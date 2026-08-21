@@ -1,0 +1,128 @@
+{
+  "classification": "MODEL_OUTPUT confirmatory untouched phase-2 control gate",
+  "label": "Phase-2 control population convergence",
+  "metrics": {
+    "bound_mismatches": {
+      "gate": 0,
+      "passed": true,
+      "value": 0
+    },
+    "max_mean_q_difference_AU": {
+      "gate": 0.1,
+      "passed": true,
+      "value": 0.02954521869352078
+    },
+    "max_q_lt30_count_difference": {
+      "gate": 0,
+      "passed": true,
+      "value": 0
+    },
+    "max_wasserstein_q_AU": {
+      "gate": 0.1,
+      "passed": true,
+      "value": 0.02954522186233959
+    }
+  },
+  "pointwise_gate_remains_failed": true,
+  "pointwise_passing_tracers": 12,
+  "population_equation": "f_q<30(t)=(1/N) sum_i I[q_i(t)<30 AU]",
+  "population_gate_passed": true,
+  "tracer_count": 15,
+  "tracer_diagnostics": {
+    "t000": {
+      "first_pointwise_failure_year": 61000,
+      "max_abs_i_difference_deg": 0.10816537970402784,
+      "max_abs_q_difference_AU": 0.4093954649417668,
+      "pointwise_passed": false
+    },
+    "t004": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 5.8926712398488235e-08,
+      "max_abs_q_difference_AU": 3.771594947465928e-08,
+      "pointwise_passed": true
+    },
+    "t008": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 6.126086304902856e-10,
+      "max_abs_q_difference_AU": 1.6935643998294836e-09,
+      "pointwise_passed": true
+    },
+    "t009": {
+      "first_pointwise_failure_year": 59000,
+      "max_abs_i_difference_deg": 0.040634988834924,
+      "max_abs_q_difference_AU": 0.2879959630221407,
+      "pointwise_passed": false
+    },
+    "t013": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 1.0417917479799144e-06,
+      "max_abs_q_difference_AU": 2.1020979410479868e-06,
+      "pointwise_passed": true
+    },
+    "t017": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 1.2053931186528644e-09,
+      "max_abs_q_difference_AU": 3.3876581539971085e-09,
+      "pointwise_passed": true
+    },
+    "t018": {
+      "first_pointwise_failure_year": 95000,
+      "max_abs_i_difference_deg": 0.014108565188820421,
+      "max_abs_q_difference_AU": 0.11045371072823329,
+      "pointwise_passed": false
+    },
+    "t022": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 9.400839218187684e-09,
+      "max_abs_q_difference_AU": 2.9236989718128825e-08,
+      "pointwise_passed": true
+    },
+    "t026": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 2.1970549823890906e-09,
+      "max_abs_q_difference_AU": 7.094719478573097e-09,
+      "pointwise_passed": true
+    },
+    "t027": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 1.0763622881881929e-08,
+      "max_abs_q_difference_AU": 1.1836803182063704e-07,
+      "pointwise_passed": true
+    },
+    "t031": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 2.6022419774562877e-09,
+      "max_abs_q_difference_AU": 8.844910581728982e-09,
+      "pointwise_passed": true
+    },
+    "t035": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 2.429231926726061e-09,
+      "max_abs_q_difference_AU": 9.220428864864516e-09,
+      "pointwise_passed": true
+    },
+    "t036": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 4.26420676546968e-09,
+      "max_abs_q_difference_AU": 4.087289084964141e-08,
+      "pointwise_passed": true
+    },
+    "t040": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 5.4065871779584995e-09,
+      "max_abs_q_difference_AU": 1.5604918246481247e-08,
+      "pointwise_passed": true
+    },
+    "t044": {
+      "first_pointwise_failure_year": null,
+      "max_abs_i_difference_deg": 6.579867317668686e-09,
+      "max_abs_q_difference_AU": 1.5651284712703273e-08,
+      "pointwise_passed": true
+    }
+  },
+  "worst_epochs_year": {
+    "count": 0,
+    "mean_q": 87000,
+    "wasserstein_q": 87000
+  }
+}
