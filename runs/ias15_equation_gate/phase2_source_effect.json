@@ -1,0 +1,36 @@
+{
+  "classification": "MODEL_OUTPUT confirmatory numerical sensitivity only",
+  "effect_equation": "D_epsilon(t)=W1({q_source,i(t)},{q_control,i(t)})",
+  "label": "Untouched phase-2 middle-source minus control population effect",
+  "metrics": {
+    "max_count_effect_disagreement": {
+      "gate": 0,
+      "passed": true,
+      "value": 0
+    },
+    "max_mean_q_effect_disagreement_AU": {
+      "gate": 0.2,
+      "passed": true,
+      "value": 0.15783019662294606
+    },
+    "max_wasserstein_effect_disagreement_AU": {
+      "gate": 0.2,
+      "passed": true,
+      "value": 0.10886748090175069
+    },
+    "nonzero_low_q_count_effect_both": {
+      "first_max_abs_count": 1,
+      "gate": ">= 1 tracer in both",
+      "passed": true,
+      "second_max_abs_count": 1
+    },
+    "resolved_wasserstein_effect_both": {
+      "first_max_AU": 0.49653565183991,
+      "gate": "> 0.2 AU in both",
+      "passed": true,
+      "second_max_AU": 0.5167331068796684
+    }
+  },
+  "scope": "numerically resolved population sensitivity; not explanatory sufficiency or detection",
+  "source_effect_gate_passed": true
+}

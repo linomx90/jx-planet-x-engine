@@ -1,0 +1,146 @@
+{
+  "created_utc": "2026-08-21T00:32:46.584013+00:00",
+  "environment": {
+    "implementation": "CPython",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.13"
+  },
+  "payload": {
+    "command": "finalize-ias15-equation-gate",
+    "engine_version": "0.1.0",
+    "result": {
+      "all_required_gates_passed": false,
+      "claim_decision": "INVALID_FOR_SOURCE_INFERENCE",
+      "classification": "MODEL_OUTPUT numerical test",
+      "confirmation_checks": {
+        "phase2_control_population_converged": true,
+        "phase2_source_effect_resolved": true,
+        "phase2_source_population_converged": false
+      },
+      "critical_result": {
+        "bound_mismatches": {
+          "gate": 0,
+          "passed": true,
+          "value": 0
+        },
+        "max_mean_q_difference_AU": {
+          "gate": 0.1,
+          "passed": false,
+          "value": 0.14567162105127807
+        },
+        "max_q_lt30_count_difference": {
+          "gate": 0,
+          "passed": true,
+          "value": 0
+        },
+        "max_wasserstein_q_AU": {
+          "gate": 0.1,
+          "passed": false,
+          "value": 0.15507972621233226
+        }
+      },
+      "design": {
+        "duration_years": 100000,
+        "epsilons": [
+          1e-12,
+          1e-14
+        ],
+        "integrator": "REBOUND 4.4.11 IAS15",
+        "phase2_status": "untouched confirmation; thresholds fixed before integrations",
+        "source_case": "equal-5-K500 middle family, inclination 25 deg",
+        "tracers": [
+          "t000",
+          "t004",
+          "t008",
+          "t009",
+          "t013",
+          "t017",
+          "t018",
+          "t022",
+          "t026",
+          "t027",
+          "t031",
+          "t035",
+          "t036",
+          "t040",
+          "t044"
+        ]
+      },
+      "equations": {
+        "dynamics": "r_i_ddot=G sum_(j!=i) m_j (r_j-r_i)/|r_j-r_i|^3",
+        "low_q_fraction": "f_q<30(t)=(1/N) sum_i I[q_i(t)<30 AU]",
+        "population_distance": "D_epsilon(t)=W1({q_source,i(t)},{q_control,i(t)})"
+      },
+      "governing_verdict": "BLOCKED_SOURCE_POPULATION_NONCONVERGENCE",
+      "next_valid_method": "A preregistered phase/uncertainty ensemble that compares converged distributions, not repeated deterministic tracer identities.",
+      "pointwise_status": "FAILED; chaotic tracer identities are not reproducible to 100 kyr",
+      "record_sha256": {
+        "phase0_pointwise": "122fd13aee859d14fc10ed84d7616db2158a9fd354eeabc9e3cf7e80e6f05c34",
+        "phase0_population_exploratory": "f4d7e56e0a1eaff8d053861bf3ffea5fcbcbdd499122fa4641d0784f3a924ef0",
+        "phase1_control_population": "df9fcf5794d4757672b3b906bd788ef4e31bf1ccc06ce88c629d9d95c73379d2",
+        "phase1_effect_exploratory": "3dd071cb81447b927d16fc7b58eb658215b9e09cb5169fd2cc3bbdb2d4feb0d2",
+        "phase1_source_population": "b1dd2879f1f983f319a1fe4820d7d8afe073beb3b6363fa21d2097206caa4a0e",
+        "phase2_control_population": "a36b3fd1c8458a976b07ce3d01e5b3f2241fc39b615ee6ca1b142bf51851663c",
+        "phase2_effect_confirmation": "f9fba3ddbea818e1c2add40f40b155eb43dc8719638d55b7d65ec256aef0bf92",
+        "phase2_source_population": "31633f2db18d258dbe9307474ffa57028fa4713b03233f6c5bf806ab0f79e780"
+      },
+      "resolved_effect_but_blocked": {
+        "max_count_effect_disagreement": {
+          "gate": 0,
+          "passed": true,
+          "value": 0
+        },
+        "max_mean_q_effect_disagreement_AU": {
+          "gate": 0.2,
+          "passed": true,
+          "value": 0.15783019662294606
+        },
+        "max_wasserstein_effect_disagreement_AU": {
+          "gate": 0.2,
+          "passed": true,
+          "value": 0.10886748090175069
+        },
+        "nonzero_low_q_count_effect_both": {
+          "first_max_abs_count": 1,
+          "gate": ">= 1 tracer in both",
+          "passed": true,
+          "second_max_abs_count": 1
+        },
+        "resolved_wasserstein_effect_both": {
+          "first_max_AU": 0.49653565183991,
+          "gate": "> 0.2 AU in both",
+          "passed": true,
+          "second_max_AU": 0.5167331068796684
+        }
+      },
+      "scientific_scope": "No detection, explanatory sufficiency, mass, distance, orbit, or sky direction is established.",
+      "test_name": "JX 100-kyr adaptive IAS15 equation and population-sensitivity gate"
+    },
+    "software": {
+      "files": {
+        "README.md": "8cb837176692c18939eaf2621d7dd81a4856981b8bd00d077fa830a971d8e3a0",
+        "benchmarks/de441_anchor_2461200_5.lock.json": "f4114dbbeabad45f6d3f3b6961d6a2f4b578d1f909f12f609526f72dbb868930",
+        "benchmarks/yoshida6_2026_08_20.lock.json": "bb2f9995ad1ec117673383da7dee7f4536715709814bd83f11c08b8d2836e2ad",
+        "docs/JX_IAS15_EQUATION_GATE_2026-08-20.md": "eed84654dd016184070f04bddbbc104a91b8672c6597257f5676d71965b3ba52",
+        "docs/SCIENTIFIC_CONTRACT.md": "8ebc066a7aebd19f470a147ee4af74100ff3edaf8e0f1b3e5e5ffc4865671600",
+        "pyproject.toml": "e30ee2fe3204d99e354a0ca9c80cbfb67a4bf62035ba3912ab85db5251f3f46d",
+        "src/jxplanetx/__init__.py": "d3992066408ee9e66cb554add58ecb5e241cc97fcdf922a78dfd19028689aa78",
+        "src/jxplanetx/claims.py": "bf0c248194f2c642e09b5b2b95c79be5f0decb25bfb39a124f329bf67e558e1d",
+        "src/jxplanetx/cli.py": "ab4663aebeceb6db7d1be2a60ab512c84ca77e71574354841b5dabd9ab4034e2",
+        "src/jxplanetx/de441_anchor.py": "93c96aec0f11371eaa1dda793b2ae7bef1caf94038c5061bd1c7925643e18682",
+        "src/jxplanetx/decimal_bs.py": "69ab795b7d735951af0e01ce5d410a122eb058f8a5f634ee3a6c198f807bc9cb",
+        "src/jxplanetx/decimal_math.py": "7dc49a49749a4eeea7300b88511d2964bacd81b9bf9cd7a14d5f75bae8c395a7",
+        "src/jxplanetx/dynamics.py": "c83073d78844f5875af3c48dd083be2f81d073441ec0277ab3bcb38d2a7dbf51",
+        "src/jxplanetx/gates.py": "9ee4be7990301de6ffb70d00b3bf5f8fd0ab081eb66eb4fb296b25186de703ca",
+        "src/jxplanetx/ias15_gate.py": "d668c39c115cf9eec2307623f52624cb2d456259832b86fb44c1e91580528312",
+        "src/jxplanetx/production_benchmark.py": "a396ce42ceb953620b41713c9eb976c3f9753d1efb6f8a38f72a6136c3f1fecd",
+        "src/jxplanetx/provenance.py": "6710af4c44734afe8c1f3f39969a8b52b47ad69f41c54c3d57f1335151c21584",
+        "src/jxplanetx/yoshida6.py": "562c2fff76a8a5e7838029ac94728147d84fb055bac84eadfed18d8a36e840f3",
+        "tests/test_engine.py": "cc95740e3906d02002ed76d40d1cda99ba351f493054870b7d1f0b68ffd9b646"
+      },
+      "tree_sha256": "ed6d19c40a2d367b9127a5d763f06049a966593ece8c3abdd7b5b80dc525606b"
+    }
+  },
+  "payload_sha256": "0e722dd78f06102c0660bc9e499334f2cf7c772c43e4bd06ad5559d518df7836",
+  "schema": "jx-planet-x-run/v1"
+}
