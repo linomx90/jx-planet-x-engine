@@ -1,0 +1,10 @@
+{
+  "benchmark_id": "JX_DE441_ANCHOR_TDB_2461200_5",
+  "source_artifact": "/Planet X/JX_ANOMALY_ZONE_ORBIT_FAMILY_5K500_SCREEN_2026-08-18.zip",
+  "source_archive_sha256": "d20caee282eae6905c1e7f826fe65a5ade6a623e7584bf700b82b00a8af101ee",
+  "source_state_sha256": "7fc835c1a4400e6a76d1b92701a40caf18d10c9c3014d49ef34a1de41c399f3e",
+  "epoch_TDB_JD": 2461200.5,
+  "massive_state": "DE441 ICRF/J2000 barycentric states transformed to J2000 ecliptic",
+  "tracer_state": "synthetic preserved baseline phase 0; labels t000,t003,...,t042",
+  "status": "IMPORTED_NOT_PRODUCTION_QUALIFIED"
+}

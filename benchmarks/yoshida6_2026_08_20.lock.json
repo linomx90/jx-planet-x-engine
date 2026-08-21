@@ -1,0 +1,15 @@
+{
+  "benchmark_id": "JX_ARB_YOSHIDA6_GATE_2026-08-20",
+  "library_artifact": "/Planetx/JX_ARB_YOSHIDA6_GATE_2026-08-20.zip",
+  "archive_sha256": "50a3f04007c302bc47068c1827a7fb4cead653f442609342a3b037ac9c04f9bb",
+  "checksum_manifest_sha256": "4517fc0b236eb370ff65fbfbaaac5af6ba3710c9c8c97c4bacc59781e78964eb",
+  "state_sha256": "62269a0dbf85203ceaaffcbf469cbc50c3d4a13267317b4f311f45ca7dc46c75",
+  "configuration_sha256": "726190c12a88cb220d07e1adada58f08bd1fe7d60c7e805487554095931de3ea",
+  "source_sha256": "d0a937bf46175e5376a14abfc576dc35ee48afd9f2a3fe0fe925ddac1dd62ae1",
+  "binary_sha256": "323728aae09a47cf88c61cf1d484d76313ef0790ead7aaccf2f9363a46024442",
+  "reference": "Fresh preserved 2026-08-20 state; not the unrecoverable 2026-08-19 MPFR state",
+  "frame": "Barycentric Cartesian, synthetic J2000-ecliptic-like benchmark",
+  "units": "AU, Julian year=365.25 d, solar mass",
+  "epoch": "Synthetic epoch; orbital elements are explicitly listed in generate_initial_state.py",
+  "de441_state": false
+}
