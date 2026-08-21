@@ -1,0 +1,98 @@
+{
+  "created_utc": "2026-08-20T23:31:58.330037+00:00",
+  "environment": {
+    "implementation": "CPython",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.13"
+  },
+  "payload": {
+    "claim_control": {
+      "decision": "SCREENING_ONLY",
+      "failed_gates": [],
+      "missing_gates": [],
+      "reason": "numerical/model gates cannot establish an observed source"
+    },
+    "command": "validate",
+    "configuration": {
+      "arithmetic": "decimal.Decimal; no binary-float conversion",
+      "benchmarks": {
+        "oscillator": {
+          "duration": "1",
+          "steps_h": "0.05",
+          "steps_h_over_2": "0.025"
+        },
+        "two_body": {
+          "dt": "0.01",
+          "epoch": "dimensionless t=0",
+          "frame": "idealized inertial Cartesian",
+          "origin": "fixed central mass",
+          "steps": 1000,
+          "units": "canonical GM=1, radius=1"
+        }
+      },
+      "decimal_digits": 80
+    },
+    "engine_version": "0.1.0",
+    "gates": [
+      {
+        "evidence_class": "MODEL_OUTPUT",
+        "metric": "abs(sum(coefficients)-1)",
+        "name": "yoshida6_coefficient_closure",
+        "passed": true,
+        "threshold": "= 0 at stored decimal precision",
+        "value": "0E-36"
+      },
+      {
+        "evidence_class": "MODEL_OUTPUT",
+        "metric": "error(h)/error(h/2)",
+        "name": "yoshida6_analytic_convergence",
+        "passed": true,
+        "threshold": "60 <= ratio <= 68 (sixth-order expectation: 64)",
+        "value": "64.000690493376068916428265066297519525200545078874111092029529654627675018188440"
+      },
+      {
+        "evidence_class": "MODEL_OUTPUT",
+        "metric": "relative drift",
+        "name": "two_body_energy",
+        "passed": true,
+        "threshold": "< 1e-12",
+        "value": "8.68202529789601220351701126048615138672024431532797034E-27"
+      },
+      {
+        "evidence_class": "MODEL_OUTPUT",
+        "metric": "relative drift",
+        "name": "two_body_angular_momentum",
+        "passed": true,
+        "threshold": "< 1e-60",
+        "value": "2.0E-79"
+      },
+      {
+        "evidence_class": "MODEL_OUTPUT",
+        "metric": "force evaluations",
+        "name": "optimized_force_count",
+        "passed": true,
+        "threshold": "8000",
+        "value": "8000"
+      }
+    ],
+    "software": {
+      "files": {
+        "README.md": "8bfc536f10a1225cf7e23b120f504b1865471a8c448dd7f5da9364569f69b3a0",
+        "docs/SCIENTIFIC_CONTRACT.md": "8ebc066a7aebd19f470a147ee4af74100ff3edaf8e0f1b3e5e5ffc4865671600",
+        "pyproject.toml": "e30ee2fe3204d99e354a0ca9c80cbfb67a4bf62035ba3912ab85db5251f3f46d",
+        "src/jxplanetx/__init__.py": "d3992066408ee9e66cb554add58ecb5e241cc97fcdf922a78dfd19028689aa78",
+        "src/jxplanetx/claims.py": "bf0c248194f2c642e09b5b2b95c79be5f0decb25bfb39a124f329bf67e558e1d",
+        "src/jxplanetx/cli.py": "35c6b2b472f4640b039a30a1387712a2f947a074de9c9431e6bda360a0216acd",
+        "src/jxplanetx/decimal_math.py": "7dc49a49749a4eeea7300b88511d2964bacd81b9bf9cd7a14d5f75bae8c395a7",
+        "src/jxplanetx/dynamics.py": "c83073d78844f5875af3c48dd083be2f81d073441ec0277ab3bcb38d2a7dbf51",
+        "src/jxplanetx/gates.py": "9ee4be7990301de6ffb70d00b3bf5f8fd0ab081eb66eb4fb296b25186de703ca",
+        "src/jxplanetx/provenance.py": "684b3a45f33cd82862ddaaff045374e6da70de3b528a49bc0e5f3b83ac1d8361",
+        "src/jxplanetx/yoshida6.py": "562c2fff76a8a5e7838029ac94728147d84fb055bac84eadfed18d8a36e840f3",
+        "tests/test_engine.py": "3e3271eb685e52a234b31986da25e113846656f729252eb932a6d0756c30ae36"
+      },
+      "tree_sha256": "7cf16d37e2b6f292f21d43f546798217f43c109db8289ba0057d6bde03489146"
+    }
+  },
+  "payload_sha256": "98ca098b28578997e1bb72b82699cdfe8163bb78bf70936dbb7cc2045f700b28",
+  "schema": "jx-planet-x-run/v1"
+}

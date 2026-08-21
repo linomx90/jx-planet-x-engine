@@ -1,0 +1,419 @@
+{
+  "created_utc": "2026-08-20T23:38:39.991960+00:00",
+  "environment": {
+    "implementation": "CPython",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.13"
+  },
+  "payload": {
+    "command": "reproduce-yoshida6",
+    "engine_version": "0.1.0",
+    "result": {
+      "all_gates_passed": true,
+      "benchmark": {
+        "benchmark_id": "JX_ARB_YOSHIDA6_GATE_2026-08-20",
+        "files_verified": 31,
+        "integrity_pass": true,
+        "manifest_sha256": "4517fc0b236eb370ff65fbfbaaac5af6ba3710c9c8c97c4bacc59781e78964eb"
+      },
+      "claim_decision": "SCREENING_ONLY",
+      "classification": "MODEL_OUTPUT / numerical validation only",
+      "comparisons": [
+        {
+          "label": "reproduced Y6 160 vs reproduced Y6 224",
+          "metrics": {
+            "bound_mismatches": {
+              "count": 0,
+              "gate": 0,
+              "passed": true
+            },
+            "massive_position_AU": {
+              "gate": "1E-7",
+              "max": "3.193411799594694438863224658017737733363254565853149572236762221169698200003055177161339981572437752E-44",
+              "passed": true,
+              "worst_body": "Jupiter",
+              "worst_time_years": 100
+            },
+            "massive_velocity_AU_per_yr": {
+              "gate": "1E-9",
+              "max": "1.700340913531706979024449216028266781216638563518182418878759150338401571863961392960174396488744404E-44",
+              "passed": true,
+              "worst_body": "Jupiter",
+              "worst_time_years": 95
+            },
+            "tracer_i_deg": {
+              "gate": "0.001",
+              "max": "6.727425844093615474004586820586E-42",
+              "passed": true,
+              "worst_body": "t007",
+              "worst_time_years": 49
+            },
+            "tracer_position_AU": {
+              "gate": "0.0001",
+              "max": "1.178596819009204716794436486994510304759372900611724346982496136580735793542988354461298399502656814E-43",
+              "passed": true,
+              "worst_body": "t014",
+              "worst_time_years": 89
+            },
+            "tracer_q_AU": {
+              "gate": "0.001",
+              "max": "4.54980778803043734335209E-44",
+              "passed": true,
+              "worst_body": "t014",
+              "worst_time_years": 83
+            },
+            "tracer_velocity_AU_per_yr": {
+              "gate": "0.000001",
+              "max": "1.827804232743188613241413828753082344147388912930570763086049298016471864901449951227249585066778713E-46",
+              "passed": true,
+              "worst_body": "t000",
+              "worst_time_years": 87
+            }
+          },
+          "passed": true,
+          "rows": 2020
+        },
+        {
+          "label": "reproduced Y6 224 vs preserved BS 224",
+          "metrics": {
+            "bound_mismatches": {
+              "count": 0,
+              "gate": 0,
+              "passed": true
+            },
+            "massive_position_AU": {
+              "gate": "1E-7",
+              "max": "4.342611177698704624361377217989617428868661188811760216055309428701433246970684826114948871240181604E-11",
+              "passed": true,
+              "worst_body": "Jupiter",
+              "worst_time_years": 100
+            },
+            "massive_velocity_AU_per_yr": {
+              "gate": "1E-9",
+              "max": "1.925808743670955072307094137877881285730089647543441865659967286059101110098258317042214684178164748E-11",
+              "passed": true,
+              "worst_body": "Jupiter",
+              "worst_time_years": 100
+            },
+            "tracer_i_deg": {
+              "gate": "0.001",
+              "max": "1.09550418102574333544708797661529537263019645406551302737E-11",
+              "passed": true,
+              "worst_body": "t013",
+              "worst_time_years": 97
+            },
+            "tracer_position_AU": {
+              "gate": "0.0001",
+              "max": "6.716016473764410264146670570045157797935788464201687838727661041742572577823374508823293689148379596E-15",
+              "passed": true,
+              "worst_body": "t000",
+              "worst_time_years": 100
+            },
+            "tracer_q_AU": {
+              "gate": "0.001",
+              "max": "3.32602158089931873931919529976111079465894431787177762215E-11",
+              "passed": true,
+              "worst_body": "t014",
+              "worst_time_years": 89
+            },
+            "tracer_velocity_AU_per_yr": {
+              "gate": "0.000001",
+              "max": "1.006689298993871502697829494007809103857239128639640664860187515207260468291205491768637070794323402E-16",
+              "passed": true,
+              "worst_body": "t000",
+              "worst_time_years": 100
+            }
+          },
+          "passed": true,
+          "rows": 2020
+        }
+      ],
+      "runs": {
+        "160": {
+          "gates": {
+            "checks": {
+              "force_calls": {
+                "gate": "= 40000",
+                "passed": true,
+                "value": 40000
+              },
+              "macro_steps": {
+                "gate": "= 5000",
+                "passed": true,
+                "value": 5000
+              },
+              "oscillator_order_ratio": {
+                "gate": "60 <= ratio <= 68",
+                "passed": true,
+                "value": "63.995816888145015155653122043115845895843613124416"
+              },
+              "projected_30000yr_wall_seconds": {
+                "gate": "<= 4500",
+                "passed": true,
+                "value": "1669.3502696999997"
+              },
+              "relative_angular_momentum_vector_drift": {
+                "gate": "<= 1e-10",
+                "passed": true,
+                "value": "1.4526151552077705697834004131094398541872567716966E-47"
+              },
+              "relative_energy_drift": {
+                "gate": "<= 1e-9",
+                "passed": true,
+                "value": "1.1410659327781541018368455172017469686443257399617E-14"
+              }
+            },
+            "passed": true
+          },
+          "preserved_numeric_comparison": {
+            "label": "preserved Y6 160 vs reproduced Y6 160",
+            "metrics": {
+              "bound_mismatches": {
+                "count": 0,
+                "gate": 0,
+                "passed": true
+              },
+              "massive_position_AU": {
+                "gate": "1E-7",
+                "max": "0E-53",
+                "passed": true,
+                "worst_body": "Sun",
+                "worst_time_years": 0
+              },
+              "massive_velocity_AU_per_yr": {
+                "gate": "1E-9",
+                "max": "0E-54",
+                "passed": true,
+                "worst_body": "Sun",
+                "worst_time_years": 0
+              },
+              "tracer_i_deg": {
+                "gate": "0.001",
+                "max": "2.62E-46",
+                "passed": true,
+                "worst_body": "t013",
+                "worst_time_years": 71
+              },
+              "tracer_position_AU": {
+                "gate": "0.0001",
+                "max": "0E-53",
+                "passed": true,
+                "worst_body": "t000",
+                "worst_time_years": 0
+              },
+              "tracer_q_AU": {
+                "gate": "0.001",
+                "max": "0E-48",
+                "passed": true,
+                "worst_body": "t000",
+                "worst_time_years": 0
+              },
+              "tracer_velocity_AU_per_yr": {
+                "gate": "0.000001",
+                "max": "0E-54",
+                "passed": true,
+                "worst_body": "t000",
+                "worst_time_years": 0
+              }
+            },
+            "passed": true,
+            "rows": 2020
+          },
+          "preserved_trajectory_sha256": "965a6e9b415ff12c47ca297af40fd35fa246e98bd2ddeadc50ab252ffced392e",
+          "serialized_state_audit": {
+            "exact_fields": [
+              "time",
+              "body",
+              "name",
+              "x",
+              "y",
+              "z",
+              "vx",
+              "vy",
+              "vz",
+              "a",
+              "e",
+              "q",
+              "bound"
+            ],
+            "exact_fields_passed": true,
+            "mismatch_counts": {
+              "i_deg": 11
+            },
+            "note": "i_deg uses a transcendental acos evaluation and is judged numerically, not bytewise"
+          },
+          "summary": {
+            "duration_years": 100,
+            "force_calls": 40000,
+            "macro_steps": 5000,
+            "method": "Yoshida6 fixed-step KDK composition",
+            "oscillator_error_2h": "9.6956926263414240692320251835429379312711949655935e-10",
+            "oscillator_error_h": "1.5150509983000958819791312965473596267174951359561e-11",
+            "oscillator_error_ratio_2h_over_h": "63.995816888145015155653122043115845895843613124416",
+            "precision_bits": 160,
+            "projected_30000yr_wall_seconds": 1669.3502696999997,
+            "relative_angular_momentum_vector_drift": "1.4526151552077705697834004131094398541872567716966e-47",
+            "relative_energy_drift": "1.1410659327781541018368455172017469686443257399617e-14",
+            "step_years": "0.02",
+            "steps_per_year": 50,
+            "wall_seconds": 5.564500899
+          },
+          "trajectory_sha256": "1ff1e3ebd69442b0133ba1e8587667393cb5eb501d9a6be05a7e5fa1b7725516"
+        },
+        "224": {
+          "gates": {
+            "checks": {
+              "force_calls": {
+                "gate": "= 40000",
+                "passed": true,
+                "value": 40000
+              },
+              "macro_steps": {
+                "gate": "= 5000",
+                "passed": true,
+                "value": 5000
+              },
+              "oscillator_order_ratio": {
+                "gate": "60 <= ratio <= 68",
+                "passed": true,
+                "value": "63.9958168881450151556531220431157770076130230965989409708433674571563"
+              },
+              "projected_30000yr_wall_seconds": {
+                "gate": "<= 4500",
+                "passed": true,
+                "value": "1903.0411244999998"
+              },
+              "relative_angular_momentum_vector_drift": {
+                "gate": "<= 1e-10",
+                "passed": true,
+                "value": "1.67627276774698937788835190565702959052429360104607784070104251214879E-66"
+              },
+              "relative_energy_drift": {
+                "gate": "<= 1e-9",
+                "passed": true,
+                "value": "1.14106593277815410183684551720175580531143043929909951681194223080529E-14"
+              }
+            },
+            "passed": true
+          },
+          "preserved_numeric_comparison": {
+            "label": "preserved Y6 224 vs reproduced Y6 224",
+            "metrics": {
+              "bound_mismatches": {
+                "count": 0,
+                "gate": 0,
+                "passed": true
+              },
+              "massive_position_AU": {
+                "gate": "1E-7",
+                "max": "0E-72",
+                "passed": true,
+                "worst_body": "Sun",
+                "worst_time_years": 0
+              },
+              "massive_velocity_AU_per_yr": {
+                "gate": "1E-9",
+                "max": "0E-73",
+                "passed": true,
+                "worst_body": "Sun",
+                "worst_time_years": 0
+              },
+              "tracer_i_deg": {
+                "gate": "0.001",
+                "max": "1.19E-65",
+                "passed": true,
+                "worst_body": "t006",
+                "worst_time_years": 89
+              },
+              "tracer_position_AU": {
+                "gate": "0.0001",
+                "max": "0E-72",
+                "passed": true,
+                "worst_body": "t000",
+                "worst_time_years": 0
+              },
+              "tracer_q_AU": {
+                "gate": "0.001",
+                "max": "0E-67",
+                "passed": true,
+                "worst_body": "t000",
+                "worst_time_years": 0
+              },
+              "tracer_velocity_AU_per_yr": {
+                "gate": "0.000001",
+                "max": "0E-73",
+                "passed": true,
+                "worst_body": "t000",
+                "worst_time_years": 0
+              }
+            },
+            "passed": true,
+            "rows": 2020
+          },
+          "preserved_trajectory_sha256": "dcdd313f8e33ccfe08558939c0a747522cdbf0566aa96e6369758621f1cc300b",
+          "serialized_state_audit": {
+            "exact_fields": [
+              "time",
+              "body",
+              "name",
+              "x",
+              "y",
+              "z",
+              "vx",
+              "vy",
+              "vz",
+              "a",
+              "e",
+              "q",
+              "bound"
+            ],
+            "exact_fields_passed": true,
+            "mismatch_counts": {
+              "i_deg": 11
+            },
+            "note": "i_deg uses a transcendental acos evaluation and is judged numerically, not bytewise"
+          },
+          "summary": {
+            "duration_years": 100,
+            "force_calls": 40000,
+            "macro_steps": 5000,
+            "method": "Yoshida6 fixed-step KDK composition",
+            "oscillator_error_2h": "9.69569262634142406923202518354293782640729576764646951457895890547513e-10",
+            "oscillator_error_h": "1.5150509983000958819791312965473612412065126784314902675355707213749e-11",
+            "oscillator_error_ratio_2h_over_h": "63.9958168881450151556531220431157770076130230965989409708433674571563",
+            "precision_bits": 224,
+            "projected_30000yr_wall_seconds": 1903.0411244999998,
+            "relative_angular_momentum_vector_drift": "1.67627276774698937788835190565702959052429360104607784070104251214879e-66",
+            "relative_energy_drift": "1.14106593277815410183684551720175580531143043929909951681194223080529e-14",
+            "step_years": "0.02",
+            "steps_per_year": 50,
+            "wall_seconds": 6.343470415
+          },
+          "trajectory_sha256": "865d09af0f4e91b1cd40c33d4a3bc80de116dbb7b64124544abc1e76c028a70c"
+        }
+      },
+      "scientific_scope": "validates the numerical tool; says nothing for or against a Planet X source"
+    },
+    "software": {
+      "files": {
+        "README.md": "ac33b779e79c0cfa84bf7d2ee5f8d0b8401743e0860381284c832b249ae9080a",
+        "benchmarks/yoshida6_2026_08_20.lock.json": "bb2f9995ad1ec117673383da7dee7f4536715709814bd83f11c08b8d2836e2ad",
+        "docs/SCIENTIFIC_CONTRACT.md": "8ebc066a7aebd19f470a147ee4af74100ff3edaf8e0f1b3e5e5ffc4865671600",
+        "pyproject.toml": "e30ee2fe3204d99e354a0ca9c80cbfb67a4bf62035ba3912ab85db5251f3f46d",
+        "src/jxplanetx/__init__.py": "d3992066408ee9e66cb554add58ecb5e241cc97fcdf922a78dfd19028689aa78",
+        "src/jxplanetx/claims.py": "bf0c248194f2c642e09b5b2b95c79be5f0decb25bfb39a124f329bf67e558e1d",
+        "src/jxplanetx/cli.py": "a4add58689b8b6a1a9fd032aeca177297dcb6688d6970fb3388567b116c228de",
+        "src/jxplanetx/decimal_math.py": "7dc49a49749a4eeea7300b88511d2964bacd81b9bf9cd7a14d5f75bae8c395a7",
+        "src/jxplanetx/dynamics.py": "c83073d78844f5875af3c48dd083be2f81d073441ec0277ab3bcb38d2a7dbf51",
+        "src/jxplanetx/gates.py": "9ee4be7990301de6ffb70d00b3bf5f8fd0ab081eb66eb4fb296b25186de703ca",
+        "src/jxplanetx/production_benchmark.py": "a396ce42ceb953620b41713c9eb976c3f9753d1efb6f8a38f72a6136c3f1fecd",
+        "src/jxplanetx/provenance.py": "6710af4c44734afe8c1f3f39969a8b52b47ad69f41c54c3d57f1335151c21584",
+        "src/jxplanetx/yoshida6.py": "562c2fff76a8a5e7838029ac94728147d84fb055bac84eadfed18d8a36e840f3",
+        "tests/test_engine.py": "111343f8a1bdfbccf8853e7e2de4a3d56c99cc646340aa2b169ecedc468baf2f"
+      },
+      "tree_sha256": "7e5de5073ed40488b57b096009ce465db7ae8401124b71c388a51910d300adab"
+    }
+  },
+  "payload_sha256": "0aacce62325c1bc1b395be68b741964d225fc9dd345e918ebdf40ace52b1f991",
+  "schema": "jx-planet-x-run/v1"
+}
