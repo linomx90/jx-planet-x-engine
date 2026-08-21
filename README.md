@@ -1,5 +1,8 @@
 # JX Planet X Scientific Engine
 
+**Version:** 0.1.1  
+**Release date:** 21 Aug 2026
+
 JX Planet X is a falsification-first numerical and inference framework for
 testing physical sources of outer-Solar-System gravity. A planet is one
 candidate source, not the assumed answer.
@@ -9,6 +12,10 @@ production gate, but the latest 100-kyr compact-source population did not
 converge. Its governing result is
 `BLOCKED_SOURCE_POPULATION_NONCONVERGENCE`; this release does not claim a
 Planet X detection or sky localization.
+
+**0.1.1 provenance hotfix:** installed-package runs now hash the executing
+packaged Python sources instead of allowing an empty software manifest.
+Numerical dynamics are unchanged.
 
 This repository begins with the validated numerical foundation:
 
@@ -39,7 +46,8 @@ PYTHONPATH=src python3 -m jxplanetx.cli reproduce-yoshida6 \
 ```
 
 Run these commands from the repository root with `PYTHONPATH=src`, as shown
-above. The tested baseline is Python 3.12.
+above. The tested baseline is Python 3.12. Version 0.1.1 passes all 16 unit
+tests.
 
 The validation command runs a sixth-order harmonic-oscillator convergence
 test, a two-body conservation test, and writes a hashed JSON record.

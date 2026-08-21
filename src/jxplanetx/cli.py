@@ -10,7 +10,7 @@ from pathlib import Path
 from . import __version__
 from .claims import assess_claim
 from .gates import run_core_gates
-from .provenance import source_manifest, write_run_record
+from .provenance import runtime_source_manifest, write_run_record
 from .production_benchmark import reproduce
 from .de441_anchor import audit_de441_independent_reference, import_de441_anchor, run_de441_precision_pair
 from .decimal_bs import run_block_reference, run_reference
@@ -40,7 +40,7 @@ def validate(args: argparse.Namespace) -> int:
         },
         "gates": [g.as_dict() for g in gates],
         "claim_control": asdict(claim),
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -53,7 +53,7 @@ def reproduce_yoshida6(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "reproduce-yoshida6",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -72,7 +72,7 @@ def run_de441(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "run-de441-anchor-gate",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -102,7 +102,7 @@ def audit_de441(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "audit-de441-independent-reference",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -149,7 +149,7 @@ def finalize_ias15_cli(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "finalize-ias15-equation-gate",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))

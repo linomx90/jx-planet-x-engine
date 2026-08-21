@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: "Avila"
     given-names: "Lino"
-version: 0.1.0
-date-released: 2026-08-20
+version: 0.1.1
+date-released: 2026-08-21
 license: MIT
 repository-code: "https://github.com/linomx90/jx-planet-x-engine"
 
