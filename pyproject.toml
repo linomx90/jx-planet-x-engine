@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jxplanetx"
+version = "0.1.0"
+description = "Falsification-first scientific engine for outer-Solar-System gravity"
+requires-python = ">=3.12"
+
+[project.scripts]
+jxplanetx = "jxplanetx.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
