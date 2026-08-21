@@ -1,0 +1,208 @@
+{
+  "created_utc": "2026-08-20T23:42:47.596494+00:00",
+  "environment": {
+    "implementation": "CPython",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.13"
+  },
+  "payload": {
+    "command": "run-de441-anchor-gate",
+    "engine_version": "0.1.0",
+    "result": {
+      "blocker": "no independent high-precision DE441-anchor reference trajectory is preserved",
+      "claim_decision": "SCREENING_ONLY",
+      "classification": "MODEL_OUTPUT numerical precision-pair gate",
+      "cross_precision_comparison": {
+        "label": "DE441 anchor Y6 160 vs Y6 224",
+        "metrics": {
+          "bound_mismatches": {
+            "count": 0,
+            "gate": 0,
+            "passed": true
+          },
+          "massive_position_AU": {
+            "gate": "1E-7",
+            "max": "3.664237424215385322218326610994459845374436354348667805630137034066966668946927967484758272261236956E-44",
+            "passed": true,
+            "worst_body": "Uranus",
+            "worst_time_years": 100
+          },
+          "massive_velocity_AU_per_yr": {
+            "gate": "1E-9",
+            "max": "4.766199010382242759706690274420498773963212857931076868903762702062502854621662373277174353363053012E-45",
+            "passed": true,
+            "worst_body": "Jupiter",
+            "worst_time_years": 68
+          },
+          "tracer_i_deg": {
+            "gate": "0.001",
+            "max": "1.07784359522268093508618E-45",
+            "passed": true,
+            "worst_body": "t033",
+            "worst_time_years": 72
+          },
+          "tracer_position_AU": {
+            "gate": "0.0001",
+            "max": "1.357927456665624355855239667317013872840277000572614035046045499734303681705138044115173067192349454E-44",
+            "passed": true,
+            "worst_body": "t033",
+            "worst_time_years": 100
+          },
+          "tracer_q_AU": {
+            "gate": "0.001",
+            "max": "7.2914315403140841966592E-45",
+            "passed": true,
+            "worst_body": "t033",
+            "worst_time_years": 75
+          },
+          "tracer_velocity_AU_per_yr": {
+            "gate": "0.000001",
+            "max": "1.973830442878043601453907319357578332305259203226902240292409833273196950568996593721458424797048597E-46",
+            "passed": true,
+            "worst_body": "t009",
+            "worst_time_years": 97
+          }
+        },
+        "passed": true,
+        "rows": 2020
+      },
+      "precision_pair_passed": true,
+      "production_qualified": false,
+      "runs": {
+        "160": {
+          "gates": {
+            "checks": {
+              "force_calls": {
+                "gate": "= 40000",
+                "passed": true,
+                "value": 40000
+              },
+              "macro_steps": {
+                "gate": "= 5000",
+                "passed": true,
+                "value": 5000
+              },
+              "oscillator_order_ratio": {
+                "gate": "60 <= ratio <= 68",
+                "passed": true,
+                "value": "63.995816888145015155653122043115845895843613124416"
+              },
+              "projected_30000yr_wall_seconds": {
+                "gate": "<= 4500",
+                "passed": true,
+                "value": "2268.5091353999996"
+              },
+              "relative_angular_momentum_vector_drift": {
+                "gate": "<= 1e-10",
+                "passed": true,
+                "value": "8.741591375290419048248368068159702862627235280585E-48"
+              },
+              "relative_energy_drift": {
+                "gate": "<= 1e-9",
+                "passed": true,
+                "value": "6.5935251144877045324272447498404131416560609314834E-17"
+              }
+            },
+            "passed": true
+          },
+          "summary": {
+            "duration_years": 100,
+            "force_calls": 40000,
+            "macro_steps": 5000,
+            "method": "Yoshida6 fixed-step KDK composition",
+            "oscillator_error_2h": "9.6956926263414240692320251835429379312711949655935e-10",
+            "oscillator_error_h": "1.5150509983000958819791312965473596267174951359561e-11",
+            "oscillator_error_ratio_2h_over_h": "63.995816888145015155653122043115845895843613124416",
+            "precision_bits": 160,
+            "projected_30000yr_wall_seconds": 2268.5091353999996,
+            "relative_angular_momentum_vector_drift": "8.741591375290419048248368068159702862627235280585e-48",
+            "relative_energy_drift": "6.5935251144877045324272447498404131416560609314834e-17",
+            "step_years": "0.02",
+            "steps_per_year": 50,
+            "wall_seconds": 7.561697118
+          },
+          "trajectory_sha256": "ddde5d73334f08800244cfb48b6e583e2e13da9db19d10c9cf7d30ef30c402d1"
+        },
+        "224": {
+          "gates": {
+            "checks": {
+              "force_calls": {
+                "gate": "= 40000",
+                "passed": true,
+                "value": 40000
+              },
+              "macro_steps": {
+                "gate": "= 5000",
+                "passed": true,
+                "value": 5000
+              },
+              "oscillator_order_ratio": {
+                "gate": "60 <= ratio <= 68",
+                "passed": true,
+                "value": "63.9958168881450151556531220431157770076130230965989409708433674571563"
+              },
+              "projected_30000yr_wall_seconds": {
+                "gate": "<= 4500",
+                "passed": true,
+                "value": "1860.8299854"
+              },
+              "relative_angular_momentum_vector_drift": {
+                "gate": "<= 1e-10",
+                "passed": true,
+                "value": "2.04093559227692035233377407411523671919672260726503920104763380402069E-66"
+              },
+              "relative_energy_drift": {
+                "gate": "<= 1e-9",
+                "passed": true,
+                "value": "6.59352511448770453242724474983427243822128739096939203603373475842885E-17"
+              }
+            },
+            "passed": true
+          },
+          "summary": {
+            "duration_years": 100,
+            "force_calls": 40000,
+            "macro_steps": 5000,
+            "method": "Yoshida6 fixed-step KDK composition",
+            "oscillator_error_2h": "9.69569262634142406923202518354293782640729576764646951457895890547513e-10",
+            "oscillator_error_h": "1.5150509983000958819791312965473612412065126784314902675355707213749e-11",
+            "oscillator_error_ratio_2h_over_h": "63.9958168881450151556531220431157770076130230965989409708433674571563",
+            "precision_bits": 224,
+            "projected_30000yr_wall_seconds": 1860.8299854,
+            "relative_angular_momentum_vector_drift": "2.04093559227692035233377407411523671919672260726503920104763380402069e-66",
+            "relative_energy_drift": "6.59352511448770453242724474983427243822128739096939203603373475842885e-17",
+            "step_years": "0.02",
+            "steps_per_year": 50,
+            "wall_seconds": 6.202766618
+          },
+          "trajectory_sha256": "355c7d1f1f8318f87549a1d831d5cb975e5845f62e644769de0694947710c1c9"
+        }
+      },
+      "state_sha256": "371fa2763ea23b6287215d088c54220426951da91e64066c0feb6d73f59f634e",
+      "status": "PARTIAL_PASS_INDEPENDENT_REFERENCE_MISSING"
+    },
+    "software": {
+      "files": {
+        "README.md": "4c7bbe70a8cea1caab731077f352482b49ce9cb280d2d8fc3beb9a0d5c9d22f4",
+        "benchmarks/de441_anchor_2461200_5.lock.json": "f4114dbbeabad45f6d3f3b6961d6a2f4b578d1f909f12f609526f72dbb868930",
+        "benchmarks/yoshida6_2026_08_20.lock.json": "bb2f9995ad1ec117673383da7dee7f4536715709814bd83f11c08b8d2836e2ad",
+        "docs/SCIENTIFIC_CONTRACT.md": "8ebc066a7aebd19f470a147ee4af74100ff3edaf8e0f1b3e5e5ffc4865671600",
+        "pyproject.toml": "e30ee2fe3204d99e354a0ca9c80cbfb67a4bf62035ba3912ab85db5251f3f46d",
+        "src/jxplanetx/__init__.py": "d3992066408ee9e66cb554add58ecb5e241cc97fcdf922a78dfd19028689aa78",
+        "src/jxplanetx/claims.py": "bf0c248194f2c642e09b5b2b95c79be5f0decb25bfb39a124f329bf67e558e1d",
+        "src/jxplanetx/cli.py": "c880f7da4a2e19e3bdbeeaf023a103626e99e8d5693cfd174efc1d2a1c05bdd8",
+        "src/jxplanetx/de441_anchor.py": "0e415f7f747bd4dae5d02df44f7ee174fda0450d9788bde48337124edc60f2d2",
+        "src/jxplanetx/decimal_math.py": "7dc49a49749a4eeea7300b88511d2964bacd81b9bf9cd7a14d5f75bae8c395a7",
+        "src/jxplanetx/dynamics.py": "c83073d78844f5875af3c48dd083be2f81d073441ec0277ab3bcb38d2a7dbf51",
+        "src/jxplanetx/gates.py": "9ee4be7990301de6ffb70d00b3bf5f8fd0ab081eb66eb4fb296b25186de703ca",
+        "src/jxplanetx/production_benchmark.py": "a396ce42ceb953620b41713c9eb976c3f9753d1efb6f8a38f72a6136c3f1fecd",
+        "src/jxplanetx/provenance.py": "6710af4c44734afe8c1f3f39969a8b52b47ad69f41c54c3d57f1335151c21584",
+        "src/jxplanetx/yoshida6.py": "562c2fff76a8a5e7838029ac94728147d84fb055bac84eadfed18d8a36e840f3",
+        "tests/test_engine.py": "111343f8a1bdfbccf8853e7e2de4a3d56c99cc646340aa2b169ecedc468baf2f"
+      },
+      "tree_sha256": "3f6d794e1ac170abc4f3082591520e491b4a0e2851779a30f39463c5e53da3e2"
+    }
+  },
+  "payload_sha256": "551354fcfd205a378fd1de6b97211d1ac43a36bd095a711f744e6e1f9193d605",
+  "schema": "jx-planet-x-run/v1"
+}

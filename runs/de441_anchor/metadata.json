@@ -1,0 +1,38 @@
+{
+  "blocker": "requires 160/224-bit run plus an independent high-precision reference trajectory",
+  "claim_decision": "SCREENING_ONLY",
+  "classification": "RECONSTRUCTED massive-body state plus ASSUMPTION synthetic tracer subset",
+  "epoch_TDB_JD": "2461200.5",
+  "frame_origin": "system barycenter after move_to_com in preserved constructor",
+  "massive_bodies": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune"
+  ],
+  "massive_body_source": "JPL DE441 part-2 SPK; transformed ICRF/J2000 barycentric to J2000 ecliptic",
+  "normalized_state_sha256": "371fa2763ea23b6287215d088c54220426951da91e64066c0feb6d73f59f634e",
+  "numerical_status": "IMPORTED_NOT_PRODUCTION_QUALIFIED",
+  "schema": "jx-de441-anchor/v1",
+  "source_state_sha256": "7fc835c1a4400e6a76d1b92701a40caf18d10c9c3014d49ef34a1de41c399f3e",
+  "tracer_source": "synthetic anomaly-zone grid; every third preserved baseline tracer",
+  "tracers": [
+    "t000",
+    "t003",
+    "t006",
+    "t009",
+    "t012",
+    "t015",
+    "t018",
+    "t021",
+    "t024",
+    "t027",
+    "t030",
+    "t033",
+    "t036",
+    "t039",
+    "t042"
+  ],
+  "units": "AU, Julian year=365.25 d, solar mass"
+}

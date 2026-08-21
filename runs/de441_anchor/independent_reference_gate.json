@@ -1,0 +1,143 @@
+{
+  "created_utc": "2026-08-21T00:07:27.143700+00:00",
+  "environment": {
+    "implementation": "CPython",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.13"
+  },
+  "payload": {
+    "command": "audit-de441-independent-reference",
+    "engine_version": "0.1.0",
+    "result": {
+      "all_numerical_gates_passed": true,
+      "bs_trajectory_sha256": "bfa369112bef1fb4c7d1be33992427ba9d2f89fa92cdbace04b061db04919fd2",
+      "claim_decision": "SCREENING_ONLY",
+      "classification": "MODEL_OUTPUT / numerical validation only",
+      "cross_method_comparison": {
+        "label": "DE441 anchor Y6 224 vs independent Decimal BS 78-digit",
+        "metrics": {
+          "bound_mismatches": {
+            "count": 0,
+            "gate": 0,
+            "passed": true
+          },
+          "massive_position_AU": {
+            "gate": "1E-7",
+            "max": "3.770496442727112331989371240708804155526367663546125839355881442635793864737297368412519050963804120E-11",
+            "passed": true,
+            "worst_body": "Jupiter",
+            "worst_time_years": 98
+          },
+          "massive_velocity_AU_per_yr": {
+            "gate": "1E-9",
+            "max": "1.663944668088696574854571777771449668307681899321457312284736607091392500492194211928464918376335667E-11",
+            "passed": true,
+            "worst_body": "Jupiter",
+            "worst_time_years": 98
+          },
+          "tracer_i_deg": {
+            "gate": "0.001",
+            "max": "2.7137329925699424832830963428927742939027471867758716783E-13",
+            "passed": true,
+            "worst_body": "t036",
+            "worst_time_years": 99
+          },
+          "tracer_position_AU": {
+            "gate": "0.0001",
+            "max": "3.086569685788873276044569156593720464455116870459668868070003244774983472979748121748999282920218839E-15",
+            "passed": true,
+            "worst_body": "t000",
+            "worst_time_years": 100
+          },
+          "tracer_q_AU": {
+            "gate": "0.001",
+            "max": "1.8143773169529188429928597480140629964608777189444122994516628756E-12",
+            "passed": true,
+            "worst_body": "t006",
+            "worst_time_years": 100
+          },
+          "tracer_velocity_AU_per_yr": {
+            "gate": "0.000001",
+            "max": "4.430352060230713676527320775560821074443492848315555561290099559011695833280982464964394170519707939E-17",
+            "passed": true,
+            "worst_body": "t000",
+            "worst_time_years": 100
+          }
+        },
+        "passed": true,
+        "rows": 2020
+      },
+      "independent_bs_kernel_validation": {
+        "accepted_steps": 91,
+        "decimal_digits": 78,
+        "gate": "1E-25",
+        "maximum_absolute_state_error": "3.00761472537695608625900650562818773869748027E-34",
+        "passed": true,
+        "problem": "harmonic oscillator q''=-q, q(0)=1, p(0)=0, t=1",
+        "rejected_steps": 4
+      },
+      "independent_reference_checks": {
+        "all_block_invariants": {
+          "gate": "true",
+          "passed": true,
+          "value": true
+        },
+        "decimal_digits": {
+          "gate": ">= 68",
+          "passed": true,
+          "value": 78
+        },
+        "duration_years": {
+          "gate": "= 100",
+          "passed": true,
+          "value": 100
+        },
+        "massive_path_spread": {
+          "gate": "<= 1e-25 AU/component",
+          "passed": true,
+          "value": "0"
+        },
+        "wall_seconds": {
+          "gate": "<= 4500",
+          "passed": true,
+          "value": 231.98721410100006
+        },
+        "y6_trajectory_identity": {
+          "gate": "355c7d1f1f8318f87549a1d831d5cb975e5845f62e644769de0694947710c1c9",
+          "passed": true,
+          "value": "355c7d1f1f8318f87549a1d831d5cb975e5845f62e644769de0694947710c1c9"
+        }
+      },
+      "numerical_status": "PRODUCTION_NUMERICAL_GATE_PASSED",
+      "precision_pair_passed": true,
+      "production_observation_qualified": false,
+      "scientific_scope": "validates numerical propagation for this DE441 anchor; it is not evidence for a Planet X source",
+      "state_sha256": "371fa2763ea23b6287215d088c54220426951da91e64066c0feb6d73f59f634e",
+      "y6_trajectory_sha256": "355c7d1f1f8318f87549a1d831d5cb975e5845f62e644769de0694947710c1c9"
+    },
+    "software": {
+      "files": {
+        "README.md": "8133ea2c037c9b933e39a8d750d221e8d2dfadc23704ef85f39fd1e4d52d7df5",
+        "benchmarks/de441_anchor_2461200_5.lock.json": "f4114dbbeabad45f6d3f3b6961d6a2f4b578d1f909f12f609526f72dbb868930",
+        "benchmarks/yoshida6_2026_08_20.lock.json": "bb2f9995ad1ec117673383da7dee7f4536715709814bd83f11c08b8d2836e2ad",
+        "docs/SCIENTIFIC_CONTRACT.md": "8ebc066a7aebd19f470a147ee4af74100ff3edaf8e0f1b3e5e5ffc4865671600",
+        "pyproject.toml": "e30ee2fe3204d99e354a0ca9c80cbfb67a4bf62035ba3912ab85db5251f3f46d",
+        "src/jxplanetx/__init__.py": "d3992066408ee9e66cb554add58ecb5e241cc97fcdf922a78dfd19028689aa78",
+        "src/jxplanetx/claims.py": "bf0c248194f2c642e09b5b2b95c79be5f0decb25bfb39a124f329bf67e558e1d",
+        "src/jxplanetx/cli.py": "d9c362c299b28823f33cdc84b24a4fae9da38316985305d749e68fd14fab4a1e",
+        "src/jxplanetx/de441_anchor.py": "93c96aec0f11371eaa1dda793b2ae7bef1caf94038c5061bd1c7925643e18682",
+        "src/jxplanetx/decimal_bs.py": "69ab795b7d735951af0e01ce5d410a122eb058f8a5f634ee3a6c198f807bc9cb",
+        "src/jxplanetx/decimal_math.py": "7dc49a49749a4eeea7300b88511d2964bacd81b9bf9cd7a14d5f75bae8c395a7",
+        "src/jxplanetx/dynamics.py": "c83073d78844f5875af3c48dd083be2f81d073441ec0277ab3bcb38d2a7dbf51",
+        "src/jxplanetx/gates.py": "9ee4be7990301de6ffb70d00b3bf5f8fd0ab081eb66eb4fb296b25186de703ca",
+        "src/jxplanetx/production_benchmark.py": "a396ce42ceb953620b41713c9eb976c3f9753d1efb6f8a38f72a6136c3f1fecd",
+        "src/jxplanetx/provenance.py": "6710af4c44734afe8c1f3f39969a8b52b47ad69f41c54c3d57f1335151c21584",
+        "src/jxplanetx/yoshida6.py": "562c2fff76a8a5e7838029ac94728147d84fb055bac84eadfed18d8a36e840f3",
+        "tests/test_engine.py": "24fd6d339202c1224a290f986ee88911a4a7c255ecec850afc8336b41343b72c"
+      },
+      "tree_sha256": "ef2f28882c73d323f14cd59a521e0969d7297d0539bacefbf9b59f700d27bedb"
+    }
+  },
+  "payload_sha256": "a7084ec36a40b7a588524a90c61d4d03f877abf4ca23c1befa4a36d0377d7e1b",
+  "schema": "jx-planet-x-run/v1"
+}
