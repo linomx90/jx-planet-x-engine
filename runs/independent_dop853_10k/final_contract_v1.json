@@ -1,0 +1,179 @@
+{
+  "schema": "jx-independent-dop853-contract/v1",
+  "experiment_id": "jx-independent-dop853-bb21-9118-10k-tracer-10kyr-v1",
+  "registration_status": "PRELOCKED_BEFORE_INDEPENDENT_OUTCOMES",
+  "mode": "FINAL_INDEPENDENT_SOFTWARE_REPLICATION",
+  "states": {
+    "control_path": "../de441_population_100k/states/de441_control_state.csv",
+    "control_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+    "source_path": "../de441_population_100k/states/de441_source_9118_state.csv",
+    "source_sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf"
+  },
+  "population": {
+    "elements_path": "../de441_population_100k/population_elements_v1.csv",
+    "elements_sha256": "2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1",
+    "tracers_per_block": 1000
+  },
+  "selection": {
+    "path": "selection_v1.json",
+    "sha256": "6cf177087444c109d8e83ee805d7c7319c396396f371f923c82612e1111a287d",
+    "expected_blocks": 10,
+    "method": "outcome-blind SHA-256 rank over all 100 integer block IDs",
+    "selected_blocks": [3, 9, 33, 47, 49, 64, 65, 74, 83, 98],
+    "registration_caveat": "The selection was frozen after the original REBOUND execution but before any independent DOP853 final outcomes. Its function reads only a public seed and integer block IDs, not outcomes."
+  },
+  "reference": {
+    "backend": "REBOUND 4.4.11 MERCURIUS",
+    "result_path": "../de441_population_100k/final_result_v1.json",
+    "result_sha256": "24b7572cf130c683acd66a4677dac62d0d30b15b24f9bf5997b612a8045d7efd",
+    "execution_root": "../de441_population_100k/final_execution_v1"
+  },
+  "dynamics": {
+    "duration_years": 10000.0,
+    "sample_years": 1.0,
+    "checkpoint_years": 2500.0,
+    "force_law": "independently implemented Newtonian point-mass gravity",
+    "test_particles_are_massless": true
+  },
+  "solver": {
+    "method": "scipy.integrate.DOP853",
+    "rtol": 1e-12,
+    "atol": 1e-14,
+    "max_step_years": 0.25,
+    "active_audit_segment_years": 2500.0
+  },
+  "classification": {
+    "q_threshold_AU": 30.0,
+    "q_hysteresis_AU": 0.000001,
+    "injection_rule": "minimum annually sampled osculating perihelion is strictly below 29.999999 AU"
+  },
+  "statistics": {
+    "bootstrap_seed": "jx-independent-dop853-final-bootstrap-2026-08-23-v1",
+    "bootstrap_repetitions": 9999,
+    "confidence_level": 0.95,
+    "equivalence_margin": 0.001,
+    "effect_definition": "source minus control annually sampled-injection fraction",
+    "effect_classification_rule": "positive or negative only if the paired-block bootstrap interval excludes zero; equivalent only if the full interval is inside the locked margin"
+  },
+  "gates": {
+    "max_injection_fraction_difference": 0.001,
+    "max_injection_identity_disagreement_fraction": 0.005,
+    "max_survival_fraction_difference": 0.001,
+    "max_wasserstein_minimum_q_AU": 0.05,
+    "max_wasserstein_final_q_AU": 0.05,
+    "max_wasserstein_final_i_deg": 0.05,
+    "max_source_control_effect_difference": 0.001,
+    "max_initial_element_roundtrip_error": 1e-10,
+    "max_relative_active_energy_drift": 1e-9,
+    "max_relative_active_angular_momentum_vector_drift": 1e-9,
+    "max_active_endpoint_position_disagreement_AU": 0.000001,
+    "max_active_endpoint_velocity_disagreement_AU_per_year": 0.000001,
+    "source_minimum_q_AU": 200.0,
+    "source_maximum_fractional_a_excursion": 0.1
+  },
+  "backend": {
+    "python_version": "3.12.13",
+    "python_implementation": "CPython",
+    "numpy_version": "2.3.5",
+    "scipy_version": "1.17.0",
+    "files": {
+      "scipy_rk_source": {
+        "sha256": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+      },
+      "scipy_dop853_coefficients": {
+        "sha256": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001"
+      },
+      "numpy_multiarray_binary": {
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      }
+    }
+  },
+  "execution": {
+    "workers": 8,
+    "checkpoint_restart_required": true,
+    "immutable_result": true
+  },
+  "locked_files": {
+    "independent_module": {
+      "path": "../../src/jxplanetx/independent_dop853.py",
+      "sha256": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062"
+    },
+    "runner": {
+      "path": "run_replication.py",
+      "sha256": "60a284dde2765a34af9a9d12695a33a4aaac6dfc837bb14ee2d12b474b005b5f"
+    },
+    "unit_tests": {
+      "path": "../../tests/test_independent_dop853.py",
+      "sha256": "87ac8f962e3f61d59fa79850d44f784fb0d269c24b12fc177a695be5198c481c"
+    },
+    "selection_generator": {
+      "path": "generate_selection.py",
+      "sha256": "40c38c49c356e3af79308a076fa253c13a9cb366be5325922089b155bbaff474"
+    },
+    "selection_manifest": {
+      "path": "selection_v1.json",
+      "sha256": "6cf177087444c109d8e83ee805d7c7319c396396f371f923c82612e1111a287d"
+    },
+    "population_manifest": {
+      "path": "../de441_population_100k/population_manifest_v1.json",
+      "sha256": "c3dd5528f382c4fd0ff71921d6d5be635faf71ca82e1d73ddd268fcbe62e8381"
+    },
+    "state_manifest": {
+      "path": "../de441_population_100k/states/state_manifest.json",
+      "sha256": "ec6e2ba8877d206838172dbb573318a2122977e263c054994d4c82a409a43d36"
+    },
+    "horizons_qualification_contract": {
+      "path": "horizons_qualification_contract_v2.json",
+      "sha256": "3064e6f23fdec4ff5b515942c7f4a68673b4bf472c398858b468b5c28f73d25b"
+    },
+    "horizons_qualification_result": {
+      "path": "horizons_qualification_result_v2.json",
+      "sha256": "02c5f266a79d06af59f88a50bbf9461743de6fb239abbec1ab00c4c2c26ae547"
+    },
+    "population_qualification_contract": {
+      "path": "population_qualification_contract_v1.json",
+      "sha256": "a94280f5c38a48b8d05fa641d045d3e02eeb95d04d28d0c2d0048ffc4885a7ed"
+    },
+    "population_qualification_result": {
+      "path": "population_qualification_result_v1.json",
+      "sha256": "b5fbd8860ab51d713d2e6c62dafbfacdc273553adecc1d7efd8c5022021fa6e6"
+    },
+    "reference_final_contract": {
+      "path": "../de441_population_100k/final_contract_v1.json",
+      "sha256": "1f3ccf6f29d4ec9890b9d66d19858c148760b00167281ce386afdfd0c8801725"
+    },
+    "reference_final_result": {
+      "path": "../de441_population_100k/final_result_v1.json",
+      "sha256": "24b7572cf130c683acd66a4677dac62d0d30b15b24f9bf5997b612a8045d7efd"
+    },
+    "reference_final_audit": {
+      "path": "../de441_population_100k/final_result_v1_audit.json",
+      "sha256": "57922e53e0c9a0bb021c659c5abecff85212792dac88241d62b9c8c4423acf12"
+    }
+  },
+  "prelock_rationale": {
+    "scientific_comparison_gates": "The population-level cross-software thresholds were fixed before the final independent run and are at least as strict as the original annual-sampling convergence gates for injection fraction, identity disagreement, survival, and source-control effect.",
+    "roundtrip_gate": "The 1e-10 element-conversion gate was fixed after a deterministic input-only audit found a maximum selected-block conversion error of 3.717559593496844e-11 AU; this audit did not integrate or inspect final outcomes.",
+    "numerical_gates": "The active-body conservation, endpoint-consistency, source-stability, and checkpoint gates were fixed after the external DE441/Horizons and 100-year operational qualifications passed."
+  },
+  "scientific_scope": "Independently integrate 10000 hash-selected matched massless tracers per arm for 10000 years with SciPy DOP853, then compare population observables and the candidate-9118 source-control effect against the locked REBOUND MERCURIUS result.",
+  "limitations": [
+    "This is a 10000-year dynamical screen, not a Solar-System-age integration.",
+    "The independent run reuses the locked physical assumptions and initial states intentionally; it tests software and numerical-method dependence, not model dependence.",
+    "SciPy DOP853 is independent of REBOUND MERCURIUS, but both use binary64 arithmetic on the same machine class.",
+    "Only 10000 of the original 100000 tracers per arm are independently replicated.",
+    "The hash-ranked selection was registered after the original REBOUND execution, so it is outcome-blind but not a preregistration made before the reference experiment.",
+    "The inner Solar System is collapsed into one monopole at the initial epoch.",
+    "Candidate 9118 elements are a declared model assumption, not a JPL state or a new observational fit.",
+    "Only candidate 9118 is tested; the result does not cover the wider source-parameter space.",
+    "The proposal is not an observed TNO population model or survey selection function.",
+    "Perihelion minima are sampled annually rather than continuously event-located.",
+    "The test particles are massless and do not interact with one another."
+  ],
+  "nonclaim": "Passing can show that the locked 10000-year source-control conclusion is robust to this independent software and integrator on the selected population. It cannot detect or exclude Planet X, validate candidate 9118, or convert a simulated effect into observational evidence.",
+  "allowed_verdicts": {
+    "PASSED": "All numerical-validity and cross-software population gates pass; claim remains SCREENING_ONLY.",
+    "CONFLICT": "Numerical validity passes but one or more locked cross-software population gates fail.",
+    "INVALID": "One or more locked numerical-validity gates fail."
+  }
+}

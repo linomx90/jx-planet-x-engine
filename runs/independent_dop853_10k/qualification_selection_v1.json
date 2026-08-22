@@ -1,0 +1,12 @@
+{
+  "schema": "jx-independent-block-selection/v1",
+  "selection_status": "OPERATIONAL_QUALIFICATION_ONLY",
+  "selected_blocks": [
+    0,
+    1
+  ],
+  "selected_count": 2,
+  "selection_rule": "Use the two blocks available in the pre-existing 100-year REBOUND qualification record.",
+  "inference_use": "none",
+  "nonclaim": "This fixed operational subset qualifies mechanics and numerical agreement only; it is not used for the final independent source-effect estimate."
+}

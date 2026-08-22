@@ -1,0 +1,113 @@
+{
+  "api_url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+  "body_count": 10,
+  "center": "Solar System Barycenter (0)",
+  "classification": "AUTHORITATIVE_EXTERNAL_REFERENCE",
+  "ephemeris_source_required": "DE441",
+  "epochs_jd_tdb": [
+    "2461200.50",
+    "2461565.75",
+    "2461931.00",
+    "2462296.25",
+    "2462661.50",
+    "2463026.75",
+    "2463392.00",
+    "2463757.25",
+    "2464122.50",
+    "2464487.75",
+    "2464853.00"
+  ],
+  "nonclaim": "Reference acquisition only; no JX output was computed by this program.",
+  "normalized_path": "horizons_de441_vectors.csv",
+  "normalized_sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e",
+  "raw_responses": [
+    {
+      "body_id": 1,
+      "body_name": "Mercury Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%271%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_01.txt",
+      "raw_sha256": "01a3326c34453df97208e1e97827e21c317b4ebc55369d949f568ab96e0ad31b",
+      "row_count": 11
+    },
+    {
+      "body_id": 2,
+      "body_name": "Venus Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%272%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_02.txt",
+      "raw_sha256": "3aa3e48a3f8ffa2cdcce4fb3b8d969f543ce25758818b914004880b61ad5b8d8",
+      "row_count": 11
+    },
+    {
+      "body_id": 3,
+      "body_name": "Earth-Moon Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%273%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_03.txt",
+      "raw_sha256": "766b017c703fd3ec8f8495919a650616b8b75dbfb7505bc1a7d3d72250d3f444",
+      "row_count": 11
+    },
+    {
+      "body_id": 4,
+      "body_name": "Mars Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%274%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_04.txt",
+      "raw_sha256": "7b6b889964dcc5932925049f887b725df35134319e4a42c5b3639b44a11e5193",
+      "row_count": 11
+    },
+    {
+      "body_id": 5,
+      "body_name": "Jupiter Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%275%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_05.txt",
+      "raw_sha256": "49ab0694b70f54616a4452029e3cfe0b99963f7af1aad12f00ec24622ee1fbb3",
+      "row_count": 11
+    },
+    {
+      "body_id": 6,
+      "body_name": "Saturn Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%276%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_06.txt",
+      "raw_sha256": "be010826b35dc01dec3e9143a7077bb3ccb8188154c6b278964972589b2b960a",
+      "row_count": 11
+    },
+    {
+      "body_id": 7,
+      "body_name": "Uranus Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%277%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_07.txt",
+      "raw_sha256": "877c30f5737f9ba81a745e66fc8fb389c8bbdc0b94cba356b24259b09d76f83f",
+      "row_count": 11
+    },
+    {
+      "body_id": 8,
+      "body_name": "Neptune Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%278%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_08.txt",
+      "raw_sha256": "44091fa94e02e6f245496f0c3fef0fdc22a7ec2dbe2289b3f34362e7a08674e1",
+      "row_count": 11
+    },
+    {
+      "body_id": 9,
+      "body_name": "Pluto Barycenter",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%279%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_09.txt",
+      "raw_sha256": "33e4b26c6fa1adc685d5437c669a36ba5db64e8e43f09271fd7b54984beab245",
+      "row_count": 11
+    },
+    {
+      "body_id": 10,
+      "body_name": "Sun",
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%2710%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27%400%27&REF_PLANE=%27FRAME%27&REF_SYSTEM=%27ICRF%27&OUT_UNITS=%27AU-D%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&VEC_LABELS=%27YES%27&TLIST=%272461200.50+2461565.75+2461931.00+2462296.25+2462661.50+2463026.75+2463392.00+2463757.25+2464122.50+2464487.75+2464853.00%27",
+      "raw_path": "raw/body_10.txt",
+      "raw_sha256": "05e413aaf6991f14357fbaa59ceb691941f4c14575a63c3f4629e4a1a7cfaa2f",
+      "row_count": 11
+    }
+  ],
+  "reference_frame": "ICRF",
+  "retrieved_at_utc": "2026-08-22T19:13:16.040190+00:00",
+  "row_count": 110,
+  "rows_per_body": 11,
+  "schema": "jx-horizons-reference/v1",
+  "state_type": "geometric Cartesian position and velocity",
+  "time_scale": "TDB",
+  "units": "AU and AU/day"
+}

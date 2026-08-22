@@ -1,0 +1,51 @@
+{
+  "schema": "jx-release-manifest/v1",
+  "project": "JX N-Body Engine",
+  "version": "0.3.0",
+  "release_date": "2026-08-22",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "validation": {
+    "test_command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
+    "tests_run": 76,
+    "tests_passed": 76,
+    "tests_failed": 0
+  },
+  "portable_files": {
+    ".gitignore": "b86984db08ab0c5449980fed0ba4758500834b6e64a2bec4a2fc468d08370575",
+    "CITATION.cff": "d604c4674bac24f392fd43ef9f744221461f97672f170c20ec1e118202cc962b",
+    "LICENSE": "2aabda4aa1b240ea14561807311d6bbc5342da9c4dc16e0df25edcd7eab55107",
+    "README.md": "2f062f5bfbaf2ae8a4b8c7f3e63dfa96620c3223cbc1bc92381431eb0a143997",
+    "RELEASE_NOTES.md": "4e1e28d2ba456428f683f0dc8db16faa693558b9174d0b2bb9d21c369baada32",
+    "pyproject.toml": "5b732fd3da6885e3f149297d315085d7e9553f444d8b849c31b6df6fe9930e96",
+    "src/jxplanetx/__init__.py": "cf7ba6aad065329789a2cd7f02aa06e8d7dc1625ea13db26201389d345db9df5",
+    "src/jxplanetx/independent_dop853.py": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062",
+    "tests/test_independent_dop853.py": "87ac8f962e3f61d59fa79850d44f784fb0d269c24b12fc177a695be5198c481c",
+    "runs/de441_population_100k/README.md": "170868adcc3030d96f66eab7ff6a33fb78e9ca9e8b7937f356183a661c4777e8",
+    "runs/independent_dop853_10k/README.md": "ad2c187a505030c6275ec8eecdcd491982351905ae9a5eadad4fcf8203c3a4ff",
+    "runs/independent_dop853_10k/run_replication.py": "60a284dde2765a34af9a9d12695a33a4aaac6dfc837bb14ee2d12b474b005b5f",
+    "runs/independent_dop853_10k/generate_selection.py": "40c38c49c356e3af79308a076fa253c13a9cb366be5325922089b155bbaff474",
+    "runs/independent_dop853_10k/selection_v1.json": "6cf177087444c109d8e83ee805d7c7319c396396f371f923c82612e1111a287d",
+    "runs/independent_dop853_10k/final_contract_v1.json": "cb3c03a8d62f3ce621d184e0603020e7f32dcdf527eb57b58459c58626d42210",
+    "runs/independent_dop853_10k/final_result_v1.json": "63dca00d4ef86df374d8ff4beafb6f86c8259177bac077cc1b7b1c4f0d1ba4d7",
+    "runs/independent_dop853_10k/diagnose_final_v1.py": "cdf89c22efa7159f7d029be74de2524c98f88b7b3e22ba9e340c3f5abab9a033",
+    "runs/independent_dop853_10k/final_v1_diagnostic_contract.json": "592c9ea6cdee09ad325f13e84afce3f84b0fdbf3ce16d85f4a42dc97ba165d72",
+    "runs/independent_dop853_10k/final_v1_diagnostic_result.json": "79fb86d3d99c8fba14d1229080abe40a29ead63c1fcab17fcdbbabb29d4cbcf8",
+    "runs/independent_dop853_10k/final_contract_v2.json": "1e7421c96bc401c44edb371079f7c9b590a84bfe98df9ed4de3d910ede4ed834",
+    "runs/independent_dop853_10k/final_result_v2.json": "2fe7c4a5f9c26b76ff0f4c2aaa02c584171a33739150801d6e4dce072771b6ff",
+    "runs/independent_dop853_10k/audit_final_v2.py": "d0bc3a42037f98e371a1794e93a627ec4c0b98137beb3473b56872ccf47d0113",
+    "runs/independent_dop853_10k/final_result_v2_audit.json": "f58df8ac8f5394ba0c83c6872788b0f976b7bd878c647c2ed6441cd9ea549b5b"
+  },
+  "reference_records": {
+    "runs/de441_population_100k/final_contract_v1.json": "1f3ccf6f29d4ec9890b9d66d19858c148760b00167281ce386afdfd0c8801725",
+    "runs/de441_population_100k/final_result_v1.json": "24b7572cf130c683acd66a4677dac62d0d30b15b24f9bf5997b612a8045d7efd",
+    "runs/de441_population_100k/final_result_v1_audit.json": "57922e53e0c9a0bb021c659c5abecff85212792dac88241d62b9c8c4423acf12"
+  },
+  "excluded_bulk_execution_directories": [
+    "runs/de441_population_100k/final_execution_v1/",
+    "runs/de441_population_100k/qualification_execution_v1/",
+    "runs/independent_dop853_10k/population_qualification_execution_v1/",
+    "runs/independent_dop853_10k/final_execution_v1/",
+    "runs/independent_dop853_10k/final_execution_v2/"
+  ],
+  "nonclaim": "This manifest authenticates a software and compact scientific-record release. It does not provide observational evidence for or against Planet X."
+}

@@ -1,0 +1,159 @@
+{
+  "schema": "jx-de441-population-contract/v1",
+  "experiment_id": "de441-bb21-9118-population-qualification-v1",
+  "registration_status": "PRELOCKED_BEFORE_MODEL_OUTCOMES",
+  "registration_purpose": "Operational and numerical qualification only; this run is not used to estimate the final source effect.",
+  "experiment_classification": "REAL_EPOCH_DE441_BACKBONE_OUTCOME_BLIND_PROPOSAL_QUALIFICATION",
+  "states": {
+    "control_path": "states/de441_control_state.csv",
+    "control_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+    "source_path": "states/de441_source_9118_state.csv",
+    "source_sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf",
+    "epoch_jd_tdb": 2461200.5,
+    "frame": "J2000 ecliptic",
+    "mass_column": "GM in AU^3/year^2"
+  },
+  "population": {
+    "elements_path": "population_elements_v1.csv",
+    "elements_sha256": "2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1",
+    "blocks": 2,
+    "tracers_per_block": 1000,
+    "selection_rule": "locked blocks 0 and 1 in full; no result-dependent selection",
+    "inference_unit": "independent phase/design block"
+  },
+  "dynamics": {
+    "integrator": "mercurius",
+    "G": 1,
+    "duration_years": 100.0,
+    "aggregate_years": 10.0,
+    "checkpoint_years": 25.0,
+    "test_particles_are_massless": true,
+    "collisions": "none",
+    "mercurius_r_crit_hill": 3.0
+  },
+  "stages": {
+    "primary": {
+      "dt_years": 0.0625,
+      "sample_years": 1.0
+    },
+    "dt_half": {
+      "blocks": 1,
+      "tracers_per_block": 1000,
+      "dt_years": 0.03125,
+      "sample_years": 1.0
+    },
+    "sample_fine": {
+      "blocks": 1,
+      "tracers_per_block": 1000,
+      "dt_years": 0.0625,
+      "sample_years": 0.25
+    }
+  },
+  "classification": {
+    "q_threshold_AU": 30.0,
+    "q_hysteresis_AU": 0.000001,
+    "injection_rule": "minimum sampled osculating perihelion is strictly below 29.999999 AU"
+  },
+  "statistics": {
+    "bootstrap_seed": "jx-de441-qualification-paired-block-bootstrap-v1",
+    "bootstrap_repetitions": 999,
+    "confidence_level": 0.95,
+    "equivalence_margin": 0.001,
+    "effect_definition": "source minus control sampled-injection fraction",
+    "effect_classification_rule": "positive or negative only if the paired-block bootstrap interval excludes zero; equivalent only if the full interval is inside the locked margin"
+  },
+  "gates": {
+    "max_relative_massive_energy_drift": 1e-7,
+    "max_relative_massive_angular_momentum_vector_drift": 1e-10,
+    "source_minimum_q_AU": 200.0,
+    "source_maximum_fractional_a_excursion": 0.1,
+    "dt_half_convergence": {
+      "max_injection_fraction_difference": 0.002,
+      "max_injection_identity_disagreement_fraction": 0.01,
+      "max_survival_fraction_difference": 0.002,
+      "max_wasserstein_minimum_q_AU": 0.25,
+      "max_wasserstein_final_q_AU": 0.1,
+      "max_wasserstein_final_i_deg": 0.1,
+      "max_source_control_effect_difference": 0.002
+    },
+    "sample_cadence_convergence": {
+      "max_injection_fraction_difference": 0.001,
+      "max_injection_identity_disagreement_fraction": 0.005,
+      "max_survival_fraction_difference": 0.001,
+      "max_wasserstein_minimum_q_AU": 0.05,
+      "max_wasserstein_final_q_AU": 0.01,
+      "max_wasserstein_final_i_deg": 0.01,
+      "max_source_control_effect_difference": 0.001
+    }
+  },
+  "backend": {
+    "name": "REBOUND",
+    "version": "4.4.11",
+    "build": "Aug 20 2026 20:18:34",
+    "binary_sha256": "ab0b6b0148eb3fde47f9ad71da44034b33bd5da55a7ec55af46c919dcd3f186a",
+    "wheel_path": "../../../imports/Planetx/rebound-4.4.11-cp312-cp312-linux_x86_64.whl",
+    "wheel_sha256": "0f8262cb39c391c9cdc0f63c975eb003e0ab1d3812025c367a3b203bc4e4143f"
+  },
+  "execution": {
+    "workers": 4,
+    "checkpoint_restart_required": true,
+    "immutable_result": true
+  },
+  "locked_files": {
+    "validation_module": {
+      "path": "../../src/jxplanetx/de441_population.py",
+      "sha256": "606532e90bd9d9934a48aaf06435121c8bdcc6552dad036cfe5898e73927907f"
+    },
+    "runner": {
+      "path": "run_population.py",
+      "sha256": "9fab494daaf5546e470063afc6c271500b33ced0419a99e10e50425b51c507b8"
+    },
+    "encounter_tail_dependency": {
+      "path": "../../src/jxplanetx/encounter_tail.py",
+      "sha256": "5b21fb932eea643a98bd87af373c3b25a2fe213eb55d555963f83dc902c3e4d1"
+    },
+    "population_scale_dependency": {
+      "path": "../../src/jxplanetx/population_scale.py",
+      "sha256": "8c2448badf1b753644c367fbbf98faca6d10b609691c84c0efceb1d1f4e6a5bb"
+    },
+    "ensemble_validation_dependency": {
+      "path": "../../src/jxplanetx/ensemble_validation.py",
+      "sha256": "ad513de454fa7bd906bcafb6ff1cb6ed5a976739bc9dd481bcf8272beac921a3"
+    },
+    "state_builder": {
+      "path": "build_real_epoch_states.py",
+      "sha256": "1a10ead88bf2f8cd5ff872207328c9c1d574c26750295736125dc16ed49c983f"
+    },
+    "population_generator": {
+      "path": "generate_locked_population.py",
+      "sha256": "b0ef3e3b4587825ba5092deeb341dbab7eda93f1ed2c96e8608e1d817406c3fa"
+    },
+    "state_manifest": {
+      "path": "states/state_manifest.json",
+      "sha256": "ec6e2ba8877d206838172dbb573318a2122977e263c054994d4c82a409a43d36"
+    },
+    "population_manifest": {
+      "path": "population_manifest_v1.json",
+      "sha256": "c3dd5528f382c4fd0ff71921d6d5be635faf71ca82e1d73ddd268fcbe62e8381"
+    },
+    "de441_validation_result": {
+      "path": "../de441_horizons_10yr/result_v1.json",
+      "sha256": "277c006e4c6474b2d52c1f002daf6b156067398685dca8cc1efa1e138c753a4e"
+    },
+    "de441_validation_contract": {
+      "path": "../de441_horizons_10yr/contract_v1.json",
+      "sha256": "5112c90e71317a5cae54d17ea82296296af68812f18c663429dc773ac161053f"
+    }
+  },
+  "scientific_scope": "Qualify the locked DE441-derived source/control population runner over 100 years on 2000 paired tracers before authorizing the long 100000-tracer screen.",
+  "limitations": [
+    "This qualification is too short and too small for source-effect inference.",
+    "The inner Solar System is collapsed into one monopole at the initial epoch.",
+    "Candidate 9118 elements at the epoch are a declared model assumption, not a JPL state or a new observational fit.",
+    "The broad outcome-blind proposal is not an observed TNO prior or survey selection function.",
+    "Perihelion minima and encounters are sampled, not continuously event-located.",
+    "The test particles are massless and do not interact with one another.",
+    "The convergence checks use the same REBOUND software and are not independent-software replication."
+  ],
+  "nonclaim": "Passing qualifies this execution design only. It does not detect or exclude Planet X, validate candidate 9118, or establish a physical trans-Neptunian population effect."
+}

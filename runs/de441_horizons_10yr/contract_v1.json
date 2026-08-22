@@ -1,0 +1,116 @@
+{
+  "schema": "jx-de441-horizons-contract/v1",
+  "lock_state": "PRELOCKED_BEFORE_MODEL_EXECUTION",
+  "locked_at_utc": "2026-08-22T19:16:27Z",
+  "test_name": "JX ten-year Newtonian compatibility with JPL Horizons DE441",
+  "scientific_scope": "Tests whether a JX ten-body Newtonian point-mass propagation initialized from DE441/Horizons remains compatible with the heliocentric Jupiter, Saturn, Uranus, and Neptune barycenter states over 10 years. This is a deliberately limited force-model compatibility test.",
+  "reference": {
+    "provider": "NASA/JPL Horizons",
+    "ephemeris": "DE441",
+    "center": "Solar System Barycenter (0)",
+    "frame": "ICRF",
+    "time_scale": "TDB",
+    "state_type": "geometric Cartesian position and velocity",
+    "units": "AU and AU/day",
+    "retrieved_at_utc": "2026-08-22T19:13:16.040190+00:00"
+  },
+  "epochs_jd_tdb": [
+    "2461200.5",
+    "2461565.75",
+    "2461931.0",
+    "2462296.25",
+    "2462661.5",
+    "2463026.75",
+    "2463392.0",
+    "2463757.25",
+    "2464122.5",
+    "2464487.75",
+    "2464853.0"
+  ],
+  "locked_files": {
+    "reference_vectors": {
+      "path": "runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv",
+      "sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e"
+    },
+    "reference_manifest": {
+      "path": "runs/de441_horizons_10yr/reference/horizons_reference_manifest.json",
+      "sha256": "87bf405df5d333dde237b8a6f63ba57a67baff60e74f752b5d1e77cc094d4565"
+    },
+    "gm_table": {
+      "path": "runs/de441_horizons_10yr/gm_de440_major_barycenters.csv",
+      "sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217"
+    },
+    "reference_acquisition_code": {
+      "path": "runs/de441_horizons_10yr/fetch_horizons_reference.py",
+      "sha256": "9370a700057b5e624620304660ff67cea6a57f3cd089508b6d2246efd560a5c0"
+    },
+    "validation_module": {
+      "path": "src/jxplanetx/de441_horizons.py",
+      "sha256": "f69a75a026b3377576300e8dd206a184958ff889fae5855bb79d8967f9067c78"
+    },
+    "validation_runner": {
+      "path": "runs/de441_horizons_10yr/run_validation.py",
+      "sha256": "384cbdb002803733922444360ba3b30c3921defc8d8c87911e4ebba6b39ca982"
+    }
+  },
+  "gm_provenance": {
+    "source_name": "NAIF gm_de440.tpc, DE440 barycenter and Sun mass parameters",
+    "source_sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+    "source_units": "km^3/s^2",
+    "conversion": "GM_AU3_day2 = GM_km3_s2 * 86400^2 / 149597870.700^3"
+  },
+  "backend": {
+    "name": "REBOUND IAS15 through JX",
+    "rebound_version": "4.4.11",
+    "librebound_sha256": "ab0b6b0148eb3fde47f9ad71da44034b33bd5da55a7ec55af46c919dcd3f186a",
+    "ias15_epsilon": "0",
+    "ias15_adaptive_mode": 2,
+    "ias15_min_dt": "0",
+    "advance_method": "Simulation.steps"
+  },
+  "model": {
+    "force_law": "Newtonian point-mass gravity",
+    "active_body_ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "science_gate_body_ids": [5, 6, 7, 8],
+    "comparison_origin": "heliocentric differences formed independently at every epoch",
+    "included": "Sun plus Mercury through Pluto system barycenters",
+    "omitted": [
+      "post-Newtonian relativity",
+      "resolved Earth and Moon",
+      "resolved planetary satellites",
+      "asteroids and trans-Neptunian perturbers",
+      "solar oblateness",
+      "non-gravitational forces"
+    ]
+  },
+  "runs": {
+    "coarse": {
+      "dt_days": "0.125",
+      "steps_per_365.25_days": 2922,
+      "total_steps": 29220
+    },
+    "tight": {
+      "dt_days": "0.0625",
+      "steps_per_365.25_days": 5844,
+      "total_steps": 58440
+    }
+  },
+  "acceptance_gates": {
+    "max_initial_position_residual_au": "1e-15",
+    "max_initial_velocity_residual_au_per_day": "1e-15",
+    "max_outer_convergence_position_au": "1e-10",
+    "max_outer_convergence_velocity_au_per_day": "1e-11",
+    "max_outer_de441_position_residual_au": "1e-5",
+    "max_outer_de441_velocity_residual_au_per_day": "1e-8",
+    "max_relative_energy_drift": "1e-12",
+    "max_relative_angular_momentum_drift": "1e-12",
+    "max_ias15_iterations_exceeded": "0"
+  },
+  "verdict_logic": {
+    "PASSED": "All locked input, completion, numerical-convergence, invariant, and outer-planet DE441 compatibility gates pass.",
+    "INVALID": "The computation completes but one or more prelocked gates fail.",
+    "BLOCKED": "A locked prerequisite or integrity check prevents a valid computation."
+  },
+  "threshold_policy": "Acceptance limits are immutable for this execution. A failed gate must be reported as INVALID; it may not be loosened after seeing JX output.",
+  "nonclaim": "Passing does not reproduce the full DE441 force model, fit observations, validate long-term chaotic populations, detect or exclude Planet X, or estimate any unknown source. Failure would identify incompatibility under this contract, not falsify DE441."
+}

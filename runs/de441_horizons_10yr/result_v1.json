@@ -1,0 +1,468 @@
+{
+  "all_gates_passed": true,
+  "backend": {
+    "library_path": "/workspace/scratch/388807340cce/.vendor/librebound.cpython-312-x86_64-linux-gnu.so",
+    "library_sha256": "ab0b6b0148eb3fde47f9ad71da44034b33bd5da55a7ec55af46c919dcd3f186a",
+    "version": "4.4.11"
+  },
+  "claim_decision": "SCREENING_ONLY",
+  "classification": "EXTERNAL_REFERENCE_COMPATIBILITY_TEST",
+  "completed_at_utc": "2026-08-22T19:17:19.684894+00:00",
+  "contract_path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/contract_v1.json",
+  "contract_sha256": "5112c90e71317a5cae54d17ea82296296af68812f18c663429dc773ac161053f",
+  "derived_outer_gate_units": {
+    "max_position_residual_km": 33.60132901582311,
+    "max_velocity_residual_m_per_s": 0.0005100449671348433
+  },
+  "gates": {
+    "coarse_relative_angular_momentum_drift": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-12,
+      "value": 3.7903823234869664e-16
+    },
+    "coarse_relative_energy_drift": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-12,
+      "value": 4.929602403649047e-16
+    },
+    "completed_exact_step_counts": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "ias15_iterations_max_exceeded": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.0,
+      "value": 0
+    },
+    "initial_state_position_residual_au": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-15,
+      "value": 0.0
+    },
+    "initial_state_velocity_residual_au_per_day": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-15,
+      "value": 0.0
+    },
+    "outer_convergence_position_au": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-10,
+      "value": 4.440892098500626e-16
+    },
+    "outer_convergence_velocity_au_per_day": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-11,
+      "value": 5.421010862427522e-20
+    },
+    "outer_de441_position_residual_au": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-05,
+      "value": 2.2461101123027624e-07
+    },
+    "outer_de441_velocity_residual_au_per_day": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-08,
+      "value": 2.9457561764915193e-10
+    },
+    "tight_relative_angular_momentum_drift": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-12,
+      "value": 3.7903823234869664e-16
+    },
+    "tight_relative_energy_drift": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-12,
+      "value": 4.929602403649047e-16
+    }
+  },
+  "model": {
+    "active_body_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "comparison_origin": "heliocentric differences formed independently at every epoch",
+    "force_law": "Newtonian point-mass gravity",
+    "included": "Sun plus Mercury through Pluto system barycenters",
+    "omitted": [
+      "post-Newtonian relativity",
+      "resolved Earth and Moon",
+      "resolved planetary satellites",
+      "asteroids and trans-Neptunian perturbers",
+      "solar oblateness",
+      "non-gravitational forces"
+    ],
+    "science_gate_body_ids": [
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "nonclaim": "Passing does not reproduce the full DE441 force model, fit observations, validate long-term chaotic populations, detect or exclude Planet X, or estimate any unknown source. Failure would identify incompatibility under this contract, not falsify DE441.",
+  "reference_residuals_by_body": {
+    "1": {
+      "final_position_residual_au": 1.2972382416878273e-05,
+      "final_velocity_residual_au_per_day": 9.192638399104614e-07,
+      "max_position_residual_au": 1.2972382416878273e-05,
+      "max_velocity_residual_au_per_day": 9.192638399104614e-07,
+      "rms_position_residual_au": 7.1976322388168224e-06,
+      "rms_velocity_residual_au_per_day": 5.419986014936879e-07
+    },
+    "10": {
+      "final_position_residual_au": 0.0,
+      "final_velocity_residual_au_per_day": 0.0,
+      "max_position_residual_au": 0.0,
+      "max_velocity_residual_au_per_day": 0.0,
+      "rms_position_residual_au": 0.0,
+      "rms_velocity_residual_au_per_day": 0.0
+    },
+    "2": {
+      "final_position_residual_au": 6.046931018056649e-06,
+      "final_velocity_residual_au_per_day": 1.6953267930481265e-07,
+      "max_position_residual_au": 6.046931018056649e-06,
+      "max_velocity_residual_au_per_day": 1.6953267930481265e-07,
+      "rms_position_residual_au": 3.634678307357136e-06,
+      "rms_velocity_residual_au_per_day": 1.0165742745551823e-07
+    },
+    "3": {
+      "final_position_residual_au": 4.379135235001176e-06,
+      "final_velocity_residual_au_per_day": 7.281674704316453e-08,
+      "max_position_residual_au": 4.379135235001176e-06,
+      "max_velocity_residual_au_per_day": 7.281674704316453e-08,
+      "rms_position_residual_au": 2.5912972105376693e-06,
+      "rms_velocity_residual_au_per_day": 4.310483515635162e-08
+    },
+    "4": {
+      "final_position_residual_au": 2.0784214233880713e-06,
+      "final_velocity_residual_au_per_day": 1.8654821745534263e-08,
+      "max_position_residual_au": 2.621893878684583e-06,
+      "max_velocity_residual_au_per_day": 2.497510757380164e-08,
+      "rms_position_residual_au": 1.4534874268029583e-06,
+      "rms_velocity_residual_au_per_day": 1.3415411655560779e-08
+    },
+    "5": {
+      "final_position_residual_au": 2.2461101123027624e-07,
+      "final_velocity_residual_au_per_day": 2.9457561764915193e-10,
+      "max_position_residual_au": 2.2461101123027624e-07,
+      "max_velocity_residual_au_per_day": 2.9457561764915193e-10,
+      "rms_position_residual_au": 1.2792344799137782e-07,
+      "rms_velocity_residual_au_per_day": 1.7885511976906884e-10
+    },
+    "6": {
+      "final_position_residual_au": 4.933727396914961e-08,
+      "final_velocity_residual_au_per_day": 2.9650889611202286e-11,
+      "max_position_residual_au": 4.933727396914961e-08,
+      "max_velocity_residual_au_per_day": 3.235468904781244e-11,
+      "rms_position_residual_au": 2.6690683680807174e-08,
+      "rms_velocity_residual_au_per_day": 2.1092128674951552e-11
+    },
+    "7": {
+      "final_position_residual_au": 2.293782801852943e-08,
+      "final_velocity_residual_au_per_day": 5.424776078277084e-12,
+      "max_position_residual_au": 2.293782801852943e-08,
+      "max_velocity_residual_au_per_day": 1.4084038315253423e-11,
+      "rms_position_residual_au": 1.3287139994539548e-08,
+      "rms_velocity_residual_au_per_day": 9.840839044334556e-12
+    },
+    "8": {
+      "final_position_residual_au": 6.44467346373289e-08,
+      "final_velocity_residual_au_per_day": 2.7680859598319095e-11,
+      "max_position_residual_au": 6.44467346373289e-08,
+      "max_velocity_residual_au_per_day": 3.019175018872433e-11,
+      "rms_position_residual_au": 3.2983809379585594e-08,
+      "rms_velocity_residual_au_per_day": 2.0709575877439896e-11
+    },
+    "9": {
+      "final_position_residual_au": 1.0574077201096092e-07,
+      "final_velocity_residual_au_per_day": 5.4646259464651576e-11,
+      "max_position_residual_au": 1.0574077201096092e-07,
+      "max_velocity_residual_au_per_day": 5.4646259464651576e-11,
+      "rms_position_residual_au": 5.288968230542038e-08,
+      "rms_velocity_residual_au_per_day": 3.356477305821126e-11
+    }
+  },
+  "residual_csv": {
+    "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/residuals_v1.csv",
+    "sha256": "f47521aa941fb8899ac7655ac4b7449dc770d399c1b62542102b091a592ff03b"
+  },
+  "runs": {
+    "coarse": {
+      "dt_days": 0.125,
+      "expected_steps": 29220,
+      "invariants": [
+        {
+          "jd_tdb": 2461200.5,
+          "relative_angular_momentum_drift": 0.0,
+          "relative_energy_drift": 0.0
+        },
+        {
+          "jd_tdb": 2461565.75,
+          "relative_angular_momentum_drift": 4.908514909874836e-17,
+          "relative_energy_drift": 0.0
+        },
+        {
+          "jd_tdb": 2461931.0,
+          "relative_angular_momentum_drift": 3.7903823234869664e-16,
+          "relative_energy_drift": 4.929602403649047e-16
+        },
+        {
+          "jd_tdb": 2462296.25,
+          "relative_angular_momentum_drift": 9.630344971950421e-17,
+          "relative_energy_drift": 0.0
+        },
+        {
+          "jd_tdb": 2462661.5,
+          "relative_angular_momentum_drift": 2.0561900314880763e-16,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2463026.75,
+          "relative_angular_momentum_drift": 4.631752693983239e-17,
+          "relative_energy_drift": 4.929602403649047e-16
+        },
+        {
+          "jd_tdb": 2463392.0,
+          "relative_angular_momentum_drift": 2.055387302575389e-16,
+          "relative_energy_drift": 1.6432008012163487e-16
+        },
+        {
+          "jd_tdb": 2463757.25,
+          "relative_angular_momentum_drift": 0.0,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2464122.5,
+          "relative_angular_momentum_drift": 9.263505387966477e-17,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2464487.75,
+          "relative_angular_momentum_drift": 1.8392917258752918e-16,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2464853.0,
+          "relative_angular_momentum_drift": 9.209907028414728e-17,
+          "relative_energy_drift": 0.0
+        }
+      ],
+      "iterations_max_exceeded": 0,
+      "max_relative_angular_momentum_drift": 3.7903823234869664e-16,
+      "max_relative_energy_drift": 4.929602403649047e-16,
+      "steps_done": 29220,
+      "steps_per_output_interval": 2922,
+      "wall_seconds": 0.358598271000119
+    },
+    "tight": {
+      "dt_days": 0.0625,
+      "expected_steps": 58440,
+      "invariants": [
+        {
+          "jd_tdb": 2461200.5,
+          "relative_angular_momentum_drift": 0.0,
+          "relative_energy_drift": 0.0
+        },
+        {
+          "jd_tdb": 2461565.75,
+          "relative_angular_momentum_drift": 4.908514909874836e-17,
+          "relative_energy_drift": 0.0
+        },
+        {
+          "jd_tdb": 2461931.0,
+          "relative_angular_momentum_drift": 3.7903823234869664e-16,
+          "relative_energy_drift": 4.929602403649047e-16
+        },
+        {
+          "jd_tdb": 2462296.25,
+          "relative_angular_momentum_drift": 9.630344971950421e-17,
+          "relative_energy_drift": 0.0
+        },
+        {
+          "jd_tdb": 2462661.5,
+          "relative_angular_momentum_drift": 2.0561900314880763e-16,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2463026.75,
+          "relative_angular_momentum_drift": 4.7374336532622764e-17,
+          "relative_energy_drift": 4.929602403649047e-16
+        },
+        {
+          "jd_tdb": 2463392.0,
+          "relative_angular_momentum_drift": 2.055387302575389e-16,
+          "relative_energy_drift": 1.6432008012163487e-16
+        },
+        {
+          "jd_tdb": 2463757.25,
+          "relative_angular_momentum_drift": 0.0,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2464122.5,
+          "relative_angular_momentum_drift": 9.263505387966477e-17,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2464487.75,
+          "relative_angular_momentum_drift": 1.8392917258752918e-16,
+          "relative_energy_drift": 3.2864016024326974e-16
+        },
+        {
+          "jd_tdb": 2464853.0,
+          "relative_angular_momentum_drift": 9.209907028414728e-17,
+          "relative_energy_drift": 0.0
+        }
+      ],
+      "iterations_max_exceeded": 0,
+      "max_relative_angular_momentum_drift": 3.7903823234869664e-16,
+      "max_relative_energy_drift": 4.929602403649047e-16,
+      "steps_done": 58440,
+      "steps_per_output_interval": 5844,
+      "wall_seconds": 0.7390753040008349
+    }
+  },
+  "runtime": {
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.13 (main, Aug  7 2026, 02:25:39) [Clang 22.1.3 ]"
+  },
+  "schema": "jx-de441-horizons-result/v1",
+  "science_verdict": "PASSED",
+  "scientific_scope": "Tests whether a JX ten-body Newtonian point-mass propagation initialized from DE441/Horizons remains compatible with the heliocentric Jupiter, Saturn, Uranus, and Neptune barycenter states over 10 years. This is a deliberately limited force-model compatibility test.",
+  "started_at_utc": "2026-08-22T19:17:18.554492+00:00",
+  "state_csv": {
+    "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/jx_states_v1.csv",
+    "sha256": "b09880f39a399f0549190df1e5da0422d76836a30899722e5217accfc48b6b9d"
+  },
+  "status": "DE441_NEWTONIAN_COMPATIBILITY_PASSED",
+  "timestep_convergence_by_body": {
+    "1": {
+      "final_position_residual_au": 3.560295004908868e-15,
+      "final_velocity_residual_au_per_day": 2.5243654060954143e-16,
+      "max_position_residual_au": 4.4214422873653615e-15,
+      "max_velocity_residual_au_per_day": 3.3402324633292073e-16,
+      "rms_position_residual_au": 3.095771056139852e-15,
+      "rms_velocity_residual_au_per_day": 2.1872562137282299e-16
+    },
+    "10": {
+      "final_position_residual_au": 0.0,
+      "final_velocity_residual_au_per_day": 0.0,
+      "max_position_residual_au": 0.0,
+      "max_velocity_residual_au_per_day": 0.0,
+      "rms_position_residual_au": 0.0,
+      "rms_velocity_residual_au_per_day": 0.0
+    },
+    "2": {
+      "final_position_residual_au": 5.445064602818712e-15,
+      "final_velocity_residual_au_per_day": 1.510879977875624e-16,
+      "max_position_residual_au": 5.445064602818712e-15,
+      "max_velocity_residual_au_per_day": 1.510879977875624e-16,
+      "rms_position_residual_au": 2.8993474879884127e-15,
+      "rms_velocity_residual_au_per_day": 8.069253673357951e-17
+    },
+    "3": {
+      "final_position_residual_au": 2.37549462997806e-15,
+      "final_velocity_residual_au_per_day": 4.040686369316634e-17,
+      "max_position_residual_au": 2.37549462997806e-15,
+      "max_velocity_residual_au_per_day": 4.040686369316634e-17,
+      "rms_position_residual_au": 1.5199129777189382e-15,
+      "rms_velocity_residual_au_per_day": 2.6265129478282337e-17
+    },
+    "4": {
+      "final_position_residual_au": 0.0,
+      "final_velocity_residual_au_per_day": 8.673617379884035e-19,
+      "max_position_residual_au": 3.608224830031759e-16,
+      "max_velocity_residual_au_per_day": 3.1358802478088506e-18,
+      "rms_position_residual_au": 1.625430931974192e-16,
+      "rms_velocity_residual_au_per_day": 1.7223977089765731e-18
+    },
+    "5": {
+      "final_position_residual_au": 4.440892098500626e-16,
+      "final_velocity_residual_au_per_day": 0.0,
+      "max_position_residual_au": 4.440892098500626e-16,
+      "max_velocity_residual_au_per_day": 5.421010862427522e-20,
+      "rms_position_residual_au": 1.3391427873961443e-16,
+      "rms_velocity_residual_au_per_day": 1.8274223889301883e-20
+    },
+    "6": {
+      "final_position_residual_au": 0.0,
+      "final_velocity_residual_au_per_day": 0.0,
+      "max_position_residual_au": 0.0,
+      "max_velocity_residual_au_per_day": 5.421010862427522e-20,
+      "rms_position_residual_au": 0.0,
+      "rms_velocity_residual_au_per_day": 1.6344962741011842e-20
+    },
+    "7": {
+      "final_position_residual_au": 0.0,
+      "final_velocity_residual_au_per_day": 0.0,
+      "max_position_residual_au": 0.0,
+      "max_velocity_residual_au_per_day": 3.3881317890172014e-21,
+      "rms_position_residual_au": 0.0,
+      "rms_velocity_residual_au_per_day": 1.0215601713132401e-21
+    },
+    "8": {
+      "final_position_residual_au": 0.0,
+      "final_velocity_residual_au_per_day": 0.0,
+      "max_position_residual_au": 0.0,
+      "max_velocity_residual_au_per_day": 0.0,
+      "rms_position_residual_au": 0.0,
+      "rms_velocity_residual_au_per_day": 0.0
+    },
+    "9": {
+      "final_position_residual_au": 0.0,
+      "final_velocity_residual_au_per_day": 0.0,
+      "max_position_residual_au": 0.0,
+      "max_velocity_residual_au_per_day": 0.0,
+      "rms_position_residual_au": 0.0,
+      "rms_velocity_residual_au_per_day": 0.0
+    }
+  },
+  "verified_locked_inputs": {
+    "files": {
+      "gm_table": {
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/gm_de440_major_barycenters.csv",
+        "sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217"
+      },
+      "reference_acquisition_code": {
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/fetch_horizons_reference.py",
+        "sha256": "9370a700057b5e624620304660ff67cea6a57f3cd089508b6d2246efd560a5c0"
+      },
+      "reference_manifest": {
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/reference/horizons_reference_manifest.json",
+        "sha256": "87bf405df5d333dde237b8a6f63ba57a67baff60e74f752b5d1e77cc094d4565"
+      },
+      "reference_vectors": {
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv",
+        "sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e"
+      },
+      "validation_module": {
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/src/jxplanetx/de441_horizons.py",
+        "sha256": "f69a75a026b3377576300e8dd206a184958ff889fae5855bb79d8967f9067c78"
+      },
+      "validation_runner": {
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/run_validation.py",
+        "sha256": "384cbdb002803733922444360ba3b30c3921defc8d8c87911e4ebba6b39ca982"
+      }
+    }
+  }
+}

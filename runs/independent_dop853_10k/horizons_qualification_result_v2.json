@@ -1,0 +1,85 @@
+{
+  "accepted_steps": 14630,
+  "all_gates_passed": true,
+  "checks": {
+    "angular_momentum_drift": true,
+    "complete_epoch_grid": true,
+    "energy_drift": true,
+    "finite_endpoint": true,
+    "outer_position_residual": true,
+    "outer_velocity_residual": true
+  },
+  "classification": "EXTERNAL_DE441_COMPATIBILITY_INDEPENDENT_OF_REBOUND",
+  "contract_path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/horizons_qualification_contract_v2.json",
+  "contract_sha256": "3064e6f23fdec4ff5b515942c7f4a68673b4bf472c398858b468b5c28f73d25b",
+  "elapsed_seconds": 6.054673038001056,
+  "maximum_outer_position_residual_AU": 2.2461094883525834e-07,
+  "maximum_outer_position_residual_km": 33.60131968166129,
+  "maximum_outer_velocity_residual_AU_per_day": 2.9457563884382634e-10,
+  "maximum_outer_velocity_residual_m_per_s": 0.0005100450038325072,
+  "maximum_relative_angular_momentum_vector_drift": 7.831276810309354e-15,
+  "maximum_relative_energy_drift": 1.528176745131205e-14,
+  "nonclaim": "Passing establishes only short-arc external compatibility of this independent Newtonian solver. It does not validate long-term chaotic tracers, detect or exclude Planet X, or reproduce the full DE441 force model.",
+  "residual_csv": {
+    "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/horizons_qualification_residuals_v2.csv",
+    "sha256": "a708566de55ec440d2ce3217e473b52aaa2249d811d3093595cd640b0dec5456"
+  },
+  "rhs_evaluations": 175580,
+  "runtime": {
+    "files": {
+      "numpy_multiarray_binary": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      },
+      "scipy_dop853_coefficients": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy/integrate/_ivp/dop853_coefficients.py",
+        "sha256": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001"
+      },
+      "scipy_rk_source": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy/integrate/_ivp/rk.py",
+        "sha256": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+      }
+    },
+    "numpy_version": "2.3.5",
+    "python_implementation": "CPython",
+    "python_version": "3.12.13",
+    "scipy_version": "1.17.0"
+  },
+  "schema": "jx-independent-dop853-horizons-result/v1",
+  "science_status": "SCREENING_ONLY",
+  "verdict": "PASSED",
+  "verified_locked_files": {
+    "gm_table": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/gm_de440_major_barycenters.csv",
+      "sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217"
+    },
+    "independent_module": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/src/jxplanetx/independent_dop853.py",
+      "sha256": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062"
+    },
+    "initial_state": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/jx_states_v1.csv",
+      "sha256": "b09880f39a399f0549190df1e5da0422d76836a30899722e5217accfc48b6b9d"
+    },
+    "original_de441_contract": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/contract_v1.json",
+      "sha256": "5112c90e71317a5cae54d17ea82296296af68812f18c663429dc773ac161053f"
+    },
+    "original_de441_result": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/result_v1.json",
+      "sha256": "277c006e4c6474b2d52c1f002daf6b156067398685dca8cc1efa1e138c753a4e"
+    },
+    "qualification_runner": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/run_horizons_qualification.py",
+      "sha256": "4cbfff211685ebe53a1f40b76eea07eba5de86566f4f1e12c1b3ae5e9b9df102"
+    },
+    "reference_vectors": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv",
+      "sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e"
+    },
+    "v1_withdrawal_record": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/horizons_qualification_v1_withdrawal.json",
+      "sha256": "2d75c7b4254987ba3af3f99f24401fb04c46f3f08c84acbed7265330d33a44e9"
+    }
+  }
+}

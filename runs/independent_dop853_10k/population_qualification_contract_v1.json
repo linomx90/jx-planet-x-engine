@@ -1,0 +1,131 @@
+{
+  "schema": "jx-independent-dop853-contract/v1",
+  "experiment_id": "jx-independent-dop853-population-qualification-100yr-v1",
+  "registration_status": "PRELOCKED_BEFORE_INDEPENDENT_OUTCOMES",
+  "mode": "OPERATIONAL_QUALIFICATION",
+  "states": {
+    "control_path": "../de441_population_100k/states/de441_control_state.csv",
+    "control_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+    "source_path": "../de441_population_100k/states/de441_source_9118_state.csv",
+    "source_sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf"
+  },
+  "population": {
+    "elements_path": "../de441_population_100k/population_elements_v1.csv",
+    "elements_sha256": "2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1",
+    "tracers_per_block": 1000
+  },
+  "selection": {
+    "path": "qualification_selection_v1.json",
+    "sha256": "ca315c7f027379c8775bf825d985a0cc3ff9966ae526c5e874b3b8810cb628b1",
+    "expected_blocks": 2
+  },
+  "reference": {
+    "backend": "REBOUND 4.4.11 MERCURIUS",
+    "result_path": "../de441_population_100k/qualification_result_v1.json",
+    "result_sha256": "68598a3cc65c0667d2788c84ae687362cd72ce64528d41f3a39fc77d9198090c",
+    "execution_root": "../de441_population_100k/qualification_execution_v1"
+  },
+  "dynamics": {
+    "duration_years": 100.0,
+    "sample_years": 1.0,
+    "checkpoint_years": 25.0,
+    "force_law": "independently implemented Newtonian point-mass gravity",
+    "test_particles_are_massless": true
+  },
+  "solver": {
+    "method": "scipy.integrate.DOP853",
+    "rtol": 1e-12,
+    "atol": 1e-14,
+    "max_step_years": 0.25,
+    "active_audit_segment_years": 25.0
+  },
+  "classification": {
+    "q_threshold_AU": 30.0,
+    "q_hysteresis_AU": 0.000001
+  },
+  "statistics": {
+    "bootstrap_seed": "jx-independent-dop853-qualification-bootstrap-v1",
+    "bootstrap_repetitions": 999,
+    "equivalence_margin": 0.001
+  },
+  "gates": {
+    "max_injection_fraction_difference": 0.0005,
+    "max_injection_identity_disagreement_fraction": 0.001,
+    "max_survival_fraction_difference": 0.0,
+    "max_wasserstein_minimum_q_AU": 0.0001,
+    "max_wasserstein_final_q_AU": 0.0001,
+    "max_wasserstein_final_i_deg": 0.0001,
+    "max_source_control_effect_difference": 0.0005,
+    "max_initial_element_roundtrip_error": 1e-10,
+    "max_relative_active_energy_drift": 1e-9,
+    "max_relative_active_angular_momentum_vector_drift": 1e-9,
+    "max_active_endpoint_position_disagreement_AU": 1e-7,
+    "max_active_endpoint_velocity_disagreement_AU_per_year": 1e-7,
+    "source_minimum_q_AU": 200.0,
+    "source_maximum_fractional_a_excursion": 0.1
+  },
+  "backend": {
+    "python_version": "3.12.13",
+    "python_implementation": "CPython",
+    "numpy_version": "2.3.5",
+    "scipy_version": "1.17.0",
+    "files": {
+      "scipy_rk_source": {
+        "sha256": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+      },
+      "scipy_dop853_coefficients": {
+        "sha256": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001"
+      },
+      "numpy_multiarray_binary": {
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      }
+    }
+  },
+  "execution": {
+    "workers": 4,
+    "checkpoint_restart_required": true,
+    "immutable_result": true
+  },
+  "locked_files": {
+    "independent_module": {
+      "path": "../../src/jxplanetx/independent_dop853.py",
+      "sha256": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062"
+    },
+    "runner": {
+      "path": "run_replication.py",
+      "sha256": "60a284dde2765a34af9a9d12695a33a4aaac6dfc837bb14ee2d12b474b005b5f"
+    },
+    "unit_tests": {
+      "path": "../../tests/test_independent_dop853.py",
+      "sha256": "87ac8f962e3f61d59fa79850d44f784fb0d269c24b12fc177a695be5198c481c"
+    },
+    "population_manifest": {
+      "path": "../de441_population_100k/population_manifest_v1.json",
+      "sha256": "c3dd5528f382c4fd0ff71921d6d5be635faf71ca82e1d73ddd268fcbe62e8381"
+    },
+    "state_manifest": {
+      "path": "../de441_population_100k/states/state_manifest.json",
+      "sha256": "ec6e2ba8877d206838172dbb573318a2122977e263c054994d4c82a409a43d36"
+    },
+    "horizons_qualification_contract": {
+      "path": "horizons_qualification_contract_v2.json",
+      "sha256": "3064e6f23fdec4ff5b515942c7f4a68673b4bf472c398858b468b5c28f73d25b"
+    },
+    "horizons_qualification_result": {
+      "path": "horizons_qualification_result_v2.json",
+      "sha256": "02c5f266a79d06af59f88a50bbf9461743de6fb239abbec1ab00c4c2c26ae547"
+    },
+    "reference_qualification_result": {
+      "path": "../de441_population_100k/qualification_result_v1.json",
+      "sha256": "68598a3cc65c0667d2788c84ae687362cd72ce64528d41f3a39fc77d9198090c"
+    }
+  },
+  "scientific_scope": "Operationally qualify the independent element conversion, force path, sampling, checkpointing, and cross-software comparison on 2000 matched tracers per arm over 100 years.",
+  "limitations": [
+    "This qualification is not used for final source-effect inference.",
+    "SciPy DOP853 is independent of REBOUND, but both run in binary64 arithmetic.",
+    "The same physical model assumptions and initial-state files are shared intentionally.",
+    "The duration is only 100 years."
+  ],
+  "nonclaim": "Passing qualifies the independent population runner; it does not replicate the 10000-year conclusion or provide evidence for or against Planet X."
+}

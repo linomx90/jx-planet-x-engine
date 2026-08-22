@@ -3,7 +3,12 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 .venv/
-.vendor/
+venv/
 build/
 dist/
-
+validation.json
+runs/de441_population_100k/final_execution_v1/
+runs/de441_population_100k/qualification_execution_v1/
+runs/independent_dop853_10k/population_qualification_execution_v1/
+runs/independent_dop853_10k/final_execution_v1/
+runs/independent_dop853_10k/final_execution_v2/

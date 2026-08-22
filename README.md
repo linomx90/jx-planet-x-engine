@@ -1,113 +1,183 @@
-# JX Planet X Scientific Engine
+# JX N-Body Engine
 
-JX Planet X is a falsification-first numerical and inference framework for
-testing physical sources of outer-Solar-System gravity. A planet is one
-candidate source, not the assumed answer.
+**Version:** 0.3.0  
+**License:** MIT  
+**Scientific claim state:** `SCREENING_ONLY`
 
-**Current scientific status:** the numerical foundation passed its encoded
-production gate, but the latest 100-kyr compact-source population did not
-converge. Its governing result is
-`BLOCKED_SOURCE_POPULATION_NONCONVERGENCE`; this release does not claim a
-Planet X detection or sky localization.
+JX N-Body Engine is a high-precision numerical toolkit for testing gravitational
+source hypotheses in the outer Solar System. It was developed inside the JX
+Planet X research project, but it is a general N-body engine: a planet is one
+possible source, not an assumed answer.
 
-This repository begins with the validated numerical foundation:
+This repository contains the engine source, packaging metadata, unit tests,
+locked protocols, and compact result summaries. It intentionally excludes the
+project's large observational inputs, bulk execution archives, and
+candidate-search catalogs.
 
-- deterministic arbitrary-precision arithmetic using Python's `decimal`;
-- a sixth-order symmetric Yoshida composition of seven KDK maps;
-- eight force evaluations per macro-step;
-- convergence and conservation gates;
-- cryptographic run manifests and evidence-class labels;
-- claim controls that cannot automatically declare a detection.
+## Scientific boundary
 
-The current engine is **not** a production orbit-determination system. It does
-not yet implement complete DSN uplink/downlink observables, ramp tables,
-troposphere/ionosphere corrections, full light time, or a simultaneous global
-ephemeris fit. Results from the present core must therefore remain
-`SCREENING_ONLY` unless an external observation module satisfies the locked
-gates in `docs/SCIENTIFIC_CONTRACT.md`.
+The code does **not** claim a Planet X detection, sky position, mass, or
+distance. Numerical simulation is not astronomical measurement. The engine's
+claim-control logic keeps ordinary numerical output at `SCREENING_ONLY` and
+blocks observational claims when required evidence gates are absent or fail.
 
-## Run
+The source includes:
 
-No third-party Python packages are required.
+- deterministic arbitrary-precision arithmetic using Python `decimal`;
+- N-body acceleration, invariants, and state objects;
+- a sixth-order symmetric Yoshida integrator;
+- an independent Decimal Bulirsch–Stoer reference integrator;
+- optional REBOUND trajectory, IAS15, and large massless-population scale gates;
+- deterministic uncertainty/phase ensemble plans with locked contracts;
+- paired source/control population validation across numerical methods;
+- perihelion, injection, survival, inclination-width, and Wasserstein metrics;
+- fail-closed `PASSED`, `BLOCKED`, and `INVALID` ensemble verdicts;
+- convergence, conservation, provenance, and claim-control utilities;
+- a prelocked ten-year JPL Horizons/DE441 outer-planet compatibility test;
+- a real-epoch, checkpointed, matched 100,000-tracer-per-arm population screen;
+- an independent SciPy DOP853 force, integration, checkpoint, and replication path;
+- a command-line interface for reproducible validation workflows.
+
+The software is not a complete orbit-determination or global ephemeris-fit
+system. Observation-level use would additionally require validated light-time,
+station, media, clock, calibration, and simultaneous-fit models.
+
+## Requirements
+
+- Python 3.12 or newer
+- No third-party dependency for the core engine and unit tests
+- Optional: `rebound==4.4.11` for IAS15 and population-scale commands
+- Optional: `numpy==2.3.5` and `scipy==1.17.0` for the independent DOP853 runner
+
+## Install and test
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+python -m unittest discover -s tests -v
+```
+
+Install the pinned REBOUND backend with
+`python -m pip install -e '.[rebound]'`. The legacy `ias15` extra remains an
+alias for compatibility.
+
+Install the independent population-replication backend with
+`python -m pip install -e '.[independent]'`.
+
+Without installing the package:
 
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests -v
-PYTHONPATH=src python3 -m jxplanetx.cli validate --output runs/validation.json
-PYTHONPATH=src python3 -m jxplanetx.cli reproduce-yoshida6 \
-  --bundle-dir imports/yoshida6_gate \
-  --output runs/yoshida6_reproduction.json
+PYTHONPATH=src python3 -m jxplanetx.cli validate --output validation.json
 ```
 
-Run these commands from the repository root with `PYTHONPATH=src`, as shown
-above. The tested baseline is Python 3.12.
+The test suite contains 76 tests covering integrator behavior,
+convergence gates, force-evaluation accounting, independent-reference logic,
+installed-package provenance, deterministic ensemble generation, strict
+trajectory registration, distribution metrics, and fail-closed verdicts.
 
-The validation command runs a sixth-order harmonic-oscillator convergence
-test, a two-body conservation test, and writes a hashed JSON record.
+## Command line
 
-`reproduce-yoshida6` accepts only the preserved synthetic benchmark whose checksum
-manifest is locked in `benchmarks/yoshida6_2026_08_20.lock.json`. It reruns the
-160- and 224-bit executable, requires byte-exact dynamical state fields plus
-numerically gated derived angles, audits performance/invariants/force counts,
-and independently compares the result to the preserved 224-bit Bulirsch-Stoer
-trajectory.
+```bash
+jxplanetx --help
+jxplanetx validate --output validation.json
+jxplanetx write-ensemble-contract --output ensemble-contract.json
+jxplanetx prepare-ensemble --contract ensemble-contract.json --output plan.lock.json
+```
 
-This benchmark is barycentric and J2000-ecliptic-like, but it is not a DE441
-state. A true DE441 state import must be implemented and validated separately.
+The general ensemble workflow validates externally computed trajectories. The
+project-specific DOP853 module now supplies an independent 10,000-year
+population replication, but not a general physical state builder or complete
+100,000-year source/control backend. See
+[the ensemble validation guide](docs/ENSEMBLE_VALIDATION.md).
 
-The `import-de441-anchor` command performs that separate import. It selects
-the five preserved DE441 massive-body states at TDB JD 2461200.5 and a declared
-15-tracer synthetic subset.
+`run-population-scale-gate` is a narrower execution backend for locked,
+paired, massless-tracer scalability tests. It does not turn the preserved
+15-orbit template set into a physical TNO population model. See
+[the population scale-gate guide](docs/POPULATION_SCALE_GATE.md).
 
-`run-de441-anchor-gate` executes the locked Yoshida-6 binary at 160 and 224
-bits on that state. Passing cross-precision and invariant gates is recorded as
-`PARTIAL_PASS_INDEPENDENT_REFERENCE_MISSING` until the independent gate runs.
+`run-encounter-tail-pilot` runs the checkpointed 10,000-tracer controlled-
+synthetic encounter-tail experiment and its prelocked timestep-halving audit.
+See [the encounter-tail pilot guide](docs/ENCOUNTER_TAIL_PILOT.md).
 
-`run-bs-block-reference` supplies a separate 78-decimal-digit adaptive
-Bulirsch–Stoer implementation. Because the tracers are exactly massless, it
-integrates five massive bodies plus one tracer per block, then verifies the
-independently repeated massive trajectories before merging. The preserved
-100-year reference is compared with the 224-bit Yoshida trajectory by
-`audit-de441-independent-reference`. Passing this closes the numerical gate as
-`PRODUCTION_NUMERICAL_GATE_PASSED`; it does not qualify an observation model or
-constitute evidence for a physical source.
+Some CLI subcommands reproduce project-specific DE441, benchmark, or IAS15
+experiments. Those commands require external input bundles that are not part of
+this engine-only repository. They fail closed when required manifests or inputs
+are unavailable or inconsistent.
 
-## 100-kyr equation gate
+## DE441/Horizons compatibility result
 
-The adaptive `run-ias15-member` and population-comparison commands resume the
-anomaly-zone family calculation from the preserved DE441 Cartesian states.
-They compare REBOUND 4.4.11 IAS15 runs at `epsilon=1e-12` and `1e-14` using
-pointwise and population equations.
+The locked ten-year external-reference validation passed. With all ten major
+Solar-System barycenters active, the maximum annual heliocentric residual among
+Jupiter, Saturn, Uranus, and Neptune was 33.6013 km in position and
+0.000510045 m/s in velocity. All predeclared convergence, conservation, and
+completion gates also passed. This validates only the stated short-arc
+Newtonian compatibility scope; it is not a full DE441 reconstruction or an
+observational Planet X result. See the
+[complete protocol and report](runs/de441_horizons_10yr/README.md).
 
-The untouched phase-2 no-source population converged, but the middle-family
-source population did not: maximum mean-perihelion and Wasserstein-perihelion
-disagreements were 0.145672 AU and 0.155080 AU against locked 0.1-AU gates.
-The governing result is therefore
-`BLOCKED_SOURCE_POPULATION_NONCONVERGENCE`. The resolved source-minus-control
-sensitivity is not scientifically usable because its prerequisite source-run
-convergence failed. See `docs/JX_IAS15_EQUATION_GATE_2026-08-20.md`.
+## DE441-backed 100,000-tracer result
 
-The optional preserved dependency can be installed locally with
-`python3 -m pip install --target .vendor imports/Planetx/rebound-4.4.11-cp312-cp312-linux_x86_64.whl`;
-then run IAS15 commands with `PYTHONPATH=.vendor:src`.
+The locked 10,000-year source/control screen completed 100,000 matched
+massless tracers per arm plus 40,000 audit trajectories. All numerical gates
+passed. The control arm produced 4,377 sampled low-perihelion injections and
+the candidate-9118 source arm produced 4,374. The source-minus-control fraction
+was −0.00003 with a paired-block 95% bootstrap interval of
+[−0.00009, +0.00003], entirely inside the predeclared ±0.001 equivalence
+margin. The result is therefore `EQUIVALENT_WITHIN_LOCKED_MARGIN` and remains
+`SCREENING_ONLY`—it is not a Planet X detection or exclusion. See the
+[complete protocol, audit, and interpretation](runs/de441_population_100k/README.md).
 
-## Architecture
+## Independent DOP853 replication result
+
+An outcome-blind SHA-256 selection of ten 1,000-tracer blocks from the
+100,000-tracer experiment was independently rerun with a separate Newtonian
+force implementation and SciPy DOP853. The corrective high-resolution run
+passed every unchanged numerical and cross-software gate. DOP853 and REBOUND
+identified exactly the same 433 injections in control and the same 433 in
+source, with zero identity disagreement, 100% survival, and a paired source-
+minus-control effect of 0.0 with bootstrap interval `[0.0, 0.0]`.
+
+The first independent attempt is preserved as `INVALID`: it missed one strict
+endpoint-position gate by 27.5% while all population gates passed. A locked
+diagnostic attributed the miss to adaptive resolution; v2 doubled temporal
+resolution without relaxing any threshold and passed. A separate artifact
+audit then rehashed 100 checkpoints, reconstructed final orbital elements, and
+recomputed the `PASSED` verdict. The conclusion remains `SCREENING_ONLY`. See
+the [full independent replication report](runs/independent_dop853_10k/README.md).
+
+## Package map
 
 ```text
 src/jxplanetx/
-  decimal_math.py   precision and vector primitives
-  dynamics.py       deterministic N-body acceleration and invariants
-  yoshida6.py       optimized sixth-order symplectic stepper
-  decimal_bs.py     independent adaptive Bulirsch–Stoer reference
-  ias15_gate.py     adaptive close-encounter and population equation gates
-  gates.py          scientific validation gates
-  claims.py         evidence labels and claim-control state machine
-  provenance.py     canonical JSON, hashes, and atomic run records
-  cli.py            reproducible validation entry point
+  decimal_math.py          precision and vector primitives
+  dynamics.py              N-body acceleration, state, and invariants
+  yoshida6.py              sixth-order symmetric integrator
+  decimal_bs.py            independent Bulirsch–Stoer reference
+  ias15_gate.py            IAS15 and population comparison gates
+  ensemble_validation.py  locked chaotic-population ensemble validation
+  population_scale.py     paired large-population execution scale gate
+  encounter_tail.py       checkpointed synthetic encounter-tail pilot
+  de441_anchor.py          declared DE441-anchor import workflow
+  de441_population.py      real-epoch paired population execution and gates
+  independent_dop853.py    independent DOP853 population replication backend
+  production_benchmark.py locked benchmark verification
+  gates.py                 numerical validation gates
+  claims.py                scientific claim-control state machine
+  provenance.py            canonical hashes and atomic run records
+  cli.py                   command-line interface
 ```
 
-## Scientific status
+## Runtime independence
 
-The software encodes the project's present conclusion: no public-data branch
-has passed the physically realistic blinded six-mode measurement gate. A
-compact distant source remains a candidate class, not a detection or sky
-localization.
+ChatGPT/JX helped develop and organize the project, but the released engine does
+not require ChatGPT, an API key, or an internet connection to run its core tests
+and validation command.
+
+## Citation and license
+
+Citation metadata is provided in `CITATION.cff`. Original JX N-Body Engine code
+is released under the MIT License. Optional third-party packages retain their
+own licenses. `RELEASE_MANIFEST_v0.3.0.json` records the portable release and
+scientific-artifact hashes.

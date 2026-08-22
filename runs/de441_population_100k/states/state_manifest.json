@@ -1,0 +1,61 @@
+{
+  "active_outer_body_ids": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "classification": "RECONSTRUCTED_DE441_BACKBONE_PLUS_ASSUMED_SOURCE_EPOCH",
+  "epoch_jd_tdb": 2461200.5,
+  "frame": "J2000 ecliptic, rotated from Horizons ICRF",
+  "inner_system_monopole_body_ids": [
+    10,
+    1,
+    2,
+    3,
+    4
+  ],
+  "nonclaim": "The planetary backbone is real-epoch DE441/Horizons-derived. The source epoch and inner-system monopole are explicit modeling assumptions.",
+  "origin": "inner-system monopole center at t0",
+  "outputs": {
+    "control": {
+      "path": "de441_control_state.csv",
+      "sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14"
+    },
+    "source": {
+      "path": "de441_source_9118_state.csv",
+      "sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf"
+    }
+  },
+  "schema": "jx-de441-population-state/v1",
+  "source_candidate": {
+    "M_deg": 126.21,
+    "Omega_deg": 96.87,
+    "a_AU": 495.19,
+    "catalog": "Brown_Batygin_2021_reference_population_v3",
+    "computed_radius_AU": 578.7730324714955,
+    "e": 0.236,
+    "i_deg": 20.28,
+    "index": 9118,
+    "mass_Mearth": 5.06,
+    "name": "P9_BB21_idx9118",
+    "omega_deg": 187.3
+  },
+  "source_epoch_assumption": "Candidate 9118 osculating elements are declared at JD 2461200.5; this is a model assumption, not a JPL source state or observational refit.",
+  "units": "AU, Julian year, GM in AU^3/year^2; integration G=1",
+  "upstream": {
+    "candidate_metadata": {
+      "path": "/workspace/scratch/388807340cce/imports/compact_source_core/source/candidate_metadata.txt",
+      "sha256": "509917e0093107464d9ee45ed2c8e9f403403b2bb0e94455fa3614825917f8b0"
+    },
+    "gm_de440": {
+      "path": "/workspace/scratch/388807340cce/imports/de441_family/jx_anomaly_zone_orbit_family_5k500_screen_2026-08-18/kernels/gm_de440.tpc",
+      "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+    },
+    "horizons_vectors": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv",
+      "sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e"
+    }
+  }
+}

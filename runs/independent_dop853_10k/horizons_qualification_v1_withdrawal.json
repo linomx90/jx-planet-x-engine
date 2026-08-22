@@ -1,0 +1,19 @@
+{
+  "schema": "jx-withdrawn-execution/v1",
+  "experiment_id": "jx-independent-dop853-de441-horizons-10yr-v1",
+  "status": "WITHDRAWN_NO_SCIENTIFIC_VERDICT",
+  "contract": {
+    "path": "horizons_qualification_contract_v1.json",
+    "sha256": "d29731382ee2f63241fef6ddf0ae7322fc8cb8743e3efbfa97b5701648823d73"
+  },
+  "preserved_partial_artifact": {
+    "path": "horizons_qualification_residuals_v1.csv",
+    "sha256": "a708566de55ec440d2ce3217e473b52aaa2249d811d3093595cd640b0dec5456"
+  },
+  "failure_stage": "machine-readable result serialization after numerical propagation and residual CSV creation",
+  "failure": "A NumPy boolean scalar was rejected by the strict standard-library JSON encoder.",
+  "correction_scope": "Add explicit NumPy scalar/array conversion in the atomic JSON serializer; dynamics, inputs, solver settings, and gates remain unchanged.",
+  "result_created": false,
+  "scientific_outcome_inspected_before_relock": false,
+  "nonclaim": "The partial residual CSV is not an accepted result and must not be used as scientific evidence."
+}
