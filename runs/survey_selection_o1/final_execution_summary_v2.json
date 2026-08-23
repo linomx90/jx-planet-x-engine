@@ -1,0 +1,43 @@
+{
+  "schema": "jx-survey-selection-execution-summary/v2",
+  "contract_sha256": "a6499e4b53d9ddaa68d3ed3d0f6fd742d3febd5add426c4ba3666f54af5a5d46",
+  "simulator_commit": "86ce0936c0585ea1120830831c66276e05b076aa",
+  "driver_sha256": "60c2fb9997f1ac9df0e1a21e38980cb0eda913933ccf9b1d604ad27ea2db2169",
+  "batch_size": 100001,
+  "correct": {
+    "total_intrinsic_draws": 9700097,
+    "total_tracked_detections": 206,
+    "pool_manifest_sha256": "b2b99a91ca52fe819b8e2a5d0a860488d0b650664cbe5abb5a6d0b773b3f8297",
+    "blocks": [
+      {"seed_block": 0, "batches": 8, "intrinsic_draws": 800008, "tracked_detections": 20},
+      {"seed_block": 1, "batches": 8, "intrinsic_draws": 800008, "tracked_detections": 22},
+      {"seed_block": 2, "batches": 9, "intrinsic_draws": 900009, "tracked_detections": 21},
+      {"seed_block": 3, "batches": 12, "intrinsic_draws": 1200012, "tracked_detections": 20},
+      {"seed_block": 4, "batches": 9, "intrinsic_draws": 900009, "tracked_detections": 20},
+      {"seed_block": 5, "batches": 15, "intrinsic_draws": 1500015, "tracked_detections": 21},
+      {"seed_block": 6, "batches": 9, "intrinsic_draws": 900009, "tracked_detections": 20},
+      {"seed_block": 7, "batches": 10, "intrinsic_draws": 1000010, "tracked_detections": 20},
+      {"seed_block": 8, "batches": 10, "intrinsic_draws": 1000010, "tracked_detections": 20},
+      {"seed_block": 9, "batches": 7, "intrinsic_draws": 700007, "tracked_detections": 22}
+    ]
+  },
+  "wrong": {
+    "total_intrinsic_draws": 18900189,
+    "total_tracked_detections": 206,
+    "pool_manifest_sha256": "85c55eca72c8aaac0292c1f25d6ed3aed1b1d03efa194e35cde023396b8716fd",
+    "blocks": [
+      {"seed_block": 0, "batches": 13, "intrinsic_draws": 1300013, "tracked_detections": 21},
+      {"seed_block": 1, "batches": 22, "intrinsic_draws": 2200022, "tracked_detections": 20},
+      {"seed_block": 2, "batches": 21, "intrinsic_draws": 2100021, "tracked_detections": 20},
+      {"seed_block": 3, "batches": 22, "intrinsic_draws": 2200022, "tracked_detections": 20},
+      {"seed_block": 4, "batches": 20, "intrinsic_draws": 2000020, "tracked_detections": 22},
+      {"seed_block": 5, "batches": 25, "intrinsic_draws": 2500025, "tracked_detections": 20},
+      {"seed_block": 6, "batches": 15, "intrinsic_draws": 1500015, "tracked_detections": 20},
+      {"seed_block": 7, "batches": 14, "intrinsic_draws": 1400014, "tracked_detections": 21},
+      {"seed_block": 8, "batches": 18, "intrinsic_draws": 1800018, "tracked_detections": 20},
+      {"seed_block": 9, "batches": 19, "intrinsic_draws": 1900019, "tracked_detections": 22}
+    ]
+  },
+  "raw_execution_archive_included_in_public_release": false,
+  "reason": "Bulk model, detected, tracked, stdout, stderr, and checkpoint files total approximately 3.9 GB and are excluded from the code release; compact hashes, counts, contracts, and verdicts are retained."
+}
