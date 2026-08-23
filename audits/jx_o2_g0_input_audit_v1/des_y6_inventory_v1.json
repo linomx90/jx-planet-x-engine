@@ -1,0 +1,253 @@
+{
+  "schema": "jx-o2-g0-des-y6-input-inventory/v1",
+  "audit_id": "jx-o2-g0-input-audit-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "SURVEY_INPUT_PROVENANCE_INVENTORY",
+  "inventory_status": "PARTIALLY_ACQUIRED_NOT_ACTIVATABLE",
+  "execution_authorized": false,
+  "outcomes_generated": false,
+  "global_data_exposure_status": "PREVIOUSLY_INSPECTED",
+  "verified_at_utc": "2026-08-23T03:03:01Z",
+  "publication": {
+    "title": "A Search of the Full Six Years of the Dark Energy Survey for Outer Solar System Objects",
+    "doi": "10.3847/1538-4365/ac3914",
+    "catalog_doi": "10.26093/cds/vizier.22580041",
+    "license": "CC-BY-4.0",
+    "exposure_status": "PREVIOUSLY_INSPECTED",
+    "exposure_reason": "The paper already reports tests of the DES extreme-TNO angular distribution and other population conclusions."
+  },
+  "journal_catalog": {
+    "archive": {
+      "artifact_id": "DES_Y6_IOP_TABLE3_ARCHIVE",
+      "url": "https://content.cld.iop.org/journals/0067-0049/258/2/41/revision1/apjsac3914_table3.tar.gz",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 327951,
+      "sha256": "1bc41364cb9d0ba3ad21b00e4f4467c5de83da0675a44c5e6ecb31df5457458e"
+    },
+    "fits_member": {
+      "path_in_archive": "y6_paper_table.fits",
+      "verification_level": "ARCHIVE_MEMBER_BYTE_VERIFIED",
+      "byte_count": 388800,
+      "record_count": 814,
+      "column_count": 55,
+      "sha256": "15e4493e3f90232b06714d9e7b964c275c749627f25750386fee313d12e579ae"
+    },
+    "vizier_mirror": {
+      "readme": {
+        "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/41/ReadMe",
+        "verification_level": "BYTE_VERIFIED",
+        "retrieved_at_utc": "2026-08-23T02:53:01Z",
+        "byte_count": 11035,
+        "sha256": "4dff6940798eafd4ad172ab81b8e531a9952839db5d67de9ca8e1f869f2eb5ca"
+      },
+      "catalog": {
+        "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/258/41/catalog.dat",
+        "verification_level": "BYTE_VERIFIED",
+        "retrieved_at_utc": "2026-08-23T02:53:01Z",
+        "byte_count": 498168,
+        "record_count": 814,
+        "sha256": "457554872af8b55b44404f4dfbaeeceafb8120cc43cb09b1350f4e48c9bc1a92"
+      }
+    }
+  },
+  "enhanced_author_catalog": {
+    "repository_url": "https://github.com/bernardinelli/des_tno_catalog",
+    "tag": "v1.0.0",
+    "commit": "8f254ca30fa0e8fc1576a5a9fad7300124d3b3ee",
+    "tree": "8653d9d1f9f2f2efe5c9c13a62cb93fd5185e813",
+    "tag_archive": {
+      "verification_level": "BYTE_VERIFIED_GITHUB_ARCHIVE",
+      "url": "https://github.com/bernardinelli/des_tno_catalog/archive/refs/tags/v1.0.0.tar.gz",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 201725368,
+      "sha256": "84695bd1df8b726d8486a04ebd6bbb673ff7312a138227f3bc299ba8f47a46b2"
+    },
+    "catalog": {
+      "url": "https://raw.githubusercontent.com/bernardinelli/des_tno_catalog/8f254ca30fa0e8fc1576a5a9fad7300124d3b3ee/y6_des_tnos_color.fits",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 527040,
+      "record_count": 814,
+      "column_count": 66,
+      "sha256": "4f2153f8726485bb661cbf9027a840c69e11c6d87c925d386055b3fdff4ea6e8"
+    },
+    "license_file": {
+      "url": "https://raw.githubusercontent.com/bernardinelli/des_tno_catalog/8f254ca30fa0e8fc1576a5a9fad7300124d3b3ee/LICENSE.txt",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 1354,
+      "sha256": "c407847d0bf5ea5b428b7bb3145b0899ccd7d22e345d045c217567ef520603a8",
+      "software_license": "MIT",
+      "data_license": "CC-BY-4.0"
+    },
+    "journal_parity": {
+      "matched_by": "MPC_DESIGNATION",
+      "shared_orbit_covariance_detection_count_class_and_mr_fields": "EXACT_MATCH",
+      "hr_rows_changed": 814,
+      "maximum_absolute_hr_change_mag": 0.69932,
+      "reason": "Later photometric processing replaced H_r and its uncertainty; a future contract must select one release."
+    }
+  },
+  "catalog_scope_and_orbits": {
+    "total_records": 814,
+    "nominal_tno_count": 812,
+    "earlier_manuscript_prose_total_records": 817,
+    "earlier_manuscript_prose_nominal_tnos": 815,
+    "final_revision1_and_cds_release_is_canonical_for_this_audit": true,
+    "centaur_count": 1,
+    "oort_cloud_comet_count": 1,
+    "noncharacterized_flagged_ids": [
+      "2013 TA188",
+      "2014 VC41",
+      "C/2014 UN271"
+    ],
+    "rows_without_nc_flag": 811,
+    "strict_characterized_tno_only_count_after_excluding_centaur": 810,
+    "eligibility_rule_status": "NOT_LOCKED_AUTHOR_OR_CONTRACT_CLARIFICATION_REQUIRED",
+    "orbit_frame": "BARYCENTRIC_ICRS_ORIENTED_CARTESIAN_STATE",
+    "orbit_epoch_label": "2016.0",
+    "positions_unit": "AU",
+    "velocities_unit": "AU_PER_JULIAN_YEAR",
+    "covariance_encoding": "TWENTY_ONE_UNIQUE_TERMS_OF_SYMMETRIC_SIX_DIMENSIONAL_STATE_COVARIANCE",
+    "covariance_validation": "ALL_814_RECONSTRUCTED_MATRICES_FINITE_AND_POSITIVE_DEFINITE",
+    "epoch_time_scale_status": "NOT_ENCODED_IN_FITS_HEADER",
+    "destnosim_epoch_interpretation": "TDB_JULIAN_YEAR_2016_0_MJD_57388_5_NOT_YET_LOCKED"
+  },
+  "native_simulator": {
+    "repository_url": "https://github.com/bernardinelli/DESTNOSIM",
+    "commit": "e01395db3b8c9c8577f008c9d9eb3ac499d0cbba",
+    "tree": "791e3489fb3a2e37222a78b3469bf9d729845a22",
+    "declared_versions": {
+      "setup_py": "1.3.4",
+      "destnosim_init_py": "1.3.3",
+      "status": "CONFLICT_NOT_RESOLVED"
+    },
+    "tag_or_release_for_commit": false,
+    "source_archive": {
+      "url": "https://github.com/bernardinelli/DESTNOSIM/archive/e01395db3b8c9c8577f008c9d9eb3ac499d0cbba.tar.gz",
+      "verification_level": "BYTE_VERIFIED_GITHUB_ARCHIVE",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 3743958,
+      "sha256": "d63beb7ec108548a63881bf6c7d31c97be005b23aa6a1b0f969cb34310ab2c47",
+      "contains_lfs_payloads": false
+    },
+    "license_status": "AMBIGUOUS_BSD_VARIANT_NO_LICENSE_TEXT",
+    "test_suite_present": false,
+    "environment_lock_present": false,
+    "rng_status": "GLOBAL_NUMPY_RANDOMNESS_NOT_LOCKED"
+  },
+  "native_selection_payloads": [
+    {
+      "artifact_id": "DES_Y6_EXPOSURE_POSITIONS",
+      "url": "https://media.githubusercontent.com/media/bernardinelli/DESTNOSIM/e01395db3b8c9c8577f008c9d9eb3ac499d0cbba/data/y6a1c.exposures.positions.fits",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 14336640,
+      "sha256": "514dcf72a55f9cf37b168dc59bdd37bdd35141bb7efe0dbe9986579674883b56",
+      "git_lfs_oid_sha256": "514dcf72a55f9cf37b168dc59bdd37bdd35141bb7efe0dbe9986579674883b56",
+      "git_lfs_pointer_sha256": "57c7da278e91770a917a9831137d6dc0d67cb62095138501f922e8eb940dbe60",
+      "active_hdu_unique_exposure_count": 76162,
+      "active_hdu_field_count": 16,
+      "ignored_hdu_row_count": 36650,
+      "filter_counts": {
+        "g": 16244,
+        "r": 16115,
+        "i": 15782,
+        "z": 15712,
+        "Y": 12309
+      },
+      "mjd_min": 56520.19162436757,
+      "mjd_max": 58493.17170059757
+    },
+    {
+      "artifact_id": "DES_Y6_CCD_CORNERS",
+      "url": "https://media.githubusercontent.com/media/bernardinelli/DESTNOSIM/e01395db3b8c9c8577f008c9d9eb3ac499d0cbba/data/y6a1c.ccdcorners.fits.gz",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 348474936,
+      "uncompressed_byte_count": 450429120,
+      "sha256": "45a95d48eff422347c68ae2cf46186b541455c16c523e10cee07e11539b1c4e7",
+      "git_lfs_oid_sha256": "45a95d48eff422347c68ae2cf46186b541455c16c523e10cee07e11539b1c4e7",
+      "git_lfs_pointer_sha256": "9466ba96863fb2b658c4a77d33b2840ee690ac977450de429c6fabc938814f43",
+      "ccd_row_count": 4596148,
+      "unique_exposure_count": 76226,
+      "exposure_ids_absent_from_positions_table": 64,
+      "gzip_integrity": "VERIFIED"
+    }
+  ],
+  "ephemeris_backend": {
+    "tutorial_path": "ORBITSPP_DESTRACKS",
+    "repository_url": "https://github.com/gbernstein/orbitspp",
+    "current_commit": "a2d979678be2034a28b92becbf212c62a72cebef",
+    "tree": "8d882a6676b0e68ca054ecbec445d983be59e91e",
+    "archive": {
+      "verification_level": "BYTE_VERIFIED_GITHUB_ARCHIVE",
+      "url": "https://github.com/gbernstein/orbitspp/archive/a2d979678be2034a28b92becbf212c62a72cebef.tar.gz",
+      "retrieved_at_utc": "2026-08-23T02:55:40Z",
+      "byte_count": 76336100,
+      "sha256": "86016f1381dd74c8b695c3d129c7feb368be8677722dc2812f0b89ec2ede177d"
+    },
+    "destracks_source_sha256": "43606bdce56d5862fd292d10c30da10a892eaf40dcf0b2700245e9aca7990a69",
+    "paper_era_commit_status": "NOT_DECLARED",
+    "license_status": "NO_LICENSE_FILE_FOUND",
+    "dependency_versions_status": "UNPINNED"
+  },
+  "blocking_discrepancies": [
+    {
+      "id": "DES-D01",
+      "issue": "The paper reports 76,217 quality-cut exposures, the simulator active table has 76,162, and the CCD-corners file has 76,226 unique exposure IDs.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "DES-D02",
+      "issue": "The paper excludes Y from discovery, while the payload includes Y and the simulator defaults to grizY; a future contract must lock griz only.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "DES-D03",
+      "issue": "The paper's 0.95529 transient-efficiency factor is not applied in the normal tutorial path when a RANDOM column exists.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "DES-D04",
+      "issue": "The required triplet window is 60 days below 50 AU and 90 days above it, while computeStatistics accepts one global threshold.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "DES-D05",
+      "issue": "No public raw single-exposure detections, 108-million-source transient catalog, fake-injection/linkage table, STS candidate inventory, or complete inclusion code was found.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "DES-D06",
+      "issue": "No exact bandpass payload was safely acquired and hashed; colors and the official grizY response selection remain unlocked.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "DES-D07",
+      "issue": "The simulator approximates discoverability and does not reproduce STS confirmation or the full linker.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "DES-D08",
+      "issue": "Earlier manuscript prose reports 817 total objects and 815 TNOs, while the exact final revision1 journal table and CDS release contain 814 total objects and 812 nominal TNOs.",
+      "status": "UNRESOLVED"
+    }
+  ],
+  "unresolved_blockers": [
+    "CATALOG_RELEASE_AND_HR_VERSION_NOT_SELECTED",
+    "EARLIER_PROSE_VERSUS_FINAL_RELEASE_COUNT_DISCREPANCY_NOT_RESOLVED",
+    "OBJECT_ELIGIBILITY_AND_COUNT_RULE_NOT_LOCKED",
+    "EPOCH_TIME_SCALE_NOT_LOCKED",
+    "EXPOSURE_COUNT_DISCREPANCY_NOT_RESOLVED",
+    "GRIZ_ONLY_AND_COLOR_RULES_NOT_LOCKED",
+    "TRANSIENT_EFFICIENCY_AND_DISTANCE_WINDOW_NOT_FIXED",
+    "RAW_SELECTION_LINEAGE_NOT_PUBLICLY_ACQUIRED",
+    "SIMULATOR_VERSION_BACKEND_DEPENDENCIES_RNG_AND_LICENSES_NOT_LOCKED",
+    "BANDPASS_PAYLOAD_NOT_HASHED",
+    "INDEPENDENT_QUALIFICATION_TESTS_NOT_PRESENT"
+  ],
+  "eligible_for_g1": false,
+  "mandatory_nonclaim": "This inventory audits public DES inputs only. It contains no JX-O2 observational statistic or model preference and authorizes no execution."
+}

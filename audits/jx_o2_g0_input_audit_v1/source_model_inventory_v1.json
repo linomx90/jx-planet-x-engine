@@ -1,0 +1,260 @@
+{
+  "schema": "jx-o2-g0-source-model-inventory/v1",
+  "audit_id": "jx-o2-g0-input-audit-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "SOURCE_MODEL_AND_CANDIDATE_LINEAGE_INVENTORY",
+  "inventory_status": "BLOCKED_NO_EXECUTION_READY_MATCHED_MODEL_PAIR",
+  "execution_authorized": false,
+  "outcomes_generated": false,
+  "global_data_exposure_status": "PREVIOUSLY_INSPECTED",
+  "verified_at_utc": "2026-08-23T03:03:01Z",
+  "required_model_pair": {
+    "baseline_model_id": "M0_LOCKED_BASELINE",
+    "compact_body_family_id": "M1_LOCKED_COMPACT_BODY_FAMILY",
+    "public_execution_ready_pair_found": false,
+    "status": "NOT_ACQUIRED",
+    "minimum_pairing_rule": "Both arms must share a content-addressed initial checkpoint, particles, known-body and migration history, tides and stars, epoch and frame, integrator, cadence, loss rules, nuisance model, source code, seeds, and outputs; only the locked compact body may differ."
+  },
+  "brown_batygin_reference_planet_orbit_catalogs": {
+    "classification": "HYPOTHETICAL_COMPACT_BODY_ORBITS_NOT_TNO_SOURCE_POPULATIONS",
+    "license": "CC0-1.0",
+    "record_count_each": 100000,
+    "epoch_jd": 2458270.0,
+    "epoch_calendar_date": "2018-06-01",
+    "frame": "J2000_HELIOCENTRIC_OSCULATING_ELEMENTS",
+    "versions": [
+      {
+        "version": "v1",
+        "doi": "10.22002/D1.2098",
+        "url": "https://data.caltech.edu/records/w8rjd-z2291",
+        "verification_level": "BYTE_VERIFIED",
+        "retrieved_at_utc": "2026-08-23T02:57:00Z",
+        "byte_count": 12400601,
+        "official_md5": "5e3a63cc780a0f65f9d98c57e70759c6",
+        "sha256": "75fafd232f6a3ef702a7cb4d4c1e4ba3d0057bd45b67b7dd4a418adf603eda4a"
+      },
+      {
+        "version": "v2",
+        "doi": "10.22002/D1.11545",
+        "url": "https://data.caltech.edu/records/0yypt-j3n93",
+        "verification_level": "BYTE_VERIFIED",
+        "retrieved_at_utc": "2026-08-23T02:57:00Z",
+        "byte_count": 12700645,
+        "official_md5": "59e13b3fd86d17b5687ef0c985998c43",
+        "sha256": "b5a2240f4aeeb5822c3501d7bea24eda46e5f1ea047f58be46f1b850731ad339"
+      },
+      {
+        "version": "v3",
+        "doi": "10.22002/8fjad-x7y61",
+        "url": "https://data.caltech.edu/records/8fjad-x7y61",
+        "verification_level": "BYTE_VERIFIED",
+        "retrieved_at_utc": "2026-08-23T02:57:00Z",
+        "byte_count": 13000682,
+        "official_md5": "a38fa7579b4c9938b3deebecda55a845",
+        "sha256": "050b68182ecbf7fd76f280d8cc43c0683d207499aba1488a68092b834420a422",
+        "readme_sha256": "89e96e080072d71aacd9c31110813e3a6a6f2cbfbae7e8d832d2bfafded3139b"
+      }
+    ],
+    "version_semantics": "The first fourteen fields are unchanged; successive versions append ZTF, DES, and PS1 direct-search detectability flags.",
+    "v3_public_flag_sums": {
+      "ztf": 56173,
+      "des": 10187,
+      "ps1": 68745,
+      "union": 78260
+    },
+    "count_discrepancy_note": "Some paper prose gives different ZTF and PS1 totals. Any future conditioning must treat the hashed CSV as canonical and document the discrepancy.",
+    "eligible_as_tno_source_population": false
+  },
+  "brown_batygin_2021_model_family": {
+    "publication_doi": "10.3847/1538-3881/ac2056",
+    "official_record_url": "https://authors.library.caltech.edu/records/5cx71-pdm28",
+    "published_grid_point_count": 121,
+    "data_exposure_status": "PREVIOUSLY_INSPECTED_MODEL_FITTING_DATA",
+    "observed_fit_object_ids": [
+      "2000 CR105",
+      "2003 VB12",
+      "2004 VN112",
+      "2010 GB174",
+      "2012 VP113",
+      "2013 FT28",
+      "2013 RA109",
+      "2013 SY99",
+      "2013 UT15",
+      "2014 SR349",
+      "2015 RX245"
+    ],
+    "missing_artifacts": [
+      "MATCHED_ZERO_COMPACT_BODY_ARM",
+      "EXACT_INITIAL_STATE_FILES",
+      "RANDOM_SEEDS",
+      "GIANT_PLANET_STATES_AND_EPOCH",
+      "MODIFIED_MERCURY6_BUILD",
+      "RAW_OUTPUTS",
+      "EMULATOR",
+      "POSTERIOR_SAMPLES"
+    ],
+    "pairing_issue": "Each published compact-body run drew a different random TNO particle set, so the table is not a paired baseline/compact-body comparison.",
+    "eligible_for_jx_o2_execution": false
+  },
+  "candidate_9118": {
+    "official_catalog_row_verified": true,
+    "catalog_versions_with_identical_core_row": [
+      "v1",
+      "v2",
+      "v3"
+    ],
+    "catalog_index": 9118,
+    "official_epoch_jd": 2458270.0,
+    "parameters": {
+      "mass_earth": 5.06,
+      "a_au": 495.19,
+      "e": 0.236,
+      "i_deg": 20.28,
+      "varpi_deg": 284.17,
+      "ascending_node_deg": 96.87,
+      "mean_anomaly_deg": 126.21,
+      "ra_deg": 69.8912,
+      "dec_deg": 12.6338,
+      "distance_au": 578.63,
+      "radius_earth": 1.69,
+      "albedo": 0.581,
+      "v_mag": 22.19
+    },
+    "direct_search_flags": {
+      "ztf": 0,
+      "des": 0,
+      "ps1": 0
+    },
+    "jx_import_commit": "269c68adb823ac445e72c48bdea92d9da2207f22",
+    "jx_local_artifacts": {
+      "state_manifest": {
+        "path": "../../runs/de441_population_100k/states/state_manifest.json",
+        "sha256": "ec6e2ba8877d206838172dbb573318a2122977e263c054994d4c82a409a43d36"
+      },
+      "source_state": {
+        "path": "../../runs/de441_population_100k/states/de441_source_9118_state.csv",
+        "sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf"
+      },
+      "control_state": {
+        "path": "../../runs/de441_population_100k/states/de441_control_state.csv",
+        "sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14"
+      },
+      "state_builder": {
+        "path": "../../runs/de441_population_100k/build_real_epoch_states.py",
+        "sha256": "1a10ead88bf2f8cd5ff872207328c9c1d574c26750295736125dc16ed49c983f"
+      },
+      "broad_tracer_manifest": {
+        "path": "../../runs/de441_population_100k/population_manifest_v1.json",
+        "sha256": "c3dd5528f382c4fd0ff71921d6d5be635faf71ca82e1d73ddd268fcbe62e8381",
+        "classification": "OUTCOME_BLIND_STRATIFIED_PROPOSAL_NOT_OBSERVATIONAL_PRIOR"
+      }
+    },
+    "jx_epoch_jd": 2461200.5,
+    "epoch_treatment": "CATALOG_ELEMENTS_REDECLARED_AT_JX_EPOCH_WITHOUT_PROPAGATION",
+    "epoch_treatment_status": "MODEL_ASSUMPTION_NOT_OFFICIAL_STATE_OR_REFIT",
+    "derived_argument_of_perihelion_deg": 187.3,
+    "selection_lineage": {
+      "status": "MISSING",
+      "published_selection_reason_found": false,
+      "tracked_decision_record_found": false,
+      "original_metadata_blob_tracked": false,
+      "obsolete_scratch_path_recorded": "/workspace/scratch/388807340cce/imports/compact_source_core/source/candidate_metadata.txt",
+      "expected_metadata_sha256": "509917e0093107464d9ee45ed2c8e9f403403b2bb0e94455fa3614825917f8b0",
+      "missing_decision_fields": [
+        "WHO_SELECTED",
+        "WHEN_SELECTED",
+        "SELECTION_RULE",
+        "CANDIDATE_UNIVERSE",
+        "RANKING",
+        "PRIOR_INSPECTION_RECORD"
+      ]
+    },
+    "eligible_as_m1_family": false,
+    "classification": "ONE_SCREENING_POINT_NOT_A_PHYSICAL_SOURCE_POPULATION"
+  },
+  "official_ossos_empirical_model_artifacts": {
+    "repository_url": "https://github.com/OSSOS/OSSOS_Models",
+    "main_commit": "0ee2b35fc3023ac6fba6e320ac6ac78d853971e0",
+    "scattering_branch_commit": "af3d0bf6a5d637021ce6e9105188dc153cc9e6c5",
+    "license": "EUPL-1.1",
+    "scattering_generator_sha256": "f971c92dffbf5bf09be851e64f2c8e129ec16b160505ae99cc7dc5313216bafb",
+    "bundled_ossos_plus_detections_sha256": "3fa4b6a5781f252cdb129052a01b82ffad1908dcd0dc56df48ce864126f34ead",
+    "input_parameters_sha256": "b66441af812d0ad5ec2274cd7482bd0c393a5a734cb2bf3bf232f720994b3739",
+    "data_exposure_status": "PREVIOUSLY_INSPECTED_OBSERVATIONALLY_CALIBRATED",
+    "eligible_as_physical_baseline_model": false,
+    "reason": "This is an empirical parametric population derived from OSSOS-plus detections, not a known-body emplacement simulation paired with a compact-body arm."
+  },
+  "physical_model_leads": [
+    {
+      "lead_id": "BATYGIN_ET_AL_2024_LOW_INCLINATION_TNOS",
+      "publication_doi": "10.3847/2041-8213/ad3cd2",
+      "official_record_url": "https://authors.library.caltech.edu/records/fa1bh-b6493",
+      "license": "CC-BY-4.0",
+      "data_exposure_status": "PREVIOUSLY_INSPECTED",
+      "pair_quality": "CLOSEST_HIGH_LEVEL_PAIR_BUT_NOT_REPRODUCIBLE_OR_PHYSICALLY_MATCHED",
+      "compact_body_summary": "Five Earth masses, a=500 AU, e=0.25, i=20 degrees, Mercury6 Bulirsch-Stoer, four billion years, initialized from the cluster_2 checkpoint at 300 million years.",
+      "baseline_difference": "The no-compact-body comparator used a different integrator and a 20-million-year output cadence instead of one million years.",
+      "missing_artifacts": [
+        "CLUSTER_2_CHECKPOINT",
+        "FULL_COMPACT_BODY_ANGULAR_STATE_AND_EPOCH",
+        "SEEDS",
+        "BOTH_INPUT_DECKS",
+        "MODIFIED_SOURCE_AND_BUILDS",
+        "RAW_OUTPUTS",
+        "EXACT_SEVENTEEN_OBJECT_ENDPOINT_TABLE"
+      ],
+      "eligible_for_jx_o2_execution": false
+    },
+    {
+      "lead_id": "NESVORNY_ET_AL_2023_CLUSTER_2",
+      "publication_doi": "10.1016/j.icarus.2023.115738",
+      "data_exposure_status": "PREVIOUSLY_INSPECTED_AND_DES_TUNED",
+      "missing_artifacts": [
+        "CHECKPOINT",
+        "MODIFIED_SWIFT_RMVS4_SOURCE",
+        "SEEDS",
+        "OUTPUT_ARCHIVE"
+      ],
+      "eligible_for_jx_o2_execution": false
+    },
+    {
+      "lead_id": "LYKAWKA_ITO_2023_KUIPER_BELT_PLANET",
+      "publication_doi": "10.3847/1538-3881/aceaf0",
+      "data_exposure_status": "PREVIOUSLY_INSPECTED_AND_TUNED",
+      "missing_artifacts": [
+        "EXACT_SOURCE_PARTICLES",
+        "RANDOM_CLONE_SCALINGS_AND_SEEDS",
+        "FULL_PHASES_AND_STATES",
+        "MODIFIED_MERCURY_SOURCE",
+        "INPUTS_AND_OUTPUTS"
+      ],
+      "eligible_for_jx_o2_execution": false
+    },
+    {
+      "lead_id": "LAWLER_ET_AL_2017_2018",
+      "publication_dois": [
+        "10.3847/1538-3881/153/1/33",
+        "10.3389/fspas.2018.00014"
+      ],
+      "data_exposure_status": "PREVIOUSLY_INSPECTED",
+      "missing_artifacts": [
+        "EXACT_SOURCE_PARTICLES",
+        "FULL_STATES",
+        "SEEDS",
+        "SOURCE_CODE",
+        "RAW_OUTPUTS"
+      ],
+      "eligible_for_jx_o2_execution": false
+    }
+  ],
+  "required_remediation": [
+    "ACQUIRE_CONTENT_ADDRESSED_COMMON_CHECKPOINT_AND_PAIRED_M0_M1_DECKS",
+    "LOCK_FULL_FINITE_M1_FAMILY_WITH_PHASE_EPOCH_AND_WEIGHTS",
+    "RECOVER_CANDIDATE_9118_SELECTION_RECORD_AND_ORIGINAL_METADATA",
+    "DEFINE_VALID_CATALOG_EPOCH_PROPAGATION",
+    "LABEL_EVERY_OBSERVED_DEPENDENCY_PREVIOUSLY_INSPECTED",
+    "LOCK_LICENSES_HASHES_SEEDS_BUILDS_AND_FORWARD_SURVEY_ADAPTERS"
+  ],
+  "eligible_for_g1": false,
+  "mandatory_nonclaim": "This inventory audits public model and candidate lineage only. It contains no JX-O2 observational statistic or model preference and authorizes no execution."
+}
