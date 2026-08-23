@@ -1,0 +1,169 @@
+{
+  "schema": "jx-survey-selection-execution-summary/v4-independent",
+  "contract_sha256": "eca324ae2448d4e704173640cfa459a3c38c329ce2eec8b61d7e94e147a15e1c",
+  "registration_sha256": "12cdd89bc1fa4882248ae201ba5aa0478723c32cad19b510a5a9e2fa3d3e159a",
+  "result_sha256": "d15dc3a507156ac6e08f2acc6911f91453d7c066e29716def63a870d440fa30a",
+  "simulator_commit": "86ce0936c0585ea1120830831c66276e05b076aa",
+  "driver_sha256": "60c2fb9997f1ac9df0e1a21e38980cb0eda913933ccf9b1d604ad27ea2db2169",
+  "batch_size": 100001,
+  "correct": {
+    "total_intrinsic_draws": 10800108,
+    "total_tracked_detections": 212,
+    "pool_manifest_sha256": "1ebc7971b13e0b8905affe7f9aa16e413f4cc6f959d02f7bc4af75d8d23d9789",
+    "detection_semantic_sha256": "65c34662bbe8f1d6e1f5434cc2fb5865cf33be10745b3ea3ed163a9bdabb3a9b",
+    "detection_csv_sha256": "036d17112c04cea3f16a19073bbddbf9d97154681046e6ed0d1afb23c435e462",
+    "blocks": [
+      {
+        "seed_block": 0,
+        "batches": 10,
+        "intrinsic_draws": 1000010,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 1,
+        "batches": 9,
+        "intrinsic_draws": 900009,
+        "tracked_detections": 21
+      },
+      {
+        "seed_block": 2,
+        "batches": 11,
+        "intrinsic_draws": 1100011,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 3,
+        "batches": 11,
+        "intrinsic_draws": 1100011,
+        "tracked_detections": 24
+      },
+      {
+        "seed_block": 4,
+        "batches": 12,
+        "intrinsic_draws": 1200012,
+        "tracked_detections": 23
+      },
+      {
+        "seed_block": 5,
+        "batches": 13,
+        "intrinsic_draws": 1300013,
+        "tracked_detections": 22
+      },
+      {
+        "seed_block": 6,
+        "batches": 10,
+        "intrinsic_draws": 1000010,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 7,
+        "batches": 12,
+        "intrinsic_draws": 1200012,
+        "tracked_detections": 21
+      },
+      {
+        "seed_block": 8,
+        "batches": 11,
+        "intrinsic_draws": 1100011,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 9,
+        "batches": 9,
+        "intrinsic_draws": 900009,
+        "tracked_detections": 21
+      }
+    ]
+  },
+  "wrong": {
+    "total_intrinsic_draws": 22700227,
+    "total_tracked_detections": 205,
+    "pool_manifest_sha256": "99500e511d68838929b8e9fa30b31fda7c1ecef722290a0d41f07aa3eb398f32",
+    "detection_semantic_sha256": "c16d3c544110e97b67e418a50434d1b03374d445494cbfc8775869f9356a145e",
+    "detection_csv_sha256": "5d1fdcd36bb1ebfbedcaf07c4cee9f6712015bf232312a771821c4de8a297b59",
+    "blocks": [
+      {
+        "seed_block": 0,
+        "batches": 24,
+        "intrinsic_draws": 2400024,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 1,
+        "batches": 28,
+        "intrinsic_draws": 2800028,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 2,
+        "batches": 29,
+        "intrinsic_draws": 2900029,
+        "tracked_detections": 21
+      },
+      {
+        "seed_block": 3,
+        "batches": 20,
+        "intrinsic_draws": 2000020,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 4,
+        "batches": 16,
+        "intrinsic_draws": 1600016,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 5,
+        "batches": 23,
+        "intrinsic_draws": 2300023,
+        "tracked_detections": 21
+      },
+      {
+        "seed_block": 6,
+        "batches": 21,
+        "intrinsic_draws": 2100021,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 7,
+        "batches": 22,
+        "intrinsic_draws": 2200022,
+        "tracked_detections": 21
+      },
+      {
+        "seed_block": 8,
+        "batches": 29,
+        "intrinsic_draws": 2900029,
+        "tracked_detections": 20
+      },
+      {
+        "seed_block": 9,
+        "batches": 15,
+        "intrinsic_draws": 1500015,
+        "tracked_detections": 22
+      }
+    ]
+  },
+  "statistics": {
+    "correct_model_false_rejection_rate": 0.0465,
+    "wrong_model_rejection_power": 1.0,
+    "exact_zeta_mean": -8.671698162468536,
+    "exact_zeta_sd": 1.9213387644411029,
+    "stable_leave_one_block_out_verdicts": 10,
+    "total_leave_one_block_out_verdicts": 10
+  },
+  "verification": {
+    "contract_independence_passed": true,
+    "pool_independence_passed": true,
+    "adapter_identity_passed_both_arms": true,
+    "checkpoint_replay_passed_both_arms": true,
+    "exact_statistical_replay_passed": true,
+    "separate_result_replay_byte_identical": true
+  },
+  "raw_execution": {
+    "files": 2369,
+    "bytes": 4868515411,
+    "included_in_public_release": false,
+    "reason": "Bulk model, detected, tracked, stdout, stderr, and checkpoint files are excluded; the prelocked contract, public preregistration, compact per-block counts, semantic hashes, and immutable verdict are retained."
+  }
+}
