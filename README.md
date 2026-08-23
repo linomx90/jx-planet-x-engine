@@ -36,6 +36,8 @@ The source includes:
 - a prelocked ten-year JPL Horizons/DE441 outer-planet compatibility test;
 - a real-epoch, checkpointed, matched 100,000-tracer-per-arm population screen;
 - an independent SciPy DOP853 force, integration, checkpoint, and replication path;
+- a pinned official OSSOS telescope-selection adapter with deterministic paired
+  populations, checkpointed execution, calibration/power tests, and fail-closed verdicts;
 - a command-line interface for reproducible validation workflows.
 
 The software is not a complete orbit-determination or global ephemeris-fit
@@ -72,10 +74,11 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 PYTHONPATH=src python3 -m jxplanetx.cli validate --output validation.json
 ```
 
-The test suite contains 76 tests covering integrator behavior,
+The test suite contains 102 tests covering integrator behavior,
 convergence gates, force-evaluation accounting, independent-reference logic,
 installed-package provenance, deterministic ensemble generation, strict
-trajectory registration, distribution metrics, and fail-closed verdicts.
+trajectory registration, distribution metrics, official OSSOS tracked-output
+normalization, exact finite-pool statistics, and fail-closed verdicts.
 
 ## Command line
 
@@ -100,6 +103,12 @@ paired, massless-tracer scalability tests. It does not turn the preserved
 `run-encounter-tail-pilot` runs the checkpointed 10,000-tracer controlled-
 synthetic encounter-tail experiment and its prelocked timestep-halving audit.
 See [the encounter-tail pilot guide](docs/ENCOUNTER_TAIL_PILOT.md).
+
+The JX-O1 survey-selection workflow generates paired calibration populations,
+executes a separately installed and hash-locked official OSSOS SurveySimulator,
+normalizes its real 14-field tracked output, and evaluates calibration, power,
+adapter, replay, scale, and seed-stability gates. See
+[the survey-selection validation report](docs/SURVEY_SELECTION_VALIDATION.md).
 
 Some CLI subcommands reproduce project-specific DE441, benchmark, or IAS15
 experiments. Those commands require external input bundles that are not part of
@@ -147,6 +156,22 @@ audit then rehashed 100 checkpoints, reconstructed final orbital elements, and
 recomputed the `PASSED` verdict. The conclusion remains `SCREENING_ONLY`. See
 the [full independent replication report](runs/independent_dop853_10k/README.md).
 
+## JX-O1 telescope-selection result
+
+The official OSSOS run processed 28,600,286 intrinsic objects across two
+paired ten-block calibration arms and produced 206 tracked detections per arm.
+The frozen v2 result remains `INVALID` because one noisy leave-one-block-out
+Monte Carlo zeta-SD estimate missed tolerance by 0.00157, even though all
+physical, power, adapter, checkpoint, and full-sample calibration gates passed.
+
+A separately versioned corrective replay replaced only those Monte Carlo moment
+estimates with their exact finite-pool formulas. It changed no threshold or
+telescope data and passed: 5.45% false rejection, 100% wrong-model power, exact
+replay, exact adapter identity, and stable verdicts for all ten excluded seed
+blocks. This is a method-validation milestone on the existing v2 pools, not an
+independent confirmation and not a Planet X detection or exclusion. See the
+[complete JX-O1 report](runs/survey_selection_o1/README.md).
+
 ## Package map
 
 ```text
@@ -162,6 +187,9 @@ src/jxplanetx/
   de441_anchor.py          declared DE441-anchor import workflow
   de441_population.py      real-epoch paired population execution and gates
   independent_dop853.py    independent DOP853 population replication backend
+  survey_selection.py      frozen v1 survey-selection audit implementation
+  survey_selection_v2.py   corrected official 14-field OSSOS adapter
+  survey_selection_v3.py   exact-zeta corrective replay evaluator
   production_benchmark.py locked benchmark verification
   gates.py                 numerical validation gates
   claims.py                scientific claim-control state machine
