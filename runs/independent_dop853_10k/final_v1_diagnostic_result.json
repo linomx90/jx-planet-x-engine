@@ -1,0 +1,544 @@
+{
+  "comparisons_to_refined_active_only": {
+    "control": {
+      "baseline_active_only_to_refined": {
+        "maximum_position_AU": 3.0910577142607333e-06,
+        "maximum_velocity_AU_per_year": 1.6383413204555816e-06
+      },
+      "block_to_refined": [
+        {
+          "block_index": 3,
+          "maximum_position_AU": 1.8178386267484427e-06,
+          "maximum_velocity_AU_per_year": 9.634523048902072e-07
+        },
+        {
+          "block_index": 9,
+          "maximum_position_AU": 1.8213115749505405e-06,
+          "maximum_velocity_AU_per_year": 9.652931479539462e-07
+        },
+        {
+          "block_index": 33,
+          "maximum_position_AU": 1.817390340253893e-06,
+          "maximum_velocity_AU_per_year": 9.632157847499657e-07
+        },
+        {
+          "block_index": 47,
+          "maximum_position_AU": 1.8191140685870293e-06,
+          "maximum_velocity_AU_per_year": 9.64128266933184e-07
+        },
+        {
+          "block_index": 49,
+          "maximum_position_AU": 1.8190661455623295e-06,
+          "maximum_velocity_AU_per_year": 9.641036052327992e-07
+        },
+        {
+          "block_index": 64,
+          "maximum_position_AU": 1.8177018629684394e-06,
+          "maximum_velocity_AU_per_year": 9.633807695024508e-07
+        },
+        {
+          "block_index": 65,
+          "maximum_position_AU": 1.815737579322999e-06,
+          "maximum_velocity_AU_per_year": 9.623397712282792e-07
+        },
+        {
+          "block_index": 74,
+          "maximum_position_AU": 1.8157725259994584e-06,
+          "maximum_velocity_AU_per_year": 9.623577112971556e-07
+        },
+        {
+          "block_index": 83,
+          "maximum_position_AU": 1.8162002837219695e-06,
+          "maximum_velocity_AU_per_year": 9.625852156280296e-07
+        },
+        {
+          "block_index": 98,
+          "maximum_position_AU": 1.8195889177218244e-06,
+          "maximum_velocity_AU_per_year": 9.643802567884483e-07
+        }
+      ],
+      "maximum_block_to_refined_position_AU": 1.8213115749505405e-06,
+      "maximum_block_to_refined_velocity_AU_per_year": 9.652931479539462e-07
+    },
+    "source": {
+      "baseline_active_only_to_refined": {
+        "maximum_position_AU": 2.974434773020192e-06,
+        "maximum_velocity_AU_per_year": 1.576541572116253e-06
+      },
+      "block_to_refined": [
+        {
+          "block_index": 3,
+          "maximum_position_AU": 1.8158308860351272e-06,
+          "maximum_velocity_AU_per_year": 9.623888308887555e-07
+        },
+        {
+          "block_index": 9,
+          "maximum_position_AU": 1.8155550859579706e-06,
+          "maximum_velocity_AU_per_year": 9.622425182773204e-07
+        },
+        {
+          "block_index": 33,
+          "maximum_position_AU": 1.8177569238636135e-06,
+          "maximum_velocity_AU_per_year": 9.634093145510524e-07
+        },
+        {
+          "block_index": 47,
+          "maximum_position_AU": 1.8169023912151966e-06,
+          "maximum_velocity_AU_per_year": 9.629570618379878e-07
+        },
+        {
+          "block_index": 49,
+          "maximum_position_AU": 1.815714613516529e-06,
+          "maximum_velocity_AU_per_year": 9.623263922505643e-07
+        },
+        {
+          "block_index": 64,
+          "maximum_position_AU": 1.8157290151514272e-06,
+          "maximum_velocity_AU_per_year": 9.623353852581488e-07
+        },
+        {
+          "block_index": 65,
+          "maximum_position_AU": 1.8165195999787685e-06,
+          "maximum_velocity_AU_per_year": 9.627533287315565e-07
+        },
+        {
+          "block_index": 74,
+          "maximum_position_AU": 1.8192677861213162e-06,
+          "maximum_velocity_AU_per_year": 9.642096945072375e-07
+        },
+        {
+          "block_index": 83,
+          "maximum_position_AU": 1.8165626570901693e-06,
+          "maximum_velocity_AU_per_year": 9.62777332187569e-07
+        },
+        {
+          "block_index": 98,
+          "maximum_position_AU": 1.819632069067126e-06,
+          "maximum_velocity_AU_per_year": 9.644024426906819e-07
+        }
+      ],
+      "maximum_block_to_refined_position_AU": 1.819632069067126e-06,
+      "maximum_block_to_refined_velocity_AU_per_year": 9.644024426906819e-07
+    }
+  },
+  "contract_path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_v1_diagnostic_contract.json",
+  "contract_sha256": "592c9ea6cdee09ad325f13e84afce3f84b0fdbf3ce16d85f4a42dc97ba165d72",
+  "diagnosis": "ADAPTIVE_RESOLUTION_FAILURE_CONFIRMED",
+  "diagnostic_checks": {
+    "all_v1_cross_software_checks_pass": true,
+    "only_v1_failure_is_endpoint_position": true,
+    "refined_active_angular_conservation": true,
+    "refined_active_energy_conservation": true,
+    "tracer_loaded_active_endpoints_are_internally_consistent": true
+  },
+  "elapsed_seconds": 32.43472169500092,
+  "failed_numerical_checks": [
+    "active_endpoint_position_consistency"
+  ],
+  "failed_result_path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_result_v1.json",
+  "failed_result_sha256": "63dca00d4ef86df374d8ff4beafb6f86c8259177bac077cc1b7b1c4f0d1ba4d7",
+  "interpretation": "This post-failure diagnosis may motivate a new prelocked rerun, but it cannot change the immutable v1 INVALID verdict or retroactively relax its gate.",
+  "maximum_refined_relative_angular_momentum_vector_drift": 2.4895847269297713e-13,
+  "maximum_refined_relative_energy_drift": 7.078989912787948e-13,
+  "pairwise_tracer_loaded_endpoint_dispersion": {
+    "control": {
+      "maximum_position_AU": 5.574007764044481e-09,
+      "maximum_position_block_pair": [
+        9,
+        65
+      ],
+      "maximum_velocity_AU_per_year": 2.9533832874366756e-09,
+      "maximum_velocity_block_pair": [
+        9,
+        65
+      ]
+    },
+    "source": {
+      "maximum_position_AU": 4.076990914235967e-09,
+      "maximum_position_block_pair": [
+        9,
+        98
+      ],
+      "maximum_velocity_AU_per_year": 2.159929881223851e-09,
+      "maximum_velocity_block_pair": [
+        9,
+        98
+      ]
+    }
+  },
+  "recommended_corrective_action": {
+    "action": "Create a new transparent v2 replication using the refined solver and a new execution directory.",
+    "gate_policy": "Retain every v1 numerical and scientific gate unchanged.",
+    "provenance_policy": "Lock the v1 INVALID result and this diagnostic into v2; label v2 as a post-v1 numerical repair rather than an original preregistration.",
+    "solver": {
+      "active_audit_segment_years": 2500.0,
+      "atol": 1e-15,
+      "max_step_years": 0.125,
+      "method": "scipy.integrate.DOP853",
+      "rtol": 1e-13
+    }
+  },
+  "refined_active_only_audits": {
+    "control": {
+      "accepted_steps": 80037,
+      "active_bodies": [
+        "Sun",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto"
+      ],
+      "duration_years": 10000.0,
+      "elapsed_seconds": 22.721986781998567,
+      "endpoint_state": [
+        {
+          "index": 0,
+          "position_AU": [
+            -24.21649599491101,
+            -6.07215464261964,
+            0.4955415904365344
+          ],
+          "velocity_AU_per_year": [
+            -0.0004676731248947322,
+            0.0016738486069062541,
+            -1.147257002079594e-05
+          ]
+        },
+        {
+          "index": 1,
+          "position_AU": [
+            -27.792881039297352,
+            -2.292764502725027,
+            0.531421035062492
+          ],
+          "velocity_AU_per_year": [
+            -2.108730443454371,
+            -1.7711087454142533,
+            0.06775781920004556
+          ]
+        },
+        {
+          "index": 2,
+          "position_AU": [
+            -33.527064172555335,
+            -7.060572378779103,
+            0.8664408550770687
+          ],
+          "velocity_AU_per_year": [
+            0.20765305415076854,
+            -2.062766217725284,
+            -0.011805481009234158
+          ]
+        },
+        {
+          "index": 3,
+          "position_AU": [
+            -17.538436012324397,
+            12.261802967175367,
+            0.43788023611944216
+          ],
+          "velocity_AU_per_year": [
+            -1.3475905357074454,
+            0.42666570104153534,
+            0.015684740113976914
+          ]
+        },
+        {
+          "index": 4,
+          "position_AU": [
+            -34.67974161362246,
+            -34.56499510147431,
+            1.3291444826346968
+          ],
+          "velocity_AU_per_year": [
+            1.0642641242353974,
+            -0.3890249943339174,
+            -0.017135429149689543
+          ]
+        },
+        {
+          "index": 5,
+          "position_AU": [
+            10.77335733416819,
+            25.435138915244515,
+            -12.93036619149283
+          ],
+          "velocity_AU_per_year": [
+            -0.4960510871886162,
+            0.5980813687102927,
+            0.08233450694268478
+          ]
+        }
+      ],
+      "endpoint_state_sha256": "f14c7a25dc7e0a6df5c3f5ea1b5a1734b29d36a18c2d04471c41c81f0f9f72c1",
+      "maximum_relative_angular_momentum_vector_drift": 2.4895847269297713e-13,
+      "maximum_relative_energy_drift": 7.032464098985585e-13,
+      "rhs_evaluations": 960656,
+      "source_bound_at_every_accepted_step": null,
+      "source_maximum_fractional_a_excursion": null,
+      "source_minimum_q_AU": null
+    },
+    "source": {
+      "accepted_steps": 80032,
+      "active_bodies": [
+        "Sun",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto",
+        "P9_BB21_idx9118"
+      ],
+      "duration_years": 10000.0,
+      "elapsed_seconds": 32.41969748500014,
+      "endpoint_state": [
+        {
+          "index": 0,
+          "position_AU": [
+            -24.24748060187435,
+            -6.051087784420067,
+            0.5061196196183512
+          ],
+          "velocity_AU_per_year": [
+            -0.0004684525507745511,
+            0.0016724939745288237,
+            -1.1125573869723434e-05
+          ]
+        },
+        {
+          "index": 1,
+          "position_AU": [
+            -27.823865201915034,
+            -2.2716973010032344,
+            0.5419989266775096
+          ],
+          "velocity_AU_per_year": [
+            -2.1087314380997353,
+            -1.771109889461948,
+            0.06775820518610544
+          ]
+        },
+        {
+          "index": 2,
+          "position_AU": [
+            -33.55804917655589,
+            -7.039500850979375,
+            0.8770190113132321
+          ],
+          "velocity_AU_per_year": [
+            0.20765129442642888,
+            -2.0627676936751085,
+            -0.011804976891225206
+          ]
+        },
+        {
+          "index": 3,
+          "position_AU": [
+            -17.569425966019622,
+            12.282872018842982,
+            0.44845490964968665
+          ],
+          "velocity_AU_per_year": [
+            -1.347591434694174,
+            0.42666391359110517,
+            0.015684994181500878
+          ]
+        },
+        {
+          "index": 4,
+          "position_AU": [
+            -34.71079929996796,
+            -34.543901211769565,
+            1.339733926671331
+          ],
+          "velocity_AU_per_year": [
+            1.0642623312738395,
+            -0.3890291406026043,
+            -0.01713485699688191
+          ]
+        },
+        {
+          "index": 5,
+          "position_AU": [
+            10.742397427617295,
+            25.456174738025947,
+            -12.919800335744803
+          ],
+          "velocity_AU_per_year": [
+            -0.4960510186278672,
+            0.5980807360519212,
+            0.08233449979907438
+          ]
+        },
+        {
+          "index": 6,
+          "position_AU": [
+            309.9295235065707,
+            388.89848055119467,
+            -140.25537143055254
+          ],
+          "velocity_AU_per_year": [
+            -0.14116050296966487,
+            0.21324874815463962,
+            0.04229015790670083
+          ]
+        }
+      ],
+      "endpoint_state_sha256": "00d9e883217e84d538da25db6fcc111d1523146e56bb4abf9502cdef2bfac93e",
+      "maximum_relative_angular_momentum_vector_drift": 2.365270188314726e-13,
+      "maximum_relative_energy_drift": 7.078989912787948e-13,
+      "rhs_evaluations": 960596,
+      "source_bound_at_every_accepted_step": true,
+      "source_maximum_fractional_a_excursion": 0.0363342624848293,
+      "source_minimum_q_AU": 352.26122328404387
+    }
+  },
+  "schema": "jx-independent-dop853-v1-diagnostic-result/v1",
+  "v1_cross_software_checks": {
+    "control_population_comparison": true,
+    "source_control_effect_difference": true,
+    "source_population_comparison": true
+  },
+  "v1_verdict_remains": "INVALID",
+  "verified_block_summaries": [
+    {
+      "arm": "control",
+      "block_index": 3,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_003/summary.json",
+      "sha256": "19c85eafcc7f668d360051e077f759467c4a48e91383e1c97e74a14737bdfc87"
+    },
+    {
+      "arm": "control",
+      "block_index": 9,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_009/summary.json",
+      "sha256": "af79d5e618edc3e791577262a62f10ad6babfbcb468e380229ca207ade761c22"
+    },
+    {
+      "arm": "control",
+      "block_index": 33,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_033/summary.json",
+      "sha256": "80f8eb4fb248493148d8e07ea462186d8ee9914c79e7a06c2f4eea4e8d44c0bf"
+    },
+    {
+      "arm": "control",
+      "block_index": 47,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_047/summary.json",
+      "sha256": "e0560658249bc4b76b2d6c8d1ea790bedff30a29af5d9a630078c1d6089dd57f"
+    },
+    {
+      "arm": "control",
+      "block_index": 49,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_049/summary.json",
+      "sha256": "2e1f43d6a6f838fa7068ed8a7a2215f7f2e5f8a2b025169448af16982cb83cee"
+    },
+    {
+      "arm": "control",
+      "block_index": 64,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_064/summary.json",
+      "sha256": "142c2dd05adbd797e8c5881b9a266a41fe86d056439aef123a1c2408b70a38e4"
+    },
+    {
+      "arm": "control",
+      "block_index": 65,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_065/summary.json",
+      "sha256": "d45e25a9c1350b04b91446eaa8f1ee96db94bea225598a4ed7290da217723e72"
+    },
+    {
+      "arm": "control",
+      "block_index": 74,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_074/summary.json",
+      "sha256": "0c946420249e2d7c7679c5cb5b81a0fdfe9d6a1fc3fcacc2b8f9b75833425c7c"
+    },
+    {
+      "arm": "control",
+      "block_index": 83,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_083/summary.json",
+      "sha256": "91854b457b02e21af0901ded3467976ae76bcf4bc6bfd4687ea56808ecf49d48"
+    },
+    {
+      "arm": "control",
+      "block_index": 98,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/control/block_098/summary.json",
+      "sha256": "fffda90656a5f16b0e6ec2fc84d293ce44819db62696f82db2682db8f41d178c"
+    },
+    {
+      "arm": "source",
+      "block_index": 3,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_003/summary.json",
+      "sha256": "6e897744fc50c4eff650f66262a6f810ba108d96cf5ae03d1a6fd785dd8d066d"
+    },
+    {
+      "arm": "source",
+      "block_index": 9,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_009/summary.json",
+      "sha256": "d74d2401bf5905152ee7780b10adb78e92794af63103a45245a92ccd826caddb"
+    },
+    {
+      "arm": "source",
+      "block_index": 33,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_033/summary.json",
+      "sha256": "b35dcafd76a09b51e7114a546b1c47e3f2390831da20d2941c022455aedf2e2d"
+    },
+    {
+      "arm": "source",
+      "block_index": 47,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_047/summary.json",
+      "sha256": "64ea74163a8d9c31b417cb374cf77abf20dd33b94efeb7547cc22982e89678ba"
+    },
+    {
+      "arm": "source",
+      "block_index": 49,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_049/summary.json",
+      "sha256": "493aa70b87511a3ae33cf38d117f27e1e98cddbb71babe4b2718ec1199ae38dc"
+    },
+    {
+      "arm": "source",
+      "block_index": 64,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_064/summary.json",
+      "sha256": "6294a8bc25ec7ce11808d9fcf1452ce258c4eb20b573c03daeb9adef5463350e"
+    },
+    {
+      "arm": "source",
+      "block_index": 65,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_065/summary.json",
+      "sha256": "def6c00e67da945cda109ceb4c9d44b88d43ad3c9c7faf34f691a6195f07f54a"
+    },
+    {
+      "arm": "source",
+      "block_index": 74,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_074/summary.json",
+      "sha256": "2bf0b08ec5b6235a3bd2bad46f413ce271963d0b2061944972704495da859dd0"
+    },
+    {
+      "arm": "source",
+      "block_index": 83,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_083/summary.json",
+      "sha256": "63f59a8e6b26a99c3ebd36c12bf7ac05bf4266f153af5ac203b147247c00e74d"
+    },
+    {
+      "arm": "source",
+      "block_index": 98,
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_execution_v1/source/block_098/summary.json",
+      "sha256": "89105b43257a98d8ee9b06bc46e18933d286b58d965ce04a513f8c85d5afd7ef"
+    }
+  ],
+  "verified_locked_files": {
+    "diagnostic_script": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/diagnose_final_v1.py",
+      "sha256": "cdf89c22efa7159f7d029be74de2524c98f88b7b3e22ba9e340c3f5abab9a033"
+    },
+    "independent_module": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/src/jxplanetx/independent_dop853.py",
+      "sha256": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062"
+    },
+    "v1_contract": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_contract_v1.json",
+      "sha256": "cb3c03a8d62f3ce621d184e0603020e7f32dcdf527eb57b58459c58626d42210"
+    },
+    "v1_result": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/final_result_v1.json",
+      "sha256": "63dca00d4ef86df374d8ff4beafb6f86c8259177bac077cc1b7b1c4f0d1ba4d7"
+    }
+  }
+}

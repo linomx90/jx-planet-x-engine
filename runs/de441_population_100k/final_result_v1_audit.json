@@ -1,0 +1,104 @@
+{
+  "audit_script_sha256": "2a9332c8a73be4b27143ed080442fdfad41ef0ab98df0696a191b0839daf49aa",
+  "checks": {
+    "all_checkpoint_archives_and_states_verified": true,
+    "all_result_gates_passed": true,
+    "all_summary_hashes_verified": true,
+    "all_tracer_hashes_verified": true,
+    "all_tracer_rows_verified": true,
+    "bootstrap_interval_recomputed": true,
+    "dt_half_metrics_recomputed": true,
+    "effect_classification_recomputed": true,
+    "paired_initial_metadata_exact": true,
+    "primary_count_recomputed": true,
+    "primary_effect_recomputed": true,
+    "primary_injection_counts_recomputed": true,
+    "primary_survival_recomputed": true,
+    "record_set_exact": true,
+    "result_contract_hash_matches": true,
+    "result_hash_is_stable": true,
+    "sample_cadence_metrics_recomputed": true
+  },
+  "contract": {
+    "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/final_contract_v1.json",
+    "sha256": "1f3ccf6f29d4ec9890b9d66d19858c148760b00167281ce386afdfd0c8801725"
+  },
+  "elapsed_seconds": 8.391291084999466,
+  "independent_convergence_recomputation": {
+    "dt_half": {
+      "control": {
+        "absolute_injection_fraction_difference": 0.0,
+        "absolute_survival_fraction_difference": 0.0,
+        "injection_identity_disagreement_fraction": 0.0,
+        "wasserstein_final_bound_i_deg": 1.207731683805755e-05,
+        "wasserstein_final_bound_q_AU": 7.982390165524934e-05,
+        "wasserstein_minimum_sampled_q_AU": 7.947135223351864e-06
+      },
+      "source": {
+        "absolute_injection_fraction_difference": 0.0,
+        "absolute_survival_fraction_difference": 0.0,
+        "injection_identity_disagreement_fraction": 0.0,
+        "wasserstein_final_bound_i_deg": 1.1949563526698284e-05,
+        "wasserstein_final_bound_q_AU": 7.918264404479842e-05,
+        "wasserstein_minimum_sampled_q_AU": 7.908719979238654e-06
+      }
+    },
+    "sample_fine": {
+      "control": {
+        "absolute_injection_fraction_difference": 0.0002,
+        "absolute_survival_fraction_difference": 0.0,
+        "injection_identity_disagreement_fraction": 0.0002,
+        "wasserstein_final_bound_i_deg": 0.0,
+        "wasserstein_final_bound_q_AU": 0.0,
+        "wasserstein_minimum_sampled_q_AU": 0.02255144540367886
+      },
+      "source": {
+        "absolute_injection_fraction_difference": 0.0003,
+        "absolute_survival_fraction_difference": 0.0,
+        "injection_identity_disagreement_fraction": 0.0003,
+        "wasserstein_final_bound_i_deg": 0.0,
+        "wasserstein_final_bound_q_AU": 0.0,
+        "wasserstein_minimum_sampled_q_AU": 0.022535966514586427
+      }
+    }
+  },
+  "independent_primary_recomputation": {
+    "control_bound_final": 100000,
+    "control_sampled_injections": 4377,
+    "effect_classification": "EQUIVALENT_WITHIN_LOCKED_MARGIN",
+    "equivalence_margin": 0.001,
+    "paired_block_bootstrap_95_percent_CI": [
+      -9e-05,
+      3e-05
+    ],
+    "source_bound_final": 100000,
+    "source_minus_control_injection_fraction": -3e-05,
+    "source_sampled_injections": 4374
+  },
+  "interpretation": "This audit verifies stored computation and deterministic statistics; it is not independent dynamical software replication.",
+  "population": {
+    "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/population_elements_v1.csv",
+    "sha256": "2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1"
+  },
+  "result": {
+    "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/final_result_v1.json",
+    "sha256": "24b7572cf130c683acd66a4677dac62d0d30b15b24f9bf5997b612a8045d7efd"
+  },
+  "schema": "jx-de441-population-final-audit/v1",
+  "verdict": "AUDIT_PASSED",
+  "verified": {
+    "block_summaries": 240,
+    "checkpoint_archive_bytes": 167970096,
+    "checkpoint_archives": 1200,
+    "record_counts": {
+      "dt_half/control": 10,
+      "dt_half/source": 10,
+      "primary/control": 100,
+      "primary/source": 100,
+      "sample_fine/control": 10,
+      "sample_fine/source": 10
+    },
+    "tracer_csvs": 240,
+    "tracer_rows": 240000
+  }
+}

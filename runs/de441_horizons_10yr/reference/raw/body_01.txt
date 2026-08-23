@@ -1,0 +1,104 @@
+API VERSION: 1.2
+API SOURCE: NASA/JPL Horizons API
+
+
+
+*******************************************************************************
+Ephemeris / API_USER Sat Aug 22 12:12:40 2026 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: Mercury Barycenter (199)        {source: DE441}
+Center body name: Solar System Barycenter (0)     {source: DE441}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 2026-Jun-09 00:00:00.0000 TDB
+Stop  time      : A.D. 2036-Jun-08 12:00:00.0000 TDB
+Step-size       : DISCRETE TIME-LIST
+*******************************************************************************
+Center geodetic : 0.0, 0.0, 0.0                   {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : (undefined)
+Output units    : AU-D
+Calendar mode   : Mixed Julian/Gregorian
+Output type     : GEOMETRIC cartesian states
+Output format   : 2 (position and velocity)
+Reference frame : ICRF
+*******************************************************************************
+            JDTDB,            Calendar Date (TDB),                      X,                      Y,                      Z,                     VX,                     VY,                     VZ,
+**************************************************************************************************************************************************************************************************
+$$SOE
+2461200.500000000, A.D. 2026-Jun-09 00:00:00.0000, -3.965312889737265E-01, -7.549413075709950E-02,  1.183872506298839E-03, -1.378224658882666E-03, -2.356250647600003E-02, -1.244398506606299E-02,
+2461565.750000000, A.D. 2027-Jun-09 06:00:00.0000, -2.791165477409539E-01, -3.325004673303702E-01, -1.482220287735693E-01,  1.653212527742424E-02, -1.349778790817956E-02, -8.923959011099585E-03,
+2461931.000000000, A.D. 2028-Jun-08 12:00:00.0000, -4.476313226636827E-03, -4.118140250869310E-01, -2.191422345371811E-01,  2.249057529906606E-02,  1.798365102429235E-03, -1.370452127248013E-03,
+2462296.250000000, A.D. 2029-Jun-08 18:00:00.0000,  2.691288839132158E-01, -2.783474125443094E-01, -1.763866221549537E-01,  1.610443769039108E-02,  1.763310513996315E-02,  7.750265670335486E-03,
+2462661.500000000, A.D. 2030-Jun-09 00:00:00.0000,  3.493885190346621E-01,  3.133149117930019E-02, -1.949766262614386E-02, -7.056926440709809E-03,  2.571444752037615E-02,  1.446762870318920E-02,
+2463026.750000000, A.D. 2031-Jun-09 06:00:00.0000,  4.966177276081903E-02,  2.708702535429606E-01,  1.393331427037104E-01, -3.338500711718879E-02,  3.876114046939232E-03,  5.529804883599469E-03,
+2463392.000000000, A.D. 2032-Jun-08 12:00:00.0000, -3.289395610049771E-01,  1.130902261507571E-01,  9.418691718754163E-02, -1.695956659199635E-02, -2.242332297252601E-02, -1.022150632560603E-02,
+2463757.250000000, A.D. 2033-Jun-08 18:00:00.0000, -3.805577501844020E-01, -1.968464677898010E-01, -6.597812230473545E-02,  7.721547838561983E-03, -2.047308692886241E-02, -1.173675734231199E-02,
+2464122.500000000, A.D. 2034-Jun-09 00:00:00.0000, -1.790460203296721E-01, -3.909881431455559E-01, -1.903558482609903E-01,  2.043265974502879E-02, -7.359649366170882E-03, -6.048010442498552E-03,
+2464487.750000000, A.D. 2035-Jun-09 06:00:00.0000,  1.157168240328907E-01, -3.855488723480546E-01, -2.176713637540784E-01,  2.149087944973133E-02,  8.648602309806328E-03,  2.394469319970302E-03,
+2464853.000000000, A.D. 2036-Jun-08 12:00:00.0000,  3.381483972723125E-01, -1.693565337327894E-01, -1.248951200134763E-01,  8.645878724476783E-03,  2.296613153775009E-02,  1.137399275735970E-02,
+$$EOE
+**************************************************************************************************************************************************************************************************
+ 
+TIME
+
+  Barycentric Dynamical Time ("TDB" or T_eph) output was requested. This
+continuous coordinate time is equivalent to the relativistic proper time
+of a clock at rest in a reference frame co-moving with the solar system
+barycenter but outside the system's gravity well. It is the independent
+variable in the solar system relativistic equations of motion.
+
+  TDB runs at a uniform rate of one SI second per second and is independent
+of irregularities in Earth's rotation.
+ 
+CALENDAR SYSTEM
+
+  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15
+(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)
+are in the Julian calendar system, which is automatically extended for dates
+prior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for
+matching historical dates. The Gregorian calendar more accurately corresponds
+to the Earth's orbital motion and seasons. A "Gregorian-only" calendar mode is
+available if such physical events are the primary interest.
+
+REFERENCE FRAME AND COORDINATES
+
+  International Celestial Reference Frame (ICRF)
+
+    The ICRF is an adopted reference frame whose axes are defined relative to 
+    fixed extragalactic radio sources distributed across the sky.
+
+    The ICRF was aligned with the prior FK5/J2000 dynamical system at the ~0.02 
+    arcsecond level but is not identical and has no associated standard epoch.
+
+  Symbol meaning [1 au= 149597870.700 km, 1 day= 86400.0 s]:
+
+    JDTDB    Julian Day Number, Barycentric Dynamical Time
+      X      X-component of position vector (au)
+      Y      Y-component of position vector (au)
+      Z      Z-component of position vector (au)
+      VX     X-component of velocity vector (au/day)                           
+      VY     Y-component of velocity vector (au/day)                           
+      VZ     Z-component of velocity vector (au/day)                           
+
+ABERRATIONS AND CORRECTIONS
+
+ Geometric state vectors have NO corrections or aberrations applied.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/horizons_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Inquiries   : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************

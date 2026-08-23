@@ -1,0 +1,523 @@
+{
+  "absolute_source_control_effect_difference": 0.0,
+  "active_endpoint_disagreement": {
+    "control": {
+      "maximum_active_endpoint_position_disagreement_AU": 1.2360131736025493e-11,
+      "maximum_active_endpoint_velocity_disagreement_AU_per_year": 6.215790562146923e-12
+    },
+    "source": {
+      "maximum_active_endpoint_position_disagreement_AU": 2.154104380591941e-12,
+      "maximum_active_endpoint_velocity_disagreement_AU_per_year": 1.052102600262157e-12
+    }
+  },
+  "active_only_audits": {
+    "control": {
+      "accepted_steps": 408,
+      "active_bodies": [
+        "Sun",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto"
+      ],
+      "duration_years": 100.0,
+      "elapsed_seconds": 0.1222918599996774,
+      "endpoint_state": [
+        {
+          "index": 0,
+          "position_AU": [
+            -0.23568769890078933,
+            -0.05076235851323883,
+            0.004675636232643917
+          ],
+          "velocity_AU_per_year": [
+            -0.004790798757853273,
+            9.723000150311522e-05,
+            8.85693726020949e-05
+          ]
+        },
+        {
+          "index": 1,
+          "position_AU": [
+            -0.6094774164963714,
+            -5.31064161934682,
+            0.035272337894843214
+          ],
+          "velocity_AU_per_year": [
+            2.7123830115427503,
+            -0.065244640353708,
+            -0.06025246925371098
+          ]
+        },
+        {
+          "index": 2,
+          "position_AU": [
+            -9.089791241299467,
+            2.8841803762811318,
+            0.3080381033909919
+          ],
+          "velocity_AU_per_year": [
+            -0.7543041751189238,
+            -1.939064090029205,
+            0.0634352335165751
+          ]
+        },
+        {
+          "index": 3,
+          "position_AU": [
+            -12.53483665049056,
+            13.72437689445987,
+            0.21483043602131485
+          ],
+          "velocity_AU_per_year": [
+            -1.0849621177611979,
+            -1.024541099128318,
+            0.010254984663240914
+          ]
+        },
+        {
+          "index": 4,
+          "position_AU": [
+            -23.078906892106712,
+            -19.994768125687187,
+            0.9418730028219321
+          ],
+          "velocity_AU_per_year": [
+            0.744646896985392,
+            -0.8571936698352848,
+            0.0004718748867468723
+          ]
+        },
+        {
+          "index": 5,
+          "position_AU": [
+            25.81624443294637,
+            39.728505286367486,
+            -11.788451168358323
+          ],
+          "velocity_AU_per_year": [
+            -0.6547815921964368,
+            0.4066240690682377,
+            0.14519021480660751
+          ]
+        }
+      ],
+      "endpoint_state_sha256": "4a1185f1bf639cd826740b51c63c1c8bc73762ba00b7f0e2ff4f53d69ede8d59",
+      "maximum_relative_angular_momentum_vector_drift": 2.8508678538830666e-13,
+      "maximum_relative_energy_drift": 9.644849970293676e-13,
+      "rhs_evaluations": 4904,
+      "source_bound_at_every_accepted_step": null,
+      "source_maximum_fractional_a_excursion": null,
+      "source_minimum_q_AU": null
+    },
+    "source": {
+      "accepted_steps": 408,
+      "active_bodies": [
+        "Sun",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto",
+        "P9_BB21_idx9118"
+      ],
+      "duration_years": 100.0,
+      "elapsed_seconds": 0.14861887100050808,
+      "endpoint_state": [
+        {
+          "index": 0,
+          "position_AU": [
+            -0.23568481665605795,
+            -0.050754045300016974,
+            0.004674211848045878
+          ],
+          "velocity_AU_per_year": [
+            -0.004790742285560124,
+            9.739630428387186e-05,
+            8.854131816045174e-05
+          ]
+        },
+        {
+          "index": 1,
+          "position_AU": [
+            -0.6094745372085691,
+            -5.3106333058186905,
+            0.03527091375533447
+          ],
+          "velocity_AU_per_year": [
+            2.7123830680571963,
+            -0.06524447592796233,
+            -0.060252496977549704
+          ]
+        },
+        {
+          "index": 2,
+          "position_AU": [
+            -9.089788347471236,
+            2.884188720043297,
+            0.30803667541233887
+          ],
+          "velocity_AU_per_year": [
+            -0.7543041254985667,
+            -1.9390639213737135,
+            0.06343520567035102
+          ]
+        },
+        {
+          "index": 3,
+          "position_AU": [
+            -12.534833847171873,
+            13.72438514239914,
+            0.214828996504585
+          ],
+          "velocity_AU_per_year": [
+            -1.084962055575788,
+            -1.0245409372233956,
+            0.01025495568477101
+          ]
+        },
+        {
+          "index": 4,
+          "position_AU": [
+            -23.07890486747622,
+            -19.994759030003834,
+            0.9418715644264357
+          ],
+          "velocity_AU_per_year": [
+            0.7446469267188687,
+            -0.857193523194286,
+            0.0004718495892674565
+          ]
+        },
+        {
+          "index": 5,
+          "position_AU": [
+            25.816246556601207,
+            39.72851385116768,
+            -11.788452386512558
+          ],
+          "velocity_AU_per_year": [
+            -0.6547815482848216,
+            0.40662424147827647,
+            0.14519019038572115
+          ]
+        },
+        {
+          "index": 6,
+          "position_AU": [
+            174.48321396393,
+            548.8506594878991,
+            -88.27049872478582
+          ],
+          "velocity_AU_per_year": [
+            -0.19627162371079215,
+            0.11303790933003317,
+            0.06700732625444172
+          ]
+        }
+      ],
+      "endpoint_state_sha256": "c86bd6618455039d0513e54e3b407779db23ec26ba7bb9c75323b54776f74e25",
+      "maximum_relative_angular_momentum_vector_drift": 2.55147830036439e-13,
+      "maximum_relative_energy_drift": 9.38949356487846e-13,
+      "rhs_evaluations": 4904,
+      "source_bound_at_every_accepted_step": true,
+      "source_maximum_fractional_a_excursion": 0.026243198453182983,
+      "source_minimum_q_AU": 354.74618597435494
+    }
+  },
+  "all_gates_passed": true,
+  "block_records": [
+    {
+      "arm": "control",
+      "block_index": 0,
+      "checkpoint_replay_binary64_exact": true,
+      "elapsed_seconds": 2.8314146180000535,
+      "summary_json": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/control/block_000/summary.json",
+      "summary_json_sha256": "02d038b4fff7387e476d0451f52622ebf2b341f53d4d038e8d1a5a3112444c16",
+      "tracer_csv": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/control/block_000/tracers.csv",
+      "tracer_csv_sha256": "a7fd56366faa1bc9b5b2e915eea8a42817a475f19089803e5386fadc6308b206",
+      "tracers": 1000
+    },
+    {
+      "arm": "control",
+      "block_index": 1,
+      "checkpoint_replay_binary64_exact": true,
+      "elapsed_seconds": 2.9478881480008567,
+      "summary_json": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/control/block_001/summary.json",
+      "summary_json_sha256": "4483d648b9d56fc0935319232404345244028e6cfa4e5972726e8e044d99cbb7",
+      "tracer_csv": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/control/block_001/tracers.csv",
+      "tracer_csv_sha256": "0a8c4428b5f4475ef3f88247a0e66eee41b5784f5b38add1299880637a2923d5",
+      "tracers": 1000
+    },
+    {
+      "arm": "source",
+      "block_index": 0,
+      "checkpoint_replay_binary64_exact": true,
+      "elapsed_seconds": 3.6881895149999764,
+      "summary_json": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/source/block_000/summary.json",
+      "summary_json_sha256": "9fce30176ae14993a94ccfade230fcba566a46e4a8a41c70af5521f72867f381",
+      "tracer_csv": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/source/block_000/tracers.csv",
+      "tracer_csv_sha256": "e60b313914a63e3e60b0625aeff5068718ccb450953d20f9d5e3e4c49fd93653",
+      "tracers": 1000
+    },
+    {
+      "arm": "source",
+      "block_index": 1,
+      "checkpoint_replay_binary64_exact": true,
+      "elapsed_seconds": 3.691566179999427,
+      "summary_json": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/source/block_001/summary.json",
+      "summary_json_sha256": "1d81e590ec08521adc98f47057987a9de292d42415c8fa8b9cdb05bb50997a02",
+      "tracer_csv": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_execution_v1/source/block_001/tracers.csv",
+      "tracer_csv_sha256": "c630ff1eea306fa63329fbdcbfbdedfe53b4a3be64cb3b79d1065e2651f38dc9",
+      "tracers": 1000
+    }
+  ],
+  "claim_decision": "SCREENING_ONLY",
+  "classification": "INDEPENDENT_SCIPY_DOP853_REPLICATION",
+  "comparison_checks": {
+    "control": {
+      "final_i_wasserstein": true,
+      "final_q_wasserstein": true,
+      "injection_fraction": true,
+      "injection_identity": true,
+      "minimum_q_wasserstein": true,
+      "survival_fraction": true
+    },
+    "source": {
+      "final_i_wasserstein": true,
+      "final_q_wasserstein": true,
+      "injection_fraction": true,
+      "injection_identity": true,
+      "minimum_q_wasserstein": true,
+      "survival_fraction": true
+    }
+  },
+  "comparisons": {
+    "control": {
+      "independent": {
+        "bound_final": 2000,
+        "sampled_injection_fraction": 0.028,
+        "sampled_injections": 56,
+        "survival_fraction": 1.0,
+        "tracers": 2000
+      },
+      "metrics": {
+        "absolute_injection_fraction_difference": 0.0,
+        "absolute_survival_fraction_difference": 0.0,
+        "injection_identity_disagreement_fraction": 0.0,
+        "wasserstein_final_bound_i_deg": 2.208950647354223e-07,
+        "wasserstein_final_bound_q_AU": 1.4218029251330746e-06,
+        "wasserstein_minimum_sampled_q_AU": 3.294670521061054e-07
+      },
+      "reference": {
+        "bound_final": 2000,
+        "sampled_injection_fraction": 0.028,
+        "sampled_injections": 56,
+        "survival_fraction": 1.0,
+        "tracers": 2000
+      }
+    },
+    "source": {
+      "independent": {
+        "bound_final": 2000,
+        "sampled_injection_fraction": 0.028,
+        "sampled_injections": 56,
+        "survival_fraction": 1.0,
+        "tracers": 2000
+      },
+      "metrics": {
+        "absolute_injection_fraction_difference": 0.0,
+        "absolute_survival_fraction_difference": 0.0,
+        "injection_identity_disagreement_fraction": 0.0,
+        "wasserstein_final_bound_i_deg": 2.1980321374423378e-07,
+        "wasserstein_final_bound_q_AU": 1.4143893877242253e-06,
+        "wasserstein_minimum_sampled_q_AU": 3.293350459170136e-07
+      },
+      "reference": {
+        "bound_final": 2000,
+        "sampled_injection_fraction": 0.028,
+        "sampled_injections": 56,
+        "survival_fraction": 1.0,
+        "tracers": 2000
+      }
+    }
+  },
+  "contract_path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/population_qualification_contract_v1.json",
+  "contract_sha256": "a94280f5c38a48b8d05fa641d045d3e02eeb95d04d28d0c2d0048ffc4885a7ed",
+  "cross_software_checks": {
+    "control_population_comparison": true,
+    "source_control_effect_difference": true,
+    "source_population_comparison": true
+  },
+  "duration_years": 100.0,
+  "elapsed_seconds": 4.531800889999431,
+  "experiment_id": "jx-independent-dop853-population-qualification-100yr-v1",
+  "independent_effect": {
+    "block_effects": [
+      0.0,
+      0.0
+    ],
+    "classification": "EQUIVALENT_WITHIN_LOCKED_MARGIN",
+    "control": {
+      "bound_final": 2000,
+      "sampled_injection_fraction": 0.028,
+      "sampled_injections": 56,
+      "survival_fraction": 1.0,
+      "tracers": 2000
+    },
+    "equivalence_margin": 0.001,
+    "paired_block_bootstrap_95_percent_CI": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "bound_final": 2000,
+      "sampled_injection_fraction": 0.028,
+      "sampled_injections": 56,
+      "survival_fraction": 1.0,
+      "tracers": 2000
+    },
+    "source_minus_control_injection_fraction": 0.0
+  },
+  "limitations": [
+    "This qualification is not used for final source-effect inference.",
+    "SciPy DOP853 is independent of REBOUND, but both run in binary64 arithmetic.",
+    "The same physical model assumptions and initial-state files are shared intentionally.",
+    "The duration is only 100 years."
+  ],
+  "maximum_initial_element_roundtrip_error": 9.640643838793039e-11,
+  "maximum_relative_active_angular_momentum_vector_drift": 2.8508678538830666e-13,
+  "maximum_relative_active_energy_drift": 9.644849970293676e-13,
+  "next_required_gate": "observed-population and explicit survey-selection model",
+  "nonclaim": "Passing qualifies the independent population runner; it does not replicate the 10000-year conclusion or provide evidence for or against Planet X.",
+  "numerical_checks": {
+    "active_angular_momentum_drift": true,
+    "active_endpoint_position_consistency": true,
+    "active_endpoint_velocity_consistency": true,
+    "active_energy_drift": true,
+    "checkpoint_replay_exact": true,
+    "complete_finite_outputs": true,
+    "initial_element_roundtrip": true,
+    "source_bound": true,
+    "source_minimum_q": true,
+    "source_semimajor_axis_excursion": true
+  },
+  "numerical_status": "VALID",
+  "reference_effect": {
+    "block_effects": [
+      0.0,
+      0.0
+    ],
+    "classification": "EQUIVALENT_WITHIN_LOCKED_MARGIN",
+    "control": {
+      "bound_final": 2000,
+      "sampled_injection_fraction": 0.028,
+      "sampled_injections": 56,
+      "survival_fraction": 1.0,
+      "tracers": 2000
+    },
+    "equivalence_margin": 0.001,
+    "paired_block_bootstrap_95_percent_CI": [
+      0.0,
+      0.0
+    ],
+    "source": {
+      "bound_final": 2000,
+      "sampled_injection_fraction": 0.028,
+      "sampled_injections": 56,
+      "survival_fraction": 1.0,
+      "tracers": 2000
+    },
+    "source_minus_control_injection_fraction": 0.0
+  },
+  "runtime": {
+    "files": {
+      "numpy_multiarray_binary": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      },
+      "scipy_dop853_coefficients": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy/integrate/_ivp/dop853_coefficients.py",
+        "sha256": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001"
+      },
+      "scipy_rk_source": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy/integrate/_ivp/rk.py",
+        "sha256": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+      }
+    },
+    "numpy_version": "2.3.5",
+    "python_implementation": "CPython",
+    "python_version": "3.12.13",
+    "scipy_version": "1.17.0"
+  },
+  "schema": "jx-independent-dop853-result/v1",
+  "science_status": "SCREENING_ONLY",
+  "scientific_scope": "Operationally qualify the independent element conversion, force path, sampling, checkpointing, and cross-software comparison on 2000 matched tracers per arm over 100 years.",
+  "selected_blocks": [
+    0,
+    1
+  ],
+  "tracers_per_arm": 2000,
+  "verdict": "PASSED",
+  "verified_locked_files": {
+    "horizons_qualification_contract": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/horizons_qualification_contract_v2.json",
+      "sha256": "3064e6f23fdec4ff5b515942c7f4a68673b4bf472c398858b468b5c28f73d25b"
+    },
+    "horizons_qualification_result": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/horizons_qualification_result_v2.json",
+      "sha256": "02c5f266a79d06af59f88a50bbf9461743de6fb239abbec1ab00c4c2c26ae547"
+    },
+    "independent_module": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/src/jxplanetx/independent_dop853.py",
+      "sha256": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062"
+    },
+    "population_manifest": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/population_manifest_v1.json",
+      "sha256": "c3dd5528f382c4fd0ff71921d6d5be635faf71ca82e1d73ddd268fcbe62e8381"
+    },
+    "reference_qualification_result": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/qualification_result_v1.json",
+      "sha256": "68598a3cc65c0667d2788c84ae687362cd72ce64528d41f3a39fc77d9198090c"
+    },
+    "runner": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/independent_dop853_10k/run_replication.py",
+      "sha256": "60a284dde2765a34af9a9d12695a33a4aaac6dfc837bb14ee2d12b474b005b5f"
+    },
+    "state_manifest": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/states/state_manifest.json",
+      "sha256": "ec6e2ba8877d206838172dbb573318a2122977e263c054994d4c82a409a43d36"
+    },
+    "unit_tests": {
+      "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/tests/test_independent_dop853.py",
+      "sha256": "87ac8f962e3f61d59fa79850d44f784fb0d269c24b12fc177a695be5198c481c"
+    }
+  },
+  "verified_reference_tracer_files": {
+    "control": [
+      {
+        "block_index": 0,
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/qualification_execution_v1/primary/control/block_000/tracers.csv",
+        "sha256": "6cac00b041d54332fe41281de3273cd0b7d5e73f6e7d16b0e45dae38c7f21c11"
+      },
+      {
+        "block_index": 1,
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/qualification_execution_v1/primary/control/block_001/tracers.csv",
+        "sha256": "7bb9b3753b7ba955cc900e42d4539122f3eeb48d2d59c3aec23adea8ad783664"
+      }
+    ],
+    "source": [
+      {
+        "block_index": 0,
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/qualification_execution_v1/primary/source/block_000/tracers.csv",
+        "sha256": "16e8f73b1d48cf94be7d4888244e1ce2e4873d02f87ce1c43d30c83085e1241c"
+      },
+      {
+        "block_index": 1,
+        "path": "/workspace/scratch/388807340cce/jx-nbody-engine-ensemble/runs/de441_population_100k/qualification_execution_v1/primary/source/block_001/tracers.csv",
+        "sha256": "a12ad55e816e4f7e38784ad7ade627ad950415207705db3b3c066ed99199310e"
+      }
+    ]
+  }
+}

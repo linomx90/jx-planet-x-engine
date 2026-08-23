@@ -10,7 +10,13 @@ from jxplanetx.decimal_bs import validate_bs_oscillator
 from jxplanetx.dynamics import Body, State
 from jxplanetx.gates import GateResult, convergence_gate, run_core_gates
 from jxplanetx.ias15_gate import IAS15_GATES, POPULATION_GATES, SELECTED_TRACERS, SOURCE_EFFECT_GATES
-from jxplanetx.provenance import sha256_data, source_manifest, write_run_record
+from jxplanetx.provenance import (
+    package_source_manifest,
+    runtime_source_manifest,
+    sha256_data,
+    source_manifest,
+    write_run_record,
+)
 from jxplanetx.production_benchmark import EXPECTED_CHECKSUM_MANIFEST_SHA256, verify_bundle
 from jxplanetx.yoshida6 import StepStats, step
 
@@ -78,7 +84,32 @@ class ProvenanceTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         manifest = source_manifest(root)
         self.assertIn("src/jxplanetx/yoshida6.py", manifest["files"])
+        self.assertEqual(manifest["scope"], "repository")
         self.assertEqual(len(manifest["tree_sha256"]), 64)
+
+    def test_installed_package_manifest_hashes_executable_source(self):
+        with tempfile.TemporaryDirectory() as folder:
+            package = Path(folder) / "jxplanetx"
+            package.mkdir()
+            (package / "__init__.py").write_text('__version__ = "test"\n')
+            (package / "engine.py").write_text("VALUE = 1\n")
+            manifest = package_source_manifest(package)
+            self.assertEqual(manifest["scope"], "installed_package")
+            self.assertEqual(
+                set(manifest["files"]),
+                {"src/jxplanetx/__init__.py", "src/jxplanetx/engine.py"},
+            )
+            self.assertEqual(len(manifest["tree_sha256"]), 64)
+
+    def test_runtime_manifest_is_never_empty(self):
+        manifest = runtime_source_manifest()
+        self.assertTrue(manifest["files"])
+        self.assertIn(manifest["scope"], {"repository", "installed_package"})
+
+    def test_empty_repository_manifest_fails_closed(self):
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaises(ValueError):
+                source_manifest(folder)
 
     def test_locked_manifest_hash_is_sha256(self):
         self.assertEqual(len(EXPECTED_CHECKSUM_MANIFEST_SHA256), 64)

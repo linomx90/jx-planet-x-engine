@@ -1,0 +1,21 @@
+{
+  "blocks": 100,
+  "classification": "OUTCOME_BLIND_STRATIFIED_PROPOSAL_NOT_OBSERVATIONAL_PRIOR",
+  "generator": "independent-per-margin SHA-256-ranked Latin hypercube with open jitter/v1",
+  "inference_unit": "independent phase/design block; never individual tracer",
+  "nonclaim": "This broad proposal is not an observed TNO prior, survey selection function, or posterior population model.",
+  "population_csv": "population_elements_v1.csv",
+  "population_sha256": "2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1",
+  "proposal": {
+    "M_rad": "uniform [0,2*pi)",
+    "Omega_rad": "uniform [0,2*pi)",
+    "a_AU": "log-uniform [100,1000]",
+    "i_deg": "isotropic in cos(i), truncated to [0,40] degrees",
+    "omega_rad": "uniform [0,2*pi)",
+    "q0_AU": "uniform [31,80]"
+  },
+  "schema": "jx-de441-population-draws/v1",
+  "seed": "jx-de441-bb21-9118-broad-proposal-2026-08-22-v1",
+  "tracers": 100000,
+  "tracers_per_block": 1000
+}

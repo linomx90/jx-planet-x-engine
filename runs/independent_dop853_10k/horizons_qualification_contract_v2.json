@@ -1,0 +1,82 @@
+{
+  "schema": "jx-independent-dop853-horizons-contract/v1",
+  "experiment_id": "jx-independent-dop853-de441-horizons-10yr-v2",
+  "registration_status": "PRELOCKED",
+  "supersedes": "v1, which was withdrawn before a result because strict JSON serialization rejected a NumPy boolean scalar",
+  "scientific_scope": "Qualify the non-REBOUND Newtonian force function and SciPy DOP853 propagation against the locked annual JPL Horizons/DE441 outer-planet vectors over ten years.",
+  "inputs": {
+    "initial_state": "../de441_horizons_10yr/jx_states_v1.csv",
+    "gm_table": "../de441_horizons_10yr/gm_de440_major_barycenters.csv",
+    "reference_vectors": "../de441_horizons_10yr/reference/horizons_de441_vectors.csv",
+    "units": "AU, day, AU/day, GM in AU^3/day^2 after locked conversion"
+  },
+  "solver": {
+    "method": "scipy.integrate.DOP853",
+    "rtol": 1e-13,
+    "atol": 1e-15,
+    "max_step_days": 0.25,
+    "annual_segment_restart": true
+  },
+  "gates": {
+    "max_outer_position_residual_AU": 1e-5,
+    "max_outer_velocity_residual_AU_per_day": 1e-8,
+    "max_relative_energy_drift": 1e-11,
+    "max_relative_angular_momentum_vector_drift": 1e-11
+  },
+  "backend": {
+    "python_version": "3.12.13",
+    "python_implementation": "CPython",
+    "numpy_version": "2.3.5",
+    "scipy_version": "1.17.0",
+    "files": {
+      "scipy_rk_source": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy/integrate/_ivp/rk.py",
+        "sha256": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+      },
+      "scipy_dop853_coefficients": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy/integrate/_ivp/dop853_coefficients.py",
+        "sha256": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001"
+      },
+      "numpy_multiarray_binary": {
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      }
+    }
+  },
+  "locked_files": {
+    "independent_module": {
+      "path": "../../src/jxplanetx/independent_dop853.py",
+      "sha256": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062"
+    },
+    "qualification_runner": {
+      "path": "run_horizons_qualification.py",
+      "sha256": "4cbfff211685ebe53a1f40b76eea07eba5de86566f4f1e12c1b3ae5e9b9df102"
+    },
+    "initial_state": {
+      "path": "../de441_horizons_10yr/jx_states_v1.csv",
+      "sha256": "b09880f39a399f0549190df1e5da0422d76836a30899722e5217accfc48b6b9d"
+    },
+    "gm_table": {
+      "path": "../de441_horizons_10yr/gm_de440_major_barycenters.csv",
+      "sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217"
+    },
+    "reference_vectors": {
+      "path": "../de441_horizons_10yr/reference/horizons_de441_vectors.csv",
+      "sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e"
+    },
+    "original_de441_contract": {
+      "path": "../de441_horizons_10yr/contract_v1.json",
+      "sha256": "5112c90e71317a5cae54d17ea82296296af68812f18c663429dc773ac161053f"
+    },
+    "original_de441_result": {
+      "path": "../de441_horizons_10yr/result_v1.json",
+      "sha256": "277c006e4c6474b2d52c1f002daf6b156067398685dca8cc1efa1e138c753a4e"
+    },
+    "v1_withdrawal_record": {
+      "path": "horizons_qualification_v1_withdrawal.json",
+      "sha256": "2d75c7b4254987ba3af3f99f24401fb04c46f3f08c84acbed7265330d33a44e9"
+    }
+  },
+  "threshold_policy": "All dynamics and gates are unchanged from v1 and immutable for this execution. Failure is INVALID and may not be repaired by loosening a threshold after output.",
+  "nonclaim": "Passing establishes only short-arc external compatibility of this independent Newtonian solver. It does not validate long-term chaotic tracers, detect or exclude Planet X, or reproduce the full DE441 force model."
+}

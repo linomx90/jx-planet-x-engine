@@ -1,0 +1,11 @@
+body_id,body_name,gm_km3_s2
+1,Mercury Barycenter,2.2031868551400003E+04
+2,Venus Barycenter,3.2485859200000000E+05
+3,Earth-Moon Barycenter,4.0350323562548019E+05
+4,Mars Barycenter,4.2828375815756102E+04
+5,Jupiter Barycenter,1.2671276409999998E+08
+6,Saturn Barycenter,3.7940584841799997E+07
+7,Uranus Barycenter,5.7945563999999985E+06
+8,Neptune Barycenter,6.8365271005803989E+06
+9,Pluto Barycenter,9.7550000000000000E+02
+10,Sun,1.3271244004127942E+11

@@ -10,11 +10,20 @@ from pathlib import Path
 from . import __version__
 from .claims import assess_claim
 from .gates import run_core_gates
-from .provenance import source_manifest, write_run_record
+from .provenance import runtime_source_manifest, write_run_record
 from .production_benchmark import reproduce
 from .de441_anchor import audit_de441_independent_reference, import_de441_anchor, run_de441_precision_pair
 from .decimal_bs import run_block_reference, run_reference
+from .ensemble_validation import (
+    EnsembleVerdict,
+    finalize_ensemble_validation,
+    prepare_ensemble_plan,
+    register_ensemble_member,
+    write_example_contract,
+)
 from .ias15_gate import compare_ias15_members, compare_ias15_population, compare_source_control_effect, finalize_ias15_equation_gate, run_ias15_member
+from .population_scale import run_population_scale_gate
+from .encounter_tail import run_encounter_tail_pilot
 
 
 def validate(args: argparse.Namespace) -> int:
@@ -40,7 +49,7 @@ def validate(args: argparse.Namespace) -> int:
         },
         "gates": [g.as_dict() for g in gates],
         "claim_control": asdict(claim),
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -53,7 +62,7 @@ def reproduce_yoshida6(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "reproduce-yoshida6",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -72,7 +81,7 @@ def run_de441(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "run-de441-anchor-gate",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -102,7 +111,7 @@ def audit_de441(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "audit-de441-independent-reference",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
@@ -149,11 +158,64 @@ def finalize_ias15_cli(args: argparse.Namespace) -> int:
         "engine_version": __version__,
         "command": "finalize-ias15-equation-gate",
         "result": result,
-        "software": source_manifest(Path(__file__).resolve().parents[2]),
+        "software": runtime_source_manifest(),
     }
     record = write_run_record(args.output, payload)
     print(json.dumps(record, indent=2, sort_keys=True))
     return 0 if result["all_required_gates_passed"] else 2
+
+
+def write_ensemble_contract_cli(args: argparse.Namespace) -> int:
+    result = write_example_contract(args.output)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def prepare_ensemble_cli(args: argparse.Namespace) -> int:
+    result = prepare_ensemble_plan(args.contract, args.output)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def register_ensemble_member_cli(args: argparse.Namespace) -> int:
+    result = register_ensemble_member(
+        args.plan,
+        args.member_id,
+        args.arm,
+        args.method_id,
+        args.trajectory,
+        args.validity,
+        args.output,
+    )
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result["payload"]["validity_passed"] else 2
+
+
+def finalize_ensemble_cli(args: argparse.Namespace) -> int:
+    result = finalize_ensemble_validation(args.plan, args.run_root)
+    payload = {
+        "engine_version": __version__,
+        "command": "finalize-ensemble-validation",
+        "result": result,
+        "software": runtime_source_manifest(),
+    }
+    record = write_run_record(args.output, payload)
+    print(json.dumps(record, indent=2, sort_keys=True))
+    if result["verdict"] == EnsembleVerdict.PASSED.value:
+        return 0
+    return 2 if result["verdict"] == EnsembleVerdict.INVALID.value else 3
+
+
+def run_population_scale_cli(args: argparse.Namespace) -> int:
+    result = run_population_scale_gate(args.contract, args.output)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result["verdict"] == "SCALE_GATE_PASSED" else 3
+
+
+def run_encounter_tail_cli(args: argparse.Namespace) -> int:
+    result = run_encounter_tail_pilot(args.contract, args.run_dir, args.output, args.workers)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result["verdict"] == "ENCOUNTER_TAIL_PILOT_PASSED" else 3
 
 
 def parser() -> argparse.ArgumentParser:
@@ -241,6 +303,43 @@ def parser() -> argparse.ArgumentParser:
     f.add_argument("--run-root", default="runs/ias15_equation_gate")
     f.add_argument("--output", default="runs/ias15_equation_gate/governing_result.json")
     f.set_defaults(func=finalize_ias15_cli)
+    wt = sub.add_parser("write-ensemble-contract", help="write a preregistration contract template")
+    wt.add_argument("--output", required=True)
+    wt.set_defaults(func=write_ensemble_contract_cli)
+    pe = sub.add_parser("prepare-ensemble", help="lock a contract and generate deterministic phase/uncertainty draws")
+    pe.add_argument("--contract", required=True)
+    pe.add_argument("--output", required=True, help="immutable plan-lock JSON")
+    pe.set_defaults(func=prepare_ensemble_cli)
+    re = sub.add_parser("register-ensemble-member", help="strictly validate and register one planned member trajectory")
+    re.add_argument("--plan", required=True)
+    re.add_argument("--member-id", required=True)
+    re.add_argument("--arm", choices=("control", "source"), required=True)
+    re.add_argument("--method-id", required=True)
+    re.add_argument("--trajectory", required=True)
+    re.add_argument("--validity", required=True, help="jx-integrator-validity/v1 JSON")
+    re.add_argument("--output", required=True)
+    re.set_defaults(func=register_ensemble_member_cli)
+    fe = sub.add_parser("finalize-ensemble-validation", help="finalize a complete locked chaotic-population ensemble")
+    fe.add_argument("--plan", required=True)
+    fe.add_argument("--run-root", required=True)
+    fe.add_argument("--output", required=True)
+    fe.set_defaults(func=finalize_ensemble_cli)
+    ps = sub.add_parser(
+        "run-population-scale-gate",
+        help="run a locked paired massless-tracer scale gate without string-hash identities",
+    )
+    ps.add_argument("--contract", required=True)
+    ps.add_argument("--output", required=True)
+    ps.set_defaults(func=run_population_scale_cli)
+    et = sub.add_parser(
+        "run-encounter-tail-pilot",
+        help="run the checkpointed controlled-synthetic 10-kyr encounter-tail pilot and dt/2 audit",
+    )
+    et.add_argument("--contract", required=True)
+    et.add_argument("--run-dir", required=True)
+    et.add_argument("--output", required=True)
+    et.add_argument("--workers", type=int)
+    et.set_defaults(func=run_encounter_tail_cli)
     return p
 
 

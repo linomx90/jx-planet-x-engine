@@ -1,0 +1,60 @@
+{
+  "schema": "jx-independent-dop853-v1-diagnostic-contract/v1",
+  "experiment_id": "jx-independent-dop853-final-v1-endpoint-diagnosis",
+  "registration_phase": "POST_V1_FAILURE_DIAGNOSTIC",
+  "failed_result": {
+    "path": "final_result_v1.json",
+    "sha256": "63dca00d4ef86df374d8ff4beafb6f86c8259177bac077cc1b7b1c4f0d1ba4d7",
+    "immutable_verdict": "INVALID"
+  },
+  "locked_files": {
+    "diagnostic_script": {
+      "path": "diagnose_final_v1.py",
+      "sha256": "cdf89c22efa7159f7d029be74de2524c98f88b7b3e22ba9e340c3f5abab9a033"
+    },
+    "independent_module": {
+      "path": "../../src/jxplanetx/independent_dop853.py",
+      "sha256": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062"
+    },
+    "v1_contract": {
+      "path": "final_contract_v1.json",
+      "sha256": "cb3c03a8d62f3ce621d184e0603020e7f32dcdf527eb57b58459c58626d42210"
+    },
+    "v1_result": {
+      "path": "final_result_v1.json",
+      "sha256": "63dca00d4ef86df374d8ff4beafb6f86c8259177bac077cc1b7b1c4f0d1ba4d7"
+    }
+  },
+  "refinement": {
+    "duration_years": 10000.0,
+    "states": {
+      "control": "../de441_population_100k/states/de441_control_state.csv",
+      "source": "../de441_population_100k/states/de441_source_9118_state.csv"
+    },
+    "solver": {
+      "method": "scipy.integrate.DOP853",
+      "rtol": 1e-13,
+      "atol": 1e-15,
+      "max_step_years": 0.125,
+      "active_audit_segment_years": 2500.0
+    }
+  },
+  "diagnostic_gates": {
+    "max_pairwise_block_position_AU": 1e-7,
+    "max_refined_relative_energy_drift": 1e-11,
+    "max_refined_relative_angular_drift": 1e-11
+  },
+  "recommended_corrective_action": {
+    "action": "Create a new transparent v2 replication using the refined solver and a new execution directory.",
+    "solver": {
+      "method": "scipy.integrate.DOP853",
+      "rtol": 1e-13,
+      "atol": 1e-15,
+      "max_step_years": 0.125,
+      "active_audit_segment_years": 2500.0
+    },
+    "gate_policy": "Retain every v1 numerical and scientific gate unchanged.",
+    "provenance_policy": "Lock the v1 INVALID result and this diagnostic into v2; label v2 as a post-v1 numerical repair rather than an original preregistration."
+  },
+  "nonclaim": "This diagnostic explains a numerical failure mode. It cannot override v1, validate the physical model, or provide evidence for or against Planet X."
+}
