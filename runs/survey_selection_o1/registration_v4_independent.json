@@ -1,0 +1,51 @@
+{
+  "schema": "jx-survey-selection-registration/v4-independent",
+  "experiment_id": "jx-o1-ossos-b-telescope-selection-v4-independent-confirmation",
+  "registered_at_utc": "2026-08-23T01:06:08Z",
+  "registration_status": "PRELOCKED_BEFORE_ANY_V4_TELESCOPE_OUTCOME",
+  "outcomes_generated_at_registration": false,
+  "contract": {
+    "path": "contract_v4_independent.json",
+    "sha256": "eca324ae2448d4e704173640cfa459a3c38c329ce2eec8b61d7e94e147a15e1c"
+  },
+  "locked_v4_implementation": {
+    "module_sha256": "a54d19c9b3ae460c0a71822604c7d8a3d33bde41e4da5da4c1677735d7a7d318",
+    "tests_sha256": "f2c4090e6cc99e37165f1be7e3bb5ab740bdd04cb9702ecd31bb0b24324216c8",
+    "runner_sha256": "b4a5811654f1a1c41d7ac99f0ee6451d85dd9c6102faf9c1a3bd791a36d94535"
+  },
+  "known_prior_records": {
+    "v2_immutable_invalid_result_sha256": "9f0d86d6365b776a64333f55a431c143d36793f489f9a9297c3bbaa054e5c9bc",
+    "v3_corrective_passed_result_sha256": "2256fd5899a1d869a66241754d65eb4ba01f28ba773188b19f7a4e4d96bc5879"
+  },
+  "direct_replication_checks": {
+    "external_simulator_equal": true,
+    "external_simulator_sha256": "b097da7d5392c02adc950896015b8f1c33ad8ad178eb377acc412ff871450f3f",
+    "gates_equal": true,
+    "gates_sha256": "a56a68554642f700916389479302bcf6d951bb87fd93b75dfcff702c732d7b02",
+    "population_design_excluding_seed_equal": true,
+    "population_design_sha256": "d6c0b01ba718ef5f3b188fa83f9d3fca47c690c6cc255a5330294adb9c8e7749",
+    "statistics_design_excluding_seed_equal": true,
+    "statistics_design_sha256": "0076a061a4e821585027c716dd2387c754d1aee3ce16fac5585623e48cbd2810"
+  },
+  "independence_basis": {
+    "fresh_intrinsic_population_hmac_key": "jx-o1-independent-confirmation-population-2026-08-23-v4",
+    "fresh_official_driver_seed_domain": "official-ossos-v4-independent",
+    "fresh_population_namespace": "final-v4-independent",
+    "fresh_resampling_key": "jx-o1-independent-confirmation-resampling-2026-08-23-v4",
+    "reject_v2_manifest_hashes": true,
+    "reject_v2_semantic_detection_pool_hashes": true
+  },
+  "preflight": {
+    "external_commit": "86ce0936c0585ea1120830831c66276e05b076aa",
+    "external_hash_verification_passed": true,
+    "compiler": "GNU Fortran 13.3.0",
+    "ready": true
+  },
+  "pre_outcome_validation": {
+    "tests_run": 107,
+    "tests_passed_or_skipped": 107,
+    "optional_rebound_tests_skipped": 4,
+    "result": "PASSED"
+  },
+  "nonclaim": "Registration authorizes an independent computational calibration repeat only. It cannot detect or exclude Planet X or validate a physical distant-source model."
+}
