@@ -25,6 +25,11 @@ using new intrinsic, official-driver, and resampling random domains. Its
 finalizer also rejects any manifest or normalized detection-pool hash matching
 V2. The separate result replay was byte-identical.
 
+The preregistered V4 runner remains hash-locked. For later archive checks,
+`verify_independent_confirmation_v4.py` recomputes the deterministic verdict
+from the registered pool manifests and rejects any saved result that does not
+match it exactly.
+
 ## Result summary
 
 | Gate | Result |
@@ -56,6 +61,7 @@ V2. The separate result replay was byte-identical.
 - `run_experiment_v2.py`: checkpointed official runner.
 - `run_corrective_replay_v3.py`: hash-bound corrective runner.
 - `run_independent_confirmation_v4.py`: fresh-domain checkpointed V4 runner.
+- `verify_independent_confirmation_v4.py`: post-result deterministic replay verifier.
 
 The V2 and V4 raw model/output/checkpoint archives are approximately 3.9 GB and
 4.9 GB respectively and are excluded from the public code release. See
