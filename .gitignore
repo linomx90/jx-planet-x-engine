@@ -12,3 +12,15 @@ runs/de441_population_100k/qualification_execution_v1/
 runs/independent_dop853_10k/population_qualification_execution_v1/
 runs/independent_dop853_10k/final_execution_v1/
 runs/independent_dop853_10k/final_execution_v2/
+.local-apt/
+.local-gfortran/
+runs/survey_selection_o1/__pycache__/
+runs/survey_selection_o1/pilot_execution_v1/
+runs/survey_selection_o1/official_qualification_v1/
+runs/survey_selection_o1/manual_official_probe_10001/
+runs/survey_selection_o1/manual_official_probe_100001/
+runs/survey_selection_o1/manual_official_probe_wrong_100001/
+runs/survey_selection_o1/official_qualification_v2_correct/
+runs/survey_selection_o1/official_qualification_v2_wrong/
+runs/survey_selection_o1/pilot_execution_v2/
+runs/survey_selection_o1/final_execution_v2/
