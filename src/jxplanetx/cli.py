@@ -24,6 +24,16 @@ from .ensemble_validation import (
 from .ias15_gate import compare_ias15_members, compare_ias15_population, compare_source_control_effect, finalize_ias15_equation_gate, run_ias15_member
 from .population_scale import run_population_scale_gate
 from .encounter_tail import run_encounter_tail_pilot
+from .survey_selection_v2 import (
+    SurveySelectionVerdict,
+    finalize_survey_selection as finalize_survey_selection_v2,
+    load_survey_contract,
+    parse_ossos_tracked_file,
+    run_analytic_survey_pilot,
+    write_detection_csv,
+    write_ossos_model_file,
+)
+from .survey_selection_v3 import finalize_survey_selection as finalize_survey_selection_v3
 
 
 def validate(args: argparse.Namespace) -> int:
@@ -218,6 +228,60 @@ def run_encounter_tail_cli(args: argparse.Namespace) -> int:
     return 0 if result["verdict"] == "ENCOUNTER_TAIL_PILOT_PASSED" else 3
 
 
+def write_survey_population_cli(args: argparse.Namespace) -> int:
+    contract = load_survey_contract(args.contract)
+    result = write_ossos_model_file(
+        args.output,
+        contract,
+        args.model_id,
+        args.seed_block,
+        args.count,
+        namespace=args.namespace,
+        start_index=args.start_index,
+    )
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def normalize_ossos_tracked_cli(args: argparse.Namespace) -> int:
+    rows = parse_ossos_tracked_file(args.input, args.model_id, args.seed_block)
+    result = write_detection_csv(args.output, rows)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def finalize_survey_selection_cli(args: argparse.Namespace) -> int:
+    contract = load_survey_contract(args.contract)
+    finalizer = (
+        finalize_survey_selection_v3
+        if contract["experiment_id"].endswith("v3-exact-zeta-corrective-replay")
+        else finalize_survey_selection_v2
+    )
+    result = finalizer(
+        args.contract,
+        args.correct_manifest,
+        args.wrong_manifest,
+        args.output,
+    )
+    print(json.dumps(result, indent=2, sort_keys=True))
+    if result["verdict"] == SurveySelectionVerdict.PASSED.value:
+        return 0
+    return 2 if result["verdict"] == SurveySelectionVerdict.INVALID.value else 3
+
+
+def run_survey_pilot_cli(args: argparse.Namespace) -> int:
+    result = run_analytic_survey_pilot(
+        args.contract,
+        args.run_dir,
+        args.output,
+        draws_per_block=args.draws_per_block,
+    )
+    print(json.dumps(result, indent=2, sort_keys=True))
+    if result["verdict"] == SurveySelectionVerdict.INVALID.value:
+        return 2
+    return 3
+
+
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="jxplanetx", description="JX Planet X scientific engine")
     p.add_argument("--version", action="version", version=__version__)
@@ -340,6 +404,45 @@ def parser() -> argparse.ArgumentParser:
     et.add_argument("--output", required=True)
     et.add_argument("--workers", type=int)
     et.set_defaults(func=run_encounter_tail_cli)
+    so = sub.add_parser(
+        "write-survey-population",
+        help="write one deterministic JX-O1 intrinsic-population block for OSSOS",
+    )
+    so.add_argument("--contract", required=True)
+    so.add_argument("--model-id", choices=("correct", "wrong"), required=True)
+    so.add_argument("--seed-block", type=int, required=True)
+    so.add_argument("--count", type=int, required=True)
+    so.add_argument("--namespace", default="final")
+    so.add_argument("--start-index", type=int, default=0)
+    so.add_argument("--output", required=True)
+    so.set_defaults(func=write_survey_population_cli)
+    no = sub.add_parser(
+        "normalize-ossos-tracked",
+        help="strictly normalize one official OSSOS tracked-output file",
+    )
+    no.add_argument("--input", required=True)
+    no.add_argument("--model-id", choices=("correct", "wrong"), required=True)
+    no.add_argument("--seed-block", type=int, required=True)
+    no.add_argument("--output", required=True)
+    no.set_defaults(func=normalize_ossos_tracked_cli)
+    fs = sub.add_parser(
+        "finalize-survey-selection",
+        help="evaluate the frozen JX-O1 calibration, power, provenance, and replay gates",
+    )
+    fs.add_argument("--contract", required=True)
+    fs.add_argument("--correct-manifest", required=True)
+    fs.add_argument("--wrong-manifest", required=True)
+    fs.add_argument("--output", required=True)
+    fs.set_defaults(func=finalize_survey_selection_cli)
+    sp = sub.add_parser(
+        "run-survey-selection-pilot",
+        help="run the non-final analytic JX-O1 software pilot",
+    )
+    sp.add_argument("--contract", required=True)
+    sp.add_argument("--run-dir", required=True)
+    sp.add_argument("--output", required=True)
+    sp.add_argument("--draws-per-block", type=int, default=10_000)
+    sp.set_defaults(func=run_survey_pilot_cli)
     return p
 
 
