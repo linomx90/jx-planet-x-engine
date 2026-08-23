@@ -1,0 +1,111 @@
+{
+  "schema": "jx-o2-g0-public-reconstruction-registration/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_id": "jx-o2-g0-public-reconstruction-design-v1",
+  "artifact_class": "IMMUTABLE_DESIGN_ONLY_G0_REMEDIATION_REGISTRATION",
+  "registered_at_utc": "2026-08-23T05:59:04Z",
+  "timestamp_authority": "The Git object and pull-request history that first publish this immutable design package.",
+  "base_repository_commit": "bffeeae889f6403fe087ebe0e6d6f3f08efe4e5c",
+  "registration_status": "DESIGN_REGISTERED_NOT_EXECUTABLE",
+  "audit_status": "BLOCKED",
+  "g0_complete": false,
+  "eligible_for_g1": false,
+  "execution_authorized": false,
+  "observed_execution_authorized": false,
+  "gpu_run_authorized": false,
+  "outcomes_generated": false,
+  "outcomes_generated_scope": "NO_JX_O2_OR_PUBLIC_RECONSTRUCTION_OUTPUT_WAS_GENERATED_BY_THIS_ARTIFACT",
+  "observed_jx_o2_score_computed": false,
+  "claim_ceiling": "PUBLIC_RECONSTRUCTION_DESIGN_ONLY",
+  "scientific_evidence_role": "IMMUTABLE_PROTOCOL_REGISTRATION_NOT_OUTCOME_EVIDENCE",
+  "candidate_9118_retirement_binding": {
+    "resolution_id": "jx-o2-g0-candidate-9118-retirement-v1",
+    "registration_sha256": "037c22ea0d1a9cb4c86eadc9056b8e1e605a7a5790cba60871daaa75aad1bbc5",
+    "use": "HISTORICAL_REFERENCE_ONLY",
+    "eligible_for_jx_o2_use": false
+  },
+  "locked_files": {
+    "readme": {
+      "path": "README.md",
+      "sha256": "cd0701ddc147e23dc1190ea2fc1e057fc1b95e14a20e31126d51161e7b259bfe"
+    },
+    "reconstruction_design": {
+      "path": "reconstruction_design_v1.json",
+      "sha256": "bf0035fe7595536b5c1fd96b447298654d2892be11426e6ea9774b2585aa9ac6"
+    },
+    "literature_prior_grid": {
+      "path": "literature_prior_grid_v1.json",
+      "sha256": "b6fe87043937764976b26473b49004eecfefb2882178f5f41ccb98424534068c"
+    },
+    "integrity_tests": {
+      "path": "../../tests/test_jx_o2_public_reconstruction_design.py",
+      "sha256": "63b0c649dbdfad60e59dbe1d33fae97723b2a0ee6004d262a2ddcbf81a8f39bc"
+    },
+    "immutability_workflow": {
+      "path": "../../.github/workflows/jx-o2-immutability-v1.yml",
+      "sha256": "6266847b7e1ca11497d62fcb49d8ed154264e4fd202e0eec89dfcae21d929c81"
+    }
+  },
+  "design_sha256": "bf0035fe7595536b5c1fd96b447298654d2892be11426e6ea9774b2585aa9ac6",
+  "literature_inventory_sha256": "b6fe87043937764976b26473b49004eecfefb2882178f5f41ccb98424534068c",
+  "registration_invariants": {
+    "registration_file_is_not_self_hashed": true,
+    "locked_files_may_be_edited_in_place": false,
+    "changes_require_new_version_and_preservation_of_this_record": true,
+    "design_may_authorize_execution": false,
+    "all_state_changing_effective_permissions_false": true,
+    "analogue_may_be_relabelled_as_original_simulation": false,
+    "missing_angles_seeds_or_checkpoint_may_be_zero_filled_or_invented": false
+  },
+  "immutability_enforcement": {
+    "pull_request_ci_step": "Verify immutable registered JX-O2 v1 artifacts",
+    "workflow_path": ".github/workflows/jx-o2-immutability-v1.yml",
+    "trusted_event": "pull_request_target",
+    "trusted_base_workflow_compares_head_objects_without_executing_head_code": true,
+    "rule": "IF_A_REGISTERED_V1_PATH_EXISTS_AT_THE_PULL_REQUEST_BASE_SHA_ITS_BYTES_MUST_NOT_CHANGE",
+    "new_version_paths_remain_additive": true,
+    "bootstrap_note": "This workflow first becomes trusted base-side enforcement after this registration is merged.",
+    "direct_push_and_required_check_enforcement_requires_external_ruleset": true
+  },
+  "g0_disposition": {
+    "source_blocker_id": "G0-B06",
+    "source_blocker_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "this_registration_resolves_source_blocker": false,
+    "next_state": "CONTINUE_DESIGN_AND_PUBLIC_INPUT_ACQUISITION_ONLY"
+  },
+  "policy_precedence": {
+    "effective_permission_rule": "STATE_CHANGING_ACTIONS_REQUIRE_ALL_MAPPED_PERMISSIONS_TRUE_AND_ANY_MISSING_MAPPING_DENIES",
+    "canonical_permission_ontology": "reconstruction_design_v1.json#/permission_ontology",
+    "this_artifact_may_expand_prior_permissions": false,
+    "static_drafting_is_not_execution_contract_publication_or_activation": true,
+    "future_external_contact_requires_case_specific_user_authorization": true
+  },
+  "current_permissions": {
+    "continue_public_source_acquisition": true,
+    "draft_author_contact_request": true,
+    "send_external_author_contact": false,
+    "draft_static_reconstruction_protocols": true,
+    "add_nonexecuting_integrity_tests": true,
+    "generate_or_select_checkpoint": false,
+    "realize_angle_grid_or_prior": false,
+    "realize_compact_body_emplacement": false,
+    "realize_random_seeds": false,
+    "run_dynamics": false,
+    "run_synthetic_calibration": false,
+    "compute_jx_o2_observed_score": false,
+    "run_observed_model_comparison": false,
+    "access_or_unblind_untouched_holdout": false,
+    "start_large_gpu_job": false,
+    "create_execution_contract": false,
+    "create_activation_receipt": false
+  },
+  "unresolved_execution_blockers": [
+    "No authentic checkpoint or fully specified open-regeneration population is locked.",
+    "No complete angular, phase, epoch, frame, origin, and weight rule is locked.",
+    "No compact-body emplacement time, full state, insertion algorithm, or estimand boundary is locked.",
+    "No deterministic beacon, RNG implementation, stream mapping, or fixed replicate count is locked.",
+    "No true physically matched M0 and M1 artifact pair has been instantiated.",
+    "The remaining survey, exposure, power, multiplicity, license, archive, and independent-replay gates remain unresolved."
+  ],
+  "mandatory_nonclaim": "This design records public reconstruction constraints only. It does not recover or reproduce the authors' original simulation, authorize any run, compare models against observations, or provide evidence for or against Planet X."
+}
