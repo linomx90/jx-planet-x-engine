@@ -1,0 +1,164 @@
+{
+  "schema": "jx-survey-selection-contract/v1",
+  "experiment_id": "jx-o1-ossos-b-telescope-selection-v1",
+  "registration_status": "PRELOCKED_BEFORE_ANY_JX_O1_OUTCOMES",
+  "milestone": "JX-O1_TELESCOPE_SELECTION_VALIDATION",
+  "external_simulator": {
+    "repository_url": "https://github.com/OSSOS/SurveySimulator",
+    "commit": "86ce0936c0585ea1120830831c66276e05b076aa",
+    "license": "EUPL-1.1",
+    "execution_mode": "external_process_not_vendored",
+    "source_subdirectory": "F95",
+    "characterization_path": "Surveys/OSSOS",
+    "characterization_scope": "Historical official four-block OSSOS-B characterization present immediately before its removal from the repository; this is not the complete eight-block OSSOS survey.",
+    "required_files": {
+      "F95/Driver.f95": "f004ec405c27e5158ea2d94d0f46f2a1c2b227d25ea1914c8f8b05e4e2ecdc4a",
+      "F95/Makefile": "4036beee1a61f854db2fe3e8084581ba06612482f2fdb8c71d23a8c5321202dd",
+      "F95/ReadModelFromFile.f95": "6bd25a39767db147026b9ce2a59ea88e9345f485780fe6871d83f39f176ae22a",
+      "F95/datadec.f95": "ee292dd4fec54dec8d7e4b65e95c0c89a038f887d731d8dc416b664d13994da0",
+      "F95/effut.f95": "ee82be0bc6e5c2c9114229b68a902df359d12e1382359848e91d7b50e90aa22a",
+      "F95/elemutils.f95": "801b9bbc840dff676042aaf6033cef57752bc586f80ffb0ac76f217056a34ff4",
+      "F95/getsur.f95": "bbfc07a271c91fc61fd1281a03809308644217c4ed107caa2d36be85fa8ce4b3",
+      "F95/ioutils.f95": "e808dcaca795a7e9f8ffe91f9c5110ec5dabfc9967f4bb18525024e991ea7212",
+      "F95/modelutils.f95": "754f01932f48197bdd1590279f5048119477f324e7ac4b6967a28a0b75460a01",
+      "F95/numutils.f95": "026a48a46b6156387a9e531eb3d97069afc0b341c3bfedfdb6b6d0571676a7eb",
+      "F95/poly_dec.f95": "7e9ef3e6cd1b65171dcb893a1f602438c92cea16f2f90ce0fad450c606762421",
+      "F95/poly_lib.f95": "00ab1c7036e9425eb50cbbf5574227a19a32aab62cf903f88e9cb2e88b0e9295",
+      "F95/rot.f95": "57a55467391b99d5dc243b12e48acdf5575d3606b7fb6e8bcf8488e6c28ef62c",
+      "F95/surveysub.f95": "932b02b1fd18c9b8f3422843625764a1a45cc8333f69c2c2a8c0df78c29d8211",
+      "F95/xvutils.f95": "fe3f9237fe167e43312e0ac892606703053c2d1eef45524b8705ad663b35caf1",
+      "Surveys/OSSOS/2013AE.eff": "fa48191629dd7a618657d2e470dd39d005ea1f8c9d5394a56696068f567b7c3d",
+      "Surveys/OSSOS/2013AO.eff": "fbab953ba2691f0c9bc5bae6140b6a371e7c40fd91c5db44f543e5152985abfe",
+      "Surveys/OSSOS/2013BL.eff": "7bc0f26224309b3a78e4fd961cfcd312c1fcd76cf1135c669ba13b55f322d2cb",
+      "Surveys/OSSOS/2014BH.eff": "114aaecfb6ec795293e30e99fdbc12ac0ccac950aa476a313d497cb17947f584",
+      "Surveys/OSSOS/OSSOS_B.CDS": "a5d99f490507ba1e08018fcbb39556bbdef0baa383ac3565682a0abf09ed0bbe",
+      "Surveys/OSSOS/OSSOS_B.detections": "9183daf3dc812cf3151524e6d5822b5d55c8cdd856d0a2814a350534b292c6ba",
+      "Surveys/OSSOS/README.formats": "1fa4ce3178210c44ddb862fef40d6d60c51260ec7b07949c30eadb6f3e486426",
+      "Surveys/OSSOS/README.ossos": "3f2cac95057eb8e668e33bd3fe727d2283af4ce2569b767f847687786c7aff09",
+      "Surveys/OSSOS/Template.eff": "95b44296b64ad6b3fe68e1a7c5473e5c8348674fa67023c17c4a246d2a2b3150",
+      "Surveys/OSSOS/pointings.list": "bde3323ea3164e16a593ddbc8db23622477bf53f78a98fe1f4025d9ae6659ead"
+    }
+  },
+  "population": {
+    "epoch_jd": 2453157.5,
+    "seed_key": "jx-o1-intrinsic-population-2026-08-23-v1",
+    "seed_blocks": 10,
+    "minimum_intrinsic_draws_per_model": 100000,
+    "minimum_intrinsic_draws_per_seed_block": 10000,
+    "minimum_tracked_detections_per_model": 20000,
+    "minimum_tracked_detections_per_seed_block": 2000,
+    "catalog_size": 20,
+    "correct_model": {
+      "q_distribution": "uniform",
+      "q_min_AU": 15.0,
+      "q_max_AU": 30.0
+    },
+    "wrong_model": {
+      "q_distribution": "beta",
+      "beta_alpha": 5.0,
+      "beta_beta": 1.0,
+      "q_min_AU": 15.0,
+      "q_max_AU": 30.0,
+      "interpretation": "Deliberately wrong phenomenological Neptune-barrier alternative concentrated near q=30 AU; it is not a physical no-Planet-X model."
+    },
+    "shared": {
+      "a_distribution": "power_law",
+      "a_power": -1.5,
+      "a_min_AU": 100.0,
+      "a_max_AU": 1000.0,
+      "inclination_distribution": "truncated_half_normal",
+      "inclination_sigma_deg": 15.0,
+      "inclination_min_deg": 0.0,
+      "inclination_max_deg": 40.0,
+      "angular_distribution": "independent_uniform_0_360_deg",
+      "H_distribution": "lawler_2018_divot",
+      "H_min": 5.0,
+      "H_break": 8.3,
+      "H_max": 12.0,
+      "alpha_bright": 0.9,
+      "alpha_faint": 0.5,
+      "contrast": 3.2,
+      "colors_r_reference": [
+        0.7,
+        0.0,
+        -0.5,
+        -1.0,
+        1.5,
+        0.4,
+        0.8,
+        -0.4,
+        -0.8,
+        0.0
+      ]
+    }
+  },
+  "statistics": {
+    "variables": [
+      "a_AU",
+      "q_AU",
+      "i_deg",
+      "H_r",
+      "r_AU",
+      "m_r"
+    ],
+    "primary_pit_variable": "q_AU",
+    "mock_catalogs": 2000,
+    "bootstrap_reference_catalogs": 2000,
+    "seed_stability_catalogs": 2000,
+    "alpha": 0.05,
+    "zeta_expected_mean": -8.685889638065035,
+    "zeta_expected_sd": 1.9422239675774466,
+    "resampling_seed": "jx-o1-bootstrap-and-pit-2026-08-23-v1"
+  },
+  "gates": {
+    "correct_model_false_rejection_rate_min": 0.035,
+    "correct_model_false_rejection_rate_max": 0.065,
+    "zeta_mean_absolute_tolerance": 0.1,
+    "zeta_sd_absolute_tolerance": 0.1,
+    "wrong_model_rejection_power_min": 0.8,
+    "seed_block_verdict_stability_required": true,
+    "adapter_identity_required": true,
+    "exact_replay_required": true,
+    "max_missing_records": 0,
+    "max_nonfinite_records": 0
+  },
+  "execution": {
+    "checkpoint_restart_required": true,
+    "immutable_result": true,
+    "pilot_seeds_excluded_from_final": true,
+    "official_backend_name": "OSSOS_SURVEY_SIMULATOR_F95_86CE093",
+    "pilot_backend_name": "JX_ANALYTIC_SELECTION_PILOT"
+  },
+  "locked_files": {
+    "survey_selection_module": {
+      "path": "../../src/jxplanetx/survey_selection.py",
+      "sha256": "35bc0d41a4113abd3c3ce9843a86d8c0622a19973796ff3c717e9b212478f3c2"
+    },
+    "unit_tests": {
+      "path": "../../tests/test_survey_selection.py",
+      "sha256": "65e9bab7efb36e56434fb1c8d0905c3c3199e33659fd4efd12b366b920b757f5"
+    },
+    "experiment_runner": {
+      "path": "run_experiment.py",
+      "sha256": "d2abb04efe8b21376a474330c78fb85e0e4249a6c8c64a72353b8c29c43c046f"
+    }
+  },
+  "scientific_scope": "Demonstrate that JX can forward-bias a reproducible outer-Solar-System population through a pinned real telescope-selection function, recover nominal false-rejection calibration, and reject a deliberately wrong population with predeclared power.",
+  "limitations": [
+    "This validation uses the historical four-block OSSOS-B characterization at the pinned official commit, not the complete eight-block OSSOS release or the full affiliated-survey ensemble.",
+    "The correct and wrong populations are calibration distributions, not competing physical formation histories.",
+    "The wrong model is deliberately strong and phenomenological; passing the power gate does not establish power for realistic Planet X alternatives.",
+    "The inclination law is explicitly a truncated half-normal, not a fitted observed-TNO inclination distribution.",
+    "The adopted Lawler et al. divot has alpha_bright=0.9, alpha_faint=0.5, break H_r=8.3, and contrast 3.2 over the locked finite H range 5 to 12.",
+    "Only r-band characterization is used; non-r colors are declared but do not affect the pinned OSSOS-B efficiency files.",
+    "Mock catalogs contain 20 detections and are used for method calibration, not as the observed Solar System.",
+    "Pilot-only analytic selection uses a disjoint random namespace and can never satisfy the official-backend gate.",
+    "External OSSOS code remains under EUPL-1.1 and is executed separately rather than copied into the MIT JX source tree."
+  ],
+  "nonclaim": "A PASSED JX-O1 verdict validates the locked telescope-selection calibration workflow only. It does not detect or exclude Planet X, validate any candidate source, or establish that either calibration population describes the Solar System.",
+  "allowed_verdicts": {
+    "PASSED": "All calibration, power, scale, adapter-identity, provenance, seed-stability, and exact-replay gates pass using the pinned official simulator.",
+    "BLOCKED": "The method is numerically valid but required external execution, sample scale, checkpoint proof, or wrong-model power is incomplete.",
+    "INVALID": "Input integrity, finite-record, statistical calibration, adapter identity, seed stability, or deterministic replay fails."
+  }
+}
