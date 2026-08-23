@@ -1,0 +1,13 @@
+{
+  "checkpoint_replay_passed": true,
+  "contract_sha256": "a6499e4b53d9ddaa68d3ed3d0f6fd742d3febd5add426c4ba3666f54af5a5d46",
+  "driver_sha256": "60c2fb9997f1ac9df0e1a21e38980cb0eda913933ccf9b1d604ad27ea2db2169",
+  "intrinsic_draws": 100001,
+  "model_id": "wrong",
+  "schema": "jx-survey-selection-official-qualification/v2",
+  "seed_block": 0,
+  "simulator_commit": "86ce0936c0585ea1120830831c66276e05b076aa",
+  "status": "COMPLETED",
+  "tracked_detections": 2,
+  "tracked_rate": 1.999980000199998e-05
+}
