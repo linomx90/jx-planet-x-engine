@@ -1,0 +1,70 @@
+{
+  "schema": "jx-o2-g0-input-audit-registration/v1",
+  "audit_id": "jx-o2-g0-input-audit-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "BLOCKED_INPUT_AUDIT_REGISTRATION_RECEIPT",
+  "registered_at_utc": "2026-08-23T03:09:14Z",
+  "base_repository_commit": "0e47a604458cf75fd9a04d3dae164b3c38d0be56",
+  "timestamp_authority": "The Git object and pull-request history that first publish this immutable receipt.",
+  "audit_status": "BLOCKED",
+  "g0_complete": false,
+  "execution_authorized": false,
+  "observed_execution_authorized": false,
+  "gpu_run_authorized": false,
+  "outcomes_generated": false,
+  "claim_ceiling": "PROVENANCE_AUDIT_ONLY",
+  "design_contract": {
+    "path": "../../runs/planet_x_survey_model_comparison_v1/design_contract_v1.json",
+    "sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971"
+  },
+  "locked_files": {
+    "readme": {
+      "path": "README.md",
+      "sha256": "77f3a80d8d9e8b21e309d8fe435e764994cd62eaca5f5edfb02c3826198837a0"
+    },
+    "g0_audit": {
+      "path": "g0_audit_v1.json",
+      "sha256": "5f7a5f9cef4f6bd73f7c36235e610d96c8475bd646bf5807aa591c58fbf002b0"
+    },
+    "ossos_inventory": {
+      "path": "ossos_inventory_v1.json",
+      "sha256": "67223671b3f5a983062ad3f7745eb52c3011cf138b737ad871a41141bb5a908b"
+    },
+    "des_y6_inventory": {
+      "path": "des_y6_inventory_v1.json",
+      "sha256": "ab180a22dab51aa70884d1f7f8db8bb442f2ba85f79bde687d9ca5191e86d18f"
+    },
+    "source_model_inventory": {
+      "path": "source_model_inventory_v1.json",
+      "sha256": "0ac5ef9bc1fbf84313a9ee5a8650a3685cba3d2d06eea1d29a547c7eda59da9f"
+    },
+    "audit_tests": {
+      "path": "../../tests/test_jx_o2_g0_audit.py",
+      "sha256": "03a90b304cd7b3374d0d381696972ac7bf3ee620febd7ef894daa032ee06ed85"
+    }
+  },
+  "evidence_summary": {
+    "byte_verified_public_catalogs_acquired": true,
+    "large_des_selection_payloads_byte_verified": true,
+    "complete_ossos_selection_function_acquired": false,
+    "des_selection_lineage_execution_ready": false,
+    "physically_matched_m0_m1_pair_acquired": false,
+    "candidate_9118_selection_lineage_complete": false,
+    "untouched_confirmatory_holdout_identified": false,
+    "all_licenses_resolved": false
+  },
+  "current_permissions": {
+    "publish_compact_audit_for_review": true,
+    "continue_public_input_acquisition": true,
+    "contact_maintainers": true,
+    "run_synthetic_calibration": false,
+    "compute_jx_o2_observed_score": false,
+    "run_observed_model_comparison": false,
+    "access_or_unblind_untouched_holdout": false,
+    "start_large_gpu_job": false,
+    "create_execution_contract": false,
+    "create_activation_receipt": false
+  },
+  "registration_rule": "This receipt registers a blocked audit. It cannot be amended to authorize execution. Resolutions must be new, hash-bound artifacts that preserve this no-go record and pass independent review before G1 is drafted.",
+  "mandatory_nonclaim": "This audit contains no JX-O2 observational statistic or model preference and authorizes no execution. It does not detect, confirm, exclude, or rule out Planet X."
+}

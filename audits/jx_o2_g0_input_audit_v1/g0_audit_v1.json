@@ -1,0 +1,201 @@
+{
+  "schema": "jx-o2-g0-input-audit/v1",
+  "audit_id": "jx-o2-g0-input-audit-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "milestone": "JX_O2_G0_INPUT_PROVENANCE_AUDIT",
+  "artifact_class": "PREEXECUTION_INPUT_PROVENANCE_AUDIT",
+  "audited_at_utc": "2026-08-23T03:03:01Z",
+  "base_repository_commit": "0e47a604458cf75fd9a04d3dae164b3c38d0be56",
+  "design_binding": {
+    "path": "../../runs/planet_x_survey_model_comparison_v1/design_contract_v1.json",
+    "sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971",
+    "required_stage": "G0",
+    "requirement": "Complete data, model, exposure, candidate-lineage, and license audit."
+  },
+  "audit_status": "BLOCKED",
+  "g0_complete": false,
+  "execution_authorized": false,
+  "observed_execution_authorized": false,
+  "gpu_run_authorized": false,
+  "outcomes_generated": false,
+  "observed_jx_o2_score_computed": false,
+  "claim_ceiling": "PROVENANCE_AUDIT_ONLY",
+  "scientific_evidence_role": "INPUT_AVAILABILITY_AND_LINEAGE_AUDIT_NOT_OUTCOME_EVIDENCE",
+  "audit_scope": [
+    "COMPLETE_CHARACTERIZED_SURVEY_CATALOGS",
+    "NATIVE_SURVEY_SELECTION_FUNCTIONS",
+    "OBJECT_ELIGIBILITY_AND_DEDUPLICATION",
+    "DATA_AND_SOFTWARE_LICENSES",
+    "DATA_EXPOSURE_AND_HOLDOUT_STATUS",
+    "PHYSICALLY_MATCHED_M0_M1_SOURCE_POPULATIONS",
+    "CANDIDATE_9118_SELECTION_AND_EPOCH_LINEAGE",
+    "SIMULATOR_AND_RUNTIME_PROVENANCE"
+  ],
+  "linked_inventories": {
+    "ossos": "ossos_inventory_v1.json",
+    "des_y6": "des_y6_inventory_v1.json",
+    "source_models": "source_model_inventory_v1.json"
+  },
+  "g0_subgates": [
+    {
+      "gate_id": "G0-01",
+      "requirement": "Byte-verified public catalog artifacts",
+      "status": "PARTIALLY_SATISFIED",
+      "reason": "Complete OSSOS and DES publication catalogs were hashed, but complete raw/reconstructed detection lineage and all eligibility rules are not locked."
+    },
+    {
+      "gate_id": "G0-02",
+      "requirement": "Complete native survey characterization",
+      "status": "BLOCKED",
+      "reason": "The public OSSOS release lacks six later selection files; the only located historical directory was explicitly withdrawn as bad. DES selection artifacts have unresolved count and implementation discrepancies."
+    },
+    {
+      "gate_id": "G0-03",
+      "requirement": "Object inclusion, exclusion, and deduplication rules",
+      "status": "BLOCKED",
+      "reason": "OSSOS has six cross-survey rediscoveries and DES has three nc rows plus a Centaur/Oort-cloud scope decision; exact rules are not frozen."
+    },
+    {
+      "gate_id": "G0-04",
+      "requirement": "Data exposure and candidate-selection lineage audited",
+      "status": "BLOCKED",
+      "reason": "Named public data are previously inspected, no untouched holdout was identified, and the JX decision record selecting candidate 9118 is absent."
+    },
+    {
+      "gate_id": "G0-05",
+      "requirement": "Physically matched M0 and M1 source-model artifacts",
+      "status": "BLOCKED",
+      "reason": "No public paired population checkpoint, decks, states, seeds, code, cadence, and outputs differing only by the compact body were found."
+    },
+    {
+      "gate_id": "G0-06",
+      "requirement": "Explicit licenses and redistributable archive plan",
+      "status": "BLOCKED",
+      "reason": "OSSOS characterization-data licensing and multiple simulator/backend software licenses are absent or ambiguous."
+    },
+    {
+      "gate_id": "G0-07",
+      "requirement": "Pinned compatible simulators and execution environment",
+      "status": "BLOCKED",
+      "reason": "Paper-era code pins, native dependencies, RNG behavior, bandpasses, and qualification tests are incomplete or inconsistent."
+    }
+  ],
+  "design_activation_gates_assessed": [
+    {
+      "gate_id": "A01",
+      "requirement": "complete_characterized_survey_manifest_locked",
+      "status": "NOT_SATISFIED"
+    },
+    {
+      "gate_id": "A02",
+      "requirement": "raw_and_reconstructed_catalog_hashes_locked",
+      "status": "NOT_SATISFIED"
+    },
+    {
+      "gate_id": "A03",
+      "requirement": "data_exposure_and_candidate_selection_lineage_audited",
+      "status": "NOT_SATISFIED"
+    },
+    {
+      "gate_id": "A04",
+      "requirement": "confirmatory_holdout_untouched_or_claim_explicitly_downgraded_to_exploratory_or_held_out_prediction",
+      "status": "NOT_SATISFIED"
+    },
+    {
+      "gate_id": "A05",
+      "requirement": "m0_m1_and_nuisance_manifests_locked",
+      "status": "NOT_SATISFIED"
+    }
+  ],
+  "blockers": [
+    {
+      "blocker_id": "G0-B01",
+      "category": "OSSOS_SELECTION_COMPLETENESS",
+      "resolution_required": "Obtain maintainer-certified AM/AP/BC/BD/BS/BT efficiencies and pointings with hashes and a documented resolution of the 2019 withdrawal, or independently reconstruct and validate them under a separately locked parity protocol."
+    },
+    {
+      "blocker_id": "G0-B02",
+      "category": "OSSOS_SCOPE_AND_DEDUPLICATION",
+      "resolution_required": "Lock the eight sky regions, ten characterization components, eleven published footprint rows, filter/color treatment, and detection-level versus physical-object alias rules."
+    },
+    {
+      "blocker_id": "G0-B03",
+      "category": "DES_CATALOG_ELIGIBILITY",
+      "resolution_required": "Choose and hash one DES release and lock handling of three nc objects, the Centaur, the Oort-cloud comet, H_r revisions, state epoch/time scale, covariance, and count likelihood."
+    },
+    {
+      "blocker_id": "G0-B04",
+      "category": "DES_SELECTION_IMPLEMENTATION",
+      "resolution_required": "Reconcile exposure counts, griz-only behavior, transient efficiency, distance-dependent triplet windows, bandpasses, ephemeris backend, dependencies, RNG, and qualification tests."
+    },
+    {
+      "blocker_id": "G0-B05",
+      "category": "RAW_SELECTION_LINEAGE",
+      "resolution_required": "Acquire or formally account for the unavailable DES transient, fake-injection, linkage, candidate, and inclusion artifacts and the full OSSOS selection provenance."
+    },
+    {
+      "blocker_id": "G0-B06",
+      "category": "MATCHED_PHYSICAL_MODELS",
+      "resolution_required": "Acquire a content-addressed common checkpoint and paired M0/M1 decks with identical particles, known-body history, tides/stars, epoch/frame, integrator, cadence, loss rules, nuisance model, code, seeds, and outputs; only the registered compact body may differ."
+    },
+    {
+      "blocker_id": "G0-B07",
+      "category": "CANDIDATE_9118_LINEAGE",
+      "resolution_required": "Recover the original metadata blob and who/when/rule/universe/ranking decision record, and define a physically valid propagation from the catalog epoch rather than redeclaring the elements."
+    },
+    {
+      "blocker_id": "G0-B08",
+      "category": "EXPOSURE_AND_HOLDOUT",
+      "resolution_required": "Label all reused observations as previously inspected and either lock an explicit exploratory or held-out-prediction claim or identify a genuinely untouched survey/chronological holdout with custodian evidence."
+    },
+    {
+      "blocker_id": "G0-B09",
+      "category": "LICENSES_AND_ARCHIVE",
+      "resolution_required": "Obtain authoritative data and software license statements where missing and predeclare a DOI-backed, content-addressed archive destination."
+    }
+  ],
+  "current_permissions": {
+    "continue_public_input_acquisition": true,
+    "contact_data_and_model_maintainers": true,
+    "draft_reconstruction_and_qualification_protocols": true,
+    "run_synthetic_calibration": false,
+    "compute_jx_o2_observed_score": false,
+    "run_observed_model_comparison": false,
+    "access_or_unblind_untouched_holdout": false,
+    "start_large_gpu_job": false,
+    "create_execution_contract": false,
+    "create_activation_receipt": false
+  },
+  "claim_firewall": {
+    "forbidden_outcome_keys": [
+      "observed_jx_o2_score",
+      "observed_test_statistic",
+      "observed_p_value",
+      "observed_bayes_factor",
+      "observed_model_preference",
+      "model_preference",
+      "preferred_model",
+      "planet_x_mass_estimate",
+      "planet_x_orbit_estimate"
+    ],
+    "forbidden_decision_tokens": [
+      "DETECTED",
+      "EXCLUDED",
+      "CONFIRMED",
+      "RULED_OUT",
+      "PASSED",
+      "PREFERRED"
+    ],
+    "decision_token_match_rule": "CASE_INSENSITIVE_UNDERSCORE_DELIMITED_TOKEN",
+    "parser_requirements": [
+      "REJECT_DUPLICATE_JSON_KEYS",
+      "REJECT_NAN_AND_INFINITY"
+    ]
+  },
+  "next_gate": {
+    "stage": "G0_REMEDIATION",
+    "execution_state": "DESIGN_AND_ACQUISITION_ONLY",
+    "minimum_exit_condition": "Every G0 blocker must be resolved in hash-bound public artifacts and independently audited before drafting G1."
+  },
+  "mandatory_nonclaim": "This audit contains no JX-O2 observational statistic or model preference and authorizes no execution. It does not detect, confirm, exclude, or rule out Planet X."
+}

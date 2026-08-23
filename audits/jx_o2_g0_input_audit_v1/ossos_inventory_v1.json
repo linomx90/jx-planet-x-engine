@@ -1,0 +1,278 @@
+{
+  "schema": "jx-o2-g0-ossos-input-inventory/v1",
+  "audit_id": "jx-o2-g0-input-audit-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "SURVEY_INPUT_PROVENANCE_INVENTORY",
+  "inventory_status": "BLOCKED_INCOMPLETE_SELECTION_FUNCTION",
+  "execution_authorized": false,
+  "outcomes_generated": false,
+  "global_data_exposure_status": "PREVIOUSLY_INSPECTED",
+  "verified_at_utc": "2026-08-23T03:03:01Z",
+  "publication": {
+    "title": "OSSOS. VII. 800+ Trans-Neptunian Objects — The Complete Data Release",
+    "doi": "10.3847/1538-4365/aab77a",
+    "catalog_doi": "10.26093/cds/vizier.22360018",
+    "catalog_url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/236/18/",
+    "exposure_status": "PREVIOUSLY_INSPECTED"
+  },
+  "complete_catalog_artifacts": [
+    {
+      "artifact_id": "OSSOS_CDS_README",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/236/18/ReadMe",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:53:01Z",
+      "byte_count": 12708,
+      "sha256": "362db5bb7e4f39675f855285be448154f62eba1ba0997ecabbb4a52bb188e25d"
+    },
+    {
+      "artifact_id": "OSSOS_CHARACTERIZED_CATALOG",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/236/18/t3char.dat",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:53:01Z",
+      "byte_count": 225960,
+      "record_count": 840,
+      "sha256": "35c6af083804788d589e1f7fbcbf3db30fecd6d32d94be3de359815e99da596f"
+    },
+    {
+      "artifact_id": "OSSOS_PLUS_ENSEMBLE_CATALOG",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/236/18/t3ens.dat",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:53:01Z",
+      "byte_count": 308812,
+      "record_count": 1148,
+      "distinct_physical_object_count": 1142,
+      "sha256": "86ddb04586247103207722841b5e78cbea17d009217926ea0690a068b60683b8"
+    },
+    {
+      "artifact_id": "OSSOS_UNCHARACTERIZED_CATALOG",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJS/236/18/t3unc.dat",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:53:01Z",
+      "byte_count": 29321,
+      "record_count": 109,
+      "sha256": "90c50df2ae9172792029611ccc71bb9d7f3bddba151debd0830a089737fce82b"
+    },
+    {
+      "artifact_id": "OSSOS_PUBLICATION_SOURCE_TAR",
+      "url": "https://export.arxiv.org/e-print/1805.11740",
+      "verification_level": "BYTE_VERIFIED",
+      "retrieved_at_utc": "2026-08-23T02:53:01Z",
+      "byte_count": 1373434,
+      "sha256": "485e4a878384af373608ca1bd6bf2d8d570f7d733c3f7f2559d04f05ce5b7ea4",
+      "scope_note": "Contains catalogs and ten discovery-exposure-ID lists, but only an ExampleSurvey selection bundle rather than all later OSSOS efficiencies and pointings."
+    }
+  ],
+  "catalog_semantics": {
+    "ossos_characterized_rows": 840,
+    "securely_tracked_discoveries": 838,
+    "lost_close_centaur_rows": 2,
+    "ensemble_survey_detection_rows": 1148,
+    "ensemble_distinct_physical_objects": 1142,
+    "coordinate_system": "J2000_ECLIPTIC_BARYCENTRIC",
+    "published_sky_region_block_count": 8,
+    "required_characterization_components": [
+      "13AE",
+      "13AO",
+      "13BL",
+      "14BH",
+      "15AP",
+      "15AM",
+      "15BS",
+      "15BT",
+      "15BC",
+      "15BD"
+    ],
+    "published_table1_footprint_row_count": 11,
+    "scope_rule_status": "NOT_LOCKED",
+    "reason": "The complete release has eight sky regions, ten depth/provenance characterization components, and eleven Table-1 footprint rows because 15BC is spatially disjoint and listed twice. Shorthand block naming alone is insufficient for activation."
+  },
+  "official_simulator_repository": {
+    "url": "https://github.com/OSSOS/SurveySimulator",
+    "license": "EUPL-1.1_FOR_SOFTWARE_ONLY",
+    "current_master": {
+      "commit": "a1fcf1bfc146b7b72654d65d6789c59790e3cbb4",
+      "tree": "89b4488cf7552db5f21b31860e9ceecd2867e244",
+      "commit_date": "2023-09-03",
+      "verification_level": "GIT_OBJECT_VERIFIED",
+      "complete_production_survey_characterization_bundle_present": false,
+      "survey_format_test_fixtures_present": true,
+      "removal_commits": [
+        "f315077a2b57e73e2d21dfae5d328b4e4f54159b",
+        "0eee79f08c1a3ff0472cbd192860c4bef872db84"
+      ]
+    },
+    "public_survsimb_mapping": {
+      "official_release_page": "https://www.ossos-survey.org/simulator.html",
+      "release_label": "SurvSimB_2018-10-10",
+      "closest_history_commit": "d4355c873722af60d59511280e1b1e9f882ec627",
+      "mapping_confidence": "STRONG_INFERENCE_NOT_TAGGED_RELEASE_FACT",
+      "mapping_reason": "The repository has no SurvSimB tag; the closest commit and its parent describe mirroring public release B.",
+      "full_git_archive": {
+        "verification_level": "DETERMINISTIC_GIT_ARCHIVE_VERIFIED",
+        "byte_count": 9789440,
+        "sha256": "90a2db413f9a57965bf8ff8a88bd05bdbd89bbed4a63fa45ba17a52432edaf2e"
+      },
+      "data_only_git_archive": {
+        "verification_level": "DETERMINISTIC_GIT_ARCHIVE_VERIFIED",
+        "byte_count": 1167360,
+        "file_count": 175,
+        "sha256": "84fe993ab937501ee9fdd16a267e29dabdcd9e569f75b3f5daf1eacd7e422652"
+      },
+      "native_scope": {
+        "ossos_components": [
+          "13AE",
+          "13AO",
+          "13BL",
+          "14BH"
+        ],
+        "includes_later_ossos_components": false,
+        "includes_cfeps": true,
+        "includes_hilat": true,
+        "includes_alexandersen_2016": true
+      }
+    }
+  },
+  "survsimb_selection_artifacts": {
+    "ossos_eolh": {
+      "efficiency_file_count": 4,
+      "pointings": {
+        "byte_count": 2903,
+        "sha256": "bde3323ea3164e16a593ddbc8db23622477bf53f78a98fe1f4025d9ae6659ead"
+      },
+      "detections": {
+        "byte_count": 63815,
+        "record_count": 237,
+        "sha256": "9183daf3dc812cf3151524e6d5822b5d55c8cdd856d0a2814a350534b292c6ba"
+      },
+      "complete_ossos_selection": false
+    },
+    "cfeps": {
+      "efficiency_file_count": 22,
+      "pointings": {
+        "byte_count": 4475,
+        "sha256": "c23695efb35b098e453e1e84428709983d7a1059e9b92faf31e9870e7ea8c6fc"
+      },
+      "detections": {
+        "byte_count": 56576,
+        "record_count": 210,
+        "sha256": "40eba75c4cab9ef24bb9de2f606b628399c939e2e025f4bf5ca1d3dd96442591"
+      },
+      "publication_doi": "10.1088/0004-6256/142/4/131"
+    },
+    "hilat": {
+      "efficiency_file_count": 43,
+      "discovery_count": 24,
+      "characterized_record_count": 21,
+      "publication_doi": "10.3847/1538-3881/aa6aa5"
+    },
+    "alexandersen_2016": {
+      "efficiency_file_count": 2,
+      "characterized_record_count": 77,
+      "publication_doi": "10.3847/0004-6256/152/3/111",
+      "catalog_doi": "10.26093/cds/vizier.51520111",
+      "catalog_table": {
+        "url": "https://cdsarc.cds.unistra.fr/ftp/J/AJ/152/111/table3.dat",
+        "verification_level": "BYTE_VERIFIED",
+        "retrieved_at_utc": "2026-08-23T02:53:01Z",
+        "byte_count": 24006,
+        "record_count": 87,
+        "sha256": "d1813da465597760b8188d4106d5a1de026fc381d2b85b86b12a7f7e5facd7f9"
+      }
+    },
+    "combined": {
+      "pointings": {
+        "byte_count": 15937,
+        "sha256": "18351c2dcea43a3cc9c2f41b3d87239ff51357a7301f423abd087606e0dd12e9"
+      },
+      "detections": {
+        "byte_count": 144758,
+        "record_count": 539,
+        "sha256": "a3e94bb8f0b202faf9bd1d656957f67c28e4dbcf8b617690b0437a36a739bf91"
+      },
+      "filter_warning": "CFEPS is predominantly g-band while the other surveys are r-band; strata and a locked color model are required."
+    }
+  },
+  "withdrawn_later_ossos_selection": {
+    "status": "QUARANTINED_NOT_ELIGIBLE",
+    "add_commit": "eaeef461daaae00eb11de53def0ec4acd055ab3b",
+    "add_date": "2019-06-17",
+    "delete_commit": "9a84f67f279851bbb4231b8d2ce633968f412561",
+    "delete_date": "2019-06-27",
+    "delete_message": "Removing bad directory.",
+    "surviving_branch_or_tag_found": false,
+    "files": {
+      "2015AM.eff": {
+        "byte_count": 2228,
+        "sha256": "9288fcf1531d9e0f6fa38cf3388fa432b155c5ece3a364247b42cac179bae156"
+      },
+      "2015AP.eff": {
+        "byte_count": 2246,
+        "sha256": "5cdeba44dc52ea8d72ecbb19861c523cb59220344d8e80d7f6441f1d9b7b0191"
+      },
+      "2015BC.eff": {
+        "byte_count": 2273,
+        "sha256": "b7ec68bea462e467f8df50b2c9bd6814c747bd6dfeb9bc188650f3e873f7d09c"
+      },
+      "2015BD.eff": {
+        "byte_count": 2278,
+        "sha256": "c08ae4f8d5fb381723b51820d704fa610605dbb79241292692b55ac3b72e9694"
+      },
+      "2015BS.eff": {
+        "byte_count": 2276,
+        "sha256": "9e2b0fee8591c4db47946f8ac99f17b49f7cc13c46921ef6e33747865c0b6333"
+      },
+      "2015BT.eff": {
+        "byte_count": 2272,
+        "sha256": "120fd986a321f142fa5ebedde973304417181934183b0a2271131dbc37433206"
+      },
+      "full_ossos_pointings": {
+        "byte_count": 15402,
+        "sha256": "1fee9a8f8810467546509ce9b509d939fa4bbd49965ff1504cae935754449c69"
+      },
+      "later_block_detection_catalog": {
+        "byte_count": 162982,
+        "record_count": 607,
+        "sha256": "3cd1e93bdf37d941c137e652b4988671695903eac1d1fa4d52bea318653e2def"
+      }
+    },
+    "published_later_block_characterized_count": 605,
+    "withdrawn_only_object_ids": [
+      "o5c114",
+      "o5t58"
+    ],
+    "quarantine_reason": "The directory was explicitly deleted as bad and its catalog has two rows absent from the official complete catalog."
+  },
+  "deduplication": {
+    "rule_status": "NOT_LOCKED",
+    "native_alias_manifest": {
+      "byte_count": 161,
+      "sha256": "411c379762a5d84c52ca8e29a5aa451fcd0f94fcd8e1fecdb6374b76ba780c04"
+    },
+    "rediscovery_alias_pairs": [
+      ["o3e20PD", "L4h05PD"],
+      ["o3e37PD", "L4h13"],
+      ["o3l13PD", "L3s05"],
+      ["o5t34PD", "L3s04"],
+      ["o5c051PD", "L4v01"],
+      ["o5d135PD", "L4v02"]
+    ],
+    "required_semantics": "Preserve both survey-detection records with stratum provenance; canonicalize only under a separately audited alias/MPC rule for physical-object statistics."
+  },
+  "license_audit": {
+    "simulator_software": "EUPL-1.1",
+    "catalog_and_characterization_data": "AUTHORITATIVE_REDISTRIBUTION_LICENSE_NOT_FOUND",
+    "status": "BLOCKED",
+    "reason": "The repository states a software license, the VizieR record exposes no license field, and the survey website asserts copyright; the software license must not be assumed to cover the data."
+  },
+  "unresolved_blockers": [
+    "MAINTAINER_CERTIFIED_LATER_OSSOS_SELECTION_FILES_NOT_ACQUIRED",
+    "WITHDRAWN_BAD_DIRECTORY_NOT_RESOLVED",
+    "EIGHT_REGION_TEN_COMPONENT_ELEVEN_FOOTPRINT_ROW_MANIFEST_NOT_LOCKED",
+    "DETECTION_VERSUS_PHYSICAL_OBJECT_DEDUP_RULE_NOT_LOCKED",
+    "CROSS_FILTER_COLOR_MODEL_NOT_LOCKED",
+    "DATA_LICENSE_NOT_RESOLVED",
+    "SIMULATOR_RELEASE_TO_CODE_COMMIT_NOT_AUTHORITATIVELY_TAGGED"
+  ],
+  "eligible_for_g1": false,
+  "mandatory_nonclaim": "This inventory audits public survey inputs only. It contains no JX-O2 observational statistic or model preference and authorizes no execution."
+}
