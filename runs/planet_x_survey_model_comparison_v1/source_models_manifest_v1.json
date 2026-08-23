@@ -1,0 +1,109 @@
+{
+  "schema": "jx-observational-source-models-design-manifest/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "DESIGN_ONLY_MODEL_FAMILY_SPECIFICATION",
+  "manifest_status": "DESIGN_ONLY_MODELS_NOT_ACQUIRED",
+  "execution_authorized": false,
+  "scientific_evidence_role": "REQUIRED_MODEL_SPECIFICATION_NOT_OUTCOME_EVIDENCE",
+  "model_label_policy": {
+    "neutral_labels_required": true,
+    "forbidden_labels": [
+      "correct_model",
+      "wrong_model"
+    ],
+    "reason": "Neither family is assumed true, and relative preference cannot replace absolute predictive adequacy."
+  },
+  "required_model_families": [
+    {
+      "model_id": "M0_LOCKED_BASELINE",
+      "family_role": "PHYSICALLY_MATCHED_BASELINE_WITHOUT_ADDITIONAL_COMPACT_BODY",
+      "semantics": "A fully specified known-body, intrinsic-population, emplacement-history, nuisance, and survey-selection generative family. It is not the universal proposition that Planet X is absent.",
+      "matching_rule": "Use the same primordial population, giant-planet history, Galactic tides, stellar encounters, early-cluster assumptions, observation epoch, nuisance structure, and analysis pipeline as M1 except for the registered additional compact body.",
+      "exact_manifest_status": "UNRESOLVED_EXECUTION_BLOCKER",
+      "eligible_for_execution": false
+    },
+    {
+      "model_id": "M1_LOCKED_COMPACT_BODY_FAMILY",
+      "family_role": "PHYSICALLY_MATCHED_FINITE_ADDITIONAL_COMPACT_BODY_FAMILY",
+      "semantics": "The M0 pipeline plus one additional compact body drawn from a finite, predeclared mass, orbit, phase, epoch, and uncertainty grid or prior. It does not represent every possible Planet X configuration.",
+      "matching_rule": "Every non-compact-body initial condition, force, nuisance, survey, fitting, and scoring choice must match M0 or be jointly varied by a prelocked rule.",
+      "exact_manifest_status": "UNRESOLVED_EXECUTION_BLOCKER",
+      "eligible_for_execution": false
+    }
+  ],
+  "candidate_family_sources_for_later_lock": [
+    {
+      "candidate_id": "BROWN_BATYGIN_2021_PLANET_NINE_POSTERIOR_FAMILY",
+      "source": "https://arxiv.org/abs/2108.09868",
+      "status": "LITERATURE_LEAD_NOT_AN_EXECUTABLE_MODEL",
+      "requirements": "Acquire a content-addressed correlated posterior or define a justified finite grid, then lock mass, all orbital elements, phase, epoch, frame, origin, weights, and selection lineage."
+    },
+    {
+      "candidate_id": "DIRECT_SEARCH_EXCLUSION_CONDITIONING",
+      "sources": [
+        "https://arxiv.org/abs/2110.13117",
+        "https://arxiv.org/abs/2401.17977"
+      ],
+      "status": "LITERATURE_CONSTRAINT_NOT_YET_INTEGRATED",
+      "requirements": "Lock the exact exclusion data, brightness relation, conditioning rule, and multiplicity consequences without using the survey-scoring outcomes."
+    },
+    {
+      "candidate_id": "LOWER_MASS_KUIPER_BELT_PLANET_FAMILY",
+      "source": "https://arxiv.org/abs/2308.13765",
+      "status": "SECONDARY_LITERATURE_LEAD_NOT_AN_EXECUTABLE_MODEL",
+      "requirements": "If included, freeze it as a separate multiplicity-controlled family with its own physically matched M0 counterpart and power region."
+    },
+    {
+      "candidate_id": "TRANSIENT_ROGUE_OR_FOSSIL_PERTURBATION_FAMILY",
+      "source": "https://doi.org/10.3389/fspas.2018.00014",
+      "status": "SECONDARY_LITERATURE_LEAD_NOT_AN_EXECUTABLE_MODEL",
+      "requirements": "If included, define a separate family and do not describe a past transient perturber as a surviving Planet X."
+    }
+  ],
+  "candidate_selection_lineage": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "same_tno_data_reuse_rule": "A model, grid point, or candidate selected using an observed TNO cannot treat that same object as independent confirmation.",
+    "candidate_9118_rule": "Candidate 9118 may be one declared grid point only if its full selection lineage is audited; it cannot stand for the M1 family or all Planet X parameter space.",
+    "upstream_search_multiplicity_required": true
+  },
+  "required_exact_fields_per_model_family": [
+    "model_id",
+    "source_artifact_paths_and_sha256",
+    "initial_population_and_emplacement_history",
+    "known_body_ephemeris_and_force_model",
+    "additional_body_mass_and_full_state_or_orbit",
+    "epoch_frame_origin_units_and_time_standard",
+    "phase_orientation_and_uncertainty_rule",
+    "integration_duration_timestep_and_numerical_tolerances",
+    "survival_classification_and_resonance_rules",
+    "absolute_magnitude_color_and_size_nuisance_model",
+    "survey_forward_adapter",
+    "parameter_grid_or_prior_with_weights",
+    "candidate_selection_lineage",
+    "deterministic_seed_derivation",
+    "software_container_and_hardware_determinism"
+  ],
+  "comparability_requirements": {
+    "same_pipeline_for_all_families": true,
+    "same_nuisance_fit_rule_for_all_families": true,
+    "same_survey_selection_code_for_all_families": true,
+    "absolute_adequacy_before_relative_preference": true,
+    "if_both_families_inadequate": "NO_REGISTERED_MODEL_ADEQUATE",
+    "adaptive_grid_expansion_after_lock": "INVALID"
+  },
+  "power_region": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "core_alternative_region_must_be_scientifically_justified": true,
+    "outside_locked_region_label": "SENSITIVITY_NOT_ESTABLISHED"
+  },
+  "acquired_model_artifacts": [],
+  "unresolved_execution_blockers": [
+    "Choose and justify a finite M1 family without using a future holdout outcome.",
+    "Build or acquire a physical source-population generator for both matched model families.",
+    "Freeze all model, nuisance, epoch, frame, force, integration, grid, prior, and weighting fields.",
+    "Audit candidate and grid selection lineage, including any use of the observed TNO catalog.",
+    "Define a scientifically justified core alternative region for realistic power calibration.",
+    "Acquire content-addressed model artifacts and independent implementation inputs."
+  ],
+  "nonclaim": "This manifest defines neutral model-family requirements but contains no executable physical model and no evidence for or against Planet X."
+}
