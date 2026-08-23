@@ -1,0 +1,157 @@
+{
+  "blocked_reasons": [],
+  "claim_decision": "SCREENING_ONLY",
+  "contract_sha256": "a6499e4b53d9ddaa68d3ed3d0f6fd742d3febd5add426c4ba3666f54af5a5d46",
+  "exact_replay_passed": true,
+  "experiment_id": "jx-o1-ossos-b-telescope-selection-v2",
+  "input_manifests": {
+    "correct": "b2b99a91ca52fe819b8e2a5d0a860488d0b650664cbe5abb5a6d0b773b3f8297",
+    "wrong": "85c55eca72c8aaac0292c1f25d6ed3aed1b1d03efa194e35cde023396b8716fd"
+  },
+  "invalid_reasons": [
+    {
+      "code": "seed_block_verdict_instability",
+      "message": "a leave-one-block-out verdict changed"
+    }
+  ],
+  "milestone": "JX-O1_TELESCOPE_SELECTION_VALIDATION",
+  "nonclaims": [
+    "JX-O1 does not detect or exclude Planet X",
+    "JX-O1 does not estimate a source mass, orbit, distance, or sky direction",
+    "the analytic pilot is not an astronomical survey simulation",
+    "passing validates only the locked telescope-selection inference workflow"
+  ],
+  "pool_summary": {
+    "correct": {
+      "adapter_identity_passed": true,
+      "backend": "OSSOS_SURVEY_SIMULATOR_F95_86CE093_V2_14_FIELD",
+      "checkpoint_replay_passed": true,
+      "intrinsic_draws": 9700097,
+      "tracked_detections": 206
+    },
+    "wrong": {
+      "adapter_identity_passed": true,
+      "backend": "OSSOS_SURVEY_SIMULATOR_F95_86CE093_V2_14_FIELD",
+      "checkpoint_replay_passed": true,
+      "intrinsic_draws": 18900189,
+      "tracked_detections": 206
+    }
+  },
+  "replay_sha256": "d24ae2a7f0a2f7be38b86139973a1533919d8096c96b77ce1522746fe8786b45",
+  "schema": "jx-survey-selection-result/v1",
+  "seed_block_stability": [
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 0,
+      "false_rejection_rate": 0.064,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.746769776231975,
+      "zeta_sd": 1.9896524864418073
+    },
+    {
+      "classification": "INVALID",
+      "excluded_seed_block": 1,
+      "false_rejection_rate": 0.05,
+      "stable": false,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.633832254476008,
+      "zeta_sd": 1.840649843213581
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 2,
+      "false_rejection_rate": 0.048,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.643287544101266,
+      "zeta_sd": 1.8681022671491667
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 3,
+      "false_rejection_rate": 0.0485,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.672468189908255,
+      "zeta_sd": 1.9410830814798041
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 4,
+      "false_rejection_rate": 0.0505,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.69008222377409,
+      "zeta_sd": 1.9788934841188335
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 5,
+      "false_rejection_rate": 0.0535,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.66253480741052,
+      "zeta_sd": 1.91453339448608
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 6,
+      "false_rejection_rate": 0.0525,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.643548660831476,
+      "zeta_sd": 1.9205736435061813
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 7,
+      "false_rejection_rate": 0.063,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.700769712991566,
+      "zeta_sd": 1.9249008398818575
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 8,
+      "false_rejection_rate": 0.054,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.649276820391457,
+      "zeta_sd": 1.930170920908707
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 9,
+      "false_rejection_rate": 0.049,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.645777714750642,
+      "zeta_sd": 1.9396896858319184
+    }
+  ],
+  "seed_block_stability_passed": false,
+  "statistics": {
+    "bootstrap_reference_catalogs": 2000,
+    "calibration_passed": true,
+    "catalog_size": 20,
+    "correct_model_false_rejection_rate": 0.0545,
+    "false_rejection_count": 109,
+    "gate_results": {
+      "correct_model_false_rejection_rate": true,
+      "wrong_model_rejection_power": true,
+      "zeta_mean": true,
+      "zeta_sd": true
+    },
+    "mock_catalogs": 2000,
+    "power_passed": true,
+    "wrong_model_rejection_count": 2000,
+    "wrong_model_rejection_power": 1.0,
+    "zeta_expected_mean": -8.685889638065035,
+    "zeta_expected_sd": 1.9422239675774466,
+    "zeta_mean": -8.691794432033534,
+    "zeta_sd": 1.9699731602780726
+  },
+  "verdict": "INVALID"
+}

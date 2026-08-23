@@ -1,0 +1,309 @@
+{
+  "blocked_reasons": [
+    {
+      "code": "correct_intrinsic_scale_incomplete",
+      "message": "intrinsic draw target is incomplete"
+    },
+    {
+      "code": "correct_intrinsic_block_0_incomplete",
+      "message": "seed block 0 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_1_incomplete",
+      "message": "seed block 1 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_2_incomplete",
+      "message": "seed block 2 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_3_incomplete",
+      "message": "seed block 3 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_4_incomplete",
+      "message": "seed block 4 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_5_incomplete",
+      "message": "seed block 5 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_6_incomplete",
+      "message": "seed block 6 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_7_incomplete",
+      "message": "seed block 7 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_8_incomplete",
+      "message": "seed block 8 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_intrinsic_block_9_incomplete",
+      "message": "seed block 9 has too few intrinsic draws"
+    },
+    {
+      "code": "correct_official_backend_missing",
+      "message": "pool was not produced by the pinned official backend"
+    },
+    {
+      "code": "correct_adapter_identity_unproven",
+      "message": "raw-to-normalized adapter identity is not proven"
+    },
+    {
+      "code": "correct_checkpoint_replay_unproven",
+      "message": "checkpoint/restart replay is not proven"
+    },
+    {
+      "code": "wrong_intrinsic_scale_incomplete",
+      "message": "intrinsic draw target is incomplete"
+    },
+    {
+      "code": "wrong_tracked_scale_incomplete",
+      "message": "tracked-detection target is incomplete"
+    },
+    {
+      "code": "wrong_intrinsic_block_0_incomplete",
+      "message": "seed block 0 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_0_incomplete",
+      "message": "seed block 0 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_1_incomplete",
+      "message": "seed block 1 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_1_incomplete",
+      "message": "seed block 1 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_2_incomplete",
+      "message": "seed block 2 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_2_incomplete",
+      "message": "seed block 2 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_3_incomplete",
+      "message": "seed block 3 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_3_incomplete",
+      "message": "seed block 3 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_4_incomplete",
+      "message": "seed block 4 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_4_incomplete",
+      "message": "seed block 4 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_5_incomplete",
+      "message": "seed block 5 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_5_incomplete",
+      "message": "seed block 5 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_6_incomplete",
+      "message": "seed block 6 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_6_incomplete",
+      "message": "seed block 6 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_7_incomplete",
+      "message": "seed block 7 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_7_incomplete",
+      "message": "seed block 7 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_8_incomplete",
+      "message": "seed block 8 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_8_incomplete",
+      "message": "seed block 8 has too few tracked detections"
+    },
+    {
+      "code": "wrong_intrinsic_block_9_incomplete",
+      "message": "seed block 9 has too few intrinsic draws"
+    },
+    {
+      "code": "wrong_tracked_block_9_incomplete",
+      "message": "seed block 9 has too few tracked detections"
+    },
+    {
+      "code": "wrong_official_backend_missing",
+      "message": "pool was not produced by the pinned official backend"
+    },
+    {
+      "code": "wrong_adapter_identity_unproven",
+      "message": "raw-to-normalized adapter identity is not proven"
+    },
+    {
+      "code": "wrong_checkpoint_replay_unproven",
+      "message": "checkpoint/restart replay is not proven"
+    }
+  ],
+  "claim_decision": "SCREENING_ONLY",
+  "contract_sha256": "a6499e4b53d9ddaa68d3ed3d0f6fd742d3febd5add426c4ba3666f54af5a5d46",
+  "exact_replay_passed": true,
+  "experiment_id": "jx-o1-ossos-b-telescope-selection-v2",
+  "input_manifests": {
+    "correct": "18af235718ed39103d1bf68f668d13f39219ab6a8bea229698639e94955ca903",
+    "wrong": "ba2fbd72e3ae22af0e391388247ef9f04f8ff96d92fbb7f61918b692304227c0"
+  },
+  "invalid_reasons": [],
+  "milestone": "JX-O1_TELESCOPE_SELECTION_VALIDATION",
+  "nonclaims": [
+    "JX-O1 does not detect or exclude Planet X",
+    "JX-O1 does not estimate a source mass, orbit, distance, or sky direction",
+    "the analytic pilot is not an astronomical survey simulation",
+    "passing validates only the locked telescope-selection inference workflow"
+  ],
+  "pool_summary": {
+    "correct": {
+      "adapter_identity_passed": false,
+      "backend": "JX_ANALYTIC_SELECTION_PILOT_V2",
+      "checkpoint_replay_passed": false,
+      "intrinsic_draws": 100000,
+      "tracked_detections": 319
+    },
+    "wrong": {
+      "adapter_identity_passed": false,
+      "backend": "JX_ANALYTIC_SELECTION_PILOT_V2",
+      "checkpoint_replay_passed": false,
+      "intrinsic_draws": 100000,
+      "tracked_detections": 119
+    }
+  },
+  "replay_sha256": "b5d4eb28c5366ce16f51e2b01b2bf322be2315097a8e05bf168ec16471c57596",
+  "schema": "jx-survey-selection-result/v1",
+  "seed_block_stability": [
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 0,
+      "false_rejection_rate": 0.0585,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.703744062036924,
+      "zeta_sd": 1.915666647508956
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 1,
+      "false_rejection_rate": 0.046,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.683911170003865,
+      "zeta_sd": 1.9551483069757771
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 2,
+      "false_rejection_rate": 0.0565,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.716761787363513,
+      "zeta_sd": 1.9079137628606004
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 3,
+      "false_rejection_rate": 0.042,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.704258465296059,
+      "zeta_sd": 1.8898541792465222
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 4,
+      "false_rejection_rate": 0.051,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.66619265563526,
+      "zeta_sd": 1.937464979599577
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 5,
+      "false_rejection_rate": 0.0595,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.709809384319938,
+      "zeta_sd": 1.9892144660686626
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 6,
+      "false_rejection_rate": 0.056,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.691802106702674,
+      "zeta_sd": 1.9225937716041426
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 7,
+      "false_rejection_rate": 0.057,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.697400454034643,
+      "zeta_sd": 1.863911091652964
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 8,
+      "false_rejection_rate": 0.05,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.72340832609443,
+      "zeta_sd": 1.920341536931172
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 9,
+      "false_rejection_rate": 0.0485,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.676944347218098,
+      "zeta_sd": 1.946986829373827
+    }
+  ],
+  "seed_block_stability_passed": true,
+  "statistics": {
+    "bootstrap_reference_catalogs": 2000,
+    "calibration_passed": true,
+    "catalog_size": 20,
+    "correct_model_false_rejection_rate": 0.051,
+    "false_rejection_count": 102,
+    "gate_results": {
+      "correct_model_false_rejection_rate": true,
+      "wrong_model_rejection_power": true,
+      "zeta_mean": true,
+      "zeta_sd": true
+    },
+    "mock_catalogs": 2000,
+    "power_passed": true,
+    "wrong_model_rejection_count": 2000,
+    "wrong_model_rejection_power": 1.0,
+    "zeta_expected_mean": -8.685889638065035,
+    "zeta_expected_sd": 1.9422239675774466,
+    "zeta_mean": -8.676416440631616,
+    "zeta_sd": 1.9260039587807545
+  },
+  "verdict": "BLOCKED"
+}

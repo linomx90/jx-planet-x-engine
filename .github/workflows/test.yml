@@ -1,0 +1,40 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install engine with pinned optional backends
+        run: python -m pip install -e '.[rebound,independent]'
+      - name: Rebuild excluded deterministic population fixture
+        run: |
+          locked_manifest="$RUNNER_TEMP/population_manifest_v1.locked.json"
+          mv runs/de441_population_100k/population_manifest_v1.json "$locked_manifest"
+          python runs/de441_population_100k/generate_locked_population.py
+          cmp "$locked_manifest" runs/de441_population_100k/population_manifest_v1.json
+      - name: Run unit tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Verify locked JX-O1 contracts
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          from jxplanetx.survey_selection_v2 import load_survey_contract
+          for path in (
+              "runs/survey_selection_o1/contract_v1.json",
+              "runs/survey_selection_o1/contract_v2.json",
+              "runs/survey_selection_o1/contract_v3_exact_zeta.json",
+          ):
+              load_survey_contract(path)
+          PY
+      - name: Run numerical validation gates
+        run: PYTHONPATH=src python -m jxplanetx.cli validate --output validation.json

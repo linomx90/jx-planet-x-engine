@@ -1,0 +1,265 @@
+{
+  "blocked_reasons": [
+    {
+      "code": "correct_tracked_scale_incomplete",
+      "message": "tracked-detection target is incomplete"
+    },
+    {
+      "code": "correct_tracked_block_0_incomplete",
+      "message": "seed block 0 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_1_incomplete",
+      "message": "seed block 1 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_2_incomplete",
+      "message": "seed block 2 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_3_incomplete",
+      "message": "seed block 3 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_4_incomplete",
+      "message": "seed block 4 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_5_incomplete",
+      "message": "seed block 5 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_6_incomplete",
+      "message": "seed block 6 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_7_incomplete",
+      "message": "seed block 7 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_8_incomplete",
+      "message": "seed block 8 has too few tracked detections"
+    },
+    {
+      "code": "correct_tracked_block_9_incomplete",
+      "message": "seed block 9 has too few tracked detections"
+    },
+    {
+      "code": "correct_official_backend_missing",
+      "message": "pool was not produced by the pinned official backend"
+    },
+    {
+      "code": "correct_adapter_identity_unproven",
+      "message": "raw-to-normalized adapter identity is not proven"
+    },
+    {
+      "code": "correct_checkpoint_replay_unproven",
+      "message": "checkpoint/restart replay is not proven"
+    },
+    {
+      "code": "wrong_tracked_scale_incomplete",
+      "message": "tracked-detection target is incomplete"
+    },
+    {
+      "code": "wrong_tracked_block_0_incomplete",
+      "message": "seed block 0 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_1_incomplete",
+      "message": "seed block 1 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_2_incomplete",
+      "message": "seed block 2 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_3_incomplete",
+      "message": "seed block 3 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_4_incomplete",
+      "message": "seed block 4 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_5_incomplete",
+      "message": "seed block 5 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_6_incomplete",
+      "message": "seed block 6 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_7_incomplete",
+      "message": "seed block 7 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_8_incomplete",
+      "message": "seed block 8 has too few tracked detections"
+    },
+    {
+      "code": "wrong_tracked_block_9_incomplete",
+      "message": "seed block 9 has too few tracked detections"
+    },
+    {
+      "code": "wrong_official_backend_missing",
+      "message": "pool was not produced by the pinned official backend"
+    },
+    {
+      "code": "wrong_adapter_identity_unproven",
+      "message": "raw-to-normalized adapter identity is not proven"
+    },
+    {
+      "code": "wrong_checkpoint_replay_unproven",
+      "message": "checkpoint/restart replay is not proven"
+    }
+  ],
+  "claim_decision": "SCREENING_ONLY",
+  "contract_sha256": "30924213e039fd5ed0dacfe01ecb1166836d4ad63eaad38a439b903f40fb3333",
+  "exact_replay_passed": true,
+  "experiment_id": "jx-o1-ossos-b-telescope-selection-v1",
+  "input_manifests": {
+    "correct": "53395dc05386582e5d091053b7de3a4ac85bc9dd93c1007c2c9eda97bfd55bf8",
+    "wrong": "eed3abe0227dbdefdb4be8c645224b5775aaed8a22e2c2ed5dbb79a242c3aaf2"
+  },
+  "invalid_reasons": [],
+  "milestone": "JX-O1_TELESCOPE_SELECTION_VALIDATION",
+  "nonclaims": [
+    "JX-O1 does not detect or exclude Planet X",
+    "JX-O1 does not estimate a source mass, orbit, distance, or sky direction",
+    "the analytic pilot is not an astronomical survey simulation",
+    "passing validates only the locked telescope-selection inference workflow"
+  ],
+  "pool_summary": {
+    "correct": {
+      "adapter_identity_passed": false,
+      "backend": "JX_ANALYTIC_SELECTION_PILOT",
+      "checkpoint_replay_passed": false,
+      "intrinsic_draws": 100000,
+      "tracked_detections": 338
+    },
+    "wrong": {
+      "adapter_identity_passed": false,
+      "backend": "JX_ANALYTIC_SELECTION_PILOT",
+      "checkpoint_replay_passed": false,
+      "intrinsic_draws": 100000,
+      "tracked_detections": 145
+    }
+  },
+  "replay_sha256": "c88de74b2576eb122f2251897f29b98a0b872f4447ebeb6c8d2be7fdd706936c",
+  "schema": "jx-survey-selection-result/v1",
+  "seed_block_stability": [
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 0,
+      "false_rejection_rate": 0.052,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.685989668006531,
+      "zeta_sd": 1.9041850171322972
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 1,
+      "false_rejection_rate": 0.0515,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.677721959091937,
+      "zeta_sd": 1.9667917103018246
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 2,
+      "false_rejection_rate": 0.047,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.68485207171542,
+      "zeta_sd": 1.9112314163394284
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 3,
+      "false_rejection_rate": 0.051,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.710169636722268,
+      "zeta_sd": 1.973545117304401
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 4,
+      "false_rejection_rate": 0.0555,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.689882040628405,
+      "zeta_sd": 1.9183384708676972
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 5,
+      "false_rejection_rate": 0.0485,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.72094949992357,
+      "zeta_sd": 1.9392101190995852
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 6,
+      "false_rejection_rate": 0.058,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.70461568300344,
+      "zeta_sd": 1.9278685778512146
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 7,
+      "false_rejection_rate": 0.055,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.592929296141232,
+      "zeta_sd": 1.904105907997359
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 8,
+      "false_rejection_rate": 0.0615,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.673389630914835,
+      "zeta_sd": 1.9370946299686458
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 9,
+      "false_rejection_rate": 0.0445,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_mean": -8.679272238208195,
+      "zeta_sd": 1.9592103266580763
+    }
+  ],
+  "seed_block_stability_passed": true,
+  "statistics": {
+    "bootstrap_reference_catalogs": 2000,
+    "calibration_passed": true,
+    "catalog_size": 20,
+    "correct_model_false_rejection_rate": 0.049,
+    "false_rejection_count": 98,
+    "gate_results": {
+      "correct_model_false_rejection_rate": true,
+      "wrong_model_rejection_power": true,
+      "zeta_mean": true,
+      "zeta_sd": true
+    },
+    "mock_catalogs": 2000,
+    "power_passed": true,
+    "wrong_model_rejection_count": 2000,
+    "wrong_model_rejection_power": 1.0,
+    "zeta_expected_mean": -8.685889638065035,
+    "zeta_expected_sd": 1.9422239675774466,
+    "zeta_mean": -8.595388707446292,
+    "zeta_sd": 1.9306929781802495
+  },
+  "verdict": "BLOCKED"
+}
