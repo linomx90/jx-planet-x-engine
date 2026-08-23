@@ -33,6 +33,7 @@ jobs:
               "runs/survey_selection_o1/contract_v1.json",
               "runs/survey_selection_o1/contract_v2.json",
               "runs/survey_selection_o1/contract_v3_exact_zeta.json",
+              "runs/survey_selection_o1/contract_v4_independent.json",
           ):
               load_survey_contract(path)
           PY

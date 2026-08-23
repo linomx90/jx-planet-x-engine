@@ -2,10 +2,12 @@
 
 ## Outcome
 
-The locked JX-O1 workflow reached a corrective milestone verdict of `PASSED`.
-That verdict validates a reproducible telescope-selection calibration workflow
-on the existing official v2 pools. It is explicitly **not** an independent
-replication and **not** a Planet X detection or exclusion.
+The locked JX-O1 workflow reached an independent V4 verdict of `PASSED`. V4
+used fresh intrinsic populations, official-driver seeds, resampling streams,
+checkpoints, raw files, and registered detection pools. Its design was
+published and CI-validated before any V4 telescope outcome. This independently
+confirms the computational calibration workflow, but it is **not** a Planet X
+detection or exclusion.
 
 The audit trail is intentionally preserved:
 
@@ -16,8 +18,10 @@ The audit trail is intentionally preserved:
 | v2 analytic pilot | JX analytic approximation | `BLOCKED` | Calibration and power passed; official-backend gates correctly blocked acceptance. |
 | v2 official run | Pinned OSSOS F95 | `INVALID` | All physical and provenance gates passed, but one Monte Carlo leave-one-block-out zeta-SD estimate missed tolerance by 0.00157. |
 | v3 corrective replay | Same immutable v2 pools | `PASSED` | Replaced only the noisy zeta moment estimates with exact finite-pool formulas; thresholds and all other tests were unchanged. |
+| v4 independent confirmation | Fresh pinned OSSOS F95 pools | `PASSED` | Repeated the unchanged design with new random domains and pool hashes; every independence, calibration, power, adapter, checkpoint, stability, and replay gate passed. |
 
-V2 remains `INVALID`. V3 does not overwrite or retroactively reclassify it.
+V2 remains `INVALID`. V3 does not overwrite or retroactively reclassify it,
+and V4 supplies the independent confirmation that V3 could not provide.
 
 ## External simulator boundary
 
@@ -62,16 +66,26 @@ These are calibration distributions, not physical formation models.
 
 ## Official execution scale
 
-Ten deterministic seed blocks were run per model. Each official batch contains
-100,001 intrinsic objects. The non-round size is required because the pinned
+Ten deterministic seed blocks were run per model in each official execution.
+Each batch contains 100,001 intrinsic objects. The non-round size is required because the pinned
 `ReadModelFromFile` EOF path fails when its final internal 100-object chunk is
 exactly full.
+
+The original V2 scale was:
 
 | Model | Intrinsic draws | Tracked detections | Minimum per block |
 |---|---:|---:|---:|
 | Correct | 9,700,097 | 206 | 20 |
 | Wrong | 18,900,189 | 206 | 20 |
 | **Total** | **28,600,286** | **412** | — |
+
+The fresh V4 independent scale was:
+
+| Model | Intrinsic draws | Tracked detections | Minimum per block |
+|---|---:|---:|---:|
+| Correct | 10,800,108 | 212 | 20 |
+| Wrong | 22,700,227 | 205 | 20 |
+| **Total** | **33,500,335** | **417** | — |
 
 Every raw tracked file was reparsed during finalization. Its semantic hash had
 to equal the normalized CSV exactly. All checkpoint artifacts, driver inputs,
@@ -125,18 +139,19 @@ The unchanged acceptance gates were:
 - the same verdict after excluding each of ten seed blocks;
 - required intrinsic and tracked sample scales in every block.
 
-The corrective v3 result was:
+The independent V4 result was:
 
 | Metric | Result | Gate |
 |---|---:|---:|
-| Correct-model false rejection | 5.45% | 3.5%–6.5% |
+| Correct-model false rejection | 4.65% | 3.5%–6.5% |
 | Wrong-model rejection power | 100% | ≥80% |
-| Exact zeta mean | −8.6712851 | within 0.1 of −8.6858896 |
-| Exact zeta SD | 1.9208218 | within 0.1 of 1.9422240 |
+| Exact zeta mean | −8.6716982 | within 0.1 of −8.6858896 |
+| Exact zeta SD | 1.9213388 | within 0.1 of 1.9422240 |
 | Leave-one-block-out verdicts | 10/10 stable | 10/10 |
 | Adapter identity | passed for both arms | required |
 | Checkpoint replay | passed for both arms | required |
 | Exact replay | passed | required |
+| Contract and pool independence | passed | required by V4 |
 
 ## Reproduction
 
@@ -160,18 +175,29 @@ PYTHONPATH=src python3 runs/survey_selection_o1/run_corrective_replay_v3.py \
   --correct-manifest runs/survey_selection_o1/final_execution_v2/correct_pool.json \
   --wrong-manifest runs/survey_selection_o1/final_execution_v2/wrong_pool.json \
   --output runs/survey_selection_o1/corrective_result_v3.json
+
+PYTHONPATH=src python3 \
+  runs/survey_selection_o1/run_independent_confirmation_v4.py preflight \
+  --contract runs/survey_selection_o1/contract_v4_independent.json \
+  --simulator-root /path/to/OSSOS-SurveySimulator
+
+PYTHONPATH=src python3 \
+  runs/survey_selection_o1/run_independent_confirmation_v4.py run \
+  --contract runs/survey_selection_o1/contract_v4_independent.json \
+  --simulator-root /path/to/OSSOS-SurveySimulator \
+  --run-dir runs/survey_selection_o1/final_execution_v4_independent \
+  --output runs/survey_selection_o1/final_result_v4_independent.json
 ```
 
-The multi-gigabyte execution archive is intentionally excluded from the code
-release. Contracts, compact verdicts, qualification records, per-block counts,
-and cryptographic bindings are retained.
+The multi-gigabyte V2 and V4 execution archives are intentionally excluded
+from the code release. Contracts, the public V4 preregistration, compact
+verdicts, qualification records, per-block counts, and cryptographic bindings
+are retained.
 
 ## Scientific boundary
 
-A `PASSED` JX-O1 corrective verdict says the locked code can generate a
-reproducible calibration population, forward-bias it through a pinned real
-telescope-selection function, recover nominal calibration, and reject one
-deliberately strong wrong population. It does not establish sensitivity to a
-realistic Planet X model, describe the observed Solar System, or provide a
-source mass, orbit, distance, or sky location.
-
+A `PASSED` independent V4 verdict says fresh random populations reproduce the
+locked workflow's nominal calibration and rejection of one deliberately strong
+wrong population through the pinned telescope-selection function. It does not
+establish sensitivity to a realistic Planet X model, describe the observed
+Solar System, or provide a source mass, orbit, distance, or sky location.

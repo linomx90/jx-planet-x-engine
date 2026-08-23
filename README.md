@@ -107,7 +107,9 @@ See [the encounter-tail pilot guide](docs/ENCOUNTER_TAIL_PILOT.md).
 The JX-O1 survey-selection workflow generates paired calibration populations,
 executes a separately installed and hash-locked official OSSOS SurveySimulator,
 normalizes its real 14-field tracked output, and evaluates calibration, power,
-adapter, replay, scale, and seed-stability gates. See
+adapter, replay, scale, independence, and seed-stability gates. A public
+preregistration and fresh official V4 execution now provide independent
+computational confirmation. See
 [the survey-selection validation report](docs/SURVEY_SELECTION_VALIDATION.md).
 
 Some CLI subcommands reproduce project-specific DE441, benchmark, or IAS15
@@ -158,18 +160,19 @@ the [full independent replication report](runs/independent_dop853_10k/README.md)
 
 ## JX-O1 telescope-selection result
 
-The official OSSOS run processed 28,600,286 intrinsic objects across two
-paired ten-block calibration arms and produced 206 tracked detections per arm.
-The frozen v2 result remains `INVALID` because one noisy leave-one-block-out
-Monte Carlo zeta-SD estimate missed tolerance by 0.00157, even though all
-physical, power, adapter, checkpoint, and full-sample calibration gates passed.
+V4 independently repeated the locked calibration with fresh intrinsic
+populations, official-driver seeds, resampling streams, raw outputs, and pool
+hashes. It processed 33,500,335 intrinsic objects and produced 212 correct-model
+and 205 deliberately wrong-model tracked detections. Every unchanged gate
+passed: 4.65% false rejection, 100% wrong-model power, exact finite-pool zeta
+moments, exact replay, raw-adapter identity, checkpoint replay, and stable
+verdicts for all ten leave-one-block-out evaluations.
 
-A separately versioned corrective replay replaced only those Monte Carlo moment
-estimates with their exact finite-pool formulas. It changed no threshold or
-telescope data and passed: 5.45% false rejection, 100% wrong-model power, exact
-replay, exact adapter identity, and stable verdicts for all ten excluded seed
-blocks. This is a method-validation milestone on the existing v2 pools, not an
-independent confirmation and not a Planet X detection or exclusion. See the
+The design was published and CI-validated before V4 execution. The original V2
+result remains `INVALID`, and the V3 corrective replay remains a non-independent
+`PASSED` record. V4 is independent computational confirmation of the locked
+telescope-selection calibration workflow—not a Planet X detection, exclusion,
+or validation of a physical distant-source model. See the
 [complete JX-O1 report](runs/survey_selection_o1/README.md).
 
 ## Package map
@@ -190,6 +193,7 @@ src/jxplanetx/
   survey_selection.py      frozen v1 survey-selection audit implementation
   survey_selection_v2.py   corrected official 14-field OSSOS adapter
   survey_selection_v3.py   exact-zeta corrective replay evaluator
+  survey_selection_v4.py   fresh-pool independent confirmation evaluator
   production_benchmark.py locked benchmark verification
   gates.py                 numerical validation gates
   claims.py                scientific claim-control state machine

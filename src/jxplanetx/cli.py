@@ -34,6 +34,10 @@ from .survey_selection_v2 import (
     write_ossos_model_file,
 )
 from .survey_selection_v3 import finalize_survey_selection as finalize_survey_selection_v3
+from .survey_selection_v4 import (
+    EXPERIMENT_ID as SURVEY_SELECTION_V4_EXPERIMENT_ID,
+    finalize_survey_selection as finalize_survey_selection_v4,
+)
 
 
 def validate(args: argparse.Namespace) -> int:
@@ -250,13 +254,18 @@ def normalize_ossos_tracked_cli(args: argparse.Namespace) -> int:
     return 0
 
 
+def _survey_selection_finalizer(contract: dict):
+    experiment_id = contract["experiment_id"]
+    if experiment_id == SURVEY_SELECTION_V4_EXPERIMENT_ID:
+        return finalize_survey_selection_v4
+    if experiment_id.endswith("v3-exact-zeta-corrective-replay"):
+        return finalize_survey_selection_v3
+    return finalize_survey_selection_v2
+
+
 def finalize_survey_selection_cli(args: argparse.Namespace) -> int:
     contract = load_survey_contract(args.contract)
-    finalizer = (
-        finalize_survey_selection_v3
-        if contract["experiment_id"].endswith("v3-exact-zeta-corrective-replay")
-        else finalize_survey_selection_v2
-    )
+    finalizer = _survey_selection_finalizer(contract)
     result = finalizer(
         args.contract,
         args.correct_manifest,
