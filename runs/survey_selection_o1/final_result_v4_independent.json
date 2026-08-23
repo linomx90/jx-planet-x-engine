@@ -1,0 +1,210 @@
+{
+  "blocked_reasons": [],
+  "claim_decision": "SCREENING_ONLY",
+  "contract_sha256": "eca324ae2448d4e704173640cfa459a3c38c329ce2eec8b61d7e94e147a15e1c",
+  "evidence_relationship": "INDEPENDENT_CONFIRMATION_WITH_FRESH_OFFICIAL_POOLS",
+  "exact_replay_passed": true,
+  "experiment_id": "jx-o1-ossos-b-telescope-selection-v4-independent-confirmation",
+  "independence_audit": {
+    "contract": {
+      "all_passed": true,
+      "baseline_v2_result_sha256": "9f0d86d6365b776a64333f55a431c143d36793f489f9a9297c3bbaa054e5c9bc",
+      "baseline_v3_corrective_result_sha256": "2256fd5899a1d869a66241754d65eb4ba01f28ba773188b19f7a4e4d96bc5879",
+      "checks": {
+        "checkpoint_restart_required": true,
+        "exact_replay_required": true,
+        "experiment_id_is_v4": true,
+        "official_backend_is_v4": true,
+        "population_seed_differs_from_v2": true,
+        "population_seed_is_predeclared_v4": true,
+        "resampling_seed_differs_from_v2": true,
+        "resampling_seed_is_predeclared_v4": true
+      },
+      "schema": "jx-survey-selection-independence-audit/v4"
+    },
+    "pools": {
+      "all_passed": true,
+      "checks": {
+        "correct_and_wrong_manifests_are_distinct": true,
+        "correct_and_wrong_semantic_pools_are_distinct": true,
+        "correct_manifest_differs_from_v2": true,
+        "correct_semantic_pool_differs_from_v2": true,
+        "wrong_manifest_differs_from_v2": true,
+        "wrong_semantic_pool_differs_from_v2": true
+      },
+      "pools": {
+        "correct": {
+          "detection_semantic_sha256": "65c34662bbe8f1d6e1f5434cc2fb5865cf33be10745b3ea3ed163a9bdabb3a9b",
+          "manifest_sha256": "1ebc7971b13e0b8905affe7f9aa16e413f4cc6f959d02f7bc4af75d8d23d9789",
+          "v2_detection_semantic_sha256": "e1676f5fe4a9d5f67c4d4c5e24a9e96db2541b5593a14d26f8f0f3cdde20982b",
+          "v2_manifest_sha256": "b2b99a91ca52fe819b8e2a5d0a860488d0b650664cbe5abb5a6d0b773b3f8297"
+        },
+        "wrong": {
+          "detection_semantic_sha256": "c16d3c544110e97b67e418a50434d1b03374d445494cbfc8775869f9356a145e",
+          "manifest_sha256": "99500e511d68838929b8e9fa30b31fda7c1ecef722290a0d41f07aa3eb398f32",
+          "v2_detection_semantic_sha256": "024bc871e3347147d90f0a9fbaf9f573fcec126b7ee586415f21827349228895",
+          "v2_manifest_sha256": "85c55eca72c8aaac0292c1f25d6ed3aed1b1d03efa194e35cde023396b8716fd"
+        }
+      },
+      "schema": "jx-survey-selection-pool-independence-audit/v4"
+    }
+  },
+  "input_manifests": {
+    "correct": "1ebc7971b13e0b8905affe7f9aa16e413f4cc6f959d02f7bc4af75d8d23d9789",
+    "wrong": "99500e511d68838929b8e9fa30b31fda7c1ecef722290a0d41f07aa3eb398f32"
+  },
+  "invalid_reasons": [],
+  "milestone": "JX-O1_TELESCOPE_SELECTION_VALIDATION",
+  "nonclaims": [
+    "JX-O1 does not detect or exclude Planet X",
+    "JX-O1 does not estimate a source mass, orbit, distance, or sky direction",
+    "the analytic pilot is not an astronomical survey simulation",
+    "passing validates only the locked telescope-selection inference workflow"
+  ],
+  "pool_summary": {
+    "correct": {
+      "adapter_identity_passed": true,
+      "backend": "OSSOS_SURVEY_SIMULATOR_F95_86CE093_V4_INDEPENDENT_14_FIELD",
+      "checkpoint_replay_passed": true,
+      "intrinsic_draws": 10800108,
+      "tracked_detections": 212
+    },
+    "wrong": {
+      "adapter_identity_passed": true,
+      "backend": "OSSOS_SURVEY_SIMULATOR_F95_86CE093_V4_INDEPENDENT_14_FIELD",
+      "checkpoint_replay_passed": true,
+      "intrinsic_draws": 22700227,
+      "tracked_detections": 205
+    }
+  },
+  "replay_sha256": "6d45e5ac66ed606aae416a16cf100eecaa866fa8048db04f8497b07f1c4c2a25",
+  "schema": "jx-survey-selection-result/v1",
+  "seed_block_stability": [
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 0,
+      "false_rejection_rate": 0.0435,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.670220809935174,
+      "zeta_sd": 1.919501183390975
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 1,
+      "false_rejection_rate": 0.0455,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.670138825855156,
+      "zeta_sd": 1.9194001016807698
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 2,
+      "false_rejection_rate": 0.0505,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.670220809935174,
+      "zeta_sd": 1.919501183390975
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 3,
+      "false_rejection_rate": 0.05,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.669887643939376,
+      "zeta_sd": 1.9190909697232932
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 4,
+      "false_rejection_rate": 0.0445,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.669972256683561,
+      "zeta_sd": 1.9191950094463208
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 5,
+      "false_rejection_rate": 0.053,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.67005597933157,
+      "zeta_sd": 1.919298048516972
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 6,
+      "false_rejection_rate": 0.052,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.670220809935174,
+      "zeta_sd": 1.919501183390975
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 7,
+      "false_rejection_rate": 0.0475,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.670138825855156,
+      "zeta_sd": 1.9194001016807698
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 8,
+      "false_rejection_rate": 0.0375,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.670220809935174,
+      "zeta_sd": 1.919501183390975
+    },
+    {
+      "classification": "PASSED",
+      "excluded_seed_block": 9,
+      "false_rejection_rate": 0.057,
+      "stable": true,
+      "wrong_model_rejection_power": 1.0,
+      "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+      "zeta_mean": -8.670138825855156,
+      "zeta_sd": 1.9194001016807698
+    }
+  ],
+  "seed_block_stability_passed": true,
+  "statistics": {
+    "bootstrap_reference_catalogs": 2000,
+    "calibration_passed": true,
+    "catalog_size": 20,
+    "correct_model_false_rejection_rate": 0.0465,
+    "false_rejection_count": 93,
+    "gate_results": {
+      "correct_model_false_rejection_rate": true,
+      "wrong_model_rejection_power": true,
+      "zeta_mean": true,
+      "zeta_sd": true
+    },
+    "mock_catalogs": 2000,
+    "power_passed": true,
+    "wrong_model_rejection_count": 2000,
+    "wrong_model_rejection_power": 1.0,
+    "zeta_estimator": "exact_finite_empirical_pool_with_replacement",
+    "zeta_expected_mean": -8.685889638065035,
+    "zeta_expected_sd": 1.9422239675774466,
+    "zeta_mean": -8.671698162468536,
+    "zeta_monte_carlo_diagnostic_mean": -8.680427403259149,
+    "zeta_monte_carlo_diagnostic_sd": 1.8611486159895632,
+    "zeta_sd": 1.9213387644411029
+  },
+  "verdict": "PASSED"
+}
