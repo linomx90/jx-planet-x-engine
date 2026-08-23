@@ -1,0 +1,79 @@
+name: immutable JX-O2 v1
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  immutable-jx-o2-v1:
+    name: Verify immutable registered JX-O2 v1 artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out trusted pull-request base only
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 1
+      - name: Compare registered paths with pull-request head tree
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          if [[ ! "${BASE_SHA}" =~ ^[0-9a-f]{40}$ ]] ||
+             [[ ! "${EXPECTED_HEAD_SHA}" =~ ^[0-9a-f]{40}$ ]] ||
+             [[ ! "${PR_NUMBER}" =~ ^[0-9]+$ ]]; then
+            echo "Invalid pull-request identity supplied by the event." >&2
+            exit 1
+          fi
+          if [[ "$(git rev-parse HEAD)" != "${BASE_SHA}" ]]; then
+            echo "Trusted checkout does not match the event base SHA." >&2
+            exit 1
+          fi
+
+          # Fetch the untrusted head only as Git objects. Never check it out or
+          # execute a script, action, build, test, or hook from it.
+          git fetch --no-tags --depth=1 --filter=blob:none origin \
+            "+refs/pull/${PR_NUMBER}/head:refs/remotes/origin/jx-o2-pr-head"
+          fetched_head_sha="$(
+            git rev-parse --verify \
+              "refs/remotes/origin/jx-o2-pr-head^{commit}"
+          )"
+          if [[ "${fetched_head_sha}" != "${EXPECTED_HEAD_SHA}" ]]; then
+            echo "Fetched pull-request head does not match the event head SHA." >&2
+            exit 1
+          fi
+
+          registered_paths=(
+            .github/workflows/jx-o2-immutability-v1.yml
+            runs/planet_x_survey_model_comparison_v1
+            audits/jx_o2_g0_input_audit_v1
+            audits/jx_o2_g0_candidate_9118_retirement_v1
+            audits/jx_o2_g0_public_reconstruction_design_v1
+            tests/test_planet_x_survey_model_design.py
+            tests/test_jx_o2_g0_audit.py
+            tests/test_jx_o2_candidate_9118_retirement.py
+            tests/test_jx_o2_public_reconstruction_design.py
+          )
+          for registered_path in "${registered_paths[@]}"; do
+            if ! git cat-file -e \
+              "${BASE_SHA}:${registered_path}" 2>/dev/null; then
+              echo "Registered immutable path missing from trusted base: ${registered_path}" >&2
+              exit 1
+            fi
+            if ! git diff --quiet \
+              --no-ext-diff \
+              --no-textconv \
+              --no-renames \
+              --ignore-submodules=none \
+              "${BASE_SHA}" \
+              "${EXPECTED_HEAD_SHA}" \
+              -- "${registered_path}"; then
+              echo "Immutable registered v1 path changed: ${registered_path}" >&2
+              exit 1
+            fi
+          done

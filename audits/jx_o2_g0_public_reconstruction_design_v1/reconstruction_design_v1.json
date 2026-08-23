@@ -1,0 +1,392 @@
+{
+  "schema": "jx-o2-g0-public-reconstruction-design/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_id": "jx-o2-g0-public-reconstruction-design-v1",
+  "milestone": "JX_O2_G0_PUBLIC_MODEL_RECONSTRUCTION_DESIGN",
+  "artifact_class": "DESIGN_ONLY_G0_REMEDIATION_PROTOCOL",
+  "registration_status": "REGISTERED_BEFORE_ANY_PUBLIC_RECONSTRUCTION_EXECUTION_OR_OUTPUT",
+  "base_repository_commit": "bffeeae889f6403fe087ebe0e6d6f3f08efe4e5c",
+  "design_state": "DESIGN_REGISTERED_NOT_EXECUTABLE",
+  "audit_status": "BLOCKED",
+  "g0_complete": false,
+  "eligible_for_g1": false,
+  "execution_authorized": false,
+  "observed_execution_authorized": false,
+  "gpu_run_authorized": false,
+  "outcomes_generated": false,
+  "outcomes_generated_scope": "NO_JX_O2_OR_PUBLIC_RECONSTRUCTION_OUTPUT_WAS_GENERATED_BY_THIS_ARTIFACT",
+  "observed_jx_o2_score_computed": false,
+  "claim_ceiling": "PUBLIC_RECONSTRUCTION_DESIGN_ONLY",
+  "scientific_evidence_role": "PROTOCOL_AND_SOURCE_CONSTRAINTS_NOT_OUTCOME_EVIDENCE",
+  "candidate_9118_retirement_binding": {
+    "resolution_id": "jx-o2-g0-candidate-9118-retirement-v1",
+    "registration_sha256": "037c22ea0d1a9cb4c86eadc9056b8e1e605a7a5790cba60871daaa75aad1bbc5",
+    "use": "HISTORICAL_REFERENCE_ONLY",
+    "eligible_for_jx_o2_use": false
+  },
+  "retired_candidate_nonuse_policy": {
+    "governing_binding_is_historical_reference_only": true,
+    "bound_retired_candidate_may_supply_angles_phase_state_weights_or_prior_influence": false,
+    "partial_parameter_reuse_from_bound_retired_candidate_allowed": false,
+    "numeric_or_alias_reencoding_changes_nonuse_policy": false
+  },
+  "bound_prior_artifacts": {
+    "jx_o2_design_registration": {
+      "path": "../../runs/planet_x_survey_model_comparison_v1/registration_design_v1.json",
+      "sha256": "d2978c56c492285d7e9f5cef6c9a8e4bdb927dca7c7a08699b4b45d1e8b2aa01"
+    },
+    "jx_o2_design_contract": {
+      "path": "../../runs/planet_x_survey_model_comparison_v1/design_contract_v1.json",
+      "sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971"
+    },
+    "jx_o2_source_model_manifest": {
+      "path": "../../runs/planet_x_survey_model_comparison_v1/source_models_manifest_v1.json",
+      "sha256": "d723c2dede9dee4bd490751ca4b5ad334397ecf8e913094039ddb8d624b6ac73"
+    },
+    "g0_registration": {
+      "path": "../jx_o2_g0_input_audit_v1/registration_g0_v1.json",
+      "sha256": "21634c974ffdff0f59b1f7b33c80bdabdfe9fc337f3476bf6f20be3ede00bd03"
+    },
+    "g0_audit": {
+      "path": "../jx_o2_g0_input_audit_v1/g0_audit_v1.json",
+      "sha256": "5f7a5f9cef4f6bd73f7c36235e610d96c8475bd646bf5807aa591c58fbf002b0"
+    },
+    "g0_source_model_inventory": {
+      "path": "../jx_o2_g0_input_audit_v1/source_model_inventory_v1.json",
+      "sha256": "0ac5ef9bc1fbf84313a9ee5a8650a3685cba3d2d06eea1d29a547c7eda59da9f"
+    }
+  },
+  "linked_literature_inventory": {
+    "path": "literature_prior_grid_v1.json",
+    "sha256": "b6fe87043937764976b26473b49004eecfefb2882178f5f41ccb98424534068c"
+  },
+  "target_exact_replication": {
+    "status": "BLOCKED_SOURCE_ARTIFACTS_NOT_RECOVERED",
+    "exact_replication_possible": false,
+    "author_checkpoint_recovered": false,
+    "complete_compact_body_state_recovered": false,
+    "original_seeds_recovered": false,
+    "modified_code_and_decks_recovered": false,
+    "machine_readable_trajectory_or_footprint_outputs_recovered": false,
+    "eligible_as_jx_o2_matched_pair": false,
+    "published_comparator_uses_same_integrator_and_cadence": false,
+    "summary_statistic_agreement_may_be_called_exact_replication": false,
+    "minimum_recovery_condition": "Authoritative bytes and semantic manifests must establish the complete checkpoint, full state, code, deck, seed, force, cadence, output, license, and replay lineage."
+  },
+  "independent_public_analogue": {
+    "status": "DESIGN_ONLY_NOT_INSTANTIATED",
+    "may_be_called_original_cluster_checkpoint": false,
+    "may_be_called_reproduction_of_published_run": false,
+    "may_become_a_new_registered_model_family_after_all_gates": true,
+    "required_label": "INDEPENDENT_PUBLIC_MODEL_FAMILY",
+    "required_claim_boundary": "A future result may compare only the newly specified model families within their locked assumptions."
+  },
+  "checkpoint_policy": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "common_checkpoint_hash_required_within_each_paired_realization": true,
+    "prelocked_ensemble_manifest_required_if_multiple_cluster_histories_are_modeled": true,
+    "required_checkpoint_fields": [
+      "PARTICLE_IDS_ORDER_AND_WEIGHTS",
+      "PARTICLE_SIX_DIMENSIONAL_STATES",
+      "SUN_AND_KNOWN_BODY_STATES",
+      "EPOCH_TIME_STANDARD_FRAME_ORIGIN_AND_UNITS",
+      "SOURCE_SELECTION_AND_EXCLUSION_RULES",
+      "GENERATOR_SOURCE_BUILD_AND_DEPENDENCY_HASHES",
+      "RNG_AND_RANDOM_STREAM_LINEAGE",
+      "BYTE_COUNT_SHA256_LICENSE_AND_SEMANTIC_MANIFEST",
+      "PUBLIC_ARCHIVE_DOI_AND_SHARD_MANIFEST"
+    ],
+    "resolution_lanes": [
+      {
+        "lane_id": "AUTHOR_EXACT",
+        "status": "NOT_ACQUIRED",
+        "eligible_to_claim_exact_replication_after_byte_REPLAY": true,
+        "eligible_to_satisfy_checkpoint_gate_after_independent_audit": true
+      },
+      {
+        "lane_id": "OPEN_REGENERATION",
+        "status": "NOT_SPECIFIED",
+        "required_label": "CLUSTER2_LIKE_NEW_MODEL",
+        "eligible_to_claim_exact_replication": false,
+        "eligible_to_satisfy_checkpoint_gate_after_full_validation": true,
+        "cluster_history_policy": "Use a prelocked ensemble of public stochastic histories rather than selecting one favorable encounter after outcomes are known."
+      },
+      {
+        "lane_id": "ANALYTIC_OR_FIGURE_SURROGATE",
+        "status": "NOT_SPECIFIED",
+        "required_label": "ENGINEERING_SURROGATE_ONLY",
+        "eligible_to_claim_exact_replication": false,
+        "eligible_to_satisfy_checkpoint_gate": false,
+        "eligible_as_observational_evidence": false,
+        "limitation": "Published densities and projected figures do not preserve velocities, particle identity, or six-dimensional correlations."
+      }
+    ],
+    "checkpoint_generation_authorized": false
+  },
+  "compact_body_emplacement_policy": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "published_parent_checkpoint_generated_without_additional_compact_body": true,
+    "emplacement_time_and_complete_state_must_be_locked_before_outputs": true,
+    "same_emplacement_operator_required_for_every_m1_member": true,
+    "post_checkpoint_lane_pairing_rule": "M0_AND_M1_SHARE_IDENTICAL_PARENT_CHECKPOINT_BYTES_WITHIN_EACH_REALIZATION",
+    "full_history_lane_pairing_rule": "M0_AND_M1_SHARE_PRIMORDIAL_DRAWS_AND_HISTORY_RULES_BUT_NOT_AN_ALREADY_EVOLVED_CHECKPOINT",
+    "post_checkpoint_insertion_estimand": "EFFECT_OF_A_LOCKED_COMPACT_BODY_INTERVENTION_AFTER_THE_PARENT_CHECKPOINT",
+    "post_checkpoint_insertion_may_represent_self_consistent_primordial_formation_and_survival": false,
+    "full_history_alternative_requires_separate_preregistered_primordial_m0_m1_initial_conditions": true,
+    "required_fields": [
+      "INSERTION_OR_EXISTENCE_START_TIME",
+      "COMPLETE_SIX_DIMENSIONAL_STATE_AND_MASS",
+      "EPOCH_TIME_STANDARD_FRAME_ORIGIN_AND_UNITS",
+      "STATE_CONVERSION_AND_INSERTION_ALGORITHM",
+      "ENERGY_MOMENTUM_AND_TRANSIENT_HANDLING",
+      "CLAIM_BOUNDARY_FOR_POST_CHECKPOINT_OR_FULL_HISTORY_ESTIMAND"
+    ],
+    "emplacement_realization_authorized": false
+  },
+  "angular_state_policy": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "required_fields_before_any_model_output": [
+      "ASCENDING_NODE",
+      "ARGUMENT_OR_LONGITUDE_OF_PERIHELION_WITH_CONVERSION_RULE",
+      "MEAN_OR_TRUE_ANOMALY_WITH_CONVERSION_RULE",
+      "EPOCH_AND_TIME_STANDARD",
+      "REFERENCE_FRAME_AND_EQUINOX",
+      "ORIGIN_AND_UNITS",
+      "GRID_OR_PRIOR_WEIGHTS"
+    ],
+    "missing_values_default_to_zero": false,
+    "single_favorable_imputation_allowed": false,
+    "post_outcome_angle_selection_allowed": false,
+    "adaptive_angle_grid_expansion_allowed": false,
+    "allowed_later_resolution_methods": [
+      "AUTHOR_SUPPLIED_FULL_STATE_WITH_HASHED_METADATA",
+      "FINITE_WEIGHTED_NUISANCE_GRID_LOCKED_BEFORE_OUTPUTS",
+      "INDEPENDENTLY_JUSTIFIED_PRIOR_SAMPLE_LOCKED_BEFORE_OUTPUTS",
+      "VALIDATED_SYMMETRY_REDUCTION_LOCKED_BEFORE_OUTPUTS"
+    ],
+    "same_angle_rule_required_at_every_physical_grid_point": true,
+    "maximization_over_angles_repeated_in_every_null_replicate": true,
+    "future_angle_state_weight_source_provenance_required": true,
+    "provenance_must_bind_source_artifact_and_transformation_hash": true,
+    "retired_candidate_or_derivative_provenance_allowed": false,
+    "separate_2021_zero_phase_convention_inherited_as_2024_fact": false,
+    "rotational_symmetry_assumed_with_tides_stars_and_survey_footprint": false,
+    "observation_conditioned_angle_catalog_status": "OPTION_REQUIRING_SEPARATE_EXPOSURE_AND_CORRELATION_AUDIT"
+  },
+  "seed_policy": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "original_author_seeds_status": "NOT_RECOVERED_IN_AUDITED_PUBLIC_SOURCES",
+    "new_seed_derivation_formula": "SHA256(execution_contract_hash || post_registration_public_randomness_beacon || counter)",
+    "new_seeds_may_be_called_recovered_author_seeds": false,
+    "seed_shopping_allowed": false,
+    "outcome_dependent_restarts_allowed": false,
+    "caller_supplied_seed_override_allowed": false,
+    "common_random_numbers_required_for_matched_arms": true,
+    "fields_to_lock_later": [
+      "CANONICAL_BYTE_ENCODING",
+      "FUTURE_BEACON_SOURCE_EVENT_ROUND_AND_VALUE",
+      "COUNTER_ALLOCATION_AND_STREAM_NAMESPACE",
+      "DIGEST_TO_SEED_CONVERSION_AND_ENDIANNESS",
+      "RNG_ALGORITHM_IMPLEMENTATION_AND_VERSION",
+      "PARTICLE_STAR_NUISANCE_AND_SURVEY_STREAM_MAPPING",
+      "FAILED_AND_RETRIED_STREAM_RECORDING_RULE"
+    ],
+    "seed_realization_authorized": false
+  },
+  "paired_model_invariants": {
+    "same_checkpoint_bytes_within_each_paired_realization": true,
+    "same_prelocked_cluster_history_ensemble_and_weights_across_families": true,
+    "same_particle_ids_order_and_weights": true,
+    "same_known_body_initial_states": true,
+    "same_non_compact_body_forces": true,
+    "same_stellar_and_tidal_history": true,
+    "same_nuisance_and_survey_random_streams": true,
+    "same_integrator_tolerances_cadence_and_loss_rules": true,
+    "same_analysis_and_absolute_adequacy_rules": true,
+    "only_registered_additional_compact_body_may_differ": true,
+    "published_2024_comparator_is_a_valid_jx_o2_matched_pair": false,
+    "published_2026_cluster_free_rows_are_a_valid_jx_o2_m0": false
+  },
+  "literature_grid_policy": {
+    "nine_physical_input_rows_recorded": true,
+    "status": "LITERATURE_SEED_GRID_NOT_EXECUTABLE",
+    "probability_weights_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "angular_expansion_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "selection_lineage_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "published_outputs_may_influence_future_weights_or_pruning": false,
+    "equal_weighting_inferred_from_table": false,
+    "adaptive_pruning_after_outputs": "INVALID"
+  },
+  "g0_disposition": {
+    "source_blocker_id": "G0-B06",
+    "source_blocker_category": "MATCHED_PHYSICAL_MODELS",
+    "source_blocker_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "this_design_resolves_source_blocker": false,
+    "g0_audit_status": "BLOCKED",
+    "g0_complete": false,
+    "eligible_for_g1": false
+  },
+  "policy_precedence": {
+    "effective_permission_rule": "STATE_CHANGING_ACTIONS_REQUIRE_ALL_MAPPED_PERMISSIONS_TRUE_AND_ANY_MISSING_MAPPING_DENIES",
+    "canonical_permission_ontology": "reconstruction_design_v1.json#/permission_ontology",
+    "this_artifact_may_expand_prior_permissions": false,
+    "static_drafting_is_not_execution_contract_publication_or_activation": true,
+    "future_external_contact_requires_case_specific_user_authorization": true
+  },
+  "permission_ontology": {
+    "missing_bound_permission_action": "DENY",
+    "unmapped_alias_action": "DENY",
+    "read_only_design_work_scope": [
+      "PUBLIC_SOURCE_ACQUISITION",
+      "DRAFT_AUTHOR_CONTACT_WITHOUT_SENDING",
+      "STATIC_PROTOCOL_DRAFTING",
+      "NONEXECUTING_INTEGRITY_TESTS"
+    ],
+    "state_changing_effective_permissions": [
+      {
+        "canonical_action": "SEND_EXTERNAL_AUTHOR_CONTACT",
+        "bound_permission_keys": [
+          "contact_data_and_model_maintainers",
+          "send_external_author_contact"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "GENERATE_OR_SELECT_CHECKPOINT",
+        "bound_permission_keys": [
+          "generate_or_select_checkpoint"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "REALIZE_ANGLE_GRID_OR_PRIOR",
+        "bound_permission_keys": [
+          "realize_angle_grid_or_prior"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "REALIZE_COMPACT_BODY_EMPLACEMENT",
+        "bound_permission_keys": [
+          "realize_compact_body_emplacement"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "REALIZE_RANDOM_SEEDS",
+        "bound_permission_keys": [
+          "realize_random_seeds"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "RUN_DYNAMICS_OR_SYNTHETIC_CALIBRATION",
+        "bound_permission_keys": [
+          "run_dynamics",
+          "run_synthetic_calibration"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "RUN_OBSERVED_MODEL_COMPARISON_OR_UNBLIND",
+        "bound_permission_keys": [
+          "compute_jx_o2_observed_score",
+          "run_observed_model_comparison",
+          "access_or_unblind_untouched_holdout",
+          "access_or_unblind_untouched_holdout_outcomes"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "START_LARGE_GPU_JOB",
+        "bound_permission_keys": [
+          "start_large_gpu_job"
+        ],
+        "effective": false
+      },
+      {
+        "canonical_action": "CREATE_OR_ACTIVATE_EXECUTION_CONTRACT",
+        "bound_permission_keys": [
+          "draft_separate_execution_contract",
+          "create_execution_contract",
+          "create_activation_receipt"
+        ],
+        "effective": false
+      }
+    ],
+    "all_state_changing_effective_permissions_false": true
+  },
+  "current_permissions": {
+    "continue_public_source_acquisition": true,
+    "draft_author_contact_request": true,
+    "send_external_author_contact": false,
+    "draft_static_reconstruction_protocols": true,
+    "add_nonexecuting_integrity_tests": true,
+    "generate_or_select_checkpoint": false,
+    "realize_angle_grid_or_prior": false,
+    "realize_compact_body_emplacement": false,
+    "realize_random_seeds": false,
+    "run_dynamics": false,
+    "run_synthetic_calibration": false,
+    "compute_jx_o2_observed_score": false,
+    "run_observed_model_comparison": false,
+    "access_or_unblind_untouched_holdout": false,
+    "start_large_gpu_job": false,
+    "create_execution_contract": false,
+    "create_activation_receipt": false
+  },
+  "claim_firewall": {
+    "forbidden_outcome_keys": [
+      "observed_jx_o2_score",
+      "observed_test_statistic",
+      "observed_p_value",
+      "observed_bayes_factor",
+      "observed_model_preference",
+      "model_preference",
+      "preferred_model",
+      "planet_x_mass_estimate",
+      "planet_x_orbit_estimate",
+      "planet_x_detected",
+      "planet_x_excluded",
+      "verdict",
+      "decision",
+      "result",
+      "result_state",
+      "run_authorized",
+      "p_value",
+      "p-value",
+      "bayes_factor",
+      "model_score",
+      "candidate_index",
+      "candidate-index"
+    ],
+    "forbidden_decision_tokens": [
+      "DETECTED",
+      "EXCLUDED",
+      "CONFIRMED",
+      "RULED_OUT",
+      "RULEDOUT",
+      "PASSED",
+      "PREFERRED"
+    ],
+    "forbidden_authorization_keys": [
+      "execution_permitted",
+      "run_permitted",
+      "simulation_permitted",
+      "dynamics_allowed"
+    ],
+    "analogue_may_be_relabelled_as_original_simulation": false,
+    "summary_agreement_may_repair_missing_provenance": false,
+    "more_gpu_objects_may_repair_missing_provenance": false
+  },
+  "unresolved_execution_blockers": [
+    "The authentic parent checkpoint and complete state lineage were not recovered in the audited public sources.",
+    "No independently validated open-regeneration population specification is locked.",
+    "The angular grid or prior, phase, epoch, frame, origin, and weights are not locked.",
+    "The compact-body emplacement time, full state, insertion algorithm, and estimand boundary are not locked.",
+    "The deterministic beacon, RNG implementation, stream mapping, and replicate counts are not locked.",
+    "A true M0 arm physically matched to every M1 member is not instantiated.",
+    "Survey completeness, data exposure, realistic power, multiplicity, licenses, and public archive gates remain unresolved."
+  ],
+  "mandatory_nonclaim": "This design records public reconstruction constraints only. It does not recover or reproduce the authors' original simulation, authorize any run, compare models against observations, or provide evidence for or against Planet X."
+}
