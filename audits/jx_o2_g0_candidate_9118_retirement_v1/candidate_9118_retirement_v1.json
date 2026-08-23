@@ -1,0 +1,319 @@
+{
+  "schema": "jx-o2-g0-candidate-retirement/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "source_audit_id": "jx-o2-g0-input-audit-v1",
+  "resolution_id": "jx-o2-g0-candidate-9118-retirement-v1",
+  "artifact_class": "SCOPED_G0_CANDIDATE_RETIREMENT",
+  "recorded_at_utc": "2026-08-23T04:16:13Z",
+  "base_repository_commit": "2d5e3aa001d12178bd7c264d378cc41d6072fef9",
+  "issue": {
+    "repository": "linomx90/jx-planet-x-engine",
+    "number": 11,
+    "url": "https://github.com/linomx90/jx-planet-x-engine/issues/11"
+  },
+  "resolution_status": "CANDIDATE_REMOVED_FROM_JX_O2_SCOPE_WITHOUT_LINEAGE_RECOVERY",
+  "resolution_method": "PERMANENT_SCOPE_REMOVAL",
+  "scientific_evidence_role": "PROVENANCE_DISPOSITION_NOT_OUTCOME_EVIDENCE",
+  "claim_ceiling": "PROVENANCE_DISPOSITION_ONLY",
+  "execution_authorized": false,
+  "observed_execution_authorized": false,
+  "gpu_run_authorized": false,
+  "outcomes_generated": false,
+  "observed_jx_o2_score_computed": false,
+  "bound_prior_artifacts": {
+    "g0_registration": {
+      "path": "../jx_o2_g0_input_audit_v1/registration_g0_v1.json",
+      "sha256": "21634c974ffdff0f59b1f7b33c80bdabdfe9fc337f3476bf6f20be3ede00bd03"
+    },
+    "g0_audit": {
+      "path": "../jx_o2_g0_input_audit_v1/g0_audit_v1.json",
+      "sha256": "5f7a5f9cef4f6bd73f7c36235e610d96c8475bd646bf5807aa591c58fbf002b0"
+    },
+    "g0_source_model_inventory": {
+      "path": "../jx_o2_g0_input_audit_v1/source_model_inventory_v1.json",
+      "sha256": "0ac5ef9bc1fbf84313a9ee5a8650a3685cba3d2d06eea1d29a547c7eda59da9f"
+    },
+    "jx_o2_design_contract": {
+      "path": "../../runs/planet_x_survey_model_comparison_v1/design_contract_v1.json",
+      "sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971"
+    },
+    "jx_o2_source_model_manifest": {
+      "path": "../../runs/planet_x_survey_model_comparison_v1/source_models_manifest_v1.json",
+      "sha256": "d723c2dede9dee4bd490751ca4b5ad334397ecf8e913094039ddb8d624b6ac73"
+    },
+    "historical_state_manifest": {
+      "path": "../../runs/de441_population_100k/states/state_manifest.json",
+      "sha256": "ec6e2ba8877d206838172dbb573318a2122977e263c054994d4c82a409a43d36"
+    },
+    "historical_source_state": {
+      "path": "../../runs/de441_population_100k/states/de441_source_9118_state.csv",
+      "sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf"
+    },
+    "historical_control_state": {
+      "path": "../../runs/de441_population_100k/states/de441_control_state.csv",
+      "sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14"
+    },
+    "historical_state_builder": {
+      "path": "../../runs/de441_population_100k/build_real_epoch_states.py",
+      "sha256": "1a10ead88bf2f8cd5ff872207328c9c1d574c26750295736125dc16ed49c983f"
+    },
+    "historical_release_manifest": {
+      "path": "../../RELEASE_MANIFEST_v0.3.0.json",
+      "sha256": "e3bf310509fc0b2f33e3dea273f5baff3272f0da6bf82ee4363e9087c733d325"
+    },
+    "historical_population_result": {
+      "path": "../../runs/de441_population_100k/final_result_v1.json",
+      "sha256": "24b7572cf130c683acd66a4677dac62d0d30b15b24f9bf5997b612a8045d7efd"
+    },
+    "historical_independent_result": {
+      "path": "../../runs/independent_dop853_10k/final_result_v2.json",
+      "sha256": "2fe7c4a5f9c26b76ff0f4c2aaa02c584171a33739150801d6e4dce072771b6ff"
+    },
+    "historical_independent_audit": {
+      "path": "../../runs/independent_dop853_10k/final_result_v2_audit.json",
+      "sha256": "f58df8ac8f5394ba0c83c6872788b0f976b7bd878c647c2ed6441cd9ea549b5b"
+    }
+  },
+  "policy_precedence": {
+    "governing_rule": "STRICTER_RETIREMENT_POLICY_CONTROLS_CANDIDATE_9118_FOR_THIS_EXPERIMENT",
+    "prior_conditional_rule": {
+      "path": "../../runs/planet_x_survey_model_comparison_v1/source_models_manifest_v1.json",
+      "sha256": "d723c2dede9dee4bd490751ca4b5ad334397ecf8e913094039ddb8d624b6ac73",
+      "json_pointer": "/candidate_selection_lineage/candidate_9118_rule"
+    },
+    "policy_effect": "REPLACES_CONDITIONAL_ELIGIBILITY_WITH_PERMANENT_INELIGIBILITY",
+    "scope": "THIS_EXPERIMENT_ID_ONLY",
+    "non_supersession_rule": "NO_LATER_RECEIPT_OR_VERSION_MAY_REINSTATE_CANDIDATE_9118_UNDER_THIS_EXPERIMENT_ID",
+    "future_reconsideration_rule": "REQUIRES_A_DIFFERENT_EXPERIMENT_ID_NEW_PREREGISTRATION_AND_INDEPENDENTLY_AUDITED_PROVENANCE"
+  },
+  "g0_blocker_disposition": {
+    "original_blocker_id": "G0-B07",
+    "original_category": "CANDIDATE_9118_LINEAGE",
+    "original_recovery_requirement_status": "NOT_SATISFIED",
+    "primary_recovery_path_status": "NOT_SATISFIED",
+    "fallback_scope_removal_status": "SATISFIED",
+    "disposition": "SCOPE_EXCLUSION_NOT_RECOVERY",
+    "candidate_specific_dependency": "REMOVED_FROM_JX_O2_MODEL_SCOPE",
+    "generic_m1_candidate_lineage_requirement": "REMAINS_UNRESOLVED_UNDER_G0_B06_AND_ISSUE_9",
+    "scope_limited_to_candidate_9118": true,
+    "does_not_complete_g0": true
+  },
+  "search_record": {
+    "search_completed_at_utc": "2026-08-23T04:08:05Z",
+    "result": "NOT_RECOVERED_WITHIN_DOCUMENTED_SEARCH_SCOPE",
+    "documented_search_scope": [
+      {
+        "scope_id": "S01",
+        "scope": "Complete retained non-shallow Git object database, all retained local refs and local remote-tracking refs, logs, path history, reflogs, stashes, notes, reachable and unreachable objects",
+        "result": "NO_AUTHENTIC_SELECTION_RECORD_RECOVERED"
+      },
+      {
+        "scope_id": "S02",
+        "scope": "Tracked, untracked, and ignored files in the shared JX project workspace and linked work copies",
+        "result": "NO_AUTHENTIC_SELECTION_RECORD_RECOVERED"
+      },
+      {
+        "scope_id": "S03",
+        "scope": "Exact obsolete scratch path recorded by the historical manifest",
+        "result": "RECORDED_SCRATCH_VOLUME_NOT_PRESENT"
+      },
+      {
+        "scope_id": "S04",
+        "scope": "Exact expected SHA-256 scan of accessible sub-one-megabyte files in the shared project workspace and temporary area",
+        "result": "NO_MATCH_RECOVERED"
+      },
+      {
+        "scope_id": "S05",
+        "scope": "Public GitHub branches, commits, code paths, issues, pull requests, and PR 2 discussion",
+        "result": "NO_CONTEMPORANEOUS_SELECTION_RATIONALE_RECOVERED"
+      }
+    ],
+    "limitations": [
+      "The recorded scratch volume and path are unavailable in the current environment.",
+      "Deleted untracked bytes, private conversations, email, and unmounted machines were not accessible.",
+      "Files at or above 1 MiB and archive interiors were not exhaustively scanned for the expected byte hash.",
+      "GitHub code and commit search missed strings known to be present, so those results were treated as non-authoritative and corroborated with local object history, public branch heads, path checks, and pull-request review.",
+      "The result establishes absence from retained project evidence, not that the record never existed anywhere."
+    ],
+    "search_evidence": {
+      "git_repository": {
+        "is_shallow": false,
+        "retained_ref_count": 12,
+        "object_database_counts": {
+          "commit": 63,
+          "tree": 162,
+          "blob": 181
+        },
+        "unreachable_object_count": 0,
+        "commands": [
+          "git rev-parse --is-shallow-repository",
+          "git for-each-ref --format=%(refname) %(objectname)",
+          "git log --all -S<term> and -G<pattern>",
+          "git log --all --full-history --diff-filter=D -- <candidate paths>",
+          "git reflog show --all",
+          "git stash list",
+          "git notes list",
+          "git rev-list --objects --all",
+          "git cat-file --batch-all-objects",
+          "git fsck --full --unreachable --no-reflogs"
+        ]
+      },
+      "public_github": {
+        "public_branch_heads_examined": {
+          "audit/jx-o2-g0-inputs": "938223848aa894057b1350e50326d9ea92478b24",
+          "design/jx-o2-characterized-survey-prereg": "3eb86fe3b6fc5d20865be261df1cf82dd785dde3",
+          "experiment/jx-o1-v4-independent-confirmation": "208d4b8a4dc5adcc47f04bd5a7bc3893d39357cd",
+          "feature/jx-o1-survey-selection": "4e27bb98705d6354ab8532b60a19789f821e4371",
+          "fix/v4-existing-result-replay": "21cabbfd4f8cebf54a041c7da59985d1146d7e99",
+          "main": "2d5e3aa001d12178bd7c264d378cc41d6072fef9",
+          "release/0.1.1": "4bb0cfb31ac50fa8f58e40c9e4a024b303903595",
+          "release/v0.3.0-independent-dop853": "269c68adb823ac445e72c48bdea92d9da2207f22"
+        },
+        "plausible_metadata_and_selection_paths_examined": 40,
+        "pull_request_2_review_comment_count": 0,
+        "query_terms": [
+          "candidate_metadata.txt",
+          "P9_BB21_idx9118",
+          "candidate 9118",
+          "catalog index 9118",
+          "509917e0093107464d9ee45ed2c8e9f403403b2bb0e94455fa3614825917f8b0"
+        ],
+        "code_and_commit_search_treated_as_authoritative": false
+      },
+      "accessible_workspace": {
+        "scope": "Shared JX project work copies and temporary area",
+        "expected_sha256_scan_max_bytes_exclusive": 1048576,
+        "expected_sha256_match_count": 0,
+        "recorded_scratch_path_present": false,
+        "methods": [
+          "Recursive filename search for candidate, 9118, ranking, and metadata names",
+          "Recursive text search for candidate identifiers and the expected SHA-256",
+          "Exact SHA-256 comparison for regular files smaller than 1 MiB"
+        ]
+      }
+    },
+    "metadata_blob": {
+      "filename": "candidate_metadata.txt",
+      "expected_sha256": "509917e0093107464d9ee45ed2c8e9f403403b2bb0e94455fa3614825917f8b0",
+      "recorded_obsolete_path": "/workspace/scratch/388807340cce/imports/compact_source_core/source/candidate_metadata.txt",
+      "status": "NOT_RECOVERED_WITHIN_DOCUMENTED_SEARCH_SCOPE",
+      "was_parsed_by_historical_state_builder": false,
+      "historical_role": "EXPECTED_HASH_CHECK_ONLY"
+    },
+    "selection_decision_fields": {
+      "selector": "NOT_RECOVERED",
+      "selection_time": "NOT_RECOVERED",
+      "selection_rule": "NOT_RECOVERED",
+      "candidate_universe": "NOT_RECOVERED",
+      "ranking": "NOT_RECOVERED",
+      "prior_inspection_record": "NOT_RECOVERED"
+    },
+    "deterministic_selection_replay": {
+      "status": "NOT_RECONSTRUCTABLE_FROM_DOCUMENTED_EVIDENCE",
+      "retrospective_reconstruction_may_be_presented_as_original_provenance": false
+    }
+  },
+  "tracked_history": {
+    "first_candidate_appearance_commit": "269c68adb823ac445e72c48bdea92d9da2207f22",
+    "first_candidate_appearance_commit_time": "2026-08-22T19:10:06-04:00",
+    "parent_commit": "e6ff286abbf31f216e21deca2b83ee65e61a0487",
+    "parent_contains_candidate_reference": false,
+    "candidate_tuple_hard_coded_in_builder": true,
+    "metadata_blob_used_to_derive_candidate_tuple": false,
+    "selection_time_inferred_from_import_commit": false,
+    "selection_rationale_present_in_import_commit": false
+  },
+  "catalog_identity": {
+    "source": "Brown-Batygin Planet Nine reference population catalog v3",
+    "catalog_sha256": "050b68182ecbf7fd76f280d8cc43c0683d207499aba1488a68092b834420a422",
+    "catalog_index": 9118,
+    "historical_jx_name": "P9_BB21_idx9118",
+    "official_catalog_row_verified": true,
+    "official_catalog_epoch_jd": 2458270.0,
+    "direct_search_flags": {
+      "ztf": 0,
+      "des": 0,
+      "ps1": 0
+    },
+    "retired_fingerprints": {
+      "catalog_index": 9118,
+      "historical_jx_name": "P9_BB21_idx9118",
+      "historical_source_state_path_suffix": "runs/de441_population_100k/states/de441_source_9118_state.csv",
+      "historical_source_state_sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf",
+      "catalog_orbit_tuple": {
+        "mass_earth": 5.06,
+        "a_au": 495.19,
+        "e": 0.236,
+        "i_deg": 20.28,
+        "varpi_deg": 284.17,
+        "ascending_node_deg": 96.87,
+        "mean_anomaly_deg": 126.21
+      }
+    }
+  },
+  "epoch_disposition": {
+    "official_catalog_epoch_jd": 2458270.0,
+    "historical_jx_epoch_jd": 2461200.5,
+    "historical_treatment": "CATALOG_ELEMENTS_REDECLARED_AT_JX_EPOCH_WITHOUT_PROPAGATION",
+    "physical_propagation_or_refit_recovered": false,
+    "historical_epoch_defect_repaired": false,
+    "eligible_as_jx_o2_physical_state": false,
+    "historical_reproduction_only": true
+  },
+  "retirement_policy": {
+    "lifecycle_state": "RETIRED_FROM_JX_O2_M1",
+    "classification": "EXPLORATORY_SCREENING_ONLY",
+    "permanent_within_experiment": true,
+    "reinstatement_within_this_experiment": false,
+    "future_experiment_rule": "REQUIRES_NEW_PREREGISTRATION_AND_INDEPENDENTLY_AUDITED_PROVENANCE",
+    "candidate_identifiers": [
+      "candidate_9118",
+      "P9_BB21_idx9118",
+      "Brown-Batygin catalog index 9118"
+    ],
+    "eligibility": {
+      "eligible_as_jx_o2_m1_family_member": false,
+      "eligible_as_jx_o2_m1_family_anchor": false,
+      "eligible_as_jx_o2_grid_point": false,
+      "eligible_to_influence_jx_o2_prior": false,
+      "eligible_as_jx_o2_calibration_target": false,
+      "eligible_as_jx_o2_power_case": false,
+      "eligible_for_jx_o2_observational_scoring": false,
+      "eligible_as_jx_o2_physical_state": false,
+      "eligible_as_observational_evidence": false
+    },
+    "historical_screening_artifacts_preserved_unchanged": true,
+    "historical_numerical_results_reinterpreted": false
+  },
+  "outcome_exposure_and_decision_independence": {
+    "historical_candidate_9118_numerical_outcomes_previously_inspected": true,
+    "retirement_decision_based_on_numerical_outcome": false,
+    "retirement_basis": [
+      "MISSING_SELECTION_PROVENANCE",
+      "INVALID_JX_O2_EPOCH_LINEAGE"
+    ],
+    "historical_outputs_role": "EXPLORATORY_DIAGNOSTIC_ONLY",
+    "future_m1_family_grid_or_weights_may_be_tuned_using_historical_9118_outcomes": false
+  },
+  "overall_state": {
+    "g0_audit_status": "BLOCKED",
+    "g0_complete": false,
+    "activation_gate_a03_status": "NOT_SATISFIED",
+    "eligible_for_g1": false,
+    "matched_m0_m1_family_acquired": false,
+    "generic_candidate_selection_lineage_complete": false,
+    "jx_o2_execution_state": "DESIGN_AND_ACQUISITION_ONLY"
+  },
+  "current_permissions": {
+    "recover_or_audit_provenance": true,
+    "preserve_historical_screening_artifacts": true,
+    "promote_candidate_9118": false,
+    "create_execution_contract": false,
+    "create_activation_receipt": false,
+    "run_synthetic_calibration": false,
+    "run_observed_model_comparison": false,
+    "access_or_unblind_untouched_holdout": false,
+    "start_large_gpu_job": false
+  },
+  "mandatory_nonclaim": "This receipt records only a provenance disposition. Candidate 9118 remains a historical exploratory screening assumption and is not evidence for or against Planet X. JX-O2 remains blocked and no execution is authorized."
+}
