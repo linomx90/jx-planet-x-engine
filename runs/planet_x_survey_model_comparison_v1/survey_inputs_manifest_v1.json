@@ -1,0 +1,119 @@
+{
+  "schema": "jx-observational-survey-inputs-design-manifest/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "DESIGN_ONLY_INPUT_INVENTORY",
+  "manifest_status": "DESIGN_ONLY_INPUTS_NOT_ACQUIRED",
+  "execution_authorized": false,
+  "scientific_evidence_role": "REQUIRED_INPUT_SPECIFICATION_NOT_OUTCOME_EVIDENCE",
+  "scope_definition": "Characterized trans-Neptunian surveys with published pointing history and quantified discovery, rate, magnitude, linking, and tracking selection functions; each survey remains a separate likelihood or predictive-score stratum.",
+  "global_data_exposure_status": "PREVIOUSLY_INSPECTED",
+  "confirmatory_holdout_status": "UNRESOLVED_EXECUTION_BLOCKER",
+  "confirmatory_interpretation": "All currently named catalogs and published analyses are public and previously inspected. A survey-level holdout may be registered as held-out prediction only if its outcomes did not influence the exact model, grid, nuisance, candidate, or statistic choices. It is not a blinded-discovery sample.",
+  "required_survey_strata": [
+    {
+      "survey_id": "OSSOS_AFFILIATED_CHARACTERIZED_ENSEMBLE",
+      "required_scope": "Complete eight-block OSSOS characterized release plus the affiliated CFEPS, HiLat, and Alexandersen characterized detections supported by the pinned native simulator.",
+      "role_before_partition_audit": "TRAINING_OR_QUALIFICATION_ONLY",
+      "data_exposure_status": "PREVIOUSLY_INSPECTED",
+      "selection_function_rule": "Use only characterized detections and the exact matching pointing, magnitude/rate efficiency, linking, and tracking characterization. Deduplicate cross-survey rediscoveries by a prelocked identity rule.",
+      "primary_sources": [
+        "https://doi.org/10.3847/1538-4365/aab77a",
+        "https://github.com/OSSOS/SurveySimulator",
+        "https://www.ossos-survey.org/simulator.html",
+        "https://www.ossos-survey.org/tnodb.html"
+      ],
+      "exact_release_status": "UNRESOLVED_EXECUTION_BLOCKER"
+    },
+    {
+      "survey_id": "DES_Y6_CHARACTERIZED_TNO_SAMPLE",
+      "required_scope": "DES Year 6 characterized trans-Neptunian sample and the exact matching native survey simulator and selection characterization.",
+      "role_before_partition_audit": "CANDIDATE_PREREGISTERED_HELD_OUT_PREDICTION_NOT_BLINDED_DISCOVERY",
+      "data_exposure_status": "PREVIOUSLY_INSPECTED",
+      "selection_function_rule": "Score through the pinned DES simulator as an independent stratum; do not pool detections under the OSSOS selection function.",
+      "primary_sources": [
+        "https://arxiv.org/abs/2109.03758",
+        "https://github.com/bernardinelli/DESTNOSIM",
+        "https://github.com/bernardinelli/des_tno_catalog"
+      ],
+      "exact_release_status": "UNRESOLVED_EXECUTION_BLOCKER"
+    }
+  ],
+  "optional_robustness_strata": [
+    {
+      "survey_id": "DEEP_B1_CHARACTERIZED_SAMPLE",
+      "role": "TERTIARY_ROBUSTNESS_ONLY_UNLESS_SEPARATELY_LOCKED",
+      "data_exposure_status": "PREVIOUSLY_INSPECTED",
+      "primary_sources": [
+        "https://arxiv.org/abs/2310.03671"
+      ],
+      "exact_release_status": "UNRESOLVED_EXECUTION_BLOCKER"
+    }
+  ],
+  "excluded_from_confirmatory_inference": [
+    {
+      "source_class": "UNCHARACTERIZED_SURVEY_DETECTIONS",
+      "reason": "The matching selection function is not adequate for the registered survey-forward comparison."
+    },
+    {
+      "source_class": "HETEROGENEOUS_MPC_DISCOVERIES",
+      "reason": "Their combined pointing, non-detection, discovery, linking, and tracking selection history is not equivalently characterized."
+    }
+  ],
+  "required_artifact_classes_per_survey": [
+    "RAW_DETECTION_CATALOG",
+    "RECONSTRUCTED_ANALYSIS_CATALOG",
+    "OBJECT_ID_AND_DEDUPLICATION_MANIFEST",
+    "POINTING_AND_FOOTPRINT_HISTORY",
+    "MAGNITUDE_AND_RATE_EFFICIENCY",
+    "LINKING_AND_TRACKING_EFFICIENCY",
+    "FILTER_BANDPASS_AND_COLOR_TRANSFORM",
+    "ORBITAL_ELEMENTS_COVARIANCES_EPOCH_AND_FRAME",
+    "NATIVE_SURVEY_SIMULATOR_SOURCE",
+    "NATIVE_SURVEY_SIMULATOR_TESTS",
+    "INCLUSION_EXCLUSION_AND_ELIGIBILITY_CODE",
+    "LICENSE_AND_CITATION_RECORD"
+  ],
+  "required_lock_fields_per_artifact": [
+    "survey_id",
+    "artifact_id",
+    "version_or_commit",
+    "retrieval_url_or_doi",
+    "retrieved_at_utc",
+    "byte_size",
+    "sha256",
+    "license",
+    "semantic_role",
+    "exposure_status"
+  ],
+  "partition_policy": {
+    "unit": "SURVEY_BLOCK_OR_CHRONOLOGY_NOT_RANDOM_OBJECT",
+    "training_and_confirmation_object_overlap_allowed": false,
+    "selection_lineage_audit_required": true,
+    "unknown_exposure_action": "BLOCK",
+    "previously_inspected_max_claim": "EXPLORATORY_OR_PREREGISTERED_HELD_OUT_MODEL_COMPARISON",
+    "future_independent_survey_required_for_blinded_confirmation": true
+  },
+  "count_model_requirements": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "must_choose_before_execution": [
+      "FIXED_N_CONDITIONAL_LIKELIHOOD",
+      "SURVEY_COUNT_LIKELIHOOD"
+    ],
+    "survey_specific_normalization_required": true
+  },
+  "orbit_uncertainty_requirements": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "covariance_propagation_rule_must_be_locked": true,
+    "epoch_frame_origin_and_units_must_be_locked": true
+  },
+  "acquired_artifacts": [],
+  "unresolved_execution_blockers": [
+    "Acquire and hash an exact finite survey-block and object inventory.",
+    "Acquire and hash every raw and reconstructed catalog and matching selection-function artifact.",
+    "Audit licenses, citations, retrieval locations, and stable archive destinations.",
+    "Freeze object eligibility, deduplication, orbital covariance, epoch, frame, color, and count-likelihood rules.",
+    "Audit whether any proposed holdout, candidate, endpoint, or cut was influenced by the same observations.",
+    "Either identify a genuinely untouched confirmation sample or explicitly lock the future claim to exploratory or held-out prediction."
+  ],
+  "nonclaim": "This inventory names required survey strata but acquires no data and authorizes no analysis. It is not evidence for or against Planet X."
+}

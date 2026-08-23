@@ -1,0 +1,374 @@
+{
+  "schema": "jx-observational-model-comparison-design/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "milestone": "JX_O2_OBSERVATIONAL_MODEL_COMPARISON_DESIGN",
+  "artifact_class": "DESIGN_ONLY_PREREGISTRATION",
+  "registration_status": "REGISTERED_BEFORE_ANY_JX_O2_ANALYSIS_EXECUTION_OR_COMPUTED_RESULT",
+  "pre_data_registration": false,
+  "prior_public_observational_literature_inspected": true,
+  "outcomes_generated_at_registration": false,
+  "execution_authorized": false,
+  "design_state": "DESIGN_REGISTERED_NOT_EXECUTABLE",
+  "claim_ceiling": "MODEL_FAMILY_COMPARISON_ONLY",
+  "scientific_evidence_role": "PROTOCOL_NOT_OUTCOME_EVIDENCE",
+  "prior_evidence": {
+    "jx_o1_v4": {
+      "experiment_id": "jx-o1-ossos-b-telescope-selection-v4-independent-confirmation",
+      "contract_path": "../survey_selection_o1/contract_v4_independent.json",
+      "contract_sha256": "eca324ae2448d4e704173640cfa459a3c38c329ce2eec8b61d7e94e147a15e1c",
+      "result_path": "../survey_selection_o1/final_result_v4_independent.json",
+      "result_sha256": "d15dc3a507156ac6e08f2acc6911f91453d7c066e29716def63a870d440fa30a",
+      "allowed_role": "SURVEY_ADAPTER_CALIBRATION_ONLY",
+      "may_satisfy_observational_gate": false,
+      "may_establish_realistic_planet_x_power": false,
+      "limitation": "JX-O1 V4 used historical four-block OSSOS-B and phenomenological calibration populations, not a complete observed catalog or physical Planet X model family."
+    }
+  },
+  "linked_design_manifests": {
+    "survey_inputs": {
+      "path": "survey_inputs_manifest_v1.json",
+      "sha256": "d446ac5049add3409a6b5c0d0f3cd76ab1a1d7c9f1676f98069c1d9f5e42e3c4",
+      "status": "UNRESOLVED_EXECUTION_BLOCKER"
+    },
+    "source_models": {
+      "path": "source_models_manifest_v1.json",
+      "sha256": "d723c2dede9dee4bd490751ca4b5ad334397ecf8e913094039ddb8d624b6ac73",
+      "status": "UNRESOLVED_EXECUTION_BLOCKER"
+    }
+  },
+  "hypotheses": {
+    "labels_correct_wrong_forbidden": true,
+    "exact_model_manifest_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "candidate_selection_lineage_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "M0_LOCKED_BASELINE": {
+      "semantics": "A fully specified known-body, intrinsic-population, nuisance, and survey-selection generative model family without the registered additional compact body. It is not the universal claim that Planet X is absent."
+    },
+    "M1_LOCKED_COMPACT_BODY_FAMILY": {
+      "semantics": "The identical registered pipeline plus one compact body on a finite predeclared mass, orbit, phase, epoch, and weight grid or prior. It is not the set of every possible Planet X configuration."
+    },
+    "interpretation_rules": [
+      "Failure of M0 may indicate model, population, nuisance, dynamics, or survey misspecification.",
+      "Failure of the locked M1 family cannot exclude a compact body outside the registered family.",
+      "Relative preference is not reportable unless the preferred family passes its locked absolute adequacy rule.",
+      "If both families fail absolute adequacy, report NO_REGISTERED_MODEL_ADEQUATE."
+    ]
+  },
+  "data_policy": {
+    "complete_survey_manifest_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "raw_catalog_manifest_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "object_inclusion_rule_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "orbit_covariance_rule_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "count_likelihood_rule_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "training_confirmatory_partition_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "data_exposure_audit_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "custodian_blinding_plan_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "partition_unit": "SURVEY_BLOCK_OR_CHRONOLOGY_NOT_RANDOM_OBJECT",
+    "previously_inspected_data_max_claim": "EXPLORATORY_OR_PREREGISTERED_HELD_OUT_MODEL_COMPARISON",
+    "unknown_exposure_action": "BLOCK",
+    "required_exposure_states": [
+      "UNTOUCHED",
+      "PREVIOUSLY_INSPECTED",
+      "UNKNOWN"
+    ],
+    "confirmatory_rule": "Only UNTOUCHED data may be described as confirmatory. PREVIOUSLY_INSPECTED data are exploratory or preregistered held-out prediction. UNKNOWN exposure blocks execution.",
+    "survey_strata_rule": "Each native survey selection function remains a separate likelihood or predictive-score stratum. Raw detections are not pooled under a shared selection function."
+  },
+  "analysis_policy": {
+    "primary_joint_statistic_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "absolute_model_adequacy_rule_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "nuisance_fit_rule_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "global_threshold_rule_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "one_primary_joint_predictive_or_model_comparison_score_required": true,
+    "global_alpha": 0.05,
+    "secondary_endpoints_govern_verdict": false,
+    "secondary_marginals_subsets_and_plots_role": "DESCRIPTIVE_ONLY",
+    "optional_stopping": false,
+    "full_search_repeated_in_every_null_simulation": true,
+    "full_nuisance_refit_repeated_in_every_calibration_replicate": true,
+    "absolute_adequacy_before_relative_preference": true,
+    "previously_inspected_input_acquisition_and_exposure_audit_before_execution_contract": "PERMITTED_WITH_DOWNGRADED_CLAIM",
+    "untouched_holdout_or_future_observed_analysis_access_before_code_contract_environment_freeze": "FORBIDDEN"
+  },
+  "multiplicity_policy": {
+    "familywise_error_control_required": true,
+    "maximum_familywise_error_rate": 0.05,
+    "global_null_calibration_must_repeat": [
+      "EVERY_COMPACT_BODY_GRID_POINT_OR_PRIOR_COMPONENT",
+      "EVERY_NUISANCE_FIT_AND_REFIT",
+      "EVERY_ENDPOINT_OR_SCORE_COMPONENT",
+      "EVERY_SUBSET_CUT_AND_ELIGIBILITY_BRANCH",
+      "EVERY_SURVEY_STRATUM_OR_BLOCK_CHOICE",
+      "EVERY_MAXIMIZATION_OR_MODEL_SELECTION_STEP",
+      "UPSTREAM_CANDIDATE_AND_GRID_SELECTION_IF_USED"
+    ],
+    "unreconstructable_upstream_search_action": "EXPLORATORY_ONLY",
+    "uncorrected_branch_action": "INVALID",
+    "adaptive_grid_expansion_after_lock": "INVALID",
+    "secondary_endpoint_affects_primary_verdict": "INVALID"
+  },
+  "power_policy": {
+    "core_alternative_region_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "minimum_power": 0.9,
+    "confidence_level": 0.95,
+    "require_simultaneous_power_lower_bound": true,
+    "require_simultaneous_type1_upper_bound": true,
+    "maximum_global_type1_error": 0.05,
+    "fixed_replicate_counts_status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "effective_sampling_units": "SURVEY_BLOCKS_AND_OBSERVED_DETECTIONS_NOT_INTRINSIC_GPU_OBJECTS",
+    "full_pipeline_search_and_refit_in_every_replicate": true,
+    "full_null_nuisance_envelope_required": true,
+    "outside_powered_region_label": "SENSITIVITY_NOT_ESTABLISHED",
+    "point_estimate_alone_satisfies_gate": false,
+    "jx_o1_v4_power_satisfies_gate": false
+  },
+  "blinding_and_seed_policy": {
+    "status": "UNRESOLVED_EXECUTION_BLOCKER",
+    "independent_custodian_required_for_untouched_holdout": true,
+    "encrypted_holdout_or_label_manifest_required": true,
+    "analysis_team_hidden_fields_before_unlock": [
+      "HOLDOUT_LABELS_AND_OBJECT_IDENTITIES",
+      "PER_OBJECT_SCORES",
+      "AGGREGATE_PRIMARY_STATISTIC",
+      "PARTIAL_OR_INTERMEDIATE_OUTCOME_LOGS"
+    ],
+    "freeze_before_unlock": [
+      "SOURCE_AND_TESTS",
+      "EXECUTION_CONTRACT",
+      "DATA_AND_MODEL_MANIFESTS",
+      "CONTAINER_AND_LOCKFILE",
+      "PRIMARY_STATISTIC_AND_THRESHOLDS"
+    ],
+    "seed_derivation": "SHA256(execution_contract_hash || post_registration_public_randomness_beacon || counter)",
+    "seed_shopping": "FORBIDDEN",
+    "observed_unblind_count": 1,
+    "outcome_dependent_reruns": "FORBIDDEN",
+    "post_unblind_corrections": "DIAGNOSTIC_OR_EXPLORATORY_UNLESS_A_GENUINELY_UNTOUCHED_RESERVE_EXISTS",
+    "public_previously_inspected_data_can_be_called_blinded": false
+  },
+  "provenance_policy": {
+    "content_hash_algorithm": "SHA256",
+    "required_bound_artifact_classes": [
+      "RAW_AND_DERIVED_OBSERVED_DATA",
+      "COMPLETE_SURVEY_CHARACTERIZATION",
+      "OBJECT_ID_INCLUSION_EXCLUSION_AND_DEDUPLICATION_LIST",
+      "M0_AND_M1_SOURCE_MODEL_MANIFESTS",
+      "PARAMETER_GRID_PRIOR_WEIGHTS_AND_NUISANCE_SPECIFICATION",
+      "EPHEMERIS_AND_FORCE_MODEL",
+      "SOURCE_CODE_AND_TESTS",
+      "EXTERNAL_SURVEY_SIMULATORS",
+      "CONTAINER_LOCKFILE_COMPILER_AND_NATIVE_DEPENDENCIES",
+      "RNG_ALGORITHM_SEED_DERIVATION_AND_ALL_SEEDS",
+      "CPU_GPU_MODELS_DRIVER_VERSIONS_AND_DETERMINISTIC_SETTINGS",
+      "CHECKPOINTS_LOGS_AND_SEMANTIC_MANIFESTS",
+      "EXACT_RESULT_AND_REPLAY_ARTIFACTS",
+      "INDEPENDENT_IMPLEMENTATION_AND_REPLAY_RECEIPT",
+      "PUBLIC_ARCHIVE_DOI_AND_SHARD_MANIFEST"
+    ],
+    "large_archive_policy": "Large raw simulation artifacts stay out of Git but must be deposited in a content-addressed public research repository with a DOI, byte counts, shard hashes, licenses, and a semantic manifest before an observation result is review-eligible.",
+    "github_role": "Compact contracts, manifests, hashes, tests, code, receipts, and results.",
+    "exact_replay_required": true,
+    "materially_independent_analysis_required": true
+  },
+  "claim_firewall": {
+    "forbidden_result_keys": [
+      "planet_x_detected",
+      "planet_x_excluded",
+      "planet_x_present",
+      "planet_x_absent",
+      "detection_claim",
+      "exclusion_claim"
+    ],
+    "forbidden_claim_enum_values": [
+      "DETECTED",
+      "EXCLUDED",
+      "CONFIRMED",
+      "RULED_OUT",
+      "PASSED"
+    ],
+    "forbidden_model_keys": [
+      "correct_model",
+      "wrong_model"
+    ],
+    "design_forbidden_content": [
+      "OBSERVED_TEST_STATISTIC",
+      "OBSERVED_P_VALUE_OR_BAYES_FACTOR",
+      "OBSERVED_MODEL_PREFERENCE",
+      "MASS_OR_ORBIT_ESTIMATE_FROM_JX_O2_DATA",
+      "PLAINTEXT_UNTOUCHED_HOLDOUT_DATA_OR_LABELS",
+      "EXECUTION_AUTHORIZATION"
+    ],
+    "calibration_artifact_with_observed_input_or_decision": "INVALID",
+    "caller_supplied_gate_instead_of_HASH_BOUND_ARTIFACT_DERIVATION": "INVALID",
+    "mandatory_future_result_nonclaim": "This compares specified generative model families within the locked data and assumptions; it does not detect or exclude Planet X."
+  },
+  "allowed_future_observation_states": [
+    "INVALID",
+    "CONFLICT",
+    "BLOCKED",
+    "NO_REGISTERED_MODEL_ADEQUATE",
+    "INCONCLUSIVE_WITHIN_LOCKED_MODELS",
+    "M0_BETTER_PREDICTIVE_FIT_WITHIN_LOCKED_MODELS",
+    "M1_FAMILY_BETTER_PREDICTIVE_FIT_WITHIN_LOCKED_MODELS",
+    "ELIGIBLE_FOR_EXTERNAL_REVIEW"
+  ],
+  "failure_mapping": {
+    "missing_integrity_or_protocol_deviation": "INVALID",
+    "incomplete_data_power_independence_or_archive": "BLOCKED",
+    "unknown_data_exposure": "BLOCKED",
+    "independent_implementations_disagree": "CONFLICT",
+    "both_models_fail_absolute_adequacy": "NO_REGISTERED_MODEL_ADEQUATE",
+    "failed_model_outside_powered_region": {
+      "observation_state": "INCONCLUSIVE_WITHIN_LOCKED_MODELS",
+      "required_annotation": "SENSITIVITY_NOT_ESTABLISHED"
+    }
+  },
+  "lifecycle": {
+    "design_artifact_immutable": true,
+    "design_artifact_may_authorize_execution": false,
+    "design_artifact_execution_authorized_must_remain_false": true,
+    "required_later_execution_contract_schema": "jx-observational-model-comparison-execution-contract/v1",
+    "required_later_activation_receipt_schema": "jx-observational-model-comparison-activation-receipt/v1",
+    "execution_contract_role": "Freeze every exact data, model, statistic, threshold, replicate, environment, archive, and seed choice before synthetic calibration; it cannot authorize observed-data unblinding.",
+    "activation_receipt_role": "Bind already frozen hashes and passed audit and calibration receipts, then authorize exactly one observed-data unlock and run.",
+    "protocol_change_rule": "Create a new version and preserve the failed or superseded record; never edit a locked artifact in place.",
+    "stop_go_sequence": [
+      {
+        "stage": "G0",
+        "requirement": "Complete data, model, exposure, candidate-lineage, and license audit."
+      },
+      {
+        "stage": "G1",
+        "requirement": "Immutable externally timestamped execution contract with no unresolved fields."
+      },
+      {
+        "stage": "G2",
+        "requirement": "Synthetic global-null calibration, realistic power, robustness, full-pipeline injection recovery, and numerical convergence."
+      },
+      {
+        "stage": "G3",
+        "requirement": "Materially independent implementation reproduces the locked calibration."
+      },
+      {
+        "stage": "G4",
+        "requirement": "Independent custodian verifies the encrypted holdout commitment and unlock receipt, if an untouched holdout exists."
+      },
+      {
+        "stage": "G5",
+        "requirement": "One fixed observed-data run followed by immutable exact replay."
+      },
+      {
+        "stage": "G6",
+        "requirement": "Submit any ELIGIBLE_FOR_EXTERNAL_REVIEW result to external scientific review before broader scientific interpretation."
+      }
+    ]
+  },
+  "activation_gates": {
+    "logic": "ALL_REQUIRED_WITH_EXPLICIT_HOLDOUT_CLAIM_BRANCH_AND_NO_WAIVERS",
+    "gate_status": "NOT_SATISFIED",
+    "gates": [
+      {
+        "gate_id": "A01",
+        "requirement": "complete_characterized_survey_manifest_locked",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A02",
+        "requirement": "raw_and_reconstructed_catalog_hashes_locked",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A03",
+        "requirement": "data_exposure_and_candidate_selection_lineage_audited",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A04",
+        "requirement": "confirmatory_holdout_untouched_or_claim_explicitly_downgraded_to_exploratory_or_held_out_prediction",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A05",
+        "requirement": "m0_m1_and_nuisance_manifests_locked",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A06",
+        "requirement": "primary_statistic_absolute_adequacy_and_global_multiplicity_locked",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A07",
+        "requirement": "fixed_simulation_counts_and_no_optional_stopping_locked",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A08",
+        "requirement": "global_type1_simultaneous_95pct_ucb_lte_0_05",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A09",
+        "requirement": "core_alternative_power_simultaneous_95pct_lcb_gte_0_90",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A10",
+        "requirement": "numerical_convergence_and_full_pipeline_injection_recovery_satisfied",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A11",
+        "requirement": "independent_implementation_calibration_replay_satisfied",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A12",
+        "requirement": "code_environment_hardware_and_seed_derivation_hashes_locked",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A13",
+        "requirement": "public_archive_destination_and_content_manifest_locked",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A14",
+        "requirement": "external_registration_timestamp_and_independent_audit_present",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A15",
+        "requirement": "encrypted_holdout_commitment_matches_custodian_receipt_if_untouched_holdout_claimed",
+        "status": "NOT_SATISFIED"
+      },
+      {
+        "gate_id": "A16",
+        "requirement": "no_unresolved_fields_or_protocol_deviations",
+        "status": "NOT_SATISFIED"
+      }
+    ],
+    "waivers_allowed": false,
+    "only_separate_activation_receipt_may_authorize_observed_execution": true
+  },
+  "invalid_design_conditions": [
+    "Any observational outcome metric, observed test statistic, model preference, p-value, Bayes factor, mass or orbit estimate, or plaintext untouched holdout data appears in this design artifact.",
+    "This design artifact is edited to authorize execution.",
+    "A secondary endpoint, subset, cut, adaptive grid expansion, optional stop, or unlocked nuisance choice affects the primary verdict.",
+    "Pointwise rather than simultaneous calibration or power bounds are used.",
+    "A future finalizer trusts caller-supplied gate booleans instead of deriving gates from hash-bound artifacts."
+  ],
+  "unresolved_execution_blockers": [
+    "Exact complete survey releases, files, object inventory, licenses, and SHA256 hashes are not acquired.",
+    "Data exposure and candidate-selection lineage are not independently audited.",
+    "No genuinely untouched confirmation sample is identified.",
+    "Exact M0 and M1 physical model artifacts, parameter family, nuisance rules, and source-population generator are not locked.",
+    "The primary joint score, absolute adequacy rule, and survey-specific count model are not locked.",
+    "Global multiplicity calibration and fixed replicate counts are not locked.",
+    "The realistic core alternative region and simultaneous power design are not locked.",
+    "The independent custodian, encrypted holdout commitment, and public randomness beacon are not established.",
+    "The independent implementation, deterministic environment, and hardware settings are not locked.",
+    "The content-addressed public archive destination and shard manifest are not locked.",
+    "The later immutable execution contract, external registration, audit receipt, calibration receipt, and activation receipt do not exist."
+  ],
+  "mandatory_nonclaim": "This design authorizes no execution and contains no observational outcome. A future result may compare only the specified generative model families within locked data and assumptions; it cannot by itself detect or exclude Planet X. JX-O1 V4 validates only the survey-adapter calibration prerequisite."
+}

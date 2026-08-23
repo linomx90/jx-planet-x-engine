@@ -1,0 +1,73 @@
+{
+  "schema": "jx-observational-model-comparison-design-registration/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "registered_at_utc": "2026-08-23T02:35:07Z",
+  "registration_status": "REGISTERED_BEFORE_ANY_JX_O2_ANALYSIS_EXECUTION_OR_COMPUTED_RESULT",
+  "pre_data_registration": false,
+  "prior_public_observational_literature_inspected": true,
+  "artifact_class": "DESIGN_ONLY_PREREGISTRATION_RECEIPT",
+  "outcomes_generated_at_registration": false,
+  "execution_authorized": false,
+  "design_state": "DESIGN_REGISTERED_NOT_EXECUTABLE",
+  "claim_ceiling": "MODEL_FAMILY_COMPARISON_ONLY",
+  "scientific_evidence_role": "PROTOCOL_NOT_OUTCOME_EVIDENCE",
+  "base_repository_commit": "1d93e1e6c095e26afae95b940ed7dcff1eac2319",
+  "timestamp_authority": "GitHub commit and pull request history",
+  "design_contract_sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971",
+  "locked_files": {
+    "readme": {
+      "path": "README.md",
+      "sha256": "c4b198c249dc7a2922c52df55b0ab11040dedd1422e183329f872563cef1cf9f"
+    },
+    "design_contract": {
+      "path": "design_contract_v1.json",
+      "sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971"
+    },
+    "survey_inputs_manifest": {
+      "path": "survey_inputs_manifest_v1.json",
+      "sha256": "d446ac5049add3409a6b5c0d0f3cd76ab1a1d7c9f1676f98069c1d9f5e42e3c4"
+    },
+    "source_models_manifest": {
+      "path": "source_models_manifest_v1.json",
+      "sha256": "d723c2dede9dee4bd490751ca4b5ad334397ecf8e913094039ddb8d624b6ac73"
+    },
+    "design_tests": {
+      "path": "../../tests/test_planet_x_survey_model_design.py",
+      "sha256": "ed604129e23ea75650e5655cec84a9519b4913806a9992af7248eee0273c6d4f"
+    }
+  },
+  "prior_calibration_boundary": {
+    "jx_o1_v4_contract_sha256": "eca324ae2448d4e704173640cfa459a3c38c329ce2eec8b61d7e94e147a15e1c",
+    "jx_o1_v4_result_sha256": "d15dc3a507156ac6e08f2acc6911f91453d7c066e29716def63a870d440fa30a",
+    "allowed_role": "SURVEY_ADAPTER_CALIBRATION_ONLY",
+    "observational_gate_satisfied": false,
+    "realistic_planet_x_power_gate_satisfied": false
+  },
+  "current_permissions": {
+    "acquire_and_audit_previously_inspected_inputs": true,
+    "draft_separate_execution_contract": true,
+    "run_synthetic_calibration": false,
+    "access_or_unblind_untouched_holdout_outcomes": false,
+    "compute_jx_o2_observed_score": false,
+    "run_observed_model_comparison": false,
+    "start_large_gpu_job": false,
+    "issue_planet_x_detection_or_exclusion_claim": false
+  },
+  "activation_status": {
+    "all_design_gates_satisfied": false,
+    "later_execution_contract_exists": false,
+    "later_activation_receipt_exists": false,
+    "observed_execution_authorized": false
+  },
+  "unresolved_execution_blockers": [
+    "Exact survey data, object, characterization, license, and exposure manifests are not locked.",
+    "Exact physically matched M0 and M1 model artifacts and candidate lineage are not locked.",
+    "The primary joint score, absolute adequacy rule, nuisance rules, and count model are not locked.",
+    "Family-wide calibration, fixed replicate counts, and simultaneous type-I and power bounds are not established.",
+    "A genuinely untouched holdout has not been identified; public named catalogs are previously inspected.",
+    "Independent custodian, implementation, replay, deterministic environment, and public archive receipts do not exist.",
+    "No later immutable execution contract or activation receipt exists."
+  ],
+  "activation_rule": "This registration can never be edited to authorize execution. A later execution contract must resolve every exact field before synthetic calibration, and a separate activation receipt may authorize exactly one observed-data run only after all required receipts pass.",
+  "mandatory_nonclaim": "This design authorizes no execution and contains no observational outcome. A future result may compare only the specified generative model families within locked data and assumptions; it cannot by itself detect or exclude Planet X. JX-O1 V4 validates only the survey-adapter calibration prerequisite."
+}
