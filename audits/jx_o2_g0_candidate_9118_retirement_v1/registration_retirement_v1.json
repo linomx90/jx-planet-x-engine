@@ -1,0 +1,54 @@
+{
+  "schema": "jx-o2-g0-candidate-retirement-registration/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "source_audit_id": "jx-o2-g0-input-audit-v1",
+  "resolution_id": "jx-o2-g0-candidate-9118-retirement-v1",
+  "artifact_class": "IMMUTABLE_SCOPED_G0_RETIREMENT_REGISTRATION",
+  "registered_at_utc": "2026-08-23T04:16:13Z",
+  "timestamp_authority": "The Git object and pull-request history that first publish this immutable receipt.",
+  "base_repository_commit": "2d5e3aa001d12178bd7c264d378cc41d6072fef9",
+  "registration_state": "REGISTERED_IMMUTABLE_SCOPED_RETIREMENT",
+  "resolution_method": "PERMANENT_SCOPE_REMOVAL",
+  "scientific_evidence_role": "PROVENANCE_DISPOSITION_NOT_OUTCOME_EVIDENCE",
+  "claim_ceiling": "PROVENANCE_DISPOSITION_ONLY",
+  "g0_audit_status": "BLOCKED",
+  "g0_complete": false,
+  "execution_authorized": false,
+  "observed_execution_authorized": false,
+  "gpu_run_authorized": false,
+  "outcomes_generated": false,
+  "scope_effect": {
+    "candidate_9118_removed_from_jx_o2_model_scope": true,
+    "lineage_recovered": false,
+    "epoch_defect_repaired": false,
+    "activation_gate_a03_satisfied": false,
+    "matched_m0_m1_family_acquired": false,
+    "eligible_for_g1": false
+  },
+  "current_permissions": {
+    "promote_candidate_9118": false,
+    "create_execution_contract": false,
+    "create_activation_receipt": false,
+    "run_synthetic_calibration": false,
+    "run_observed_model_comparison": false,
+    "access_or_unblind_untouched_holdout": false,
+    "start_large_gpu_job": false
+  },
+  "locked_files": {
+    "readme": {
+      "path": "README.md",
+      "sha256": "96487cdb6bdd03da54c42ed95087ba4e329a3f5cc0b92f054bab75c833eadd3b"
+    },
+    "retirement_receipt": {
+      "path": "candidate_9118_retirement_v1.json",
+      "sha256": "01a041382aa716293db9f61ae8917d44bd80c62347cc2aaa7c03d0442f6009cd"
+    },
+    "integrity_tests": {
+      "path": "../../tests/test_jx_o2_candidate_9118_retirement.py",
+      "sha256": "ec53802764df3adab09fac3f01c039589b570ddecefd967db5dbf924ca333fb7"
+    }
+  },
+  "registration_rule": "Any change to a locked file requires a new versioned receipt and registration; this registration must never be edited to authorize execution.",
+  "non_supersession_rule": "No later receipt or version may reinstate candidate 9118 under this experiment ID; reconsideration requires a different experiment ID, new preregistration, and independently audited provenance.",
+  "mandatory_nonclaim": "This receipt records only a provenance disposition. Candidate 9118 remains a historical exploratory screening assumption and is not evidence for or against Planet X. JX-O2 remains blocked and no execution is authorized."
+}
