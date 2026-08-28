@@ -1,0 +1,60 @@
+{
+  "schema": "jx-e2-numerics-local-closure/v1",
+  "experiment_id": "jx-e2-active-frame-integrator-50k-v1",
+  "closure_state": "JX_E2_LOCAL_CLOSURE_COMPLETE",
+  "artifact_class": "LOCAL_CONTENT_HASH_CLOSURE_ONLY",
+  "recorded_at_utc": "2026-08-23T16:13:46Z",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_CLOSURE_ONLY_NO_EXTERNAL_TIMESTAMP",
+  "externally_timestamped": false,
+  "scientific_evidence_artifact": false,
+  "new_dynamics_executed": false,
+  "path_base": "WORKSPACE_ROOT",
+  "claim_ceiling": "NUMERICAL_METHOD_FORENSICS_ONLY",
+  "replay_verdict": "JX_E2_SEMANTIC_REPLAY_EXACT",
+  "overall_numerical_classification": "MIXED_OR_INCONCLUSIVE",
+  "semantic_sha256": "4cf3a6cbd1cb051e8404d7242190820e1fb07ec7a26ca099d06cb4df837f2b2d",
+  "bindings": {
+    "registration": {
+      "relative_path": "work/jx_e2_numerics/registration_v1.json",
+      "sha256": "326f7e51dcdb51c477041b9c941b67743a0e6a92c8d04fa42bd8a0ae9eeb8486"
+    },
+    "closure_verifier": {
+      "relative_path": "work/jx_e2_numerics/verify_closure.py",
+      "sha256": "115f5aa03b510976ed7297fdb258941e4312af4a9de7d3d235a990bcc197f2ff"
+    },
+    "execution_a": {
+      "root_relative_path": "work/jx_e2_numerics/output_a",
+      "run_manifest_sha256": "48f32cc2ea8ea4b99600c3b3960ce6328a22bc9b7195ee23dc4cf2b991d5c2bd",
+      "result_sha256": "102c54a849ba3e03266e648e2b3346d2a235989a34bb789c378eb3c95dccc310",
+      "output_tree_manifest_algorithm": "jx-e2-recursive-file-manifest-sha256/v1",
+      "output_tree_manifest_sha256": "0eba12ba737ce63d4cd9ac8e46eae536184acd5c54c800b41e46c0841acebbda"
+    },
+    "execution_b": {
+      "root_relative_path": "work/jx_e2_numerics/output_b",
+      "run_manifest_sha256": "588eb9242dc3b2c53982d498c6ca39102e2980670e8df5cc8e2e285508d4cf8a",
+      "result_sha256": "eb704ade084c20c002b69c50b166d830703dca25cd748032397a250e97ef9912",
+      "output_tree_manifest_algorithm": "jx-e2-recursive-file-manifest-sha256/v1",
+      "output_tree_manifest_sha256": "3da6ac80bf8cfbec2da53197e1bb529515254795fbb1cf87170e29eb3d5041e3"
+    },
+    "replay_receipt": {
+      "relative_path": "work/jx_e2_numerics/replay_receipt_v1.json",
+      "sha256": "8989e8ba31dd0e0bfe15180fab760b80056e021944c08f73f191f702029056cb"
+    },
+    "final_report": {
+      "relative_path": "outputs/JX-E2-final-numerical-forensics-report.md",
+      "sha256": "9da2903bfca951ead02bc441bdab8e07ae7ac434ce1d32e184b11e90f25f9804",
+      "binding_scope": "BYTE_IDENTITY_ONLY"
+    }
+  },
+  "closure_policy": {
+    "additional_jx_e2_execution_authorized": false,
+    "threshold_change_or_post_outcome_rescue_authorized": false,
+    "jx_o2_execution_authorized": false,
+    "gpu_execution_authorized": false,
+    "observed_data_execution_authorized": false,
+    "scientific_planet_x_claim_authorized": false,
+    "new_work_requires_separate_preregistration": true
+  },
+  "verification_scope": "Content-hash closure only. It binds byte identity and the previously verified output-tree digests; it does not reclassify E2, reconstruct unretained samples, provide an external timestamp, or constitute independent scientific replication.",
+  "mandatory_nonclaim": "This is a post-failure, active-body-only numerical-method diagnostic using an idealized synthetic benchmark. It does not rerun JX-E1 as a replacement, alter, validate, or rehabilitate JX-E1; JX-E1 remains ENGINEERING_LONG_INVALID and JX-E1-B remains forbidden. No E2 classification establishes that E1 was accurate, adequate, or scientifically usable. Execution completion or semantic replay exactness refers only to protocol integrity. E2 uses no observed survey data or recovered author inputs, does not modify or unblock JX-O2, does not test the existence, detectability, exclusion, or preferred properties of Planet X, and provides no evidence for or against Planet X. IAS15 is a numerical comparator within the same REBOUND build, not ground truth or an independent scientific implementation."
+}

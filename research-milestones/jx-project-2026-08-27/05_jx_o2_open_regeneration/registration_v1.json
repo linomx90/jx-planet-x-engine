@@ -1,0 +1,42 @@
+{
+  "schema": "jx-o2-g0-open-regeneration-registration/v1",
+  "artifact_id": "jx-o2-g0-open-regeneration-registration-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "protocol_id": "jx-o2-g0-open-regeneration-prereg-v1",
+  "registration_state": "LOCAL_DESIGN_HASH_LOCKED_NOT_EXTERNALLY_PREREGISTERED",
+  "recorded_at_utc": "2026-08-23T17:00:59Z",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY_NO_EXTERNAL_TIMESTAMP",
+  "externally_timestamped": false,
+  "scientific_evidence_artifact": false,
+  "outcomes_generated": false,
+  "g0_complete": false,
+  "eligible_for_g1": false,
+  "claim_ceiling": "OPEN_REGENERATION_PROTOCOL_ONLY",
+  "execution_permissions": {
+    "local_hash_verification_authorized": true,
+    "network_or_github_action_authorized": false,
+    "generate_source_population_authorized": false,
+    "generate_checkpoint_authorized": false,
+    "realize_angles_or_seeds_authorized": false,
+    "dynamics_or_pilot_authorized": false,
+    "survey_adapter_authorized": false,
+    "synthetic_calibration_authorized": false,
+    "observed_data_access_authorized": false,
+    "observed_model_comparison_authorized": false,
+    "cpu_or_gpu_job_authorized": false,
+    "g1_contract_authorized": false,
+    "activation_receipt_authorized": false,
+    "planet_x_claim_authorized": false
+  },
+  "locked_files": {
+    "README.md": "63bbaee7f6870701022992fb586f33ef6900e1708469b02ba4c88641d6583801",
+    "open_regeneration_preregistration_v1.json": "68524adc51026f3e0271f90a49a19af1ba55212a611fdd3be84871d79f9b1d39",
+    "model_family_manifest_v1.json": "a29da03a337ddcfb6ed54a74663c3e9885e59a74957989a5d6c18c5b405054d4",
+    "randomization_and_numerics_v1.json": "898054a86a46382e84642eb0d655658aca525ff879569511cba39e7cf66d86c0",
+    "analysis_gate_protocol_v1.json": "0113a8a7002c1a9856d9392dedee8bdedf1882482b406b5b012a4f82872c55c2",
+    "prior_bindings_v1.json": "2947c058a27badf5ee5abfbb6e1cd0711793ec69dda7550ae1821d23c5eaa0be",
+    "verify_preregistration.py": "e5fe5d0147f023ee7da2f75390b0f9c36997d54c1b9b989c195df16b113db8ca",
+    "test_preregistration.py": "bfa4b08662a0be17de2e7a55ed941ab7c9067c4a30a0176e8719459903a07f8b"
+  },
+  "mandatory_nonclaim": "This local protocol defines only a proposed open-regeneration route. It is not externally timestamped, does not recover or reproduce the authors' original simulation, does not generate or validate a physical model, does not complete JX-O2 G0, and authorizes no checkpoint generation, dynamics, calibration, survey execution, observed comparison, GPU job, or Planet X claim."
+}

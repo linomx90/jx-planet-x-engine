@@ -1,0 +1,32 @@
+{
+  "contract_sha256": "dd4527ef2b7d61bda93395d9dec7107b57c962c88aee3f1f1032af60dd055d63",
+  "execution_a": {
+    "execution_instance_id": "d6162c36b4af993dd50bcc0e852e1ae2",
+    "output_tree_sha256": "be220085b531ed008536627ac1477ba7981723d10b8c6e7b6f74d89d260e2f2f",
+    "result_sha256": "23e2fed063c4926acc4530816b98a0e0df40d21d182d9ec9371370ad725f6529",
+    "semantic_sha256": "1a04e928287e19558a621f09af128da76a69233c1e8c339306ef8b9c42499c9a"
+  },
+  "execution_b": {
+    "execution_instance_id": "2ef3f2a56bf67981bd3482c5d2f713e4",
+    "output_tree_sha256": "f2ca81d6f462c6ec095068932f6adc9c543052f90e6f77cd1b200ce41c353003",
+    "result_sha256": "4ed6a9f680770fd42cc2c3e9bd21dfa24598fd32d2ac57774d63d0bb32c52d78",
+    "semantic_sha256": "1a04e928287e19558a621f09af128da76a69233c1e8c339306ef8b9c42499c9a"
+  },
+  "experiment_id": "jx-xp1-public-synthetic-response-v1",
+  "independent_recomputation": {
+    "all_14_initial_states_without_integration": true,
+    "all_seven_timestep_pairs_or_locked_suppression": true,
+    "particle_summaries": true,
+    "raw_class_agreement_and_emitted_classification_or_locked_suppression": true,
+    "seeds_and_64_tracers": true,
+    "two_resolution_integer_effects_and_block_effects_or_locked_suppression": true,
+    "wasserstein1_or_locked_suppression": true
+  },
+  "mandatory_nonclaim": "JX-XP1 is a locally frozen idealized 250-kyr synthetic response screen. It uses no observed survey data or private author inputs, is not an author reproduction or an independent physical validation, does not compare characterized-survey fit, and provides no evidence for or against Planet X, no mass or orbit constraint, no formation or four-billion-year stability result, and no permission, G0 evidence, or progress for JX-O2.",
+  "registration_sha256": "9b8fb748ce3850cbf908c6b1dc8d22c0ffb7f94a2223d0d3f1fbfedb1e9dca81",
+  "schema": "jx-xp1-replay-receipt/v1",
+  "seed_manifest_sha256": "92de9fae8c32f322c58216c64355739917dddee2881e823541b7fbad791e1ac7",
+  "state": "XP1_SEMANTIC_REPLAY_EXACT",
+  "tracer_rows_sha256": "b98c8c27f3301f54afff72a0b71847e1508d6ed51dc2ce566c4ca9daec7133ab",
+  "verifier_sha256": "30eb366b84dcf67f50d2aca1b9dcf8a357f13e0c96eec7aba85935e9b095e2d6"
+}

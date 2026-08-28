@@ -1,0 +1,382 @@
+{
+  "schema": "jx-xp1-synthetic-response-contract/v1",
+  "experiment_id": "jx-xp1-public-synthetic-response-v1",
+  "artifact_class": "LOCAL_FROZEN_EXPLORATORY_SYNTHETIC_EXECUTION_CONTRACT",
+  "registration_status": "LOCAL_HASH_LOCK_REQUIRED_BEFORE_FIRST_NUMERICAL_OUTPUT",
+  "claim_ceiling": "SYNTHETIC_250KYR_RESPONSE_ONLY",
+  "permissions": {
+    "local_cpu_execution_authorized": true,
+    "network_access_authorized": false,
+    "gpu_execution_authorized": false,
+    "observed_data_access_authorized": false,
+    "survey_adapter_execution_authorized": false,
+    "jx_o2_execution_or_g0_evidence_authorized": false,
+    "planet_x_detection_exclusion_constraint_or_preference_claim_authorized": false
+  },
+  "excluded_context_bindings": [
+    {
+      "id": "JX_O2_OPEN_REGEN_REGISTRATION",
+      "path": "../jx_o2_g0_open_regeneration_prereg_v1/registration_v1.json",
+      "sha256": "10d2b2f15c4f3db040d92fd95f6ea4679c6deb9bdc6a9c3862eabbadaecd3d72",
+      "role": "BOUND_CONTEXT_ONLY_DOES_NOT_AUTHORIZE_OR_RECEIVE_XP1_EVIDENCE"
+    },
+    {
+      "id": "JX_O2_CANDIDATE_RETIREMENT",
+      "path": "../jx-public-reconstruction-design/audits/jx_o2_g0_candidate_9118_retirement_v1/registration_retirement_v1.json",
+      "sha256": "037c22ea0d1a9cb4c86eadc9056b8e1e605a7a5790cba60871daaa75aad1bbc5",
+      "role": "VOLUNTARILY_GOVERNING_NONUSE_POLICY"
+    },
+    {
+      "id": "JX_E2_CLOSURE",
+      "path": "../jx_e2_numerics/closure_v1.json",
+      "sha256": "4cec842a5f5b6f22a97f0b1b5dfaaf4bcddfe7efbe5c6836bf3772ef7724d901",
+      "role": "ENGINEERING_CONTEXT_ONLY_NOT_XP1_INPUT_OR_THRESHOLD_SOURCE"
+    },
+    {
+      "id": "PUBLIC_LITERATURE_GRID",
+      "path": "../jx-public-reconstruction-design/audits/jx_o2_g0_public_reconstruction_design_v1/literature_prior_grid_v1.json",
+      "sha256": "b6fe87043937764976b26473b49004eecfefb2882178f5f41ccb98424534068c",
+      "role": "PROVENANCE_FOR_THREE_PRESELECTED_PHYSICAL_CASES_ONLY"
+    }
+  ],
+  "scientific_boundary": {
+    "question": "In this frozen idealized synthetic design, how does instantaneous addition of the equal-design six-arm compact-body mixture change the 250-kyr sampled q-below-30 fraction relative to its matched control?",
+    "observed_catalogs_or_surveys_used": false,
+    "author_checkpoint_angles_seeds_or_outputs_used": false,
+    "prior_jx_trajectory_outputs_used": false,
+    "retired_candidate_or_derivative_used": false,
+    "exact_or_independent_physical_reproduction": false,
+    "population_or_survey_inference": false,
+    "model_preference_or_planet_x_evidence": false,
+    "horizon_interpretation": "EARLY_SYNTHETIC_RESPONSE_SCREEN_NOT_FORMATION_OR_LONG_TERM_STABILITY"
+  },
+  "design_core": {
+    "units_and_frame": {
+      "G_AU3_Msun_yr2": 39.47841760435743,
+      "distance": "AU",
+      "time": "JULIAN_YEAR",
+      "mass": "SOLAR_MASS",
+      "epoch": "SYNTHETIC_T0",
+      "construction_origin": "SUN_CENTERED_RELATIVE_STATES",
+      "integration_frame": "ACTIVE_BODY_BARYCENTRIC_AFTER_DETERMINISTIC_TRANSLATION_AND_BOOST",
+      "reported_states": "SUN_RELATIVE"
+    },
+    "common_active_system": {
+      "sun_mass_Msun": 1.0,
+      "earth_to_sun_mass_ratio": 3.0034896149156e-6,
+      "giants": [
+        {"name": "Jupiter", "mass_Msun": 0.00095, "a_AU": 5.2, "initial_longitude_deg": 0.0},
+        {"name": "Saturn", "mass_Msun": 0.00028, "a_AU": 9.5, "initial_longitude_deg": 90.0},
+        {"name": "Uranus", "mass_Msun": 0.000044, "a_AU": 19.2, "initial_longitude_deg": 180.0},
+        {"name": "Neptune", "mass_Msun": 0.000052, "a_AU": 30.1, "initial_longitude_deg": 270.0}
+      ],
+      "planet_orbits": "CIRCULAR_COPLANAR_IDEALIZED",
+      "included_forces": "NEWTONIAN_POINT_MASS_GRAVITY",
+      "omitted": [
+        "INNER_PLANETS",
+        "GENERAL_RELATIVITY",
+        "MIGRATION_OR_GAS",
+        "CLUSTER_GALACTIC_TIDE_OR_STELLAR_ENCOUNTERS",
+        "COLLISIONS_OR_REMOVAL",
+        "TRACER_BACKREACTION"
+      ]
+    },
+    "m0_definition": "COMMON_ACTIVE_SYSTEM_WITH_NO_ADDED_BODY",
+    "m1_physical_cases": [
+      {"id": "CI01", "mass_Mearth": 5.0, "a_AU": 367.0, "e": 0.2, "i_deg": 20.0, "selection_role": "PREDECLARED_LOW_PUBLIC_DESIGN_CASE"},
+      {"id": "CI05", "mass_Mearth": 7.07, "a_AU": 433.0, "e": 0.35, "i_deg": 20.0, "selection_role": "PREDECLARED_CENTRAL_PUBLIC_DESIGN_CASE"},
+      {"id": "CI09", "mass_Mearth": 10.0, "a_AU": 540.0, "e": 0.5, "i_deg": 20.0, "selection_role": "PREDECLARED_HIGH_PUBLIC_DESIGN_CASE"}
+    ],
+    "orientation_probes": [
+      {"id": "A", "Omega_deg": 45.0, "varpi_deg": 135.0, "M_deg": 90.0},
+      {"id": "B", "Omega_deg": 225.0, "varpi_deg": 315.0, "M_deg": 270.0}
+    ],
+    "orientation_policy": {
+      "omega_rule": "OMEGA_ARGUMENT_DEG_EQUALS_VARPI_MINUS_ASCENDING_NODE_MODULO_360",
+      "same_two_probes_for_every_physical_case": true,
+      "probe_weights": ["1/2", "1/2"],
+      "recovered_author_states": false,
+      "probability_or_posterior_interpretation": false,
+      "post_output_probe_change": "INVALID"
+    },
+    "m1_mixture": {
+      "configuration_ids": ["CI01-A", "CI01-B", "CI05-A", "CI05-B", "CI09-A", "CI09-B"],
+      "weight_each": "1/6",
+      "weights_are_arithmetic_design_weights_not_probabilities": true,
+      "ranking_pruning_or_reweighting": "FORBIDDEN"
+    },
+    "tracer_design": {
+      "classification": "FOUR_DETERMINISTIC_LHS_DESIGN_BLOCKS_NOT_AN_OBSERVED_POPULATION",
+      "block_count": 4,
+      "tracers_per_block": 16,
+      "total_tracers": 64,
+      "a_AU": [150.0, 800.0],
+      "a_distribution": "LOG_UNIFORM_WITHIN_EACH_LHS_BLOCK",
+      "q_AU": [35.0, 80.0],
+      "q_distribution": "UNIFORM_WITHIN_EACH_LHS_BLOCK",
+      "i_deg": [0.0, 40.0],
+      "i_distribution": "UNIFORM_IN_COS_I_WITHIN_EACH_LHS_BLOCK",
+      "Omega_omega_M_deg": [0.0, 360.0],
+      "angular_distribution": "INDEPENDENT_UNIFORM_WITHIN_EACH_LHS_BLOCK",
+      "massless": true,
+      "common_exact_states_in_all_primary_and_audit_arms": true,
+      "blocks_are_deterministic_design_REPLICATES_not_iid_samples": true,
+      "post_output_replacement_or_resampling": "FORBIDDEN"
+    },
+    "dynamics": {
+      "integrator": "MERCURIUS",
+      "primary_dt_years": 0.125,
+      "audit_dt_years": 0.0625,
+      "r_crit_hill": 3.0,
+      "safe_mode": 1,
+      "testparticle_type": 0,
+      "duration_years": 250000.0,
+      "sample_cadence_years": 50.0,
+      "sample_count_including_t0": 5001,
+      "collision": "NONE",
+      "removal": "NONE"
+    },
+    "primary_arm_ids": ["M0", "CI01-A", "CI01-B", "CI05-A", "CI05-B", "CI09-A", "CI09-B"],
+    "audit_arm_ids": ["AUDIT-M0", "AUDIT-CI01-A", "AUDIT-CI01-B", "AUDIT-CI05-A", "AUDIT-CI05-B", "AUDIT-CI09-A", "AUDIT-CI09-B"],
+    "audit_selection_basis": "EVERY_PRIMARY_ARM_HAS_A_PREDECLARED_HALF_TIMESTEP_COUNTERPART",
+    "per_particle_outputs": [
+      "MINIMUM_SAMPLED_Q_AU",
+      "FIRST_SAMPLED_Q_BELOW_35_TIME_YR",
+      "FIRST_SAMPLED_Q_BELOW_30_TIME_YR",
+      "FINAL_SUN_RELATIVE_A_E_I_Q_AND_DISTANCE",
+      "FINAL_FINITE_AND_BOUND"
+    ],
+    "primary_estimand": {
+      "definition": "DELTA_EQUALS_MEAN_OVER_64_PARTICLES_OF_OPEN_PAREN_ONE_SIXTH_SUM_OVER_6_M1_CONFIGS_INDICATOR_MINIMUM_SAMPLED_Q_BELOW_30_MINUS_M0_INDICATOR_CLOSE_PAREN",
+      "block_effects_required": 4,
+      "sampled_not_continuous": true
+    },
+    "secondary_descriptive_outputs": [
+      "ANALOGOUS_SAMPLED_Q_BELOW_35_EFFECT",
+      "FINAL_FINITE_AND_BOUND_FRACTIONS",
+      "PER_CONFIGURATION_EFFECTS",
+      "WASSERSTEIN1_MINIMUM_SAMPLED_Q_FINAL_Q_AND_FINAL_I"
+    ],
+    "exploratory_classification": {
+      "directionally_stable_increase": "DELTA_AT_LEAST_0_05_AND_EVERY_BLOCK_DELTA_STRICTLY_POSITIVE",
+      "directionally_stable_decrease": "DELTA_AT_MOST_MINUS_0_05_AND_EVERY_BLOCK_DELTA_STRICTLY_NEGATIVE",
+      "practically_small": "ABS_DELTA_AT_MOST_0_02_AND_MAX_ABS_BLOCK_DELTA_AT_MOST_0_05",
+      "otherwise": "INCONCLUSIVE",
+      "p_values_bayes_factors_confidence_intervals_row_winner_or_significance_language": "FORBIDDEN"
+    }
+  },
+  "seed_policy": {
+    "design_core_sha256": "0865266fa46b3cdf080d783f366f4988a76fb1667bf334bd79b005e9ad68380c",
+    "design_core_canonical_bytes": "UTF8_JSON_SORT_KEYS_TRUE_SEPARATORS_COMMA_COLON_ENSURE_ASCII_TRUE_ALLOW_NAN_FALSE",
+    "manifest_path": "seed_manifest_v1.json",
+    "domain_ascii": "jx-xp1-public-synthetic-response-v1",
+    "stream_formula": "SHA256(UINT32_BE_DOMAIN_LENGTH || DOMAIN || RAW_32_BYTE_DESIGN_CORE_SHA256 || UINT32_BE_LABEL_LENGTH || ASCII_LABEL || UINT64_BE_COUNTER)",
+    "manifest_seed_bytes": 16,
+    "manifest_seed_slice": "FIRST_16_DIGEST_BYTES",
+    "seed_encoding": "LOWERCASE_HEX_BIG_ENDIAN",
+    "lhs_construction": {
+      "u64_formula": "BIG_ENDIAN_FIRST_8_BYTES_OF_SHA256(ASCII_jx-xp1-lhs-u64/v1_NUL || SEED16 || UINT64_BE_COUNTER)",
+      "counter_initial": 0,
+      "permutation": "DESCENDING_FISHER_YATES_I_15_TO_1_WITH_UNBIASED_U64_REJECTION_LIMIT_2POW64_MINUS_2POW64_MOD_I_PLUS_1",
+      "permutation_counter_consumption": "CONSUME_AND_INCREMENT_EVERY_U64_INCLUDING_REJECTED_WORDS",
+      "jitter": "AFTER_PERMUTATION_ONE_U64_PER_LOGICAL_INDEX_0_TO_15_THEN_RIGHT_SHIFT_11_AND_DIVIDE_BY_2POW53",
+      "lhs_fraction": "(PERMUTED_STRATUM_FOR_LOGICAL_INDEX + JITTER) / 16",
+      "stream_dimension_map": {
+        "LOG_A": "NATURAL_LOG_A",
+        "Q": "Q_AU",
+        "COS_I": "COS_INCLINATION",
+        "OMEGA": "ASCENDING_NODE_RADIANS",
+        "OMEGA_ARGUMENT": "ARGUMENT_OF_PERIHELION_RADIANS",
+        "MEAN_ANOMALY": "MEAN_ANOMALY_RADIANS"
+      },
+      "transforms": {
+        "a_AU": "EXP(LOG(150) + LHS_LOG_A * (LOG(800) - LOG(150)))",
+        "q_AU": "35 + 45 * LHS_Q",
+        "e": "1 - q_AU / a_AU",
+        "i_rad": "ACOS(COS(RADIANS(40)) + LHS_COS_I * (1 - COS(RADIANS(40))))",
+        "angles_rad": "2 * PI * MATCHING_LHS_FRACTION"
+      },
+      "logical_id": "XP1-B{BLOCK_INDEX:02d}-T{INDEX_WITHIN_BLOCK:02d}",
+      "row_order": "BLOCK_INDEX_ASCENDING_THEN_INDEX_WITHIN_BLOCK_ASCENDING",
+      "canonical_row_fields": ["logical_id", "block_index", "index_within_block", "a_AU_hex", "q_AU_hex", "e_hex", "i_rad_hex", "Omega_rad_hex", "omega_rad_hex", "M_rad_hex"],
+      "canonical_rows_sha256_domain": "jx-xp1-canonical-tracer-design/v1_NUL",
+      "canonical_rows_sha256": "b98c8c27f3301f54afff72a0b71847e1508d6ed51dc2ce566c4ca9daec7133ab",
+      "block_0_log_a_permutation_test_vector": [8, 1, 12, 2, 7, 4, 6, 9, 11, 15, 5, 13, 0, 10, 14, 3],
+      "block_0_log_a_first_four_lhs_float_hex": ["0x1.0cf6f52b2afc6p-1", "0x1.a7245b502b2fep-4", "0x1.9c3eba048b96cp-1", "0x1.04ce7c89d6844p-3"]
+    },
+    "system_time_pid_hostname_os_entropy_or_caller_override": false,
+    "retry_policy": "RETRY_IDENTICAL_STREAM_ONLY_NO_REDRAW",
+    "local_reproducible_not_externally_randomized_or_outcome_independent": true
+  },
+  "numerical_gates": {
+    "gate_order": ["INTEGRITY", "CONSERVATION_AND_READBACK", "TIMESTEP_ENDPOINT_CONVERGENCE", "EXPLORATORY_CLASSIFICATION"],
+    "finite_definition": "ALL_SIX_CARTESIAN_COMPONENTS_FINITE_FOR_EVERY_PARTICLE_AT_EVERY_50_YEAR_SAMPLE",
+    "final_bound_definition": "FINITE_SUN_RELATIVE_OSCULATING_A_GREATER_THAN_ZERO_AND_E_AT_LEAST_ZERO_AND_LESS_THAN_ONE_AT_250_KYR",
+    "max_relative_active_energy_drift": 1e-6,
+    "max_relative_active_com_angular_momentum_vector_drift": 1e-10,
+    "max_scale_normalized_active_linear_momentum_residual": 1e-10,
+    "max_dt_half_q_below_30_fraction_difference": 0.015625,
+    "max_dt_half_q_below_35_fraction_difference": 0.015625,
+    "max_dt_half_final_finite_bound_fraction_difference": 0.015625,
+    "max_dt_half_w1_minimum_sampled_q_AU": 0.25,
+    "max_dt_half_w1_final_q_AU": 0.1,
+    "max_dt_half_w1_final_i_deg": 0.1,
+    "sampled_orbit_policy": {
+      "primary": "SUN_RELATIVE_OSCULATING_ELEMENTS",
+      "sample_times": "T_EQUALS_0_THROUGH_250000_INCLUSIVE_AT_EXACT_50_YEAR_MULTIPLES",
+      "threshold_comparison": "STRICTLY_LESS_THAN_30_OR_35_AU",
+      "eligible_sample": "FINITE_CARTESIAN_AND_FINITE_OSCULATING_A_E_I_Q_WITH_Q_GE_0_BOUND_OR_HYPERBOLIC",
+      "physically_unbound_finite_orbit": "LEGITIMATE_OUTCOME_RECORDED_SEPARATELY_NOT_A_NUMERICAL_FAILURE",
+      "orbit_conversion_or_nonfinite_failure": "NUMERICAL_GATE_FAILURE_AND_CLASSIFICATION_SUPPRESSED",
+      "minimum_sampled_q": "MINIMUM_OVER_ALL_5001_FINITE_OSCULATING_SAMPLES_INCLUDING_HYPERBOLIC_STATES",
+      "first_crossing": "FIRST_ELIGIBLE_SAMPLE_TIME_OR_NULL"
+    },
+    "active_invariant_policy": {
+      "active_particles": "SUN_FOUR_GIANTS_AND_OPTIONAL_ADDED_BODY_ONLY",
+      "summation": "MATH_FSUM_BINARY64",
+      "intrinsic_energy": "MATH_FSUM_OF_HALF_MASS_TIMES_COM_RELATIVE_SPEED_SQUARED_PLUS_MATH_FSUM_OF_ALL_ACTIVE_PAIRWISE_MINUS_G_M_I_M_J_OVER_SEPARATION",
+      "energy_metric": "ABS(INTRINSIC_E_T_MINUS_INTRINSIC_E_0)/ABS(INTRINSIC_E_0)",
+      "rebound_engine_energy": "OPTIONAL_DIAGNOSTIC_NOT_A_GATE",
+      "com_angular": "SUM_MASS_TIMES_CROSS(POSITION_MINUS_ACTIVE_COM_POSITION,VELOCITY_MINUS_ACTIVE_COM_VELOCITY)",
+      "com_angular_metric": "NORM(L_COM_T_MINUS_L_COM_0)/NORM(L_COM_0)",
+      "linear_internal_scale": "SUM_MASS_TIMES_NORM(VELOCITY_MINUS_ACTIVE_COM_VELOCITY)_AT_T0",
+      "linear_metric": "NORM(P_T_MINUS_P_0)/LINEAR_INTERNAL_SCALE",
+      "sample_aggregation": "MAXIMUM_OVER_ALL_5001_SAMPLE_TIMES_IN_EVERY_ARM",
+      "zero_or_nonfinite_denominator": "INVALID_INTEGRITY"
+    },
+    "wasserstein1_policy": {
+      "definition": "EXACT_EMPIRICAL_1D_W1_BY_SORTED_CDF_INTERVAL_INTEGRATION",
+      "minimum_sampled_q_population": "ALL_64_PARTICLES_REQUIRED_FINITE",
+      "final_q_and_i_population": "ALL_64_PARTICLES_REQUIRED_FINITE_OSCULATING_VALUES_BOUND_OR_UNBOUND",
+      "missing_censored_or_nonfinite_value": "NUMERICAL_GATE_FAILURE_AND_CLASSIFICATION_SUPPRESSED",
+      "units": {"minimum_sampled_q": "AU", "final_q": "AU", "final_i": "DEG"}
+    },
+    "analysis_output_policy": {
+      "complete_status": "COMPLETE_AT_BOTH_RESOLUTIONS",
+      "incomplete_status": "SUPPRESSED_REQUIRED_FINITE_ORBIT_METRICS_INCOMPLETE",
+      "incomplete_trigger": "ANY_OF_14_ARMS_HAS_FALSE_ALL_PARTICLES_HAVE_COMPLETE_FINITE_OSCULATING_HISTORY",
+      "incomplete_analysis_shape": "STATUS_PLUS_NULL_PRIMARY_DT_NULL_AUDIT_DT_HALF_NULL_PRIMARY_RAW_CLASSIFICATION_NULL_AUDIT_RAW_CLASSIFICATION",
+      "incomplete_timestep_shape": "EMPTY_LIST_AND_BOTH_ALL_SEVEN_TIMESTEP_PAIRS_PASS_AND_RAW_CLASS_AGREEMENT_FALSE",
+      "per_arm_summary_when_incomplete": "RECORDED_FINITE_SAMPLE_COUNTS_ONLY_NOT_A_COMPLETE_ESTIMAND_AND_NEVER_CLASSIFIED"
+    },
+    "timestep_scope": "ALL_SEVEN_PRIMARY_ARMS_HAVE_HALF_TIMESTEP_COUNTERPARTS_AND_BOTH_COMPLETE_MIXTURE_ANALYSES_ARE_RECOMPUTED",
+    "timestep_aggregation": "GLOBAL_64_PARTICLE_PER_ARM_FRACTION_AND_W1_GATES_PLUS_EXACT_PRIMARY_VERSUS_AUDIT_RAW_CLASS_EQUALITY_USING_ALL_FOUR_BLOCK_EFFECTS",
+    "classification_integer_rules": {
+      "increase": "PRIMARY_OR_AUDIT_MIXTURE_Q30_NUMERATOR_AT_LEAST_20_AND_EVERY_BLOCK_NUMERATOR_AT_LEAST_1",
+      "decrease": "PRIMARY_OR_AUDIT_MIXTURE_Q30_NUMERATOR_AT_MOST_MINUS_20_AND_EVERY_BLOCK_NUMERATOR_AT_MOST_MINUS_1",
+      "practically_small": "ABS_MIXTURE_Q30_NUMERATOR_AT_MOST_7_AND_MAX_ABS_BLOCK_NUMERATOR_AT_MOST_4",
+      "otherwise": "INCONCLUSIVE",
+      "primary_class_emission": "ONLY_IF_ALL_14_ARMS_PASS_INTEGRITY_AND_CONSERVATION_ALL_7_TIMESTEP_PAIRS_PASS_AND_PRIMARY_RAW_CLASS_EQUALS_AUDIT_RAW_CLASS"
+    },
+    "threshold_change_after_output": "FORBIDDEN",
+    "failed_numerical_gate_state": "NUMERICALLY_UNRESOLVED_AND_EFFECT_CLASSIFICATION_SUPPRESSED"
+  },
+  "resource_caps_per_execution": {
+    "workers": 1,
+    "worker_interpretation": "ONE_NUMERICAL_CHILD_AT_A_TIME_PLUS_NONNUMERICAL_PARENT_COORDINATOR",
+    "max_wall_seconds_total": 3600.0,
+    "max_wall_seconds_per_arm": 600.0,
+    "max_peak_rss_bytes": 2147483648,
+    "max_output_bytes": 134217728,
+    "minimum_free_disk_bytes": 1073741824,
+    "gpu_used": false,
+    "scope": "EACH_A_OR_B_EXECUTION_INDEPENDENTLY",
+    "aggregate_a_b_verification_wall_limit_promised": false,
+    "native_dynamics_watchdog": "ONE_POSIX_FORKED_CHILD_PER_ARM_WITH_PARENT_MONOTONIC_NS_POLL_AND_IMMEDIATE_KILL_ON_CAP_OR_FAILURE",
+    "watchdog_platform_lock": "LINUX_POSIX_FORK_AND_PROCFS",
+    "watchdog_clock": "PYTHON_TIME_MONOTONIC_NS",
+    "deadline_expiry_rule": "NOW_NS_GREATER_THAN_OR_EQUAL_TO_DEADLINE_NS",
+    "arm_wall_scope": "BEFORE_PROCESS_START_THROUGH_VALIDATED_RESPONSE_RECEIPT_AND_WORKER_EXIT",
+    "fork_precondition": "COORDINATOR_PROCFS_THREAD_COUNT_EXACTLY_ONE_BEFORE_EVERY_FORK",
+    "watchdog_poll_seconds": 0.25,
+    "watchdog_live_rss_source": "LINUX_PROC_PID_STATUS_VM_HWM",
+    "watchdog_terminal_rss_source": "POSIX_WAIT4_RUSAGE_RU_MAXRSS",
+    "worker_response_transport": "PARENT_NONBLOCKING_UINT64_BE_LENGTH_FRAMED_UTF8_JSON_PIPE_WITH_DEADLINE_CHECKS",
+    "rss_cap_scope": "PARENT_AND_EACH_SINGLE_ACTIVE_CHILD_PROCESS_PEAK_CHECKED_INDIVIDUALLY_NOT_SUMMED",
+    "watchdog_scope": "NATIVE_ARM_DYNAMICS_HARD_PROCESS_BOUNDARY_WITH_SYNCHRONOUS_CHECKS_AROUND_NONINTEGRATING_SETUP_ANALYSIS_AND_FINALIZATION",
+    "preflight_contains_no_integration_and_resource_checks_occur_before_and_after": true,
+    "finalization_wall_reserve_seconds": 5.0,
+    "final_result_is_written_via_fsynced_pending_file_then_size_and_resource_checked_before_atomic_publish": true
+  },
+  "runtime_lock": {
+    "python_version": "3.12.13",
+    "python_executable_sha256": "021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7",
+    "rebound_version": "4.4.11",
+    "rebound_build": "Nov 13 2025 14:44:51",
+    "rebound_binary_sha256": "fe7a23bcece1c3f1f869089e9e8d806bedb4727d893d2e551339adbb6665c28a",
+    "rebound_python_source_file_count": 29,
+    "rebound_python_source_sha256": "2c40b16571d57049cbf4bb8329a0c58342f3dc0f0cf49d860ca77fda5a73ae3a"
+  },
+  "result_policy": {
+    "clean_execution_labels": ["A", "B"],
+    "output_directories_must_be_distinct_absent_and_disjoint": true,
+    "output_directory_parent_must_preexist": true,
+    "semantic_result_equality_required_for_replay": true,
+    "elapsed_time_memory_and_output_path_are_provenance_only": true,
+    "runtime_absolute_paths_retained": false,
+    "no_raw_trajectories": true,
+    "result_overwrite": "FORBIDDEN",
+    "failure_receipt_is_permanent_for_output_directory": true,
+    "failure_receipt_free_form_exception_message_retained": false,
+    "failure_receipt_message": "REDACTED_NON_SEMANTIC_FAILURE_DETAIL",
+    "allowed_execution_states": ["INVALID_INTEGRITY", "RESOURCE_LIMIT", "NUMERICALLY_UNRESOLVED", "EXPLORATORY_COMPLETE"],
+    "allowed_replay_states": ["NONDETERMINISTIC_REPLAY", "XP1_SEMANTIC_REPLAY_EXACT"],
+    "a_only_independent_verification_receipt_required_before_b": true,
+    "a_only_receipt_state": "XP1_A_OUTPUT_VERIFIED_FOR_B",
+    "verification_recomputation_keys": [
+      "seeds_and_64_tracers",
+      "all_14_initial_states_without_integration",
+      "particle_summaries",
+      "two_resolution_integer_effects_and_block_effects_or_locked_suppression",
+      "wasserstein1_or_locked_suppression",
+      "all_seven_timestep_pairs_or_locked_suppression",
+      "raw_class_agreement_and_emitted_classification_or_locked_suppression"
+    ],
+    "a_and_b_output_roots_must_be_disjoint_without_ancestor_relationship": true,
+    "verification_receipts_must_be_outside_package_and_execution_output_trees": true,
+    "execution_outputs_and_verification_receipts_must_not_overlap_package_or_bound_context_trees": true,
+    "registered_package_inventory": ["README.md", "contract_v1.json", "registration_v1.json", "run_exploratory.py", "seed_manifest_v1.json", "test_exploratory.py", "verify_replay.py"],
+    "registered_package_subdirectories": "FORBIDDEN",
+    "successful_output_inventory": ["run_manifest.json", "result_v1.json"],
+    "failure_output_inventory": ["run_manifest.json", "failure_receipt.json"]
+  },
+  "execution_shape_lock": {
+    "primary_arm_count": 7,
+    "audit_arm_count": 7,
+    "total_arm_count": 14,
+    "tracers_in_every_arm": 64,
+    "analysis_blocks": 4,
+    "particles_per_analysis_block": 16,
+    "analysis_blocks_are_not_arm_multipliers": true,
+    "checkpoints_or_restart_files": "FORBIDDEN",
+    "raw_trajectories": "FORBIDDEN"
+  },
+  "initial_pairing_lock": {
+    "pre_translation_common_sun_relative_cartesian_components": "BITWISE_EXACT_ACROSS_ALL_14_ARMS",
+    "pre_translation_common_state_digest_required": true,
+    "post_active_com_translation_comparison": "SUN_RELATIVE_SIX_CARTESIAN_COMPONENTS_FOR_EVERY_COMMON_ACTIVE_BODY_AND_TRACER",
+    "post_translation_max_binary64_epsilon_units_per_component": 64.0,
+    "epsilon_scale": "ABS(ACTUAL_MINUS_REFERENCE)/(BINARY64_EPSILON*MAX(1,ABS(REFERENCE)))",
+    "maximum_observed_epsilon_units_recorded_per_arm": true,
+    "only_declared_physical_difference": "OPTIONAL_SINGLE_M1_BODY"
+  },
+  "sampled_state_stream_lock": {
+    "required_in_every_arm_semantic": true,
+    "domain": "jx-xp1-sampled-state-stream/v1_NUL",
+    "update_order": "SAMPLE_INDEX_ASCENDING_THEN_PARTICLE_INDEX_ASCENDING",
+    "sample_prefix": "UINT64_BE_SAMPLE_INDEX_THEN_BINARY64_BIG_ENDIAN_TIME_THEN_UINT32_BE_N_THEN_UINT32_BE_N_ACTIVE",
+    "particle_payload": "UINT32_BE_PARTICLE_INDEX_UINT32_BE_REBOUND_HASH_THEN_8_BINARY64_BIG_ENDIAN_M_R_X_Y_Z_VX_VY_VZ",
+    "raw_sampled_states_retained": false
+  },
+  "retired_candidate_nonuse_lock": {
+    "governing_registration_binding_id": "JX_O2_CANDIDATE_RETIREMENT",
+    "forbidden_catalog_index": 9118,
+    "forbidden_historical_name": "P9_BB21_idx9118",
+    "forbidden_metadata_sha256": "509917e0093107464d9ee45ed2c8e9f403403b2bb0e94455fa3614825917f8b0",
+    "forbidden_historical_source_state_sha256": "81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf",
+    "forbidden_catalog_sha256": "050b68182ecbf7fd76f280d8cc43c0683d207499aba1488a68092b834420a422",
+    "forbidden_orbit_tuple": {"mass_Mearth": 5.06, "a_AU": 495.19, "e": 0.236, "i_deg": 20.28, "varpi_deg": 284.17, "Omega_deg": 96.87, "M_deg": 126.21},
+    "runner_input_surface": "ONLY_HASH_LOCKED_CONTRACT_SEED_MANIFEST_AND_REGISTRATION_NO_EXTERNAL_STATE_OR_TRAJECTORY_ARGUMENTS"
+  },
+  "mandatory_nonclaim": "JX-XP1 is a locally frozen idealized 250-kyr synthetic response screen. It uses no observed survey data or private author inputs, is not an author reproduction or an independent physical validation, does not compare characterized-survey fit, and provides no evidence for or against Planet X, no mass or orbit constraint, no formation or four-billion-year stability result, and no permission, G0 evidence, or progress for JX-O2."
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "jx-project-milestone-ledger/v1",
+  "as_of_date": "2026-08-27",
+  "archive_status": "ONGOING_PROJECT_CHECKPOINT_NOT_CLOSURE",
+  "global_scientific_status": "NO_OBSERVATIONAL_PLANET_NINE_RESULT_AND_NO_SCIENTIFICALLY_ADMISSIBLE_XP2_RESULT",
+  "planet_nine_evidence": "NONE",
+  "milestones": [
+    {
+      "id": "PUBLIC_ENGINE_FOUNDATION",
+      "location": "REPOSITORY_MAIN_HISTORY",
+      "status": "SCREENING_ONLY",
+      "result_present": true,
+      "interpretation": "CONTRACT_SCOPED_SOFTWARE_AND_NUMERICAL_SCREENING_ONLY"
+    },
+    {
+      "id": "JX_O2_DESIGN_AND_G0_AUDIT",
+      "location": "REPOSITORY_MAIN_HISTORY",
+      "status": "BLOCKED",
+      "result_present": false,
+      "interpretation": "DESIGN_AND_PROVENANCE_AUDIT_ONLY"
+    },
+    {
+      "id": "CANDIDATE_9118_RETIREMENT",
+      "location": "REPOSITORY_MAIN_HISTORY",
+      "status": "REGISTERED_IMMUTABLE_SCOPED_RETIREMENT",
+      "result_present": false,
+      "interpretation": "PROVENANCE_DISPOSITION_ONLY"
+    },
+    {
+      "id": "JX_O2_PUBLIC_RECONSTRUCTION_DESIGN",
+      "location": "REPOSITORY_MAIN_HISTORY",
+      "status": "DESIGN_REGISTERED_NOT_EXECUTABLE",
+      "result_present": false,
+      "interpretation": "PUBLIC_RECONSTRUCTION_DESIGN_ONLY"
+    },
+    {
+      "id": "JX_E1_HARDENED_SMOKE",
+      "location": "01_jx_e1_smoke",
+      "status": "ENGINEERING_SMOKE_VALID",
+      "result_present": true,
+      "interpretation": "100_YEAR_SYNTHETIC_MACHINERY_TEST_ONLY"
+    },
+    {
+      "id": "JX_E1_50K",
+      "location": "02_jx_e1_50k_invalid",
+      "status": "ENGINEERING_LONG_INVALID",
+      "result_present": true,
+      "interpretation": "LOCKED_ENGINEERING_CONFIGURATION_FAILED_CONSERVATION_GATE"
+    },
+    {
+      "id": "JX_E2_NUMERICAL_FORENSICS",
+      "location": "03_jx_e2_numerical_forensics",
+      "status": "MIXED_OR_INCONCLUSIVE",
+      "result_present": true,
+      "interpretation": "NUMERICAL_METHOD_FORENSICS_ONLY"
+    },
+    {
+      "id": "JX_O2_LOCAL_CUSTODY",
+      "location": "04_jx_o2_g0_local_custody",
+      "status": "JX_O2_G0_LOCAL_CUSTODY_VERIFIED_BLOCKED",
+      "result_present": false,
+      "interpretation": "ACQUISITION_CHECKLIST_ONLY"
+    },
+    {
+      "id": "JX_O2_OPEN_REGENERATION",
+      "location": "05_jx_o2_open_regeneration",
+      "status": "LOCAL_DESIGN_HASH_LOCKED_NOT_EXTERNALLY_PREREGISTERED",
+      "result_present": false,
+      "interpretation": "OPEN_REGENERATION_PROTOCOL_ONLY"
+    },
+    {
+      "id": "JX_XP1_SYNTHETIC_RESPONSE",
+      "location": "06_jx_xp1_exploratory",
+      "status": "PRACTICALLY_SMALL",
+      "result_present": true,
+      "interpretation": "SYNTHETIC_250KYR_RESPONSE_ONLY_FLOOR_LIMITED_ENDPOINT"
+    },
+    {
+      "id": "JX_XP2_V1_TO_V3",
+      "location": "07_jx_xp2_invalid_lineage",
+      "status": "HISTORICAL_INVALID_NONAUTHORIZING",
+      "result_present": false,
+      "interpretation": "PROTOCOL_FAILURE_AND_REPLAY_DEFECT_LINEAGE_ONLY"
+    },
+    {
+      "id": "JX_XP2_V4_REVIEW",
+      "location": "../runs/jx_xp2_synthetic_robustness_review_v1",
+      "status": "FROZEN_EXPLORATORY_REVIEW_SNAPSHOT",
+      "result_present": false,
+      "interpretation": "UNEXECUTED_PROTOCOL_AND_SOURCE_REVIEW_ONLY"
+    },
+    {
+      "id": "JX_XP2_V5_ENGINEERING",
+      "location": "08_jx_xp2_v5_scientific_reset",
+      "status": "NONAUTHORITY_REVIEW_ONLY",
+      "result_present": false,
+      "interpretation": "STATIC_SCHEMA_SOURCE_AND_CEREMONY_REVIEW_ONLY"
+    },
+    {
+      "id": "JX_XP2_SCIENTIFIC_RESET",
+      "location": "08_jx_xp2_v5_scientific_reset",
+      "status": "PRESERVATION_ONLY",
+      "result_present": false,
+      "interpretation": "RECOVERY_CHECKPOINT_AND_SCIENTIFIC_SCOPE_RESET"
+    }
+  ]
+}

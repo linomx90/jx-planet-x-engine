@@ -1,0 +1,13 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_O2_OPEN_REGENERATION",
+  "publication_category": "DESIGN_PROTOCOL",
+  "canonical_publication_status": "LOCAL_DESIGN_HASH_LOCKED_NOT_EXTERNALLY_PREREGISTERED",
+  "claim_ceiling": "OPEN_REGENERATION_PROTOCOL_ONLY",
+  "result_present": false,
+  "interpretation_allowed": "DESIGN_ONLY_NO_MODEL_GENERATION_OR_EXECUTION",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "RETROSPECTIVE_GITHUB_PUBLICATION_ONLY",
+  "superseded_by": "NONE_G0_REMAINS_BLOCKED"
+}
