@@ -1,0 +1,37 @@
+{
+  "schema": "jx-xp2-dop853-selection-manifest/v1",
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v1",
+  "artifact_class": "PREOUTPUT_DETERMINISTIC_SENTINEL_SELECTION",
+  "tracer_rows_sha256": "f4a2defd98154209e9a17c7190684799e59d36d34f2a1db3fa8ce7c5b9eaf4ce",
+  "selection_domain_ascii_without_terminator": "jx-xp2-dop853-sentinel/v1",
+  "selection_domain_terminator_hex": "00",
+  "rank_formula": "SHA256(ASCII_SELECTION_DOMAIN || BYTE_00 || ASCII_LOGICAL_ID)",
+  "selection_rule": "WITHIN_EACH_BLOCK_RANK_ALL_16_LOGICAL_IDS_BY_RANK_DIGEST_ASCENDING_THEN_LOGICAL_ID_ASCENDING_SELECT_FIRST_4",
+  "selection_core_canonicalization": "UTF8_JSON_SORT_KEYS_TRUE_SEPARATORS_COMMA_COLON_ENSURE_ASCII_TRUE_ALLOW_NAN_FALSE_OVER_DOMAIN_FIELDS_RULE_SENTINELS_AND_ORDERED_IDS",
+  "sentinels_by_block": {
+    "0": {"ordered_logical_ids": ["XP2-B00-T02", "XP2-B00-T11", "XP2-B00-T10", "XP2-B00-T07"], "rank_sha256": ["0f3af52275d34775b98cd1baf99473c5a1d8998e684c4ff649b3ee088152a956", "152b74777006dd0ad4988fb32e7919056b8e5ea65e6e0a9625822624547e8f54", "1c7d94d2da176764e1e858cd37faab7282730bef21cd48a388bfe5e816d4bfa2", "357295b342a0ff23bb4927866e5dc137aa77ba396e76a5b7886ac2c7047b5059"]},
+    "1": {"ordered_logical_ids": ["XP2-B01-T00", "XP2-B01-T05", "XP2-B01-T13", "XP2-B01-T09"], "rank_sha256": ["10858d2cf18048c05b7d0329cb0e8103236e70b2af9358e64d8c30480672436a", "1a73fbfd99500fd677937a91bed75f5e7531aae884b08e48023205b0bf935506", "1c8934b86890c63a68e34f366c46db8cc7f8f1771fe954653361fd629fa51b0a", "34e2ae963683f30ad99f75d5e9956932040086a872a9e324c600f94b20cff347"]},
+    "2": {"ordered_logical_ids": ["XP2-B02-T04", "XP2-B02-T06", "XP2-B02-T02", "XP2-B02-T09"], "rank_sha256": ["0283c99b583b6f2b2a13e8284cb862bf93aeec2a4bd1422a101750c10d87ec38", "14b410cbf3e58a52e6ea0e474b47ee94feafa9a21ef1800fda7ab036e316dd13", "275362f2ef6fcda344b0fd4a25916be430957aeaa4456f6e9cf83579b9b5e5a1", "37711b4b499f345300e7a35d263dd226b873492776e410f0fb933e2beeaf92b0"]},
+    "3": {"ordered_logical_ids": ["XP2-B03-T04", "XP2-B03-T06", "XP2-B03-T09", "XP2-B03-T08"], "rank_sha256": ["0d9a95321d1d06a0278f180d31a0269340bcccd087cc03ac656c5a5a19c36c63", "1b03176b4b28793b61cf2d01edbd2470ca5843abb60e020b28985849a624a214", "1beeaf388996cb4a0a7d584522d8d59383c8ea059c74871ad35bb15afd20d7ec", "1f51ff0ba95e0f55f035a406b64a93a2959f0061f8c582ae2adea95cecc85541"]},
+    "4": {"ordered_logical_ids": ["XP2-B04-T14", "XP2-B04-T12", "XP2-B04-T09", "XP2-B04-T01"], "rank_sha256": ["1b11807083cb958a43a0306e9b4135451c0ce4e3795ffa3b1bec97689150df3f", "2c5994514435eac609936257351b8d1bb36bbef5d2bdf92731807a9a63d8cace", "3812cb728a77a21fe9a9666abce00607bed43941de7d798344ae7ea339a73d5e", "38fbd79c873d1630397927cad08db2d0ef95a339de3c1cfe510b50d83b16f712"]},
+    "5": {"ordered_logical_ids": ["XP2-B05-T01", "XP2-B05-T06", "XP2-B05-T10", "XP2-B05-T13"], "rank_sha256": ["2a129ad269f9b2bcc0f165041438efdbeda8bece3d4678f8c5cd91558500588e", "4ae8d86fc1a113f6c7c1346cc5721336a800381630955f7bdcdce91aa70c5598", "559eabeed2280cdf0875bbb809ad207532db337e9b479f689b4b590f4a8f19e3", "588d4bf9b567c9d3e376783648b210fa1e8e2bd1eb8d78f217dc0808d25bddf7"]},
+    "6": {"ordered_logical_ids": ["XP2-B06-T13", "XP2-B06-T09", "XP2-B06-T15", "XP2-B06-T05"], "rank_sha256": ["2e56946ffaff89e90e6fa20ab8361d3564429a470982259bdeb0b102568fee30", "48d629d27ad6bfa75cde605928f0ef3a68b648c4a1d48ec9a526d90e5486920b", "60779317add581cc36be5c260c4a18c618e1559be555bdfdb4ad7076e3f0a8ca", "6dd6906899ef1e3f9fd799e8781e2b89122d940ee8d7f19ed6b6baae0bc4cbfd"]},
+    "7": {"ordered_logical_ids": ["XP2-B07-T10", "XP2-B07-T04", "XP2-B07-T13", "XP2-B07-T08"], "rank_sha256": ["0eb71a2dfa1417476486241746220ce781abb8a3679a1b1f30e30032aa816879", "20ddbcc35fb8a7539eef3cb48ed7bcec8ddcb1b516939ce0a0cf12d5b738b6d8", "2aa103fb10c6d5c2422b689c3c1fa962bd04cf3414921d56111dc887d62a7b1c", "34367a16e49c91f62d36784f2a4d233bf05f4d6353d3a52d9eae9a612308914f"]}
+  },
+  "ordered_logical_ids": [
+    "XP2-B00-T02", "XP2-B00-T11", "XP2-B00-T10", "XP2-B00-T07",
+    "XP2-B01-T00", "XP2-B01-T05", "XP2-B01-T13", "XP2-B01-T09",
+    "XP2-B02-T04", "XP2-B02-T06", "XP2-B02-T02", "XP2-B02-T09",
+    "XP2-B03-T04", "XP2-B03-T06", "XP2-B03-T09", "XP2-B03-T08",
+    "XP2-B04-T14", "XP2-B04-T12", "XP2-B04-T09", "XP2-B04-T01",
+    "XP2-B05-T01", "XP2-B05-T06", "XP2-B05-T10", "XP2-B05-T13",
+    "XP2-B06-T13", "XP2-B06-T09", "XP2-B06-T15", "XP2-B06-T05",
+    "XP2-B07-T10", "XP2-B07-T04", "XP2-B07-T13", "XP2-B07-T08"
+  ],
+  "selection_core_sha256": "419799ab46ede3169c0f51ef54005b0eb9fea61b831f9dd9924f8a317c668f98",
+  "selected_tracer_count": 32,
+  "selected_arm_ids": ["M0", "CI01-P0", "CI01-P4", "CI05-P1", "CI05-P5", "CI09-P2", "CI09-P6"],
+  "outcome_or_prior_trajectory_used": false,
+  "override_allowed": false,
+  "mandatory_nonclaim": "This outcome-blind deterministic subset defines a numerical sentinel only and is not an observed or probabilistic sample."
+}

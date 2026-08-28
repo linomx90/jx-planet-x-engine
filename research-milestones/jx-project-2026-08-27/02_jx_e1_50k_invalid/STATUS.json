@@ -1,0 +1,13 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_E1_50K",
+  "publication_category": "ENGINEERING_RESULT",
+  "canonical_publication_status": "ENGINEERING_LONG_INVALID",
+  "claim_ceiling": "ENGINEERING_SURROGATE_ONLY",
+  "result_present": true,
+  "interpretation_allowed": "LOCKED_CONFIGURATION_FAILED_REQUIRED_CONSERVATION_STANDARD",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY",
+  "superseded_by": "NONE_RESULT_REMAINS_INVALID"
+}

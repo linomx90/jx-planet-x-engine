@@ -1,0 +1,31 @@
+{
+  "artifact_class": "LOCAL_CONTENT_HASH_REGISTRATION_ONLY",
+  "execution_permissions": {
+    "execution_a_authorized": true,
+    "execution_b_authorized_only_after_verified_a": true,
+    "gpu_execution_authorized": false,
+    "jx_o2_execution_or_g0_evidence_authorized": false,
+    "local_cpu_only": true,
+    "network_access_authorized": false,
+    "observed_data_access_authorized": false,
+    "planet_x_claim_authorized": false,
+    "survey_adapter_execution_authorized": false
+  },
+  "experiment_id": "jx-xp1-public-synthetic-response-v1",
+  "externally_timestamped": false,
+  "locked_files": {
+    "README.md": "6a56df4efa8c2c002f298523f5fb9deffa517978703e415c53e8440f63944804",
+    "contract_v1.json": "dd4527ef2b7d61bda93395d9dec7107b57c962c88aee3f1f1032af60dd055d63",
+    "run_exploratory.py": "eaabbf56b80c6de319292073ab9404d4a57eeb3ae9b07392db5275e6342b43dd",
+    "seed_manifest_v1.json": "92de9fae8c32f322c58216c64355739917dddee2881e823541b7fbad791e1ac7",
+    "test_exploratory.py": "996a162681181ae1e747db77ba1e4df4d32b4039c085bd03370c74743120f224",
+    "verify_replay.py": "30eb366b84dcf67f50d2aca1b9dcf8a357f13e0c96eec7aba85935e9b095e2d6"
+  },
+  "mandatory_nonclaim": "JX-XP1 is a locally frozen idealized 250-kyr synthetic response screen. It uses no observed survey data or private author inputs, is not an author reproduction or an independent physical validation, does not compare characterized-survey fit, and provides no evidence for or against Planet X, no mass or orbit constraint, no formation or four-billion-year stability result, and no permission, G0 evidence, or progress for JX-O2.",
+  "outcomes_generated": false,
+  "recorded_at_utc": "2026-08-23T18:38:30Z",
+  "registration_state": "LOCAL_CONTENT_HASH_LOCK_COMPLETE_BEFORE_ANY_XP1_NUMERICAL_OUTPUT",
+  "schema": "jx-xp1-local-registration/v1",
+  "scientific_evidence_artifact": false,
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY_NO_EXTERNAL_TIMESTAMP"
+}

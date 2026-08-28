@@ -1,0 +1,62 @@
+{
+  "schema": "jx-xp2-v1-final-invalid-protocol-diagnostic/v1",
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v1",
+  "artifact_class": "FINAL_STOPPED_INVALID_PROTOCOL_DIAGNOSTIC_ONLY",
+  "recorded_at_utc": "2026-08-23T21:52:52Z",
+  "registration_sha256": "7ab012862513df6d597d58270bdd1abab33cbea25a0f63e018279f8705aaafba",
+  "registered_package_inventory_restored_exactly": true,
+  "supersedes_stale_diagnostic_receipt": {
+    "relative_path": "v1_invalid_protocol_diagnostic_receipt.json",
+    "sha256": "7599be5588958e0e75463c3ad478d0b86672b54caaa88d0f45db8f4706b0a744",
+    "reason": "The first stop request did not terminate the detached coordinator, so its earlier snapshot was not terminal."
+  },
+  "output_a_relative_path": "output_a",
+  "output_a_recursive_regular_file_manifest_definition": "SHA256 over bytewise-path-sorted records relative_path NUL decimal_size NUL file_sha256 LF",
+  "output_a_recursive_regular_file_manifest_sha256": "8499982541b17bead728aa8dfd4f2fe5220c2fedd9612903bbf7574e1aaae00d",
+  "output_a_total_file_bytes": 32081374,
+  "output_a_regular_file_count": 516,
+  "output_a_directory_count_including_root": 27,
+  "output_a_special_file_count": 0,
+  "attempt_ledger_sha256": "d453130feea1a8dcf2def7157ffc94dff1dabd706768004657af06c935548737",
+  "run_manifest_sha256": "17dfece0c241a74b8759924889ee820131b3bc2924971c0a3c6f7245e0866027",
+  "attempt_ledger_counts_at_terminal_stop": {
+    "rows": 417,
+    "starts": 210,
+    "passes": 171,
+    "fails": 36,
+    "open_attempts_interrupted_by_stop": 3,
+    "fail_attempt_index_1": 30,
+    "fail_attempt_index_2": 5,
+    "fail_attempt_index_3": 1
+  },
+  "complete_arm_count": 8,
+  "committed_segment_count": 171,
+  "result_v1_emitted": false,
+  "a_verification_receipt_emitted": false,
+  "execution_b_started": false,
+  "dop853_execution_started": false,
+  "observed_failure_receipts": {
+    "count": 1,
+    "relative_path": "output_a/failures/failure_1787521801599118539_2.json",
+    "sha256": "72e0986a7e92015ecd650ba0643afe1736ba1b409374397609663bc54f56d724",
+    "scope": "GENERIC_COORDINATOR_RESOURCE_LIMIT_WITH_NULL_ARM_SEGMENT_ATTEMPT"
+  },
+  "protocol_violation": {
+    "registered_policy": "failure_receipts_permanent=true",
+    "observed_terminal_fail_rows": 36,
+    "observed_permanent_failure_receipts": 1,
+    "failure_receipt_bijection_satisfied": false,
+    "cause_classification": "COORDINATOR_CHILD_COMMIT_BEFORE_PASS_LEDGER_VISIBILITY_RACE",
+    "post_hoc_repair_forbidden": true
+  },
+  "forced_stop_disclosure": {
+    "mechanism": "A temporary unregistered package-root sentinel entry caused every newly launched worker to fail the frozen exact-inventory check until the coordinator exhausted an attempt. The sentinel was then removed.",
+    "reason": "The first interrupt did not reach the detached coordinator or its worker process groups.",
+    "scientific_state_used": false,
+    "registered_package_restored_and_rehashed_exactly": true
+  },
+  "disposition": "V1_EXECUTION_A_PERMANENTLY_INVALID_AND_FORBIDDEN_FROM_SCIENTIFIC_OR_A_B_REPLAY_USE",
+  "scientific_classification": null,
+  "authorizes_analysis": false,
+  "mandatory_nonclaim": "This stopped partial execution is an invalid-protocol diagnostic, not a numerical or scientific XP2 result. It cannot authorize execution B, DOP853 comparison, an official classification, or any claim about Planet X or JX-O2."
+}

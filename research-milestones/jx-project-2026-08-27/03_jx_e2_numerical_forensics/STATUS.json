@@ -1,0 +1,13 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_E2_NUMERICAL_FORENSICS",
+  "publication_category": "NUMERICAL_DIAGNOSTIC",
+  "canonical_publication_status": "MIXED_OR_INCONCLUSIVE",
+  "claim_ceiling": "NUMERICAL_METHOD_FORENSICS_ONLY",
+  "result_present": true,
+  "interpretation_allowed": "DESCRIPTIVE_NUMERICAL_PATTERNS_WITHOUT_ESTABLISHED_REFERENCE_ACCURACY",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY",
+  "superseded_by": "NONE_DOES_NOT_REPAIR_JX_E1"
+}

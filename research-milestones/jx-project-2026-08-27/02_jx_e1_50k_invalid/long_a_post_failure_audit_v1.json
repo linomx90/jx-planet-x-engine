@@ -1,0 +1,164 @@
+{
+  "artifact_class": "POST_OUTCOME_DIAGNOSTIC_USING_STORED_CHECKPOINTS_AND_LOCKED_INITIAL_RECONSTRUCTION",
+  "audit_state": "INVALID_RESULT_PRESERVED_AND_CHARACTERIZED",
+  "claim_ceiling": "POST_FAILURE_NUMERICAL_CHARACTERIZATION_ONLY",
+  "configurations": [
+    {
+      "base_configuration": "M0",
+      "checkpoint_max_relative_com_angular_drift_compensated": 2.3051780451276815e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 5.526584176427934e-14,
+      "checkpoint_max_relative_linear_drift_ordinary": 5.526584176427934e-14,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 5.086107290642395e-11,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 5.086107290642395e-11,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.495664976259598e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 5.593234695241504e-14,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 5.086437786264297e-11,
+      "stored_failed_checks": [],
+      "tracer_block_checkpointed_active_states_exact": true
+    },
+    {
+      "base_configuration": "CI01-A",
+      "checkpoint_max_relative_com_angular_drift_compensated": 2.467708395231388e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 9.586034557538048e-14,
+      "checkpoint_max_relative_linear_drift_ordinary": 9.586034557538048e-14,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 4.2778209152708533e-11,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 4.2778209152708533e-11,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.4940643893915527e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 9.69359266435937e-14,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 4.2778355436491435e-11,
+      "stored_failed_checks": [],
+      "tracer_block_checkpointed_active_states_exact": true
+    },
+    {
+      "base_configuration": "CI03-C",
+      "checkpoint_max_relative_com_angular_drift_compensated": 3.6764267042993467e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 6.726468624416778e-14,
+      "checkpoint_max_relative_linear_drift_ordinary": 6.726468624416778e-14,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 3.230372986085067e-11,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 3.230372986085067e-11,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.500781804824303e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 6.934924830896168e-14,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 3.230402220313252e-11,
+      "stored_failed_checks": [],
+      "tracer_block_checkpointed_active_states_exact": true
+    },
+    {
+      "base_configuration": "CI05-C",
+      "checkpoint_max_relative_com_angular_drift_compensated": 4.2561730896256395e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 1.0820576445416296e-13,
+      "checkpoint_max_relative_linear_drift_ordinary": 1.0820576445416296e-13,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 9.576685539043659e-11,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 9.576685539043659e-11,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.5608828054462365e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 1.0968895061873521e-13,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 9.576685539043659e-11,
+      "stored_failed_checks": [],
+      "tracer_block_checkpointed_active_states_exact": true
+    },
+    {
+      "base_configuration": "CI06-C",
+      "checkpoint_max_relative_com_angular_drift_compensated": 6.756022407481536e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 3.301232230174331e-14,
+      "checkpoint_max_relative_linear_drift_ordinary": 3.301232230174331e-14,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 2.2339916959646667e-11,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 2.2339916959646667e-11,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.496960018766526e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 3.4598173456303956e-14,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 2.2339916959646667e-11,
+      "stored_failed_checks": [],
+      "tracer_block_checkpointed_active_states_exact": true
+    },
+    {
+      "base_configuration": "CI07-B",
+      "checkpoint_max_relative_com_angular_drift_compensated": 2.828201967602296e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 1.0948125229562505e-10,
+      "checkpoint_max_relative_linear_drift_ordinary": 1.0948125229562505e-10,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 1.67843550277247e-10,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 1.67843550277247e-10,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.4382981087525005e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 1.0948125229562505e-10,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 1.6784355027360344e-10,
+      "stored_failed_checks": [
+        "active_angular_momentum_drift_within_gate",
+        "active_linear_momentum_drift_within_gate"
+      ],
+      "tracer_block_checkpointed_active_states_exact": true
+    },
+    {
+      "base_configuration": "CI09-A",
+      "checkpoint_max_relative_com_angular_drift_compensated": 2.7208983501029153e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 1.099918750663305e-10,
+      "checkpoint_max_relative_linear_drift_ordinary": 1.099918750663305e-10,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 1.0095075806371238e-10,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 1.0095075806371238e-10,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.583990311531871e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 1.099918750663305e-10,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 1.009663148451927e-10,
+      "stored_failed_checks": [
+        "active_angular_momentum_drift_within_gate",
+        "active_linear_momentum_drift_within_gate"
+      ],
+      "tracer_block_checkpointed_active_states_exact": true
+    },
+    {
+      "base_configuration": "CI09-D",
+      "checkpoint_max_relative_com_angular_drift_compensated": 2.13089768722048e-13,
+      "checkpoint_max_relative_linear_drift_compensated": 1.0918536171523745e-10,
+      "checkpoint_max_relative_linear_drift_ordinary": 1.0918536171523745e-10,
+      "checkpoint_max_relative_origin_angular_drift_compensated": 1.404555726812776e-10,
+      "checkpoint_max_relative_origin_angular_drift_ordinary": 1.404555726812776e-10,
+      "stored_10yr_sampled_max_relative_energy_drift": 4.481354000514464e-08,
+      "stored_10yr_sampled_max_relative_linear_drift": 1.0918536171523745e-10,
+      "stored_10yr_sampled_max_relative_origin_angular_drift": 1.40455572683728e-10,
+      "stored_failed_checks": [
+        "active_angular_momentum_drift_within_gate",
+        "active_linear_momentum_drift_within_gate"
+      ],
+      "tracer_block_checkpointed_active_states_exact": true
+    }
+  ],
+  "execution_b_authorized_or_started": false,
+  "experiment_id": "jx-e1-p9-9x4-50k-v1",
+  "gates_preserved": {
+    "all_M1_common_initial_states_must_match_M0_exactly": true,
+    "all_sampled_states_and_invariants_must_be_finite": true,
+    "checkpoint_decoded_state_must_be_exact": true,
+    "direct_vs_chained_restart_every_sample_must_be_exact": true,
+    "full_independent_semantic_replay_required": true,
+    "max_dt_half_final_i_difference_deg": 0.1,
+    "max_dt_half_final_q_difference_AU": 0.1,
+    "max_relative_active_angular_momentum_vector_drift": 1e-10,
+    "max_relative_active_energy_drift": 1e-06,
+    "max_relative_active_linear_momentum_vector_drift": 1e-10,
+    "minimum_dt_half_paired_bound_count": 16,
+    "threshold_rationale": "Conservative engineering tolerances locked before any 50 kyr output; a failure invalidates this stage and thresholds may not be widened post-outcome."
+  },
+  "initial_reference": "DETERMINISTIC_LOCKED_T0_RECONSTRUCTION_NO_INTEGRATION",
+  "integrity": {
+    "all_duplicate_tracer_blocks_have_identical_checkpointed_active_states": true,
+    "audit_arm_records_verified": 16,
+    "stored_checkpoints_verified": 160
+  },
+  "interpretation": {
+    "diagnostic_hypothesis": "The origin-based angular-momentum overshoot is largely coupled to center-of-mass motion, while a small linear-momentum drift remains in the stored double-precision states. This post-outcome diagnosis cannot replace the locked gate or rehabilitate E1.",
+    "failed_distinct_active_configurations": [
+      "CI07-B",
+      "CI09-A",
+      "CI09-D"
+    ],
+    "locked_E1_verdict": "ENGINEERING_LONG_INVALID",
+    "next_action": "STOP_E1_NO_B. Any new numerical-method study requires a separately locked experiment and cannot change this result."
+  },
+  "mandatory_nonclaim": "This 50,000-year calculation is an idealized synthetic engineering sensitivity benchmark. It is not an author-simulation reproduction, does not use observed survey data, does not modify or unblock JX-O2, and provides no evidence for or against Planet X.",
+  "new_dynamics_executed": false,
+  "schema": "jx-e1-long-post-failure-numerical-audit/v1",
+  "source_artifacts": {
+    "audit_script_sha256": "612f628eea7e25ec4096c1e69e9ef8031cab725dbdc7fba4508245b428127478",
+    "contract_sha256": "8ac4b0a54418e2ce1d4ce13e9c986177086ec433c900b6060537f15bf97a1187",
+    "result_semantic_sha256": "beb1a2d5756b3c4ca565009b2e24922541565504cb6dad52276392088532b479",
+    "result_sha256": "d121033d412a8cd3739b79827e506e895a616d735dde8eb4769d1617e05fc559",
+    "runner_sha256": "a5f4d74e0a9c03c28fdb1a9a54d8c4be676df2c5caca7325570e9049e73500d9",
+    "verifier_sha256": "2dd3ab2651e20d2452cf21ba6df8cb41b47bc35f9b5879ca07e28ba6c9c7bece"
+  },
+  "thresholds_changed": false
+}

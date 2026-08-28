@@ -1,0 +1,25 @@
+{
+  "contract_sha256": "dd4527ef2b7d61bda93395d9dec7107b57c962c88aee3f1f1032af60dd055d63",
+  "execution_a": {
+    "execution_instance_id": "d6162c36b4af993dd50bcc0e852e1ae2",
+    "output_tree_sha256": "be220085b531ed008536627ac1477ba7981723d10b8c6e7b6f74d89d260e2f2f",
+    "result_sha256": "23e2fed063c4926acc4530816b98a0e0df40d21d182d9ec9371370ad725f6529",
+    "semantic_sha256": "1a04e928287e19558a621f09af128da76a69233c1e8c339306ef8b9c42499c9a"
+  },
+  "experiment_id": "jx-xp1-public-synthetic-response-v1",
+  "independent_recomputation": {
+    "all_14_initial_states_without_integration": true,
+    "all_seven_timestep_pairs_or_locked_suppression": true,
+    "particle_summaries": true,
+    "raw_class_agreement_and_emitted_classification_or_locked_suppression": true,
+    "seeds_and_64_tracers": true,
+    "two_resolution_integer_effects_and_block_effects_or_locked_suppression": true,
+    "wasserstein1_or_locked_suppression": true
+  },
+  "mandatory_nonclaim": "JX-XP1 is a locally frozen idealized 250-kyr synthetic response screen. It uses no observed survey data or private author inputs, is not an author reproduction or an independent physical validation, does not compare characterized-survey fit, and provides no evidence for or against Planet X, no mass or orbit constraint, no formation or four-billion-year stability result, and no permission, G0 evidence, or progress for JX-O2.",
+  "registration_sha256": "9b8fb748ce3850cbf908c6b1dc8d22c0ffb7f94a2223d0d3f1fbfedb1e9dca81",
+  "schema": "jx-xp1-a-verification-receipt/v1",
+  "seed_manifest_sha256": "92de9fae8c32f322c58216c64355739917dddee2881e823541b7fbad791e1ac7",
+  "state": "XP1_A_OUTPUT_VERIFIED_FOR_B",
+  "verifier_sha256": "30eb366b84dcf67f50d2aca1b9dcf8a357f13e0c96eec7aba85935e9b095e2d6"
+}

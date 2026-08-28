@@ -1,0 +1,246 @@
+{
+  "schema": "jx-e2-numerics-contract/v1",
+  "experiment_id": "jx-e2-active-frame-integrator-50k-v1",
+  "artifact_class": "LOCAL_NUMERICAL_METHOD_FORENSICS_ONLY",
+  "registration_status": "LOCKED_AFTER_E2_CLASSIFICATION_METRIC_BLIND_CAPABILITY_PREFLIGHTS_BEFORE_ANY_E2_CLASSIFICATION_OR_50KYR_OUTPUT",
+  "outcomes_generated_at_registration": false,
+  "claim_ceiling": "NUMERICAL_METHOD_FORENSICS_ONLY",
+  "permissions": {
+    "local_cpu_numerical_diagnostic_authorized": true,
+    "gpu_execution_authorized": false,
+    "network_access_authorized": false,
+    "observed_data_access_authorized": false,
+    "jx_e1_reclassification_authorized": false,
+    "jx_e1_execution_b_authorized": false,
+    "jx_o2_execution_authorized": false,
+    "scientific_planet_x_claim_authorized": false
+  },
+  "pre_registration_disclosure": {
+    "runtime_only_preflight_executed": true,
+    "preflight_scope": "One 1000-year active-body-only CI09-D timing run for MERCURIUS dt=0.03125 and one for IAS15 epsilon=1e-12.",
+    "values_retained": {
+      "mercurius_wall_seconds": 0.035448,
+      "ias15_wall_seconds": 0.07257
+    },
+    "checkpoint_capability_preflight": {
+      "scope": "M0 active-only 0-20-year save/load/continue capability check for MERCURIUS dt=0.0625 and IAS15 epsilon=1e-12",
+      "only_values_inspected": [
+        "immediate decoded-state equality",
+        "continued decoded-state equality"
+      ],
+      "mercurius_immediate_and_continued_exact": true,
+      "ias15_immediate_and_continued_exact": true
+    },
+    "state_values_or_invariant_metrics_saved_or_inspected": false,
+    "decoded_state_equality_flags_inspected": true,
+    "preflight_may_affect_numerical_classification": false,
+    "preflight_label": "E2_CLASSIFICATION_METRIC_BLIND_CAPABILITY_PREFLIGHT_NOT_OUTCOME_BLIND_TO_E1"
+  },
+  "runtime_lock": {
+    "python_version": "3.12.13",
+    "rebound_version": "4.4.11",
+    "rebound_build": "Nov 13 2025 14:44:51",
+    "rebound_binary_sha256": "fe7a23bcece1c3f1f869089e9e8d806bedb4727d893d2e551339adbb6665c28a",
+    "rebound_python_source_file_count": 29,
+    "rebound_python_source_sha256": "2c40b16571d57049cbf4bb8329a0c58342f3dc0f0cf49d860ca77fda5a73ae3a",
+    "python_wrapper_import_policy": "Use a fresh nonexistent pycache prefix with bytecode writes disabled before the first REBOUND import, then verify the deterministic hash of all 29 package .py sources. The Python standard library and operating system are not content-addressed."
+  },
+  "e1_immutable_boundary": {
+    "directory": "../jx_e1_long_pilot",
+    "contract_path": "../jx_e1_long_pilot/contract_v1.json",
+    "contract_sha256": "8ac4b0a54418e2ce1d4ce13e9c986177086ec433c900b6060537f15bf97a1187",
+    "runner_path": "../jx_e1_long_pilot/run_long_pilot.py",
+    "runner_sha256": "a5f4d74e0a9c03c28fdb1a9a54d8c4be676df2c5caca7325570e9049e73500d9",
+    "verifier_path": "../jx_e1_long_pilot/verify_long_replay.py",
+    "verifier_sha256": "2dd3ab2651e20d2452cf21ba6df8cb41b47bc35f9b5879ca07e28ba6c9c7bece",
+    "result_path": "../jx_e1_long_pilot/long_a/result_v1.json",
+    "result_sha256": "d121033d412a8cd3739b79827e506e895a616d735dde8eb4769d1617e05fc559",
+    "result_semantic_sha256": "beb1a2d5756b3c4ca565009b2e24922541565504cb6dad52276392088532b479",
+    "post_failure_audit_path": "../jx_e1_long_pilot/long_a_post_failure_audit_v1.json",
+    "post_failure_audit_sha256": "eeb3843af50c1deb901bdd4a26abe88e4a9bccc1ef6378b684482b3e11d13257",
+    "audit_script_path": "../jx_e1_long_pilot/audit_long_a_failure.py",
+    "audit_script_sha256": "612f628eea7e25ec4096c1e69e9ef8031cab725dbdc7fba4508245b428127478",
+    "required_e1_verdict": "ENGINEERING_LONG_INVALID",
+    "required_e1_audit_state": "INVALID_RESULT_PRESERVED_AND_CHARACTERIZED",
+    "e1_thresholds_changed": false,
+    "e1_execution_b_must_remain_unstarted": true,
+    "e2_can_rehabilitate_or_replace_e1": false
+  },
+  "purpose": {
+    "question": "Determine whether E1 conservation-gate exceedances are consistent with frame-sensitive diagnostics, deterministic floating-point accumulation, or timestep-dependent MERCURIUS behavior in the locked idealized active-body system.",
+    "why_all_eight_bases": "The full E1 timestep-audit base set is retained so the three failed configurations are not selected without the five predeclared controls.",
+    "active_body_scope": "Sun, four idealized giant planets, and the engineering-surrogate compact body where applicable; no tracers.",
+    "ias15_role": "Independent numerical comparator within the same REBOUND build, not ground truth or an independent scientific implementation.",
+    "post_outcome_status": true
+  },
+  "analytic_benchmark": {
+    "classification": "IDEALIZED_CIRCULAR_COPLANAR_CODE_BENCHMARK",
+    "epoch": "SYNTHETIC_T0",
+    "G_AU3_Msun_yr2": 39.47841760435743,
+    "sun_mass_Msun": 1.0,
+    "earth_to_sun_mass_ratio": 3.0034896149156e-6,
+    "giants": [
+      {"name": "Jupiter", "mass_Msun": 0.00095, "a_AU": 5.2, "initial_longitude_deg": 0.0},
+      {"name": "Saturn", "mass_Msun": 0.00028, "a_AU": 9.5, "initial_longitude_deg": 90.0},
+      {"name": "Uranus", "mass_Msun": 0.000044, "a_AU": 19.2, "initial_longitude_deg": 180.0},
+      {"name": "Neptune", "mass_Msun": 0.000052, "a_AU": 30.1, "initial_longitude_deg": 270.0}
+    ]
+  },
+  "configuration_set": [
+    {"id": "M0", "model_id": null, "angle_id": null},
+    {"id": "CI01-A", "model_id": "CI01", "angle_id": "A"},
+    {"id": "CI03-C", "model_id": "CI03", "angle_id": "C"},
+    {"id": "CI05-C", "model_id": "CI05", "angle_id": "C"},
+    {"id": "CI06-C", "model_id": "CI06", "angle_id": "C"},
+    {"id": "CI07-B", "model_id": "CI07", "angle_id": "B"},
+    {"id": "CI09-A", "model_id": "CI09", "angle_id": "A"},
+    {"id": "CI09-D", "model_id": "CI09", "angle_id": "D"}
+  ],
+  "frames": [
+    {
+      "id": "F0_E1_UNSHIFTED",
+      "rule": "Exact active Cartesian state produced by the hash-bound E1 builder; no translation or boost."
+    },
+    {
+      "id": "FCM_ACTIVE_BARYCENTRIC",
+      "rule": "Subtract the compensated active-body center-of-mass position and velocity from every active body exactly once at t=0."
+    }
+  ],
+  "frame_identity_rule": {
+    "comparison": "Corresponding Sun-relative Cartesian components at t=0",
+    "absolute_relative_bound_in_binary64_eps": 64,
+    "binary64_epsilon": 2.220446049250313e-16,
+    "masses_hashes_and_particle_order_exact": true
+  },
+  "numerical_regimes": [
+    {"id": "MERCURIUS_0125", "integrator": "mercurius", "dt_years": 0.125, "r_crit_hill": 3.0, "safe_mode": 1},
+    {"id": "MERCURIUS_00625", "integrator": "mercurius", "dt_years": 0.0625, "r_crit_hill": 3.0, "safe_mode": 1},
+    {"id": "MERCURIUS_003125", "integrator": "mercurius", "dt_years": 0.03125, "r_crit_hill": 3.0, "safe_mode": 1},
+    {"id": "IAS15_1E10", "integrator": "ias15", "initial_dt_years": 0.125, "epsilon": 1e-10, "min_dt_years": 0.0, "adaptive_mode": "prs23"},
+    {"id": "IAS15_1E12", "integrator": "ias15", "initial_dt_years": 0.125, "epsilon": 1e-12, "min_dt_years": 0.0, "adaptive_mode": "prs23"},
+    {"id": "IAS15_1E14", "integrator": "ias15", "initial_dt_years": 0.125, "epsilon": 1e-14, "min_dt_years": 0.0, "adaptive_mode": "prs23"}
+  ],
+  "dynamics": {
+    "duration_years": 50000.0,
+    "sample_cadence_years": 10.0,
+    "checkpoint_cadence_years": 5000.0,
+    "exact_finish_time": 1,
+    "gravity": "basic_or_mercurius_integrator_default_as_read_back",
+    "collision": "none",
+    "boundary": "none",
+    "active_bodies_only": true,
+    "expected_arm_count": 96,
+    "expected_pairwise_comparison_count": 160,
+    "expected_e1_context_record_count": 160,
+    "expected_samples_per_arm_including_t0": 5001,
+    "expected_checkpoints_per_arm": 10,
+    "workers": 1,
+    "gpu_used": false
+  },
+  "execution_integrity": {
+    "independently_constructed_direct_and_checkpoint_chained_streams_per_arm": true,
+    "exact_initial_physical_state_required": true,
+    "direct_and_chained_decoded_state_exact_at_every_sample": true,
+    "decoded_state_before_save_and_after_load_exact": true,
+    "integrator_settings_readback_after_every_load": true,
+    "all_cartesian_states_and_invariants_finite": true,
+    "particle_count_hash_order_and_mass_unchanged": true,
+    "ias15_iteration_limit_events_must_equal_zero": true,
+    "partial_arm_resume_allowed": false,
+    "automatic_retry_or_parameter_change_allowed": false,
+    "clean_A_B_semantic_replay_required": true
+  },
+  "metrics": {
+    "summation": "math.fsum compensated component sums, including the pairwise gravitational-potential terms",
+    "intrinsic_energy": "K_internal + U, with K_internal evaluated from COM-relative velocities and U from the pairwise active-body potential",
+    "linear_momentum": "P = sum(m_i*v_i)",
+    "origin_angular_momentum": "L0 = sum(m_i*r_i cross v_i)",
+    "com_angular_momentum": "Lcom = sum(m_i*(r_i-Rcom) cross (v_i-Vcom))",
+    "linear_scale": "Pstar = sum(m_i*norm(v_i-Vcom)) at t0",
+    "angular_scale": "Lstar = sum(m_i*norm((r_i-Rcom) cross (v_i-Vcom))) at t0",
+    "energy_scale": "Estar = K_internal + abs(U) at t0",
+    "com_ballistic_residual": "Rcom(t) - (Rcom(0) + Vcom(0)*t)",
+    "state_discrepancy": "Maximum over active non-Sun bodies of position separation divided by locked semimajor-axis scale or velocity separation divided by sqrt(G*M_sun/a_scale), using Sun-relative Cartesian states",
+    "record_maximum_sampled_and_endpoint_values": true
+    ,"sampling_limit": "Maximum values and state classifications apply only to the locked 10-year sampling grid; inter-sample extrema may be missed."
+  },
+  "comparison_policy": {
+    "frame_pairs": "F0 versus FCM for each configuration and numerical regime",
+    "mercurius_refinement_pairs": [
+      ["MERCURIUS_0125", "MERCURIUS_00625"],
+      ["MERCURIUS_00625", "MERCURIUS_003125"]
+    ],
+    "ias15_reference_pairs": [
+      ["IAS15_1E10", "IAS15_1E12"],
+      ["IAS15_1E12", "IAS15_1E14"]
+    ],
+    "mercurius_to_tight_reference": [
+      ["MERCURIUS_0125", "IAS15_1E14"],
+      ["MERCURIUS_00625", "IAS15_1E14"],
+      ["MERCURIUS_003125", "IAS15_1E14"]
+    ],
+    "e1_context": "Compare F0 MERCURIUS dt=0.125 and 0.0625 active checkpoint states with the corresponding E1 block-0 primary/audit checkpoints at the ten common times.",
+    "e1_context_exactness_controls_e2_validity": false
+  },
+  "classification_policy": {
+    "classifications_do_not_control_execution_validity": true,
+    "state_floor": 1e-12,
+    "invariant_floor": 1e-13,
+    "ias15_reference_absolute_ceiling": 1e-10,
+    "ias15_reference_rule": "D(1e-12,1e-14) must be <= 1e-10 and also <= 0.25*D(1e-10,1e-12), or both discrepancies must be <= state_floor. Both frames must establish this reference before any positive classification.",
+    "state_equivalence_band": "max(state_floor, 10*D(1e-12,1e-14))",
+    "refinement_rule": "Error to IAS15_1E14 must decrease by at least factor 2 per halving until within the state-equivalence band.",
+    "frame_effect_rule": "Physical states remain equivalent while the raw-origin or ordinary-frame metric changes by at least factor 4 and the compensated intrinsic metric changes by less than factor 4.",
+    "step_signature_rule": "Both-frame IAS15 references and both-frame MERCURIUS refinement must be established. Origin-angular frame/intrinsic-metric sensitivity must be true. In both frames the scale-normalized linear residual must exceed invariant_floor at the finest MERCURIUS step and grow by a bounded factor from 1.5 through 3.0 at each step doubling. Tight-IAS15 linear momentum and COM-angular residuals must each, without cross-metric substitution, be at most one quarter of their corresponding fine-MERCURIUS residual, and each corresponding fine-MERCURIUS residual must exceed invariant_floor.",
+    "instability_suspected_rule": "With an established IAS15 reference, MERCURIUS state error grows by more than factor 2 on both refinements, remains above 10 times the state-equivalence band, and persists in both frames; nonfinite/integration failures instead invalidate execution.",
+    "allowed_configuration_classifications": [
+      "FRAME_EFFECT_AND_LINEAR_STEP_SIGNATURE_CONSISTENT",
+      "MERCURIUS_REFINEMENT_CONSISTENT",
+      "MERCURIUS_REFINEMENT_DIVERGENCE_SUSPECTED",
+      "MIXED_OR_INCONCLUSIVE"
+    ],
+    "overall_classification_rule": "Return FRAME_EFFECT_AND_LINEAR_STEP_SIGNATURE_CONSISTENT only if all eight retained configurations have that classification; return MERCURIUS_REFINEMENT_DIVERGENCE_SUSPECTED if any configuration has that classification; otherwise MIXED_OR_INCONCLUSIVE. No aggregate classification is keyed only to the three known E1 failures."
+  },
+  "inherited_reference_flags": {
+    "affect_e2_validity": false,
+    "applicable_frame": "F0_E1_UNSHIFTED_ONLY",
+    "maximum_relative_energy_drift": 1e-6,
+    "maximum_relative_origin_angular_momentum_drift": 1e-10,
+    "linear_momentum_threshold_transferable_to_Pstar_metric": false,
+    "angular_momentum_threshold_transferable_to_Lstar_com_metric": false,
+    "source": "In the unchanged F0 frame, relative_engine_energy_drift uses the exact E1 engine-energy formula. The origin-angular illustration uses E2's compensated evaluator and only compares against the legacy numeric value; it is mathematically corresponding but is not an exact reproduction of E1's REBOUND angular-momentum evaluator. The Pstar/Lstar metrics use different denominators and are never described as inherited E1 thresholds."
+  },
+  "result_policy": {
+    "clean_execution_labels": ["E2-A", "E2-B"],
+    "first_execution_verdict": "JX_E2_EXECUTION_PROVISIONALLY_COMPLETE",
+    "invalid_execution_verdict": "JX_E2_EXECUTION_INVALID",
+    "replay_verdict": "JX_E2_SEMANTIC_REPLAY_EXACT",
+    "replay_mismatch_verdict": "JX_E2_SEMANTIC_REPLAY_INVALID",
+    "execution_or_replay_verdict_says_nothing_about_numerical_adequacy": true,
+    "numerical_classification_may_not_use_passed_or_failed_language": true,
+    "row_or_angle_ranking_allowed": false,
+    "observational_score_p_value_or_bayes_factor_allowed": false,
+    "raw_checkpoint_hash_affects_verdict": false,
+    "failure_receipt_permanently_invalidates_output_directory": true,
+    "threshold_edit_or_adaptive_extension_allowed": false
+  },
+  "replay_scope": {
+    "independently_verified": "Locked identities, runtime and source bindings, exact file and checkpoint inventories, decoded checkpoint states, initial active-state reconstruction, record schemas, comparison arithmetic constraints, classification arithmetic, and exact A/B semantic replay.",
+    "not_independently_reconstructible": "Raw 10-year state samples are intentionally not retained, so sampled maxima and sampled-stream digests are content-bound by clean A/B equality but cannot be independently reconstructed from trajectory records.",
+    "independent_scientific_implementation": false,
+    "raw_checkpoint_container_bytes_may_differ_between_A_and_B": true
+  },
+  "resource_caps": {
+    "wall_time_scope": "From command entry through validation, dynamics, checkpointing, and final post-write cap enforcement; E2-B includes verification of E2-A.",
+    "max_wall_seconds_per_configuration_bundle": 300.0,
+    "max_wall_seconds_total_per_clean_execution": 1800.0,
+    "max_peak_rss_bytes": 1073741824,
+    "max_output_bytes": 67108864,
+    "max_checkpoint_bytes": 262144,
+    "minimum_free_disk_bytes": 1073741824,
+    "workers": 1,
+    "gpu_used": false,
+    "network_used": false
+  },
+  "mandatory_nonclaim": "This is a post-failure, active-body-only numerical-method diagnostic using an idealized synthetic benchmark. It does not rerun JX-E1 as a replacement, alter, validate, or rehabilitate JX-E1; JX-E1 remains ENGINEERING_LONG_INVALID and JX-E1-B remains forbidden. No E2 classification establishes that E1 was accurate, adequate, or scientifically usable. Execution completion or semantic replay exactness refers only to protocol integrity. E2 uses no observed survey data or recovered author inputs, does not modify or unblock JX-O2, does not test the existence, detectability, exclusion, or preferred properties of Planet X, and provides no evidence for or against Planet X. IAS15 is a numerical comparator within the same REBOUND build, not ground truth or an independent scientific implementation."
+}

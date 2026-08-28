@@ -1,0 +1,467 @@
+{
+  "schema": "jx-xp2-robustness-contract/v1",
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v2",
+  "artifact_class": "LOCAL_FROZEN_EXPLORATORY_SYNTHETIC_EXECUTION_CONTRACT",
+  "registration_status": "LOCAL_HASH_LOCK_REQUIRED_BEFORE_FIRST_NUMERICAL_OUTPUT",
+  "claim_ceiling": "SYNTHETIC_1MYR_8_ORIENTATION_RESPONSE_WITH_DOP853_SENTINEL_ONLY",
+  "permissions": {
+    "local_cpu_execution_authorized": true,
+    "network_access_authorized": false,
+    "gpu_execution_authorized": false,
+    "observed_data_access_authorized": false,
+    "survey_adapter_execution_authorized": false,
+    "jx_o2_execution_or_g0_evidence_authorized": false,
+    "planet_x_detection_exclusion_constraint_or_preference_claim_authorized": false
+  },
+  "xp1_historical_binding": {
+    "role": "MOTIVATION_AND_DESIGN_LINEAGE_ONLY_NOT_A_TRAJECTORY_INPUT_OR_PRIOR",
+    "registration_path": "../jx_xp1_synthetic_response_v1/registration_v1.json",
+    "registration_sha256": "9b8fb748ce3850cbf908c6b1dc8d22c0ffb7f94a2223d0d3f1fbfedb1e9dca81",
+    "semantic_sha256": "1a04e928287e19558a621f09af128da76a69233c1e8c339306ef8b9c42499c9a",
+    "prior_trajectory_or_particle_metric_consumed": false,
+    "endpoint_change_disclosure": "XP2_USES_Q_BELOW_35_AT_1MYR_AS_PRIMARY_AFTER_XP1_Q_BELOW_30_WAS_FLOOR_LIMITED",
+    "protected_read_only_trees": ["../jx_xp1_synthetic_response_v1", "../jx_xp1_runs_v1"],
+    "output_receipt_or_checkpoint_tree_overlap": "FORBIDDEN"
+  },
+  "xp2_v1_invalid_protocol_lineage": {
+    "role": "INVALID_PROTOCOL_DIAGNOSTIC_ONLY_NOT_A_TRAJECTORY_INPUT_OR_SCIENTIFIC_RESULT",
+    "v1_registration_path": "../jx_xp2_robustness_v1/registration_v1.json",
+    "v1_registration_sha256": "7ab012862513df6d597d58270bdd1abab33cbea25a0f63e018279f8705aaafba",
+    "v1_final_invalid_diagnostic_path": "../jx_xp2_runs_v1/v1_final_invalid_protocol_diagnostic_receipt.json",
+    "v1_final_invalid_diagnostic_sha256": "231ccc7170bd7418eb258d648fd243beaf21f296bd9ed3f9ed8981e78f2520d6",
+    "v1_final_invalid_diagnostic_size_bytes": 3375,
+    "v1_output_or_outcome_consumed": false,
+    "v1_scientific_classification_consumed": false,
+    "protocol_repair_only_scientific_design_unchanged": true,
+    "protected_read_only_trees": ["../jx_xp2_robustness_v1", "../jx_xp2_runs_v1"],
+    "output_receipt_or_checkpoint_tree_overlap": "FORBIDDEN"
+  },
+  "frozen_v1_scientific_design_inputs": {
+    "role": "EXACT_SCIENTIFIC_DESIGN_INPUT_REUSE_WITH_V2_EXECUTION_PROTOCOL_ONLY",
+    "scientific_design_experiment_id": "jx-xp2-public-synthetic-robustness-v1",
+    "seed_manifest_path": "seed_manifest_v1.json",
+    "seed_manifest_sha256": "92668bc5b562214f2bd5e2b2a366cdd70c9355cb4162533cdd7d4847d15a45c1",
+    "selection_manifest_path": "selection_manifest_v1.json",
+    "selection_manifest_sha256": "c4fb5d36878f148046bb2254d07f4492352f5c3eb95134f3eec92e82710ae2b0",
+    "initial_states_path": "initial_states_v1.json",
+    "initial_states_sha256": "bb11017fd1f418e46ac146839c2030b19d616b5f9a50704d3021b8c2644949dc",
+    "tracer_or_state_bytes_regenerated_for_v2": false,
+    "v1_dynamics_or_outcomes_consumed": false
+  },
+  "scientific_boundary": {
+    "question": "In this frozen idealized design, how does the equal-weight 24-cell added-body grid change the one-million-year sampled q-below-35 tracer fraction relative to the matched control, and is that label stable to a half timestep, the 500-kyr landmark, deterministic replay, and a frozen DOP853 sentinel?",
+    "observed_catalogs_or_surveys_used": false,
+    "author_checkpoint_angles_seeds_or_outputs_used": false,
+    "prior_trajectory_outputs_used": false,
+    "retired_candidate_or_derivative_used": false,
+    "population_or_survey_inference": false,
+    "model_preference_or_planet_x_evidence": false,
+    "horizon_interpretation": "IDEALIZED_SYNTHETIC_1MYR_RESPONSE_NOT_FORMATION_OR_SOLAR_SYSTEM_AGE_STABILITY"
+  },
+  "design_core": {
+    "units_and_frame": {
+      "G_AU3_Msun_yr2": 39.47841760435743,
+      "distance": "AU",
+      "time": "JULIAN_YEAR",
+      "mass": "SOLAR_MASS",
+      "epoch": "SYNTHETIC_T0",
+      "construction_origin": "SUN_CENTERED_RELATIVE_OSCULATING_ELEMENTS",
+      "integration_frame": "ACTIVE_BODY_BARYCENTRIC_AFTER_DETERMINISTIC_TRANSLATION_AND_BOOST",
+      "reported_states": "SUN_RELATIVE"
+    },
+    "common_active_system": {
+      "sun_mass_Msun": 1.0,
+      "earth_to_sun_mass_ratio": 0.0000030034896149156,
+      "giants": [
+        {"name": "Jupiter", "mass_Msun": 0.00095, "a_AU": 5.2, "initial_longitude_deg": 0.0},
+        {"name": "Saturn", "mass_Msun": 0.00028, "a_AU": 9.5, "initial_longitude_deg": 90.0},
+        {"name": "Uranus", "mass_Msun": 0.000044, "a_AU": 19.2, "initial_longitude_deg": 180.0},
+        {"name": "Neptune", "mass_Msun": 0.000052, "a_AU": 30.1, "initial_longitude_deg": 270.0}
+      ],
+      "planet_orbits": "CIRCULAR_COPLANAR_IDEALIZED",
+      "included_forces": "NEWTONIAN_POINT_MASS_GRAVITY",
+      "omitted": [
+        "INNER_PLANETS", "GENERAL_RELATIVITY", "MIGRATION_OR_GAS",
+        "CLUSTER_GALACTIC_TIDE_OR_STELLAR_ENCOUNTERS", "COLLISIONS_OR_REMOVAL",
+        "TRACER_BACKREACTION"
+      ]
+    },
+    "m0_definition": "COMMON_ACTIVE_SYSTEM_WITH_NO_ADDED_BODY",
+    "m1_physical_cases": [
+      {"id": "CI01", "mass_Mearth": 5.0, "a_AU": 367.0, "e": 0.2, "i_deg": 20.0},
+      {"id": "CI05", "mass_Mearth": 7.07, "a_AU": 433.0, "e": 0.35, "i_deg": 20.0},
+      {"id": "CI09", "mass_Mearth": 10.0, "a_AU": 540.0, "e": 0.5, "i_deg": 20.0}
+    ],
+    "orientation_probes": [
+      {"id": "P0", "Omega_deg": 45.0, "varpi_deg": 45.0, "M_deg": 0.0},
+      {"id": "P1", "Omega_deg": 45.0, "varpi_deg": 135.0, "M_deg": 90.0},
+      {"id": "P2", "Omega_deg": 135.0, "varpi_deg": 45.0, "M_deg": 90.0},
+      {"id": "P3", "Omega_deg": 135.0, "varpi_deg": 135.0, "M_deg": 0.0},
+      {"id": "P4", "Omega_deg": 225.0, "varpi_deg": 225.0, "M_deg": 180.0},
+      {"id": "P5", "Omega_deg": 225.0, "varpi_deg": 315.0, "M_deg": 270.0},
+      {"id": "P6", "Omega_deg": 315.0, "varpi_deg": 225.0, "M_deg": 270.0},
+      {"id": "P7", "Omega_deg": 315.0, "varpi_deg": 315.0, "M_deg": 180.0}
+    ],
+    "orientation_policy": {
+      "omega_rule": "OMEGA_ARGUMENT_DEG_EQUALS_VARPI_MINUS_ASCENDING_NODE_MODULO_360",
+      "orientation_weight_each": "1/8",
+      "physical_case_weight_each": "1/3",
+      "weights_are_arithmetic_design_weights_not_probabilities": true,
+      "xp1_anchor_orientations": {"P1": "XP1_A", "P5": "XP1_B"},
+      "ranking_pruning_or_reweighting": "FORBIDDEN"
+    },
+    "tracer_design": {
+      "classification": "EIGHT_DETERMINISTIC_LHS_DESIGN_BLOCKS_NOT_AN_OBSERVED_OR_RANDOM_POPULATION",
+      "block_count": 8,
+      "tracers_per_block": 16,
+      "total_tracers": 128,
+      "a_AU": [150.0, 800.0],
+      "a_distribution": "LOG_UNIFORM_WITHIN_EACH_LHS_BLOCK",
+      "q_AU": [35.0, 80.0],
+      "q_distribution": "UNIFORM_WITHIN_EACH_LHS_BLOCK",
+      "i_deg": [0.0, 40.0],
+      "i_distribution": "UNIFORM_IN_COS_I_WITHIN_EACH_LHS_BLOCK",
+      "Omega_omega_M_deg": [0.0, 360.0],
+      "angular_distribution": "INDEPENDENT_UNIFORM_WITHIN_EACH_LHS_BLOCK",
+      "massless": true,
+      "blocks_are_deterministic_design_replicates_not_iid_samples": true,
+      "design_unit": "TRACER_NOT_3072_CELL_TRACER_EXPOSURES",
+      "post_output_replacement_or_resampling": "FORBIDDEN"
+    },
+    "dynamics": {
+      "primary_integrator": "MERCURIUS",
+      "primary_dt_years": 0.125,
+      "audit_dt_years": 0.0625,
+      "r_crit_hill": 3.0,
+      "safe_mode": 1,
+      "testparticle_type": 0,
+      "duration_years": 1000000.0,
+      "landmark_years": [250000.0, 500000.0, 1000000.0],
+      "sample_cadence_years": 50.0,
+      "sample_count_including_t0": 20001,
+      "segment_years": 50000.0,
+      "segment_count": 20,
+      "collision": "NONE",
+      "removal": "NONE"
+    },
+    "primary_arm_ids": [
+      "M0",
+      "CI01-P0", "CI01-P1", "CI01-P2", "CI01-P3", "CI01-P4", "CI01-P5", "CI01-P6", "CI01-P7",
+      "CI05-P0", "CI05-P1", "CI05-P2", "CI05-P3", "CI05-P4", "CI05-P5", "CI05-P6", "CI05-P7",
+      "CI09-P0", "CI09-P1", "CI09-P2", "CI09-P3", "CI09-P4", "CI09-P5", "CI09-P6", "CI09-P7"
+    ],
+    "audit_arm_ids": [
+      "AUDIT-M0",
+      "AUDIT-CI01-P0", "AUDIT-CI01-P1", "AUDIT-CI01-P2", "AUDIT-CI01-P3", "AUDIT-CI01-P4", "AUDIT-CI01-P5", "AUDIT-CI01-P6", "AUDIT-CI01-P7",
+      "AUDIT-CI05-P0", "AUDIT-CI05-P1", "AUDIT-CI05-P2", "AUDIT-CI05-P3", "AUDIT-CI05-P4", "AUDIT-CI05-P5", "AUDIT-CI05-P6", "AUDIT-CI05-P7",
+      "AUDIT-CI09-P0", "AUDIT-CI09-P1", "AUDIT-CI09-P2", "AUDIT-CI09-P3", "AUDIT-CI09-P4", "AUDIT-CI09-P5", "AUDIT-CI09-P6", "AUDIT-CI09-P7"
+    ],
+    "endpoints": {
+      "official": "ONE_MILLION_YEAR_CHANGE_IN_EVER_SAMPLED_Q_BELOW_35_FRACTION",
+      "secondary_thresholds_AU": [30.0, 40.0],
+      "bridge_landmark_year": 250000.0,
+      "mandatory_horizon_robustness_year": 500000.0,
+      "official_landmark_year": 1000000.0,
+      "sampled_not_continuous": true,
+      "per_particle": [
+        "MINIMUM_SAMPLED_Q_AU", "FIRST_SAMPLED_Q_BELOW_30_TIME_YR",
+        "FIRST_SAMPLED_Q_BELOW_35_TIME_YR", "FIRST_SAMPLED_Q_BELOW_40_TIME_YR",
+        "FINAL_SUN_RELATIVE_A_E_I_Q_AND_DISTANCE", "FINAL_FINITE_AND_BOUND"
+      ],
+      "descriptive_distributions": [
+        "WASSERSTEIN1_MINIMUM_SAMPLED_Q", "WASSERSTEIN1_FINAL_Q",
+        "WASSERSTEIN1_FINAL_I", "WASSERSTEIN1_CENSORED_FIRST_Q30_DIVIDED_BY_HORIZON",
+        "WASSERSTEIN1_CENSORED_FIRST_Q35_DIVIDED_BY_HORIZON"
+      ]
+    }
+  },
+  "seed_policy": {
+    "design_core_sha256": "93edfe8d15381bb1d18311b6a8a13ae546572cef355c262c71e6c9447fc45d75",
+    "design_core_canonical_bytes": "UTF8_JSON_SORT_KEYS_TRUE_SEPARATORS_COMMA_COLON_ENSURE_ASCII_TRUE_ALLOW_NAN_FALSE",
+    "domain_ascii": "jx-xp2-public-synthetic-robustness-v1",
+    "manifest_path": "seed_manifest_v1.json",
+    "stream_formula": "SHA256(UINT32_BE_DOMAIN_LENGTH || DOMAIN || RAW_32_BYTE_DESIGN_CORE_SHA256 || UINT32_BE_LABEL_LENGTH || ASCII_LABEL || UINT64_BE_COUNTER)",
+    "manifest_seed_bytes": 16,
+    "seed_encoding": "LOWERCASE_HEX_BIG_ENDIAN",
+    "lhs_u64_domain_ascii_without_terminator": "jx-xp2-lhs-u64/v1",
+    "lhs_u64_domain_terminator_hex": "00",
+    "u64_formula": "BIG_ENDIAN_FIRST_8_BYTES_OF_SHA256(ASCII_DOMAIN || BYTE_00 || SEED16 || UINT64_BE_COUNTER)",
+    "counter_initial": 0,
+    "permutation": "DESCENDING_FISHER_YATES_I_15_TO_1_WITH_UNBIASED_U64_REJECTION_LIMIT_2POW64_MINUS_2POW64_MOD_I_PLUS_1",
+    "permutation_counter_consumption": "CONSUME_AND_INCREMENT_EVERY_U64_INCLUDING_REJECTED_WORDS",
+    "jitter": "AFTER_PERMUTATION_ONE_U64_PER_LOGICAL_INDEX_0_TO_15_THEN_RIGHT_SHIFT_11_AND_DIVIDE_BY_2POW53",
+    "lhs_fraction": "(PERMUTED_STRATUM_FOR_LOGICAL_INDEX + JITTER) / 16",
+    "stream_dimension_suffixes_in_order": ["LOG_A", "Q", "COS_I", "OMEGA", "OMEGA_ARGUMENT", "MEAN_ANOMALY"],
+    "stream_label_formula": "LHS_BLOCK_{BLOCK_INDEX_DECIMAL}_{DIMENSION_SUFFIX}",
+    "transforms": {
+      "a_AU": "EXP(LOG(150) + LHS_LOG_A * (LOG(800) - LOG(150)))",
+      "q_AU": "35 + 45 * LHS_Q",
+      "e": "1 - q_AU / a_AU",
+      "i_rad": "ACOS(COS(RADIANS(40)) + LHS_COS_I * (1 - COS(RADIANS(40))))",
+      "angles_rad": "2 * PI * MATCHING_LHS_FRACTION"
+    },
+    "logical_id": "XP2-B{BLOCK_INDEX:02d}-T{INDEX_WITHIN_BLOCK:02d}",
+    "canonical_row_fields": [
+      "logical_id", "block_index", "index_within_block", "a_AU_hex", "q_AU_hex",
+      "e_hex", "i_rad_hex", "Omega_rad_hex", "omega_rad_hex", "M_rad_hex"
+    ],
+    "canonical_rows_serialization": "UTF8_JSON_SORT_KEYS_TRUE_SEPARATORS_COMMA_COLON_ENSURE_ASCII_TRUE_ALLOW_NAN_FALSE",
+    "canonical_rows_sha256_domain_ascii_without_terminator": "jx-xp2-canonical-tracer-design/v1",
+    "canonical_rows_sha256_domain_terminator_hex": "00",
+    "canonical_rows_sha256": "f4a2defd98154209e9a17c7190684799e59d36d34f2a1db3fa8ce7c5b9eaf4ce",
+    "block_0_log_a_permutation_test_vector": [8, 2, 3, 6, 15, 7, 13, 9, 0, 4, 11, 12, 1, 14, 5, 10],
+    "block_0_log_a_first_four_lhs_float_hex": ["0x1.1a2cbe18a28a9p-1", "0x1.38369132770bcp-3", "0x1.8a82b8aa3fccep-3", "0x1.9cc4ccbe503b9p-2"],
+    "system_time_pid_hostname_os_entropy_or_override": false,
+    "outcome_or_prior_trajectory_used": false,
+    "post_output_redraw": "FORBIDDEN"
+  },
+  "initial_state_policy": {
+    "path": "initial_states_v1.json",
+    "schema": "jx-xp2-barycentric-initial-states/v1",
+    "artifact_sha256": "bb11017fd1f418e46ac146839c2030b19d616b5f9a50704d3021b8c2644949dc",
+    "representation": "PACKED_BIG_ENDIAN_IEEE754_BINARY64_HEX_EXACT_EXPANDABLE_ROWS",
+    "row_order": "COMMON_ACTIVE_SUN_FOUR_GIANTS_THEN_OPTIONAL_ADDED_BODY_THEN_128_TRACERS",
+    "shared_input_rule": "PRIMARY_MERCURIUS_AND_INDEPENDENT_DOP853_MUST_CONSUME_THE_SAME_REGISTERED_EXPANDED_BINARY64_BARYCENTRIC_CARTESIAN_ROWS",
+    "expanded_digest_domain_ascii_without_terminator": "jx-xp2-expanded-barycentric-state/v1",
+    "expanded_digest_domain_terminator_hex": "00",
+    "independent_verifier_requirement": "RECONSTRUCT_EACH_SUN_CENTERED_ELEMENT_ROW_AND_ACTIVE_BARYCENTRIC_TRANSLATION_WITHOUT_IMPORTING_RUNNER_HELPERS_THEN_REQUIRE_EXACT_BINARY64_HEX_ROWS_AND_ALL_25_EXPANDED_DIGESTS",
+    "runner_reconstruction_or_tolerance_substitution": "FORBIDDEN",
+    "cartesian_construction": {
+      "implementation": "LOCAL_SOURCE_ONLY_BINARY64_NO_REBOUND_NO_SCIPY",
+      "kepler_initial_guess": "E0_EQUALS_M_IF_E_LESS_THAN_0P8_ELSE_PI",
+      "kepler_updates": "EXACTLY_32_NEWTON_UPDATES_E_EQUALS_E_MINUS_(E_MINUS_e_SIN_E_MINUS_M)_DIVIDED_BY_(1_MINUS_e_COS_E)_WITH_NO_EARLY_EXIT",
+      "perifocal_position": ["x=a*(cos(E)-e)", "y=a*sqrt(1-e*e)*sin(E)"],
+      "perifocal_velocity": ["n=sqrt(G*(primary_mass+orbiting_mass)/(a*a*a))", "denominator=1-e*cos(E)", "vx=-a*n*sin(E)/denominator", "vy=a*n*sqrt(1-e*e)*cos(E)/denominator"],
+      "rotation": "RZ_ASCENDING_NODE_THEN_RX_INCLINATION_THEN_RZ_ARGUMENT_PERIHELION_USING_THE_EXPLICIT_P_AND_Q_COMPONENT_ORDER_IN_REGISTERED_BUILD_DESIGN_SOURCE",
+      "angle_conversion": "PYTHON_MATH_RADIANS_BINARY64_AND_OMEGA_ARGUMENT_EQUALS_VARPI_MINUS_OMEGA_ASCENDING_NODE_MODULO_360",
+      "active_com": "PYTHON_MATH_FSUM_MASS_WEIGHTED_COMPONENTS_IN_REGISTERED_ACTIVE_ROW_ORDER_DIVIDED_BY_MATH_FSUM_MASSES_THEN_BINARY64_COMPONENT_SUBTRACTION",
+      "operation_reassociation_or_fused_multiply_add": "FORBIDDEN",
+      "builder_path": "build_design.py",
+      "preoutput_replacement_disclosure": "REPLACES_EARLIER_UNREGISTERED_REBOUND_DERIVED_CARTESIAN_BYTES_WITH_PHYSICALLY_ROUNDOFF_EQUIVALENT_LOCALLY_SPECIFIED_BYTES_BEFORE_ANY_DYNAMICS"
+    },
+    "independent_element_roundtrip_maximum_absolute_error": {
+      "a_AU": 1e-11,
+      "e": 2e-15,
+      "i_rad": 3e-15,
+      "angular_rad_modulo_2pi": 5e-15
+    },
+    "post_registration_regeneration": "FORBIDDEN"
+  },
+  "classification": {
+    "primary_threshold_AU": 35.0,
+    "mixture_denominator": 3072,
+    "block_denominator": 384,
+    "physical_case_denominator": 1024,
+    "orientation_denominator": 384,
+    "exact_estimands": {
+      "hit_definition": "H_CONFIG_TRACER_HORIZON_THRESHOLD_EQUALS_1_IFF_PREFIX_MINIMUM_SAMPLED_SUN_RELATIVE_OSCULATING_Q_IS_STRICTLY_LESS_THAN_THRESHOLD_AU_ELSE_0",
+      "mixture_numerator": "N_EQUALS_SUM_OVER_24_M1_CONFIGURATIONS_OF_H_CONFIG_MINUS_24_TIMES_H_M0_SUMMED_OVER_128_MATCHED_TRACERS",
+      "block_numerator": "N_B_EQUALS_SUM_OVER_24_M1_CONFIGURATIONS_AND_16_TRACERS_IN_BLOCK_B_OF_H_CONFIG_MINUS_24_TIMES_SUM_OVER_SAME_16_TRACERS_OF_H_M0",
+      "physical_case_numerator": "N_C_EQUALS_SUM_OVER_8_ORIENTATIONS_AND_128_TRACERS_OF_H_CASE_ORIENTATION_MINUS_8_TIMES_SUM_OVER_128_TRACERS_OF_H_M0",
+      "orientation_numerator": "N_P_EQUALS_SUM_OVER_3_CASES_AND_128_TRACERS_OF_H_CASE_ORIENTATION_MINUS_3_TIMES_SUM_OVER_128_TRACERS_OF_H_M0",
+      "control_reuse": "M0_IS_ALGEBRAICALLY_REUSED_AS_MATCHED_CONTROL_AND_NEVER_TREATED_AS_24_INDEPENDENT_CONTROLS"
+    },
+    "increase": {
+      "mixture_numerator_minimum": 154,
+      "all_8_block_numerators_strictly_positive": true,
+      "all_3_physical_case_numerators_strictly_positive": true,
+      "orientation_positive_minimum_count": 6,
+      "orientation_negative_maximum_count": 0
+    },
+    "decrease": {
+      "mixture_numerator_maximum": -154,
+      "all_8_block_numerators_strictly_negative": true,
+      "all_3_physical_case_numerators_strictly_negative": true,
+      "orientation_negative_minimum_count": 6,
+      "orientation_positive_maximum_count": 0
+    },
+    "practically_small": {
+      "maximum_absolute_mixture_numerator": 61,
+      "maximum_absolute_block_numerator": 19,
+      "maximum_absolute_physical_case_numerator": 51,
+      "maximum_absolute_orientation_numerator": 19
+    },
+    "event_support_at_1M": {
+      "small_minimum_unique_M0_q35_hitters": 16,
+      "small_minimum_unique_any_M1_q35_hitters": 16,
+      "directional_minimum_unique_union_q35_hitters": 24,
+      "directional_minimum_unique_discordant_q35_tracers": 16,
+      "M0_set": "SET_OF_LOGICAL_IDS_WITH_M0_PREFIX_MINIMUM_SAMPLED_Q_STRICTLY_LESS_THAN_35_AT_1M",
+      "any_M1_set": "SET_OF_LOGICAL_IDS_WITH_PREFIX_MINIMUM_SAMPLED_Q_STRICTLY_LESS_THAN_35_IN_AT_LEAST_ONE_OF_24_M1_CONFIGURATIONS_AT_1M",
+      "union_set": "SET_UNION_OF_M0_SET_AND_ANY_M1_SET",
+      "discordant_set": "SET_OF_LOGICAL_IDS_FOR_WHICH_AT_LEAST_ONE_MATCHED_M1_VERSUS_M0_Q35_INDICATOR_DIFFERS_AT_1M",
+      "raw_qualifying_but_support_failed_label": "ENDPOINT_FLOOR_LIMITED"
+    },
+    "labels": {
+      "increase": "DESIGN_GRID_DIRECTIONALLY_ROBUST_INCREASE",
+      "decrease": "DESIGN_GRID_DIRECTIONALLY_ROBUST_DECREASE",
+      "small": "DESIGN_GRID_Q35_PRACTICALLY_SMALL_WITH_EVENT_SUPPORT",
+      "floor": "ENDPOINT_FLOOR_LIMITED",
+      "otherwise": "INCONCLUSIVE"
+    },
+    "horizon_policy": {
+      "classification_is_computed_at": [500000.0, 1000000.0],
+      "structural_raw_label_definition": "APPLY_ONLY_THE_INTEGER_MIXTURE_BLOCK_CASE_AND_ORIENTATION_RULES_WITHOUT_ANY_EVENT_SUPPORT_FLOOR",
+      "primary_and_audit_raw_class_must_agree_at_each_horizon": true,
+      "500k_and_1M_raw_labels_must_be_exactly_equal": true,
+      "any_500k_and_1M_raw_label_difference": "HORIZON_SENSITIVE_AND_CLASS_NULL",
+      "event_support_application_order": "ONLY_AFTER_TIMESTEP_AND_500K_VERSUS_1M_STRUCTURAL_RAW_LABEL_EQUALITY_APPLY_THE_DECLARED_1M_UNIQUE_TRACER_EVENT_SUPPORT_SETS_TO_THE_AGREED_1M_STRUCTURAL_LABEL",
+      "event_support_resolution_rule": "EVALUATE_THE_1M_EVENT_SUPPORT_SETS_AND_PROMOTION_INDEPENDENTLY_FOR_DT_0P125_AND_DT_0P0625_AND_REQUIRE_IDENTICAL_PROMOTED_LABELS_AND_STATES",
+      "event_support_resolution_mismatch": "TIMESTEP_SENSITIVE_AND_CLASS_NULL",
+      "event_support_failure_mapping": "A_STRUCTURALLY_QUALIFYING_DIRECTIONAL_OR_SMALL_LABEL_WITH_FAILED_1M_SUPPORT_BECOMES_ENDPOINT_FLOOR_LIMITED_OTHERWISE_RETAIN_THE_STRUCTURAL_LABEL",
+      "250k_is_descriptive_bridge_only": true
+    },
+    "p_values_bayes_factors_confidence_intervals_or_significance_language": "FORBIDDEN"
+  },
+  "numerical_gates": {
+    "all_50_arms_required": true,
+    "all_particles_all_samples_finite_cartesian_and_finite_osculating_required": true,
+    "finite_hyperbolic_states_are_legitimate_and_bound_status_is_separate": true,
+    "threshold_comparison": "STRICTLY_LESS_THAN",
+    "prefix_minimum_q": "MINIMUM_OVER_ALL_ELIGIBLE_SAMPLES_FROM_T0_THROUGH_THE_LANDMARK_INCLUSIVE",
+    "paired_indicator_discordance": "HAMMING_COUNT_OVER_THE_SAME_128_LOGICAL_TRACER_IDS",
+    "censored_first_crossing": "FIRST_ELIGIBLE_STRICT_THRESHOLD_SAMPLE_TIME_OR_LANDMARK_IF_NEVER_HIT",
+    "censored_first_crossing_normalization": "DIVIDE_EACH_CENSORED_TIME_BY_ITS_LANDMARK_YEAR_BEFORE_W1",
+    "empirical_w1": "EXACT_ONE_DIMENSIONAL_EMPIRICAL_WASSERSTEIN_1_BY_SORTED_CDF_INTERVAL_INTEGRATION_WITH_EQUAL_MASS_PER_VALUE",
+    "max_relative_compensated_active_energy_drift": 0.000005,
+    "max_relative_active_com_angular_momentum_vector_drift": 1e-10,
+    "max_scale_normalized_active_linear_momentum_residual": 1e-10,
+    "timestep_pairs": {
+      "required_pair_count": 25,
+      "landmarks_year": [250000.0, 500000.0, 1000000.0],
+      "max_q30_count_difference": 2,
+      "max_q35_count_difference": 2,
+      "max_q40_count_difference": 2,
+      "max_q30_indicator_discordance": 4,
+      "max_q35_indicator_discordance": 4,
+      "max_q40_indicator_discordance": 4,
+      "max_bound_count_difference": 1,
+      "max_w1_minimum_sampled_q_AU": 0.5,
+      "max_w1_final_q_AU": 0.5,
+      "max_w1_final_i_deg": 0.25,
+      "max_w1_censored_first_q30_divided_by_horizon": 0.02,
+      "max_w1_censored_first_q35_divided_by_horizon": 0.02
+    },
+    "failure_state": "NUMERICALLY_UNRESOLVED",
+    "failure_classification": null
+  },
+  "independent_sentinel": {
+    "implementation": "SEPARATE_SCIPY_DOP853_NEWTONIAN_FORCE_AND_METRIC_PATH_WITH_NO_REBOUND_IMPORT",
+    "official_execution_count": 1,
+    "tracers": 32,
+    "selection_manifest_path": "selection_manifest_v1.json",
+    "arm_ids": [
+      "M0", "CI01-P0", "CI01-P4", "CI05-P1", "CI05-P5", "CI09-P2", "CI09-P6"
+    ],
+    "solver": {
+      "method": "scipy.integrate.DOP853",
+      "rtol": 1e-11,
+      "component_atol_position_AU": 1e-12,
+      "component_atol_velocity_AU_per_year": 1e-12,
+      "first_step_years": 0.125,
+      "max_step_years": 1.0,
+      "sample_cadence_years": 50.0,
+      "segment_years": 50000.0,
+      "fixed_restart_at_every_segment_boundary_is_part_of_method": true
+    },
+    "active_gates": {
+      "max_relative_compensated_intrinsic_energy_drift": 1e-8,
+      "max_relative_com_angular_momentum_vector_drift": 1e-10,
+      "max_scale_normalized_linear_momentum_residual": 1e-10
+    },
+    "cross_method_gates_against_each_mercurius_resolution": {
+      "landmarks_year": [250000.0, 500000.0, 1000000.0],
+      "max_event_count_difference_each_q30_q35_q40": 1,
+      "max_indicator_discordance_each_q30_q35_q40": 2,
+      "max_bound_count_difference": 1,
+      "max_w1_minimum_sampled_q_AU": 1.0,
+      "max_w1_final_q_AU": 2.0,
+      "max_w1_final_i_deg": 1.0,
+      "max_w1_censored_first_q30_divided_by_horizon": 0.05,
+      "max_w1_censored_first_q35_divided_by_horizon": 0.05
+    },
+    "failure_state": "INTEGRATOR_SENSITIVE",
+    "physical_validation_claim": false
+  },
+  "checkpoint_and_resume": {
+    "segment_years": 50000.0,
+    "segments_per_arm": 20,
+    "sample_boundary_ownership": "SEGMENT_0_OWNS_T0_EACH_LATER_SEGMENT_OMITS_DUPLICATE_START_SAMPLE",
+    "expected_total_samples": 20001,
+    "complete_integrator_state_and_settings_required": true,
+    "mercurius_storage": "REBOUND_SIMULATIONARCHIVE_ONE_SNAPSHOT_PER_SEGMENT_BOUNDARY",
+    "dop853_storage": "IMMUTABLE_FULL_BOUNDARY_CARTESIAN_STATE_AND_ACCUMULATOR_FOR_EACH_OF_20_SEGMENTS_PER_ARM_WITH_FIXED_SOLVER_RESTART_BY_DESIGN",
+    "checkpoint_save_rule": "FSYNC_PENDING_STATE_AND_RECEIPT_VERIFY_HASH_AND_SIZE_THEN_ATOMIC_RENAME",
+    "interrupted_pending_segment_analyzed": false,
+    "append_only_attempt_ledger": true,
+    "attempt_ledger_publication_v2": "BOTH_COORDINATORS_USE_LOGICAL_APPEND_VIA_FSYNCED_ATOMIC_WHOLE_LEDGER_REPLACEMENT; COMPLETE_PENDING_ONE_ROW_EXTENSION_PROMOTED_ON_RESUME; ANY_INCOMPLETE_BYTE_PREFIX_OF_OLD_OR_OLD_PLUS_INCOMPLETE_NEW_ROW_IS_DISCARDED_WITH_OLD_LEDGER_AUTHORITATIVE; DIVERGENCE_FROM_OLD_PREFIX_IS_REJECTED",
+    "attempt_ledger_state_machine": "PER_ARM_EXACT_NEXT_SEGMENT_ONLY; START_BINDS_REGISTRATION_EXECUTION_ARM_SEGMENT_AND_PREDECESSOR_CHAIN; AT_MOST_THREE_SEQUENTIAL_ATTEMPTS; EXACTLY_ONE_PASS_BINDS_SELECTED_COMMIT_CHAIN; EVERY_FAIL_EXACTLY_BINDS_ONE_DETERMINISTIC_PERMANENT_V2_RECEIPT_AND_FAIL_NEVER_BINDS_A_COMMIT",
+    "worker_start_visibility_v2": "CHILD_READS_ONLY_IMMUTABLE_LEDGER_PREFIX_ENDING_AT_ITS_EXACT_START_AND_VALIDATES_ONLY_OWN_START_PREDECESSOR_AND_STATIC_REGISTERED_INPUTS; COORDINATOR_ALONE_VALIDATES_GLOBAL_COMMIT_PASS_STATE",
+    "execution_lock_v2": "EXCLUSIVE_NONBLOCKING_ZERO_BYTE_OUTPUT_LOCK_INHERITED_BY_EVERY_CHILD_AND_HELD_THROUGH_ATOMIC_RESULT_PUBLICATION; RESUME_MUTATION_FORBIDDEN_WHILE_ANY_PREVIOUS_COORDINATOR_OR_CHILD_HOLDS_LOCK",
+    "top_level_pending_recovery_v2": "UNDER_EXECUTION_LOCK_PROMOTE_EXACT_COMPLETE_PENDING_RUN_MANIFEST; DISCARD_PARTIAL_PRESTART_MANIFEST_AND_RECREATE; VALIDATE_AND_PROMOTE_COMPLETE_PRIMARY_RESULT_OR_REBUILD_PARTIAL; VALIDATE_COMPLETE_DOP853_RESULT_AGAINST_RECOMPUTED_SEMANTICS_PROVENANCE_LEDGER_AND_IMMUTABLE_CHECKPOINTS_OR_REBUILD_PARTIAL",
+    "primary_failure_receipt_v2": "DETERMINISTIC_ATTEMPT_KEY_FILENAME; RECEIPT_FSYNCED_BEFORE_FAIL_LEDGER_PUBLICATION; STABLE_START_BOUND_EVENT_DIGEST; EXACT_CLASS_RETURN_CODE_AND_QUARANTINE_BINDING; RECEIPT_WITHOUT_FAIL_RECONCILED_ON_RESUME; FAIL_WITHOUT_RECEIPT_OR_ANY_EXTRA_REJECTED",
+    "dop853_failure_receipt_v2": "DETERMINISTIC_ARM_SEGMENT_ATTEMPT_FILENAME; RECEIPT_FSYNCED_BEFORE_SEGMENT_ATTEMPT_FAILED_LEDGER_PUBLICATION; START_SEQUENCE_BOUND_EVENT_DIGEST; EXACT_CLOSED_FAILURE_TO_RECEIPT_FILENAME_SHA256_AND_CLASS_BIJECTION; COMPLETE_ORPHAN_RECEIPT_RECONCILED; PARTIAL_UNPUBLISHED_RECEIPT_BECOMES_INTERRUPTED_ATTEMPT; MISSING_EXTRA_DUPLICATE_OR_TAMPERED_RECEIPT_REJECTED",
+    "dop853_failure_classes_v2": ["InterruptedAttempt", "IntegrityError", "NumericalError", "ResourceLimitError", "UnexpectedFailure"],
+    "retry_identical_inputs_checkpoint_and_seed_only": true,
+    "maximum_attempts_per_segment": 3,
+    "attempt_exhaustion_state": "INCOMPLETE_RESOURCE",
+    "conflicting_duplicate_segment_hash_state": "NONDETERMINISTIC_RESUME",
+    "hash_chain_required": true
+  },
+  "resource_caps_per_execution": {
+    "workers": 4,
+    "max_wall_seconds_total": 86400.0,
+    "max_wall_seconds_per_segment_attempt": 14400.0,
+    "max_peak_rss_bytes_per_process": 1073741824,
+    "max_aggregate_child_rss_bytes": 4294967296,
+    "max_output_bytes": 2147483648,
+    "minimum_free_disk_bytes": 21474836480,
+    "gpu_used": false,
+    "native_dynamics_watchdog": "PARENT_MONOTONIC_DEADLINES_WITH_ONE_FRESH_SEPARATE_PROCESS_GROUP_PER_ARM_SEGMENT_ATTEMPT_AND_SIGKILL_ON_CAP_OR_FAILURE",
+    "watchdog_poll_seconds": 0.25
+  },
+  "runtime_lock": {
+    "native_thread_environment": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "python_version": "3.12.13",
+    "python_executable_sha256": "021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7",
+    "rebound_version": "4.4.11",
+    "rebound_build": "Nov 13 2025 14:44:51",
+    "rebound_binary_sha256": "fe7a23bcece1c3f1f869089e9e8d806bedb4727d893d2e551339adbb6665c28a",
+    "rebound_python_source_file_count": 29,
+    "rebound_python_source_sha256": "2c40b16571d57049cbf4bb8329a0c58342f3dc0f0cf49d860ca77fda5a73ae3a",
+    "numpy_version": "2.3.5",
+    "numpy_multiarray_binary_sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd",
+    "scipy_version": "1.17.0",
+    "scipy_rk_source_sha256": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056",
+    "scipy_dop853_coefficients_sha256": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001"
+  },
+  "result_policy": {
+    "primary_execution_labels": ["A", "B"],
+    "primary_semantic_payload_excludes_execution_label_paths_timing_memory_and_attempt_counts": true,
+    "verify_complete_A_before_B": true,
+    "primary_A_B_exact_semantic_equality_required": true,
+    "dop853_official_execution_label": "DOP853-SENTINEL",
+    "output_trees_must_be_distinct_absent_or_valid_resumable_and_disjoint": true,
+    "output_overwrite": "FORBIDDEN",
+    "failure_receipts_permanent": true,
+    "primary_failure_receipt_bijection_required": true,
+    "primary_failure_receipt_schema": "jx-xp2-primary-failure/v2",
+    "dop853_failure_receipt_bijection_required": true,
+    "dop853_attempt_ledger_schema": "jx-xp2-dop853-attempt-ledger-row/v2",
+    "dop853_failure_receipt_schema": "jx-xp2-dop853-failure/v2",
+    "runtime_paths_timing_memory_and_attempt_counts_are_provenance_only": true,
+    "no_raw_sampled_trajectories": true,
+    "classification_emission_requires_primary_replay_and_passing_independent_sentinel": true,
+    "registered_package_inventory": [
+      "README.md", "contract_v1.json", "seed_manifest_v1.json", "selection_manifest_v1.json", "initial_states_v1.json", "build_design.py",
+      "run_primary.py", "run_independent.py", "verify_replay.py", "test_primary.py",
+      "test_independent.py", "registration_v1.json"
+    ]
+  },
+  "mandatory_nonclaim": "JX-XP2 is a locally frozen idealized one-million-year synthetic response screen with a limited DOP853 numerical sentinel. It uses no observed survey data or private author inputs, is not an author reproduction or independent physical validation, cannot detect or exclude Planet X or constrain its mass or orbit, cannot establish formation or Solar-System-age stability, and provides no evidence, permission, G0 result, or progress for JX-O2."
+}

@@ -1,0 +1,40 @@
+{
+  "claim_ceiling": "ENGINEERING_SURROGATE_ONLY",
+  "cross_execution_checks": {
+    "audit_endpoint_hashes_exact_by_key": true,
+    "base_deterministic_payload_sha256_exact_across_executions": true,
+    "primary_endpoint_hashes_exact_by_key": true,
+    "semantic_objects_exact_across_executions": true,
+    "semantic_sha256_exact_across_executions": true
+  },
+  "experiment_contract_sha256": "770dbe118cedccbe0b81ee1f41412fa911654d5f68597d60715bffb2edd8aca7",
+  "experiment_id": "jx-e1-p9-9x4-smoke-v3-replay",
+  "nonclaim": "This verifies repeatability of a hardened synthetic engineering surrogate only. It is not a reproduction, observational comparison, detection, exclusion, or evidence for or against Planet X.",
+  "per_execution_checks": {
+    "output_d": {
+      "all_declared_checks_true": true,
+      "audit_run_key_set_exact": true,
+      "checkpoint_run_key_set_exact": true,
+      "every_loaded_checkpoint_matches_recorded_decoded_hash": true,
+      "mercurius_r_crit_hill_readback_exact": true,
+      "primary_run_key_set_exact": true,
+      "semantic_hash_recomputed_exact": true,
+      "verdict_valid": true
+    },
+    "output_e": {
+      "all_declared_checks_true": true,
+      "audit_run_key_set_exact": true,
+      "checkpoint_run_key_set_exact": true,
+      "every_loaded_checkpoint_matches_recorded_decoded_hash": true,
+      "mercurius_r_crit_hill_readback_exact": true,
+      "primary_run_key_set_exact": true,
+      "semantic_hash_recomputed_exact": true,
+      "verdict_valid": true
+    }
+  },
+  "raw_checkpoint_container_hashes_affect_verdict": false,
+  "schema": "jx-e1-hardened-replay-verification-receipt/v1",
+  "semantic_sha256": "f144a919f3199e831fbda0afc777728838cd30771b4ec8bf81c986e3a47ff7eb",
+  "verdict": "HARDENED_SEMANTIC_REPLAY_EXACT",
+  "verification_contract_sha256": "5e5d9065e8b0d6f3813988a9450165afbd00a6bebf3cc3f3075babd51c192cd6"
+}
