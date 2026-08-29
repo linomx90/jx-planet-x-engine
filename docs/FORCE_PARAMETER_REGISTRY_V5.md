@@ -140,6 +140,22 @@ acceleration depends on velocity, the correction must not be silently inserted
 into that method. An appropriate velocity-dependent integration method and its
 own validation contract are required first.
 
+JX therefore keeps its first velocity-dependent experiment in an isolated
+reference layer. The fixed-step Decimal implicit-midpoint implementation solves
+the full six-component first-order equation, recomputes the accepted candidate's
+midpoint right-hand side and scaled residual before accepting every step, and
+verifies exactly one Newtonian base plus one Solar 1PN correction at every
+right-hand-side call while recording the closed ledger per accepted step. Its
+precision, rounding, Decimal traps, step, tolerances, iteration limit, registry
+digest, and force-plan digest are immutable inputs. It is not imported by the
+legacy dynamics or Yoshida modules and exposes no command-line execution mode.
+
+This numerical reference does not change the Solar row from `NOT_IMPLEMENTED`,
+`UNQUALIFIED`, and `BLOCKED`: the registry still lacks frozen physical inputs,
+validity, covariance, retained provenance bytes, an error budget, a production
+integrator, and independent external qualification. Details and validation
+boundaries are in [V5_REFERENCE_INTEGRATOR.md](V5_REFERENCE_INTEGRATOR.md).
+
 ## Gravity harmonics and oblateness
 
 The external potential of body \(b\) is declared using one coefficient
@@ -377,7 +393,8 @@ blocked:
 - locally pinned parameter and coefficient artifacts with uncertainty;
 - exact frame/time and compatible-state selection;
 - a declared Decimal precision and rounding context for every authorized run;
-- a validated velocity-dependent integrator for relativistic forces;
+- a registry-authorizing production integrator for velocity-dependent
+  relativistic forces and an independently qualified external reference arm;
 - N-body EIH and independent acceleration fixtures;
 - body orientation and harmonic coverage;
 - per-body tide laws and spin backreaction;
@@ -385,7 +402,8 @@ blocked:
 - collision outcomes and regularization compatibility;
 - observation synthesis, estimation, and external residual validation.
 
-Until those gates pass, JX may say only that a model contract or equation-level
-implementation exists. It may not claim DE440/DE441 reproduction,
+Until those gates pass, JX may say that a model contract, equation-level
+implementation, and bounded nonauthorizing numerical reference exist. It may
+not claim authorized physical propagation, DE440/DE441 reproduction,
 ephemeris-grade accuracy, orbit determination, a physical detection or
 exclusion, or superiority over another system.

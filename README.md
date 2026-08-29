@@ -65,8 +65,13 @@ restricted Solar Schwarzschild 1PN correction. It is equation-level,
 correction-only, and permanently reports `registry_authorized=false`. It is not
 wired into the existing Yoshida integrator because the relativistic term is
 velocity-dependent and that integrator assumes a separable, position-only
-force. Its Decimal precision and rounding policy is not yet execution-bound.
-Full N-body EIH relativity and scientific propagation remain blocked.
+force. A separate fixed-step Decimal implicit-midpoint path now tests the
+six-component restricted Newtonian-plus-1PN first-order equation with an explicit precision, rounding,
+force-ledger, and nonlinear-residual contract. That path is reference-only,
+retains `MODEL_OUTPUT`, and cannot make the draft registry executable. Full
+N-body EIH relativity, production propagation, and scientific claim promotion
+remain blocked. See the
+[V5 reference-integrator protocol](docs/V5_REFERENCE_INTEGRATOR.md).
 
 ## Requirements
 
@@ -207,6 +212,8 @@ src/jxplanetx/
   dynamics.py              N-body acceleration, state, and invariants
   force_registry_v5.py     fail-closed V5 physics-registry inspection
   solar_1pn.py             nonauthorizing Decimal Solar 1PN reference kernel
+  v5_reference_dynamics.py nonauthorizing Newtonian-plus-1PN force ledger
+  v5_implicit_midpoint.py  fixed-step Decimal velocity-dependent reference
   yoshida6.py              sixth-order symmetric integrator
   decimal_bs.py            independent Bulirsch–Stoer reference
   ias15_gate.py            IAS15 and population comparison gates

@@ -1492,9 +1492,9 @@
       "blocking_reasons": [
         "DRAFT_NONEXECUTABLE registry grants no propagation authority",
         "Exact parameter values, uncertainties, covariance, epoch, validity, and retained provenance are unresolved",
-        "Independent numerical-method and external-reference qualification are absent",
-        "Only the equation-level Decimal kernel exists; no velocity-dependent production integrator is implemented",
-        "Decimal precision and rounding are not bound",
+        "Independent production integration-arm and held-out external-reference qualification are absent",
+        "The equation-level Decimal kernel and isolated reference integrator are nonauthorizing; no velocity-dependent production integrator is implemented",
+        "No registry-authorized precision and rounding contract is frozen; per-reference-run binding grants no authority",
         "The source artifact, epoch, and applicability domain are not frozen"
       ]
     },
@@ -2599,7 +2599,8 @@
     "registry_claim_state": "DRAFT_NONEXECUTABLE",
     "permitted_claims": [
       "The V5 schema and draft registry can be inspected for completeness",
-      "The restricted Solar Schwarzschild 1PN equation-level Decimal kernel exists and remains nonauthorizing"
+      "The restricted Solar Schwarzschild 1PN equation-level Decimal kernel exists and remains nonauthorizing",
+      "An isolated fixed-step Decimal implicit-midpoint reference path exists for the restricted Newtonian-plus-Solar-1PN equation and remains MODEL_OUTPUT with no registry authority"
     ],
     "prohibited_claims": [
       "V5 force models are authorized for scientific propagation",

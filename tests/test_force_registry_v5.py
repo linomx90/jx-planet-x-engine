@@ -81,6 +81,11 @@ class ForceRegistryV5Tests(unittest.TestCase):
         self.assertIn("equation-level Decimal kernel", blockers)
         self.assertIn("velocity-dependent production integrator", blockers)
         self.assertIn("precision and rounding", blockers)
+        self.assertIn("isolated reference integrator", blockers)
+        self.assertIn("per-reference-run binding grants no authority", blockers)
+        permitted = self.registry["claim_boundaries"]["permitted_claims"]
+        self.assertTrue(any("implicit-midpoint reference path" in claim for claim in permitted))
+        self.assertTrue(any("no registry authority" in claim for claim in permitted))
 
     def test_discovery_links_do_not_masquerade_as_retained_provenance(self) -> None:
         for source in self.registry["provenance_sources"]:
@@ -223,8 +228,12 @@ class ForceRegistryV5Tests(unittest.TestCase):
         self.assertIn("schemas/jx-force-parameter-registry-v5.schema.json", manifest["files"])
         self.assertIn("src/jxplanetx/force_registry_v5.py", manifest["files"])
         self.assertIn("src/jxplanetx/solar_1pn.py", manifest["files"])
+        self.assertIn("src/jxplanetx/v5_reference_dynamics.py", manifest["files"])
+        self.assertIn("src/jxplanetx/v5_implicit_midpoint.py", manifest["files"])
+        self.assertIn("tests/test_v5_reference_integrator.py", manifest["files"])
         self.assertIn("docs/SCIENTIFIC_CONTRACT.md", manifest["files"])
         self.assertIn("docs/FORCE_PARAMETER_REGISTRY_V5.md", manifest["files"])
+        self.assertIn("docs/V5_REFERENCE_INTEGRATOR.md", manifest["files"])
 
 
 if __name__ == "__main__":
