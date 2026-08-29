@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jxplanetx"
 version = "0.3.0"
-description = "Falsification-first scientific engine for outer-Solar-System gravity"
+description = "Falsification-first framework for outer-Solar-System dynamics and evidence"
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}

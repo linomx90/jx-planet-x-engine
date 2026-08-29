@@ -1,13 +1,13 @@
-# JX N-Body Engine
+# JX Scientific Dynamics Framework
 
 **Version:** 0.3.0  
 **License:** MIT  
 **Scientific claim state:** `SCREENING_ONLY`
 
-JX N-Body Engine is a high-precision numerical toolkit for testing gravitational
-source hypotheses in the outer Solar System. It was developed inside the JX
-Planet X research project, but it is a general N-body engine: a planet is one
-possible source, not an assumed answer.
+JX is a falsification-first framework for testing physical and observational
+models of the outer Solar System. Its currently implemented native propagation
+core is a deterministic Newtonian point-mass engine. A planet is one possible
+source, not an assumed answer, and model output is not astronomical evidence.
 
 This repository contains the engine source, packaging metadata, unit tests,
 locked protocols, and compact result summaries. It intentionally excludes the
@@ -40,9 +40,25 @@ The source includes:
   populations, checkpointed execution, calibration/power tests, and fail-closed verdicts;
 - a command-line interface for reproducible validation workflows.
 
-The software is not a complete orbit-determination or global ephemeris-fit
-system. Observation-level use would additionally require validated light-time,
-station, media, clock, calibration, and simultaneous-fit models.
+The most important present limitation is that JX's native core remains
+Newtonian point-mass dynamics: it has no qualified built-in relativity,
+oblateness, nongravitational forces, or collision regularization. It is also not
+a complete orbit-determination or observational ephemeris system.
+
+## JX V5 physics foundation
+
+The V5 foundation begins the controlled expansion beyond gravity-only
+propagation. Its force-parameter registry covers relativity, gravity harmonics,
+nongravitational forces, physical-body properties, collision capability, and
+future measurement modeling. Every declaration is bound to units, frames,
+epochs, provenance, uncertainty, covariance, applicability, and validation
+requirements.
+
+This foundation is deliberately `DRAFT_NONEXECUTABLE`. Unresolved scientific
+values are recorded as `TBD_BLOCKED`; they are never replaced by guessed
+defaults. Declared-but-unimplemented models cannot authorize a run or increase
+the scientific claim state. See the
+[V5 force-parameter registry](docs/FORCE_PARAMETER_REGISTRY_V5.md).
 
 ## Requirements
 
@@ -181,6 +197,7 @@ or validation of a physical distant-source model. See the
 src/jxplanetx/
   decimal_math.py          precision and vector primitives
   dynamics.py              N-body acceleration, state, and invariants
+  force_registry_v5.py     fail-closed V5 physics-registry inspection
   yoshida6.py              sixth-order symmetric integrator
   decimal_bs.py            independent Bulirsch–Stoer reference
   ias15_gate.py            IAS15 and population comparison gates

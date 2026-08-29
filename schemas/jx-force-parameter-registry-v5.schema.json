@@ -1,0 +1,1261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-force-parameter-registry-v5.schema.json",
+  "title": "JX force and observation parameter registry V5",
+  "description": "Structural schema for a fail-closed JX force, parameter, applicability, collision, and measurement registry. Semantic validation remains mandatory.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema",
+    "registry_id",
+    "state",
+    "framework",
+    "lineage",
+    "execution_policy",
+    "unit_definitions",
+    "frames",
+    "validity_intervals",
+    "bodies",
+    "provenance_sources",
+    "parameters",
+    "covariance_blocks",
+    "force_models",
+    "applicability",
+    "collision_capabilities",
+    "measurement_capabilities",
+    "claim_boundaries"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schemas/jx-force-parameter-registry-v5.schema.json"
+    },
+    "schema": {
+      "const": "jx-force-parameter-registry/v5"
+    },
+    "registry_id": {
+      "$ref": "#/$defs/nonemptyString"
+    },
+    "state": {
+      "enum": [
+        "DRAFT_NONEXECUTABLE",
+        "FROZEN_EXECUTABLE",
+        "RETIRED_NONEXECUTABLE"
+      ]
+    },
+    "framework": {
+      "$ref": "#/$defs/framework"
+    },
+    "lineage": {
+      "$ref": "#/$defs/lineage"
+    },
+    "execution_policy": {
+      "$ref": "#/$defs/executionPolicy"
+    },
+    "unit_definitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/unitDefinition"
+      }
+    },
+    "frames": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/frame"
+      }
+    },
+    "validity_intervals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/validityInterval"
+      }
+    },
+    "bodies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/body"
+      }
+    },
+    "provenance_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/provenanceSource"
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/parameter"
+      }
+    },
+    "covariance_blocks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/covarianceBlock"
+      }
+    },
+    "force_models": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/forceModel"
+      }
+    },
+    "applicability": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/applicability"
+      }
+    },
+    "collision_capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/collisionCapability"
+      }
+    },
+    "measurement_capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/measurementCapability"
+      }
+    },
+    "claim_boundaries": {
+      "$ref": "#/$defs/claimBoundaries"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "DRAFT_NONEXECUTABLE"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution_policy": {
+            "properties": {
+              "executable": {
+                "const": false
+              },
+              "blocking_state": {
+                "const": "TBD_BLOCKED"
+              }
+            }
+          },
+          "claim_boundaries": {
+            "properties": {
+              "registry_claim_state": {
+                "const": "DRAFT_NONEXECUTABLE"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "FROZEN_EXECUTABLE"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution_policy": {
+            "properties": {
+              "executable": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonemptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonemptyString"
+      },
+      "uniqueItems": true
+    },
+    "sha256OrBlocked": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{64}|TBD_BLOCKED|NOT_APPLICABLE)$"
+    },
+    "sizeOrBlocked": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*|TBD_BLOCKED|NOT_APPLICABLE)$"
+    },
+    "framework": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project",
+        "package",
+        "registry_generation",
+        "scientific_contract_path",
+        "scientific_contract_sha256",
+        "scientific_contract_size_bytes",
+        "evidence_classes",
+        "canonical_json"
+      ],
+      "properties": {
+        "project": {
+          "const": "jx-planet-x-engine"
+        },
+        "package": {
+          "const": "jxplanetx"
+        },
+        "registry_generation": {
+          "const": "V5"
+        },
+        "scientific_contract_path": {
+          "const": "docs/SCIENTIFIC_CONTRACT.md"
+        },
+        "scientific_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "scientific_contract_size_bytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "evidence_classes": {
+          "type": "array",
+          "const": [
+            "MEASURED",
+            "RECONSTRUCTED",
+            "MODEL_OUTPUT",
+            "ASSUMPTION",
+            "FORECAST",
+            "SPECULATION"
+          ]
+        },
+        "canonical_json": {
+          "const": "UTF8_SORTED_KEYS_COMPACT_ALLOW_NAN_FALSE"
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predecessor_generation",
+        "predecessor_status",
+        "v4_immutable",
+        "v4_may_be_read",
+        "v4_may_be_ingested",
+        "v4_may_be_modified",
+        "v4_artifact_references",
+        "rationale"
+      ],
+      "properties": {
+        "predecessor_generation": {
+          "const": "V4"
+        },
+        "predecessor_status": {
+          "const": "IMMUTABLE_EXTERNAL_LINEAGE_ONLY"
+        },
+        "v4_immutable": {
+          "const": true
+        },
+        "v4_may_be_read": {
+          "const": false
+        },
+        "v4_may_be_ingested": {
+          "const": false
+        },
+        "v4_may_be_modified": {
+          "const": false
+        },
+        "v4_artifact_references": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonemptyString"
+        }
+      }
+    },
+    "executionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executable",
+        "blocking_state",
+        "tbd_blocks_execution",
+        "not_applicable_requires_evidence",
+        "bounded_omission_requires_error_budget",
+        "unknown_keys_rejected",
+        "implicit_defaults_forbidden",
+        "prohibited_uses"
+      ],
+      "properties": {
+        "executable": {
+          "type": "boolean"
+        },
+        "blocking_state": {
+          "enum": [
+            "NONE",
+            "TBD_BLOCKED",
+            "RETIRED"
+          ]
+        },
+        "tbd_blocks_execution": {
+          "const": true
+        },
+        "not_applicable_requires_evidence": {
+          "const": true
+        },
+        "bounded_omission_requires_error_budget": {
+          "const": true
+        },
+        "unknown_keys_rejected": {
+          "const": true
+        },
+        "implicit_defaults_forbidden": {
+          "const": true
+        },
+        "prohibited_uses": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "unitDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit_id",
+        "symbol",
+        "quantity_dimension",
+        "definition_status",
+        "provenance_refs"
+      ],
+      "properties": {
+        "unit_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "symbol": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "quantity_dimension": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "definition_status": {
+          "enum": [
+            "DEFINED",
+            "TBD_BLOCKED"
+          ]
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frame_id",
+        "frame_kind",
+        "origin",
+        "orientation",
+        "time_scale",
+        "epoch",
+        "validity_ref",
+        "status",
+        "provenance_refs"
+      ],
+      "properties": {
+        "frame_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "frame_kind": {
+          "enum": [
+            "BARYCENTRIC_INERTIAL",
+            "HELIOCENTRIC_INERTIAL",
+            "BODY_FIXED",
+            "TOPOCENTRIC",
+            "ORBITAL_RTN"
+          ]
+        },
+        "origin": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "orientation": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "time_scale": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "epoch": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "validity_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "status": {
+          "enum": [
+            "VERIFIED",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "validityInterval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validity_id",
+        "status",
+        "start",
+        "end",
+        "time_scale",
+        "inclusivity",
+        "provenance_refs"
+      ],
+      "properties": {
+        "validity_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "status": {
+          "enum": [
+            "VERIFIED",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "start": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "end": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "time_scale": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "inclusivity": {
+          "enum": [
+            "CLOSED",
+            "OPEN",
+            "LEFT_CLOSED",
+            "RIGHT_CLOSED",
+            "TBD_BLOCKED"
+          ]
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "body": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "body_id",
+        "body_kind",
+        "display_name",
+        "roles",
+        "identity_status",
+        "gm_parameter_ref",
+        "radius_parameter_ref",
+        "spin_parameter_refs",
+        "frame_ref",
+        "validity_ref",
+        "provenance_refs"
+      ],
+      "properties": {
+        "body_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "body_kind": {
+          "enum": [
+            "BODY",
+            "BODY_SET",
+            "MASSLESS_TEST_PARTICLE_SET",
+            "OBSERVER_SET"
+          ]
+        },
+        "display_name": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "GRAVITATING_SOURCE",
+              "ACCELERATED_TARGET",
+              "NON_GRAVITATING_TARGET",
+              "OBSERVER",
+              "EMITTER",
+              "OCCULTER"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "identity_status": {
+          "enum": [
+            "VERIFIED",
+            "TBD_BLOCKED"
+          ]
+        },
+        "gm_parameter_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "radius_parameter_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "spin_parameter_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "frame_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "validity_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "provenanceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provenance_id",
+        "status",
+        "evidence_class",
+        "title",
+        "provider",
+        "version",
+        "uri",
+        "local_path",
+        "sha256",
+        "size_bytes",
+        "locator",
+        "retrieved_utc",
+        "derivation"
+      ],
+      "properties": {
+        "provenance_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "status": {
+          "enum": [
+            "VERIFIED",
+            "TBD_BLOCKED"
+          ]
+        },
+        "evidence_class": {
+          "enum": [
+            "MEASURED",
+            "RECONSTRUCTED",
+            "MODEL_OUTPUT",
+            "ASSUMPTION",
+            "FORECAST",
+            "SPECULATION",
+            "TBD_BLOCKED"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "provider": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "version": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "uri": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "local_path": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256OrBlocked"
+        },
+        "size_bytes": {
+          "$ref": "#/$defs/sizeOrBlocked"
+        },
+        "locator": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "retrieved_utc": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "derivation": {
+          "$ref": "#/$defs/nonemptyString"
+        }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "value",
+        "reason_code",
+        "rationale",
+        "evidence_refs"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "VALUE",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "reason_code": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "TBD_BLOCKED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "const": "TBD_BLOCKED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "NOT_APPLICABLE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "const": "NOT_APPLICABLE"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "kind",
+        "value",
+        "unit_id",
+        "confidence_level",
+        "covariance_block_ref",
+        "provenance_refs"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "VALUE",
+            "EXACT",
+            "COVARIANCE_MEMBER",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "STANDARD_UNCERTAINTY",
+            "CONFIDENCE_INTERVAL",
+            "PRIOR_DISTRIBUTION",
+            "CORRELATION_PLUS_SIGMAS",
+            "EXACT_DEFINITION",
+            "FIXED_ASSUMPTION",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "unit_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "confidence_level": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "covariance_block_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "TBD_BLOCKED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "TBD_BLOCKED"
+              },
+              "value": {
+                "const": "TBD_BLOCKED"
+              },
+              "unit_id": {
+                "const": "TBD_BLOCKED"
+              },
+              "confidence_level": {
+                "const": "TBD_BLOCKED"
+              },
+              "covariance_block_ref": {
+                "const": "TBD_BLOCKED"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parameter_id",
+        "family",
+        "name",
+        "value_kind",
+        "quantity",
+        "unit_id",
+        "value_role",
+        "resolution",
+        "uncertainty",
+        "frame_ref",
+        "epoch",
+        "validity_ref",
+        "body_refs",
+        "provenance_refs",
+        "required_for_execution"
+      ],
+      "properties": {
+        "parameter_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "family": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "name": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "value_kind": {
+          "enum": [
+            "SCALAR",
+            "VECTOR",
+            "MATRIX",
+            "ENUM",
+            "ARTIFACT",
+            "TIME_SERIES",
+            "INTERVAL"
+          ]
+        },
+        "quantity": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "unit_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "value_role": {
+          "enum": [
+            "DEFINED_CONSTANT",
+            "ESTIMATE",
+            "FIXED_SCENARIO",
+            "SOLVE_FOR",
+            "MODEL_SELECTION",
+            "DATA_ARTIFACT"
+          ]
+        },
+        "resolution": {
+          "$ref": "#/$defs/resolution"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        },
+        "frame_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "epoch": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "validity_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "body_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "required_for_execution": {
+          "type": "boolean"
+        }
+      }
+    },
+    "covarianceSigma": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parameter_id",
+        "value",
+        "unit_id"
+      ],
+      "properties": {
+        "parameter_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "value": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "unit_id": {
+          "$ref": "#/$defs/nonemptyString"
+        }
+      }
+    },
+    "covarianceBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "covariance_block_id",
+        "family",
+        "status",
+        "representation",
+        "parameter_ids",
+        "sigmas",
+        "correlation_matrix",
+        "frame_ref",
+        "epoch",
+        "validity_ref",
+        "provenance_refs",
+        "blocking_issue"
+      ],
+      "properties": {
+        "covariance_block_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "family": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "status": {
+          "enum": [
+            "VALUE",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "representation": {
+          "const": "CORRELATION_PLUS_SIGMAS"
+        },
+        "parameter_ids": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "sigmas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/covarianceSigma"
+          }
+        },
+        "correlation_matrix": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/nonemptyString"
+            }
+          }
+        },
+        "frame_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "epoch": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "validity_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "blocking_issue": {
+          "$ref": "#/$defs/nonemptyString"
+        }
+      }
+    },
+    "forceModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_id",
+        "family",
+        "domain",
+        "equation_scope",
+        "applicability_status",
+        "treatment",
+        "parameter_refs",
+        "source_body_refs",
+        "target_body_refs",
+        "frame_ref",
+        "validity_ref",
+        "implementation_status",
+        "implementation_ref",
+        "qualification_status",
+        "qualification_refs",
+        "provenance_refs",
+        "exclusive_with",
+        "blocking_reasons"
+      ],
+      "properties": {
+        "model_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "family": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "domain": {
+          "const": "PROPAGATION"
+        },
+        "equation_scope": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "applicability_status": {
+          "enum": [
+            "APPLICABLE",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "treatment": {
+          "enum": [
+            "MODELED",
+            "BOUNDED_OMISSION",
+            "BLOCKED"
+          ]
+        },
+        "parameter_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "source_body_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "target_body_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "frame_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "validity_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "implementation_status": {
+          "enum": [
+            "IMPLEMENTED",
+            "NOT_IMPLEMENTED",
+            "TBD_BLOCKED"
+          ]
+        },
+        "implementation_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "qualification_status": {
+          "enum": [
+            "QUALIFIED",
+            "UNQUALIFIED",
+            "TBD_BLOCKED"
+          ]
+        },
+        "qualification_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "exclusive_with": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "blocking_reasons": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_id",
+        "subject_ref",
+        "subject_kind",
+        "status",
+        "treatment",
+        "reason_code",
+        "rationale",
+        "evidence_refs",
+        "error_bound_parameter_ref",
+        "error_budget_ref"
+      ],
+      "properties": {
+        "model_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "subject_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "subject_kind": {
+          "enum": [
+            "BODY",
+            "BODY_SET",
+            "BODY_PAIR_SET"
+          ]
+        },
+        "status": {
+          "enum": [
+            "APPLICABLE",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "treatment": {
+          "enum": [
+            "MODELED",
+            "BOUNDED_OMISSION",
+            "BLOCKED"
+          ]
+        },
+        "reason_code": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "error_bound_parameter_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "error_budget_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        }
+      }
+    },
+    "collisionCapability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "status",
+        "supported_modes",
+        "selected_mode",
+        "geometry",
+        "body_pair_scope",
+        "radius_parameter_refs",
+        "event_localization",
+        "output_policy",
+        "implementation_ref",
+        "qualification_refs",
+        "blocking_reasons"
+      ],
+      "properties": {
+        "capability_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "status": {
+          "enum": [
+            "IMPLEMENTED",
+            "NOT_IMPLEMENTED",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "supported_modes": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "selected_mode": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "geometry": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "body_pair_scope": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "radius_parameter_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "event_localization": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "output_policy": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "implementation_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "qualification_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "blocking_reasons": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "measurementCapability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "observation_type",
+        "status",
+        "required_correction_capability_ids",
+        "input_frame_refs",
+        "output_frame_ref",
+        "parameter_refs",
+        "implementation_ref",
+        "qualification_refs",
+        "provenance_refs",
+        "blocking_reasons"
+      ],
+      "properties": {
+        "capability_id": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "observation_type": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "status": {
+          "enum": [
+            "IMPLEMENTED",
+            "NOT_IMPLEMENTED",
+            "NOT_APPLICABLE",
+            "TBD_BLOCKED"
+          ]
+        },
+        "required_correction_capability_ids": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "input_frame_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "output_frame_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "parameter_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "implementation_ref": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "qualification_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "blocking_reasons": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "claimBoundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_claim_state",
+        "permitted_claims",
+        "prohibited_claims",
+        "simulation_output_evidence_class",
+        "external_review_required",
+        "tbd_policy",
+        "not_applicable_policy",
+        "bounded_omission_policy"
+      ],
+      "properties": {
+        "registry_claim_state": {
+          "enum": [
+            "DRAFT_NONEXECUTABLE",
+            "ELIGIBLE_FOR_VALIDATION",
+            "RETIRED_NONEXECUTABLE"
+          ]
+        },
+        "permitted_claims": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "prohibited_claims": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "simulation_output_evidence_class": {
+          "const": "MODEL_OUTPUT"
+        },
+        "external_review_required": {
+          "const": true
+        },
+        "tbd_policy": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "not_applicable_policy": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "bounded_omission_policy": {
+          "$ref": "#/$defs/nonemptyString"
+        }
+      }
+    }
+  }
+}
