@@ -60,6 +60,14 @@ defaults. Declared-but-unimplemented models cannot authorize a run or increase
 the scientific claim state. See the
 [V5 force-parameter registry](docs/FORCE_PARAMETER_REGISTRY_V5.md).
 
+V5 now includes a JX-owned Decimal reference kernel for the
+restricted Solar Schwarzschild 1PN correction. It is equation-level,
+correction-only, and permanently reports `registry_authorized=false`. It is not
+wired into the existing Yoshida integrator because the relativistic term is
+velocity-dependent and that integrator assumes a separable, position-only
+force. Its Decimal precision and rounding policy is not yet execution-bound.
+Full N-body EIH relativity and scientific propagation remain blocked.
+
 ## Requirements
 
 - Python 3.12 or newer
@@ -90,7 +98,7 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 PYTHONPATH=src python3 -m jxplanetx.cli validate --output validation.json
 ```
 
-The test suite contains 102 tests covering integrator behavior,
+The test suite covers integrator behavior,
 convergence gates, force-evaluation accounting, independent-reference logic,
 installed-package provenance, deterministic ensemble generation, strict
 trajectory registration, distribution metrics, official OSSOS tracked-output
@@ -198,6 +206,7 @@ src/jxplanetx/
   decimal_math.py          precision and vector primitives
   dynamics.py              N-body acceleration, state, and invariants
   force_registry_v5.py     fail-closed V5 physics-registry inspection
+  solar_1pn.py             nonauthorizing Decimal Solar 1PN reference kernel
   yoshida6.py              sixth-order symmetric integrator
   decimal_bs.py            independent Bulirsch–Stoer reference
   ias15_gate.py            IAS15 and population comparison gates

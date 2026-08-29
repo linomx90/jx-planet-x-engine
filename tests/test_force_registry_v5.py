@@ -15,11 +15,34 @@ from jxplanetx.force_registry_v5 import (
     validate_registry_semantics,
 )
 from jxplanetx.provenance import sha256_data, source_manifest
+from jxplanetx.solar_1pn import SOLAR_SCHWARZSCHILD_1PN_MODEL_ID
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = PROJECT_ROOT / "registries" / "jx_force_parameters_v5.json"
 SCHEMA = PROJECT_ROOT / "schemas" / "jx-force-parameter-registry-v5.schema.json"
+
+EXPECTED_MODEL_IDS = frozenset(
+    {
+        "force.newtonian.point_mass",
+        "relativity.solar_schwarzschild_test_particle_1pn",
+        "force.relativity.eih_1pn_gr",
+        "force.relativity.restricted_ppn_beta_gamma",
+        "force.relativity.solar_lense_thirring",
+        "force.harmonics.solar_j2_j4",
+        "force.harmonics.planetary",
+        "force.tides.constant_time_lag",
+        "force.nongrav.srp_cannonball",
+        "force.nongrav.srp_pr_burns_1979",
+        "force.nongrav.yarkovsky.empirical_a2",
+        "force.nongrav.yarkovsky.linear_sphere",
+        "force.nongrav.yarkovsky.facet_thermophysical",
+        "force.nongrav.comet.marsden_esm",
+        "force.nongrav.comet.rotating_jet",
+        "force.encounter.hybrid_switching",
+        "force.regularization.algorithmic",
+    }
+)
 
 
 class ForceRegistryV5Tests(unittest.TestCase):
@@ -42,6 +65,60 @@ class ForceRegistryV5Tests(unittest.TestCase):
             {"NEWTONIAN_POINT_MASS", "RELATIVITY", "GRAVITY_HARMONICS", "NONGRAVITATIONAL"}
             <= set(inspection.force_families)
         )
+
+    def test_model_roster_and_solar_kernel_boundary_are_exact(self) -> None:
+        models = {row["model_id"]: row for row in self.registry["force_models"]}
+        self.assertEqual(frozenset(models), EXPECTED_MODEL_IDS)
+        self.assertEqual(SOLAR_SCHWARZSCHILD_1PN_MODEL_ID, "relativity.solar_schwarzschild_test_particle_1pn")
+
+        solar = models[SOLAR_SCHWARZSCHILD_1PN_MODEL_ID]
+        self.assertEqual(solar["implementation_ref"], "src/jxplanetx/solar_1pn.py")
+        self.assertEqual(solar["implementation_status"], "NOT_IMPLEMENTED")
+        self.assertEqual(solar["qualification_status"], "UNQUALIFIED")
+        self.assertEqual(solar["treatment"], "BLOCKED")
+        self.assertEqual(solar["applicability_status"], "TBD_BLOCKED")
+        blockers = " ".join(solar["blocking_reasons"])
+        self.assertIn("equation-level Decimal kernel", blockers)
+        self.assertIn("velocity-dependent production integrator", blockers)
+        self.assertIn("precision and rounding", blockers)
+
+    def test_discovery_links_do_not_masquerade_as_retained_provenance(self) -> None:
+        for source in self.registry["provenance_sources"]:
+            self.assertEqual(source["status"], "TBD_BLOCKED")
+            self.assertEqual(source["sha256"], "TBD_BLOCKED")
+            self.assertEqual(source["size_bytes"], "TBD_BLOCKED")
+        self.assertFalse(self.registry["execution_policy"]["executable"])
+
+    def test_solar_kernel_registers_domain_and_tdb_compatible_inputs(self) -> None:
+        models = {row["model_id"]: row for row in self.registry["force_models"]}
+        parameters = {row["parameter_id"]: row for row in self.registry["parameters"]}
+        solar = models[SOLAR_SCHWARZSCHILD_1PN_MODEL_ID]
+        required = {
+            "parameter.sun.gm_tdb_compatible",
+            "parameter.speed_of_light",
+            "parameter.solar_1pn.maximum_compactness",
+            "parameter.solar_1pn.maximum_speed_fraction_squared",
+            "parameter.decimal_context",
+            "parameter.omitted_force.error_budget",
+        }
+        self.assertEqual(set(solar["parameter_refs"]), required)
+
+        compatible_gm = parameters["parameter.sun.gm_tdb_compatible"]
+        self.assertEqual(compatible_gm["frame_ref"], "frame.sun_relative_icrs_tdb_restricted")
+        self.assertIn("source.iau.tdb2006", compatible_gm["provenance_refs"])
+
+        for parameter_id in (
+            "parameter.solar_1pn.maximum_compactness",
+            "parameter.solar_1pn.maximum_speed_fraction_squared",
+        ):
+            threshold = parameters[parameter_id]
+            self.assertEqual(threshold["unit_id"], "unit.dimensionless")
+            self.assertEqual(threshold["resolution"]["state"], "TBD_BLOCKED")
+            self.assertTrue(threshold["required_for_execution"])
+
+    def test_every_declared_model_has_discovery_provenance_but_no_verified_source(self) -> None:
+        self.assertTrue(all(model["provenance_refs"] for model in self.registry["force_models"]))
+        self.assertFalse(any(source["status"] == "VERIFIED" for source in self.registry["provenance_sources"]))
 
     def test_draft_cannot_be_loaded_for_execution(self) -> None:
         with self.assertRaisesRegex(ForceRegistryError, "grants no execution authority") as raised:
@@ -140,10 +217,14 @@ class ForceRegistryV5Tests(unittest.TestCase):
         self.assertEqual(command.func.__name__, "inspect_force_registry_cli")
         self.assertFalse(hasattr(command, "execute"))
 
-    def test_source_manifest_binds_registry_and_schema(self) -> None:
+    def test_source_manifest_binds_registry_schema_kernel_and_contracts(self) -> None:
         manifest = source_manifest(PROJECT_ROOT)
         self.assertIn("registries/jx_force_parameters_v5.json", manifest["files"])
         self.assertIn("schemas/jx-force-parameter-registry-v5.schema.json", manifest["files"])
+        self.assertIn("src/jxplanetx/force_registry_v5.py", manifest["files"])
+        self.assertIn("src/jxplanetx/solar_1pn.py", manifest["files"])
+        self.assertIn("docs/SCIENTIFIC_CONTRACT.md", manifest["files"])
+        self.assertIn("docs/FORCE_PARAMETER_REGISTRY_V5.md", manifest["files"])
 
 
 if __name__ == "__main__":
