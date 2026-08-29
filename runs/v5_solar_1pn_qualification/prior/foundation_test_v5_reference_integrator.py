@@ -695,7 +695,6 @@ class V5IsolationTests(unittest.TestCase):
         allowed = {
             "v5_reference_dynamics.py",
             "v5_implicit_midpoint.py",
-            "v5_solar_1pn_qualification.py",
         }
         forbidden_names = {"v5_reference_dynamics", "v5_implicit_midpoint"}
         for path in package.glob("*.py"):

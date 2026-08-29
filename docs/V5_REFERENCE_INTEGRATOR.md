@@ -139,6 +139,25 @@ The perihelion comparison uses
 as a restricted 1PN validation relation. It is not a fit to observations or an
 accuracy claim against a planetary ephemeris.
 
+## Frozen qualification package
+
+The checked-in
+[Solar 1PN qualification package](../runs/v5_solar_1pn_qualification/README.md)
+separates known development evidence from fresh holdout fixtures and defines
+ten conjunctive gates, Q0 through Q9. It retains and hashes the governing IERS,
+IAU, BIPM, JPL, and NAIF source artifacts; binds the Decimal contexts, force
+plans, coordinate conventions, coefficient derivations, integration schedules,
+and fixture records; and predeclares equation, perihelion, independent-oracle,
+restricted-EIH, convergence, precision, transform, holdout, and claim-audit
+checks.
+
+This is a preregistered input and inspection layer, not a qualification result.
+No outcomes have been generated, no holdout runner is registered, and raw
+DE440 or Horizons trajectories are explicitly ineligible as a correctness
+oracle for the restricted static-Sun equation unless their broader force model
+is removed or quantitatively budgeted. A future all-gates pass would remain
+`MODEL_OUTPUT` and only `ELIGIBLE_FOR_REVIEW_NONAUTHORIZING`.
+
 ## Still blocked
 
 Production use requires, at minimum, frozen physical parameter values and

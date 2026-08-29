@@ -156,6 +156,14 @@ validity, covariance, retained provenance bytes, an error budget, a production
 integrator, and independent external qualification. Details and validation
 boundaries are in [V5_REFERENCE_INTEGRATOR.md](V5_REFERENCE_INTEGRATOR.md).
 
+The companion
+[frozen Solar 1PN qualification package](../runs/v5_solar_1pn_qualification/README.md)
+retains the first source and transformation inputs and preregisters Q0--Q9,
+including fresh holdouts and the restricted finite-mass EIH correspondence.
+It deliberately has no execution implementation or outcomes. Package validity
+therefore means only that the future experiment was frozen consistently; it
+does not alter this registry row, resolve a parameter, or authorize a force.
+
 ## Gravity harmonics and oblateness
 
 The external potential of body \(b\) is declared using one coefficient

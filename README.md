@@ -73,6 +73,16 @@ N-body EIH relativity, production propagation, and scientific claim promotion
 remain blocked. See the
 [V5 reference-integrator protocol](docs/V5_REFERENCE_INTEGRATOR.md).
 
+A separate [Solar 1PN qualification package](runs/v5_solar_1pn_qualification/README.md)
+now freezes the source artifacts, unit and time-scale transformations, fresh
+holdout fixtures, Q0--Q9 gate definitions, prior-development disclosure, and
+claim ceiling needed for a later qualification attempt. The package contains
+no outcomes and exposes no trajectory runner: its execution implementation is
+`NOT_REGISTERED`, its evidence ceiling is `MODEL_OUTPUT`, and even a future
+all-gates pass could make the reference path only
+`ELIGIBLE_FOR_REVIEW_NONAUTHORIZING`. It cannot change the draft registry or
+authorize physical Solar-System propagation.
+
 ## Requirements
 
 - Python 3.12 or newer
@@ -214,6 +224,7 @@ src/jxplanetx/
   solar_1pn.py             nonauthorizing Decimal Solar 1PN reference kernel
   v5_reference_dynamics.py nonauthorizing Newtonian-plus-1PN force ledger
   v5_implicit_midpoint.py  fixed-step Decimal velocity-dependent reference
+  v5_solar_1pn_qualification.py fail-closed frozen-package inspector only
   yoshida6.py              sixth-order symmetric integrator
   decimal_bs.py            independent Bulirsch–Stoer reference
   ias15_gate.py            IAS15 and population comparison gates

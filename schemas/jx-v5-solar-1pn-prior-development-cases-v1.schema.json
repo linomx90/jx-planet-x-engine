@@ -1,0 +1,899 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x.invalid/schemas/jx-v5-solar-1pn-prior-development-cases-v1.schema.json",
+  "title": "JX V5 Solar 1PN disclosed prior-development cases",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema",
+    "manifest_id",
+    "state",
+    "foundation_commit",
+    "foundation_sources",
+    "method_roster",
+    "known_fixture_ids",
+    "known_state_records",
+    "generated_state_families",
+    "invalid_case_records",
+    "generic_rhs_records",
+    "known_case_descriptor_sha256s",
+    "generated_family_fingerprint_list_sha256s",
+    "counts",
+    "manifest_disclosure_sha256",
+    "outcomes_generated",
+    "registry_authorized",
+    "excluded_from_decisive_gates",
+    "nonclaim"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "../../schemas/jx-v5-solar-1pn-prior-development-cases-v1.schema.json"
+    },
+    "schema": {
+      "const": "jx-v5-solar-1pn-prior-development-cases/v1"
+    },
+    "manifest_id": {
+      "const": "jx.v5.solar_1pn.prior_development_cases.v1"
+    },
+    "state": {
+      "const": "FROZEN_DISCLOSED_PRIOR_DEVELOPMENT_CASES_NONAUTHORIZING"
+    },
+    "foundation_commit": {
+      "$ref": "#/$defs/foundationCommit"
+    },
+    "foundation_sources": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/foundationSource"
+      }
+    },
+    "method_roster": {
+      "type": "array",
+      "minItems": 43,
+      "maxItems": 43,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/methodRecord"
+      }
+    },
+    "known_fixture_ids": {
+      "type": "array",
+      "minItems": 79,
+      "maxItems": 79,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/identifier"
+      }
+    },
+    "known_state_records": {
+      "type": "array",
+      "minItems": 26,
+      "maxItems": 26,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/knownStateRecord"
+      }
+    },
+    "generated_state_families": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/generatedStateFamily"
+      }
+    },
+    "invalid_case_records": {
+      "type": "array",
+      "minItems": 46,
+      "maxItems": 46,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/invalidCaseRecord"
+      }
+    },
+    "generic_rhs_records": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/genericRhsRecord"
+      }
+    },
+    "known_case_descriptor_sha256s": {
+      "type": "array",
+      "minItems": 96,
+      "maxItems": 96,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/sha256"
+      }
+    },
+    "generated_family_fingerprint_list_sha256s": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/sha256"
+      }
+    },
+    "counts": {
+      "$ref": "#/$defs/counts"
+    },
+    "manifest_disclosure_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "outcomes_generated": {
+      "const": false
+    },
+    "registry_authorized": {
+      "const": false
+    },
+    "excluded_from_decisive_gates": {
+      "const": true
+    },
+    "nonclaim": {
+      "$ref": "#/$defs/nonclaim"
+    }
+  },
+  "$defs": {
+    "foundationCommit": {
+      "const": "58b57094d519205f3ef398f3c738af96107c59e5"
+    },
+    "nonclaim": {
+      "const": "This manifest discloses prior development evidence only. It contains no qualification outcome, grants no registry authority, and every listed case is excluded from decisive Q0-Q9 evidence."
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "positiveSize": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "repositoryPath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.{1,2}(?:/|$))[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*$"
+    },
+    "canonicalDecimal": {
+      "type": "string",
+      "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$"
+    },
+    "nonemptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceRole": {
+      "enum": [
+        "development_solar_1pn_tests",
+        "development_reference_integrator_tests"
+      ]
+    },
+    "artifactBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "size_bytes"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repositoryPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size_bytes": {
+          "$ref": "#/$defs/positiveSize"
+        }
+      }
+    },
+    "jsonArtifactBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "size_bytes",
+        "canonical_sha256",
+        "schema",
+        "artifact_id"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repositoryPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size_bytes": {
+          "$ref": "#/$defs/positiveSize"
+        },
+        "canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "schema": {
+          "const": "jx-v5-solar-1pn-prior-development-fingerprint-list/v1"
+        },
+        "artifact_id": {
+          "const": "jx.v5.solar_1pn.prior.perihelion_4096_fingerprints.v1"
+        }
+      }
+    },
+    "allowedDeltaProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "unified_diff_sha256",
+        "added_line_sha256",
+        "foundation_method_roster_sha256",
+        "current_method_roster_sha256",
+        "method_roster_unchanged",
+        "changed_test_method_locators",
+        "changed_scientific_case_count"
+      ],
+      "properties": {
+        "policy": {
+          "enum": [
+            "NO_DELTA_BYTE_IDENTICAL",
+            "EXACT_SINGLE_NONSCIENTIFIC_ISOLATION_ALLOWLIST_INSERTION"
+          ]
+        },
+        "unified_diff_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "added_line_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "foundation_method_roster_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "current_method_roster_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "method_roster_unchanged": {
+          "const": true
+        },
+        "changed_test_method_locators": {
+          "type": "array",
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonemptyString"
+          }
+        },
+        "changed_scientific_case_count": {
+          "type": "integer",
+          "const": 0
+        }
+      }
+    },
+    "foundationSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_role",
+        "foundation_commit",
+        "foundation_copy",
+        "current_file",
+        "allowed_delta_proof"
+      ],
+      "properties": {
+        "source_role": {
+          "$ref": "#/$defs/sourceRole"
+        },
+        "foundation_commit": {
+          "$ref": "#/$defs/foundationCommit"
+        },
+        "foundation_copy": {
+          "$ref": "#/$defs/artifactBinding"
+        },
+        "current_file": {
+          "$ref": "#/$defs/artifactBinding"
+        },
+        "allowed_delta_proof": {
+          "$ref": "#/$defs/allowedDeltaProof"
+        }
+      }
+    },
+    "methodRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "source_role",
+        "source_locator",
+        "case_category",
+        "descriptor_code",
+        "descriptor",
+        "expected_semantics",
+        "descriptor_sha256",
+        "excluded_from_decisive_gates"
+      ],
+      "properties": {
+        "record_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source_role": {
+          "$ref": "#/$defs/sourceRole"
+        },
+        "source_locator": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "case_category": {
+          "enum": [
+            "EQUATION_OR_METAMORPHIC",
+            "FAIL_CLOSED",
+            "REFERENCE_COMPOSITION",
+            "GENERIC_INTEGRATOR",
+            "TRAJECTORY_DEVELOPMENT",
+            "ISOLATION"
+          ]
+        },
+        "descriptor_code": {
+          "$ref": "#/$defs/identifier"
+        },
+        "descriptor": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "expected_semantics": {
+          "enum": [
+            "DEVELOPMENT_ASSERTION_ONLY",
+            "EXPECTED_FAILURE_ONLY",
+            "MODEL_OUTPUT_ONLY",
+            "NONAUTHORIZING_ISOLATION_ASSERTION"
+          ]
+        },
+        "descriptor_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "excluded_from_decisive_gates": {
+          "const": true
+        }
+      }
+    },
+    "coefficientSnapshotValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "unit_id"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/canonicalDecimal"
+        },
+        "unit_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "coefficientSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "central_source",
+        "gravitational_parameter",
+        "speed_of_light",
+        "maximum_compactness",
+        "maximum_speed_fraction_squared"
+      ],
+      "properties": {
+        "central_source": {
+          "const": "SUN"
+        },
+        "gravitational_parameter": {
+          "$ref": "#/$defs/coefficientSnapshotValue"
+        },
+        "speed_of_light": {
+          "$ref": "#/$defs/coefficientSnapshotValue"
+        },
+        "maximum_compactness": {
+          "$ref": "#/$defs/coefficientSnapshotValue"
+        },
+        "maximum_speed_fraction_squared": {
+          "$ref": "#/$defs/coefficientSnapshotValue"
+        }
+      }
+    },
+    "coordinateSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "units",
+        "frame",
+        "origin",
+        "orientation",
+        "time_scale",
+        "epoch_kind",
+        "central_source_model",
+        "target_treatment",
+        "output_semantics",
+        "length_unit_ref",
+        "time_unit_ref",
+        "velocity_unit_ref",
+        "gravitational_parameter_unit_ref"
+      ],
+      "properties": {
+        "units": {
+          "enum": [
+            "AU_DAY",
+            "KILOMETRE_SECOND"
+          ]
+        },
+        "frame": {
+          "const": "BCRS_DERIVED_SUN_RELATIVE_ICRS_ALIGNED_RESTRICTED"
+        },
+        "origin": {
+          "const": "SUN"
+        },
+        "orientation": {
+          "const": "ICRS_ALIGNED_RESTRICTED"
+        },
+        "time_scale": {
+          "enum": [
+            "TCB_COMPATIBLE",
+            "TDB_COMPATIBLE"
+          ]
+        },
+        "epoch_kind": {
+          "enum": [
+            "SYNTHETIC_COORDINATE_OFFSET",
+            "DECLARED_COORDINATE_EPOCH"
+          ]
+        },
+        "central_source_model": {
+          "const": "STATIC_SPHERICAL_SOLAR_MONOPOLE"
+        },
+        "target_treatment": {
+          "const": "MASSLESS_NO_BACKREACTION"
+        },
+        "output_semantics": {
+          "const": "CORRECTION_ONLY"
+        },
+        "length_unit_ref": {
+          "$ref": "#/$defs/identifier"
+        },
+        "time_unit_ref": {
+          "$ref": "#/$defs/identifier"
+        },
+        "velocity_unit_ref": {
+          "$ref": "#/$defs/identifier"
+        },
+        "gravitational_parameter_unit_ref": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "knownStateRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "source_role",
+        "source_locator",
+        "alias_locators",
+        "target",
+        "epoch",
+        "position",
+        "velocity",
+        "coordinate_contract",
+        "coefficient_contract",
+        "scientific_fingerprint_sha256"
+      ],
+      "properties": {
+        "record_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source_role": {
+          "$ref": "#/$defs/sourceRole"
+        },
+        "source_locator": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "alias_locators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonemptyString"
+          }
+        },
+        "target": {
+          "$ref": "#/$defs/identifier"
+        },
+        "epoch": {
+          "$ref": "#/$defs/canonicalDecimal"
+        },
+        "position": {
+          "$ref": "#/$defs/vector3"
+        },
+        "velocity": {
+          "$ref": "#/$defs/vector3"
+        },
+        "coordinate_contract": {
+          "$ref": "#/$defs/coordinateSnapshot"
+        },
+        "coefficient_contract": {
+          "$ref": "#/$defs/coefficientSnapshot"
+        },
+        "scientific_fingerprint_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "vector3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/canonicalDecimal"
+      }
+    },
+    "vector6": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/canonicalDecimal"
+      }
+    },
+    "generatedStateFamily": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family_id",
+        "source_role",
+        "source_locator",
+        "generator_descriptor",
+        "expected_semantics",
+        "sample_count",
+        "fingerprint_list",
+        "first_scientific_fingerprint_sha256",
+        "last_scientific_fingerprint_sha256",
+        "ordered_member_fingerprints_sha256",
+        "collision_policy",
+        "descriptor_sha256",
+        "excluded_from_decisive_gates"
+      ],
+      "properties": {
+        "family_id": {
+          "const": "development.family.solar_equation_level_perihelion_4096"
+        },
+        "source_role": {
+          "const": "development_solar_1pn_tests"
+        },
+        "source_locator": {
+          "const": "SolarSchwarzschild1PNEquationTests.test_equation_level_perihelion_relation:samples"
+        },
+        "generator_descriptor": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "expected_semantics": {
+          "const": "DEVELOPMENT_EQUATION_LEVEL_INPUT_FAMILY_ONLY"
+        },
+        "sample_count": {
+          "const": 4096
+        },
+        "fingerprint_list": {
+          "$ref": "#/$defs/jsonArtifactBinding"
+        },
+        "first_scientific_fingerprint_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "last_scientific_fingerprint_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "ordered_member_fingerprints_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "collision_policy": {
+          "const": "UNION_ALL_MEMBER_SCIENTIFIC_FINGERPRINTS_WITH_KNOWN_STATES"
+        },
+        "descriptor_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "excluded_from_decisive_gates": {
+          "const": true
+        }
+      }
+    },
+    "invalidCaseRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "source_role",
+        "source_locator",
+        "alias_locators",
+        "descriptor_code",
+        "descriptor",
+        "expected_exception",
+        "expected_semantics",
+        "descriptor_sha256",
+        "excluded_from_decisive_gates"
+      ],
+      "properties": {
+        "record_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source_role": {
+          "$ref": "#/$defs/sourceRole"
+        },
+        "source_locator": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "alias_locators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonemptyString"
+          }
+        },
+        "descriptor_code": {
+          "$ref": "#/$defs/identifier"
+        },
+        "descriptor": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "expected_exception": {
+          "$ref": "#/$defs/identifier"
+        },
+        "expected_semantics": {
+          "const": "EXPECTED_FAILURE_ONLY"
+        },
+        "descriptor_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "excluded_from_decisive_gates": {
+          "const": true
+        }
+      }
+    },
+    "genericRhsRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "source_role",
+        "source_locator",
+        "alias_locators",
+        "rhs_kind",
+        "initial_epoch",
+        "initial_six_vector",
+        "synthetic_unit_convention",
+        "state_only_numeric_fingerprint_sha256",
+        "rhs_descriptor",
+        "expected_semantics",
+        "descriptor_sha256",
+        "excluded_from_decisive_gates"
+      ],
+      "properties": {
+        "record_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source_role": {
+          "const": "development_reference_integrator_tests"
+        },
+        "source_locator": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "alias_locators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonemptyString"
+          }
+        },
+        "rhs_kind": {
+          "enum": [
+            "LINEAR_VELOCITY_DEPENDENT",
+            "HARMONIC_OSCILLATOR",
+            "NONAUTONOMOUS_EPOCH",
+            "FORCED_NONLINEAR_NONCONVERGENCE",
+            "INDEPENDENT_DECIMAL_RK4_SOLAR",
+            "INDEPENDENT_NEWTONIAN_SOLAR"
+          ]
+        },
+        "initial_epoch": {
+          "$ref": "#/$defs/canonicalDecimal"
+        },
+        "initial_six_vector": {
+          "$ref": "#/$defs/vector6"
+        },
+        "synthetic_unit_convention": {
+          "const": "AU_DAY_NUMERIC_ONLY_NO_PHYSICAL_SOLAR_CONTRACT"
+        },
+        "state_only_numeric_fingerprint_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "rhs_descriptor": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "expected_semantics": {
+          "const": "DEVELOPMENT_NUMERICAL_METHOD_INPUT_ONLY"
+        },
+        "descriptor_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "excluded_from_decisive_gates": {
+          "const": true
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "foundation_source_count",
+        "method_count",
+        "known_fixture_id_count",
+        "known_state_record_count",
+        "generated_state_family_count",
+        "generated_state_member_count",
+        "invalid_case_record_count",
+        "generic_rhs_record_count",
+        "known_case_descriptor_count"
+      ],
+      "properties": {
+        "foundation_source_count": {
+          "const": 2
+        },
+        "method_count": {
+          "const": 43
+        },
+        "known_fixture_id_count": {
+          "const": 79
+        },
+        "known_state_record_count": {
+          "const": 26
+        },
+        "generated_state_family_count": {
+          "const": 1
+        },
+        "generated_state_member_count": {
+          "const": 4096
+        },
+        "invalid_case_record_count": {
+          "const": 46
+        },
+        "generic_rhs_record_count": {
+          "const": 6
+        },
+        "known_case_descriptor_count": {
+          "const": 96
+        }
+      }
+    },
+    "generatedFingerprintListDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "$schema",
+        "schema",
+        "artifact_id",
+        "state",
+        "foundation_commit",
+        "source_role",
+        "source_locator",
+        "target",
+        "epoch",
+        "coordinate_contract",
+        "coefficient_contract",
+        "sample_count",
+        "members",
+        "ordered_member_fingerprints_sha256",
+        "outcomes_generated",
+        "registry_authorized",
+        "nonclaim"
+      ],
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "const": "../../../schemas/jx-v5-solar-1pn-prior-development-cases-v1.schema.json#/$defs/generatedFingerprintListDocument"
+        },
+        "schema": {
+          "const": "jx-v5-solar-1pn-prior-development-fingerprint-list/v1"
+        },
+        "artifact_id": {
+          "const": "jx.v5.solar_1pn.prior.perihelion_4096_fingerprints.v1"
+        },
+        "state": {
+          "const": "FROZEN_DISCLOSED_GENERATED_PRIOR_INPUTS_NONAUTHORIZING"
+        },
+        "foundation_commit": {
+          "$ref": "#/$defs/foundationCommit"
+        },
+        "source_role": {
+          "const": "development_solar_1pn_tests"
+        },
+        "source_locator": {
+          "const": "SolarSchwarzschild1PNEquationTests.test_equation_level_perihelion_relation:samples"
+        },
+        "target": {
+          "const": "DEVELOPMENT_TEST_PARTICLE"
+        },
+        "epoch": {
+          "const": "0"
+        },
+        "coordinate_contract": {
+          "$ref": "#/$defs/coordinateSnapshot"
+        },
+        "coefficient_contract": {
+          "$ref": "#/$defs/coefficientSnapshot"
+        },
+        "sample_count": {
+          "const": 4096
+        },
+        "members": {
+          "type": "array",
+          "minItems": 4096,
+          "maxItems": 4096,
+          "items": {
+            "$ref": "#/$defs/generatedFingerprintMember"
+          }
+        },
+        "ordered_member_fingerprints_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "outcomes_generated": {
+          "const": false
+        },
+        "registry_authorized": {
+          "const": false
+        },
+        "nonclaim": {
+          "$ref": "#/$defs/nonclaim"
+        }
+      }
+    },
+    "generatedFingerprintMember": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "anomaly_fraction_numerator",
+        "anomaly_fraction_denominator",
+        "position",
+        "velocity",
+        "scientific_fingerprint_sha256"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "anomaly_fraction_numerator": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "anomaly_fraction_denominator": {
+          "const": 4096
+        },
+        "position": {
+          "$ref": "#/$defs/vector3"
+        },
+        "velocity": {
+          "$ref": "#/$defs/vector3"
+        },
+        "scientific_fingerprint_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}
