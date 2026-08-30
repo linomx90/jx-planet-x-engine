@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-v5-solar-1pn-q4-eih-registration-v1.schema.json",
+  "title": "JX V5 Solar 1PN Q4 EIH null registration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema", "registration_id", "qualification_id", "status", "design_only", "outcomes_generated", "execution_authorized", "registry_authorized", "evidence_class", "protocol_constants", "evaluator_requirements", "fixture_slots", "external_bindings", "ready", "nonclaim"],
+  "properties": {
+    "$schema": {"const": "../../schemas/jx-v5-solar-1pn-q4-eih-registration-v1.schema.json"},
+    "schema": {"const": "jx-v5-solar-1pn-q4-eih-registration/v1"},
+    "registration_id": {"const": "jx.v5.solar_1pn.q4_eih_registration.v1"},
+    "qualification_id": {"$ref": "#/$defs/qualificationId"},
+    "status": {"const": "AWAITING_EXTERNAL_Q4_EIH_REGISTRATION"},
+    "design_only": {"const": true},
+    "outcomes_generated": {"const": false},
+    "execution_authorized": {"const": false},
+    "registry_authorized": {"const": false},
+    "evidence_class": {"const": "MODEL_OUTPUT"},
+    "protocol_constants": {"$ref": "#/$defs/protocolConstants"},
+    "evaluator_requirements": {"$ref": "#/$defs/evaluatorRequirements"},
+    "fixture_slots": {"type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true, "items": {"$ref": "#/$defs/fixtureSlot"}},
+    "external_bindings": {"$ref": "#/$defs/externalBindings"},
+    "ready": {"const": false},
+    "nonclaim": {"const": "This null registration supplies no EIH evaluator, runtime, fixtures, convention review, backreaction result, expectation, budget, or execution authority."}
+  },
+  "$defs": {
+    "qualificationId": {"const": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781"},
+    "awaiting": {"type": "object", "additionalProperties": false, "required": ["status", "value"], "properties": {"status": {"type": "string", "pattern": "^AWAITING_EXTERNAL_[A-Z0-9_]+$"}, "value": {"type": "null"}}},
+    "protocolConstants": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coordinate_gauge", "beta", "gamma", "retained_order_policy", "fixed_total_mu", "correction_only_comparison", "newtonian_base_addition_policy", "mass_ratio_definition", "finite_mass_relative_identity", "restricted_difference_identity", "barycentric_position_policy", "barycentric_velocity_policy", "nu_ladder", "required_fixture_roles"],
+      "properties": {
+        "coordinate_gauge": {"const": "HARMONIC"}, "beta": {"const": "1"}, "gamma": {"const": "1"},
+        "retained_order_policy": {"const": "NEWTONIAN_SUBSTITUTION_INSIDE_C_MINUS_2_TERMS"},
+        "fixed_total_mu": {"const": true}, "correction_only_comparison": {"const": true},
+        "newtonian_base_addition_policy": {"const": "ADD_EXACTLY_ONCE_AFTER_CORRECTION_ONLY_COMPARISON"},
+        "mass_ratio_definition": {"const": "nu=q/(1+q)^2"},
+        "finite_mass_relative_identity": {"const": "a_rel(nu)=-mu*n/r^2+mu/(c^2*r^2)*{[(4+2*nu)*mu/r-(1+3*nu)*v^2+(3/2)*nu*rdot^2]*n+(4-2*nu)*rdot*v}"},
+        "restricted_difference_identity": {"const": "a_rel(nu)-a_restricted=nu*mu/(c^2*r^2)*{[2*mu/r-3*v^2+(3/2)*rdot^2]*n-2*rdot*v}"},
+        "barycentric_position_policy": {"const": "x_source=-q*r/(1+q);x_target=r/(1+q)"},
+        "barycentric_velocity_policy": {"const": "v_source=-q*v/(1+q);v_target=v/(1+q)"},
+        "nu_ladder": {"const": ["0.25", "0.1", "0.01"]},
+        "required_fixture_roles": {"const": ["GENERIC", "RADIAL", "TRANSVERSE", "ROTATED", "BODY_EXCHANGED"]}
+      }
+    },
+    "evaluatorRequirements": {
+      "type": "object", "additionalProperties": false,
+      "required": ["complete_simultaneous_finite_mass_eih_identity_binding", "barycentric_state_policy_binding", "body_exchange_rule", "source_backreaction_metric", "comparison_norm", "q4_budget_binding", "convention_review_binding"],
+      "properties": {"complete_simultaneous_finite_mass_eih_identity_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_EIH_IDENTITY"}}}]}, "barycentric_state_policy_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_BARYCENTRIC_POLICY"}}}]}, "body_exchange_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_BODY_EXCHANGE_RULE"}}}]}, "source_backreaction_metric": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_BACKREACTION_METRIC"}}}]}, "comparison_norm": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_NORM"}}}]}, "q4_budget_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_BUDGET"}}}]}, "convention_review_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_CONVENTION_REVIEW"}}}]}}
+    },
+    "fixtureSlot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["role", "status", "binding"],
+      "properties": {"role": {"enum": ["GENERIC", "RADIAL", "TRANSVERSE", "ROTATED", "BODY_EXCHANGED"]}, "status": {"const": "AWAITING_EXTERNAL_FIXTURE"}, "binding": {"type": "null"}}
+    },
+    "externalBindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["eih_source_binding", "eih_runtime_binding", "dependency_lock_binding", "eih_configuration_binding", "external_independence_binding", "sealed_expectation_binding"],
+      "properties": {"eih_source_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SOURCE"}}}]}, "eih_runtime_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RUNTIME"}}}]}, "dependency_lock_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_DEPENDENCY_LOCK"}}}]}, "eih_configuration_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_CONFIGURATION"}}}]}, "external_independence_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_INDEPENDENCE_ATTESTATION"}}}]}, "sealed_expectation_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SEALED_EXPECTATION"}}}]}}
+    }
+  }
+}

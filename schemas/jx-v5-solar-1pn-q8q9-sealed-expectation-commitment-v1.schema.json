@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-v5-solar-1pn-q8q9-sealed-expectation-commitment-v1.schema.json",
+  "title": "JX V5 Solar 1PN externally sealed expectation commitment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema",
+    "qualification_id",
+    "predecessor_package_sha256",
+    "status",
+    "phase_required",
+    "expectation_visibility",
+    "hash_algorithm",
+    "domain_separator",
+    "commitment_formula",
+    "nonce_policy",
+    "required_case_roles",
+    "required_observable_ids",
+    "expectation_package_path",
+    "expectation_package_size_bytes",
+    "expectation_package_sha256",
+    "expectation_package_canonical_sha256",
+    "commitment_sha256",
+    "custodian_signing_key_id",
+    "committed_utc",
+    "signature",
+    "reveal_status",
+    "nonclaim"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../schemas/jx-v5-solar-1pn-q8q9-sealed-expectation-commitment-v1.schema.json"
+    },
+    "schema": {
+      "const": "jx-v5-solar-1pn-q8q9-sealed-expectation-commitment/v1"
+    },
+    "qualification_id": {
+      "$ref": "#/$defs/qualificationId"
+    },
+    "predecessor_package_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "status": {
+      "enum": [
+        "AWAITING_EXTERNAL_EXPECTATION_COMMITMENT",
+        "EXPECTATIONS_COMMITTED_SEALED",
+        "REVEALED_FIRST_VALID",
+        "INVALIDATED"
+      ]
+    },
+    "phase_required": {
+      "const": "BEFORE_EXECUTION"
+    },
+    "expectation_visibility": {
+      "const": "UNAVAILABLE_TO_IMPLEMENTATION_TEAM_BEFORE_UNBLINDING"
+    },
+    "hash_algorithm": {
+      "const": "SHA-256"
+    },
+    "domain_separator": {
+      "const": "JX-V5-SOLAR-1PN-Q8Q9-SEALED-EXPECTATIONS-V1|"
+    },
+    "commitment_formula": {
+      "const": "SHA256(domain_separator_utf8 || nonce_bytes || canonical_expectation_bytes)"
+    },
+    "nonce_policy": {
+      "$ref": "#/$defs/noncePolicy"
+    },
+    "required_case_roles": {
+      "$ref": "#/$defs/identifierArray"
+    },
+    "required_observable_ids": {
+      "$ref": "#/$defs/identifierArray"
+    },
+    "expectation_package_path": {
+      "$ref": "#/$defs/nullableRepositoryPath"
+    },
+    "expectation_package_size_bytes": {
+      "$ref": "#/$defs/nullablePositiveSize"
+    },
+    "expectation_package_sha256": {
+      "$ref": "#/$defs/nullableSha256"
+    },
+    "expectation_package_canonical_sha256": {
+      "$ref": "#/$defs/nullableSha256"
+    },
+    "commitment_sha256": {
+      "$ref": "#/$defs/nullableSha256"
+    },
+    "custodian_signing_key_id": {
+      "$ref": "#/$defs/nullableString"
+    },
+    "committed_utc": {
+      "$ref": "#/$defs/nullableTimestamp"
+    },
+    "signature": {
+      "$ref": "#/$defs/nullableString"
+    },
+    "reveal_status": {
+      "enum": [
+        "NOT_APPLICABLE_PREEXECUTION",
+        "EXPECTATIONS_STILL_SEALED",
+        "REVEALED_FIRST_VALID",
+        "INVALIDATED"
+      ]
+    },
+    "nonclaim": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "qualificationId": {
+      "type": "string",
+      "pattern": "^jx\\.v5\\.solar_1pn\\.qualification\\.[0-9a-f]{64}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"
+    },
+    "identifierArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/identifier"
+      }
+    },
+    "nullableString": {
+      "if": {
+        "const": null
+      },
+      "then": {
+        "const": null
+      },
+      "else": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "nullableSha256": {
+      "if": {
+        "const": null
+      },
+      "then": {
+        "const": null
+      },
+      "else": {
+        "$ref": "#/$defs/sha256"
+      }
+    },
+    "nullableTimestamp": {
+      "if": {
+        "const": null
+      },
+      "then": {
+        "const": null
+      },
+      "else": {
+        "type": "string",
+        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+      }
+    },
+    "nullableRepositoryPath": {
+      "if": {
+        "const": null
+      },
+      "then": {
+        "const": null
+      },
+      "else": {
+        "type": "string",
+        "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.{1,2}(?:/|$))[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*$"
+      }
+    },
+    "nullablePositiveSize": {
+      "if": {
+        "const": null
+      },
+      "then": {
+        "const": null
+      },
+      "else": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      }
+    },
+    "noncePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_entropy_bits",
+        "encoding",
+        "source",
+        "preunblind_visibility",
+        "nonce_stored_in_this_artifact"
+      ],
+      "properties": {
+        "minimum_entropy_bits": {
+          "const": 256
+        },
+        "encoding": {
+          "const": "LOWERCASE_HEX_ON_REVEAL"
+        },
+        "source": {
+          "const": "EXTERNAL_CUSTODIAN_CSPRNG"
+        },
+        "preunblind_visibility": {
+          "const": "SECRET_EXTERNAL"
+        },
+        "nonce_stored_in_this_artifact": {
+          "const": false
+        }
+      }
+    }
+  }
+}

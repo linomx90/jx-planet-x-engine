@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-v5-solar-1pn-q3-oracle-registration-v1.schema.json",
+  "title": "JX V5 Solar 1PN Q3 oracle null registration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema", "registration_id", "qualification_id", "status", "design_only", "outcomes_generated", "execution_authorized", "registry_authorized", "evidence_class", "protocol_constants", "method_requirements", "checkpoint_requirements", "self_convergence", "external_bindings", "ready", "nonclaim"],
+  "properties": {
+    "$schema": {"const": "../../schemas/jx-v5-solar-1pn-q3-oracle-registration-v1.schema.json"},
+    "schema": {"const": "jx-v5-solar-1pn-q3-oracle-registration/v1"},
+    "registration_id": {"const": "jx.v5.solar_1pn.q3_oracle_registration.v1"},
+    "qualification_id": {"$ref": "#/$defs/qualificationId"},
+    "status": {"const": "AWAITING_EXTERNAL_Q3_ORACLE_REGISTRATION"},
+    "design_only": {"const": true},
+    "outcomes_generated": {"const": false},
+    "execution_authorized": {"const": false},
+    "registry_authorized": {"const": false},
+    "evidence_class": {"const": "MODEL_OUTPUT"},
+    "protocol_constants": {"$ref": "#/$defs/protocolConstants"},
+    "method_requirements": {"$ref": "#/$defs/methodRequirements"},
+    "checkpoint_requirements": {"$ref": "#/$defs/checkpointRequirements"},
+    "self_convergence": {"$ref": "#/$defs/selfConvergence"},
+    "external_bindings": {"$ref": "#/$defs/externalBindings"},
+    "ready": {"const": false},
+    "nonclaim": {"const": "This null registration supplies no oracle, coefficients, controller, scales, norms, self-convergence result, expectation, or execution authority."}
+  },
+  "$defs": {
+    "qualificationId": {"const": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781"},
+    "awaiting": {"type": "object", "additionalProperties": false, "required": ["status", "value"], "properties": {"status": {"type": "string", "pattern": "^AWAITING_EXTERNAL_[A-Z0-9_]+$"}, "value": {"type": "null"}}},
+    "protocolConstants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_method_order", "arithmetic", "adaptive", "no_jx_imports_required", "force_ledger", "rhs_equation", "checkpoint_schedule_refs", "per_checkpoint_required_fields", "self_convergence_tolerance_levels", "self_convergence_precision_context_refs", "comparison_prohibited_until_self_convergence_passed"],
+      "properties": {
+        "minimum_method_order": {"const": 8},
+        "arithmetic": {"const": "ARBITRARY_PRECISION"},
+        "adaptive": {"const": true},
+        "no_jx_imports_required": {"const": true},
+        "force_ledger": {"const": ["force.newtonian.point_mass", "relativity.solar_schwarzschild_test_particle_1pn"]},
+        "rhs_equation": {"const": "dr/dt=v;dv/dt=-mu*r/r^3+mu/(c^2*r^3)*((4*mu/r-v^2)*r+4*(r_dot_v)*v)"},
+        "checkpoint_schedule_refs": {"const": ["schedule.q2.e031.c83.h001.one_pn", "schedule.q2.e031.c97.h001.one_pn", "schedule.q2.e047.c83.h001.one_pn", "schedule.q2.e047.c97.h001.one_pn", "schedule.q3.generic.h001.one_pn"]},
+        "per_checkpoint_required_fields": {"const": ["checkpoint_id", "checkpoint_epoch", "length_scale_lk", "velocity_scale_vk", "differential_signal_position_scale", "differential_signal_velocity_scale", "signal_floor", "component_treatment", "total_state_norm", "differential_signal_norm"]},
+        "self_convergence_tolerance_levels": {"const": ["0.000000000000000000000000000001", "0.0000000000000000000000000000000000000001"]},
+        "self_convergence_precision_context_refs": {"const": ["decimal.context.precision_50", "decimal.context.precision_70", "decimal.context.precision_90"]},
+        "comparison_prohibited_until_self_convergence_passed": {"const": true}
+      }
+    },
+    "methodRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method_id", "exact_order", "source_citation", "method_coefficients_binding", "rhs_transcription_binding", "force_ledger_binding", "error_control_policy", "dense_output_or_exact_checkpoint_policy", "event_handling", "controller_binding"],
+      "properties": {
+        "method_id": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_METHOD_ID"}}}]}, "exact_order": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_ORDER"}}}]}, "source_citation": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SOURCE_CITATION"}}}]}, "method_coefficients_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_COEFFICIENTS"}}}]}, "rhs_transcription_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RHS_TRANSCRIPTION"}}}]}, "force_ledger_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_FORCE_LEDGER"}}}]}, "error_control_policy": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_ERROR_CONTROL_POLICY"}}}]}, "dense_output_or_exact_checkpoint_policy": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_CHECKPOINT_POLICY"}}}]}, "event_handling": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_EVENT_HANDLING"}}}]}, "controller_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_CONTROLLER"}}}]}
+      }
+    },
+    "checkpointRequirements": {
+      "type": "object", "additionalProperties": false,
+      "required": ["checkpoint_roster", "per_checkpoint_metric_rows"],
+      "properties": {"checkpoint_roster": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_CHECKPOINT_ROSTER"}}}]}, "per_checkpoint_metric_rows": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_PER_CHECKPOINT_METRICS"}}}]}}
+    },
+    "selfConvergence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["oracle_allocation_ref", "tolerance_convergence_result_binding", "precision_convergence_result_binding", "pass_attestation_binding"],
+      "properties": {"oracle_allocation_ref": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_BUDGET"}}}]}, "tolerance_convergence_result_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SELF_CONVERGENCE_RESULT"}}}]}, "precision_convergence_result_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SELF_CONVERGENCE_RESULT"}}}]}, "pass_attestation_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SELF_CONVERGENCE_ATTESTATION"}}}]}}
+    },
+    "externalBindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["oracle_source_binding", "oracle_runtime_binding", "dependency_lock_binding", "oracle_configuration_binding", "external_independence_binding", "sealed_expectation_binding"],
+      "properties": {"oracle_source_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SOURCE"}}}]}, "oracle_runtime_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RUNTIME"}}}]}, "dependency_lock_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_DEPENDENCY_LOCK"}}}]}, "oracle_configuration_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_CONFIGURATION"}}}]}, "external_independence_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_INDEPENDENCE_ATTESTATION"}}}]}, "sealed_expectation_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SEALED_EXPECTATION"}}}]}}
+    }
+  }
+}
