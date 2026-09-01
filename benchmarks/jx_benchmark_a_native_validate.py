@@ -83,7 +83,7 @@ def main() -> int:
     }
     python_bm6 = base.jx(
         "bm6", "equal_force_budget", state, 10.0 * 365.25, 365.25,
-        support.PRIMARY_DT_DAYS,
+        support.BM6_DT_DAYS,
     )
     replay_gate = support.replay_comparison(native_run, python_bm6)
 
@@ -99,10 +99,12 @@ def main() -> int:
     )
     rebound_run = base.reb(
         "equal_force_budget", state, 10.0 * 365.25, 365.25,
-        support.PRIMARY_DT_DAYS,
+        support.REBOUND_DT_DAYS,
     )
     native_summary = base.summary(native_run, tight, state)
     rebound_summary = base.summary(rebound_run, tight, state)
+    if native_summary["force_evaluations"] != rebound_summary["force_evaluations"]:
+        raise RuntimeError("primary force budgets do not match")
     reference_gate = base.ref_gate(
         loose, tight, [native_summary, rebound_summary], state
     )
@@ -123,6 +125,9 @@ def main() -> int:
         "winner": speed_winner,
         "native_details": {
             "repeats": result_a["timing_repeats"],
+            "steps": support.BM6_STEPS,
+            "dt_days": support.BM6_DT_DAYS,
+            "measured_force_evaluations": 10 * support.BM6_STEPS,
             "min_seconds": result_a["timing_min_seconds"],
             "max_seconds": result_a["timing_max_seconds"],
             "timing_semantics": (

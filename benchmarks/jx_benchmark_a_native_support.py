@@ -16,9 +16,12 @@ import numpy as np
 
 REQUIRED_REBOUND = "5.1.1"
 EXPECTED_BODY_IDS = tuple(range(1, 11))
-PRIMARY_STEPS = 2_940
-PRIMARY_OUTPUT_EVERY = 294
-PRIMARY_DT_DAYS = 365.25 / PRIMARY_OUTPUT_EVERY
+BM6_STEPS = 2_940
+BM6_OUTPUT_EVERY = 294
+BM6_DT_DAYS = 365.25 / BM6_OUTPUT_EVERY
+REBOUND_STEPS = 29_400
+REBOUND_OUTPUT_EVERY = 2_940
+REBOUND_DT_DAYS = 365.25 / REBOUND_OUTPUT_EVERY
 TIMING_REPEATS = 31
 STATE_REPLAY_TOLERANCE = 2.0e-15
 ENERGY_REPLAY_TOLERANCE = 5.0e-16
@@ -76,19 +79,19 @@ def invoke_native(
         "--trajectory", str(trajectory_path),
         "--result", str(result_path),
         "--contest", "equal_force_budget",
-        "--dt-days", format(PRIMARY_DT_DAYS, ".17g"),
-        "--steps", str(PRIMARY_STEPS),
-        "--output-every-steps", str(PRIMARY_OUTPUT_EVERY),
+        "--dt-days", format(BM6_DT_DAYS, ".17g"),
+        "--steps", str(BM6_STEPS),
+        "--output-every-steps", str(BM6_OUTPUT_EVERY),
         "--timing-repeats", str(TIMING_REPEATS),
     ]
     run_command(command, root, log_path)
     result = json.loads(result_path.read_text(encoding="utf-8"))
-    if result["force_evaluations"] != 10 * PRIMARY_STEPS:
+    if result["force_evaluations"] != 10 * BM6_STEPS:
         raise RuntimeError("native force-evaluation accounting mismatch")
-    if result["steps"] != PRIMARY_STEPS:
+    if result["steps"] != BM6_STEPS:
         raise RuntimeError("native step count mismatch")
     if not math.isclose(
-        result["dt_days"], PRIMARY_DT_DAYS, rel_tol=0.0, abs_tol=0.0
+        result["dt_days"], BM6_DT_DAYS, rel_tol=0.0, abs_tol=0.0
     ):
         raise RuntimeError("native timestep mismatch")
     return result
@@ -97,7 +100,7 @@ def invoke_native(
 def parse_native_trajectory(path: Path, state: dict[str, Any]) -> dict[str, Any]:
     with path.open(newline="", encoding="utf-8") as stream:
         rows = list(csv.DictReader(stream))
-    expected_snapshots = PRIMARY_STEPS // PRIMARY_OUTPUT_EVERY + 1
+    expected_snapshots = BM6_STEPS // BM6_OUTPUT_EVERY + 1
     expected_rows = expected_snapshots * len(EXPECTED_BODY_IDS)
     if len(rows) != expected_rows:
         raise RuntimeError(f"native trajectory row count {len(rows)} != {expected_rows}")
@@ -110,7 +113,7 @@ def parse_native_trajectory(path: Path, state: dict[str, Any]) -> dict[str, Any]
             raise RuntimeError(f"duplicate body {body_id} at step {step}")
         grouped[step][body_id] = row
 
-    expected_steps = tuple(range(0, PRIMARY_STEPS + 1, PRIMARY_OUTPUT_EVERY))
+    expected_steps = tuple(range(0, BM6_STEPS + 1, BM6_OUTPUT_EVERY))
     if tuple(sorted(grouped)) != expected_steps:
         raise RuntimeError("native output-step grid mismatch")
 
@@ -158,9 +161,9 @@ def parse_native_trajectory(path: Path, state: dict[str, Any]) -> dict[str, Any]
     return {
         "lane": "bm6_native_cpp",
         "contest": "equal_force_budget",
-        "dt": PRIMARY_DT_DAYS,
-        "steps": PRIMARY_STEPS,
-        "calls": 10 * PRIMARY_STEPS,
+        "dt": BM6_DT_DAYS,
+        "steps": BM6_STEPS,
+        "calls": 10 * BM6_STEPS,
         "cost_semantics": "measured: ten native force solves per BM6 macro-step",
         "wall": 0.0,
         "t": np.arange(expected_snapshots, dtype=float) * 365.25,
@@ -225,16 +228,17 @@ def setup_rebound(state: dict[str, Any], dt: float):
 
 
 def rebound_native_timing(state: dict[str, Any], repeats: int) -> dict[str, Any]:
-    # Warm the imported library and instruction/data caches outside measurement.
-    warmup = setup_rebound(state, PRIMARY_DT_DAYS)
-    warmup.steps(PRIMARY_STEPS)
+    # One force evaluation per REBOUND Leapfrog step. Ten times more steps than
+    # BM6 are required to match BM6's ten force solves per macro-step.
+    warmup = setup_rebound(state, REBOUND_DT_DAYS)
+    warmup.steps(REBOUND_STEPS)
 
     samples: list[float] = []
     checksums: list[float] = []
     for _ in range(repeats):
-        simulation = setup_rebound(state, PRIMARY_DT_DAYS)
+        simulation = setup_rebound(state, REBOUND_DT_DAYS)
         start = time.perf_counter()
-        simulation.steps(PRIMARY_STEPS)
+        simulation.steps(REBOUND_STEPS)
         samples.append(time.perf_counter() - start)
         checksums.append(
             math.fsum(
@@ -246,6 +250,9 @@ def rebound_native_timing(state: dict[str, Any], repeats: int) -> dict[str, Any]
         )
     return {
         "repeats": repeats,
+        "steps": REBOUND_STEPS,
+        "dt_days": REBOUND_DT_DAYS,
+        "modeled_force_evaluations": REBOUND_STEPS,
         "median_seconds": statistics.median(samples),
         "min_seconds": min(samples),
         "max_seconds": max(samples),
