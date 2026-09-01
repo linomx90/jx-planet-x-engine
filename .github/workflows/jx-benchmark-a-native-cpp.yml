@@ -1,0 +1,112 @@
+name: JX Benchmark A Native C++
+
+on:
+  push:
+    branches:
+      - experiment/bm6-rebound-5.1.1
+    paths:
+      - native/**
+      - benchmarks/jx_benchmark_a_native_cpp_contract.json
+      - benchmarks/jx_benchmark_a_bm6_golden_state_v1.json
+      - benchmarks/jx_benchmark_a_native_replay_oracle_v2_contract.json
+      - benchmarks/jx_benchmark_a_native_support.py
+      - benchmarks/jx_benchmark_a_native_validate.py
+      - .github/workflows/jx-benchmark-a-native-cpp.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: "0"
+  OMP_NUM_THREADS: "1"
+  OPENBLAS_NUM_THREADS: "1"
+  MKL_NUM_THREADS: "1"
+
+jobs:
+  native-benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out benchmark branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned benchmark dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.3.5 scipy==1.17.0 rebound==5.1.1
+          python - <<'PY'
+          import numpy, scipy, rebound
+          assert rebound.__version__ == "5.1.1", rebound.__version__
+          print("numpy", numpy.__version__)
+          print("scipy", scipy.__version__)
+          print("rebound", rebound.__version__)
+          PY
+
+      - name: Compile Python harnesses
+        run: |
+          python -m py_compile benchmarks/jx_benchmark_a.py
+          python -m py_compile benchmarks/jx_benchmark_a_native_support.py
+          python -m py_compile benchmarks/jx_benchmark_a_native_validate.py
+
+      - name: Run sanitizers and reversibility self-test
+        run: make -C native sanitizer
+
+      - name: Compile strict release binary
+        run: make -C native release
+
+      - name: Run locked native replay
+        id: benchmark
+        continue-on-error: true
+        run: |
+          python benchmarks/jx_benchmark_a_native_validate.py \
+            --executable build/native/jx_bm6_native
+
+      - name: Record build, contracts, and environment metadata
+        if: always()
+        run: |
+          output=runs/jx_benchmark_a_native_cpp
+          mkdir -p "$output"
+          cp benchmarks/jx_benchmark_a_contract.json "$output/base_contract.lock.json"
+          cp benchmarks/jx_benchmark_a_native_cpp_contract.json "$output/native_contract.lock.json"
+          cp benchmarks/jx_benchmark_a_native_replay_oracle_v2_contract.json "$output/replay_oracle_amendment.lock.json"
+          cp benchmarks/jx_benchmark_a_bm6_golden_state_v1.json "$output/golden_state_manifest.lock.json"
+          cat > "$output/build_command.txt" <<'EOF'
+          g++ -std=c++20 -fno-fast-math -ffp-contract=off -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG native/jx_bm6_native.cpp -o build/native/jx_bm6_native
+          EOF
+          g++ --version > "$output/compiler.txt"
+          uname -a > "$output/uname.txt"
+          lscpu > "$output/lscpu.txt"
+          python -m pip freeze --all > "$output/pip-freeze.txt"
+          ldd build/native/jx_bm6_native > "$output/ldd.txt"
+          cd "$output"
+          rm -f SHA256SUMS.txt
+          sha256sum * > SHA256SUMS.txt
+
+      - name: Verify artifact hashes
+        if: always()
+        run: |
+          if [ -f runs/jx_benchmark_a_native_cpp/SHA256SUMS.txt ]; then
+            cd runs/jx_benchmark_a_native_cpp
+            sha256sum -c SHA256SUMS.txt
+          fi
+
+      - name: Upload complete native benchmark artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-benchmark-a-native-cpp-${{ github.sha }}
+          path: runs/jx_benchmark_a_native_cpp/
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Enforce benchmark verdict
+        if: always()
+        run: test "${{ steps.benchmark.outcome }}" = "success"

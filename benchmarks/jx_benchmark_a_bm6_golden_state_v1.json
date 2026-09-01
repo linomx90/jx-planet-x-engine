@@ -1,0 +1,96 @@
+{
+  "canonicalization": "For each annual output in ascending output_index and body_id 1..10: output_index|body_id|x|y|z|vx|vy|vz\\n using source CSV strings unchanged.",
+  "claim_boundary": "Exact replay oracle for the preserved primary BM6 output only.",
+  "diagnostic_tolerances": {
+    "angular_series_max_abs_delta": 5e-16,
+    "energy_series_max_abs_delta": 5e-16
+  },
+  "overall_state_sha256": "84a6f400b565ab7769329f8eb0099d74d16e02bbb277a8e1a4974417c10f06b0",
+  "schema": "jx-benchmark-a-bm6-golden-state/v1",
+  "snapshots": [
+    {
+      "output_index": 0,
+      "relative_angular_momentum_vector_error": "0.00000000000000000e+00",
+      "signed_relative_energy_error": "0.00000000000000000e+00",
+      "state_sha256": "78a5ee2c9497a638a2b928392d96af3de12e4fdef7705753a219acd9113dbf33",
+      "time_days": "0.00000000000000000e+00"
+    },
+    {
+      "output_index": 1,
+      "relative_angular_momentum_vector_error": "2.80715136938015453e-15",
+      "signed_relative_energy_error": "5.01176244370986363e-14",
+      "state_sha256": "be29f5423d9d26d0316648d90bdfd0224322447d507268519feef3be44921274",
+      "time_days": "3.65250000000000000e+02"
+    },
+    {
+      "output_index": 2,
+      "relative_angular_momentum_vector_error": "3.70700955915837253e-15",
+      "signed_relative_energy_error": "5.29110657991664289e-14",
+      "state_sha256": "0a29e10c821c91cd4f07f12fe47e65629a2129b0e5658c6547b48d9c5f905cfc",
+      "time_days": "7.30500000000000000e+02"
+    },
+    {
+      "output_index": 3,
+      "relative_angular_momentum_vector_error": "3.65384930250813762e-15",
+      "signed_relative_energy_error": "2.80987337007995632e-14",
+      "state_sha256": "20405e262346ec84f1f2a82d4e658b40014b47ce84c69b5c71046f6ff0f717b1",
+      "time_days": "1.09575000000000000e+03"
+    },
+    {
+      "output_index": 4,
+      "relative_angular_momentum_vector_error": "4.65627171419521191e-15",
+      "signed_relative_energy_error": "-1.98334336706813288e-13",
+      "state_sha256": "a117261656ee1e4930bdd029ec88cde71d6718d24f96de1a3517f13e4c67a0dc",
+      "time_days": "1.46100000000000000e+03"
+    },
+    {
+      "output_index": 5,
+      "relative_angular_momentum_vector_error": "7.45393447487233075e-15",
+      "signed_relative_energy_error": "-7.74604857693386778e-13",
+      "state_sha256": "b4088dbd421641c4274eaa77fb7480ddc6869d037d85a873a176f6046f30dda7",
+      "time_days": "1.82625000000000000e+03"
+    },
+    {
+      "output_index": 6,
+      "relative_angular_momentum_vector_error": "4.46119967438623077e-15",
+      "signed_relative_energy_error": "-1.66784881323459397e-13",
+      "state_sha256": "005e1ce7e21de036f0077e06247662355f21e9d088ef36eb95f4c020dcee17c6",
+      "time_days": "2.19150000000000000e+03"
+    },
+    {
+      "output_index": 7,
+      "relative_angular_momentum_vector_error": "1.40037401846992103e-15",
+      "signed_relative_energy_error": "3.20424156237188028e-14",
+      "state_sha256": "1696726cd296f318f83b05462909e778470ccde9607da5346e9c6e855904c97a",
+      "time_days": "2.55675000000000000e+03"
+    },
+    {
+      "output_index": 8,
+      "relative_angular_momentum_vector_error": "5.15104532320923605e-15",
+      "signed_relative_energy_error": "4.46950617930846882e-14",
+      "state_sha256": "9b698820cf87943879fce986240502a7283dbc5d87d118fbd578d94ea68ae486",
+      "time_days": "2.92200000000000000e+03"
+    },
+    {
+      "output_index": 9,
+      "relative_angular_momentum_vector_error": "2.41322076990611062e-15",
+      "signed_relative_energy_error": "4.97889842768553684e-14",
+      "state_sha256": "bd0042638c220b22f240add34e1ecc1281cbd59baaccadbcaf37a0c33f7fce31",
+      "time_days": "3.28725000000000000e+03"
+    },
+    {
+      "output_index": 10,
+      "relative_angular_momentum_vector_error": "4.02903098555811567e-15",
+      "signed_relative_energy_error": "-2.20188907362990731e-14",
+      "state_sha256": "1fb395325932b54c69796c6b36927124300d2f354e5b917ec7dbc4a39c27baf9",
+      "time_days": "3.65250000000000000e+03"
+    }
+  ],
+  "source": {
+    "artifact_zip_sha256": "95a2064b4524f37c3ff5e8324a2961e166fe8463cab531600b806d35a25f8378",
+    "candidate_commit": "847433b819836cf71cf55f2b5fac9f7c566a4243",
+    "result_sha256": "063de521c66bc4671dc6fa28cffcadfd4d17cc7b0cd2ea2fbdd6946eed563786",
+    "source_member": "trajectory_equal_force_budget_bm6.csv",
+    "workflow_run_id": 33565234437
+  }
+}
