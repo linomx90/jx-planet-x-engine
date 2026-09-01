@@ -1,0 +1,80 @@
+{
+  "schema": "jx-general-dynamics-benchmark-a-result-summary/v1",
+  "date": "2026-09-01",
+  "classification": "MODEL_OUTPUT_NUMERICAL_ENGINEERING_ONLY",
+  "scope": "frozen ten-body Newtonian DE441/Horizons workload over ten years",
+  "primary_contest": "equal_force_budget",
+  "primary_verdict": "JX_BM6_WIN",
+  "equal_timestep_verdict": "INVALID_REFERENCE",
+  "equal_force_budget": {
+    "modeled_propagation_force_evaluations": 29400,
+    "bm6": {
+      "dt_days": 1.2423469387755102,
+      "steps": 2940,
+      "max_position_error_au": 1.5009541688941567e-7,
+      "rms_position_error_au": 2.7322385765096967e-8,
+      "max_velocity_error_au_per_day": 7.872405135301613e-9,
+      "rms_velocity_error_au_per_day": 1.4776848712013868e-9,
+      "max_relative_energy_error": 7.746048576933868e-13,
+      "max_relative_angular_momentum_vector_error": 7.45393447487233e-15,
+      "wall_seconds": 9.09135105300004
+    },
+    "rebound_leapfrog_5_1_1": {
+      "dt_days": 0.12423469387755103,
+      "steps": 29400,
+      "max_position_error_au": 0.0029449334057903153,
+      "rms_position_error_au": 0.0006023715876016241,
+      "max_velocity_error_au_per_day": 0.00020232043946303148,
+      "rms_velocity_error_au_per_day": 0.00003886168512411998,
+      "max_relative_energy_error": 1.2158039277478082e-8,
+      "max_relative_angular_momentum_vector_error": 9.81838124932806e-15,
+      "wall_seconds": 0.07643816899997091
+    },
+    "bm6_improvement_factors": {
+      "max_position": 19620.40858289514,
+      "rms_position": 22046.815120044343,
+      "max_velocity": 25699.952681015067,
+      "rms_velocity": 26299.03430798792,
+      "max_energy": 15695.795290623675
+    },
+    "rebound_wall_time_advantage_factor": 118.9373211308018,
+    "reference_gate": {
+      "passed": true,
+      "rms_position_disagreement_au": 7.470891072166654e-13,
+      "rms_velocity_disagreement_au_per_day": 4.2102592621046006e-14,
+      "position_limit_au": 2.732238576509697e-10,
+      "velocity_limit_au_per_day": 1.4776848712013867e-11
+    }
+  },
+  "equal_timestep": {
+    "status": "INVALID_REFERENCE",
+    "reason": "binary64 DOP853 loose/tight disagreement did not satisfy the locked one-percent referee gate",
+    "rms_position_disagreement_au": 7.470891072166654e-13,
+    "required_position_limit_au": 1.1271946675083161e-14,
+    "rms_velocity_disagreement_au_per_day": 4.2102592621046006e-14,
+    "required_velocity_limit_au_per_day": 3.957537378888668e-16,
+    "next_requirement": "genuinely higher-precision referee"
+  },
+  "provenance": {
+    "branch": "experiment/bm6-rebound-5.1.1",
+    "v1_workflow_run_id": 33565234437,
+    "v1_candidate_commit": "847433b819836cf71cf55f2b5fac9f7c566a4243",
+    "v1_result_sha256": "063de521c66bc4671dc6fa28cffcadfd4d17cc7b0cd2ea2fbdd6946eed563786",
+    "v1_artifact_zip_sha256": "95a2064b4524f37c3ff5e8324a2961e166fe8463cab531600b806d35a25f8378",
+    "v2_workflow_run_id": 33566265896,
+    "v2_workflow_commit": "91e259772a82649460c51c0c66276f968ac3651e",
+    "v2_result_sha256": "aeee0cee19474113278b6865722a8033fc5932aa5d7a36844684d0786286cf7a",
+    "v2_artifact_zip_sha256": "abd638fb493f64b686060a21dfc9fe720d69b87c2d6cf4d33fe4d9ebe4bf5f30",
+    "normalized_initial_state_sha256": "43e6f0655447286e74a146b3b07ae24c9daeed77a0aa14bfc98f76dbd29704c4",
+    "reference_vectors_sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e",
+    "gm_table_sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217",
+    "rebound_version": "5.1.1",
+    "rebound_leapfrog_source_blob_sha": "b5bc591497b0e108393fd9b12a6f99524cd1f9b6"
+  },
+  "next_locked_actions": [
+    "native C++ BM6 replay",
+    "160/224-bit independent referee",
+    "separate close-encounter and hybrid gate"
+  ],
+  "nonclaim": "Not a universal REBOUND ranking, speed win, complete ephemeris reconstruction, or Planet-X claim."
+}
