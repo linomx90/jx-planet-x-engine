@@ -7,6 +7,8 @@ on:
     paths:
       - native/**
       - benchmarks/jx_benchmark_a_native_cpp_contract.json
+      - benchmarks/jx_benchmark_a_bm6_golden_state_v1.json
+      - benchmarks/jx_benchmark_a_native_replay_oracle_v2_contract.json
       - benchmarks/jx_benchmark_a_native_support.py
       - benchmarks/jx_benchmark_a_native_validate.py
       - .github/workflows/jx-benchmark-a-native-cpp.yml
@@ -67,11 +69,15 @@ jobs:
           python benchmarks/jx_benchmark_a_native_validate.py \
             --executable build/native/jx_bm6_native
 
-      - name: Record build and environment metadata
+      - name: Record build, contracts, and environment metadata
         if: always()
         run: |
           output=runs/jx_benchmark_a_native_cpp
           mkdir -p "$output"
+          cp benchmarks/jx_benchmark_a_contract.json "$output/base_contract.lock.json"
+          cp benchmarks/jx_benchmark_a_native_cpp_contract.json "$output/native_contract.lock.json"
+          cp benchmarks/jx_benchmark_a_native_replay_oracle_v2_contract.json "$output/replay_oracle_amendment.lock.json"
+          cp benchmarks/jx_benchmark_a_bm6_golden_state_v1.json "$output/golden_state_manifest.lock.json"
           cat > "$output/build_command.txt" <<'EOF'
           g++ -std=c++20 -fno-fast-math -ffp-contract=off -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG native/jx_bm6_native.cpp -o build/native/jx_bm6_native
           EOF
