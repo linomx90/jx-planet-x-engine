@@ -1,0 +1,53 @@
+{
+  "schema": "jx-native-cpp-bm6-result-summary/v1",
+  "date": "2026-09-01",
+  "classification": "MODEL_OUTPUT_NUMERICAL_ENGINEERING_ONLY",
+  "verdict": "JX_NATIVE_BM6_WIN",
+  "branch": "experiment/bm6-rebound-5.1.1",
+  "native_code_commit": "5f55c3d16c14b3caaab49851d2d76d0a8dc54fd1",
+  "workflow_run_id": 33570885036,
+  "artifact_id": 9824909036,
+  "artifact_zip_sha256": "67065838cecf215b339aeb8202056a58abfdd82a3d54571826f10995dd4ef3db",
+  "result_json_sha256": "e53ad3e2404e6d071977a5dcfefcae5f4a1ae798943895952cb7a5ab55f40c38",
+  "native_executable_sha256": "172ba517333ece69bb57cd199e2062aed6d87dbc6ab6cf61494f54f21f151575",
+  "force_evaluations_per_lane": 29400,
+  "native_bm6": {
+    "steps": 2940,
+    "dt_days": 1.2423469387755102,
+    "median_integration_seconds": 0.006660755,
+    "max_position_error_au": 1.5009665937940493e-07,
+    "rms_position_error_au": 2.7322635250426944e-08,
+    "max_velocity_error_au_per_day": 7.872510012198502e-09,
+    "rms_velocity_error_au_per_day": 1.477703246776705e-09,
+    "max_relative_energy_error": 7.747691777735085e-13,
+    "max_relative_angular_momentum_vector_error": 7.45393447487233e-15
+  },
+  "rebound_5_1_1_leapfrog": {
+    "steps": 29400,
+    "dt_days": 0.12423469387755103,
+    "median_integration_seconds": 0.01007962799999973,
+    "max_position_error_au": 0.002944933407426413,
+    "rms_position_error_au": 0.0006023715879144003,
+    "max_velocity_error_au_per_day": 0.00020232043957778316,
+    "rms_velocity_error_au_per_day": 3.886168514451853e-05,
+    "max_relative_energy_error": 1.2158039277478082e-08,
+    "max_relative_angular_momentum_vector_error": 9.81838124932806e-15
+  },
+  "native_advantage_factors": {
+    "speed": 1.5132861064548584,
+    "max_position_accuracy": 19620.246177380905,
+    "rms_position_accuracy": 22046.613820128776,
+    "max_velocity_accuracy": 25699.61032304645,
+    "rms_velocity_accuracy": 26298.70728733054,
+    "max_energy_accuracy": 15692.466383881228
+  },
+  "gates": {
+    "sanitizers": true,
+    "self_test": true,
+    "deterministic_replay": true,
+    "exact_preserved_state_replay": true,
+    "independent_reference": true,
+    "accuracy_win_rule": true
+  },
+  "claim_boundary": "Scoped native BM6 replay and equal-force accuracy/speed measurement only; not a universal REBOUND, close-encounter, arbitrary-precision, full-ephemeris, or Planet-X claim."
+}
