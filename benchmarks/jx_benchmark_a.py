@@ -117,7 +117,7 @@ def reb(contest,S,T,out,h):
   q=np.array([[p.x,p.y,p.z] for p in sim.particles]); v=np.array([[p.vx,p.vy,p.vz] for p in sim.particles]); x,e,l=capture(q,v,e0,L0,S["mu"]); st.append(x); es.append(e); ls.append(l)
  cap(); start=time.perf_counter()
  for k in range(1,n+1):
-  sim.step()
+  sim.steps(1)
   if k%m==0: cap()
  return dict(lane="rebound_leapfrog_5.1.1",contest=contest,dt=h,steps=n,calls=n,
   cost_semantics="one-force-solve-per-step Leapfrog cost model; REBOUND internals not instrumented",
