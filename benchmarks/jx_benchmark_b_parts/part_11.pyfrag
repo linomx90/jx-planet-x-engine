@@ -1,0 +1,90 @@
+                        "steps": int(raw_result["steps"]),
+                        "dt": float(raw_result["dt"]),
+                        "force_evaluations": int(raw_result["force_evaluations"]),
+                        "timing_median_seconds": float(raw_result["timing_median_seconds"]),
+                        "reference_valid": valid,
+                        **metrics,
+                    }
+                    row["safe"] = bool(row["safe"] and valid)
+                except Exception as error:
+                    achieved_dt = case.duration / steps
+                    tau_reference = reference["min_separation"] / max(
+                        reference["relative_speed_at_min"], 1e-300
+                    )
+                    row = {
+                        "case_id": case.case_id,
+                        "family": case.family,
+                        "planet": case.planet_label,
+                        "orientation": case.orientation,
+                        "rho_target": case.rho_target,
+                        "mode": mode,
+                        "eta_target": float(eta),
+                        "run_status": "failed",
+                        "error": str(error),
+                        "steps": steps,
+                        "dt": achieved_dt,
+                        "force_evaluations": None,
+                        "timing_median_seconds": None,
+                        "reference_valid": valid,
+                        "safe": False,
+                        "achieved_rho": reference["min_separation"] / case.q_scale,
+                        "achieved_eta": achieved_dt / max(tau_reference, 1e-300),
+                        "final_position_over_scale": None,
+                        "final_velocity_over_scale": None,
+                        "min_separation_error_over_scale": None,
+                        "time_of_min_error_over_tau": None,
+                        "scattering_angle_error_radians": None,
+                        "reversibility_max_scaled": None,
+                        "candidate_outcome": "failed",
+                        "reference_outcome": outcome(reference, case),
+                    }
+                candidate_rows.append(row)
+                if mode == "bm6":
+                    rows_for_boundary.append(row)
+
+        smallest_eta = min(float(value) for value in eta_targets)
+        audit_steps = max(1, math.ceil(case.duration / (smallest_eta * case.tau_nominal)))
+        audit_a = run_native(
+            native, "bm6", case, state_path, raw / f"{case.case_id}_bm6_replay_a.json",
+            steps=audit_steps, timing_repeats=1,
+        )
+        audit_b = run_native(
+            native, "bm6", case, state_path, raw / f"{case.case_id}_bm6_replay_b.json",
+            steps=audit_steps, timing_repeats=1,
+        )
+        deterministic_checks.append({
+            "case_id": case.case_id,
+            "eta_target": smallest_eta,
+            "exact_state_and_event_replay": exact_replay_equal(audit_a, audit_b),
+        })
+
+        boundary, monotonic = safe_boundary(rows_for_boundary)
+        boundaries.append({
+            "case_id": case.case_id,
+            "family": case.family,
+            "planet": case.planet_label,
+            "orientation": case.orientation,
+            "rho_target": case.rho_target,
+            "rho_reference": reference["min_separation"] / case.q_scale,
+            "eta_safe_max": boundary,
+            "monotonic_pass_sequence": monotonic,
+            "reference_valid": valid,
+        })
+
+    critical_cases = [case for case in all_cases if case.family != "full_ten_body_screen"]
+    critical_reference_valid = all(reference_valid_by_case[case.case_id] for case in critical_cases)
+    critical_boundaries = [row for row in boundaries if row["family"] != "full_ten_body_screen"]
+    deterministic_passed = all(row["exact_state_and_event_replay"] for row in deterministic_checks)
+    if not critical_reference_valid or not deterministic_passed:
+        verdict = "INVALID_REFERENCE"
+    elif all(row["eta_safe_max"] is not None for row in critical_boundaries):
+        verdict = "JX_BM6_ENCOUNTER_BOUNDARY_MEASURED"
+    elif all(row["eta_safe_max"] is None for row in critical_boundaries):
+        verdict = "JX_BM6_UNSAFE_IN_TESTED_ENCOUNTERS"
+    else:
+        verdict = "SCREENING_PARTIAL"
+
+    full_boundaries = [row for row in boundaries if row["family"] == "full_ten_body_screen"]
+    full_portability_passed = all(
+        row["reference_valid"] and row["eta_safe_max"] is not None for row in full_boundaries
+    ) if full_boundaries else None

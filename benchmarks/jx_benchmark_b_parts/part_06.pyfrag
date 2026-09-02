@@ -1,0 +1,90 @@
+    distances_squared = np.einsum("ij,ij->i", relative_position, relative_position)
+    speeds = np.linalg.norm(relative_velocity, axis=1)
+    return parabolic_minimum(times, distances_squared, speeds)
+
+
+def run_rebound(case: EncounterCase, mode: str, *, sample_count: int,
+                fixed_dt: float | None = None, epsilon: float = 1e-13) -> dict[str, Any]:
+    import rebound
+
+    if rebound.__version__ != REQUIRED_REBOUND:
+        raise RuntimeError(f"expected REBOUND {REQUIRED_REBOUND}, observed {rebound.__version__}")
+    simulation = rebound.Simulation()
+    simulation.G = 1.0
+    for body in case.bodies:
+        simulation.add(
+            m=body.mu,
+            x=float(body.q[0]), y=float(body.q[1]), z=float(body.q[2]),
+            vx=float(body.v[0]), vy=float(body.v[1]), vz=float(body.v[2]),
+        )
+    simulation.integrator = mode
+    if mode == "ias15":
+        simulation.ri_ias15.epsilon = epsilon
+        times = np.linspace(0.0, case.duration, sample_count)
+        positions = np.empty((sample_count, len(case.bodies), 3), dtype=float)
+        velocities = np.empty_like(positions)
+        start = time.perf_counter()
+        for index, target in enumerate(times):
+            if index:
+                simulation.integrate(float(target), exact_finish_time=1)
+            for body_index, particle in enumerate(simulation.particles):
+                positions[index, body_index] = (particle.x, particle.y, particle.z)
+                velocities[index, body_index] = (particle.vx, particle.vy, particle.vz)
+        wall = time.perf_counter() - start
+        steps = None
+    else:
+        if fixed_dt is None:
+            raise RuntimeError("fixed-step REBOUND lane requires dt")
+        steps = max(1, math.ceil(case.duration / fixed_dt))
+        simulation.dt = case.duration / steps
+        times = np.linspace(0.0, case.duration, steps + 1)
+        positions = np.empty((steps + 1, len(case.bodies), 3), dtype=float)
+        velocities = np.empty_like(positions)
+        start = time.perf_counter()
+        for index in range(steps + 1):
+            for body_index, particle in enumerate(simulation.particles):
+                positions[index, body_index] = (particle.x, particle.y, particle.z)
+                velocities[index, body_index] = (particle.vx, particle.vy, particle.vz)
+            if index < steps:
+                simulation.steps(1)
+        wall = time.perf_counter() - start
+    ids = [body.body_id for body in case.bodies]
+    primary = ids.index(case.primary_id)
+    tracer = ids.index(case.tracer_id)
+    minimum = sampled_metrics(times, positions, velocities, primary, tracer)
+    final = {
+        body.body_id: (positions[-1, index].copy(), velocities[-1, index].copy())
+        for index, body in enumerate(case.bodies)
+    }
+    return {
+        "mode": f"rebound_{mode}_{REQUIRED_REBOUND}",
+        "final": final,
+        "min_separation": minimum[0],
+        "time_of_min_separation": minimum[1],
+        "relative_speed_at_min": minimum[2],
+        "wall_seconds": wall,
+        "steps": steps,
+        "sample_count": len(times),
+    }
+
+
+def dop853_force(mu: np.ndarray):
+    count = len(mu)
+
+    def force(_time: float, state: np.ndarray) -> np.ndarray:
+        positions = state[:3 * count].reshape(count, 3)
+        velocities = state[3 * count:].reshape(count, 3)
+        acceleration = np.zeros_like(positions)
+        for i in range(count):
+            terms = [[], [], []]
+            for j in range(count):
+                if i == j:
+                    continue
+                separation = positions[j] - positions[i]
+                radius_squared = float(np.dot(separation, separation))
+                inverse_radius_cubed = 1.0 / (radius_squared * math.sqrt(radius_squared))
+                for component in range(3):
+                    terms[component].append(float(mu[j] * separation[component] * inverse_radius_cubed))
+            acceleration[i] = [math.fsum(component_terms) for component_terms in terms]
+        return np.concatenate((velocities.ravel(), acceleration.ravel()))
+

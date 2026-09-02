@@ -1,0 +1,26 @@
+        "",
+        "See `boundary_summary.csv`, `candidate_summary.csv`, and `result.json`.",
+        "",
+        f"Claim ceiling: {contract['claim_ceiling']}",
+    ]
+    (output / "README.md").write_text("\n".join(readme) + "\n", encoding="utf-8")
+
+    checksum_lines = []
+    for path in sorted(output.rglob("*")):
+        if path.is_file() and path.name != "SHA256SUMS.txt":
+            checksum_lines.append(f"{sha256(path)}  {path.relative_to(output)}")
+    (output / "SHA256SUMS.txt").write_text("\n".join(checksum_lines) + "\n", encoding="utf-8")
+
+    print(json.dumps({
+        "verdict": verdict,
+        "case_count": len(all_cases),
+        "reference_valid_count": sum(reference_valid_by_case.values()),
+        "deterministic_replay_passed": deterministic_passed,
+        "full_ten_body_portability_screen_passed": full_portability_passed,
+        "result_sha256": sha256(result_path),
+    }, indent=2), flush=True)
+    return 0 if verdict in {"JX_BM6_ENCOUNTER_BOUNDARY_MEASURED", "SCREENING_PARTIAL"} else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

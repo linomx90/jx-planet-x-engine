@@ -1,0 +1,90 @@
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--contract", default=None)
+    parser.add_argument("--quick", action="store_true", help="developer smoke test; never authoritative")
+    args = parser.parse_args()
+
+    root = Path(__file__).resolve().parents[1]
+    contract_path = Path(args.contract) if args.contract else root / "benchmarks/jx_benchmark_b_contract.json"
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    native = Path(args.native).resolve()
+    if not native.exists():
+        raise RuntimeError("native executable not found")
+    output = Path(args.output).resolve()
+    raw = output / "raw"
+    states_dir = output / "states"
+    output.mkdir(parents=True, exist_ok=True)
+    raw.mkdir(parents=True, exist_ok=True)
+    states_dir.mkdir(parents=True, exist_ok=True)
+
+    gm_path = root / contract["inputs"]["gm_table"]
+    solar_path = root / "runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv"
+    gm = load_gm(gm_path)
+    solar = load_solar_state(solar_path, gm)
+
+    all_cases = analytic_cases(contract) + cr3bp_cases(contract, gm) + full_system_cases(contract, solar)
+    if args.quick:
+        all_cases = [next(case for case in all_cases if case.case_id == "analytic_vinf_1")]
+
+    sample_count = int(contract["reference_profiles"]["uniform_event_samples"])
+    reference_rows: list[dict[str, Any]] = []
+    candidate_rows: list[dict[str, Any]] = []
+    boundaries: list[dict[str, Any]] = []
+    reference_by_case: dict[str, dict[str, Any]] = {}
+    reference_valid_by_case: dict[str, bool] = {}
+    deterministic_checks: list[dict[str, Any]] = []
+    screening_lanes: list[dict[str, Any]] = []
+
+    for case_index, case in enumerate(all_cases, 1):
+        print(f"[{case_index}/{len(all_cases)}] reference {case.case_id}", flush=True)
+        state_path = states_dir / f"{case.case_id}.csv"
+        write_state(case, state_path)
+
+        if case.family == "analytic_two_body":
+            reference = exact_reference(case)
+            bs160_raw = run_native(
+                native, "bs160", case, state_path, raw / f"{case.case_id}_bs160.json",
+                reference_profile=contract["reference_profiles"]["bs160"], timing_repeats=1,
+            )
+            bs224_raw = run_native(
+                native, "bs224", case, state_path, raw / f"{case.case_id}_bs224.json",
+                reference_profile=contract["reference_profiles"]["bs224"], timing_repeats=1,
+            )
+            bs160 = native_reference(bs160_raw)
+            bs224 = native_reference(bs224_raw)
+            diff224 = reference_difference(bs224, reference, case)
+            diff_pair = reference_difference(bs160, bs224, case)
+            gates = contract["reference_gates"]
+            valid = (
+                diff224["position_over_scale"] <= float(gates["analytic_bs224_final_position_over_scale"])
+                and diff224["velocity_over_scale"] <= float(gates["analytic_bs224_final_velocity_over_scale"])
+            )
+            diagnostics = {"bs224_vs_analytic": diff224, "bs160_vs_bs224": diff_pair}
+        elif case.family == "restricted_three_body":
+            bs160_raw = run_native(
+                native, "bs160", case, state_path, raw / f"{case.case_id}_bs160.json",
+                reference_profile=contract["reference_profiles"]["bs160"], timing_repeats=1,
+            )
+            bs224_raw = run_native(
+                native, "bs224", case, state_path, raw / f"{case.case_id}_bs224.json",
+                reference_profile=contract["reference_profiles"]["bs224"], timing_repeats=1,
+            )
+            bs160 = native_reference(bs160_raw)
+            bs224 = native_reference(bs224_raw)
+            ias15 = run_rebound(
+                case, "ias15", sample_count=sample_count,
+                epsilon=float(contract["reference_profiles"]["ias15_epsilon"]),
+            )
+            pair = reference_difference(bs160, bs224, case)
+            external = reference_difference(ias15, bs224, case)
+            gates = contract["reference_gates"]
+            valid = (
+                pair["position_over_scale"] <= float(gates["cr3bp_bs160_vs_bs224_position_over_hill"])
+                and pair["velocity_over_scale"] <= float(gates["cr3bp_bs160_vs_bs224_velocity_over_vhill"])
+                and pair["min_separation_over_scale"] <= float(gates["cr3bp_bs160_vs_bs224_min_separation_over_hill"])
+                and pair["tmin_over_tau"] <= float(gates["cr3bp_bs160_vs_bs224_tmin_over_tau"])
+                and external["position_over_scale"] <= float(gates["cr3bp_ias15_vs_bs224_position_over_hill"])
+                and external["velocity_over_scale"] <= float(gates["cr3bp_ias15_vs_bs224_velocity_over_vhill"])
+            )
+            reference = bs224
+            diagnostics = {"bs160_vs_bs224": pair, "ias15_vs_bs224": external, "ias15": {k: v for k, v in ias15.items() if k != "final"}}
+            for lane in ("trace", "mercurius"):

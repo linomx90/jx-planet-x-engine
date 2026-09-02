@@ -1,0 +1,90 @@
+
+    result = {
+        "schema": "jx-general-dynamics-benchmark-b-result/v1",
+        "classification": "MODEL_OUTPUT_NUMERICAL_ENGINEERING_ONLY",
+        "verdict": verdict,
+        "quick_mode": args.quick,
+        "contract_sha256": sha256(contract_path),
+        "native_source_executable_sha256": sha256(native),
+        "gm_table_sha256": sha256(gm_path),
+        "solar_state_sha256": sha256(solar_path),
+        "case_count": len(all_cases),
+        "reference_valid_count": sum(reference_valid_by_case.values()),
+        "deterministic_replay_passed": deterministic_passed,
+        "full_ten_body_portability_screen_passed": full_portability_passed,
+        "safe_gates": contract["bm6_safe_gates"],
+        "boundaries": boundaries,
+        "reference_rows": reference_rows,
+        "screening_lanes": screening_lanes,
+        "deterministic_checks": deterministic_checks,
+        "candidate_rows": candidate_rows,
+        "environment": {
+            "python": sys.version,
+            "platform": platform.platform(),
+            "numpy": np.__version__,
+            "scipy": __import__("scipy").__version__,
+            "rebound": (
+                __import__("rebound").__version__
+                if __import__("importlib.util").util.find_spec("rebound") is not None
+                else "unavailable_in_developer_quick_mode"
+            ),
+            "git_commit": (
+                subprocess.run(
+                    ["git", "rev-parse", "HEAD"], cwd=root, text=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                    check=False,
+                ).stdout.strip()
+                or "unavailable_in_local_smoke_test"
+            ),
+        },
+        "claim_ceiling": contract["claim_ceiling"],
+    }
+    result_path = output / "result.json"
+    result_path.write_text(json.dumps(json_ready(result), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    def write_rows(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
+        with path.open("w", newline="", encoding="utf-8") as stream:
+            writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
+
+    candidate_fields = [
+        "case_id", "family", "planet", "orientation", "rho_target", "mode",
+        "eta_target", "run_status", "error", "achieved_rho", "achieved_eta", "steps", "dt",
+        "force_evaluations", "timing_median_seconds", "reference_valid", "safe",
+        "final_position_over_scale", "final_velocity_over_scale",
+        "min_separation_error_over_scale", "time_of_min_error_over_tau",
+        "scattering_angle_error_radians", "reversibility_max_scaled",
+        "candidate_outcome", "reference_outcome",
+    ]
+    write_rows(output / "candidate_summary.csv", candidate_rows, candidate_fields)
+    write_rows(
+        output / "boundary_summary.csv", boundaries,
+        ["case_id", "family", "planet", "orientation", "rho_target", "rho_reference", "eta_safe_max", "monotonic_pass_sequence", "reference_valid"],
+    )
+    reference_flat = [
+        {key: value for key, value in row.items() if key != "diagnostics"}
+        for row in reference_rows
+    ]
+    write_rows(
+        output / "reference_summary.csv", reference_flat,
+        ["case_id", "family", "planet", "orientation", "rho_target", "rho_reference", "tau_reference", "reference_mode", "reference_valid", "state_sha256", "notes"],
+    )
+    (output / "contract.lock.json").write_text(contract_path.read_text(encoding="utf-8"), encoding="utf-8")
+    (output / "environment.json").write_text(
+        json.dumps(json_ready(result["environment"]), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+    safe_rows = [row for row in boundaries if row["eta_safe_max"] is not None]
+    minimum_safe = min((row["eta_safe_max"] for row in safe_rows), default=None)
+    readme = [
+        "# JX Benchmark B — close-encounter boundary",
+        "",
+        f"Verdict: **{verdict}**",
+        "",
+        f"Cases: {len(all_cases)}; valid references: {sum(reference_valid_by_case.values())}; deterministic replay: {deterministic_passed}.",
+        f"Full ten-body portability screen: {full_portability_passed}.",
+        "",
+        "The result is case-specific. `eta_safe_max` is the largest tested",
+        "`dt/(d_min/v_rel,min)` for which that case and every smaller tested step passed.",
+        f"Minimum measured safe boundary across passing cases: {minimum_safe!r}.",

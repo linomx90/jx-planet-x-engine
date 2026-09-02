@@ -1,0 +1,90 @@
+            radial_velocity * math.cos(anomaly) - transverse_velocity * math.sin(anomaly),
+            radial_velocity * math.sin(anomaly) + transverse_velocity * math.cos(anomaly),
+            0.0,
+        ])
+        return position, velocity
+
+    inbound_position, inbound_velocity = state(-true_anomaly)
+    outbound_position, outbound_velocity = state(true_anomaly)
+    hyperbolic_anomaly = math.acosh(
+        (eccentricity + math.cos(true_anomaly))
+        / (1.0 + eccentricity * math.cos(true_anomaly))
+    )
+    one_way_time = math.sqrt(semimajor_abs ** 3 / mu) * (
+        eccentricity * math.sinh(hyperbolic_anomaly) - hyperbolic_anomaly
+    )
+    duration = 2.0 * one_way_time
+    periapsis_speed = math.sqrt(v_infinity * v_infinity + 2.0 * mu / periapsis)
+    tau = periapsis / periapsis_speed
+    deflection = 2.0 * math.asin(1.0 / eccentricity)
+    return (
+        inbound_position,
+        inbound_velocity,
+        outbound_position,
+        outbound_velocity,
+        duration,
+        tau,
+        deflection,
+    )
+
+
+def orient(position: np.ndarray, velocity: np.ndarray, e1: np.ndarray,
+           e2: np.ndarray, e3: np.ndarray, orientation_name: str) -> tuple[np.ndarray, np.ndarray]:
+    if orientation_name == "planar":
+        return position[0] * e1 + position[1] * e2, velocity[0] * e1 + velocity[1] * e2
+    if orientation_name == "vertical":
+        return position[0] * e1 + position[1] * e3, velocity[0] * e1 + velocity[1] * e3
+    raise RuntimeError(f"unknown orientation {orientation_name}")
+
+
+def analytic_cases(contract: dict[str, Any]) -> list[EncounterCase]:
+    spec = contract["analytic_two_body"]
+    result: list[EncounterCase] = []
+    for v_infinity in spec["v_infinity"]:
+        inbound_q, inbound_v, outbound_q, outbound_v, duration, tau, deflection = hyperbolic_relative_state(
+            float(spec["mu"]), float(spec["periapsis"]), float(v_infinity), float(spec["launch_radius"])
+        )
+        bodies = [
+            Body(1, "center", float(spec["mu"]), np.zeros(3), np.zeros(3)),
+            Body(TRACER_ID, "tracer", 0.0, inbound_q, inbound_v),
+        ]
+        periapsis_speed = float(spec["periapsis"]) / tau
+        result.append(
+            EncounterCase(
+                f"analytic_vinf_{v_infinity:g}",
+                "analytic_two_body",
+                "isolated_point_mass",
+                "planar",
+                1.0,
+                duration,
+                tau,
+                float(spec["periapsis"]),
+                periapsis_speed,
+                1,
+                TRACER_ID,
+                bodies,
+                analytic_final={
+                    1: (np.zeros(3), np.zeros(3)),
+                    TRACER_ID: (outbound_q, outbound_v),
+                },
+                analytic_minimum=(float(spec["periapsis"]), duration / 2.0, periapsis_speed),
+                notes=f"analytic deflection={deflection:.17e} rad",
+            )
+        )
+    return result
+
+
+def cr3bp_cases(contract: dict[str, Any], gm: dict[int, tuple[str, float]]) -> list[EncounterCase]:
+    result: list[EncounterCase] = []
+    sun_mu = gm[10][1]
+    for planet_id in contract["restricted_three_body"]["planet_ids"]:
+        planet_name, planet_mu_raw = gm[int(planet_id)]
+        planet_fraction = planet_mu_raw / (sun_mu + planet_mu_raw)
+        star_mu = 1.0 - planet_fraction
+        planet_mu = planet_fraction
+        hill = (planet_mu / 3.0) ** (1.0 / 3.0)
+        star = Body(1, "star", star_mu, np.array([-planet_fraction, 0.0, 0.0]), np.array([0.0, -planet_fraction, 0.0]))
+        planet = Body(2, planet_name.replace(" ", "_"), planet_mu, np.array([1.0 - planet_fraction, 0.0, 0.0]), np.array([0.0, 1.0 - planet_fraction, 0.0]))
+        for geometry in contract["restricted_three_body"]["geometries"]:
+            rho = float(geometry["rho_target"])
+            launch_radius = float(geometry["launch_radius_hill"]) * hill

@@ -1,0 +1,90 @@
+def candidate_metrics(candidate: dict[str, Any], reference: dict[str, Any],
+                      case: EncounterCase, gates: dict[str, Any]) -> dict[str, Any]:
+    candidate_common = native_reference(candidate)
+    cq, cv = relative_final(candidate_common, case)
+    rq, rv = relative_final(reference, case)
+    initial_primary = next(body for body in case.bodies if body.body_id == case.primary_id)
+    initial_tracer = next(body for body in case.bodies if body.body_id == case.tracer_id)
+    initial_relative_velocity = initial_tracer.v - initial_primary.v
+    candidate_angle = angle_between(initial_relative_velocity, cv)
+    reference_angle = angle_between(initial_relative_velocity, rv)
+    tau_reference = reference["min_separation"] / max(reference["relative_speed_at_min"], 1e-300)
+    metrics = {
+        "final_position_over_scale": norm(cq - rq) / case.q_scale,
+        "final_velocity_over_scale": norm(cv - rv) / case.v_scale,
+        "min_separation_error_over_scale": abs(candidate_common["min_separation"] - reference["min_separation"]) / case.q_scale,
+        "time_of_min_error_over_tau": abs(candidate_common["time_of_min_separation"] - reference["time_of_min_separation"]) / max(tau_reference, 1e-300),
+        "scattering_angle_error_radians": abs(candidate_angle - reference_angle),
+        "candidate_outcome": outcome(candidate_common, case),
+        "reference_outcome": outcome(reference, case),
+        "reversibility_max_scaled": float(candidate["reversibility_max_scaled"]),
+        "achieved_rho": reference["min_separation"] / case.q_scale,
+        "achieved_eta": float(candidate["dt"]) / max(tau_reference, 1e-300),
+    }
+    metrics["safe"] = (
+        metrics["final_position_over_scale"] <= float(gates["final_position_over_scale"])
+        and metrics["final_velocity_over_scale"] <= float(gates["final_velocity_over_scale"])
+        and metrics["min_separation_error_over_scale"] <= float(gates["min_separation_error_over_scale"])
+        and metrics["time_of_min_error_over_tau"] <= float(gates["time_of_min_error_over_tau"])
+        and metrics["scattering_angle_error_radians"] <= float(gates["scattering_angle_error_radians"])
+        and metrics["reversibility_max_scaled"] <= float(gates["reversibility_max_scaled"])
+        and metrics["candidate_outcome"] == metrics["reference_outcome"]
+    )
+    return metrics
+
+
+def exact_reference(case: EncounterCase) -> dict[str, Any]:
+    if case.analytic_final is None or case.analytic_minimum is None:
+        raise RuntimeError("case has no analytic reference")
+    return {
+        "mode": "analytic_hyperbola",
+        "final": case.analytic_final,
+        "min_separation": case.analytic_minimum[0],
+        "time_of_min_separation": case.analytic_minimum[1],
+        "relative_speed_at_min": case.analytic_minimum[2],
+        "wall_seconds": 0.0,
+    }
+
+
+def exact_replay_equal(a: dict[str, Any], b: dict[str, Any]) -> bool:
+    return (
+        a["final_state"] == b["final_state"]
+        and a["min_separation"] == b["min_separation"]
+        and a["time_of_min_separation"] == b["time_of_min_separation"]
+        and a["relative_speed_at_min"] == b["relative_speed_at_min"]
+        and a["force_evaluations"] == b["force_evaluations"]
+    )
+
+
+def safe_boundary(rows: list[dict[str, Any]]) -> tuple[float | None, bool]:
+    ordered = sorted(rows, key=lambda row: row["achieved_eta"])
+    boundary: float | None = None
+    monotonic = True
+    failed_seen = False
+    for row in ordered:
+        if row["safe"] and not failed_seen:
+            boundary = float(row["achieved_eta"])
+        elif not row["safe"]:
+            failed_seen = True
+        elif row["safe"] and failed_seen:
+            monotonic = False
+    return boundary, monotonic
+
+
+def json_ready(value: Any) -> Any:
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, np.floating):
+        return float(value)
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, dict):
+        return {str(key): json_ready(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_ready(item) for item in value]
+    return value
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--native", required=True)
