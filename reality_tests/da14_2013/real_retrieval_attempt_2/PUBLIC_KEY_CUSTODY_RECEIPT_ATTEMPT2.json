@@ -1,0 +1,29 @@
+{
+  "algorithm": "RSA-3072-OAEP-SHA256+AES-256-GCM-per-record",
+  "date_utc": "2026-09-02",
+  "encrypted_private_key_load_verified_from_library_copy": true,
+  "encrypted_private_key_sha256": "775758d7f3e07a5177c51607caca3cbc88e94908ddfa3e6280175ee0086a4507",
+  "library_file_ids": {
+    "encrypted_private_key": "file_00000000ad2c822fa15d50b4d319c58b",
+    "password": "file_000000000298822f9fa2ffd8cfa3a529",
+    "public_key": "file_000000008b38822fbeb53255506ffaea",
+    "verification": "file_00000000abf0822f8db35800adebcb91"
+  },
+  "library_paths": {
+    "encrypted_private_key": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Custodian Vault/Attempt 2/Encrypted Private Key/da14_attempt2_private_key_encrypted.pem",
+    "password": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Recovery Codes/Attempt 2/da14_attempt2_private_key_password.txt",
+    "public_material": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Custodian Vault/Attempt 2/Public Material/",
+    "verification": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Custodian Vault/Attempt 2/Audit/JX_REALITY_TEST_1_ATTEMPT2_LIBRARY_CUSTODY_VERIFICATION.json"
+  },
+  "password_file_sha256": "01576aa76f7fc1fa5df4eb70c53137eb3b44b119576c9380d9d15aa16086ca7b",
+  "password_in_repository": false,
+  "private_key_in_repository": false,
+  "public_key_fingerprint_sha256": "d995cd53e4bb9769d0112b868def61191d7b74ce7544f4e5141932d78b8803ee",
+  "public_key_sha256": "6c22672d5553573f2fcad07f93da5ad149b8f7b584763a31ea44ceabea5e566e",
+  "public_private_key_match_verified_from_library_copy": true,
+  "real_da14_data_accessed_before_receipt": false,
+  "schema": "jx-reality-test-1-attempt2-public-custody-receipt/v1",
+  "security_boundary": "The key and password are separated by Library path but remain under one account; copy the password offline for stronger independent custody.",
+  "status": "PERSISTENT_LIBRARY_CUSTODY_VERIFIED_BEFORE_RETRIEVAL",
+  "synthetic_encrypt_decrypt_exact": true
+}

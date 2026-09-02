@@ -1,0 +1,39 @@
+{
+  "attempt_limit": 1,
+  "attempt_number": 2,
+  "authorization_message_timestamp_utc": "2026-09-02T21:57:13Z",
+  "authorized_changes": [
+    "replace the lost custodian keypair with a newly generated and persistently archived keypair",
+    "correct only stdout/stderr and export-directory permission plumbing"
+  ],
+  "claim_ceiling": "One real-source curation attempt only; no orbit-fit, prediction, unblinding, or physical-validation verdict.",
+  "custody_precondition": "Encrypted private key and password must be archived and independently read back from persistent Library storage before workflow execution.",
+  "date_utc": "2026-09-02",
+  "execution_rule": "A failure consumes this attempt. Any further execution requires new explicit authorization.",
+  "forbidden_changes": [
+    "source-adapter algorithms",
+    "approved endpoints",
+    "target designation",
+    "cutoff or holdout window",
+    "normalization rules",
+    "encryption format",
+    "scientific model or metrics",
+    "holdout unblinding",
+    "orbit fitting"
+  ],
+  "prior_attempt": {
+    "commit": "10875b3c731243e5cc1853167841042328104991",
+    "network_request_initiated": false,
+    "real_da14_records_downloaded": false,
+    "reason": "Runner shell could not create stdout/stderr files in a directory owned mode 0700 by the unprivileged retrieval identity.",
+    "status": "REAL_RETRIEVAL_BLOCKED_BEFORE_NETWORK_REQUEST",
+    "workflow_run_id": 33686072499
+  },
+  "schema": "jx-reality-test-1-second-real-retrieval-authorization/v1",
+  "status": "SECOND_REAL_RETRIEVAL_ATTEMPT_AUTHORIZED",
+  "target": {
+    "designation_query": "367943",
+    "name": "Duende",
+    "provisional_designation": "2012 DA14"
+  }
+}
