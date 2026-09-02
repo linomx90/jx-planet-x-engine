@@ -1,0 +1,18 @@
+CXX ?= g++
+BASE_FLAGS = -std=c++20 -fno-fast-math -ffp-contract=off -Wall -Wextra -Wpedantic -Werror
+OUTPUT = ../build/native/jx_benchmark_b_native
+SOURCE = jx_benchmark_b_native.cpp
+
+.PHONY: release sanitizer clean
+
+release:
+	mkdir -p ../build/native
+	$(CXX) $(BASE_FLAGS) -O3 -DNDEBUG $(SOURCE) -o $(OUTPUT)
+
+sanitizer:
+	mkdir -p ../build/native
+	$(CXX) $(BASE_FLAGS) -DJXB_FIXED_ONLY -O1 -g -fno-omit-frame-pointer \
+		-fsanitize=address,undefined $(SOURCE) -o $(OUTPUT)_sanitized
+
+clean:
+	rm -f $(OUTPUT) $(OUTPUT)_sanitized
