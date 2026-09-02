@@ -1,0 +1,133 @@
+name: JX Benchmark B Close Encounters
+
+on:
+  push:
+    branches:
+      - experiment/jx-benchmark-b-close-encounter
+    paths:
+      - native/jx_benchmark_b_native.cpp
+      - native/jx_benchmark_b_native_parts/**
+      - native/Makefile.benchmark_b
+      - native/README_BENCHMARK_B.md
+      - benchmarks/jx_benchmark_b.py
+      - benchmarks/jx_benchmark_b_parts/**
+      - benchmarks/jx_benchmark_b_contract.json
+      - .github/workflows/jx-benchmark-b-close-encounter.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: "0"
+  OMP_NUM_THREADS: "1"
+  OPENBLAS_NUM_THREADS: "1"
+  MKL_NUM_THREADS: "1"
+
+jobs:
+  benchmark-b:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out Benchmark B branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned numerical dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libboost-dev
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.3.5 scipy==1.17.0 rebound==5.1.1
+          python - <<'PY'
+          import numpy, scipy, rebound
+          assert rebound.__version__ == "5.1.1", rebound.__version__
+          print("numpy", numpy.__version__)
+          print("scipy", scipy.__version__)
+          print("rebound", rebound.__version__)
+          PY
+
+      - name: Compile harness
+        run: JXB_COMPILE_ONLY=1 python benchmarks/jx_benchmark_b.py
+
+      - name: Compile and run sanitizer smoke gate
+        run: |
+          make -C native -f Makefile.benchmark_b sanitizer
+          cat > "$RUNNER_TEMP/encounter_smoke.csv" <<'CSV'
+          body_id,body_name,mu,x,y,z,vx,vy,vz
+          1,center,1.0,0.0,0.0,0.0,0.0,0.0,0.0
+          99,tracer,0.0,-8.5,-18.103866990231644,0.0,0.5226136240091719,0.9093266739736607,0.0
+          CSV
+          ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 \
+          UBSAN_OPTIONS=halt_on_error=1 \
+          build/native/jx_benchmark_b_native_sanitized \
+            --mode bm6 \
+            --state "$RUNNER_TEMP/encounter_smoke.csv" \
+            --result "$RUNNER_TEMP/encounter_smoke_result.json" \
+            --duration 35.72459569654701 \
+            --steps 310 \
+            --primary-id 1 \
+            --tracer-id 99 \
+            --qscale 1.0 \
+            --vscale 1.7320508075688772 \
+            --timing-repeats 1
+
+      - name: Compile strict release executable
+        run: make -C native -f Makefile.benchmark_b release
+
+      - name: Run frozen Benchmark B
+        id: benchmark
+        continue-on-error: true
+        run: |
+          rm -rf runs/jx_benchmark_b_close_encounter
+          python benchmarks/jx_benchmark_b.py \
+            --native build/native/jx_benchmark_b_native \
+            --output runs/jx_benchmark_b_close_encounter
+
+      - name: Preserve build and dependency provenance
+        if: always()
+        run: |
+          output=runs/jx_benchmark_b_close_encounter
+          mkdir -p "$output"
+          cat > "$output/build_command.txt" <<'EOF'
+          g++ -std=c++20 -fno-fast-math -ffp-contract=off -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG native/jx_benchmark_b_native.cpp -o build/native/jx_benchmark_b_native
+          EOF
+          g++ --version > "$output/compiler.txt"
+          uname -a > "$output/uname.txt"
+          lscpu > "$output/lscpu.txt"
+          python -m pip freeze --all > "$output/pip-freeze.txt"
+          if [ -f build/native/jx_benchmark_b_native ]; then
+            sha256sum build/native/jx_benchmark_b_native > "$output/native-executable.sha256"
+          else
+            printf "MISSING\n" > "$output/native-executable.sha256"
+          fi
+          cd "$output"
+          rm -f SHA256SUMS.txt
+          find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
+
+      - name: Verify artifact hashes
+        if: always()
+        run: |
+          if [ -f runs/jx_benchmark_b_close_encounter/SHA256SUMS.txt ]; then
+            cd runs/jx_benchmark_b_close_encounter
+            sha256sum -c SHA256SUMS.txt
+          fi
+
+      - name: Upload complete Benchmark B artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-benchmark-b-close-encounter-${{ github.sha }}
+          path: runs/jx_benchmark_b_close_encounter/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce scientific verdict
+        if: always()
+        run: test "${{ steps.benchmark.outcome }}" = "success"

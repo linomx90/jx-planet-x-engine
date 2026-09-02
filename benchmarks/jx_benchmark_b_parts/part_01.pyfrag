@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""JX Benchmark B: close-encounter boundary for native BM6.
+
+The benchmark is fail-closed and scoped. It measures when the fixed-step BM6
+lane remains accurate during close encounters. It does not validate a hybrid
+switch, arbitrary-precision BM6, or universal close-encounter behavior.
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import math
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import time
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Iterable
+
+import numpy as np
+from scipy.integrate import solve_ivp
+
+AU_KM = 149_597_870.700
+DAY_SECONDS = 86_400.0
+REQUIRED_REBOUND = "5.1.1"
+TRACER_ID = 99
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def norm(vector: np.ndarray) -> float:
+    return float(np.linalg.norm(vector))
+
+
+def unit(vector: np.ndarray) -> np.ndarray:
+    length = norm(vector)
+    if not (length > 0.0 and math.isfinite(length)):
+        raise RuntimeError("cannot normalize vector")
+    return vector / length
+
+
+def angle_between(a: np.ndarray, b: np.ndarray) -> float:
+    denominator = norm(a) * norm(b)
+    if not denominator:
+        return float("nan")
+    cosine = float(np.dot(a, b) / denominator)
+    return math.acos(max(-1.0, min(1.0, cosine)))
+
+
+def parabolic_minimum(times: np.ndarray, distances_squared: np.ndarray,
+                      speeds: np.ndarray) -> tuple[float, float, float]:
+    index = int(np.argmin(distances_squared))
+    time_min = float(times[index])
+    distance_squared = float(distances_squared[index])
+    speed = float(speeds[index])
+    if 0 < index < len(times) - 1:
+        t0, t1, t2 = map(float, times[index - 1:index + 2])
+        y0, y1, y2 = map(float, distances_squared[index - 1:index + 2])
+        denominator = (t0 - t1) * (t0 - t2) * (t1 - t2)
+        if denominator:
+            coefficient_a = (
+                t2 * (y1 - y0) + t1 * (y0 - y2) + t0 * (y2 - y1)
+            ) / denominator
+            coefficient_b = (
+                t2 * t2 * (y0 - y1)
+                + t1 * t1 * (y2 - y0)
+                + t0 * t0 * (y1 - y2)
+            ) / denominator
+            if coefficient_a > 0.0:
+                vertex = -coefficient_b / (2.0 * coefficient_a)
+                if t0 <= vertex <= t2:
+                    coefficient_c = (
+                        t1 * t2 * (t1 - t2) * y0
+                        + t2 * t0 * (t2 - t0) * y1
+                        + t0 * t1 * (t0 - t1) * y2
+                    ) / denominator
+                    value = coefficient_a * vertex * vertex + coefficient_b * vertex + coefficient_c
+                    if value >= 0.0 and math.isfinite(value):
+                        time_min = vertex

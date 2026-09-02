@@ -1,0 +1,249 @@
+{
+  "candidate_summary": {
+    "bm6_safe_points": 144,
+    "bm6_total_points": 225,
+    "kdk_safe_points": 10,
+    "kdk_total_points": 225,
+    "note": "Pass-count comparison is a control diagnostic, not an equal-force-budget ranking."
+  },
+  "claim_ceiling": "A case-specific BM6 safe-step boundary in rho=d_min/R_H and eta=dt/(d_min/v_rel,min). Not universal close-encounter qualification, not a hybrid validation, not an arbitrary-precision BM6 result, and not a Planet-X result.",
+  "classification": "MODEL_OUTPUT_NUMERICAL_ENGINEERING_ONLY",
+  "date": "2026-09-02",
+  "definition": {
+    "eta": "dt / tau_encounter",
+    "eta_safe_max": "largest achieved eta in the uninterrupted fine-to-coarse passing prefix for a case",
+    "rho": "d_min / R_H for planet-encounter cases",
+    "tau_encounter": "d_min / v_rel_at_min"
+  },
+  "deterministic_replay": {
+    "cases_passed": 25,
+    "cases_total": 25,
+    "passed": true
+  },
+  "engineering_decision": {
+    "benchmark_c_rule_candidate": "keep BM6 only where scout-predicted eta <= 0.1; hand predeclared windows to an adaptive encounter solver",
+    "bm6_role": "leading binary64 smooth/far-field lane with a measured encounter-step boundary",
+    "kdk_role": "transparent control and disposable encounter scout",
+    "next_stage": "Benchmark C: deterministic two-pass hybrid with a frozen and hashed encounter schedule",
+    "remaining_gates": [
+      "hybrid handoff and rejoin continuity",
+      "false-negative encounter detection",
+      "forward/backward reversibility across transitions",
+      "checkpoint/restart identity",
+      "longer chaotic ensemble validation",
+      "higher-precision BM6 coefficients before 160/224-bit production qualification"
+    ]
+  },
+  "full_ten_body_portability_screen_passed": true,
+  "measured_boundary": {
+    "all_25_passed_eta_target_0_2": true,
+    "equivalent_minimum_macrosteps_per_tau": 5.121519221005581,
+    "eta_target_0_2_achieved_eta_range": [
+      0.1877646900209564,
+      0.2135488607890894
+    ],
+    "eta_target_0_4_case_count": 25,
+    "eta_target_0_4_pass_count": 22,
+    "family_ranges": [
+      {
+        "count": 3,
+        "family": "analytic_two_body",
+        "max": 0.3982696385108878,
+        "median": 0.398136395070005,
+        "min": 0.1996026284718577
+      },
+      {
+        "count": 6,
+        "family": "full_ten_body_screen",
+        "max": 0.7510608668773706,
+        "median": 0.5944139265826623,
+        "min": 0.5815426431267188
+      },
+      {
+        "count": 16,
+        "family": "restricted_three_body",
+        "max": 0.5774955908000817,
+        "median": 0.4945641849769018,
+        "min": 0.1952545635089222
+      }
+    ],
+    "global_limiting_case": {
+      "case_id": "cr3bp_p5_rho_3_planar",
+      "eta_safe_max": 0.1952545635089222,
+      "family": "restricted_three_body",
+      "monotonic_pass_sequence": true,
+      "orientation": "planar",
+      "planet": "Jupiter Barycenter",
+      "reference_valid": true,
+      "rho_reference": 3.03877994935888,
+      "rho_target": 3.0
+    },
+    "global_primary_eta_safe_max": 0.1952545635089222
+  },
+  "nonmonotonic_phase_cases": [
+    {
+      "case_id": "cr3bp_p5_rho_3_vertical",
+      "eta_safe_max": 0.350484439965769,
+      "family": "restricted_three_body",
+      "monotonic_pass_sequence": false,
+      "orientation": "vertical",
+      "planet": "Jupiter Barycenter",
+      "reference_valid": true,
+      "rho_reference": 3.0395054767131486,
+      "rho_target": 3.0
+    },
+    {
+      "case_id": "cr3bp_p8_rho_3_vertical",
+      "eta_safe_max": 0.3505648882327458,
+      "family": "restricted_three_body",
+      "monotonic_pass_sequence": false,
+      "orientation": "vertical",
+      "planet": "Neptune Barycenter",
+      "reference_valid": true,
+      "rho_reference": 3.0453946417119613,
+      "rho_target": 3.0
+    }
+  ],
+  "preserved_failures": [
+    {
+      "artifact_id": 9826256805,
+      "artifact_zip_sha256": "212d527bcca53bcad161ac673710719eff7aaab0ce362ac5f9c8018a3b7a809a",
+      "commit": "2b72b440a8a983687cb65f09b491711d388ee866",
+      "correction": "prospectively installed libboost-dev; no result was relabeled",
+      "failure": "native release build blocked because the runner lacked Boost headers",
+      "workflow_run_id": 33574905285
+    },
+    {
+      "artifact_id": 9826296331,
+      "artifact_zip_sha256": "542981a9582e5264669137a8b2a5f161143f9d05950fe23ae3a1570ac306724b",
+      "commit": "f5342001fc01f9ec4b780f9b947e9958fc04dd79",
+      "correction": "prospectively used simulation.integrator.epsilon; no result was relabeled",
+      "failure": "REBOUND 5.1.1 IAS15 configuration used an obsolete ri_ias15 attribute",
+      "workflow_run_id": 33574980680
+    }
+  ],
+  "provenance": {
+    "artifact_id": 9826387815,
+    "artifact_zip_sha256": "3d981cc6a28e68d7cb8366890b274f53190bef98b84d7605d9b7335534187f67",
+    "base_commit": "6506a6079adf24bc02a3b11a724c6a7a733a2632",
+    "branch": "experiment/jx-benchmark-b-close-encounter",
+    "contract_sha256": "cf97b1ae1ee5f58b24639168fd350ddda6645bda480e353a5119205b7df82424",
+    "gm_table_sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217",
+    "native_executable_sha256": "b658a06cb6822a5715c40c54d1aa061730f4a9c1763057b3dd70d36249475cb5",
+    "repository": "linomx90/jx-planet-x-engine",
+    "result_json_sha256": "d1ec4d029bb8d52053e01ed353e9f2225f2f9ea84ca58d1d333e9003a6891b6c",
+    "solar_state_sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e",
+    "successful_commit": "c43b9a2ebdeab40792c2eeb48d41986e5e2d1be7",
+    "workflow_run_id": 33575199573
+  },
+  "recommended_next_hybrid_guard": {
+    "basis": "all 25 cases passed the eta_target=0.1 grid with substantial gate margin",
+    "bm6_force_evaluations_per_tau": 100.0,
+    "eta_guard": 0.1,
+    "interpretation": "prospective engineering guard for Benchmark C, not a universal production constant",
+    "macrosteps_per_tau": 10.0,
+    "worst_observed_gate_margins_at_eta_target_0_1": {
+      "final_position_over_scale": {
+        "case_id": "analytic_vinf_0.5",
+        "gate": 1e-05,
+        "gate_fraction": 0.00019719789665171268,
+        "margin_factor": 5071.048002941846,
+        "value": 1.971978966517127e-09
+      },
+      "final_velocity_over_scale": {
+        "case_id": "cr3bp_p8_rho_0.1_planar",
+        "gate": 1e-05,
+        "gate_fraction": 1.4056351772529527e-05,
+        "margin_factor": 71142.21500591001,
+        "value": 1.405635177252953e-10
+      },
+      "min_separation_error_over_scale": {
+        "case_id": "cr3bp_p8_rho_3_planar",
+        "gate": 0.0001,
+        "gate_fraction": 0.03605934696604488,
+        "margin_factor": 27.73206073148372,
+        "value": 3.6059346966044886e-06
+      },
+      "reversibility_max_scaled": {
+        "case_id": "full10_p8_rho_1_vertical",
+        "gate": 1e-08,
+        "gate_fraction": 0.012002352535070331,
+        "margin_factor": 83.31699948639613,
+        "value": 1.200235253507033e-10
+      },
+      "scattering_angle_error_radians": {
+        "case_id": "analytic_vinf_0.5",
+        "gate": 1e-05,
+        "gate_fraction": 9.881118145926847e-06,
+        "margin_factor": 101203.12147185649,
+        "value": 9.881118145926847e-11
+      },
+      "time_of_min_error_over_tau": {
+        "case_id": "cr3bp_p8_rho_3_planar",
+        "gate": 0.001,
+        "gate_fraction": 0.02109387266246917,
+        "margin_factor": 47.40713172973823,
+        "value": 2.109387266246917e-05
+      }
+    }
+  },
+  "reference_gate_values": {
+    "analytic_bs224_final_position_over_scale": 1e-11,
+    "analytic_bs224_final_velocity_over_scale": 1e-11,
+    "cr3bp_bs160_vs_bs224_min_separation_over_hill": 1e-05,
+    "cr3bp_bs160_vs_bs224_position_over_hill": 1e-10,
+    "cr3bp_bs160_vs_bs224_tmin_over_tau": 0.0001,
+    "cr3bp_bs160_vs_bs224_velocity_over_vhill": 1e-10,
+    "cr3bp_ias15_vs_bs224_position_over_hill": 1e-08,
+    "cr3bp_ias15_vs_bs224_velocity_over_vhill": 1e-08,
+    "full_dop853_pair_position_over_hill": 1e-07,
+    "full_dop853_pair_velocity_over_vhill": 1e-07,
+    "full_ias15_vs_dop853_position_over_hill": 1e-06,
+    "full_ias15_vs_dop853_velocity_over_vhill": 1e-06
+  },
+  "reference_validation": {
+    "analytic_bs224_max_pos": 1.1234667099445444e-14,
+    "analytic_bs224_max_vel": 1.3343220141622404e-16,
+    "cr_bs_pair_max_min_separation_over_scale": 4.9365795546315875e-09,
+    "cr_bs_pair_max_position_over_scale": 0.0,
+    "cr_bs_pair_max_tmin_over_tau": 9.272085236353965e-07,
+    "cr_bs_pair_max_velocity_over_scale": 0.0,
+    "cr_ias15_max_position_over_scale": 1.6266191924093521e-15,
+    "cr_ias15_max_velocity_over_scale": 6.085997942855901e-15,
+    "full_dop_pair_max_position_over_scale": 6.350047965237314e-13,
+    "full_dop_pair_max_velocity_over_scale": 1.5141603916292644e-11,
+    "full_ias15_max_position_over_scale": 1.2040468468597838e-13,
+    "full_ias15_max_velocity_over_scale": 1.745400300734349e-13
+  },
+  "schema": "jx-general-dynamics-benchmark-b-final-summary/v1",
+  "scope": {
+    "candidate_lanes": [
+      "native_cpp20_bm6_binary64",
+      "native_kdk_control"
+    ],
+    "case_count": 25,
+    "families": {
+      "analytic_two_body": 3,
+      "full_ten_body_screen": 6,
+      "restricted_three_body": 16
+    },
+    "reference_lanes": [
+      "closed_form_hyperbolic_two_body",
+      "160_bit_bulirsch_stoer",
+      "224_bit_bulirsch_stoer",
+      "REBOUND_5.1.1_IAS15",
+      "SciPy_1.17_DOP853_loose_tight"
+    ],
+    "reference_valid_count": 25,
+    "screening_lanes": [
+      "REBOUND_5.1.1_TRACE",
+      "REBOUND_5.1.1_MERCURIUS"
+    ]
+  },
+  "screening_lanes": {
+    "MERCURIUS_completed": 16,
+    "TRACE_completed": 16,
+    "note": "screening-only; not used to set the BM6 boundary"
+  },
+  "verdict": "JX_BM6_ENCOUNTER_BOUNDARY_MEASURED"
+}

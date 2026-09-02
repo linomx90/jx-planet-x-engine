@@ -1,0 +1,90 @@
+                try:
+                    lane_result = run_rebound(
+                        case, lane, sample_count=sample_count,
+                        fixed_dt=case.tau_nominal * 0.05,
+                    )
+                    lane_diff = reference_difference(lane_result, reference, case)
+                    screening_lanes.append({
+                        "case_id": case.case_id,
+                        "lane": lane,
+                        "status": "completed",
+                        **lane_diff,
+                        "wall_seconds": lane_result["wall_seconds"],
+                        "steps": lane_result["steps"],
+                    })
+                except Exception as error:  # screening-only lane
+                    screening_lanes.append({"case_id": case.case_id, "lane": lane, "status": "unavailable", "error": str(error)})
+        else:
+            dop_loose = run_dop853(case, contract["reference_profiles"]["dop853_loose"], sample_count)
+            dop_tight = run_dop853(case, contract["reference_profiles"]["dop853_tight"], sample_count)
+            ias15 = run_rebound(
+                case, "ias15", sample_count=sample_count,
+                epsilon=float(contract["reference_profiles"]["ias15_epsilon"]),
+            )
+            pair = reference_difference(dop_loose, dop_tight, case)
+            external = reference_difference(ias15, dop_tight, case)
+            gates = contract["reference_gates"]
+            valid = (
+                pair["position_over_scale"] <= float(gates["full_dop853_pair_position_over_hill"])
+                and pair["velocity_over_scale"] <= float(gates["full_dop853_pair_velocity_over_vhill"])
+                and external["position_over_scale"] <= float(gates["full_ias15_vs_dop853_position_over_hill"])
+                and external["velocity_over_scale"] <= float(gates["full_ias15_vs_dop853_velocity_over_vhill"])
+            )
+            reference = dop_tight
+            diagnostics = {
+                "dop853_loose_vs_tight": pair,
+                "ias15_vs_dop853_tight": external,
+                "dop853_loose": {k: v for k, v in dop_loose.items() if k != "final"},
+                "dop853_tight": {k: v for k, v in dop_tight.items() if k != "final"},
+                "ias15": {k: v for k, v in ias15.items() if k != "final"},
+            }
+
+        reference_by_case[case.case_id] = reference
+        reference_valid_by_case[case.case_id] = valid
+        reference_rows.append({
+            "case_id": case.case_id,
+            "family": case.family,
+            "planet": case.planet_label,
+            "orientation": case.orientation,
+            "rho_target": case.rho_target,
+            "rho_reference": reference["min_separation"] / case.q_scale,
+            "tau_reference": reference["min_separation"] / max(reference["relative_speed_at_min"], 1e-300),
+            "reference_mode": reference["mode"],
+            "reference_valid": valid,
+            "diagnostics": diagnostics,
+            "state_sha256": sha256(state_path),
+            "notes": case.notes,
+        })
+
+        eta_targets: Iterable[float]
+        if case.family == "analytic_two_body":
+            eta_targets = contract["analytic_two_body"]["eta_targets"]
+        elif case.family == "restricted_three_body":
+            eta_targets = contract["restricted_three_body"]["eta_targets"]
+        else:
+            eta_targets = contract["full_ten_body_screen"]["eta_targets"]
+        if args.quick:
+            eta_targets = [0.2, 0.05]
+
+        rows_for_boundary: list[dict[str, Any]] = []
+        for eta in eta_targets:
+            steps = max(1, math.ceil(case.duration / (float(eta) * case.tau_nominal)))
+            for mode in ("bm6", "kdk"):
+                result_path = raw / f"{case.case_id}_{mode}_eta_{float(eta):.8g}.json"
+                try:
+                    raw_result = run_native(
+                        native, mode, case, state_path, result_path,
+                        steps=steps, timing_repeats=1 if args.quick else 3,
+                    )
+                    metrics = candidate_metrics(
+                        raw_result, reference, case, contract["bm6_safe_gates"]
+                    )
+                    row = {
+                        "case_id": case.case_id,
+                        "family": case.family,
+                        "planet": case.planet_label,
+                        "orientation": case.orientation,
+                        "rho_target": case.rho_target,
+                        "mode": mode,
+                        "eta_target": float(eta),
+                        "run_status": "completed",

@@ -1,0 +1,90 @@
+    return force
+
+
+def run_dop853(case: EncounterCase, profile: dict[str, Any], sample_count: int) -> dict[str, Any]:
+    q, v, mu, ids = state_arrays(case)
+    initial = np.concatenate((q.ravel(), v.ravel()))
+    times = np.linspace(0.0, case.duration, sample_count)
+    start = time.perf_counter()
+    solution = solve_ivp(
+        dop853_force(mu),
+        (0.0, case.duration),
+        initial,
+        method="DOP853",
+        t_eval=times,
+        rtol=float(profile["rtol"]),
+        atol=float(profile["atol"]),
+        max_step=case.tau_nominal * float(profile["max_step_tau_fraction"]),
+    )
+    wall = time.perf_counter() - start
+    if not solution.success:
+        raise RuntimeError(solution.message)
+    count = len(mu)
+    positions = solution.y[:3 * count].T.reshape(len(times), count, 3)
+    velocities = solution.y[3 * count:].T.reshape(len(times), count, 3)
+    primary = ids.index(case.primary_id)
+    tracer = ids.index(case.tracer_id)
+    minimum = sampled_metrics(times, positions, velocities, primary, tracer)
+    final = {
+        body_id: (positions[-1, index].copy(), velocities[-1, index].copy())
+        for index, body_id in enumerate(ids)
+    }
+    return {
+        "mode": "dop853",
+        "final": final,
+        "min_separation": minimum[0],
+        "time_of_min_separation": minimum[1],
+        "relative_speed_at_min": minimum[2],
+        "wall_seconds": wall,
+        "nfev": int(solution.nfev),
+        "sample_count": len(times),
+    }
+
+
+def native_reference(result: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "mode": result["mode"],
+        "final": result_state(result),
+        "min_separation": float(result["min_separation"]),
+        "time_of_min_separation": float(result["time_of_min_separation"]),
+        "relative_speed_at_min": float(result["relative_speed_at_min"]),
+        "wall_seconds": float(result["wall_seconds"]),
+        "force_evaluations": int(result["force_evaluations"]),
+        "accepted_steps": int(result["accepted_steps"]),
+        "rejected_steps": int(result["rejected_steps"]),
+    }
+
+
+def relative_final(reference: dict[str, Any], case: EncounterCase) -> tuple[np.ndarray, np.ndarray]:
+    primary_q, primary_v = reference["final"][case.primary_id]
+    tracer_q, tracer_v = reference["final"][case.tracer_id]
+    return tracer_q - primary_q, tracer_v - primary_v
+
+
+def reference_difference(a: dict[str, Any], b: dict[str, Any], case: EncounterCase) -> dict[str, float]:
+    aq, av = relative_final(a, case)
+    bq, bv = relative_final(b, case)
+    tau = max(
+        b["min_separation"] / max(b["relative_speed_at_min"], 1e-300),
+        1e-300,
+    )
+    return {
+        "position_over_scale": norm(aq - bq) / case.q_scale,
+        "velocity_over_scale": norm(av - bv) / case.v_scale,
+        "min_separation_over_scale": abs(a["min_separation"] - b["min_separation"]) / case.q_scale,
+        "tmin_over_tau": abs(a["time_of_min_separation"] - b["time_of_min_separation"]) / tau,
+    }
+
+
+def outcome(reference: dict[str, Any], case: EncounterCase) -> str:
+    q, v = relative_final(reference, case)
+    distance = norm(q)
+    primary_mu = next(body.mu for body in case.bodies if body.body_id == case.primary_id)
+    if reference["min_separation"] / case.q_scale < 1e-4:
+        return "near_singularity"
+    specific_energy = 0.5 * float(np.dot(v, v)) - primary_mu / distance
+    if specific_energy < 0.0 and distance < case.q_scale:
+        return "captured"
+    return "flyby"
+
+

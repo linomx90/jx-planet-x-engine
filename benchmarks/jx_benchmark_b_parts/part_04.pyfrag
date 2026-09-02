@@ -1,0 +1,90 @@
+            v_infinity = float(geometry["v_infinity_hill"]) * hill
+            inbound_q, inbound_v, _, _, duration, tau, _ = hyperbolic_relative_state(
+                planet_mu, rho * hill, v_infinity, launch_radius
+            )
+            for orientation_name in contract["restricted_three_body"]["orientations"]:
+                relative_q, relative_v = orient(
+                    inbound_q, inbound_v,
+                    np.array([1.0, 0.0, 0.0]),
+                    np.array([0.0, 1.0, 0.0]),
+                    np.array([0.0, 0.0, 1.0]),
+                    orientation_name,
+                )
+                tracer = Body(
+                    TRACER_ID,
+                    "tracer",
+                    0.0,
+                    planet.q + relative_q,
+                    planet.v + relative_v,
+                )
+                result.append(
+                    EncounterCase(
+                        f"cr3bp_p{planet_id}_rho_{rho:g}_{orientation_name}",
+                        "restricted_three_body",
+                        planet_name,
+                        orientation_name,
+                        rho,
+                        duration,
+                        tau,
+                        hill,
+                        hill,
+                        2,
+                        TRACER_ID,
+                        [star, planet, tracer],
+                        notes=(
+                            f"normalized CR3BP; mu_planet={planet_mu:.17e}; "
+                            f"R_H={hill:.17e}; vinf/v_H={float(geometry['v_infinity_hill']):g}"
+                        ),
+                    )
+                )
+    return result
+
+
+def full_system_cases(contract: dict[str, Any], solar: list[Body]) -> list[EncounterCase]:
+    result: list[EncounterCase] = []
+    body_map = {body.body_id: body for body in solar}
+    sun = body_map[10]
+    spec = contract["full_ten_body_screen"]
+    for planet_id in spec["planet_ids"]:
+        planet = body_map[int(planet_id)]
+        heliocentric_position = planet.q - sun.q
+        heliocentric_velocity = planet.v - sun.v
+        radius = norm(heliocentric_position)
+        e_radial = unit(heliocentric_position)
+        e_normal = unit(np.cross(heliocentric_position, heliocentric_velocity))
+        e_tangent = np.cross(e_normal, e_radial)
+        mean_motion = math.sqrt((sun.mu + planet.mu) / radius ** 3)
+        hill = radius * (planet.mu / (3.0 * sun.mu)) ** (1.0 / 3.0)
+        v_hill = mean_motion * hill
+        for rho in spec["rho_targets"]:
+            rho = float(rho)
+            inbound_q, inbound_v, _, _, duration, tau, _ = hyperbolic_relative_state(
+                planet.mu,
+                rho * hill,
+                float(spec["v_infinity_hill"]) * v_hill,
+                float(spec["launch_radius_hill"]) * hill,
+            )
+            for orientation_name in spec["orientations"]:
+                relative_q, relative_v = orient(
+                    inbound_q, inbound_v, e_radial, e_tangent, e_normal, orientation_name
+                )
+                tracer = Body(
+                    TRACER_ID,
+                    "tracer",
+                    0.0,
+                    planet.q + relative_q,
+                    planet.v + relative_v,
+                )
+                result.append(
+                    EncounterCase(
+                        f"full10_p{planet_id}_rho_{rho:g}_{orientation_name}",
+                        "full_ten_body_screen",
+                        planet.name,
+                        orientation_name,
+                        rho,
+                        duration,
+                        tau,
+                        hill,
+                        v_hill,
+                        planet.body_id,
+                        TRACER_ID,

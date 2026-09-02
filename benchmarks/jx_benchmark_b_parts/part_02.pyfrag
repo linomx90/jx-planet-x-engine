@@ -1,0 +1,90 @@
+                        distance_squared = value
+                        weight = (vertex - t0) / (t2 - t0)
+                        speed = float((1.0 - weight) * speeds[index - 1] + weight * speeds[index + 1])
+    return math.sqrt(max(0.0, distance_squared)), time_min, speed
+
+
+@dataclass
+class Body:
+    body_id: int
+    name: str
+    mu: float
+    q: np.ndarray
+    v: np.ndarray
+
+
+@dataclass
+class EncounterCase:
+    case_id: str
+    family: str
+    planet_label: str
+    orientation: str
+    rho_target: float
+    duration: float
+    tau_nominal: float
+    q_scale: float
+    v_scale: float
+    primary_id: int
+    tracer_id: int
+    bodies: list[Body]
+    analytic_final: dict[int, tuple[np.ndarray, np.ndarray]] | None = None
+    analytic_minimum: tuple[float, float, float] | None = None
+    notes: str = ""
+
+
+def load_gm(path: Path) -> dict[int, tuple[str, float]]:
+    conversion = DAY_SECONDS * DAY_SECONDS / (AU_KM * AU_KM * AU_KM)
+    result: dict[int, tuple[str, float]] = {}
+    with path.open(newline="", encoding="utf-8") as stream:
+        for row in csv.DictReader(stream):
+            body_id = int(row["body_id"])
+            result[body_id] = (row["body_name"], float(row["gm_km3_s2"]) * conversion)
+    return result
+
+
+def load_solar_state(path: Path, gm: dict[int, tuple[str, float]]) -> list[Body]:
+    with path.open(newline="", encoding="utf-8") as stream:
+        rows = list(csv.DictReader(stream))
+    epoch = min(float(row["jd_tdb"]) for row in rows)
+    initial = {int(row["body_id"]): row for row in rows if float(row["jd_tdb"]) == epoch}
+    if tuple(sorted(initial)) != tuple(range(1, 11)):
+        raise RuntimeError("frozen ten-body initial roster changed")
+    bodies: list[Body] = []
+    for body_id in range(1, 11):
+        row = initial[body_id]
+        gm_name, mu = gm[body_id]
+        if row["body_name"] != gm_name:
+            raise RuntimeError("state/GM name mismatch")
+        bodies.append(
+            Body(
+                body_id,
+                gm_name,
+                mu,
+                np.array([float(row["x_au"]), float(row["y_au"]), float(row["z_au"])]),
+                np.array([
+                    float(row["vx_au_per_day"]),
+                    float(row["vy_au_per_day"]),
+                    float(row["vz_au_per_day"]),
+                ]),
+            )
+        )
+    return bodies
+
+
+def hyperbolic_relative_state(mu: float, periapsis: float, v_infinity: float,
+                              launch_radius: float) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, float, float, float]:
+    if not (mu > 0.0 and periapsis > 0.0 and v_infinity > 0.0 and launch_radius > periapsis):
+        raise RuntimeError("invalid hyperbolic geometry")
+    semimajor_abs = mu / (v_infinity * v_infinity)
+    eccentricity = 1.0 + periapsis / semimajor_abs
+    parameter = semimajor_abs * (eccentricity * eccentricity - 1.0)
+    cosine_true_anomaly = (parameter / launch_radius - 1.0) / eccentricity
+    true_anomaly = math.acos(max(-1.0, min(1.0, cosine_true_anomaly)))
+    angular_momentum = math.sqrt(mu * parameter)
+
+    def state(anomaly: float) -> tuple[np.ndarray, np.ndarray]:
+        radius = parameter / (1.0 + eccentricity * math.cos(anomaly))
+        radial_velocity = mu / angular_momentum * eccentricity * math.sin(anomaly)
+        transverse_velocity = mu / angular_momentum * (1.0 + eccentricity * math.cos(anomaly))
+        position = np.array([radius * math.cos(anomaly), radius * math.sin(anomaly), 0.0])
+        velocity = np.array([
