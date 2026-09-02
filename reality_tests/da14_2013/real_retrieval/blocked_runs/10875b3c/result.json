@@ -1,0 +1,44 @@
+{
+  "claim_ceiling": "Blocked workflow execution only; no source-schema, curation, orbit-fit, prediction, or physical-validation claim.",
+  "classification": "WORKFLOW_CURATOR_ATTEMPT_ONLY",
+  "date_utc": "2026-09-02",
+  "evidence_state": {
+    "complete_normalized_plaintext_written": false,
+    "curated_files": [],
+    "da14_records_downloaded": false,
+    "holdout_count": null,
+    "holdout_unblinded": false,
+    "orbit_fitting_performed": false,
+    "password_present": false,
+    "private_key_present": false,
+    "quarantine_count": null,
+    "raw_http_response_retained": false,
+    "source_requests": [],
+    "training_count": null
+  },
+  "failure": {
+    "category": "WORKFLOW_OUTPUT_PLUMBING",
+    "message": "/tmp/jx-da14-export-parent/retrieval_stdout.json: Permission denied",
+    "network_request_initiated": false,
+    "scientific_component_reached": false,
+    "stage": "shell stdout redirection before adapter process launch"
+  },
+  "integrity": {
+    "artifact_internal_sha256_manifest_verified": true,
+    "artifact_zip_sha256": "3e72b5a0dc977bd32d62753f23777770e88617407ae1ca6441149187697bf891"
+  },
+  "next_action": "Require explicit human authorization, then freeze a plumbing-only correction and a newly generated, immediately archived replacement custody key before any second real retrieval execution.",
+  "schema": "jx-reality-test-1-real-retrieval-blocked-checkpoint/v1",
+  "status": "REAL_RETRIEVAL_BLOCKED_BEFORE_NETWORK_REQUEST",
+  "target": {
+    "designation": "2012 DA14",
+    "name": "Duende",
+    "number": 367943
+  },
+  "workflow": {
+    "artifact_id": 9868145137,
+    "artifact_zip_sha256": "3e72b5a0dc977bd32d62753f23777770e88617407ae1ca6441149187697bf891",
+    "commit": "10875b3c731243e5cc1853167841042328104991",
+    "run_id": 33686072499
+  }
+}
