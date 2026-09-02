@@ -1,0 +1,18 @@
+{
+  "assembled_driver_sha256": "03b3bfcba174c97639a1f46cd4d355c7435f65e046fa00ab30179490eaafaa90",
+  "attempt_number": 3,
+  "authorized_input_commit": "c6c068b2b1cf008aeefec5f1a000e4bef9a2392b",
+  "branch": "reality-test-1/da14-real-retrieval-attempt-3-v2",
+  "compressed_driver_sha256": "a7e3043b14ef562279e25502c6e150e35e1d38127ca4a8c77217a64b6c234eb8",
+  "date_utc": "2026-09-02",
+  "execution_scope": "One production curation attempt only; public key only; no unblinding, orbit fit, or prediction.",
+  "failure_preservation": "The driver emits a stage marker and safe run manifest after retrieval; the workflow adds a fallback manifest if execution stops before packaging.",
+  "files": {
+    "EXECUTION_DRIVER_SHA256SUMS.txt": "a27c0ab9ae82c9f2876d4e3f994a9cc79b68e5cb3cf1af8573092ba3b797f112",
+    "attempt3_driver.sh.gz.b64": "31ca577328f7f824a536e99ca755beff86e04f7cc6c083eca5c65a95bcae8a2f",
+    "run_attempt3.sh": "c83c9c6a66bd65cdf786e1ee3313d52f55169d3872108de8e66c9a7d4929c200"
+  },
+  "packed_driver_base64_sha256": "31ca577328f7f824a536e99ca755beff86e04f7cc6c083eca5c65a95bcae8a2f",
+  "schema": "jx-reality-test-1-attempt3-execution-driver-manifest/v2",
+  "status": "FROZEN_BEFORE_WORKFLOW_TRIGGER"
+}
