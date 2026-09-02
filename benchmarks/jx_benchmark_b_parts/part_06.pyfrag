@@ -19,7 +19,7 @@ def run_rebound(case: EncounterCase, mode: str, *, sample_count: int,
         )
     simulation.integrator = mode
     if mode == "ias15":
-        simulation.ri_ias15.epsilon = epsilon
+        simulation.integrator.epsilon = epsilon
         times = np.linspace(0.0, case.duration, sample_count)
         positions = np.empty((sample_count, len(case.bodies), 3), dtype=float)
         velocities = np.empty_like(positions)
