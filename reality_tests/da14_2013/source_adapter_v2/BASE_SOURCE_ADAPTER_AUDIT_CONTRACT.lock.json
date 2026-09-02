@@ -1,0 +1,70 @@
+{
+  "allowed_verdicts": [
+    "SOURCE_ADAPTER_AUDIT_PASSED",
+    "SOURCE_ADAPTER_LEAK_DETECTED",
+    "SOURCE_SCHEMA_UNSUPPORTED",
+    "SECURITY_BOUNDARY_FAILED",
+    "BLOCKED"
+  ],
+  "claim_ceiling": "Synthetic no-leak and fail-closed validation of the restricted downloader/normalizer in one recorded environment. It does not prove secrecy against root, a malicious administrator, memory forensics, DNS or CA compromise, kernel compromise, or direct use of another client to query the sources. It does not access or validate the real 2012 DA14 data.",
+  "cutoff_utc": "2013-02-01T00:00:00Z",
+  "date_utc": "2026-09-02",
+  "holdout_end_utc": "2013-03-01T00:00:00Z",
+  "limits": {
+    "maximum_json_depth": 32,
+    "maximum_records_total": 250000,
+    "maximum_redirects": 0,
+    "maximum_response_bytes_each": 67108864,
+    "maximum_string_bytes": 1048576,
+    "request_timeout_seconds": 20.0
+  },
+  "object_specific_da14_query_authorized": false,
+  "passing_rule": "Every required check must pass and no protected synthetic canary may appear in stdout, stderr, logs, receipts, schedules, manifests, temporary files, or any pre-unblind workspace file.",
+  "production_endpoints": {
+    "jpl_radar": "https://ssd-api.jpl.nasa.gov/sb_radar.api",
+    "mpc_observations": "https://data.minorplanetcenter.net/api/get-obs",
+    "mpc_observatory_codes": "https://data.minorplanetcenter.net/api/obscodes"
+  },
+  "required_check_ids": [
+    "base_curator_regression_passed",
+    "production_endpoint_allowlist_enforced",
+    "https_required_outside_audit",
+    "loopback_audit_token_required",
+    "redirect_blocked",
+    "wrong_content_type_blocked",
+    "malformed_json_blocked",
+    "truncated_transfer_blocked",
+    "timeout_blocked",
+    "response_size_limit_enforced",
+    "mpc_ades_normalization_exact",
+    "jpl_radar_normalization_exact",
+    "observatory_metadata_normalization_exact",
+    "cutoff_boundary_exact",
+    "duplicate_record_preserved_and_flagged",
+    "nonfinite_measurement_blocked",
+    "missing_timezone_blocked",
+    "no_protected_canary_in_stdout_stderr",
+    "no_protected_canary_in_preunblind_workspace",
+    "no_raw_http_response_persisted",
+    "crash_after_download_no_plaintext_leak",
+    "crash_after_normalization_no_plaintext_leak",
+    "wrong_public_key_unblind_blocked",
+    "output_tamper_detected",
+    "canonical_training_and_schedule_reproducible",
+    "ciphertext_nonce_diversity",
+    "private_key_absent_from_adapter_workspace",
+    "quarantine_not_exposed",
+    "real_target_query_not_performed"
+  ],
+  "schedule_whitelist": [
+    "schedule_id",
+    "obs_time_utc",
+    "station_code",
+    "measurement_type",
+    "transmitter_code",
+    "receiver_code",
+    "dataset_class"
+  ],
+  "schema": "jx-reality-test-1-source-adapter-audit-contract/v1",
+  "status": "FROZEN_SYNTHETIC_NO_LEAK_AUDIT_ONLY"
+}

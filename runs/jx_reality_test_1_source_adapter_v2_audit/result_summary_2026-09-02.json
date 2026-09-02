@@ -1,0 +1,57 @@
+{
+  "audit": {
+    "deterministic_repeat_count": 2,
+    "external_network_used": false,
+    "holdout_unblinded": false,
+    "orbit_fitting_performed": false,
+    "passed": 21,
+    "real_target_query_performed": false,
+    "result_sha256": "0f9daa39657514d51deb7b79108635079d332df37e54df6c8dea7e09388a0ea5",
+    "total": 21
+  },
+  "authorization_state": {
+    "complete_real_retrieval_authorized": false,
+    "holdout_unblinding_authorized": false,
+    "orbit_fitting_authorized": false
+  },
+  "claim_ceiling": "Prospective synthetic validation of one narrow live-schema normalizer revision; no real retrieval or physical result.",
+  "classification": "PROSPECTIVE_SYNTHETIC_NORMALIZER_REVISION",
+  "date_utc": "2026-09-02",
+  "diagnostic_basis": {
+    "live_probe_sha256": "e4ccf666acef8a0728cd8744b83603ffd778887bfebae2d40611c991edfd60c3",
+    "observed_structure": "one MPC object envelope plus one integer ancillary item",
+    "schema_probe_commit": "98fb738505c3594156ce84b13966f9654fd85db2",
+    "schema_probe_run_id": 33692648520
+  },
+  "inherited_security_baseline": {
+    "checks": "29/29",
+    "result_sha256": "794fafe5b33b0091e6846ca263a772baa90ff4191009b892652d81b7236d2821",
+    "status": "SOURCE_ADAPTER_AUDIT_PASSED",
+    "unchanged_components_revalidated_by_hash": true
+  },
+  "next_gate": "A new explicit authorization is required for a complete real retrieval using the preserved v0.2 runtime.",
+  "revision": {
+    "accepted_layouts": [
+      "one object envelope",
+      "one object envelope plus one non-boolean integer, in either order"
+    ],
+    "after_sha256": "b9b9d49e576786f845779fff8ca33a56ddc424f1a17c6fac0a912819abf0d236",
+    "before_sha256": "32e7d20ab7ef8e488bba9299c78a1eabcb47146c28d88a580a99b4cd0d35e2fd",
+    "opaque_integer": {
+      "affects_normalized_records": false,
+      "emitted": false,
+      "interpreted": false,
+      "retained": false
+    },
+    "target_file": "src/jx_source_adapter/normalize.py"
+  },
+  "schema": "jx-reality-test-1-source-adapter-v2-final-summary/v1",
+  "status": "SOURCE_ADAPTER_V2_AUDIT_PASSED",
+  "workflow": {
+    "artifact_id": 9871211121,
+    "artifact_zip_sha256": "bba96cef39d6a54c2678cd6c9984c6683bd536b86377daf893729d03c5687ff1",
+    "execution_commit": "1f7e1e05a7aebef6b357571993a70941f13c7287",
+    "run_id": 33694352872,
+    "run_manifest_sha256": "e9f9a861d8aa0d0d55f42a704be0a40e7bd5b3459731f461d75e2f0d41a3f6e7"
+  }
+}
