@@ -1,0 +1,48 @@
+{
+  "attempt_consumed": true,
+  "claim_ceiling": "Real-source schema rejection only; no curation, orbit fit, prediction, unblinding, or physical-validation result.",
+  "classification": "REAL_SOURCE_CURATION_ATTEMPT_NO_PHYSICAL_RESULT",
+  "custody": {
+    "encrypted_private_key_sha256": "775758d7f3e07a5177c51607caca3cbc88e94908ddfa3e6280175ee0086a4507",
+    "password_file_sha256": "01576aa76f7fc1fa5df4eb70c53137eb3b44b119576c9380d9d15aa16086ca7b",
+    "persistent_library_custody_verified_before_execution": true,
+    "public_key_fingerprint_sha256": "d995cd53e4bb9769d0112b868def61191d7b74ce7544f4e5141932d78b8803ee"
+  },
+  "date_utc": "2026-09-02",
+  "evidence_state": {
+    "complete_normalized_plaintext_written": false,
+    "encrypted_holdout_produced": false,
+    "encrypted_quarantine_produced": false,
+    "holdout_unblinded": false,
+    "orbit_fitting_performed": false,
+    "password_present": false,
+    "private_key_present": false,
+    "raw_http_response_retained": false,
+    "training_records_produced": false
+  },
+  "execution": {
+    "adapter_process_launched": true,
+    "completed_request_count_known": false,
+    "plumbing_correction_worked": true,
+    "retrieval_exit_code": 22,
+    "schema_gate_failed_closed": true,
+    "source_request_receipts_available": false,
+    "verification_exit_code": 127
+  },
+  "interpretation": "A live official-source response failed the exact frozen normalizer schema. No orbit-fit or physical conclusion can be drawn.",
+  "next_gate": "New explicit authorization only after prospective live-schema diagnostic and a newly audited adapter revision.",
+  "schema": "jx-reality-test-1-real-retrieval-attempt2-result/v1",
+  "status": "SOURCE_SCHEMA_UNSUPPORTED",
+  "target": {
+    "designation": "2012 DA14",
+    "name": "Duende",
+    "number": 367943
+  },
+  "workflow": {
+    "artifact_id": 9869307779,
+    "artifact_zip_sha256": "6e75c33d55e2f6fe6901e209401ef3cd1378ac6e842a05df887be438c85c2854",
+    "commit": "7262a0ea0c22fc8b9f6a4d92cce0f80630f613b0",
+    "frozen_input_commit": "9a30ff44861cfa711315aad82bb546e4ffab23f8",
+    "run_id": 33689123745
+  }
+}
