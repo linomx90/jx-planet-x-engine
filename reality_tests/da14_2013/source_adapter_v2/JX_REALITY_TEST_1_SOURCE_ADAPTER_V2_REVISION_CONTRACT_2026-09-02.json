@@ -1,0 +1,121 @@
+{
+  "schema": "jx-reality-test-1-source-adapter-v2-revision-contract/v1",
+  "date_utc": "2026-09-02",
+  "status": "FROZEN_PROSPECTIVE_NORMALIZER_REVISION",
+  "authorization": {
+    "message_timestamp_utc": "2026-09-02T22:34:23Z",
+    "user_instruction": "do it",
+    "authorized_actions": [
+      "run one value-redacted live schema diagnostic after a passing synthetic no-value-leak audit",
+      "prospectively revise only the normalizer branch required by the observed live structure",
+      "run a new synthetic no-network audit of the revised normalizer"
+    ],
+    "complete_real_retrieval_authorized": false,
+    "holdout_unblinding_authorized": false,
+    "orbit_fitting_authorized": false
+  },
+  "live_schema_diagnostic": {
+    "branch": "reality-test-1/da14-live-schema-diagnostic",
+    "workflow_run_id": 33692648520,
+    "execution_commit": "98fb738505c3594156ce84b13966f9654fd85db2",
+    "artifact_id": 9870611284,
+    "artifact_zip_sha256": "bec68ea95b9af71dfeae168bafa0940d58c2c221dac85d11ac83ddfd511ef798",
+    "live_probe_sha256": "e4ccf666acef8a0728cd8744b83603ffd778887bfebae2d40611c991edfd60c3",
+    "status": "LIVE_SCHEMA_PROBE_COMPLETE",
+    "synthetic_audit": {
+      "status": "SCHEMA_PROBE_SYNTHETIC_AUDIT_PASSED",
+      "checks": "19/19"
+    },
+    "privacy_state": {
+      "measurement_values_emitted": false,
+      "raw_http_response_retention": "NONE",
+      "complete_normalized_plaintext_retention": "NEVER_WRITTEN",
+      "private_key_present": false,
+      "holdout_unblinded": false,
+      "orbit_fitting_performed": false
+    }
+  },
+  "diagnosis": {
+    "mpc_observations": {
+      "http_status": 200,
+      "content_type": "application/json",
+      "root_type": "array",
+      "envelope_item_count": 2,
+      "envelope_type_counts": {
+        "object": 1,
+        "integer": 1
+      },
+      "object_envelope_keys": [
+        "ADES_DF",
+        "OBS80",
+        "OBS_DF",
+        "XML"
+      ],
+      "ades_df_record_count": 1071,
+      "ades_df_record_types": {
+        "object": 1071
+      },
+      "observation_key_signature_counts": {
+        "optical_key_signature": 1071
+      },
+      "current_normalizer_status": "INCOMPATIBLE",
+      "current_error": "MPC response does not match the single-object envelope"
+    },
+    "mpc_observatory_codes": {
+      "http_status": 200,
+      "root_type": "object",
+      "record_count": 2718,
+      "current_structural_status": "COMPATIBLE"
+    },
+    "jpl_radar": {
+      "http_status": 200,
+      "api_signature_version": "1.1",
+      "declared_field_count": 9,
+      "normalized_record_count": 8,
+      "radar_station_count": 3,
+      "current_normalizer_status": "COMPATIBLE"
+    },
+    "conclusion": "The only observed compatibility defect is that the MPC observation normalizer requires an array of length exactly one, while the live response contains one object envelope plus one ancillary integer."
+  },
+  "authorized_code_change": {
+    "target_path": "src/jx_source_adapter/normalize.py",
+    "original_sha256": "32e7d20ab7ef8e488bba9299c78a1eabcb47146c28d88a580a99b4cd0d35e2fd",
+    "patched_sha256": "b9b9d49e576786f845779fff8ca33a56ddc424f1a17c6fac0a912819abf0d236",
+    "accepted_layouts": [
+      "array containing exactly one object envelope",
+      "array containing exactly one object envelope and exactly one non-boolean integer ancillary item, in either order"
+    ],
+    "rejected_layouts": [
+      "non-array root",
+      "zero object envelopes",
+      "more than one object envelope",
+      "more than one ancillary item",
+      "boolean ancillary item",
+      "string, number-with-fraction, null, array, or object ancillary item outside the one object envelope"
+    ],
+    "ancillary_integer_policy": {
+      "interpreted": false,
+      "retained": false,
+      "emitted": false,
+      "effect_on_normalized_records": "NONE",
+      "permitted_metadata": [
+        "envelope_item_count",
+        "object_envelope_count",
+        "opaque_integer_metadata_present",
+        "opaque_integer_metadata_retained=false"
+      ]
+    }
+  },
+  "inherited_security_baseline": {
+    "status": "SOURCE_ADAPTER_AUDIT_PASSED",
+    "checks": "29/29",
+    "result_sha256": "794fafe5b33b0091e6846ca263a772baa90ff4191009b892652d81b7236d2821",
+    "unchanged_runtime_files": 13,
+    "changed_runtime_files": 1,
+    "changed_file": "src/jx_source_adapter/normalize.py"
+  },
+  "required_v2_synthetic_checks": 21,
+  "required_v2_status": "SOURCE_ADAPTER_V2_AUDIT_PASSED",
+  "next_gate_after_pass": "Preserve the revised source and audit. A complete real retrieval remains blocked until a new explicit human authorization is recorded.",
+  "claim_ceiling": "Prospective synthetic validation of one narrowly scoped live-schema normalizer revision. No complete real retrieval, observation dataset, orbit fit, prediction, unblinding, or physical-validation result."
+}
