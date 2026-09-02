@@ -1,0 +1,83 @@
+{
+  "allowed_outcomes": [
+    "REAL_RETRIEVAL_CURATED_VALUES_SEALED",
+    "SOURCE_SCHEMA_UNSUPPORTED",
+    "SOURCE_TRANSPORT_FAILED",
+    "INTEGRITY_CHECK_FAILED",
+    "SECURITY_POLICY_FAILED",
+    "UNEXPECTED_INTERNAL_ERROR"
+  ],
+  "authorization": {
+    "basis": "User endorsed the separately logged real DA14 retrieval step in the conversation.",
+    "message_timestamp_utc": "2026-09-02T21:11:04Z",
+    "single_retrieval_attempt_authorized": true
+  },
+  "claim_ceiling": "A logged real-source curation action only. It does not validate orbit fitting, physical prediction, or withheld-observation performance.",
+  "custodian_public_key": {
+    "private_key_present_in_retrieval_environment": false,
+    "public_key_fingerprint_sha256": "8211e6a91fd5aca36fb349a4c41d9499ee2b6f90c86f084c19aa2f9f6cb0785f",
+    "public_key_sha256": "33917e6f6af48bc5d98d81ad2f8ee54fe1bc6e8c21205537e5b567603961612d"
+  },
+  "cutoff_utc": "2013-02-01T00:00:00Z",
+  "date_utc": "2026-09-02",
+  "execution_requirements": [
+    "fresh ephemeral execution directory",
+    "dedicated unprivileged process identity",
+    "public key present; private key and password absent",
+    "all 14 runtime source hashes verified before execution",
+    "HTTPS endpoint allowlist enforced by the frozen source package",
+    "raw HTTP responses and complete normalized plaintext never persisted",
+    "stdout and stderr retained but must contain receipts/statuses only",
+    "output hashes verified before artifact upload",
+    "no orbit fitting or holdout unblinding in this action"
+  ],
+  "expected_outputs": [
+    "training.jsonl",
+    "holdout_schedule.csv",
+    "holdout.jxenc",
+    "post_holdout_quarantine.jxenc",
+    "observer_metadata.json",
+    "source_response_receipt.json",
+    "adapter_manifest.json",
+    "ADAPTER_RECEIPT.json",
+    "SHA256SUMS.txt"
+  ],
+  "holdout_end_utc": "2013-03-01T00:00:00Z",
+  "limits": {
+    "maximum_json_depth": 32,
+    "maximum_records_total": 250000,
+    "maximum_redirects": 0,
+    "maximum_response_bytes_each": 67108864,
+    "maximum_string_bytes": 1048576,
+    "request_timeout_seconds": 20.0
+  },
+  "next_gate_after_success": "Freeze the real curation receipt and perform a training-only data-quality audit. Orbit fitting remains blocked.",
+  "production_endpoints": {
+    "jpl_radar": "https://ssd-api.jpl.nasa.gov/sb_radar.api",
+    "mpc_observations": "https://data.minorplanetcenter.net/api/get-obs",
+    "mpc_observatory_codes": "https://data.minorplanetcenter.net/api/obscodes"
+  },
+  "schema": "jx-reality-test-1-real-retrieval-contract/v2",
+  "source_adapter": {
+    "audited_full_source_file_count": 31,
+    "audited_full_source_zip_sha256": "6a33c25434cc3569e3c994f5576780a2f9adcf13ad964119d97bbec5663db5f9",
+    "deployed_runtime_file_count": 14,
+    "deployed_runtime_hash_manifest_sha256": "a11b47719f9251395e0f063ed13055bd8039045ee0f94e183df60ac483daaf16",
+    "preregistration_json_sha256": "751e8675deb21b1858ee430115e8f73798ec35b973f4c12de97f1621e2b5d33f",
+    "synthetic_audit_contract_sha256": "d363d2665fd8f21729e8c99d3df38acb900d8378dc7e0535cca4272098c75307",
+    "synthetic_audit_result_sha256": "794fafe5b33b0091e6846ca263a772baa90ff4191009b892652d81b7236d2821",
+    "synthetic_audit_status": "SOURCE_ADAPTER_AUDIT_PASSED"
+  },
+  "status": "FROZEN_REAL_RETRIEVAL_AUTHORIZED",
+  "supersedes": {
+    "path": "JX_REALITY_TEST_1_REAL_RETRIEVAL_CONTRACT_2026-09-02.json",
+    "reason": "Deploy the exact audited runtime files directly and verify their individual frozen hashes rather than embedding the complete ZIP in GitHub.",
+    "sha256": "e26af0d4e27bf199c518aaffbfd144bd68b1b6008ebf0c52710cf7d46554aaeb",
+    "timing": "before any real-source retrieval"
+  },
+  "target": {
+    "designation_query": "367943",
+    "name": "Duende",
+    "provisional_designation": "2012 DA14"
+  }
+}
