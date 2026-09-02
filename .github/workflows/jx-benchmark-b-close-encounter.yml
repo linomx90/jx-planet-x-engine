@@ -41,6 +41,8 @@ jobs:
 
       - name: Install pinned numerical dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libboost-dev
           python -m pip install --upgrade pip
           python -m pip install numpy==2.3.5 scipy==1.17.0 rebound==5.1.1
           python - <<'PY'
@@ -100,7 +102,11 @@ jobs:
           uname -a > "$output/uname.txt"
           lscpu > "$output/lscpu.txt"
           python -m pip freeze --all > "$output/pip-freeze.txt"
-          sha256sum build/native/jx_benchmark_b_native > "$output/native-executable.sha256"
+          if [ -f build/native/jx_benchmark_b_native ]; then
+            sha256sum build/native/jx_benchmark_b_native > "$output/native-executable.sha256"
+          else
+            printf "MISSING\n" > "$output/native-executable.sha256"
+          fi
           cd "$output"
           rm -f SHA256SUMS.txt
           find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
