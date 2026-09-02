@@ -1,0 +1,8 @@
+{
+  "password_present_in_repository": false,
+  "private_key_location": "outside GitHub and outside the retrieval environment",
+  "private_key_present_in_repository": false,
+  "public_key_fingerprint_sha256": "8211e6a91fd5aca36fb349a4c41d9499ee2b6f90c86f084c19aa2f9f6cb0785f",
+  "public_key_sha256": "33917e6f6af48bc5d98d81ad2f8ee54fe1bc6e8c21205537e5b567603961612d",
+  "schema": "jx-reality-test-1-public-key-receipt/v1"
+}
