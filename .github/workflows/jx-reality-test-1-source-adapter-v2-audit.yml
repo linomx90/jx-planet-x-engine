@@ -1,0 +1,229 @@
+name: JX Reality Test 1 — Source Adapter v0.2 Audit
+
+on:
+  push:
+    branches:
+      - reality-test-1/da14-source-adapter-v2
+    paths:
+      - .github/workflows/jx-reality-test-1-source-adapter-v2-audit.yml
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: "0"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  EXPECTED_PARENT_COMMIT: c0d4913d9bbd9b3ed9b5704235e3f1ebc69e4d57
+  V2_ROOT: reality_tests/da14_2013/source_adapter_v2
+  RUNTIME_ROOT: reality_tests/da14_2013/real_retrieval/runtime
+  PREREGISTRATION: reality_tests/da14_2013/preregistration/JX_REALITY_TEST_1_DA14_PREREGISTRATION_2026-09-02.json
+  OUTPUT_ROOT: runs/jx_reality_test_1_source_adapter_v2_audit
+
+jobs:
+  source-adapter-v2-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out frozen audit execution commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Enforce one synthetic-only execution
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = "push"
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$GITHUB_REF_NAME" = "reality-test-1/da14-source-adapter-v2"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT_COMMIT"
+          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/jx-reality-test-1-source-adapter-v2-audit.yml"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned runtime dependency
+        run: python -m pip install --no-cache-dir cryptography==46.0.4
+
+      - name: Verify frozen revision files and reconstruct audited v0.1 runtime
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+
+          root = Path('reality_tests/da14_2013/source_adapter_v2')
+          manifest = json.loads((root / 'SOURCE_ADAPTER_V2_INPUT_MANIFEST.json').read_text())
+          for name, expected in manifest['git_blob_sha1'].items():
+              path = root / name
+              observed = subprocess.check_output(['git', 'hash-object', str(path)], text=True).strip()
+              if observed != expected:
+                  raise SystemExit(f'BLOCKED: git blob mismatch for {name}: {observed}')
+          assert manifest['full_real_retrieval_authorized'] is False
+          assert manifest['holdout_unblinding_authorized'] is False
+          assert manifest['orbit_fitting_authorized'] is False
+          print('V2_INPUT_BLOBS_VERIFIED')
+          PY
+
+          ! grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' "$V2_ROOT" "$RUNTIME_ROOT"
+          test -z "$(find "$V2_ROOT" "$RUNTIME_ROOT" -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+
+          ARCHIVE="$RUNNER_TEMP/remaining_runtime.tar.gz"
+          base64 --decode "$RUNTIME_ROOT/remaining_runtime.tar.gz.b64" > "$ARCHIVE"
+          echo "162886f21a1821936aa4aae893228460fb15c9c77f1a5a1e79050bbacff78805  $ARCHIVE" | sha256sum -c -
+
+          cat > "$RUNNER_TEMP/expected_archive_members.txt" <<'EOF'
+          src/jx_source_adapter/util.py
+          src/jx_source_adapter/policy.py
+          src/jx_source_adapter/http_client.py
+          src/jx_source_adapter/normalize.py
+          src/jx_source_adapter/bridge.py
+          src/jx_source_adapter/verify.py
+          src/jx_source_adapter/cli.py
+          EOF
+          tar -tzf "$ARCHIVE" > "$RUNNER_TEMP/actual_archive_members.txt"
+          diff -u "$RUNNER_TEMP/expected_archive_members.txt" "$RUNNER_TEMP/actual_archive_members.txt"
+
+          EXPANDED="$RUNNER_TEMP/runtime-v2"
+          mkdir -p "$EXPANDED"
+          cp -a "$RUNTIME_ROOT/src" "$EXPANDED/"
+          tar -xzf "$ARCHIVE" -C "$EXPANDED"
+          (cd "$EXPANDED" && sha256sum -c "$GITHUB_WORKSPACE/$RUNTIME_ROOT/RUNTIME_SOURCE_SHA256SUMS.txt")
+          awk '{print $2}' "$RUNTIME_ROOT/RUNTIME_SOURCE_SHA256SUMS.txt" | sort > "$RUNNER_TEMP/expected_runtime_files.txt"
+          (cd "$EXPANDED" && find src -type f -print | sort) > "$RUNNER_TEMP/actual_runtime_files.txt"
+          diff -u "$RUNNER_TEMP/expected_runtime_files.txt" "$RUNNER_TEMP/actual_runtime_files.txt"
+
+          cp "$EXPANDED/src/jx_source_adapter/normalize.py" "$RUNNER_TEMP/normalize_v1.py"
+          python "$V2_ROOT/apply_normalize_v2_patch.py" "$EXPANDED/src/jx_source_adapter/normalize.py"
+          echo "b9b9d49e576786f845779fff8ca33a56ddc424f1a17c6fac0a912819abf0d236  $EXPANDED/src/jx_source_adapter/normalize.py" | sha256sum -c -
+          diff -u "$RUNNER_TEMP/normalize_v1.py" "$EXPANDED/src/jx_source_adapter/normalize.py" > "$RUNNER_TEMP/normalize_v1_to_v2.patch" || test $? -eq 1
+          python -m compileall -q "$EXPANDED/src" "$V2_ROOT/apply_normalize_v2_patch.py" "$V2_ROOT/source_adapter_v2_synthetic_audit.py"
+
+      - name: Run two deterministic synthetic no-network audits
+        run: |
+          set -euo pipefail
+          OUT="$GITHUB_WORKSPACE/$OUTPUT_ROOT"
+          mkdir -p "$OUT/audit_run_1" "$OUT/audit_run_2"
+
+          for run in 1 2; do
+            PYTHONPATH="$RUNNER_TEMP/runtime-v2/src" \
+              python "$V2_ROOT/source_adapter_v2_synthetic_audit.py" \
+                --contract "$V2_ROOT/BASE_SOURCE_ADAPTER_AUDIT_CONTRACT.lock.json" \
+                --preregistration "$PREREGISTRATION" \
+                --output "$OUT/audit_run_${run}" \
+                > "$OUT/audit_run_${run}.stdout.json" \
+                2> "$OUT/audit_run_${run}.stderr.txt"
+            (cd "$OUT/audit_run_${run}" && sha256sum -c SHA256SUMS.txt)
+          done
+
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+
+          out = Path(os.environ['OUTPUT_ROOT'])
+          hashes = []
+          for run in (1, 2):
+              path = out / f'audit_run_{run}' / 'SOURCE_ADAPTER_V2_AUDIT_RESULT.json'
+              result = json.loads(path.read_text())
+              assert result['status'] == 'SOURCE_ADAPTER_V2_AUDIT_PASSED', result
+              assert result['passed_count'] == 21, result
+              assert result['check_count'] == 21, result
+              assert result['external_network_used'] is False, result
+              assert result['real_target_query_performed'] is False, result
+              assert result['holdout_unblinded'] is False, result
+              assert result['orbit_fitting_performed'] is False, result
+              assert result['prior_source_adapter_audit']['status'] == 'SOURCE_ADAPTER_AUDIT_PASSED', result
+              assert result['prior_source_adapter_audit']['checks'] == '29/29', result
+              hashes.append(hashlib.sha256(path.read_bytes()).hexdigest())
+          assert hashes[0] == hashes[1], hashes
+          print(json.dumps({'status': 'SOURCE_ADAPTER_V2_AUDIT_PASSED', 'result_sha256': hashes[0], 'repeat_count': 2}, sort_keys=True))
+          PY
+
+      - name: Package revised source, audit, and provenance
+        run: |
+          set -euo pipefail
+          OUT="$GITHUB_WORKSPACE/$OUTPUT_ROOT"
+          cp "$V2_ROOT/JX_REALITY_TEST_1_SOURCE_ADAPTER_V2_REVISION_CONTRACT_2026-09-02.json" "$OUT/revision_contract.lock.json"
+          cp "$V2_ROOT/BASE_SOURCE_ADAPTER_AUDIT_CONTRACT.lock.json" "$OUT/base_audit_contract.lock.json"
+          cp "$V2_ROOT/SOURCE_ADAPTER_V2_INPUT_MANIFEST.json" "$OUT/input_manifest.lock.json"
+          cp "$V2_ROOT/README.md" "$OUT/README.md"
+          cp "$V2_ROOT/apply_normalize_v2_patch.py" "$OUT/apply_normalize_v2_patch.py"
+          cp "$V2_ROOT/source_adapter_v2_synthetic_audit.py" "$OUT/source_adapter_v2_synthetic_audit.py"
+          cp "$RUNNER_TEMP/runtime-v2/src/jx_source_adapter/normalize.py" "$OUT/normalize_v2.py"
+          cp "$RUNNER_TEMP/normalize_v1_to_v2.patch" "$OUT/normalize_v1_to_v2.patch"
+          cp "$RUNTIME_ROOT/RUNTIME_SOURCE_SHA256SUMS.txt" "$OUT/runtime_v1_source_SHA256SUMS.txt"
+          (cd "$RUNNER_TEMP/runtime-v2" && find src -type f -print0 | sort -z | xargs -0 sha256sum) > "$OUT/runtime_v2_source_SHA256SUMS.txt"
+          python -m pip freeze --all > "$OUT/pip-freeze.txt"
+          python --version > "$OUT/python-version.txt" 2>&1
+          uname -a > "$OUT/uname.txt"
+          git show -s --format=fuller HEAD > "$OUT/git-commit.txt"
+
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, subprocess
+
+          out = Path(os.environ['OUTPUT_ROOT'])
+          result_path = out / 'audit_run_1' / 'SOURCE_ADAPTER_V2_AUDIT_RESULT.json'
+          result = json.loads(result_path.read_text())
+          manifest = {
+              'schema': 'jx-reality-test-1-source-adapter-v2-run-manifest/v1',
+              'status': result['status'],
+              'version': result['version'],
+              'checks': {'passed': result['passed_count'], 'total': result['check_count']},
+              'deterministic_repeat_count': 2,
+              'result_sha256': hashlib.sha256(result_path.read_bytes()).hexdigest(),
+              'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'authorized_parent_commit': os.environ['EXPECTED_PARENT_COMMIT'],
+              'live_schema_probe': {
+                  'workflow_run_id': 33692648520,
+                  'execution_commit': '98fb738505c3594156ce84b13966f9654fd85db2',
+                  'artifact_id': 9870611284,
+                  'artifact_zip_sha256': 'bec68ea95b9af71dfeae168bafa0940d58c2c221dac85d11ac83ddfd511ef798',
+                  'live_probe_sha256': 'e4ccf666acef8a0728cd8744b83603ffd778887bfebae2d40611c991edfd60c3',
+              },
+              'normalizer_sha256': {
+                  'before_patch': '32e7d20ab7ef8e488bba9299c78a1eabcb47146c28d88a580a99b4cd0d35e2fd',
+                  'after_patch': 'b9b9d49e576786f845779fff8ca33a56ddc424f1a17c6fac0a912819abf0d236',
+              },
+              'external_network_used': False,
+              'real_target_query_performed': False,
+              'complete_real_retrieval_authorized': False,
+              'holdout_unblinded': False,
+              'orbit_fitting_performed': False,
+              'next_gate': 'Preserve the revision. A complete real retrieval requires new explicit human authorization.',
+              'claim_ceiling': 'Prospective synthetic validation of one narrow live-schema normalizer revision; no real retrieval or physical result.',
+          }
+          (out / 'RUN_MANIFEST.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+          PY
+
+          ! grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' "$OUT"
+          test -z "$(find "$OUT" -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+          rm -f "$OUT/DELIVERABLE_SHA256SUMS.txt"
+          (cd "$OUT" && find . -type f ! -name DELIVERABLE_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > DELIVERABLE_SHA256SUMS.txt)
+          (cd "$OUT" && sha256sum -c DELIVERABLE_SHA256SUMS.txt)
+
+      - name: Upload complete source-adapter v0.2 audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-reality-test-1-source-adapter-v2-audit-${{ github.sha }}
+          path: runs/jx_reality_test_1_source_adapter_v2_audit/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce synthetic-only verdict
+        run: |
+          python - <<'PY'
+          import json, os
+          path = os.path.join(os.environ['OUTPUT_ROOT'], 'RUN_MANIFEST.json')
+          result = json.load(open(path, encoding='utf-8'))
+          assert result['status'] == 'SOURCE_ADAPTER_V2_AUDIT_PASSED', result
+          assert result['checks'] == {'passed': 21, 'total': 21}, result
+          assert result['deterministic_repeat_count'] == 2, result
+          assert result['external_network_used'] is False, result
+          assert result['real_target_query_performed'] is False, result
+          assert result['complete_real_retrieval_authorized'] is False, result
+          assert result['holdout_unblinded'] is False, result
+          assert result['orbit_fitting_performed'] is False, result
+          print('SOURCE_ADAPTER_V2_AUDIT_PASSED')
+          PY
