@@ -1,0 +1,22 @@
+{
+  "schema": "jx-reality-test-1-source-adapter-v2-input-manifest/v1",
+  "status": "FROZEN_BEFORE_SYNTHETIC_AUDIT",
+  "date_utc": "2026-09-02",
+  "git_blob_sha1": {
+    "apply_normalize_v2_patch.py": "f0de99fa43e374d84aa68695e9c0749bbf1ef403",
+    "source_adapter_v2_synthetic_audit.py": "385e77b7df46272eb204911dfbbb68d9af6b617c",
+    "BASE_SOURCE_ADAPTER_AUDIT_CONTRACT.lock.json": "40bb24a9166e96a756618c30527d48ebf3020111",
+    "JX_REALITY_TEST_1_SOURCE_ADAPTER_V2_REVISION_CONTRACT_2026-09-02.json": "31ea6c3ab7779856efea6453282984a97e4ba0d2",
+    "README.md": "89717e67a345e0f80f0cc98d8479f308929acf64"
+  },
+  "normalizer_sha256": {
+    "before_patch": "32e7d20ab7ef8e488bba9299c78a1eabcb47146c28d88a580a99b4cd0d35e2fd",
+    "after_patch": "b9b9d49e576786f845779fff8ca33a56ddc424f1a17c6fac0a912819abf0d236"
+  },
+  "inherited_runtime_hash_manifest": "reality_tests/da14_2013/real_retrieval/runtime/RUNTIME_SOURCE_SHA256SUMS.txt",
+  "inherited_source_adapter_audit_result_sha256": "794fafe5b33b0091e6846ca263a772baa90ff4191009b892652d81b7236d2821",
+  "live_schema_probe_sha256": "e4ccf666acef8a0728cd8744b83603ffd778887bfebae2d40611c991edfd60c3",
+  "full_real_retrieval_authorized": false,
+  "holdout_unblinding_authorized": false,
+  "orbit_fitting_authorized": false
+}
