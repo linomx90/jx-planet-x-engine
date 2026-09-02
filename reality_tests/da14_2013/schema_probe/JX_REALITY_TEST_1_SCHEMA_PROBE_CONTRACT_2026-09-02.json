@@ -1,0 +1,91 @@
+{
+  "schema": "jx-reality-test-1-live-schema-probe-contract/v1",
+  "date_utc": "2026-09-02",
+  "status": "FROZEN_BEFORE_LIVE_SCHEMA_QUERY",
+  "authorization": {
+    "message_timestamp_utc": "2026-09-02T22:34:23Z",
+    "user_instruction": "do it",
+    "authorized_action": "one schema-only diagnostic execution after a passing synthetic no-value-leak audit",
+    "full_retrieval_authorized": false,
+    "holdout_unblinding_authorized": false,
+    "orbit_fitting_authorized": false
+  },
+  "target": {
+    "designation_query": "367943",
+    "name": "Duende",
+    "provisional_designation": "2012 DA14"
+  },
+  "approved_sources": {
+    "mpc_observations": {
+      "url": "https://data.minorplanetcenter.net/api/get-obs",
+      "method": "GET",
+      "request_body": {
+        "ades_version": "2022",
+        "desigs": ["367943"],
+        "output_format": ["ADES_DF"]
+      }
+    },
+    "mpc_observatory_codes": {
+      "url": "https://data.minorplanetcenter.net/api/obscodes",
+      "method": "GET",
+      "request_body": {}
+    },
+    "jpl_radar": {
+      "url": "https://ssd-api.jpl.nasa.gov/sb_radar.api?des=367943&coords=1",
+      "method": "GET"
+    }
+  },
+  "limits": {
+    "request_timeout_seconds": 20.0,
+    "maximum_response_bytes_each": 67108864,
+    "maximum_json_depth": 32,
+    "maximum_string_bytes": 1048576,
+    "maximum_records_total": 250000,
+    "redirects_allowed": 0,
+    "requests_must_be_sequential": true
+  },
+  "permitted_output": [
+    "endpoint/source identity",
+    "HTTP status",
+    "content type",
+    "response byte count",
+    "response SHA-256",
+    "request method/path/body SHA-256",
+    "top-level JSON type and structural keys",
+    "field names and nested structural paths",
+    "JSON type counts, nullability, presence counts, and byte-length ranges",
+    "array lengths and row widths",
+    "timestamp/numeric/code/free-text pattern classes without values",
+    "API signature version",
+    "sanitized normalizer failure stage and static error wording",
+    "compatibility status of the currently frozen normalizer"
+  ],
+  "prohibited_output": [
+    "RA or declination values",
+    "radar delay or Doppler values",
+    "measurement uncertainties",
+    "raw or sample observation records",
+    "raw HTTP response",
+    "complete normalized plaintext",
+    "free-text source values",
+    "current target orbit or covariance",
+    "target-specific Horizons or SBDB solution values"
+  ],
+  "synthetic_gate": {
+    "required_status": "SCHEMA_PROBE_SYNTHETIC_AUDIT_PASSED",
+    "protected_canary_values_emitted": false,
+    "failed_required_checks": 0,
+    "live_query_must_not_run_if_gate_fails": true
+  },
+  "live_probe_output_statuses": [
+    "LIVE_SCHEMA_PROBE_COMPLETE",
+    "LIVE_SCHEMA_PROBE_PARTIAL"
+  ],
+  "next_action_after_probe": "Prospectively update only the normalizer branches required by the observed structural schema, then rerun the synthetic adapter and schema-probe audits. A subsequent complete real retrieval requires new explicit authorization.",
+  "claim_ceiling": "Value-redacted live API-structure diagnostic only; no observation dataset, orbit fit, prediction, unblinding, or physical-validation result.",
+  "documentation": {
+    "mpc_observations": "https://docs.minorplanetcenter.net/mpc-ops-docs/apis/get-obs/",
+    "mpc_observatory_codes": "https://docs.minorplanetcenter.net/mpc-ops-docs/apis/obscodes/",
+    "jpl_radar": "https://ssd-api.jpl.nasa.gov/doc/sb_radar.html"
+  }
+}
