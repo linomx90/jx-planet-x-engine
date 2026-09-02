@@ -1,0 +1,25 @@
+name: JX DA14 Schema-Probe Hash Inspection
+
+on:
+  push:
+    branches:
+      - reality-test-1/da14-live-schema-diagnostic
+    paths:
+      - .github/workflows/jx-schema-probe-hash-inspection.yml
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-hashes:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print exact checked-out SHA-256 values
+        run: |
+          set -euo pipefail
+          sha256sum \
+            reality_tests/da14_2013/schema_probe/schema_probe.py \
+            reality_tests/da14_2013/schema_probe/JX_REALITY_TEST_1_SCHEMA_PROBE_CONTRACT_2026-09-02.json \
+            reality_tests/da14_2013/schema_probe/README.md \
+            reality_tests/da14_2013/schema_probe/SCHEMA_PROBE_INPUT_SHA256SUMS.txt

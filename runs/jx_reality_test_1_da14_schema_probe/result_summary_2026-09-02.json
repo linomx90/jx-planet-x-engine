@@ -1,0 +1,82 @@
+{
+  "claim_ceiling": "Value-redacted live API-structure diagnosis only; no observation dataset, orbit fit, prediction, unblinding, or physical-validation result.",
+  "classification": "LIVE_API_STRUCTURE_DIAGNOSTIC_NO_OBSERVATION_DATASET",
+  "date_utc": "2026-09-02",
+  "diagnosis": {
+    "conclusion": "Only the MPC outer-envelope cardinality check was incompatible: the live response had one object envelope plus one ancillary integer.",
+    "jpl_radar": {
+      "api_signature_version": "1.1",
+      "fetch_status": "FETCHED_IN_MEMORY_NO_RAW_RETENTION",
+      "http_status": 200,
+      "normalized_record_count": 8,
+      "normalizer_status": "COMPATIBLE",
+      "radar_station_count": 3
+    },
+    "mpc_observations": {
+      "ades_df_record_count": 1071,
+      "envelope_count": 2,
+      "envelope_type_counts": {
+        "integer": 1,
+        "object": 1
+      },
+      "fetch_status": "FETCHED_IN_MEMORY_NO_RAW_RETENTION",
+      "http_status": 200,
+      "normalizer_error": "MPC response does not match the single-object envelope",
+      "normalizer_status": "INCOMPATIBLE",
+      "object_envelope_keys": [
+        "ADES_DF",
+        "OBS80",
+        "OBS_DF",
+        "XML"
+      ],
+      "observation_key_signature_counts": {
+        "optical_key_signature": 1071
+      },
+      "response_sha256": "87ae0c92803ee6e70341833f1cd65c2a706593e9be1d1326d19b02ac7e3bad23",
+      "response_size_bytes": 2057417,
+      "root_type": "array"
+    },
+    "mpc_observatory_codes": {
+      "fetch_status": "FETCHED_IN_MEMORY_NO_RAW_RETENTION",
+      "http_status": 200,
+      "record_count": 2718,
+      "structural_status": "COMPATIBLE"
+    }
+  },
+  "preserved_preflight_blocks": [
+    {
+      "artifact_zip_sha256": "1b4ccf435f64d1e0e017dd51a7bbd5397d67bcf361d3c47dd476a4e4ff445229",
+      "commit": "90e75bc9691dbbff98d54e768e74f92ef8c601a9",
+      "live_request_made": false,
+      "run_id": 33691866126
+    },
+    {
+      "artifact_zip_sha256": "0fd6cca5a6948bbf1971b72e8dab651253a3537c90442c8c2fd926d5a703edd1",
+      "commit": "29cf2e3cd6673944ae328a084aa6af239803588a",
+      "live_request_made": false,
+      "run_id": 33692319546
+    }
+  ],
+  "privacy": {
+    "complete_normalized_plaintext_retention": "NEVER_WRITTEN",
+    "holdout_unblinded": false,
+    "measurement_values_emitted": false,
+    "orbit_fitting_performed": false,
+    "private_key_present": false,
+    "raw_http_response_retention": "NONE"
+  },
+  "schema": "jx-reality-test-1-live-schema-diagnostic-final-summary/v1",
+  "status": "LIVE_SCHEMA_PROBE_COMPLETE",
+  "synthetic_gate": {
+    "passed": 19,
+    "status": "SCHEMA_PROBE_SYNTHETIC_AUDIT_PASSED",
+    "total": 19
+  },
+  "workflow": {
+    "artifact_id": 9870611284,
+    "artifact_zip_sha256": "bec68ea95b9af71dfeae168bafa0940d58c2c221dac85d11ac83ddfd511ef798",
+    "execution_commit": "98fb738505c3594156ce84b13966f9654fd85db2",
+    "live_probe_sha256": "e4ccf666acef8a0728cd8744b83603ffd778887bfebae2d40611c991edfd60c3",
+    "run_id": 33692648520
+  }
+}

@@ -1,0 +1,245 @@
+name: JX Reality Test 1 — DA14 Live Schema Probe
+
+on:
+  push:
+    branches:
+      - reality-test-1/da14-live-schema-diagnostic
+    paths:
+      - .github/workflows/jx-reality-test-1-schema-probe.yml
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: "0"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  EXPECTED_PARENT_COMMIT: c1bd1675d54f7322242f939e860b473d14506ed2
+  PROBE_ROOT: reality_tests/da14_2013/schema_probe
+  RUNTIME_ROOT: reality_tests/da14_2013/real_retrieval/runtime
+  OUTPUT_ROOT: runs/jx_reality_test_1_da14_schema_probe
+
+jobs:
+  schema-probe-once:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out frozen schema-probe execution commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Enforce one authorized schema-only execution
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = "push"
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$GITHUB_REF_NAME" = "reality-test-1/da14-live-schema-diagnostic"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT_COMMIT"
+          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/jx-reality-test-1-schema-probe.yml"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Verify frozen probe and reconstruct exact audited transport runtime
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          echo "83e1bffd06541814bda1010379ee30f912537d38e9e500f7811e918aae464c6e  $PROBE_ROOT/SCHEMA_PROBE_INPUT_SHA256SUMS.txt" | sha256sum -c -
+          sha256sum -c "$PROBE_ROOT/SCHEMA_PROBE_INPUT_SHA256SUMS.txt"
+
+          ! grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' "$PROBE_ROOT" "$RUNTIME_ROOT"
+          test -z "$(find "$PROBE_ROOT" "$RUNTIME_ROOT" -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+
+          ARCHIVE="$RUNNER_TEMP/remaining_runtime.tar.gz"
+          base64 --decode "$RUNTIME_ROOT/remaining_runtime.tar.gz.b64" > "$ARCHIVE"
+          echo "162886f21a1821936aa4aae893228460fb15c9c77f1a5a1e79050bbacff78805  $ARCHIVE" | sha256sum -c -
+
+          cat > "$RUNNER_TEMP/expected_archive_members.txt" <<'EOF'
+          src/jx_source_adapter/util.py
+          src/jx_source_adapter/policy.py
+          src/jx_source_adapter/http_client.py
+          src/jx_source_adapter/normalize.py
+          src/jx_source_adapter/bridge.py
+          src/jx_source_adapter/verify.py
+          src/jx_source_adapter/cli.py
+          EOF
+          tar -tzf "$ARCHIVE" > "$RUNNER_TEMP/actual_archive_members.txt"
+          diff -u "$RUNNER_TEMP/expected_archive_members.txt" "$RUNNER_TEMP/actual_archive_members.txt"
+
+          EXPANDED="$RUNNER_TEMP/runtime-expanded"
+          mkdir -p "$EXPANDED"
+          cp -a "$RUNTIME_ROOT/src" "$EXPANDED/"
+          tar -xzf "$ARCHIVE" -C "$EXPANDED"
+          (cd "$EXPANDED" && sha256sum -c "$GITHUB_WORKSPACE/$RUNTIME_ROOT/RUNTIME_SOURCE_SHA256SUMS.txt")
+          awk '{print $2}' "$RUNTIME_ROOT/RUNTIME_SOURCE_SHA256SUMS.txt" | sort > "$RUNNER_TEMP/expected_runtime_files.txt"
+          (cd "$EXPANDED" && find src -type f -print | sort) > "$RUNNER_TEMP/actual_runtime_files.txt"
+          diff -u "$RUNNER_TEMP/expected_runtime_files.txt" "$RUNNER_TEMP/actual_runtime_files.txt"
+          python -m py_compile "$PROBE_ROOT/schema_probe.py"
+
+      - name: Run synthetic no-value-leak audit
+        run: |
+          set -euo pipefail
+          OUT="$GITHUB_WORKSPACE/$OUTPUT_ROOT"
+          mkdir -p "$OUT/audit"
+          PYTHONPATH="$RUNNER_TEMP/runtime-expanded/src" \
+            python "$PROBE_ROOT/schema_probe.py" \
+              --contract "$PROBE_ROOT/JX_REALITY_TEST_1_SCHEMA_PROBE_CONTRACT_2026-09-02.json" \
+              self-audit \
+              --output "$OUT/audit" \
+              > "$OUT/audit_stdout.json" \
+              2> "$OUT/audit_stderr.txt"
+          python - <<'PY'
+          import json, os
+          path = os.path.join(os.environ['OUTPUT_ROOT'], 'audit', 'SCHEMA_PROBE_AUDIT_RESULT.json')
+          result = json.load(open(path, encoding='utf-8'))
+          assert result['status'] == 'SCHEMA_PROBE_SYNTHETIC_AUDIT_PASSED', result
+          assert result['passed_count'] == result['check_count'], result
+          assert result['protected_canary_values_emitted'] is False, result
+          assert result['external_network_used'] is False, result
+          assert result['real_target_query_performed'] is False, result
+          PY
+          (cd "$OUT/audit" && sha256sum -c SHA256SUMS.txt)
+
+      - name: Build keyless unprivileged live-probe environment
+        run: |
+          set -euo pipefail
+          sudo useradd --system --no-create-home --shell /usr/sbin/nologin jxprobe
+          sudo install -d -m 0700 -o jxprobe -g jxprobe /tmp/jx-da14-schema-probe
+          sudo install -d -m 0700 -o jxprobe -g jxprobe /tmp/jx-da14-schema-probe/tmp
+          sudo install -d -m 0700 -o jxprobe -g jxprobe /tmp/jx-da14-schema-probe/runtime
+          sudo install -d -m 0700 -o jxprobe -g jxprobe /tmp/jx-da14-schema-probe/output
+          sudo cp -a "$RUNNER_TEMP/runtime-expanded/src" /tmp/jx-da14-schema-probe/runtime/
+          sudo cp "$PROBE_ROOT/schema_probe.py" /tmp/jx-da14-schema-probe/schema_probe.py
+          sudo cp "$PROBE_ROOT/JX_REALITY_TEST_1_SCHEMA_PROBE_CONTRACT_2026-09-02.json" /tmp/jx-da14-schema-probe/contract.json
+          sudo chown -R jxprobe:jxprobe /tmp/jx-da14-schema-probe
+          sudo find /tmp/jx-da14-schema-probe/runtime -type d -exec chmod 0555 {} +
+          sudo find /tmp/jx-da14-schema-probe/runtime -type f -exec chmod 0444 {} +
+          sudo chmod 0444 /tmp/jx-da14-schema-probe/schema_probe.py /tmp/jx-da14-schema-probe/contract.json
+          sudo chmod 0700 /tmp/jx-da14-schema-probe/tmp /tmp/jx-da14-schema-probe/output
+          test -z "$(sudo find /tmp/jx-da14-schema-probe -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+          ! sudo grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' /tmp/jx-da14-schema-probe
+
+      - name: Execute the one value-redacted live schema probe
+        id: live_probe
+        continue-on-error: true
+        run: |
+          set +e
+          PYTHON_BIN_DIR=$(dirname "$(command -v python3)")
+          sudo -u jxprobe env -i \
+            HOME=/tmp/jx-da14-schema-probe \
+            TMPDIR=/tmp/jx-da14-schema-probe/tmp \
+            PATH="$PYTHON_BIN_DIR:/usr/bin:/bin" \
+            PYTHONPATH=/tmp/jx-da14-schema-probe/runtime/src \
+            PYTHONHASHSEED=0 \
+            bash -c '
+              exec python3 /tmp/jx-da14-schema-probe/schema_probe.py \
+                --contract /tmp/jx-da14-schema-probe/contract.json \
+                live \
+                --output /tmp/jx-da14-schema-probe/output/LIVE_SCHEMA_PROBE.json \
+                > /tmp/jx-da14-schema-probe/output/live_stdout.json \
+                2> /tmp/jx-da14-schema-probe/output/live_stderr.txt
+            '
+          rc=$?
+          printf '%s\n' "$rc" | sudo tee /tmp/jx-da14-schema-probe/output/live_exit_code.txt >/dev/null
+          exit "$rc"
+
+      - name: Package only schema metadata and integrity records
+        if: always()
+        env:
+          LIVE_PROBE_OUTCOME: ${{ steps.live_probe.outcome }}
+        run: |
+          set -euo pipefail
+          OUT="$GITHUB_WORKSPACE/$OUTPUT_ROOT"
+          mkdir -p "$OUT/live"
+          sudo cp -a /tmp/jx-da14-schema-probe/output/. "$OUT/live/" 2>/dev/null || true
+          sudo chown -R "$USER:$USER" "$OUT"
+          cp "$PROBE_ROOT/JX_REALITY_TEST_1_SCHEMA_PROBE_CONTRACT_2026-09-02.json" "$OUT/contract.lock.json"
+          cp "$PROBE_ROOT/SCHEMA_PROBE_INPUT_SHA256SUMS.txt" "$OUT/input_SHA256SUMS.txt"
+          cp "$RUNTIME_ROOT/RUNTIME_SOURCE_SHA256SUMS.txt" "$OUT/runtime_source_SHA256SUMS.txt"
+          git show -s --format=fuller HEAD > "$OUT/git-commit.txt"
+          python --version > "$OUT/python-version.txt" 2>&1
+          uname -a > "$OUT/uname.txt"
+
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, subprocess
+
+          out = Path(os.environ['OUTPUT_ROOT'])
+          audit = json.loads((out / 'audit' / 'SCHEMA_PROBE_AUDIT_RESULT.json').read_text())
+          live_path = out / 'live' / 'LIVE_SCHEMA_PROBE.json'
+          live = json.loads(live_path.read_text()) if live_path.exists() else {}
+          try:
+              exit_code = int((out / 'live' / 'live_exit_code.txt').read_text().strip())
+          except Exception:
+              exit_code = 127
+
+          def sha(path: Path) -> str:
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          sources = live.get('sources', {}) if isinstance(live, dict) else {}
+          compatibility = live.get('current_normalizer_compatibility', {}) if isinstance(live, dict) else {}
+          manifest = {
+              'schema': 'jx-reality-test-1-live-schema-probe-run-manifest/v1',
+              'status': live.get('status', 'LIVE_SCHEMA_PROBE_BLOCKED'),
+              'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'authorized_parent_commit': os.environ.get('EXPECTED_PARENT_COMMIT'),
+              'workflow_outcome': os.environ.get('LIVE_PROBE_OUTCOME', 'unknown'),
+              'live_exit_code': exit_code,
+              'synthetic_audit_status': audit.get('status'),
+              'synthetic_checks': {'passed': audit.get('passed_count'), 'total': audit.get('check_count')},
+              'measurement_values_emitted': live.get('measurement_values_emitted'),
+              'raw_http_response_retention': live.get('raw_http_response_retention'),
+              'holdout_unblinded': live.get('holdout_unblinded'),
+              'orbit_fitting_performed': live.get('orbit_fitting_performed'),
+              'private_key_present': False,
+              'source_fetch_statuses': {
+                  key: value.get('fetch_status') for key, value in sources.items()
+              },
+              'normalizer_compatibility_statuses': {
+                  key: value.get('status') for key, value in compatibility.items()
+                  if isinstance(value, dict)
+              },
+              'live_probe_sha256': sha(live_path) if live_path.exists() else None,
+              'claim_ceiling': 'Value-redacted live API-structure diagnostic only; no observation dataset, orbit fit, prediction, unblinding, or physical-validation result.',
+          }
+          (out / 'RUN_MANIFEST.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+          PY
+
+          ! grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' "$OUT"
+          test -z "$(find "$OUT" -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+          rm -f "$OUT/DELIVERABLE_SHA256SUMS.txt"
+          (cd "$OUT" && find . -type f ! -name DELIVERABLE_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > DELIVERABLE_SHA256SUMS.txt)
+          (cd "$OUT" && sha256sum -c DELIVERABLE_SHA256SUMS.txt)
+
+      - name: Upload schema-probe artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-reality-test-1-da14-schema-probe-${{ github.sha }}
+          path: runs/jx_reality_test_1_da14_schema_probe/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce diagnostic completion without requiring normalizer compatibility
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os
+          path = os.path.join(os.environ['OUTPUT_ROOT'], 'RUN_MANIFEST.json')
+          result = json.load(open(path, encoding='utf-8'))
+          assert result['synthetic_audit_status'] == 'SCHEMA_PROBE_SYNTHETIC_AUDIT_PASSED', result
+          assert result['status'] == 'LIVE_SCHEMA_PROBE_COMPLETE', result
+          assert result['live_exit_code'] == 0, result
+          assert result['measurement_values_emitted'] is False, result
+          assert result['raw_http_response_retention'] == 'NONE', result
+          assert result['holdout_unblinded'] is False, result
+          assert result['orbit_fitting_performed'] is False, result
+          assert result['private_key_present'] is False, result
+          print('LIVE_SCHEMA_PROBE_COMPLETE')
+          PY
+
+      - name: Remove ephemeral probe environment
+        if: always()
+        run: sudo rm -rf /tmp/jx-da14-schema-probe
