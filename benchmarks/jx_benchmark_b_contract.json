@@ -1,0 +1,190 @@
+{
+  "schema": "jx-general-dynamics-benchmark-b-close-encounter-contract/v1",
+  "date": "2026-09-01",
+  "base_commit": "6506a6079adf24bc02a3b11a724c6a7a733a2632",
+  "branch": "experiment/jx-benchmark-b-close-encounter",
+  "classification": "NUMERICAL_ENGINEERING_ONLY",
+  "objective": "Measure the fixed-step BM6 close-encounter operating boundary; do not assume BM6 is safe inside a Hill sphere.",
+  "preservation": "Benchmark A and its native BM6 source remain immutable. Benchmark B adds isolated code, contracts, and artifacts only.",
+  "inputs": {
+    "solar_state": "runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv at the earliest JD_TDB epoch",
+    "gm_table": "runs/de441_horizons_10yr/gm_de440_major_barycenters.csv",
+    "solar_body_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "encounter_planet_ids": [
+      5,
+      8
+    ],
+    "tracer_id": 99
+  },
+  "lanes": {
+    "bm6": "native C++20 Blanes-Moan symmetric sixth-order S10/BM6, IEEE-754 binary64",
+    "kdk": "native cached-acceleration kick-drift-kick control",
+    "analytic": "closed-form two-body hyperbolic orbit",
+    "bs160": "independent 160-bit adaptive Bulirsch-Stoer modified-midpoint extrapolation",
+    "bs224": "independent 224-bit adaptive Bulirsch-Stoer modified-midpoint extrapolation",
+    "ias15": "REBOUND 5.1.1 IAS15 independent adaptive cross-check",
+    "dop853": "SciPy 1.17 DOP853 independent binary64 full-system cross-check",
+    "trace": "REBOUND 5.1.1 TRACE screening lane when available",
+    "mercurius": "REBOUND 5.1.1 MERCURIUS screening lane when available"
+  },
+  "analytic_two_body": {
+    "mu": 1.0,
+    "periapsis": 1.0,
+    "launch_radius": 20.0,
+    "v_infinity": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "eta_targets": [
+      1.6,
+      1.2,
+      0.8,
+      0.6,
+      0.4,
+      0.2,
+      0.1,
+      0.05,
+      0.025
+    ]
+  },
+  "restricted_three_body": {
+    "planet_ids": [
+      5,
+      8
+    ],
+    "orientations": [
+      "planar",
+      "vertical"
+    ],
+    "geometries": [
+      {
+        "rho_target": 3.0,
+        "launch_radius_hill": 4.0,
+        "v_infinity_hill": 20.0
+      },
+      {
+        "rho_target": 1.0,
+        "launch_radius_hill": 1.5,
+        "v_infinity_hill": 10.0
+      },
+      {
+        "rho_target": 0.3,
+        "launch_radius_hill": 1.5,
+        "v_infinity_hill": 10.0
+      },
+      {
+        "rho_target": 0.1,
+        "launch_radius_hill": 1.5,
+        "v_infinity_hill": 10.0
+      }
+    ],
+    "eta_targets": [
+      1.6,
+      1.2,
+      0.8,
+      0.6,
+      0.4,
+      0.2,
+      0.1,
+      0.05,
+      0.025
+    ]
+  },
+  "full_ten_body_screen": {
+    "planet_ids": [
+      5,
+      8
+    ],
+    "orientations": [
+      "vertical"
+    ],
+    "rho_targets": [
+      1.0,
+      0.3,
+      0.1
+    ],
+    "launch_radius_hill": 1.25,
+    "v_infinity_hill": 30.0,
+    "eta_targets": [
+      1.6,
+      1.2,
+      0.8,
+      0.6,
+      0.4,
+      0.2,
+      0.1,
+      0.05,
+      0.025
+    ],
+    "status": "screening_only; cannot widen the primary boundary but can falsify portability"
+  },
+  "reference_profiles": {
+    "bs160": {
+      "rtol": 1e-24,
+      "atol": 1e-32,
+      "initial_step_tau_fraction": 0.125,
+      "max_step_tau_fraction": 0.0625
+    },
+    "bs224": {
+      "rtol": 1e-34,
+      "atol": 1e-44,
+      "initial_step_tau_fraction": 0.125,
+      "max_step_tau_fraction": 0.0625
+    },
+    "dop853_loose": {
+      "rtol": 2e-12,
+      "atol": 2e-15,
+      "max_step_tau_fraction": 0.25
+    },
+    "dop853_tight": {
+      "rtol": 2e-13,
+      "atol": 2e-16,
+      "max_step_tau_fraction": 0.125
+    },
+    "ias15_epsilon": 1e-13,
+    "uniform_event_samples": 2001
+  },
+  "reference_gates": {
+    "analytic_bs224_final_position_over_scale": 1e-11,
+    "analytic_bs224_final_velocity_over_scale": 1e-11,
+    "cr3bp_bs160_vs_bs224_position_over_hill": 1e-10,
+    "cr3bp_bs160_vs_bs224_velocity_over_vhill": 1e-10,
+    "cr3bp_bs160_vs_bs224_min_separation_over_hill": 1e-05,
+    "cr3bp_bs160_vs_bs224_tmin_over_tau": 0.0001,
+    "cr3bp_ias15_vs_bs224_position_over_hill": 1e-08,
+    "cr3bp_ias15_vs_bs224_velocity_over_vhill": 1e-08,
+    "full_dop853_pair_position_over_hill": 1e-07,
+    "full_dop853_pair_velocity_over_vhill": 1e-07,
+    "full_ias15_vs_dop853_position_over_hill": 1e-06,
+    "full_ias15_vs_dop853_velocity_over_vhill": 1e-06
+  },
+  "bm6_safe_gates": {
+    "final_position_over_scale": 1e-05,
+    "final_velocity_over_scale": 1e-05,
+    "min_separation_error_over_scale": 0.0001,
+    "time_of_min_error_over_tau": 0.001,
+    "scattering_angle_error_radians": 1e-05,
+    "reversibility_max_scaled": 1e-08,
+    "outcome_classification_must_match": true
+  },
+  "verdicts": [
+    "JX_BM6_ENCOUNTER_BOUNDARY_MEASURED",
+    "JX_BM6_UNSAFE_IN_TESTED_ENCOUNTERS",
+    "SCREENING_PARTIAL",
+    "INVALID_REFERENCE",
+    "BLOCKED"
+  ],
+  "claim_ceiling": "A case-specific BM6 safe-step boundary in rho=d_min/R_H and eta=dt/(d_min/v_rel,min). Not universal close-encounter qualification, not a hybrid validation, not an arbitrary-precision BM6 result, and not a Planet-X result."
+}
