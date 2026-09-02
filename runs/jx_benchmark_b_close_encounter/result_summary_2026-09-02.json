@@ -127,7 +127,7 @@
     "artifact_zip_sha256": "3d981cc6a28e68d7cb8366890b274f53190bef98b84d7605d9b7335534187f67",
     "base_commit": "6506a6079adf24bc02a3b11a724c6a7a733a2632",
     "branch": "experiment/jx-benchmark-b-close-encounter",
-    "contract_sha256": "4cf7dff4330c0091b36a74c5ed7ca37756c1f31b15a010744fb50ec92811ad47",
+    "contract_sha256": "cf97b1ae1ee5f58b24639168fd350ddda6645bda480e353a5119205b7df82424",
     "gm_table_sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217",
     "native_executable_sha256": "b658a06cb6822a5715c40c54d1aa061730f4a9c1763057b3dd70d36249475cb5",
     "repository": "linomx90/jx-planet-x-engine",
