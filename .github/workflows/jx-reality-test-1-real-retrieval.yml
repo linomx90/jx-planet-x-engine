@@ -1,0 +1,309 @@
+name: JX Reality Test 1 — One-Time Real DA14 Retrieval
+
+on:
+  push:
+    branches:
+      - reality-test-1/da14-real-retrieval
+    paths:
+      - .github/workflows/jx-reality-test-1-real-retrieval.yml
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: "0"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  EXPECTED_PARENT_COMMIT: d530a1aca9dad25368f9008f444f735a5b14df9f
+  REAL_RETRIEVAL_ROOT: reality_tests/da14_2013/real_retrieval
+
+jobs:
+  retrieve-once:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out frozen retrieval commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Enforce one authorized execution
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = "push"
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$GITHUB_REF_NAME" = "reality-test-1/da14-real-retrieval"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT_COMMIT"
+          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/jx-reality-test-1-real-retrieval.yml"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install the one pinned runtime dependency
+        run: python -m pip install --no-cache-dir cryptography==46.0.4
+
+      - name: Verify and reconstruct the exact audited runtime
+        run: |
+          set -euo pipefail
+          BASE="$GITHUB_WORKSPACE/$REAL_RETRIEVAL_ROOT"
+          cd "$BASE"
+          sha256sum -c RETRIEVAL_INPUT_SHA256SUMS_v3.txt
+
+          ! grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' .
+          test -z "$(find . -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+
+          ARCHIVE="$RUNNER_TEMP/remaining_runtime.tar.gz"
+          base64 --decode runtime/remaining_runtime.tar.gz.b64 > "$ARCHIVE"
+          echo "162886f21a1821936aa4aae893228460fb15c9c77f1a5a1e79050bbacff78805  $ARCHIVE" | sha256sum -c -
+
+          cat > "$RUNNER_TEMP/expected_archive_members.txt" <<'EOF'
+          src/jx_source_adapter/util.py
+          src/jx_source_adapter/policy.py
+          src/jx_source_adapter/http_client.py
+          src/jx_source_adapter/normalize.py
+          src/jx_source_adapter/bridge.py
+          src/jx_source_adapter/verify.py
+          src/jx_source_adapter/cli.py
+          EOF
+          tar -tzf "$ARCHIVE" > "$RUNNER_TEMP/actual_archive_members.txt"
+          diff -u "$RUNNER_TEMP/expected_archive_members.txt" "$RUNNER_TEMP/actual_archive_members.txt"
+
+          EXPANDED="$RUNNER_TEMP/runtime-expanded"
+          mkdir -p "$EXPANDED"
+          cp -a runtime/src "$EXPANDED/"
+          tar -xzf "$ARCHIVE" -C "$EXPANDED"
+          (cd "$EXPANDED" && sha256sum -c "$BASE/runtime/RUNTIME_SOURCE_SHA256SUMS.txt")
+          awk '{print $2}' runtime/RUNTIME_SOURCE_SHA256SUMS.txt | sort > "$RUNNER_TEMP/expected_runtime_files.txt"
+          (cd "$EXPANDED" && find src -type f -print | sort) > "$RUNNER_TEMP/actual_runtime_files.txt"
+          diff -u "$RUNNER_TEMP/expected_runtime_files.txt" "$RUNNER_TEMP/actual_runtime_files.txt"
+
+      - name: Build public-key-only ephemeral environment
+        run: |
+          set -euo pipefail
+          BASE="$GITHUB_WORKSPACE/$REAL_RETRIEVAL_ROOT"
+          EXPANDED="$RUNNER_TEMP/runtime-expanded"
+          sudo useradd --system --no-create-home --shell /usr/sbin/nologin jxretrieve
+          sudo install -d -m 0700 -o jxretrieve -g jxretrieve /tmp/jx-da14-ephemeral
+          sudo install -d -m 0700 -o jxretrieve -g jxretrieve /tmp/jx-da14-ephemeral/tmp
+          sudo install -d -m 0700 -o jxretrieve -g jxretrieve /tmp/jx-da14-ephemeral/runtime
+          sudo install -d -m 0700 -o jxretrieve -g jxretrieve /tmp/jx-da14-export-parent
+          sudo cp -a "$EXPANDED/src" /tmp/jx-da14-ephemeral/runtime/
+          sudo cp "$BASE/da14_holdout_public_key.pem" /tmp/jx-da14-ephemeral/public_key.pem
+          sudo cp "$BASE/JX_REALITY_TEST_1_REAL_RETRIEVAL_CONTRACT_v3_2026-09-02.json" /tmp/jx-da14-ephemeral/retrieval_contract.json
+          sudo cp "$GITHUB_WORKSPACE/reality_tests/da14_2013/preregistration/JX_REALITY_TEST_1_DA14_PREREGISTRATION_2026-09-02.json" /tmp/jx-da14-ephemeral/preregistration.json
+          sudo chown -R jxretrieve:jxretrieve /tmp/jx-da14-ephemeral /tmp/jx-da14-export-parent
+          sudo find /tmp/jx-da14-ephemeral/runtime -type d -exec chmod 0555 {} +
+          sudo find /tmp/jx-da14-ephemeral/runtime -type f -exec chmod 0444 {} +
+          sudo chmod 0444 /tmp/jx-da14-ephemeral/public_key.pem /tmp/jx-da14-ephemeral/retrieval_contract.json /tmp/jx-da14-ephemeral/preregistration.json
+          sudo chmod 0700 /tmp/jx-da14-ephemeral/tmp /tmp/jx-da14-export-parent
+          test -z "$(sudo find /tmp/jx-da14-ephemeral -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+          ! sudo grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' /tmp/jx-da14-ephemeral
+
+      - name: Execute the one logged real retrieval
+        id: real_retrieval
+        continue-on-error: true
+        run: |
+          set +e
+          PYTHON_BIN_DIR=$(dirname "$(command -v python3)")
+          sudo -u jxretrieve env -i \
+            HOME=/tmp/jx-da14-ephemeral \
+            TMPDIR=/tmp/jx-da14-ephemeral/tmp \
+            PATH="$PYTHON_BIN_DIR:/usr/bin:/bin" \
+            PYTHONPATH=/tmp/jx-da14-ephemeral/runtime/src \
+            PYTHONHASHSEED=0 \
+            python3 -m jx_source_adapter.cli retrieve \
+              --designation 367943 \
+              --output /tmp/jx-da14-export-parent/curated \
+              --public-key /tmp/jx-da14-ephemeral/public_key.pem \
+              --preregistration /tmp/jx-da14-ephemeral/preregistration.json \
+              --audit-contract /tmp/jx-da14-ephemeral/retrieval_contract.json \
+              > /tmp/jx-da14-export-parent/retrieval_stdout.json \
+              2> /tmp/jx-da14-export-parent/retrieval_stderr.txt
+          rc=$?
+          printf '%s\n' "$rc" | sudo tee /tmp/jx-da14-export-parent/retrieval_exit_code.txt >/dev/null
+          exit "$rc"
+
+      - name: Verify and package only curated products and safe receipts
+        if: always()
+        env:
+          RETRIEVAL_OUTCOME: ${{ steps.real_retrieval.outcome }}
+        run: |
+          set -euo pipefail
+          BASE="$GITHUB_WORKSPACE/$REAL_RETRIEVAL_ROOT"
+          OUT="$GITHUB_WORKSPACE/runs/jx_reality_test_1_da14_real_retrieval"
+          mkdir -p "$OUT"
+          cp "$BASE/JX_REALITY_TEST_1_REAL_RETRIEVAL_CONTRACT_v3_2026-09-02.json" "$OUT/contract.lock.json"
+          cp "$BASE/RETRIEVAL_INPUT_SHA256SUMS_v3.txt" "$OUT/input_SHA256SUMS.txt"
+          cp "$BASE/runtime/RUNTIME_SOURCE_SHA256SUMS.txt" "$OUT/runtime_source_SHA256SUMS.txt"
+          cp "$BASE/PUBLIC_KEY_RECEIPT.json" "$OUT/PUBLIC_KEY_RECEIPT.json"
+          sudo cp /tmp/jx-da14-export-parent/retrieval_stdout.json "$OUT/retrieval_stdout.json" 2>/dev/null || printf '{}\n' > "$OUT/retrieval_stdout.json"
+          sudo cp /tmp/jx-da14-export-parent/retrieval_stderr.txt "$OUT/retrieval_stderr.txt" 2>/dev/null || : > "$OUT/retrieval_stderr.txt"
+          sudo cp /tmp/jx-da14-export-parent/retrieval_exit_code.txt "$OUT/retrieval_exit_code.txt" 2>/dev/null || printf '127\n' > "$OUT/retrieval_exit_code.txt"
+          sudo chown -R "$USER:$USER" "$OUT"
+
+          if [ -d /tmp/jx-da14-export-parent/curated ]; then
+            PYTHON_BIN_DIR=$(dirname "$(command -v python3)")
+            set +e
+            sudo -u jxretrieve env -i \
+              HOME=/tmp/jx-da14-ephemeral \
+              PATH="$PYTHON_BIN_DIR:/usr/bin:/bin" \
+              PYTHONPATH=/tmp/jx-da14-ephemeral/runtime/src \
+              python3 -m jx_source_adapter.cli verify \
+                --output /tmp/jx-da14-export-parent/curated \
+                > "$OUT/verification_receipt.json" \
+                2> "$OUT/verification_stderr.txt"
+            verification_rc=$?
+            set -e
+            printf '%s\n' "$verification_rc" > "$OUT/verification_exit_code.txt"
+            sudo cp -a /tmp/jx-da14-export-parent/curated "$OUT/curated"
+            sudo chown -R "$USER:$USER" "$OUT/curated"
+          else
+            printf '127\n' > "$OUT/verification_exit_code.txt"
+            printf '{}\n' > "$OUT/verification_receipt.json"
+            : > "$OUT/verification_stderr.txt"
+          fi
+
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, platform, subprocess
+
+          out = Path('runs/jx_reality_test_1_da14_real_retrieval')
+          curated = out / 'curated'
+          expected = {
+              'training.jsonl', 'holdout_schedule.csv', 'holdout.jxenc',
+              'post_holdout_quarantine.jxenc', 'observer_metadata.json',
+              'source_response_receipt.json', 'adapter_manifest.json',
+              'ADAPTER_RECEIPT.json', 'SHA256SUMS.txt'
+          }
+          def sha(path: Path) -> str:
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          try:
+              exit_code = int((out / 'retrieval_exit_code.txt').read_text().strip())
+          except Exception:
+              exit_code = 127
+          try:
+              verification_exit_code = int((out / 'verification_exit_code.txt').read_text().strip())
+          except Exception:
+              verification_exit_code = 127
+          files = {p.name for p in curated.iterdir() if p.is_file()} if curated.exists() else set()
+          receipt = {}
+          source_receipt = {}
+          if (curated / 'ADAPTER_RECEIPT.json').exists():
+              receipt = json.loads((curated / 'ADAPTER_RECEIPT.json').read_text())
+          if (curated / 'source_response_receipt.json').exists():
+              source_receipt = json.loads((curated / 'source_response_receipt.json').read_text())
+
+          failure_map = {
+              22: 'SOURCE_SCHEMA_UNSUPPORTED',
+              23: 'SOURCE_TRANSPORT_FAILED',
+              24: 'INTEGRITY_CHECK_FAILED',
+              25: 'SECURITY_POLICY_FAILED',
+              26: 'UNEXPECTED_INTERNAL_ERROR',
+          }
+          successful = (
+              exit_code == 0
+              and verification_exit_code == 0
+              and os.environ.get('RETRIEVAL_OUTCOME') == 'success'
+              and curated.exists()
+              and files == expected
+              and receipt.get('status') == 'SOURCE_ADAPTER_COMPLETE_VALUES_SEALED'
+          )
+          status = 'REAL_RETRIEVAL_CURATED_VALUES_SEALED' if successful else failure_map.get(exit_code, 'REAL_RETRIEVAL_BLOCKED')
+          requests = []
+          for item in source_receipt.get('requests', []):
+              requests.append({
+                  key: item.get(key)
+                  for key in (
+                      'source_id', 'request_method', 'request_path',
+                      'request_body_sha256', 'response_sha256',
+                      'response_size_bytes', 'http_status', 'content_type',
+                      'redirects_followed'
+                  )
+              })
+          manifest = {
+              'schema': 'jx-reality-test-1-real-retrieval-run-manifest/v1',
+              'status': status,
+              'retrieval_exit_code': exit_code,
+              'verification_exit_code': verification_exit_code,
+              'workflow_outcome': os.environ.get('RETRIEVAL_OUTCOME', 'unknown'),
+              'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'authorized_parent_commit': os.environ.get('EXPECTED_PARENT_COMMIT'),
+              'python': platform.python_version(),
+              'platform': platform.platform(),
+              'private_key_present': False,
+              'password_present': False,
+              'holdout_unblinded': False,
+              'orbit_fitting_performed': False,
+              'raw_http_response_retention': 'NONE',
+              'complete_normalized_plaintext_retention': 'NEVER_WRITTEN',
+              'curated_files': sorted(files),
+              'curated_file_hashes': {
+                  p.name: sha(p) for p in sorted(curated.iterdir()) if p.is_file()
+              } if curated.exists() else {},
+              'counts': {
+                  'training': receipt.get('training_count'),
+                  'holdout': receipt.get('holdout_count'),
+                  'quarantine': receipt.get('quarantine_count'),
+              },
+              'public_key_fingerprint_sha256': receipt.get('public_key_fingerprint_sha256'),
+              'normalized_complete_plaintext_sha256': receipt.get('normalized_complete_plaintext_sha256'),
+              'source_requests': requests,
+              'claim_ceiling': 'Real-source curation only; no orbit fit, prediction, unblinding, or physical-validation verdict.',
+          }
+          (out / 'RUN_MANIFEST.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+          status_md = [
+              '# JX Reality Test 1 — Real DA14 Retrieval Status', '',
+              f"**Status:** `{status}`", '',
+              f"- Retrieval exit code: `{exit_code}`",
+              f"- Verification exit code: `{verification_exit_code}`",
+              f"- Training records: `{manifest['counts']['training']}`",
+              f"- Encrypted holdout records: `{manifest['counts']['holdout']}`",
+              f"- Encrypted quarantine records: `{manifest['counts']['quarantine']}`",
+              f"- Private key in environment: `False`",
+              f"- Holdout unblinded: `False`",
+              f"- Orbit fitting performed: `False`", '',
+              'This action is curation only. It makes no orbit-fit or physical-validation claim.'
+          ]
+          (out / 'STATUS.md').write_text('\n'.join(status_md) + '\n')
+          PY
+
+          python -m pip freeze --all > "$OUT/pip-freeze.txt"
+          python --version > "$OUT/python-version.txt" 2>&1
+          uname -a > "$OUT/uname.txt"
+          lscpu > "$OUT/lscpu.txt"
+          git show -s --format=fuller HEAD > "$OUT/git-commit.txt"
+
+          ! grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' "$OUT"
+          test -z "$(find "$OUT" -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+          rm -f "$OUT/DELIVERABLE_SHA256SUMS.txt"
+          (cd "$OUT" && find . -type f ! -name DELIVERABLE_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > DELIVERABLE_SHA256SUMS.txt)
+          (cd "$OUT" && sha256sum -c DELIVERABLE_SHA256SUMS.txt)
+
+      - name: Upload the sealed retrieval artifact even if blocked
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-reality-test-1-da14-real-retrieval-${{ github.sha }}
+          path: runs/jx_reality_test_1_da14_real_retrieval/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce the scientific outcome
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          path = 'runs/jx_reality_test_1_da14_real_retrieval/RUN_MANIFEST.json'
+          result = json.load(open(path, encoding='utf-8'))
+          assert result['status'] == 'REAL_RETRIEVAL_CURATED_VALUES_SEALED', result
+          assert result['retrieval_exit_code'] == 0, result
+          assert result['verification_exit_code'] == 0, result
+          assert result['counts']['training'] and result['counts']['training'] > 0, result
+          assert result['counts']['holdout'] and result['counts']['holdout'] > 0, result
+          assert result['private_key_present'] is False, result
+          assert result['holdout_unblinded'] is False, result
+          assert result['orbit_fitting_performed'] is False, result
+          print('REAL_RETRIEVAL_CURATED_VALUES_SEALED')
+          PY
