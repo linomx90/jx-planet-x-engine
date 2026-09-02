@@ -1,0 +1,24 @@
+{
+  "custody_limit": "Recovery copies are under one ChatGPT Library account and are not strong independent administrative custody.",
+  "date_utc": "2026-09-02",
+  "encrypted_private_key_load_verified": true,
+  "encrypted_private_key_sha256": "775758d7f3e07a5177c51607caca3cbc88e94908ddfa3e6280175ee0086a4507",
+  "key_algorithm": "RSA-3072",
+  "password_file_sha256": "01576aa76f7fc1fa5df4eb70c53137eb3b44b119576c9380d9d15aa16086ca7b",
+  "persistent_library_paths": {
+    "encrypted_private_key": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Custodian Vault/Attempt 2/Encrypted Private Key/da14_attempt2_private_key_encrypted.pem",
+    "library_verification": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Custodian Vault/Attempt 2/Audit/JX_REALITY_TEST_1_ATTEMPT2_LIBRARY_CUSTODY_VERIFICATION.json",
+    "password": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Recovery Codes/Attempt 2/da14_attempt2_private_key_password.txt",
+    "public_key": "/JX General Dynamics Engine/Reality Tests/JX Reality Test 1 - 2012 DA14/Custodian Vault/Attempt 2/Public Material/da14_attempt2_public_key.pem"
+  },
+  "public_key_fingerprint_sha256": "d995cd53e4bb9769d0112b868def61191d7b74ce7544f4e5141932d78b8803ee",
+  "public_key_sha256": "6c22672d5553573f2fcad07f93da5ad149b8f7b584763a31ea44ceabea5e566e",
+  "public_private_key_match_verified": true,
+  "retrieval_environment_policy": {
+    "password_present": false,
+    "private_key_present": false,
+    "public_key_present": true
+  },
+  "schema": "jx-reality-test-1-attempt3-public-key-custody-receipt/v1",
+  "status": "PERSISTENT_LIBRARY_CUSTODY_REVERIFIED_FOR_ATTEMPT_3"
+}
