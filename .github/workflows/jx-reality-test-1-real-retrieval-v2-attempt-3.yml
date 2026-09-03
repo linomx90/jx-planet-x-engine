@@ -1,0 +1,153 @@
+name: JX Reality Test 1 — One-Time Real DA14 Retrieval v0.2 Attempt 3
+
+on:
+  push:
+    branches:
+      - reality-test-1/da14-real-retrieval-attempt-3-v2
+    paths:
+      - .github/workflows/jx-reality-test-1-real-retrieval-v2-attempt-3.yml
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: "0"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  EXPECTED_PARENT_COMMIT: bfcb14408e63b2d12883de12198af2fcb2a22822
+  ATTEMPT_ROOT: reality_tests/da14_2013/real_retrieval_attempt_3_v2
+  RUNTIME_ROOT: reality_tests/da14_2013/real_retrieval/runtime
+  V2_ROOT: reality_tests/da14_2013/source_adapter_v2
+  PREREGISTRATION: reality_tests/da14_2013/preregistration/JX_REALITY_TEST_1_DA14_PREREGISTRATION_2026-09-02.json
+  OUTPUT_ROOT: runs/jx_reality_test_1_da14_real_retrieval_attempt_3_v2
+
+jobs:
+  retrieve-once-v2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out frozen attempt-3 trigger commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Enforce exactly one prospectively authorized execution
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = "push"
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$GITHUB_REF_NAME" = "reality-test-1/da14-real-retrieval-attempt-3-v2"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT_COMMIT"
+          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/jx-reality-test-1-real-retrieval-v2-attempt-3.yml"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned runtime dependency
+        run: python -m pip install --no-cache-dir cryptography==46.0.4
+
+      - name: Verify frozen execution driver
+        run: |
+          set -euo pipefail
+          echo "be1170caf6ec4f78bc875e765f06c81f6bbd2e1960bfbba77a7bdf8ed097fb4c  $ATTEMPT_ROOT/EXECUTION_DRIVER_MANIFEST.json" | sha256sum -c -
+          echo "a27c0ab9ae82c9f2876d4e3f994a9cc79b68e5cb3cf1af8573092ba3b797f112  $ATTEMPT_ROOT/EXECUTION_DRIVER_SHA256SUMS.txt" | sha256sum -c -
+          (cd "$ATTEMPT_ROOT" && sha256sum -c EXECUTION_DRIVER_SHA256SUMS.txt)
+          bash -n "$ATTEMPT_ROOT/run_attempt3.sh"
+
+      - name: Execute one authorized real-source curation
+        id: driver
+        continue-on-error: true
+        run: bash "$ATTEMPT_ROOT/run_attempt3.sh"
+
+      - name: Finalize safe artifact even if blocked early
+        if: always()
+        env:
+          DRIVER_OUTCOME: ${{ steps.driver.outcome }}
+        run: |
+          set -euo pipefail
+          OUT="$GITHUB_WORKSPACE/$OUTPUT_ROOT"
+          mkdir -p "$OUT"
+          cp "$ATTEMPT_ROOT/EXECUTION_DRIVER_MANIFEST.json" "$OUT/execution_driver_manifest.lock.json"
+          cp "$ATTEMPT_ROOT/EXECUTION_DRIVER_SHA256SUMS.txt" "$OUT/execution_driver_SHA256SUMS.txt"
+          cp "$ATTEMPT_ROOT/JX_REALITY_TEST_1_ATTEMPT3_AUTHORIZATION_2026-09-02.json" "$OUT/authorization.lock.json"
+          cp "$ATTEMPT_ROOT/JX_REALITY_TEST_1_REAL_RETRIEVAL_CONTRACT_v5_2026-09-02.json" "$OUT/contract.lock.json"
+          cp "$ATTEMPT_ROOT/PUBLIC_KEY_CUSTODY_RECEIPT_ATTEMPT3.json" "$OUT/PUBLIC_KEY_CUSTODY_RECEIPT.json"
+
+          if [ -d /tmp/jx-da14-attempt3-v2-export/curated ] && [ ! -d "$OUT/curated" ]; then
+            sudo cp -a /tmp/jx-da14-attempt3-v2-export/curated "$OUT/curated"
+          fi
+          sudo cp /tmp/jx-da14-attempt3-v2-export/retrieval_stdout.json "$OUT/retrieval_stdout.json" 2>/dev/null || true
+          sudo cp /tmp/jx-da14-attempt3-v2-export/retrieval_stderr.txt "$OUT/retrieval_stderr.txt" 2>/dev/null || true
+          sudo cp /tmp/jx-da14-attempt3-v2-export/retrieval_exit_code.txt "$OUT/retrieval_exit_code.txt" 2>/dev/null || true
+          sudo chown -R "$USER:$USER" "$OUT"
+
+          if [ ! -f "$OUT/RUN_MANIFEST.json" ]; then
+            python - <<'PY'
+          from pathlib import Path
+          import json, os, platform, subprocess
+          out = Path(os.environ['GITHUB_WORKSPACE']) / os.environ['OUTPUT_ROOT']
+          stage_path = out / 'DRIVER_STAGE.txt'
+          stage = stage_path.read_text(encoding='utf-8').strip() if stage_path.exists() else 'DRIVER_NOT_STARTED_OR_NO_STAGE'
+          network = 'MAY_HAVE_OCCURRED_TRANSIENTLY' if stage.startswith('NETWORK_') or stage in {'PACKAGING_SAFE_ARTIFACT', 'ARTIFACT_PACKAGED'} else 'NOT_REACHED_BY_STAGE_MARKER'
+          manifest = {
+              'schema': 'jx-reality-test-1-real-retrieval-run-manifest/v3-fallback',
+              'status': 'REAL_RETRIEVAL_BLOCKED',
+              'attempt_number': 3,
+              'adapter_version': '0.2.0',
+              'driver_outcome': os.environ.get('DRIVER_OUTCOME', 'unknown'),
+              'last_recorded_stage': stage,
+              'network_request_status': network,
+              'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'authorized_parent_commit': os.environ['EXPECTED_PARENT_COMMIT'],
+              'python': platform.python_version(),
+              'private_key_present': False,
+              'password_present': False,
+              'holdout_unblinded': False,
+              'orbit_fitting_performed': False,
+              'raw_http_response_retention': 'NONE_BY_DESIGN',
+              'claim_ceiling': 'Blocked curation execution only; no orbit fit, prediction, unblinding, or physical-validation verdict.'
+          }
+          (out / 'RUN_MANIFEST.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          (out / 'STATUS.md').write_text(f"# JX Reality Test 1 — Attempt 3\n\n**Status:** `REAL_RETRIEVAL_BLOCKED`\n\nLast recorded stage: `{stage}`\n", encoding='utf-8')
+          PY
+          fi
+
+          ! grep -R -I -n -E 'BEGIN (ENCRYPTED )?PRIVATE KEY' "$OUT"
+          test -z "$(find "$OUT" -type f \( -iname '*private*key*' -o -iname '*password*' \) -print -quit)"
+          rm -f "$OUT/DELIVERABLE_SHA256SUMS.txt"
+          (cd "$OUT" && find . -type f ! -name DELIVERABLE_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > DELIVERABLE_SHA256SUMS.txt)
+          (cd "$OUT" && sha256sum -c DELIVERABLE_SHA256SUMS.txt)
+
+      - name: Upload sealed attempt-3 artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-reality-test-1-da14-real-retrieval-v2-attempt-3-${{ github.sha }}
+          path: ${{ env.OUTPUT_ROOT }}/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce scientific curation outcome
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os
+          path = os.path.join(os.environ['OUTPUT_ROOT'], 'RUN_MANIFEST.json')
+          result = json.load(open(path, encoding='utf-8'))
+          assert result['status'] == 'REAL_RETRIEVAL_CURATED_VALUES_SEALED', result
+          assert result['attempt_number'] == 3, result
+          assert result['adapter_version'] == '0.2.0', result
+          assert result['retrieval_exit_code'] == 0, result
+          assert result['verification_exit_code'] == 0, result
+          assert result['counts']['training'] and result['counts']['training'] > 0, result
+          assert result['counts']['holdout'] and result['counts']['holdout'] > 0, result
+          assert result['private_key_present'] is False, result
+          assert result['holdout_unblinded'] is False, result
+          assert result['orbit_fitting_performed'] is False, result
+          print('REAL_RETRIEVAL_CURATED_VALUES_SEALED')
+          PY
+
+      - name: Remove ephemeral retrieval workspace
+        if: always()
+        run: sudo rm -rf /tmp/jx-da14-attempt3-v2 /tmp/jx-da14-attempt3-v2-export
