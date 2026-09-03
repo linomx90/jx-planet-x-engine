@@ -1,0 +1,56 @@
+{
+  "adapter_version": "0.2.0",
+  "authorization": {
+    "attempt_3_consumed": true,
+    "attempt_4_authorized": false,
+    "next_requirement": "New explicit human authorization for one later one-shot production curation."
+  },
+  "claim_ceiling": "Blocked pre-network workflow checkpoint only; no successful curation, orbit fit, prediction, unblinding, or physical-validation result.",
+  "classification": "WORKFLOW_CURATOR_ATTEMPT_ONLY",
+  "date_utc": "2026-09-03",
+  "evidence_state": {
+    "complete_normalized_plaintext_written": false,
+    "da14_records_downloaded": false,
+    "encrypted_holdout_created": false,
+    "encrypted_quarantine_created": false,
+    "holdout_unblinded": false,
+    "network_request_initiated": false,
+    "orbit_fitting_performed": false,
+    "password_present": false,
+    "private_key_present": false,
+    "raw_http_response_retained": false,
+    "redacted_schedule_created": false,
+    "training_dataset_created": false
+  },
+  "failure": {
+    "category": "PREFLIGHT_TRANSPORT_HASH_MISMATCH",
+    "driver_launched": false,
+    "reason": "Base64 text was line-folded in the repository while the expected checksum represented one continuous line.",
+    "stage": "execution driver repository-text hash verification"
+  },
+  "prospective_correction": {
+    "branch_head_after_checkpoint": "05d2b7c954bb7721ec6759a7c825b5108a6dbe41",
+    "status": "PREFLIGHT_TRANSPORT_HASH_CORRECTED_NO_RETRIEVAL_AUTHORIZATION",
+    "workflow_rerun_after_correction": false
+  },
+  "schema": "jx-reality-test-1-attempt3-preflight-blocked-summary/v1",
+  "status": "REAL_RETRIEVAL_BLOCKED_BEFORE_DRIVER_AND_BEFORE_NETWORK",
+  "target": {
+    "designation": "2012 DA14",
+    "name": "Duende",
+    "number": 367943
+  },
+  "transport_hashes": {
+    "actual_folded_base64_sha256": "6c34be4cebf27f9d63b1ca36c4e7b832e24db264a6fd4cb8d0356096c78ab6c5",
+    "assembled_driver_sha256": "03b3bfcba174c97639a1f46cd4d355c7435f65e046fa00ab30179490eaafaa90",
+    "decoded_content_changed": false,
+    "decoded_gzip_driver_sha256": "a7e3043b14ef562279e25502c6e150e35e1d38127ca4a8c77217a64b6c234eb8",
+    "old_one_line_base64_sha256": "31ca577328f7f824a536e99ca755beff86e04f7cc6c083eca5c65a95bcae8a2f"
+  },
+  "workflow": {
+    "artifact_id": 9872345388,
+    "artifact_zip_sha256": "0cbc26fcdc45b1144f7e97559c605a66a8d962cf8abcacdc1efbc57ed9cbd10e",
+    "run_id": 33697609902,
+    "trigger_commit": "f6c31acddbca03deab1eb656bc955962d087c120"
+  }
+}
