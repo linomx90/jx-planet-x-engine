@@ -1,0 +1,64 @@
+name: JX-CHI vs TRACE Neutral REBOUND Side
+
+on:
+  push:
+    branches:
+      - experiment/jx-chi-trace-neutral-fixture-20260904
+    paths:
+      - benchmarks/jx_chi_trace_neutral/**
+      - .github/workflows/jx-chi-trace-neutral.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: "0"
+  OMP_NUM_THREADS: "1"
+  OPENBLAS_NUM_THREADS: "1"
+  MKL_NUM_THREADS: "1"
+
+jobs:
+  rebound-trace-neutral:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install pinned REBOUND runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.3.5 rebound==5.1.1
+          python - <<'PY'
+          import numpy, rebound
+          assert rebound.__version__ == "5.1.1"
+          print("numpy", numpy.__version__)
+          print("rebound", rebound.__version__)
+          PY
+      - name: Compile harness
+        run: python -m py_compile benchmarks/jx_chi_trace_neutral/run_rebound_trace.py
+      - name: Run frozen neutral fixture
+        run: python benchmarks/jx_chi_trace_neutral/run_rebound_trace.py
+      - name: Preserve environment and verify hashes
+        if: always()
+        run: |
+          output=runs/jx_chi_trace_neutral
+          mkdir -p "$output"
+          python -m pip freeze --all > "$output/pip-freeze.txt"
+          uname -a > "$output/uname.txt"
+          lscpu > "$output/lscpu.txt"
+          cp benchmarks/jx_chi_trace_neutral/contract.json "$output/contract.lock.json"
+          cd "$output"
+          rm -f SHA256SUMS.txt
+          find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
+          sha256sum -c SHA256SUMS.txt
+      - name: Upload complete neutral artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-chi-vs-trace-neutral-rebound-${{ github.sha }}
+          path: runs/jx_chi_trace_neutral/
+          if-no-files-found: error
+          retention-days: 90

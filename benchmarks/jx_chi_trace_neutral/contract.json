@@ -1,0 +1,58 @@
+{
+  "schema": "jx-chi-vs-trace-neutral-fixture-contract/v1",
+  "date_utc": "2026-09-04",
+  "classification": "PUBLIC_NEUTRAL_FIXTURE_NO_PRIVATE_JX_SOURCE",
+  "objective": "Generate an unmodified REBOUND 5.1.1 TRACE trajectory and independent IAS15 references on a frozen public Cartesian fixture. The private JX-CHI reference is executed separately and compared only after this artifact is frozen.",
+  "fixture": {
+    "name": "rebound_trace_chaotic_exchange_short_horizon",
+    "provenance": "Cartesian initialization transcribed from REBOUND 5.1.1 rebound/tests/test_trace_full_bs.py::chaotic_exchange_sim",
+    "G": 1.0,
+    "star_mass": 1.0,
+    "planet_mass_expression": "0.01/(1.0-0.01)",
+    "planet_semimajor_axis": 5.2,
+    "planet_eccentricity": 0.0,
+    "test_particle_x_offset_from_star": 4.42,
+    "test_particle_vy_expression": "0.0072*365.25/(2*pi)",
+    "softening": 0.0
+  },
+  "schedule": {
+    "duration": 100.0,
+    "global_step_counts": [400, 800, 1600],
+    "output": "every global TRACE step",
+    "reversal_step_count": 800
+  },
+  "trace": {
+    "version": "5.1.1",
+    "integrator": "TRACE",
+    "peri_mode": "FULL_BS",
+    "peri_mode_integer": 1,
+    "r_crit_hill": 3.63,
+    "peri_crit_eta": 1.0,
+    "collision": "none"
+  },
+  "ias15_references": [
+    {"name": "ias15_loose", "epsilon": 1e-11},
+    {"name": "ias15_tight", "epsilon": 1e-13}
+  ],
+  "required_outputs": [
+    "TRACE trajectories at all three resolutions",
+    "two deterministic TRACE replays per resolution",
+    "IAS15 loose and tight trajectories on the 1600-step output lattice",
+    "sampled planet-tracer closest approach",
+    "Jacobi-constant series",
+    "system-energy series",
+    "velocity-flip reversal at the 800-step schedule",
+    "runtime and exact artifact hashes"
+  ],
+  "reference_gate": {
+    "maximum_ias15_pair_position_difference": 1e-8,
+    "maximum_ias15_pair_velocity_difference": 1e-8
+  },
+  "verdicts": [
+    "REBOUND_TRACE_NEUTRAL_ARTIFACT_COMPLETE",
+    "INVALID_REFERENCE",
+    "NONDETERMINISTIC_TRACE_REPLAY",
+    "BLOCKED"
+  ],
+  "claim_ceiling": "This artifact qualifies only the public REBOUND side and the neutral fixture. It contains no private JX-CHI source and cannot establish a JX-vs-TRACE winner until the separately executed JX trajectory is compared against the same reference and schedule."
+}
