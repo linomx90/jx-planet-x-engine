@@ -1,0 +1,78 @@
+name: Public Topocentric Astronomy Kernels
+
+on:
+  push:
+    branches:
+      - experiment/de440s-public-kernel-cache-20260904
+    paths:
+      - .github/workflows/public-topocentric-kernels.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Download exact public NAIF kernels
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact/kernels
+          base=https://naif.jpl.nasa.gov/pub/naif/generic_kernels
+          curl --fail --location --retry 4 --retry-all-errors \
+            "$base/spk/stations/earthstns_itrf93_260814.bsp" \
+            -o artifact/kernels/earthstns_itrf93_260814.bsp
+          curl --fail --location --retry 4 --retry-all-errors \
+            "$base/fk/stations/earth_topo_260814.tf" \
+            -o artifact/kernels/earth_topo_260814.tf
+          curl --fail --location --retry 4 --retry-all-errors \
+            "$base/pck/earth_1962_260806_2126_combined.bpc" \
+            -o artifact/kernels/earth_1962_260806_2126_combined.bpc
+          curl --fail --location --retry 4 --retry-all-errors \
+            "$base/pck/pck00011.tpc" \
+            -o artifact/kernels/pck00011.tpc
+
+      - name: Verify frozen public-byte identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd artifact/kernels
+          cat > EXPECTED_SHA256SUMS.txt <<'EOF'
+          007eb0aad5dd022c6d61bdbfb2395680bd1eb31c49a8637d0b0a1cfbea737c6b  earthstns_itrf93_260814.bsp
+          4f40cd1e86718047bc8ea6ff6bd063c9fbf36102b63f0dca370c8e94fd282490  earth_topo_260814.tf
+          cc87ad1a495cf598800ba403763d350f087ac0b97da9fec603278a3864c6a53e  earth_1962_260806_2126_combined.bpc
+          3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1  pck00011.tpc
+          EOF
+          sha256sum -c EXPECTED_SHA256SUMS.txt
+          sha256sum earthstns_itrf93_260814.bsp earth_topo_260814.tf \
+            earth_1962_260806_2126_combined.bpc pck00011.tpc \
+            > ACTUAL_SHA256SUMS.txt
+          wc -c earthstns_itrf93_260814.bsp earth_topo_260814.tf \
+            earth_1962_260806_2126_combined.bpc pck00011.tpc \
+            > BYTE_COUNTS.txt
+
+      - name: Record neutral acquisition provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > artifact/PROVENANCE.txt <<EOF
+          repository=linomx90/jx-planet-x-engine
+          branch=${GITHUB_REF_NAME}
+          commit=${GITHUB_SHA}
+          workflow=${GITHUB_WORKFLOW}
+          run_id=${GITHUB_RUN_ID}
+          source=https://naif.jpl.nasa.gov/pub/naif/generic_kernels/
+          scope=public NAIF topocentric station and Earth-orientation kernels only
+          private_jx_source_included=false
+          EOF
+
+      - name: Upload public kernel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-topocentric-kernels-${{ github.sha }}
+          path: artifact
+          if-no-files-found: error
+          retention-days: 90
