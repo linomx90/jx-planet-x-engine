@@ -1,0 +1,72 @@
+name: Public DE440s Earth-Jupiter Cache
+
+on:
+  push:
+    branches:
+      - experiment/de440s-public-kernel-cache-20260904
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-cache:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install exact Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'numpy==2.3.5' 'spiceypy==8.2.0'
+
+      - name: Retrieve exact public NAIF kernels
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public_de440s_cache/kernels public_de440s_cache/wheels
+          curl --fail --location --retry 5 --retry-delay 2 \
+            --output public_de440s_cache/kernels/de440s.bsp \
+            'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp'
+          curl --fail --location --retry 5 --retry-delay 2 \
+            --output public_de440s_cache/kernels/naif0012.tls \
+            'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls'
+          curl --fail --location --retry 5 --retry-delay 2 \
+            --output public_de440s_cache/kernels/gm_de440.tpc \
+            'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc'
+          python -m pip download --no-deps --only-binary=:all: \
+            --dest public_de440s_cache/wheels 'spiceypy==8.2.0'
+
+      - name: Build and verify state cache
+        run: |
+          set -euo pipefail
+          python tools/public_de440s_cache/build_cache.py \
+            --kernel-dir public_de440s_cache/kernels \
+            --output-dir public_de440s_cache
+          sha256sum public_de440s_cache/kernels/* public_de440s_cache/wheels/* \
+            > public_de440s_cache/ALL_EXTERNAL_SHA256SUMS.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('public_de440s_cache/CACHE_METADATA.json')
+          obj = json.loads(p.read_text())
+          assert obj['sample_count'] == 12833
+          assert obj['kernel_sha256']['de440s.bsp'] == 'c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2'
+          assert obj['kernel_sha256']['naif0012.tls'] == '678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b'
+          print(json.dumps(obj, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload exact public cache artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-de440s-earth-jupiter-cache-${{ github.sha }}
+          path: public_de440s_cache/
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 6
