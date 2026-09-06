@@ -1,0 +1,67 @@
+name: JX Benchmark A
+
+on:
+  push:
+    branches:
+      - experiment/bm6-rebound-5.1.1
+    paths:
+      - benchmarks/jx_benchmark_a.py
+      - benchmarks/jx_benchmark_a_contract.json
+      - .github/workflows/jx-benchmark-a.yml
+      - runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv
+      - runs/de441_horizons_10yr/gm_de440_major_barycenters.csv
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out frozen branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned benchmark dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.3.5 scipy==1.17.0 rebound==5.1.1
+          python - <<'PY'
+          import numpy, scipy, rebound
+          assert rebound.__version__ == "5.1.1", rebound.__version__
+          print("numpy", numpy.__version__)
+          print("scipy", scipy.__version__)
+          print("rebound", rebound.__version__)
+          PY
+
+      - name: Compile benchmark
+        run: python -m py_compile benchmarks/jx_benchmark_a.py
+
+      - name: Run locked head-to-head
+        run: |
+          mkdir -p runs/jx_benchmark_a
+          python -m pip freeze --all > runs/jx_benchmark_a/pip-freeze.txt
+          python benchmarks/jx_benchmark_a.py
+
+      - name: Verify artifact hashes
+        if: always()
+        run: |
+          if [ -f runs/jx_benchmark_a/SHA256SUMS.txt ]; then
+            cd runs/jx_benchmark_a
+            sha256sum -c SHA256SUMS.txt
+          fi
+
+      - name: Upload complete benchmark artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-benchmark-a-${{ github.sha }}
+          path: runs/jx_benchmark_a/
+          if-no-files-found: error
+          retention-days: 90
