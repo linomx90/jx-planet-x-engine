@@ -1,0 +1,97 @@
+{
+  "allowed_verdicts": [
+    "PHYSICALLY_VALIDATED_ON_THIS_HOLDOUT",
+    "NUMERICALLY_VALID_BUT_PHYSICALLY_FAILED",
+    "ORBIT_FIT_FAILED",
+    "OBSERVATION_MODEL_FAILED",
+    "INVALID_BLIND",
+    "BLOCKED"
+  ],
+  "blindness_class": "historical sealed-measurement holdout; not analyst-naive blind",
+  "claim_ceiling": "Object-, cutoff-, dataset-, model-, and holdout-specific physical-validation test only; not universal JX validation, an engine superiority claim, or a Planet-X result.",
+  "cutoff_utc": "2013-02-01T00:00:00Z",
+  "documentation_sources": {
+    "jpl_horizons_manual": "https://ssd.jpl.nasa.gov/horizons/manual.html",
+    "jpl_sbdb_api": "https://ssd-api.jpl.nasa.gov/doc/sbdb.html",
+    "jpl_small_body_radar_api": "https://ssd-api.jpl.nasa.gov/doc/sb_radar.html",
+    "mpc_observations_api": "https://docs.minorplanetcenter.net/mpc-ops-docs/apis/get-obs/",
+    "mpc_observatory_codes_api": "https://docs.minorplanetcenter.net/mpc-ops-docs/apis/obscodes/"
+  },
+  "holdout_end_utc": "2013-03-01T00:00:00Z",
+  "immediate_next_action": "Implement and audit only the curator/seal mechanism before any object-specific observation download.",
+  "model_contract": {
+    "covariance": "training-only normal system with at most one preregistered robust variance-inflation factor",
+    "dynamics": [
+      "Sun",
+      "eight planets",
+      "Moon separately",
+      "Pluto system",
+      "declared massive-asteroid perturbers",
+      "solar first-order post-Newtonian gravity",
+      "Earth J2 during encounter"
+    ],
+    "estimation": "weighted nonlinear least squares of a six-dimensional state at a declared TDB epoch using training observations only",
+    "nongravitational_parameters": "forbidden unless a prospectively specified training-only significance gate activates them before prediction sealing",
+    "observation_model": [
+      "observatory geometry",
+      "UTC-TAI-TT-TDB conversion",
+      "Earth orientation",
+      "topocentric parallax",
+      "iterative light time",
+      "ADES coordinate-convention handling",
+      "applicable aberration and relativistic light deflection without double correction"
+    ]
+  },
+  "permitted_preseal_data": [
+    "MPC ADES-2022 target observations with observation time strictly before cutoff",
+    "JPL small-body radar astrometry with measurement epoch strictly before cutoff",
+    "MPC observatory-code metadata",
+    "frozen leap-second and IERS Earth-orientation tables",
+    "frozen JPL DE441 major-body ephemeris and declared constants/kernels",
+    "generic published algorithms and documentation",
+    "value-redacted holdout schedule metadata only"
+  ],
+  "preregistration_date_utc": "2026-09-02",
+  "primary_metrics": [
+    "delta_RA_cos_Dec",
+    "delta_Dec",
+    "radar_delay_residual",
+    "radar_Doppler_residual",
+    "weighted_RMS",
+    "Mahalanobis_distance_distribution",
+    "covariance_coverage"
+  ],
+  "primary_question": "Can a JX orbit-determination and propagation pipeline fit only pre-cutoff target observations and predict withheld optical/radar measurements through the 2013 Earth encounter and post-encounter motion?",
+  "prohibited_preseal_data": [
+    "post-cutoff optical or radar measurement values",
+    "current target SBDB orbit or covariance",
+    "target-specific Horizons vectors, elements, SPKs, observer ephemerides, close-approach tables, or B-plane values",
+    "published encounter numbers used as numerical fit constraints"
+  ],
+  "schema": "jx-reality-test-1-preregistration/v1",
+  "sealed_predictions": [
+    "fitted state and covariance",
+    "training diagnostics",
+    "topocentric RA/Dec for every optical holdout schedule row",
+    "radar delay/Doppler for every radar schedule row",
+    "closest-approach epoch and distance",
+    "incoming/outgoing geocentric velocity",
+    "B-plane coordinates and covariance",
+    "post-encounter state and osculating period"
+  ],
+  "secondary_metrics": [
+    "closest_approach_time_error",
+    "closest_approach_distance_error",
+    "B_plane_error",
+    "outgoing_state_error",
+    "post_encounter_period_error"
+  ],
+  "status": "FROZEN_BEFORE_OBJECT_SPECIFIC_OBSERVATION_RETRIEVAL",
+  "target": {
+    "name": "Duende",
+    "permanent_number": 367943,
+    "provisional_designation": "2012 DA14"
+  },
+  "threshold_policy": "All numeric thresholds must be frozen in a training-only Threshold Addendum before unblinding; otherwise verdict INVALID_BLIND.",
+  "unblinding_rule": "One logged manifest-verifying unblind; no post-unblind refit, threshold change, force addition, observation deletion, or code modification may alter the preregistered verdict."
+}
