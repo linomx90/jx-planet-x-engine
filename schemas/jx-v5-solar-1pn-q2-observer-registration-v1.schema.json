@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-v5-solar-1pn-q2-observer-registration-v1.schema.json",
+  "title": "JX V5 Solar 1PN Q2 observer null registration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema", "registration_id", "qualification_id", "status", "design_only", "outcomes_generated", "execution_authorized", "registry_authorized", "evidence_class", "protocol_constants", "observer_rules", "external_bindings", "ready", "nonclaim"],
+  "properties": {
+    "$schema": {"const": "../../schemas/jx-v5-solar-1pn-q2-observer-registration-v1.schema.json"},
+    "schema": {"const": "jx-v5-solar-1pn-q2-observer-registration/v1"},
+    "registration_id": {"const": "jx.v5.solar_1pn.q2_observer_registration.v1"},
+    "qualification_id": {"$ref": "#/$defs/qualificationId"},
+    "status": {"const": "AWAITING_EXTERNAL_Q2_OBSERVER_REGISTRATION"},
+    "design_only": {"const": true},
+    "outcomes_generated": {"const": false},
+    "execution_authorized": {"const": false},
+    "registry_authorized": {"const": false},
+    "evidence_class": {"const": "MODEL_OUTPUT"},
+    "protocol_constants": {"$ref": "#/$defs/protocolConstants"},
+    "observer_rules": {"$ref": "#/$defs/observerRules"},
+    "external_bindings": {"$ref": "#/$defs/externalBindings"},
+    "ready": {"const": false},
+    "nonclaim": {"const": "This null registration supplies no observer, runtime, rule completion, expectation, budget, result, or execution authority."}
+  },
+  "$defs": {
+    "qualificationId": {"const": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781"},
+    "awaiting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value"],
+      "properties": {
+        "status": {"type": "string", "pattern": "^AWAITING_EXTERNAL_[A-Z0-9_]+$"},
+        "value": {"type": "null"}
+      }
+    },
+    "protocolConstants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_function", "event_direction", "observer_class", "angle_class", "binary_float_trigonometry_allowed", "linear_event_interpolation_allowed", "paired_force_execution_required", "step_grid", "event_tolerance_grid", "eccentricity_roster", "orbit_count", "analytic_leading_coefficient", "scaling_parameter_kind"],
+      "properties": {
+        "event_function": {"const": "R_DOT_V_ZERO_OUTWARD_PERIHELION"},
+        "event_direction": {"const": "NEGATIVE_TO_POSITIVE"},
+        "observer_class": {"const": "INDEPENDENT_ARBITRARY_PRECISION"},
+        "angle_class": {"const": "HIGH_PRECISION_ORIENTED_ATAN2"},
+        "binary_float_trigonometry_allowed": {"const": false},
+        "linear_event_interpolation_allowed": {"const": false},
+        "paired_force_execution_required": {"const": true},
+        "step_grid": {"const": ["0.04", "0.02", "0.01"]},
+        "event_tolerance_grid": {"const": ["0.00000000000000000001", "0.000000000000000000000000000001"]},
+        "eccentricity_roster": {"const": ["0.31", "0.47"]},
+        "orbit_count": {"const": 2},
+        "analytic_leading_coefficient": {"const": "6*pi"},
+        "scaling_parameter_kind": {"const": "INVERSE_C_SQUARED"}
+      }
+    },
+    "observerRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initial_event_exclusion_rule", "event_bracket_acceptance_rule", "root_method_id", "root_termination_rule", "orbital_orientation_rule", "angle_unwrap_rule", "orbit_index_rule", "secular_regression_rule", "step_extrapolation_rule", "event_extrapolation_rule", "inverse_c_squared_extrapolation_rule", "analytic_target_expression", "high_precision_pi_rule"],
+      "properties": {
+        "initial_event_exclusion_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "event_bracket_acceptance_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "root_method_id": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_METHOD_ID"}}}]},
+        "root_termination_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "orbital_orientation_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "angle_unwrap_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "orbit_index_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "secular_regression_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "step_extrapolation_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "event_extrapolation_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "inverse_c_squared_extrapolation_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]},
+        "analytic_target_expression": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_EXPRESSION"}}}]},
+        "high_precision_pi_rule": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RULE"}}}]}
+      }
+    },
+    "externalBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observer_source_binding", "observer_runtime_binding", "observer_configuration_binding", "observer_independence_binding", "sealed_expectation_binding", "q2_budget_binding"],
+      "properties": {
+        "observer_source_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SOURCE"}}}]},
+        "observer_runtime_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_RUNTIME"}}}]},
+        "observer_configuration_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_CONFIGURATION"}}}]},
+        "observer_independence_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_INDEPENDENCE_ATTESTATION"}}}]},
+        "sealed_expectation_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_SEALED_EXPECTATION"}}}]},
+        "q2_budget_binding": {"allOf": [{"$ref": "#/$defs/awaiting"}, {"properties": {"status": {"const": "AWAITING_EXTERNAL_BUDGET"}}}]}
+      }
+    }
+  }
+}

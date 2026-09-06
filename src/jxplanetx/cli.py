@@ -21,6 +21,7 @@ from .ensemble_validation import (
     register_ensemble_member,
     write_example_contract,
 )
+from .force_registry_v5 import inspect_registry_file
 from .ias15_gate import compare_ias15_members, compare_ias15_population, compare_source_control_effect, finalize_ias15_equation_gate, run_ias15_member
 from .population_scale import run_population_scale_gate
 from .encounter_tail import run_encounter_tail_pilot
@@ -182,6 +183,25 @@ def finalize_ias15_cli(args: argparse.Namespace) -> int:
 def write_ensemble_contract_cli(args: argparse.Namespace) -> int:
     result = write_example_contract(args.output)
     print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def inspect_force_registry_cli(args: argparse.Namespace) -> int:
+    """Inspect a V5 registry without authorizing or running dynamics."""
+
+    _, inspection = inspect_registry_file(
+        args.registry,
+        schema_path=args.schema,
+        project_root=args.project_root,
+    )
+    payload = {
+        "engine_version": __version__,
+        "command": "inspect-force-registry",
+        "inspection": inspection.as_dict(),
+        "software": runtime_source_manifest(),
+    }
+    record = write_run_record(args.output, payload)
+    print(json.dumps(record, indent=2, sort_keys=True))
     return 0
 
 
@@ -379,6 +399,15 @@ def parser() -> argparse.ArgumentParser:
     wt = sub.add_parser("write-ensemble-contract", help="write a preregistration contract template")
     wt.add_argument("--output", required=True)
     wt.set_defaults(func=write_ensemble_contract_cli)
+    fr = sub.add_parser(
+        "inspect-force-registry",
+        help="validate the nonexecuting JX V5 force and physical-parameter registry",
+    )
+    fr.add_argument("--registry", required=True)
+    fr.add_argument("--schema")
+    fr.add_argument("--project-root")
+    fr.add_argument("--output", default="runs/v5_force_registry_inspection.json")
+    fr.set_defaults(func=inspect_force_registry_cli)
     pe = sub.add_parser("prepare-ensemble", help="lock a contract and generate deterministic phase/uncertainty draws")
     pe.add_argument("--contract", required=True)
     pe.add_argument("--output", required=True, help="immutable plan-lock JSON")

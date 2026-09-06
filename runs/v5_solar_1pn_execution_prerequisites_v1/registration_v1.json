@@ -1,0 +1,132 @@
+{
+  "$schema": "../../schemas/jx-v5-solar-1pn-execution-prerequisite-registration-v1.schema.json",
+  "schema": "jx-v5-solar-1pn-execution-prerequisite-registration/v1",
+  "prerequisite_package_id": "jx.v5.solar_1pn.execution_prerequisites.v1",
+  "predecessor": {
+    "qualification_id": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781",
+    "package_sha256": "80b4b6196167d95ce6cc72bf5a5ffba90e0fdc748d9144d2d9f83183b974f237",
+    "commit": "975b1b7002e358a980457acb18c9beaa90aa1c9f",
+    "plan": {
+      "path": "runs/v5_solar_1pn_qualification/qualification_plan_v1.json",
+      "sha256": "b511ecd55a759e9c8037ac74cdf9e68985cde6b4f66008d4c9531f10c5c3b3dc",
+      "size_bytes": "92080",
+      "canonical_sha256": "9e2a75c6ff7c4c220d31d14348e95f619437e966bcfe517763a2eb57d0953210"
+    },
+    "inputs": {
+      "path": "runs/v5_solar_1pn_qualification/qualification_inputs_v1.json",
+      "sha256": "30ae263fc402d2d0d0bf6318c77285be13f8c2a5daa9c8e5667c789a20ab1b7c",
+      "size_bytes": "186336",
+      "canonical_sha256": "57b64944d65d930d4dfcf0a60fd02e5945788a14483c3daa30040257433c4f79"
+    },
+    "registration": {
+      "path": "runs/v5_solar_1pn_qualification/registration_v1.json",
+      "sha256": "7e4b839f0842b6e5d23b6b2c1610eb3a1f3024062e4b696d09e1eb9d6b32f545",
+      "size_bytes": "18490",
+      "canonical_sha256": "319939d02d5764e527514fd346615b9b175ac120c194cf4e88435482b31a253c"
+    }
+  },
+  "status": "DESIGN_ONLY_BLOCKED",
+  "outcomes_generated": false,
+  "registry_authorized": false,
+  "execution_authorized": false,
+  "ready": false,
+  "evidence_class": "MODEL_OUTPUT",
+  "scientific_evidence_artifact": false,
+  "artifacts": [
+    {
+      "role": "q2_observer_null_registration",
+      "schema": "jx-v5-solar-1pn-q2-observer-registration/v1",
+      "path": "runs/v5_solar_1pn_execution_prerequisites_v1/q2_observer_registration_v1.json",
+      "sha256": "99de6f9b11e94a9161c54bb05fbd10deab50875488ce5c9541345ccb94116310",
+      "size_bytes": "3135",
+      "canonical_sha256": "2c98f4811bb86a2462ced231c29c4c9e595233460af600ba8df549e307f6adbd"
+    },
+    {
+      "role": "q3_oracle_null_registration",
+      "schema": "jx-v5-solar-1pn-q3-oracle-registration/v1",
+      "path": "runs/v5_solar_1pn_execution_prerequisites_v1/q3_oracle_registration_v1.json",
+      "sha256": "76aea6bb941ae3f7264d5172e4484fd0cdfc50d3b3100ab68b90e3c08ab1ed2f",
+      "size_bytes": "4284",
+      "canonical_sha256": "2e803e0281a00b2ccb762a52dc2119ecd83447a55bcafb119979c661109f4cb6"
+    },
+    {
+      "role": "q4_eih_null_registration",
+      "schema": "jx-v5-solar-1pn-q4-eih-registration/v1",
+      "path": "runs/v5_solar_1pn_execution_prerequisites_v1/q4_eih_registration_v1.json",
+      "sha256": "10904f60db6179684134946cf522b1b4d68f1d7d0cca396038a5307f908d37f0",
+      "size_bytes": "3395",
+      "canonical_sha256": "7c31f9cb0fea324bf37080bd609b8dd3a38f39e5dbf568199642d1d99a0b2b74"
+    }
+  ],
+  "schemas": [
+    {
+      "role": "package_schema",
+      "schema": "jx-v5-solar-1pn-execution-prerequisite-registration/v1",
+      "path": "schemas/jx-v5-solar-1pn-execution-prerequisite-registration-v1.schema.json",
+      "sha256": "e9d04cae4ae5aef4f3586e2dbb531f979b0ba539028dc3ec3cdb6a65d0754ad5",
+      "size_bytes": "4825",
+      "canonical_sha256": "e9ac191d34fd1ad7242487ddd9684d03d567ab390dafc5b1c9ec2075b62c81dd"
+    },
+    {
+      "role": "q2_schema",
+      "schema": "jx-v5-solar-1pn-q2-observer-registration/v1",
+      "path": "schemas/jx-v5-solar-1pn-q2-observer-registration-v1.schema.json",
+      "sha256": "a8de8d0e19d91b47337d6b11eec280c19d2d4fe1d72e3f4348d14203803befc4",
+      "size_bytes": "6883",
+      "canonical_sha256": "c2226e2d3ee9c020b010da0c043b90da7238f34bd0c91e330effd96fb4181fe4"
+    },
+    {
+      "role": "q3_schema",
+      "schema": "jx-v5-solar-1pn-q3-oracle-registration/v1",
+      "path": "schemas/jx-v5-solar-1pn-q3-oracle-registration-v1.schema.json",
+      "sha256": "52353353fd1d82a488245a9ac6d219dfb981cdfa66248553da1df432e013d2e3",
+      "size_bytes": "8252",
+      "canonical_sha256": "85db20ffbdbc91a218eac7bec7c0d57ea65f0a797fee0619eb898807dab7a4d2"
+    },
+    {
+      "role": "q4_schema",
+      "schema": "jx-v5-solar-1pn-q4-eih-registration/v1",
+      "path": "schemas/jx-v5-solar-1pn-q4-eih-registration-v1.schema.json",
+      "sha256": "94954937a5c4f3ec7d14475b1f2e5eb5d34c11fcab475b74121543aa1ee95b85",
+      "size_bytes": "6522",
+      "canonical_sha256": "0f56aa92f358085c010f1a0b6c76a505cf9fd142779d48809509231c766af407"
+    }
+  ],
+  "verifier": {
+    "path": "runs/v5_solar_1pn_execution_prerequisites_v1/verify_execution_prerequisites_v1.py",
+    "sha256": "d24f3b92bbceddc73be1b443311e3df7bf72bda2c2e08118ce5a62f549b52bda",
+    "size_bytes": "38592"
+  },
+  "readme": {
+    "path": "runs/v5_solar_1pn_execution_prerequisites_v1/README.md",
+    "sha256": "53ea3e45d0364a53687907ff6ccbee56371176848a117d19b6fc2c7a1eb6fca9",
+    "size_bytes": "2151"
+  },
+  "blocked_reasons": [
+    "Q2_OBSERVER_UNREGISTERED",
+    "Q2_RULES_EXPECTATION_BUDGET_UNRESOLVED",
+    "Q3_ORACLE_UNREGISTERED",
+    "Q3_SCALES_NORMS_SELF_CONVERGENCE_UNRESOLVED",
+    "Q4_EIH_EVALUATOR_UNREGISTERED",
+    "Q4_FIXTURES_CONVENTION_BACKREACTION_BUDGET_UNRESOLVED",
+    "EXTERNAL_INDEPENDENCE_UNATTESTED",
+    "SEALED_EXPECTATIONS_UNAVAILABLE",
+    "EXECUTION_NOT_AUTHORIZED"
+  ],
+  "claim_control": {
+    "permitted_claim": "DESIGN_ONLY_BLOCKED_NONAUTHORIZING",
+    "prohibited_claims": [
+      "NO_QUALIFICATION_OUTCOME",
+      "NO_EXECUTION_AUTHORITY",
+      "NO_REGISTRY_AUTHORITY",
+      "NO_OBSERVER_IMPLEMENTATION",
+      "NO_ORACLE_IMPLEMENTATION",
+      "NO_EIH_IMPLEMENTATION",
+      "NO_INDEPENDENCE_ATTESTATION",
+      "NO_SEALED_EXPECTATION",
+      "NO_ERROR_BUDGET",
+      "NO_SCIENTIFIC_CLAIM"
+    ]
+  },
+  "nonclaim": "This additive package is design-only blocked metadata. It contains no execution implementation, numerical outcome, scientific evidence, or authority."
+}

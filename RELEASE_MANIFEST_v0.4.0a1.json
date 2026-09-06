@@ -1,0 +1,985 @@
+{
+  "schema": "jx-release-manifest/v2",
+  "project": "JX Celestial Dynamics Framework",
+  "version": "0.4.0a1",
+  "release_date": "2026-09-06",
+  "release_stage": "alpha",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "release_target": {
+    "repository": "https://github.com/linomx90/jx-planet-x-engine",
+    "branch": "release/v0.4.0a1-v5-engine",
+    "tag": "v0.4.0a1",
+    "github_release_kind": "prerelease",
+    "base_ref": "origin/main",
+    "base_commit": "82791ac28007421863a7c71cb5df9111e181aeba",
+    "working_tree_parent_head_at_generation": "6ea9347feee79e7416c8d9a27e2818cdae4b1436"
+  },
+  "integrity_scope": {
+    "algorithm": "SHA-256",
+    "selection": "ALL_REGULAR_REPOSITORY_FILES_WHOSE_CURRENT_BYTES_DIFFER_FROM_BASE_COMMIT",
+    "base_commit": "82791ac28007421863a7c71cb5df9111e181aeba",
+    "manifest_path": "RELEASE_MANIFEST_v0.4.0a1.json",
+    "manifest_self_included": false,
+    "manifest_exclusion_reason": "SELF_HASH_CYCLE_AVOIDANCE",
+    "path_normalization": "REPOSITORY_RELATIVE_POSIX_UTF8",
+    "path_order": "UNICODE_CODE_POINT_ASCENDING",
+    "row_stream_encoding": "FOR_EACH_SORTED_PATH_UTF8(PATH)||NUL||ASCII(BASE10_SIZE_BYTES)||NUL||ASCII(LOWERCASE_SHA256)||LF",
+    "file_count": 164,
+    "total_size_bytes": 14188571,
+    "row_stream_sha256": "f449a70b54064ed4cb0a8191de7cd5d21b2283819491fb134530e4b8ce744893",
+    "files": {
+      ".github/workflows/test.yml": {
+        "size_bytes": 7641,
+        "sha256": "87e517072824d21573e60262e61faabaa447479fec4f601b8ae0391f8c5e226f"
+      },
+      "CHANGELOG.md": {
+        "size_bytes": 7484,
+        "sha256": "5913dd3daaaacbaf710eec48f0c4a9e4d9fa4a86205f195b56b0584c79a4316e"
+      },
+      "CITATION.cff": {
+        "size_bytes": 632,
+        "sha256": "38dac9cbe8f9780a41320346975ebff562b850e82685ec3acd8b3d686f9a1149"
+      },
+      "README.md": {
+        "size_bytes": 23079,
+        "sha256": "ea7ca130543213c5ca6aa2f159cce7efa758ee3c1a753776fac9167d6a683c7f"
+      },
+      "RELEASE_NOTES.md": {
+        "size_bytes": 12011,
+        "sha256": "0063329c4e5335c2436ce99ef62e2c0674b4c4e8088fdf9bfb6c834eb21e344b"
+      },
+      "benchmarks/engine_force_benchmark.py": {
+        "size_bytes": 12520,
+        "sha256": "c52ea597e16f42ec35cd44ab42e53adeb43d92d807359de326a10511ddea1eb5"
+      },
+      "benchmarks/jx_challenger_v1.py": {
+        "size_bytes": 98050,
+        "sha256": "0a9f00ae4dd9ba5279a0289af2a0bf0d0394e2ee8441793a6f07896de2ac43a8"
+      },
+      "benchmarks/jx_post_v5_precision_probe.py": {
+        "size_bytes": 99266,
+        "sha256": "d22369803670d4fe8097d26b52107deda112b1e0107c0077214ae00ad7bad0b5"
+      },
+      "benchmarks/rebound_hybrid_comparison.py": {
+        "size_bytes": 170407,
+        "sha256": "f6bf49a5041b63a50ec59d4a909ef490ccfae334ceba2cb82e7846a2c38a13b0"
+      },
+      "benchmarks/rebound_ias15_comparison.py": {
+        "size_bytes": 37068,
+        "sha256": "e5b58f975aac66f1139e2caad03c892e7c39d596ca11c4f8667ee2c474028b88"
+      },
+      "benchmarks/rebound_leapfrog_comparison.py": {
+        "size_bytes": 76043,
+        "sha256": "dca1f9862e4b077996398536b481ab8fc38c043159876fbe53fbec74550f34db"
+      },
+      "benchmarks/rebound_whfast_comparison.py": {
+        "size_bytes": 72936,
+        "sha256": "2a3b233eeda1ec3b99e4bee6e999ead6753c9d51e996f2282919a0057ff4123d"
+      },
+      "docs/ENGINE_API.md": {
+        "size_bytes": 65198,
+        "sha256": "ce2cf06b3c7af84771db16de8cdf16961bd78efdd482a7e53709f2669dfaea37"
+      },
+      "docs/FORCE_PARAMETER_REGISTRY_V5.md": {
+        "size_bytes": 18972,
+        "sha256": "49a554d4945c8a134fc1de2ab614312d146722a2accdbaf45cefc3c199cdc2c2"
+      },
+      "docs/HYBRID_EXTERNAL_COMPARISON.md": {
+        "size_bytes": 12303,
+        "sha256": "650d3b7fa4d1ba493035a3b21fcfa738688f3fc6553ec9713512d90a3b2de8cf"
+      },
+      "docs/JX_CHALLENGER_V1.md": {
+        "size_bytes": 7345,
+        "sha256": "48c46f895c33b5aa77ebd16485d9aba04c7871c0a9d9e529320c47e2b74398ba"
+      },
+      "docs/JX_PUBLIC_RESEARCH_STUDY.md": {
+        "size_bytes": 26534,
+        "sha256": "3e2104393ad1cf0972e87c8f5f307d6d92b1ca673563e742f63f34bb38e3cbea"
+      },
+      "docs/SCIENTIFIC_CONTRACT.md": {
+        "size_bytes": 4170,
+        "sha256": "964f776c660474274c994efed2787604ecb192162e5af8f9928de3ae1889939d"
+      },
+      "docs/V5_REFERENCE_INTEGRATOR.md": {
+        "size_bytes": 7622,
+        "sha256": "e58f9473f91234d2c1cf9199ffd7a9fddd36a542392e78b81eef77803a4feb8c"
+      },
+      "observer/v5_solar_1pn/README.md": {
+        "size_bytes": 4465,
+        "sha256": "3947c7aa4739414a7149f224158090dbd896c16a83a930755825dd18954275d4"
+      },
+      "observer/v5_solar_1pn/__init__.py": {
+        "size_bytes": 181,
+        "sha256": "7c31721343f7dad6a8f8bc4a3d4fd6ab3339529627d38198edc3d7515adde6cb"
+      },
+      "observer/v5_solar_1pn/candidate.py": {
+        "size_bytes": 66910,
+        "sha256": "720e69b26be5a52d6a8279e036486242d14617631e42c9339f29832de44e3640"
+      },
+      "oracle/v5_solar_1pn/README.md": {
+        "size_bytes": 1846,
+        "sha256": "c133c5f64ea728f53b767e687a9d9bbf4c033ca30e1fbbd1c27ba0f6b9722e61"
+      },
+      "oracle/v5_solar_1pn/__init__.py": {
+        "size_bytes": 108,
+        "sha256": "c49a269b42c9ba011ca4d7b04de2dec5e90a442156f38cb3cf9f94fda862b1d3"
+      },
+      "oracle/v5_solar_1pn/candidate.py": {
+        "size_bytes": 53450,
+        "sha256": "b8f66f4d783064780d83c62f2289e288961d4a5c63631040da84e17321a7aa26"
+      },
+      "oracle/v5_solar_1pn/sources/README.md": {
+        "size_bytes": 1120,
+        "sha256": "631535bcf828a4e8e324654f31aa0c947f21e2c0556ef085ee54380f6cbcd3fb"
+      },
+      "oracle/v5_solar_1pn/sources/nasa-tr-r-287-fehlberg.pdf": {
+        "size_bytes": 2625098,
+        "sha256": "5553a2a3eb53785a461762cc2b29428015f1b32c3ad0a5cb57f85a421256a0c8"
+      },
+      "pyproject.toml": {
+        "size_bytes": 1137,
+        "sha256": "f221bbbc4126edf369f9b91b9060bae96f4364f5e1e4ac1c5a0d4c00f57e072a"
+      },
+      "registries/jx_force_parameters_v5.json": {
+        "size_bytes": 95636,
+        "sha256": "7be12736b5fd760263b2d174af28a62698bcb7d56efc39820b1e815258f33ef3"
+      },
+      "runs/v5_solar_1pn_execution_prerequisites_v1/README.md": {
+        "size_bytes": 2151,
+        "sha256": "53ea3e45d0364a53687907ff6ccbee56371176848a117d19b6fc2c7a1eb6fca9"
+      },
+      "runs/v5_solar_1pn_execution_prerequisites_v1/q2_observer_registration_v1.json": {
+        "size_bytes": 3135,
+        "sha256": "99de6f9b11e94a9161c54bb05fbd10deab50875488ce5c9541345ccb94116310"
+      },
+      "runs/v5_solar_1pn_execution_prerequisites_v1/q3_oracle_registration_v1.json": {
+        "size_bytes": 4284,
+        "sha256": "76aea6bb941ae3f7264d5172e4484fd0cdfc50d3b3100ab68b90e3c08ab1ed2f"
+      },
+      "runs/v5_solar_1pn_execution_prerequisites_v1/q4_eih_registration_v1.json": {
+        "size_bytes": 3395,
+        "sha256": "10904f60db6179684134946cf522b1b4d68f1d7d0cca396038a5307f908d37f0"
+      },
+      "runs/v5_solar_1pn_execution_prerequisites_v1/registration_v1.json": {
+        "size_bytes": 5960,
+        "sha256": "e64b267971353b54b88ce7c2e8132f14673a64c7068ce52193eb78c71ce70b11"
+      },
+      "runs/v5_solar_1pn_execution_prerequisites_v1/verify_execution_prerequisites_v1.py": {
+        "size_bytes": 38592,
+        "sha256": "d24f3b92bbceddc73be1b443311e3df7bf72bda2c2e08118ce5a62f549b52bda"
+      },
+      "runs/v5_solar_1pn_preexecution_handoff_v1/README.md": {
+        "size_bytes": 6158,
+        "sha256": "394600de5085c993ca7df53ef14fa98b18cd5929bdbfbe0b35576ae4dfc62606"
+      },
+      "runs/v5_solar_1pn_preexecution_handoff_v1/registration_v1.json": {
+        "size_bytes": 33911,
+        "sha256": "1f5509a00dd38e95a687f8d96c87dd4b19aca3f5be8ca63afa5b3afb914e5f54"
+      },
+      "runs/v5_solar_1pn_preexecution_handoff_v1/verify_handoff_v1.py": {
+        "size_bytes": 43472,
+        "sha256": "453ab622f3b0f6265053a02efe6295e073081709d4e41f910ff83e7f4e140186"
+      },
+      "runs/v5_solar_1pn_q2_observer_registration_v1/README.md": {
+        "size_bytes": 4163,
+        "sha256": "787f579642809eafa5ecd01386fe0acc8ad17cff6b801a18a38cad774e3c1a3d"
+      },
+      "runs/v5_solar_1pn_q2_observer_registration_v1/external_registration_template_v1.json": {
+        "size_bytes": 5458,
+        "sha256": "9bd92efe84f5d9cfe8469cba16449389e08b34251fbdd7e5f4de846d2f9e17f4"
+      },
+      "runs/v5_solar_1pn_q2_observer_registration_v1/registration_v1.json": {
+        "size_bytes": 9940,
+        "sha256": "8c7af546a668d100c441d3ce9845d944628ee1b9ec9487aa5248aef0dbee39e4"
+      },
+      "runs/v5_solar_1pn_q2_observer_registration_v1/verify_registration_v1.py": {
+        "size_bytes": 47393,
+        "sha256": "bf65ef64c04f94451c1d3db3060132e1a41a3514e7c8171bc9fdb75c47299bff"
+      },
+      "runs/v5_solar_1pn_qualification/README.md": {
+        "size_bytes": 33278,
+        "sha256": "e32b1d64ad9b60490c54e3a6a2a43f34a6c99b727931964db78ae1d588ba6917"
+      },
+      "runs/v5_solar_1pn_qualification/prior/equation_level_perihelion_4096_fingerprints_v1.json": {
+        "size_bytes": 1762116,
+        "sha256": "20d23a93c426baa3818c05f5a57616edd7844905ef805d4ad87fb7948f3cd205"
+      },
+      "runs/v5_solar_1pn_qualification/prior/foundation_test_solar_1pn.py": {
+        "size_bytes": 16028,
+        "sha256": "c99f77627fc351294fcdbe6d81748ff1c1ab0e0e4f40309747e02ed75969d7d0"
+      },
+      "runs/v5_solar_1pn_qualification/prior/foundation_test_v5_reference_integrator.py": {
+        "size_bytes": 30065,
+        "sha256": "07ad98669347f4a10df363e41ca863f0bde65016f51cf66594c60aff7a2f195a"
+      },
+      "runs/v5_solar_1pn_qualification/prior_development_cases_v1.json": {
+        "size_bytes": 132803,
+        "sha256": "c7897e82143cf155933910103d3dd9cca3166b2033a36bbd0d72c3109fe3c8ce"
+      },
+      "runs/v5_solar_1pn_qualification/qualification_inputs_v1.json": {
+        "size_bytes": 186336,
+        "sha256": "30ae263fc402d2d0d0bf6318c77285be13f8c2a5daa9c8e5667c789a20ab1b7c"
+      },
+      "runs/v5_solar_1pn_qualification/qualification_plan_v1.json": {
+        "size_bytes": 92080,
+        "sha256": "b511ecd55a759e9c8037ac74cdf9e68985cde6b4f66008d4c9531f10c5c3b3dc"
+      },
+      "runs/v5_solar_1pn_qualification/registration_v1.json": {
+        "size_bytes": 18490,
+        "sha256": "7e4b839f0842b6e5d23b6b2c1610eb3a1f3024062e4b696d09e1eb9d6b32f545"
+      },
+      "runs/v5_solar_1pn_qualification/sources/README.md": {
+        "size_bytes": 1827,
+        "sha256": "b16827bc9e3861faa574fb63e73e8e60b0f29733a0612f87a4e61e30a828f0f5"
+      },
+      "runs/v5_solar_1pn_qualification/sources/bipm_si_brochure_9_v4_01.pdf": {
+        "size_bytes": 3503078,
+        "sha256": "1122cf38e25b23d780a30607c68f7350b2b6d1f9970a89947aaa87a45ecbb20a"
+      },
+      "runs/v5_solar_1pn_qualification/sources/gm_de440.tpc": {
+        "size_bytes": 12406,
+        "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140"
+      },
+      "runs/v5_solar_1pn_qualification/sources/iau_2006_resolution_b2.pdf": {
+        "size_bytes": 69374,
+        "sha256": "4369c28ef3ea6c0a211dee9a3d0b64569ee855e1dd4dca8adfc7e6319af79cf9"
+      },
+      "runs/v5_solar_1pn_qualification/sources/iau_2006_resolution_b3.pdf": {
+        "size_bytes": 72593,
+        "sha256": "1c8da5a20e4d67213f6008286cf133e0a495762719c4067b665f158ef83059da"
+      },
+      "runs/v5_solar_1pn_qualification/sources/iau_2012_resolutions_en.pdf": {
+        "size_bytes": 121989,
+        "sha256": "cd8a216237c4f3cd5edaf775c5326c754157ed750910d424b0ec5b90bb07ecad"
+      },
+      "runs/v5_solar_1pn_qualification/sources/iers_tn36_chapter_10.pdf": {
+        "size_bytes": 393782,
+        "sha256": "8be36ed5cdf8407e66fbdf106e30695ee0dbcf835809f3a9fa4dc9b6f073de54"
+      },
+      "runs/v5_solar_1pn_qualification/sources/jpl_astrodynamic_parameters_2026-08-29.html": {
+        "size_bytes": 22489,
+        "sha256": "168f48b94ae3a65f31c96f081d08e7ca91ecc9e65678fdc57353821b492b313e"
+      },
+      "runs/v5_solar_1pn_qualification/sources/jpl_de440_export_2026-08-29.html": {
+        "size_bytes": 29979,
+        "sha256": "ce7db9fc032a395318911b6b07cb2f12717f2849dc9938cbd207cb662f4d1687"
+      },
+      "runs/v5_solar_1pn_qualification_q8q9_prerequisites_v1/README.md": {
+        "size_bytes": 4783,
+        "sha256": "877d03766a28ea73beba3752e8b49d970d1c952491079e7e5df0276f9c072a3c"
+      },
+      "runs/v5_solar_1pn_qualification_q8q9_prerequisites_v1/error_budget_template_v1.json": {
+        "size_bytes": 24179,
+        "sha256": "fda6aeb9d274137da6303e606f3354c5f2d75ed8a803d6bf0f550816b178f85b"
+      },
+      "runs/v5_solar_1pn_qualification_q8q9_prerequisites_v1/external_artifact_slots_v1.json": {
+        "size_bytes": 2424,
+        "sha256": "89477e1600aebb65e2bab5e0a912fd60f3f8f4c3f1aa10f3ab0f8bf54665337d"
+      },
+      "runs/v5_solar_1pn_qualification_q8q9_prerequisites_v1/registration_v1.json": {
+        "size_bytes": 7446,
+        "sha256": "b046b2c049c8a2c800382aed171306dd7eb6e8a813fd283ad55706b801ce109f"
+      },
+      "runs/v5_solar_1pn_qualification_q8q9_prerequisites_v1/verify_prerequisites_v1.py": {
+        "size_bytes": 76216,
+        "sha256": "917883dbb778200b2e91fce0bf43f333eb08936cc115d85434ad43df8aafee98"
+      },
+      "runs/v5_solar_1pn_qualification_successor_v2/README.md": {
+        "size_bytes": 7728,
+        "sha256": "dd0709f2186e4b540a7e60a1f63657aba6e5cc47b8dc2ba9f8d8152d2f44204a"
+      },
+      "runs/v5_solar_1pn_qualification_successor_v2/qualification_successor_v2.json": {
+        "size_bytes": 39047,
+        "sha256": "43dd622e651a80d7d42d31082170792b51ce646e394a5850ff2064c09d1ba21c"
+      },
+      "runs/v5_solar_1pn_qualification_successor_v2/verify_qualification_successor_v2.py": {
+        "size_bytes": 55349,
+        "sha256": "005431008790078bb6e54c970a5c18224fe182d53852d929be625a953a10c2ec"
+      },
+      "schemas/jx-force-parameter-registry-v5.schema.json": {
+        "size_bytes": 29554,
+        "sha256": "ad64b4e8753ef3ae50950b725bbe5d918f708fcd79e0a92942a729dcf0e04072"
+      },
+      "schemas/jx-v5-solar-1pn-execution-prerequisite-registration-v1.schema.json": {
+        "size_bytes": 4825,
+        "sha256": "e9d04cae4ae5aef4f3586e2dbb531f979b0ba539028dc3ec3cdb6a65d0754ad5"
+      },
+      "schemas/jx-v5-solar-1pn-preexecution-handoff-v1.schema.json": {
+        "size_bytes": 21510,
+        "sha256": "2a1bceeea916be87e9d933a61123f88e8e29df245d82dbcd856b8e46896dc182"
+      },
+      "schemas/jx-v5-solar-1pn-prior-development-cases-v1.schema.json": {
+        "size_bytes": 23137,
+        "sha256": "e4f8cf8e752c63dd74b470ecd273c62a015695d3e5b612356984d1e891d25d0c"
+      },
+      "schemas/jx-v5-solar-1pn-q2-observer-registration-boundary-v1.schema.json": {
+        "size_bytes": 22828,
+        "sha256": "696a51313f443bb9a139cb191b86e2676c7568a4e6244b157d94ba5590ab62ef"
+      },
+      "schemas/jx-v5-solar-1pn-q2-observer-registration-v1.schema.json": {
+        "size_bytes": 6883,
+        "sha256": "a8de8d0e19d91b47337d6b11eec280c19d2d4fe1d72e3f4348d14203803befc4"
+      },
+      "schemas/jx-v5-solar-1pn-q3-oracle-registration-v1.schema.json": {
+        "size_bytes": 8252,
+        "sha256": "52353353fd1d82a488245a9ac6d219dfb981cdfa66248553da1df432e013d2e3"
+      },
+      "schemas/jx-v5-solar-1pn-q4-eih-registration-v1.schema.json": {
+        "size_bytes": 6522,
+        "sha256": "94954937a5c4f3ec7d14475b1f2e5eb5d34c11fcab475b74121543aa1ee95b85"
+      },
+      "schemas/jx-v5-solar-1pn-q8q9-custody-attestation-v1.schema.json": {
+        "size_bytes": 7132,
+        "sha256": "0f4026f7a7190fa3b7cb450d5e3fbc1e12ce9390d23813e2b8023b180da5dc91"
+      },
+      "schemas/jx-v5-solar-1pn-q8q9-error-budget-v1.schema.json": {
+        "size_bytes": 9266,
+        "sha256": "b186a99016eb8d65b245439028d95f6859d124358ff5954e72d82d329429ef91"
+      },
+      "schemas/jx-v5-solar-1pn-q8q9-independence-attestation-v1.schema.json": {
+        "size_bytes": 5289,
+        "sha256": "da87bb8d0d2a09a8224709ff473acac22c143943a0998b02b1185a43d0d51503"
+      },
+      "schemas/jx-v5-solar-1pn-q8q9-prerequisite-registration-v1.schema.json": {
+        "size_bytes": 11453,
+        "sha256": "1044f1564fdabfab43958270e765411319d03a3f38a40d6ef1c47b251377d53c"
+      },
+      "schemas/jx-v5-solar-1pn-q8q9-sealed-expectation-commitment-v1.schema.json": {
+        "size_bytes": 5356,
+        "sha256": "f7fa4ca3950f5a53d2a6ff2cb74b52b6e724aba5a456a9eebfe70f1f0a158e18"
+      },
+      "schemas/jx-v5-solar-1pn-q8q9-unblinding-record-v1.schema.json": {
+        "size_bytes": 6021,
+        "sha256": "6b52bce95cb22e155793ea7c14b2e8e923585229ca5d901eeffa11db723f31c5"
+      },
+      "schemas/jx-v5-solar-1pn-qualification-inputs-v1.schema.json": {
+        "size_bytes": 49219,
+        "sha256": "fee49ac694d94c1508116d004ef16d9709014f8eca5f70ad298da3c9b938f4eb"
+      },
+      "schemas/jx-v5-solar-1pn-qualification-plan-v1.schema.json": {
+        "size_bytes": 24668,
+        "sha256": "c49bffc4ce0b8243c9b7f540247801f181f26656557d47c1f83f811f5b368744"
+      },
+      "schemas/jx-v5-solar-1pn-qualification-registration-v1.schema.json": {
+        "size_bytes": 9098,
+        "sha256": "ae36572f0a34c11edd11cc0f33ad9f83e3f89bc62dc4abc09b119462c9a144f4"
+      },
+      "schemas/jx-v5-solar-1pn-qualification-successor-v2.schema.json": {
+        "size_bytes": 25382,
+        "sha256": "f4db0e9a654bd187c4e93a3ecef5f0a3058f2893bdea76f3fa68b74e6f330a86"
+      },
+      "src/jxplanetx/__init__.py": {
+        "size_bytes": 97,
+        "sha256": "e1a5c7ea6928757ba8f8de69a0667dd7893d75c656123fdf42d3f430c60a9f51"
+      },
+      "src/jxplanetx/claims.py": {
+        "size_bytes": 10268,
+        "sha256": "69c5e5c0e7e2ccfb3599c6d715fd4e7cac13e546e198b7cf19bec031f622a1f1"
+      },
+      "src/jxplanetx/cli.py": {
+        "size_bytes": 21267,
+        "sha256": "8de34eb529b8a76a04d8a676d88db606c3ce8cd0fae785627e152f0353f9a763"
+      },
+      "src/jxplanetx/engine/__init__.py": {
+        "size_bytes": 10591,
+        "sha256": "13cf2923cc5af3172414c069dcbe99a7c6f00061bb12fffa464215f3d66e8fc1"
+      },
+      "src/jxplanetx/engine/api.py": {
+        "size_bytes": 10482,
+        "sha256": "ce0c9242e5bc90a1b14605e510d94875aafc7f83337b2758ea9649dccd9a0a58"
+      },
+      "src/jxplanetx/engine/backends.py": {
+        "size_bytes": 7367,
+        "sha256": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba"
+      },
+      "src/jxplanetx/engine/catalog.py": {
+        "size_bytes": 38321,
+        "sha256": "028dee5a30ff803abdab5635658f7dbb03e10e1e9182f0b83d806182f6301665"
+      },
+      "src/jxplanetx/engine/contracts.py": {
+        "size_bytes": 14885,
+        "sha256": "fb4db9221d31c1eda87b1f09cae8ec890c7b3a9e63231b5a3e94c09b651cf801"
+      },
+      "src/jxplanetx/engine/encounter.py": {
+        "size_bytes": 141835,
+        "sha256": "0bd95ff70f15574e8c58c2fcea4fce51e4964f75a2d7230719cc1f21a7cbdd22"
+      },
+      "src/jxplanetx/engine/encounter_contracts.py": {
+        "size_bytes": 61450,
+        "sha256": "372ae800dd9404623ad1773c676700e1a42ec8e1b652c1e14b78288fb26ec1ac"
+      },
+      "src/jxplanetx/engine/evaluator.py": {
+        "size_bytes": 26948,
+        "sha256": "2d5c2fd92bb88b91cfd7e0d24702e58d6177d31be56abc7551a5570080fc99f5"
+      },
+      "src/jxplanetx/engine/forces.py": {
+        "size_bytes": 20182,
+        "sha256": "67ab6459cc8478f71e5d420e67cd94094b0f91af1f175e365aa3f8f2d23c4c24"
+      },
+      "src/jxplanetx/engine/hybrid.py": {
+        "size_bytes": 89734,
+        "sha256": "3aba61e73a963270dbb3cd872280e3f2e857e7e2118b5c48d6cebab14f181b42"
+      },
+      "src/jxplanetx/engine/hybrid_contracts.py": {
+        "size_bytes": 135671,
+        "sha256": "32b5e3b479d3b6060a7275e3658aebf6b375801ca7d8e74b6b45a14cf9356c14"
+      },
+      "src/jxplanetx/engine/rkf78.py": {
+        "size_bytes": 9553,
+        "sha256": "01a802a85d0a2faad6bf49aaeba00c4fdf7ce10faa3eedfff6e9ed56e503ae4f"
+      },
+      "src/jxplanetx/engine/symplectic.py": {
+        "size_bytes": 62106,
+        "sha256": "220f55ad48b960f0d6802f33502bc17c224c22de0dbd1f5aae639033ec9c490f"
+      },
+      "src/jxplanetx/engine/symplectic_contracts.py": {
+        "size_bytes": 7941,
+        "sha256": "305030363314bc4ea10e40c676f91b648c72398874d3d205b522105741ba3c9d"
+      },
+      "src/jxplanetx/engine/trajectory.py": {
+        "size_bytes": 53465,
+        "sha256": "52045e7a4ca33eb246ac85a7d9be8ed5514366ee23d2528d4f556d18506766db"
+      },
+      "src/jxplanetx/engine/trajectory_contracts.py": {
+        "size_bytes": 11685,
+        "sha256": "36d9fe8cdf81ce8d333b4afe18ed020550450a0655d7b95f35997892fb88e142"
+      },
+      "src/jxplanetx/engine/wisdom_holman.py": {
+        "size_bytes": 230474,
+        "sha256": "2c3ed08e04d6a622af63f6be82afa1a222582e772a891179cdc01aa0f2a7383f"
+      },
+      "src/jxplanetx/engine/wisdom_holman_contracts.py": {
+        "size_bytes": 25447,
+        "sha256": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+      },
+      "src/jxplanetx/force_registry_v5.py": {
+        "size_bytes": 30446,
+        "sha256": "1d5e7763ae3da8f23672aadf06ad26a9181e89c45477071c483c241a44aa8d05"
+      },
+      "src/jxplanetx/provenance.py": {
+        "size_bytes": 4366,
+        "sha256": "d77064f614557511b62b108f9b038bf0c5990abc3f404f2ebec6d2327062ce34"
+      },
+      "src/jxplanetx/solar_1pn.py": {
+        "size_bytes": 15035,
+        "sha256": "f74d5c00cf65cf88fda4e1774af548b90094ad702332bab8fd77602b9283d095"
+      },
+      "src/jxplanetx/solar_system/__init__.py": {
+        "size_bytes": 336,
+        "sha256": "bb26c8df24d1558bc55a329bc82b24e20bb38353746ed1ce8d0c0d6a47a4c0a8"
+      },
+      "src/jxplanetx/solar_system/_cspice_worker.py": {
+        "size_bytes": 40504,
+        "sha256": "09824658b6acb407ea683ff6d9c24df07bff3684549f5b478844f24c7d6e0951"
+      },
+      "src/jxplanetx/solar_system/artifacts.py": {
+        "size_bytes": 34663,
+        "sha256": "a9e4d553d034eb6b49e90507b3f3e8d97f1851151214866784cb69344f1bf025"
+      },
+      "src/jxplanetx/solar_system/contracts.py": {
+        "size_bytes": 73474,
+        "sha256": "8c3c940ad6d08cddac75e78a0837de7b3f310d5d66dae036e844a3939e477dbb"
+      },
+      "src/jxplanetx/solar_system/cspice_execution.py": {
+        "size_bytes": 88890,
+        "sha256": "bee84c9e5cb29dcca9e2eb5d4a30eb13d2ebe10ffe02b2cec2b5483b62f673d8"
+      },
+      "src/jxplanetx/solar_system/cspice_execution_contracts.py": {
+        "size_bytes": 100339,
+        "sha256": "b1f7b22094ca152ba5ec7b720db4127b2b3526d69955b830d5625fd8f4f43de8"
+      },
+      "src/jxplanetx/solar_system/cspice_time.py": {
+        "size_bytes": 20519,
+        "sha256": "60aaecc001af508c632603ae86712c155bfa54ba8ac9ed350dc0c341e72bea00"
+      },
+      "src/jxplanetx/solar_system/engine_preparation.py": {
+        "size_bytes": 38195,
+        "sha256": "f16c7e4d67c6b147f8a441e46947d0718c5c5125f8755cdc26704e604afd7030"
+      },
+      "src/jxplanetx/solar_system/engine_preparation_contracts.py": {
+        "size_bytes": 73122,
+        "sha256": "db4437f49b9bbe72bd6ebdc33d05623471eca3b172efa4c4057a516d9b26f369"
+      },
+      "src/jxplanetx/solar_system/frames.py": {
+        "size_bytes": 6306,
+        "sha256": "f762bc6584248591a42863dbf9cee1def3b16fcf5d35e52bf25a8b39f48f6df2"
+      },
+      "src/jxplanetx/solar_system/serialization.py": {
+        "size_bytes": 11953,
+        "sha256": "f4fbd0f9cfb25171e3fd32e329b6f223512d6054ee76ad30c23c2e08c383de4a"
+      },
+      "src/jxplanetx/solar_system/states.py": {
+        "size_bytes": 11965,
+        "sha256": "67c8726569f7e39a9c21d49b64b4337d8b1bfaa9d8787b2760282b93ba0e4869"
+      },
+      "src/jxplanetx/solar_system/time.py": {
+        "size_bytes": 8937,
+        "sha256": "7f89479f566f5db59da61114ff877dcb992e1dcfa714a33208a84dba98d47f9f"
+      },
+      "src/jxplanetx/solar_system/units.py": {
+        "size_bytes": 20389,
+        "sha256": "348a6a996a1c39571772499100896a466caa1178956ad8acd97bb1db34ae829b"
+      },
+      "src/jxplanetx/v5_implicit_midpoint.py": {
+        "size_bytes": 21487,
+        "sha256": "58f504c5f9bd31f7a1ccc2cbb13e3d8acbb9f3bdf49863c4f332c8ad46ea2996"
+      },
+      "src/jxplanetx/v5_reference_dynamics.py": {
+        "size_bytes": 22276,
+        "sha256": "e42eeefc91560edba768b1d9a0fc2818b364dd3b356a9cd2efc11ce522404591"
+      },
+      "src/jxplanetx/v5_solar_1pn_qualification.py": {
+        "size_bytes": 200826,
+        "sha256": "51b8d971894a8b34cf9384fdb31340d8323e959b113f97cc87bdaa6202d0282b"
+      },
+      "tests/test_claim_capabilities.py": {
+        "size_bytes": 8858,
+        "sha256": "f4f9326718c329f7983dfe4f8cc9ae50d4a81ea2591f1b4642eda9c903dd5515"
+      },
+      "tests/test_engine_api.py": {
+        "size_bytes": 28219,
+        "sha256": "7acde41f42f8b6a2bee587173e7a9ffe721da32d27cebf50e42540c5e39bc56d"
+      },
+      "tests/test_engine_backends.py": {
+        "size_bytes": 9334,
+        "sha256": "3658c6029dca301ff5cda734a63b5210c75b22a55f9b239a17ffe42280691d80"
+      },
+      "tests/test_engine_capabilities.py": {
+        "size_bytes": 20787,
+        "sha256": "33a52686a75fadeee7e8a4891f9f1fb79be2ca2d79e8fc43b3d4d00e3ec397a8"
+      },
+      "tests/test_engine_contracts.py": {
+        "size_bytes": 13130,
+        "sha256": "ef916ab1b5c8d89d7e820b10013cfff48817761a2026b5eca6d3c2da553ad2d9"
+      },
+      "tests/test_engine_encounter.py": {
+        "size_bytes": 52853,
+        "sha256": "2c8ab25c3dd563b56f6b08d29fcdfda2e999532941ccb2561a9ff7ccc4b144ce"
+      },
+      "tests/test_engine_forces.py": {
+        "size_bytes": 13755,
+        "sha256": "f7579b54e42c8f82be2ec4c54a031b83eb0469a0921c4ae097e35052106b5b9a"
+      },
+      "tests/test_engine_hybrid.py": {
+        "size_bytes": 136060,
+        "sha256": "9861ca193132f91f14b153e375c46f0cb4e77612f09c5415054daf2ce1d06c12"
+      },
+      "tests/test_engine_symplectic.py": {
+        "size_bytes": 35616,
+        "sha256": "608b8d9a4e8ed9c8eec8a086fbe659d0effdb4053f6710c6928106ab047b6625"
+      },
+      "tests/test_engine_trajectory.py": {
+        "size_bytes": 62899,
+        "sha256": "d5e32d381bdda04c50c3afa6f8151448b831152828198b0c565c23a2fc2c2a9e"
+      },
+      "tests/test_engine_wisdom_holman.py": {
+        "size_bytes": 94909,
+        "sha256": "5744cea951af9b7aec6785837a5f16f3e94c4b10e34fcf6ea8a7c45231fbcc6a"
+      },
+      "tests/test_force_registry_v5.py": {
+        "size_bytes": 12410,
+        "sha256": "5df819672b750b59bad1461712fd7d8561a0a74256ce6154ad613b8be5973ce8"
+      },
+      "tests/test_jx_challenger_v1.py": {
+        "size_bytes": 35253,
+        "sha256": "2851cb240965b17740928858a430d8229e1437c543599b99c682b9f7f79e1b26"
+      },
+      "tests/test_jx_post_v5_precision_probe.py": {
+        "size_bytes": 33940,
+        "sha256": "dd432555a8fd8b6ac4c4730fa3e5e94dfc1466077f13860f201403b0b45794e2"
+      },
+      "tests/test_rebound_hybrid_comparison.py": {
+        "size_bytes": 39708,
+        "sha256": "f0d4bb5341f31e7f79a1c68b5f958c438c506711eaa004b31af102b70a5478c9"
+      },
+      "tests/test_rebound_ias15_comparison.py": {
+        "size_bytes": 25675,
+        "sha256": "231051092698c90e110f8068ed2067704db7cf1dbc91e1bcc897c1922f77525d"
+      },
+      "tests/test_rebound_leapfrog_comparison.py": {
+        "size_bytes": 30578,
+        "sha256": "72a7393fb263ff80aa654f95afe8acc74ed7c27b4217b1e6eb71442519733c9c"
+      },
+      "tests/test_rebound_whfast_comparison.py": {
+        "size_bytes": 20706,
+        "sha256": "35b6559cbde8ed36f4db669f6a18147f60ebea57404c2084db98230d96d6f3ab"
+      },
+      "tests/test_solar_1pn.py": {
+        "size_bytes": 16028,
+        "sha256": "c99f77627fc351294fcdbe6d81748ff1c1ab0e0e4f40309747e02ed75969d7d0"
+      },
+      "tests/test_solar_system_artifacts.py": {
+        "size_bytes": 56053,
+        "sha256": "5aa41f27f7061dfd9da46c1f4d3e137b86d1e623d45e0de12e6e72b35fd69560"
+      },
+      "tests/test_solar_system_contracts.py": {
+        "size_bytes": 56316,
+        "sha256": "ad148887414de9184495315c221c39d48e63dce7bf9e6d7e74379b3b8ba66cfe"
+      },
+      "tests/test_solar_system_cspice_execution.py": {
+        "size_bytes": 44700,
+        "sha256": "83ede2bf6748f40f7276169693a48a5cac8a4cb5e583daa68aaa312a73542d01"
+      },
+      "tests/test_solar_system_cspice_execution_contracts.py": {
+        "size_bytes": 65570,
+        "sha256": "42cd220ba0f80083604e9a7dbd970c583a53f3b61bbd040f961401ab0b8a413e"
+      },
+      "tests/test_solar_system_cspice_time.py": {
+        "size_bytes": 69416,
+        "sha256": "f2aad62d00034fd5e9a1a7af3062827eb26f30d5fb670af318bcd010a18491a6"
+      },
+      "tests/test_solar_system_engine_preparation.py": {
+        "size_bytes": 49313,
+        "sha256": "7d08166835410b61811dbc9c0851cb12475d4bd4ad3816ebc4f61896a3e731f5"
+      },
+      "tests/test_solar_system_frames.py": {
+        "size_bytes": 20162,
+        "sha256": "71a78c92b7f77dc340f36aea3babe5593a00f2abb42d08496e46eda8fcc748f4"
+      },
+      "tests/test_solar_system_states.py": {
+        "size_bytes": 42052,
+        "sha256": "b3afb18696ad711343c1a39ae99393a3078d9b9e1a3f0833fd76cbad1e199f52"
+      },
+      "tests/test_solar_system_time.py": {
+        "size_bytes": 14724,
+        "sha256": "cbb97d7b5cb6c93bbfe6f0f885ca7e5e2078bd51ff0fd6af5b68467d91734256"
+      },
+      "tests/test_solar_system_units.py": {
+        "size_bytes": 23652,
+        "sha256": "ce3b000c51024e26f8b47f443c65006bb54a57babcc8e5e33b224f5ea81f2067"
+      },
+      "tests/test_v5_independent_oracle.py": {
+        "size_bytes": 25251,
+        "sha256": "6e199264904ec66f1ae231dbc67e775bad3501f216788ae257a4184a556fede3"
+      },
+      "tests/test_v5_q2_observer_registration_boundary.py": {
+        "size_bytes": 30274,
+        "sha256": "e90ad41055561938b227abba3c647a91f0f318a9da016ed391ad9e618afcf3ab"
+      },
+      "tests/test_v5_q2_perihelion_observer.py": {
+        "size_bytes": 36508,
+        "sha256": "b827522717cc6792ed11af998908e6c8b8fee329ad399dcb54d44a823da40b1b"
+      },
+      "tests/test_v5_reference_integrator.py": {
+        "size_bytes": 30110,
+        "sha256": "97016ac020e2e3da0d05928d23bd3f5d4cb4263611934cd9ca37283978e42fd2"
+      },
+      "tests/test_v5_solar_1pn_execution_prerequisites.py": {
+        "size_bytes": 24879,
+        "sha256": "20ccedc61a653bce02e30d96160c7389a62ffb46cb58920a40f04c79d3a9be0e"
+      },
+      "tests/test_v5_solar_1pn_preexecution_handoff_v1.py": {
+        "size_bytes": 25290,
+        "sha256": "2ccfd6ff02687488c93ee10e84609b747316e09af143cb08c5ab79fad8367363"
+      },
+      "tests/test_v5_solar_1pn_q8q9_prerequisites.py": {
+        "size_bytes": 51238,
+        "sha256": "8806f5cc213f406746e0af9d2a5ab5b2712e2654464570acf27e788837870741"
+      },
+      "tests/test_v5_solar_1pn_qualification.py": {
+        "size_bytes": 185429,
+        "sha256": "9efabf05b443a8bc11a847a884f0cc811976a7851184e05ff063358a4d8854df"
+      },
+      "tests/test_v5_solar_1pn_qualification_successor_v2.py": {
+        "size_bytes": 23595,
+        "sha256": "9e31e4e98ca62dc677b542bba10f47fa23a9b0cfa29e30d0c417efbc5469b991"
+      }
+    }
+  },
+  "engine_source_tree": {
+    "schema": "jxplanetx.engine-source-manifest.v1",
+    "selection": "EXACT_TOP_LEVEL_SOURCE_TREE_PYTHON_ROSTER",
+    "repository_prefix": "src/",
+    "manifest_path_root": "jxplanetx/engine/",
+    "files": [
+      {
+        "path": "jxplanetx/engine/__init__.py",
+        "size_bytes": 10591,
+        "sha256": "13cf2923cc5af3172414c069dcbe99a7c6f00061bb12fffa464215f3d66e8fc1"
+      },
+      {
+        "path": "jxplanetx/engine/api.py",
+        "size_bytes": 10482,
+        "sha256": "ce0c9242e5bc90a1b14605e510d94875aafc7f83337b2758ea9649dccd9a0a58"
+      },
+      {
+        "path": "jxplanetx/engine/backends.py",
+        "size_bytes": 7367,
+        "sha256": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba"
+      },
+      {
+        "path": "jxplanetx/engine/catalog.py",
+        "size_bytes": 38321,
+        "sha256": "028dee5a30ff803abdab5635658f7dbb03e10e1e9182f0b83d806182f6301665"
+      },
+      {
+        "path": "jxplanetx/engine/contracts.py",
+        "size_bytes": 14885,
+        "sha256": "fb4db9221d31c1eda87b1f09cae8ec890c7b3a9e63231b5a3e94c09b651cf801"
+      },
+      {
+        "path": "jxplanetx/engine/encounter.py",
+        "size_bytes": 141835,
+        "sha256": "0bd95ff70f15574e8c58c2fcea4fce51e4964f75a2d7230719cc1f21a7cbdd22"
+      },
+      {
+        "path": "jxplanetx/engine/encounter_contracts.py",
+        "size_bytes": 61450,
+        "sha256": "372ae800dd9404623ad1773c676700e1a42ec8e1b652c1e14b78288fb26ec1ac"
+      },
+      {
+        "path": "jxplanetx/engine/evaluator.py",
+        "size_bytes": 26948,
+        "sha256": "2d5c2fd92bb88b91cfd7e0d24702e58d6177d31be56abc7551a5570080fc99f5"
+      },
+      {
+        "path": "jxplanetx/engine/forces.py",
+        "size_bytes": 20182,
+        "sha256": "67ab6459cc8478f71e5d420e67cd94094b0f91af1f175e365aa3f8f2d23c4c24"
+      },
+      {
+        "path": "jxplanetx/engine/hybrid.py",
+        "size_bytes": 89734,
+        "sha256": "3aba61e73a963270dbb3cd872280e3f2e857e7e2118b5c48d6cebab14f181b42"
+      },
+      {
+        "path": "jxplanetx/engine/hybrid_contracts.py",
+        "size_bytes": 135671,
+        "sha256": "32b5e3b479d3b6060a7275e3658aebf6b375801ca7d8e74b6b45a14cf9356c14"
+      },
+      {
+        "path": "jxplanetx/engine/rkf78.py",
+        "size_bytes": 9553,
+        "sha256": "01a802a85d0a2faad6bf49aaeba00c4fdf7ce10faa3eedfff6e9ed56e503ae4f"
+      },
+      {
+        "path": "jxplanetx/engine/symplectic.py",
+        "size_bytes": 62106,
+        "sha256": "220f55ad48b960f0d6802f33502bc17c224c22de0dbd1f5aae639033ec9c490f"
+      },
+      {
+        "path": "jxplanetx/engine/symplectic_contracts.py",
+        "size_bytes": 7941,
+        "sha256": "305030363314bc4ea10e40c676f91b648c72398874d3d205b522105741ba3c9d"
+      },
+      {
+        "path": "jxplanetx/engine/trajectory.py",
+        "size_bytes": 53465,
+        "sha256": "52045e7a4ca33eb246ac85a7d9be8ed5514366ee23d2528d4f556d18506766db"
+      },
+      {
+        "path": "jxplanetx/engine/trajectory_contracts.py",
+        "size_bytes": 11685,
+        "sha256": "36d9fe8cdf81ce8d333b4afe18ed020550450a0655d7b95f35997892fb88e142"
+      },
+      {
+        "path": "jxplanetx/engine/wisdom_holman.py",
+        "size_bytes": 230474,
+        "sha256": "2c3ed08e04d6a622af63f6be82afa1a222582e772a891179cdc01aa0f2a7383f"
+      },
+      {
+        "path": "jxplanetx/engine/wisdom_holman_contracts.py",
+        "size_bytes": 25447,
+        "sha256": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+      }
+    ],
+    "file_count": 18,
+    "total_size_bytes": 958137,
+    "tree_hash_algorithm": "SHA256_DOMAIN_SEPARATED_SORTED_CANONICAL_JSON_V1",
+    "tree_hash_domain": "jxplanetx.engine-source-tree.v1",
+    "tree_hash_preimage": "ASCII(DOMAIN)||NUL||ASCII(JSON(FILES,SORT_KEYS,COMPACT,ENSURE_ASCII,ALLOW_NAN_FALSE))",
+    "tree_sha256": "974e31567db7f0e717f76944aedb0c027632f9ab2f4f9f4cbf9b66866d114269"
+  },
+  "post_v5_precision_evidence": {
+    "scope": "ADDITIVE_EQUAL_BINARY_ENERGY_PHASE_CONVERGENCE_ONLY",
+    "evidence_class": "MODEL_OUTPUT",
+    "repository_sources": {
+      "benchmarks/jx_post_v5_precision_probe.py": {
+        "size_bytes": 99266,
+        "sha256": "d22369803670d4fe8097d26b52107deda112b1e0107c0077214ae00ad7bad0b5"
+      },
+      "tests/test_jx_post_v5_precision_probe.py": {
+        "size_bytes": 33940,
+        "sha256": "dd432555a8fd8b6ac4c4730fa3e5e94dfc1466077f13860f201403b0b45794e2"
+      }
+    },
+    "external_checkpoint": {
+      "included_in_repository": false,
+      "distribution_status": "SEPARATE_RECOVERY_EVIDENCE",
+      "archive": {
+        "filename": "jx-v5-post-precision-freeze-20260906.tar.gz",
+        "size_bytes": 1336757,
+        "sha256": "e630fcd8ccbad81e74e28a9dacae237d27f35d4a48bcf35c431fa951ce18ed60"
+      },
+      "reports": {
+        "full-required-run-a.json": {
+          "size_bytes": 1716860,
+          "sha256": "6ef98fd1552496896e1824541e86fd2dcb4e28197a3dc1a6221776c4e25b4546"
+        },
+        "full-required-run-b.json": {
+          "size_bytes": 1716856,
+          "sha256": "4e85278ba5ddb1b2113cd4d6ec953e9816dab93f9bd68bd8c2302ede1a77cf46"
+        }
+      },
+      "semantic_content_sha256": "efcf91d421957a4594df78f9ce15bd286f7679df365df5c8334a541bef959db3",
+      "semantic_identity_statement": "BOTH_REPORTS_VALIDATE_AND_SHARE_THE_SAME_DOMAIN_SEPARATED_FULLY_TYPED_BINARY64_SEMANTIC_DIGEST;DECLARED_DIAGNOSTIC_TIMINGS_ARE_EXCLUDED"
+    },
+    "profile": {
+      "fixture": "ANALYTIC_EQUAL_MASS_CIRCULAR_BINARY",
+      "periods": 100,
+      "samples_per_period": 16,
+      "step_divisors": [
+        256,
+        512,
+        1024
+      ],
+      "families": [
+        "jx_kdk",
+        "rebound_leapfrog"
+      ],
+      "replay": "COMPLETE_FRESH_STATE_REEXECUTION_PER_LANE"
+    }
+  },
+  "nonvendored_artifacts_and_runtimes": {
+    "dependency_payloads_included": false,
+    "items": [
+      {
+        "id": "jx-v5-final-full-source-recovery",
+        "kind": "RECOVERY_CHECKPOINT_ARCHIVE",
+        "filename": "jx-v5-final-full-source-20260906.tar.gz",
+        "size_bytes": 7500113,
+        "sha256": "52fc8ee40a65a738804aff5738f1a10fdf40132dbc4ac8b736402badf3a8e33f",
+        "status": "NOT_VENDORED",
+        "relationship": "AUDITED_PRE_RELEASE_RECOVERY_EVIDENCE_NOT_TAGGED_SOURCE_OF_TRUTH"
+      },
+      {
+        "id": "jx-v5-post-precision-freeze",
+        "kind": "SCIENTIFIC_EVIDENCE_CHECKPOINT_ARCHIVE",
+        "filename": "jx-v5-post-precision-freeze-20260906.tar.gz",
+        "size_bytes": 1336757,
+        "sha256": "e630fcd8ccbad81e74e28a9dacae237d27f35d4a48bcf35c431fa951ce18ed60",
+        "status": "NOT_VENDORED"
+      },
+      {
+        "id": "de440s-spk",
+        "kind": "EXTERNAL_EPHEMERIS_KERNEL",
+        "filename": "de440s.bsp",
+        "size_bytes": 32726016,
+        "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+        "status": "NOT_VENDORED",
+        "use": "OPT_IN_STEP5_CSPICE_PROFILE_ONLY"
+      },
+      {
+        "id": "spiceypy-cspice-runtime",
+        "kind": "EXTERNAL_OPTIONAL_RUNTIME",
+        "version": "spiceypy==8.2.0",
+        "cspice_profile": "N0067_DERIVED",
+        "status": "NOT_VENDORED",
+        "identity_profiles": "ABI_SPECIFIC_IDENTITIES_ARE_LOCKED_IN_THE_SOLAR_SYSTEM_EXECUTION_SOURCE"
+      },
+      {
+        "id": "rebound-exact-comparator-runtime",
+        "kind": "EXTERNAL_OPTIONAL_RUNTIME",
+        "version": "5.1.1",
+        "githash": "33549d1d50d616a95a6d6a79e5e2c9c3b3730b1f",
+        "python_source_file_count": 67,
+        "python_source_tree_sha256": "e64bb210040368bfbf82d2993e8e1824f1571bd788755bc20028d41aaad3c40e",
+        "module": {
+          "relative_path": "rebound/__init__.py",
+          "size_bytes": 3824,
+          "sha256": "924e19bfddb22bca9cbff0c641eaf3b2f791287f33df2d8d852f80aac78f8cdd"
+        },
+        "library": {
+          "relative_path": "librebound.cpython-314-x86_64-linux-gnu.so",
+          "size_bytes": 2104024,
+          "sha256": "52df4fe1050b98d6b0db11f31c18ec14ed00697a987e904bd7587cce4a0ccdef"
+        },
+        "metadata": {
+          "relative_path": "rebound-5.1.1.dist-info/METADATA",
+          "size_bytes": 9389,
+          "sha256": "cb8b4530f733ac4b2ed6bf385c5198f5244e2382181cf0733a08d8aff5c22bb8"
+        },
+        "license": {
+          "expression": "GPL-3.0-only",
+          "relative_path": "rebound-5.1.1.dist-info/licenses/LICENSE",
+          "size_bytes": 35147,
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        },
+        "status": "NOT_VENDORED",
+        "use": "CHALLENGER_V1_AND_POST_V5_EXTERNAL_COMPARISON_LANES_ONLY"
+      },
+      {
+        "id": "rebound-legacy-runtime",
+        "kind": "EXTERNAL_OPTIONAL_RUNTIME",
+        "version": "4.4.11",
+        "status": "NOT_VENDORED",
+        "use": "LEGACY_IAS15_AND_POPULATION_FEATURES_AND_CI_SMOKE_ONLY"
+      }
+    ]
+  },
+  "validation": {
+    "release_candidate_preflight": {
+      "environment": {
+        "python": "3.14.4",
+        "numpy": "2.3.5",
+        "scipy": "1.16.3",
+        "rebound": "ABSENT"
+      },
+      "package_version_coherence": "PASS_0.4.0a1",
+      "workflow_yaml_parse": "PASS",
+      "workflow_shell_blocks": "13/13 BASH_N_PASS",
+      "metadata_and_workflow_diff_check": "PASS",
+      "final_checkpoint_checksums": "18/18 PASS",
+      "post_precision_checkpoint_checksums": "11/11 PASS",
+      "release_scope_frozen_files": "119/119 BYTE_IDENTICAL",
+      "engine_source_tree": "PASS"
+    },
+    "workflow_local_preflight": {
+      "rebound_leapfrog_comparison": "17 PASS; 2 INTENTIONAL SKIPS",
+      "rebound_whfast_comparison": "13 PASS; 1 INTENTIONAL CLASS SKIP",
+      "post_v5_precision_cpython_3_14_numpy_2_3_5_no_rebound": "24 PASS; 1 INTENTIONAL REBOUND SKIP",
+      "legacy_rebound_4_4_11_clean_export": {
+        "test_de441_population.py": "4/4 PASS",
+        "test_encounter_tail.py": "4/4 PASS",
+        "test_population_scale.py": "8/8 PASS"
+      }
+    },
+    "frozen_precision_checkpoint": {
+      "focused_exact_rebound_5_1_1": "25/25 PASS",
+      "focused_system_normal": "24 PASS; 1 INTENTIONAL SKIP",
+      "focused_system_optimized": "24 PASS; 1 INTENTIONAL SKIP",
+      "full_semantic_replay": "BITWISE_SEMANTIC_DIGEST_MATCH",
+      "independent_science_red_team": "P0_NONE;P1_NONE"
+    },
+    "frozen_challenger_v1": {
+      "exact_rebound_5_1_1": "23/23 PASS",
+      "system_normal": "22 PASS; 1 INTENTIONAL SKIP",
+      "system_optimized": "22 PASS; 1 INTENTIONAL SKIP"
+    },
+    "github_actions": {
+      "status_at_manifest_generation": "PENDING",
+      "engine_job": "CPYTHON_3_12_13;INDEPENDENT_EXTRA;REBOUND_ABSENT;ONE_TEST_FILE_PER_PROCESS;FROZEN_POST_V5_PRECISION_TEST_EXCLUDED;FULL_GIT_HISTORY_FOR_FOUNDATION_OBJECT",
+      "post_v5_precision_runtime_job": "UBUNTU_26_04_CONTAINER;DISTRO_CPYTHON_3_14_4_EXECUTABLE_BYTE_PIN;DISTRO_NUMPY_2_3_5_SELECTED_BINARY_BYTE_PINS;REBOUND_ABSENT;FROZEN_POST_V5_PRECISION_TEST_ONLY",
+      "legacy_rebound_job": "PYTHON_3_12;REBOUND_4_4_11;THREE_INTEGRATION_TEST_FILES"
+    }
+  },
+  "claim_boundaries": {
+    "authentication_or_authority_claimed": false,
+    "scientific_or_production_use_authorized": false,
+    "planet_x_observational_evidence_claimed": false,
+    "general_rebound_superiority_claimed": false,
+    "rebound_equivalence_claimed": false,
+    "comparative_speed_superiority_claimed": false,
+    "timing_comparability_claimed": false,
+    "general_or_theoretical_convergence_order_claimed": false,
+    "continuous_time_energy_bound_claimed": false,
+    "long_horizon_stability_claimed": false,
+    "cross_hardware_bitwise_reproducibility_claimed": false,
+    "collision_encounter_or_chaos_coverage_claimed": false,
+    "step5_trajectory_execution_claimed": false,
+    "de440_ephemeris_reproduction_claimed": false,
+    "fixture_specific_empirical_state_phase_refinement_observed": true,
+    "scope_statement": "THE_POSITIVE_REFINEMENT_OBSERVATION_IS LIMITED_TO_THE_DECLARED_EQUAL_MASS_CIRCULAR_BINARY_GRIDS_AND_RETAINED_SAMPLE_METRICS"
+  },
+  "nonclaim": "This prerelease manifest records byte identities only through unauthenticated SHA-256 integrity records. The software and recorded numerical outputs remain SCREENING_ONLY, unqualified MODEL_OUTPUT and do not establish observational evidence, source authority, scientific validity, production fitness, general accuracy or speed superiority over REBOUND."
+}

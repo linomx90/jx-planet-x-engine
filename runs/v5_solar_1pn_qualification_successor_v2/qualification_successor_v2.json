@@ -1,0 +1,874 @@
+{
+  "$schema": "../../schemas/jx-v5-solar-1pn-qualification-successor-v2.schema.json",
+  "schema": "jx-v5-solar-1pn-qualification-successor-spec/v2",
+  "successor_spec_id": "jx.v5.solar_1pn.qualification_successor_spec.f402f13c924543633925a99734d800911b01a8812ca7b293f7426fea6e07030c",
+  "identity_contract": {
+    "algorithm": "SHA-256",
+    "id_prefix": "jx.v5.solar_1pn.qualification_successor_spec.",
+    "canonicalization": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE",
+    "domain": "jx-v5-solar-1pn-qualification-successor-spec-identity/v2",
+    "envelope_keys": [
+      "schema",
+      "sentinel",
+      "successor"
+    ],
+    "payload_field": "successor",
+    "sentinel": "CONTENT_DIGEST_SENTINEL",
+    "sentinelized_field": "successor_spec_id",
+    "identity_scope": "BLOCKED_SPECIFICATION_NOT_EXECUTION_QUALIFICATION"
+  },
+  "bound_packages": {
+    "frozen_qualification": {
+      "role": "frozen_qualification",
+      "package_id": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781",
+      "qualification_id": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781",
+      "commit": "975b1b7002e358a980457acb18c9beaa90aa1c9f",
+      "identity_kind": "QUALIFICATION_PACKAGE_SHA256",
+      "identity_sha256": "80b4b6196167d95ce6cc72bf5a5ffba90e0fdc748d9144d2d9f83183b974f237",
+      "plan": {
+        "path": "runs/v5_solar_1pn_qualification/qualification_plan_v1.json",
+        "sha256": "b511ecd55a759e9c8037ac74cdf9e68985cde6b4f66008d4c9531f10c5c3b3dc",
+        "size_bytes": "92080",
+        "canonical_sha256": "9e2a75c6ff7c4c220d31d14348e95f619437e966bcfe517763a2eb57d0953210"
+      },
+      "inputs": {
+        "path": "runs/v5_solar_1pn_qualification/qualification_inputs_v1.json",
+        "sha256": "30ae263fc402d2d0d0bf6318c77285be13f8c2a5daa9c8e5667c789a20ab1b7c",
+        "size_bytes": "186336",
+        "canonical_sha256": "57b64944d65d930d4dfcf0a60fd02e5945788a14483c3daa30040257433c4f79"
+      },
+      "registration": {
+        "path": "runs/v5_solar_1pn_qualification/registration_v1.json",
+        "sha256": "7e4b839f0842b6e5d23b6b2c1610eb3a1f3024062e4b696d09e1eb9d6b32f545",
+        "size_bytes": "18490",
+        "canonical_sha256": "319939d02d5764e527514fd346615b9b175ac120c194cf4e88435482b31a253c"
+      }
+    },
+    "execution_prerequisites": {
+      "role": "execution_prerequisites",
+      "package_id": "jx.v5.solar_1pn.execution_prerequisites.v1",
+      "commit": "dd7b22f64c04e0836c624f13b6a4a087caeeeb46",
+      "identity_kind": "REGISTRATION_CANONICAL_SHA256",
+      "identity_sha256": "4aa7a82574cdd3127809d82202ca4e5a9e999f2f4d40b7fe93a01b388d002ea7",
+      "registration": {
+        "path": "runs/v5_solar_1pn_execution_prerequisites_v1/registration_v1.json",
+        "sha256": "e64b267971353b54b88ce7c2e8132f14673a64c7068ce52193eb78c71ce70b11",
+        "size_bytes": "5960",
+        "canonical_sha256": "4aa7a82574cdd3127809d82202ca4e5a9e999f2f4d40b7fe93a01b388d002ea7"
+      }
+    },
+    "q8q9_prerequisites": {
+      "role": "q8q9_prerequisites",
+      "package_id": "jx.v5.solar_1pn.q8q9_prerequisites.v1",
+      "commit": "dd7b22f64c04e0836c624f13b6a4a087caeeeb46",
+      "identity_kind": "Q8Q9_PACKAGE_SHA256",
+      "identity_sha256": "1d9008ae6a3c3a79edd06c3b01f6ab2a662246633188339c0d7f608f5712080b",
+      "registration": {
+        "path": "runs/v5_solar_1pn_qualification_q8q9_prerequisites_v1/registration_v1.json",
+        "sha256": "b046b2c049c8a2c800382aed171306dd7eb6e8a813fd283ad55706b801ce109f",
+        "size_bytes": "7446",
+        "canonical_sha256": "b6e86925ea6a0ecc28423b36a795ae743400cc183c46b9fdaf570431788514f3"
+      }
+    },
+    "q2_observer_registration_boundary": {
+      "role": "q2_observer_registration_boundary",
+      "package_id": "jx.v5.solar_1pn.q2_observer_registration_boundary.v1",
+      "commit": "3102c53616e3b7134092191ca94c77077128ae64",
+      "tree": "1a9d0c4b4389f15322a4633cbed4fcf25ef53c69",
+      "identity_kind": "Q2_OBSERVER_BOUNDARY_PACKAGE_SHA256",
+      "identity_sha256": "e4abdcf4b83b9a01b8b060ea8095b229d3ee8191eb73d2ca93ef9e4fbd57ba55",
+      "registration": {
+        "path": "runs/v5_solar_1pn_q2_observer_registration_v1/registration_v1.json",
+        "sha256": "8c7af546a668d100c441d3ce9845d944628ee1b9ec9487aa5248aef0dbee39e4",
+        "size_bytes": "9940",
+        "canonical_sha256": "d4027b8fc3d406cfa5dc7843bc1bbd74225aeb372cfc5c98b4c5023e5d4b7985"
+      },
+      "observer": {
+        "observer_id": "jx.v5.solar_1pn.q2.perihelion_observer_candidate.v1",
+        "commit": "d6344c49e7c6a734a337e84bd209ca5c11c23916",
+        "tree": "4eb04188a0ec6e073e51f126b02eb8a394872aa2",
+        "source_tuple_sha256": "d9d02d25689bb4561594aae77d7673433ce3c8e008b785f314c33bed143f3e27"
+      }
+    }
+  },
+  "effective_protocol": {
+    "inheritance": "FROZEN_BYTES_UNMODIFIED_WITH_EXACT_LISTED_CHRONOLOGY_AND_ELIGIBILITY_CORRECTIONS",
+    "chronology_corrections": [
+      {
+        "correction_id": "q8.unblinding_chronology.v2",
+        "scope": "REPLACE_ONLY_CONTRADICTORY_PREEXECUTION_TIMING",
+        "frozen_source": {
+          "document_path": "runs/v5_solar_1pn_qualification/qualification_inputs_v1.json",
+          "document_sha256": "30ae263fc402d2d0d0bf6318c77285be13f8c2a5daa9c8e5667c789a20ab1b7c",
+          "selector": {
+            "collection": "blocked_artifacts",
+            "placeholder_id": "blocker.q8.unblinding_record"
+          },
+          "expected_fields": {
+            "status": "BLOCKED",
+            "artifact_kind": "UNBLINDING_RECORD",
+            "resolution_requirement": "Create the first-valid unblinding record only after execution.",
+            "required_before_execution": true
+          }
+        },
+        "effective_rule": {
+          "preexecution_unblinding_status": "FORBIDDEN_NOT_APPLICABLE",
+          "required_before_execution": false,
+          "required_predecessor_artifact_role": "output_manifest_commitment",
+          "required_predecessor_custody_state": "OUTPUTS_COMMITTED_EXPECTATIONS_SEALED",
+          "phase_required": "AFTER_OUTPUT_COMMIT_BEFORE_ADJUDICATION",
+          "first_valid_unblinding_only": true,
+          "valid_unblinding_ordinal": "1",
+          "invalid_or_aborted_requests": "REVEAL_NOTHING_AND_DO_NOT_CHANGE_VALID_ORDINAL",
+          "post_unblinding_tuning_allowed": false,
+          "q8_readiness_effect": "UNBLINDING_RECORD_EXCLUDED_FROM_PREEXECUTION_READINESS",
+          "q8_postrun_adjudication_effect": "FIRST_VALID_UNBLINDING_RECORD_REQUIRED"
+        }
+      }
+    ],
+    "eligibility_and_claim_corrections": [
+      {
+        "correction_id": "case_eligibility.disclosed_holdout_labels.v2",
+        "scope": "EXECUTION_ELIGIBILITY_AND_CLAIM_BOUNDARY_ONLY",
+        "frozen_source_path": "runs/v5_solar_1pn_qualification/qualification_inputs_v1.json",
+        "frozen_source_sha256": "30ae263fc402d2d0d0bf6318c77285be13f8c2a5daa9c8e5667c789a20ab1b7c",
+        "selector": "fixtures[*].fixture_id WHERE PREFIX fixture.holdout.",
+        "expected_values": [
+          "fixture.holdout.synthetic_perihelion_3d",
+          "fixture.holdout.synthetic_perihelion_scaled_3d",
+          "fixture.holdout.synthetic_perihelion_e047_3d",
+          "fixture.holdout.synthetic_perihelion_e047_scaled_3d",
+          "fixture.holdout.generic_equation_3d",
+          "fixture.holdout.domain_boundary_3d",
+          "fixture.holdout.domain_outside_3d",
+          "fixture.holdout.domain_speed_outside_3d",
+          "fixture.holdout.tcb_km_s_transform",
+          "fixture.holdout.tdb_km_s_transform",
+          "fixture.holdout.tdb_au_day_transform",
+          "fixture.holdout.eih_mass_ratio"
+        ],
+        "effective_rule": "FROZEN_LABELS_RETAINED_BUT_CASES_ARE_VALIDATION_NOT_INPUT_BLIND_FOR_NEW_EXECUTION"
+      },
+      {
+        "correction_id": "expectation_commitment_schema.execution_eligibility.v2",
+        "scope": "EXECUTION_ELIGIBILITY_AND_CLAIM_BOUNDARY_ONLY",
+        "frozen_source_path": "schemas/jx-v5-solar-1pn-q8q9-sealed-expectation-commitment-v1.schema.json",
+        "frozen_source_sha256": "f7fa4ca3950f5a53d2a6ff2cb74b52b6e724aba5a456a9eebfe70f1f0a158e18",
+        "selector": "required AND properties",
+        "expected_values": [
+          "expectation_package_sha256",
+          "expectation_package_canonical_sha256"
+        ],
+        "effective_rule": "FROZEN_SCHEMA_RETAINED_BUT_NOT_EXECUTION_ELIGIBLE_BECAUSE_UNSALTED_EXPECTATION_HASHES_ARE_VISIBLE_BEFORE_REVEAL"
+      }
+    ],
+    "frozen_preexecution_blocker_resolution_map": [
+      {
+        "placeholder_id": "blocker.execution_implementation",
+        "artifact_kind": "EXECUTION_SOURCE",
+        "successor_roles": [
+          "jx_execution_implementation_output_authentication_serialization_and_attempt_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_JX_EXECUTOR_SOURCE_RUNTIME_DEPENDENCIES_FORCE_CONFIG_ALL_ARM_OUTPUT_AND_ATTEMPT_CONTRACT"
+      },
+      {
+        "placeholder_id": "blocker.q0.provenance_review",
+        "artifact_kind": "PROVENANCE_REVIEW",
+        "successor_roles": [
+          "provenance_custody_and_independence_attestations"
+        ],
+        "discharge_requirement": "COMPLETE_EXACT_INDEPENDENT_Q0_PROVENANCE_REVIEW"
+      },
+      {
+        "placeholder_id": "blocker.q1.independent_equation_oracle",
+        "artifact_kind": "INDEPENDENT_EQUATION_ORACLE",
+        "successor_roles": [
+          "q1_independent_equation_oracle_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_INDEPENDENT_Q1_ORACLE_SOURCE_RUNTIME_DEPENDENCIES_CONFIG_GENERIC_3D_RADIAL_TRANSVERSE_ROTATED_SCALE_SEPARATED_FIXTURES_MUTATION_ROSTER_CONVENTIONS_NORMS_BUDGET_AND_INDEPENDENCE"
+      },
+      {
+        "placeholder_id": "blocker.q2.event_observer_source",
+        "artifact_kind": "EVENT_OBSERVER_SOURCE",
+        "successor_roles": [
+          "q2_content_derived_external_registration"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q2_OBSERVER_SOURCE_AND_CONTENT_DERIVED_EXTERNAL_REGISTRATION_ID"
+      },
+      {
+        "placeholder_id": "blocker.q2.event_observer_runtime",
+        "artifact_kind": "EVENT_OBSERVER_RUNTIME",
+        "successor_roles": [
+          "q2_content_derived_external_registration"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q2_RUNTIME_DECIMAL_BACKEND_DEPENDENCIES_CONFIGURATIONS_REVIEW_AND_SIGNATURE"
+      },
+      {
+        "placeholder_id": "blocker.q2.expected_outputs",
+        "artifact_kind": "EXPECTED_OUTPUTS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_COMMITTED_Q2_EXPECTATIONS"
+      },
+      {
+        "placeholder_id": "blocker.q3.oracle_source",
+        "artifact_kind": "INDEPENDENT_ORACLE_SOURCE",
+        "successor_roles": [
+          "q3_independent_oracle_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_INDEPENDENT_Q3_ORACLE_SOURCE"
+      },
+      {
+        "placeholder_id": "blocker.q3.oracle_runtime",
+        "artifact_kind": "INDEPENDENT_ORACLE_RUNTIME",
+        "successor_roles": [
+          "q3_independent_oracle_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q3_RUNTIME_PLATFORM_DECIMAL_BACKEND_AND_NUMERICAL_FLOORS"
+      },
+      {
+        "placeholder_id": "blocker.q3.dependency_lock",
+        "artifact_kind": "DEPENDENCY_LOCK",
+        "successor_roles": [
+          "q3_independent_oracle_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q3_STDLIB_AND_DEPENDENCY_CLOSURE"
+      },
+      {
+        "placeholder_id": "blocker.q3.method_coefficients",
+        "artifact_kind": "METHOD_COEFFICIENTS",
+        "successor_roles": [
+          "q3_independent_oracle_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q3_METHOD_COEFFICIENTS"
+      },
+      {
+        "placeholder_id": "blocker.q3.configuration",
+        "artifact_kind": "CONFIGURATION",
+        "successor_roles": [
+          "q3_independent_oracle_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q3_EPOCHS_SCALES_NORMS_AND_CONFIGURATION"
+      },
+      {
+        "placeholder_id": "blocker.q3.self_convergence_outputs",
+        "artifact_kind": "SELF_CONVERGENCE_OUTPUTS",
+        "successor_roles": [
+          "q3_independent_oracle_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_RETAINED_Q3_SELF_CONVERGENCE_OUTPUTS_AND_EVIDENCE"
+      },
+      {
+        "placeholder_id": "blocker.q3.expected_outputs",
+        "artifact_kind": "EXPECTED_OUTPUTS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_COMMITTED_Q3_EXPECTATIONS"
+      },
+      {
+        "placeholder_id": "blocker.q4.eih_source",
+        "artifact_kind": "EIH_SOURCE",
+        "successor_roles": [
+          "q4_external_eih_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_EXTERNAL_Q4_EIH_SOURCE"
+      },
+      {
+        "placeholder_id": "blocker.q4.eih_runtime",
+        "artifact_kind": "EIH_RUNTIME",
+        "successor_roles": [
+          "q4_external_eih_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q4_RUNTIME_PLATFORM_AND_CONFIGURATION"
+      },
+      {
+        "placeholder_id": "blocker.q4.dependency_lock",
+        "artifact_kind": "DEPENDENCY_LOCK",
+        "successor_roles": [
+          "q4_external_eih_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q4_STDLIB_AND_DEPENDENCY_CLOSURE"
+      },
+      {
+        "placeholder_id": "blocker.q4.configuration",
+        "artifact_kind": "CONFIGURATION",
+        "successor_roles": [
+          "q4_external_eih_execution_contract"
+        ],
+        "discharge_requirement": "BIND_EXACT_Q4_GENERIC_RADIAL_TRANSVERSE_ROTATED_BODY_EXCHANGED_FIXTURE_ROSTER_CONVENTIONS_BACKREACTION_NORMS_AND_PER_ARM_BUDGET"
+      },
+      {
+        "placeholder_id": "blocker.q4.expected_outputs",
+        "artifact_kind": "EXPECTED_OUTPUTS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_COMMITTED_Q4_EXPECTATIONS"
+      },
+      {
+        "placeholder_id": "blocker.q5.expected_outputs",
+        "artifact_kind": "EXPECTED_OUTPUTS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_COMMITTED_Q5_EXPECTATIONS"
+      },
+      {
+        "placeholder_id": "blocker.q6.expected_outputs",
+        "artifact_kind": "EXPECTED_OUTPUTS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_COMMITTED_Q6_EXPECTATIONS"
+      },
+      {
+        "placeholder_id": "blocker.q7.expected_outputs",
+        "artifact_kind": "EXPECTED_OUTPUTS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_COMMITTED_Q7_EXPECTATIONS"
+      },
+      {
+        "placeholder_id": "blocker.q8.custodian_attestation",
+        "artifact_kind": "CUSTODIAN_ATTESTATION",
+        "successor_roles": [
+          "fresh_external_case_custody_and_claim_scope",
+          "provenance_custody_and_independence_attestations"
+        ],
+        "discharge_requirement": "BIND_FRESH_CASE_OR_NARROWED_CLAIM_CUSTODY_AND_SIGNED_INDEPENDENCE_ATTESTATIONS"
+      },
+      {
+        "placeholder_id": "blocker.q8.sealed_expectations",
+        "artifact_kind": "SEALED_EXPECTATIONS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_SALTED_COMMITTED_EXPECTATIONS_UNAVAILABLE_UNTIL_REVEAL"
+      },
+      {
+        "placeholder_id": "blocker.q9.budget_justification",
+        "artifact_kind": "ERROR_BUDGET_JUSTIFICATION",
+        "successor_roles": [
+          "qualification_error_budget"
+        ],
+        "discharge_requirement": "BIND_COMPLETE_NINE_COMPONENT_TOTAL_PER_OBSERVABLE_PER_CELL_INDEPENDENTLY_REVIEWED_BUDGET"
+      },
+      {
+        "placeholder_id": "blocker.q9.expected_outputs",
+        "artifact_kind": "EXPECTED_OUTPUTS",
+        "successor_roles": [
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "sealed_expectation_commitment"
+        ],
+        "discharge_requirement": "BIND_TYPED_SECRET_COMMITTED_Q9_EXPECTATIONS"
+      }
+    ],
+    "phase_requirements": [
+      {
+        "phase": "BEFORE_EXECUTION",
+        "required_artifact_roles": [
+          "fresh_external_case_custody_and_claim_scope",
+          "q2_content_derived_external_registration",
+          "signature_trust_profile_and_keyring",
+          "q2_execution_and_adjudication_contract",
+          "q2_planarity_identifiability_and_remainder_policy",
+          "q3_independent_oracle_execution_contract",
+          "q4_external_eih_execution_contract",
+          "typed_expectation_content_schema",
+          "secrecy_preserving_expectation_commitment_schema",
+          "jx_execution_implementation_output_authentication_serialization_and_attempt_contract",
+          "q1_independent_equation_oracle_execution_contract",
+          "qualification_error_budget",
+          "provenance_custody_and_independence_attestations",
+          "sealed_expectation_commitment"
+        ]
+      },
+      {
+        "phase": "AFTER_EXECUTION_BEFORE_UNBLIND",
+        "required_artifact_roles": [
+          "output_manifest_commitment"
+        ]
+      },
+      {
+        "phase": "AFTER_OUTPUT_COMMIT_BEFORE_ADJUDICATION",
+        "required_artifact_roles": [
+          "unblinding_record"
+        ]
+      },
+      {
+        "phase": "AFTER_ADJUDICATION",
+        "required_artifact_roles": [
+          "final_adjudication_and_result_record"
+        ]
+      }
+    ],
+    "q8_readiness_and_postrun_adjudication_separated": true,
+    "legacy_sealed_expectation_schema_execution_acceptable": false,
+    "disclosed_fixture_classification": "VALIDATION_CASES_NOT_INPUT_BLIND_HOLDOUTS",
+    "future_claim_boundary": "FRESH_EXTERNAL_CUSTODIED_CASES_OR_EXPLICIT_OUTCOME_BLINDING_ONLY_CLAIM"
+  },
+  "unresolved_artifact_slots": [
+    {
+      "role": "fresh_external_case_custody_and_claim_scope",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_FRESH_EXTERNAL_CASES_OR_NARROWED_CLAIM",
+      "requirements": [
+        "EXACTLY_ONE_BRANCH_FRESH_INPUT_BLIND_OR_DISCLOSED_VALIDATION_OUTCOME_BLIND_ONLY",
+        "FRESH_BRANCH_EXACT_SECRET_CASE_ROSTER_AND_CONTENT_LOCKED_BEFORE_EXECUTION",
+        "FRESH_BRANCH_DOMAIN_SEPARATED_HIDING_COMMITMENT_OR_AUTHENTICATED_ENCRYPTION_OR_CUSTODIAN_RUN_EQUIVALENT",
+        "FRESH_BRANCH_NO_PUBLIC_UNSALTED_RAW_OR_CANONICAL_PLAINTEXT_CASE_HASHES",
+        "FRESH_BRANCH_CONTROLLED_INJECTION_ONLY_AFTER_EXECUTOR_AND_CONFIGURATION_LOCK",
+        "FRESH_BRANCH_IMPLEMENTERS_NEVER_RECEIVE_PLAINTEXT_CASES",
+        "FRESH_BRANCH_OUTPUTS_BIND_EXACT_CASE_COMMITMENT_OR_CIPHERTEXT",
+        "DISCLOSED_BRANCH_EXACT_PUBLIC_VALIDATION_ROSTER",
+        "DISCLOSED_BRANCH_CLAIM_LABEL_OUTCOME_BLIND_ONLY_NEVER_HOLDOUT_OR_INPUT_BLIND",
+        "BRANCH_CODE_BOUND_IN_EXECUTION_ID_AND_FINAL_CLAIM_AND_ADJUDICATION"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "q2_content_derived_external_registration",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_CONTENT_DERIVED_EXTERNAL_Q2_REGISTRATION",
+      "requirements": [
+        "EXACT_Q2_BOUNDARY_AND_OBSERVER_SOURCE",
+        "EXACT_RUNTIME_ARTIFACT_AND_DECIMAL_BACKEND",
+        "EXACT_STDLIB_AND_DEPENDENCY_CLOSURE",
+        "EXACT_OBSERVER_CONFIGURATIONS",
+        "EXTERNAL_INDEPENDENCE_REVIEW_AND_SIGNATURE",
+        "CONTENT_DERIVED_EXTERNAL_REGISTRATION_ID"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "signature_trust_profile_and_keyring",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_SIGNATURE_TRUST_PROFILE_AND_KEYRING",
+      "requirements": [
+        "TRUSTED_SIGNATURE_PROFILE",
+        "PINNED_KEYRING",
+        "KEY_STATUS_AND_REVOCATION_POLICY",
+        "SIGNED_PAYLOAD_DOMAIN_AND_SERIALIZATION"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "q2_execution_and_adjudication_contract",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_EXACT_Q2_EXECUTION_AND_ADJUDICATION_CONTRACT",
+      "requirements": [
+        "WRAPPER_LOADS_CONCRETE_SOURCE_CONFIG_ARTIFACT",
+        "WRAPPER_RECOMPUTES_DOMAIN_SEPARATED_CANONICAL_SOURCE_CONFIG_HASH",
+        "CALLER_SUPPLIED_SOURCE_HASH_EQUALITY_IS_INSUFFICIENT",
+        "EXACT_24_PLAN_CELLS_MAPPED_TO_SCHEDULE_AND_FORCE_MODE",
+        "RAW_TRAJECTORY_SERIALIZATION_BOUND",
+        "PARSER_AND_CANONICAL_OBSERVER_OUTPUT_BOUND",
+        "STEP_EVENT_TOLERANCE_AND_INVERSE_C_SQUARED_EXTRAPOLATION_BOUND",
+        "INDEPENDENT_ANALYTIC_6PI_TARGET_AND_PI_BOUND",
+        "PER_CELL_ADJUDICATION_RULES_BOUND"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "q2_planarity_identifiability_and_remainder_policy",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_Q2_PLANARITY_IDENTIFIABILITY_OR_REMAINDER_POLICY",
+      "requirements": [
+        "FINAL_OFF_PLANE_BOUND_ZERO_OR_TINY_EXTERNALLY_JUSTIFIED_AND_BUDGET_BOUND",
+        "AT_LEAST_THREE_POSTINITIAL_PERIHELION_EVENTS_PREFERABLY_FOUR_OR_RIGOROUS_REMAINDER_BUDGET_AND_NARROWED_CLAIM",
+        "AT_LEAST_THREE_NONZERO_INVERSE_C_SQUARED_LEVELS_PLUS_NEWTONIAN_REFERENCE_OR_RIGOROUS_REMAINDER_BUDGET_AND_NARROWED_CLAIM",
+        "GRID_CHANGE_REQUIRES_NEW_SUCCESSOR_SPEC_ID"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "q3_independent_oracle_execution_contract",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_Q3_INDEPENDENT_ORACLE_EXECUTION_CONTRACT",
+      "requirements": [
+        "CONCRETE_EPOCH_ROSTER",
+        "EXACT_SCALES_AND_NORMS",
+        "EXACT_ORACLE_SOURCE_AND_METHOD_COEFFICIENTS",
+        "EXACT_RUNTIME_AND_CONFIGURATION",
+        "EXACT_DEPENDENCY_CLOSURE",
+        "EXACT_NUMERICAL_FLOORS",
+        "SELF_CONVERGENCE_RULE",
+        "EXACT_RETAINED_SELF_CONVERGENCE_OUTPUTS_AND_EVIDENCE",
+        "EXTERNAL_IMPLEMENTATION_INDEPENDENCE"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "q4_external_eih_execution_contract",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_Q4_EXTERNAL_EIH_EXECUTION_CONTRACT",
+      "requirements": [
+        "EXTERNAL_EIH_EVALUATOR",
+        "EXACT_ORDERED_FIXTURE_ROLE_ROSTER_GENERIC_RADIAL_TRANSVERSE_ROTATED_BODY_EXCHANGED",
+        "COORDINATE_AND_SIGN_CONVENTIONS",
+        "BACKREACTION_AND_MASSLESS_LIMIT_POLICY",
+        "EXACT_NORMS",
+        "EXACT_RUNTIME_DEPENDENCIES_AND_CONFIGURATION",
+        "PER_ARM_ERROR_BUDGET",
+        "EXTERNAL_IMPLEMENTATION_INDEPENDENCE"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "typed_expectation_content_schema",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_TYPED_EXPECTATION_CONTENT_SCHEMA",
+      "requirements": [
+        "EXACT_CASE_ROSTER",
+        "FRESH_BRANCH_EXPECTATION_ROSTER_REFERENCE_ONLY_HIDING_COMMITMENT_OR_AUTHENTICATED_CIPHERTEXT",
+        "EXACT_OBSERVABLE_TYPES_UNITS_AND_SHAPES",
+        "EXACT_ACCEPTANCE_RELATIONS",
+        "CLOSED_SCHEMA_AND_CANONICAL_SERIALIZATION"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "secrecy_preserving_expectation_commitment_schema",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_SECRECY_PRESERVING_EXPECTATION_COMMITMENT_SCHEMA",
+      "requirements": [
+        "DOMAIN_SEPARATED_SALTED_COMMITMENT",
+        "HIGH_ENTROPY_CUSTODIED_SALT_UNAVAILABLE_UNTIL_REVEAL",
+        "SALT_NONREUSE_AND_DOMAIN_BINDING",
+        "ONLY_SCHEMA_AND_HIDING_COMMITMENT_OR_AUTHENTICATED_CIPHERTEXT_ROSTER_REFERENCE_VISIBLE_BEFORE_REVEAL",
+        "NO_UNSALTED_RAW_EXPECTATION_HASH_BEFORE_REVEAL",
+        "NO_UNSALTED_CANONICAL_EXPECTATION_HASH_BEFORE_REVEAL",
+        "COMMITMENT_REVEAL_VERIFICATION_AND_FIRST_VALID_ONLY"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "jx_execution_implementation_output_authentication_serialization_and_attempt_contract",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_EXACT_JX_EXECUTION_IMPLEMENTATION_AND_OUTPUT_CONTRACT",
+      "requirements": [
+        "EXACT_JX_ALL_ARM_EXECUTOR_SOURCE_COMMIT_AND_TREE",
+        "EXACT_RUNTIME_DECIMAL_BACKEND_PLATFORM_AND_LOCALE",
+        "EXACT_STDLIB_AND_DEPENDENCY_CLOSURE",
+        "EXACT_FORCE_EVALUATOR_CONFIGURATION_AND_ALL_ARM_SCOPE",
+        "EXACT_WRAPPER_AND_PARSER_SOURCE",
+        "EXACT_OUTPUT_TYPES_UNITS_SHAPES_AND_CELL_ROSTER",
+        "RAW_AND_CANONICAL_TRAJECTORY_BINDINGS",
+        "AUTHENTICATED_WRAPPER_AND_SERIALIZATION",
+        "OUTPUT_MANIFEST_BINDS_SELECTED_CASE_BRANCH_CODE_AND_EXACT_CASE_COMMITMENT_CIPHERTEXT_OR_DISCLOSED_ROSTER",
+        "ATTEMPT_ORDINAL_AND_ABORT_RECORD_POLICY",
+        "CLOSED_SCHEMA_BEFORE_EXECUTION"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "q1_independent_equation_oracle_execution_contract",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_Q1_INDEPENDENT_EQUATION_ORACLE_EXECUTION_CONTRACT",
+      "requirements": [
+        "EXACT_INDEPENDENT_SOURCE_RUNTIME_AND_DEPENDENCY_CLOSURE",
+        "EXACT_CONFIGURATION_AND_CONVENTIONS",
+        "EXACT_FIXTURE_ROLE_ROSTER_GENERIC_3D_RADIAL_TRANSVERSE_ROTATED_SCALE_SEPARATED",
+        "EXACT_FROZEN_MUTATION_DISCRIMINATION_ROSTER_AND_ANALYTIC_IDENTITIES",
+        "EXACT_NORMS_AND_PER_ARM_ERROR_BUDGET",
+        "EXTERNAL_IMPLEMENTATION_INDEPENDENCE",
+        "CONTENT_DERIVED_ARTIFACT_ID"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "qualification_error_budget",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_COMPLETE_INDEPENDENTLY_REVIEWED_ERROR_BUDGET",
+      "requirements": [
+        "ALL_NINE_COMPONENTS_ORACLE_STEP_SOLVE_DECIMAL_EVENT_TRANSFORM_PARAMETER_ANALYTIC_MODEL",
+        "TOTAL_CONSERVATIVE_COMBINATION",
+        "PER_OBSERVABLE_AND_PER_Q2_CELL_ALLOCATIONS",
+        "CUBIC_HERMITE_EVENT_INTERPOLATION_ERROR_SEPARATELY_BUDGETED",
+        "EXACT_NORMS_SCOPES_DISCRIMINATION_MARGINS_DERIVATIONS_AND_EVIDENCE_BINDINGS",
+        "EXTERNALLY_REVIEWED_AND_FROZEN_BEFORE_EXECUTION"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "provenance_custody_and_independence_attestations",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_Q0_PROVENANCE_CUSTODY_AND_INDEPENDENCE_ATTESTATIONS",
+      "requirements": [
+        "EXTERNAL_CUSTODIAN",
+        "EXACT_INDEPENDENT_Q0_PROVENANCE_REVIEW",
+        "IMPLEMENTATION_AND_EXPECTATION_ISOLATION",
+        "CONFLICT_DISCLOSURES",
+        "SIGNED_CONTENT_DERIVED_ATTESTATION_IDS"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "sealed_expectation_commitment",
+      "phase_required": "BEFORE_EXECUTION",
+      "status": "AWAITING_NEW_SECRECY_PRESERVING_SEALED_EXPECTATION_COMMITMENT",
+      "requirements": [
+        "USES_NEW_SECRECY_PRESERVING_SCHEMA",
+        "BINDS_EXECUTION_CASE_SCHEMA_AND_BRANCH_SAFE_ROSTER_REFERENCE_NEVER_FRESH_PLAINTEXT_IDS_VALUES_OR_UNSALTED_HASHES",
+        "EXPECTATIONS_REMAIN_UNAVAILABLE_UNTIL_OUTPUT_COMMIT",
+        "CONTENT_DERIVED_CHILD_ID"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "output_manifest_commitment",
+      "phase_required": "AFTER_EXECUTION_BEFORE_UNBLIND",
+      "status": "AWAITING_POSTEXECUTION_OUTPUT_MANIFEST_COMMITMENT",
+      "requirements": [
+        "ALL_ATTEMPTS_AND_EXACT_OUTPUTS_COMMITTED",
+        "EXPECTATIONS_STILL_SEALED",
+        "BINDS_EXACT_SECRET_CASE_COMMITMENT_OR_AUTHENTICATED_CIPHERTEXT_OR_DISCLOSED_BRANCH_ROSTER",
+        "BINDS_STABLE_EXECUTION_QUALIFICATION_ID",
+        "CONTENT_DERIVED_CHILD_ID"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "unblinding_record",
+      "phase_required": "AFTER_OUTPUT_COMMIT_BEFORE_ADJUDICATION",
+      "status": "AWAITING_FIRST_VALID_POST_OUTPUT_COMMIT_UNBLINDING",
+      "requirements": [
+        "PREEXECUTION_STATUS_FORBIDDEN_NOT_APPLICABLE",
+        "EXACT_OUTPUT_MANIFEST_COMMITMENT_PREDECESSOR",
+        "EXACT_SEALED_EXPECTATION_COMMITMENT_PREDECESSOR",
+        "EXACT_SELECTED_CASE_BINDING_PREDECESSOR_SECRET_COMMITMENT_CIPHERTEXT_OR_DISCLOSED_ROSTER",
+        "FIRST_VALID_UNBLINDING_ONLY",
+        "UNBLINDING_RECORD_ORDINAL_ONE",
+        "INVALID_OR_ABORTED_REQUESTS_REVEAL_NOTHING_AND_DO_NOT_CHANGE_VALID_ORDINAL",
+        "COMMITMENT_REVEAL_VERIFIED",
+        "SELECTED_CASE_BRANCH_VERIFIED_BY_SECRET_REVEAL_CUSTODIAN_PROFILE_OR_DISCLOSED_ROSTER_RECONFIRMATION",
+        "BINDS_STABLE_EXECUTION_QUALIFICATION_ID",
+        "CONTENT_DERIVED_CHILD_ID"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    },
+    {
+      "role": "final_adjudication_and_result_record",
+      "phase_required": "AFTER_ADJUDICATION",
+      "status": "AWAITING_POST_UNBLIND_FINAL_ADJUDICATION",
+      "requirements": [
+        "EXACT_UNBLINDING_RECORD_PREDECESSOR",
+        "EXACT_OUTPUT_MANIFEST_COMMITMENT_PREDECESSOR",
+        "PREREGISTERED_GATE_AND_BUDGET_APPLICATION_ONLY",
+        "NO_POST_UNBLIND_TUNING_OR_RECLASSIFICATION",
+        "EXACT_SECRET_CASE_BRANCH_CODE_AND_CLAIM_BOUNDARY_BOUND",
+        "BINDS_STABLE_EXECUTION_QUALIFICATION_ID",
+        "CONTENT_DERIVED_CHILD_ID"
+      ],
+      "content_derived_artifact_id": null,
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null
+    }
+  ],
+  "external_identity_policy": {
+    "static_external_registration_id": "jx.v5.solar_1pn.q2_observer.external_registration.v1",
+    "static_external_registration_id_effect": "TEMPLATE_LABEL_ONLY_INSUFFICIENT_FOR_EXECUTION",
+    "future_external_q2_id_scope": "SOURCE_RUNTIME_DEPENDENCIES_CONFIGURATIONS_REVIEW_SIGNATURE",
+    "in_place_slot_resolution_allowed": false,
+    "resolved_artifact_requires_content_derived_id": true,
+    "preexecution_slot_resolution_requires_new_successor_spec_id": true,
+    "postexecution_slot_resolution_requires_new_successor_spec_id": false,
+    "execution_requires_new_content_derived_execution_id": true,
+    "postexecution_records_require_content_derived_child_ids": true,
+    "postexecution_records_bind_stable_execution_qualification_id": true,
+    "postexecution_records_mutate_execution_identity": false,
+    "postexecution_slots_remain_null_in_immutable_spec": true,
+    "postexecution_fulfillment_mechanism": "SEPARATE_CONTENT_DERIVED_CHILD_RECORDS_NOT_SPEC_EDITS",
+    "future_execution_identity_domain": "jx-v5-solar-1pn-execution-qualification-identity/v1",
+    "future_execution_identity_id_prefix": "jx.v5.solar_1pn.execution_qualification.",
+    "future_execution_identity_envelope_keys": [
+      "schema",
+      "successor_spec_id",
+      "preexecution_artifacts"
+    ],
+    "future_execution_identity_canonicalization": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE",
+    "future_execution_identity_preexecution_artifact_shape": "ORDERED_ROLE_CONTENT_ID_PATH_SIZE_RAW_SHA256_CANONICAL_SHA256",
+    "future_execution_identity_acyclicity": "PREEXECUTION_ARTIFACT_IDS_DERIVE_INDEPENDENTLY_FROM_THIS_SUCCESSOR_SPEC_ID_NEVER_FROM_THE_UNMINTED_EXECUTION_ID_THEN_EXECUTION_ID_DERIVES_LAST_FROM_SUCCESSOR_SPEC_AND_COMPLETE_ORDERED_ROSTER",
+    "future_execution_identity_preexecution_role_roster": [
+      "fresh_external_case_custody_and_claim_scope",
+      "q2_content_derived_external_registration",
+      "signature_trust_profile_and_keyring",
+      "q2_execution_and_adjudication_contract",
+      "q2_planarity_identifiability_and_remainder_policy",
+      "q3_independent_oracle_execution_contract",
+      "q4_external_eih_execution_contract",
+      "typed_expectation_content_schema",
+      "secrecy_preserving_expectation_commitment_schema",
+      "jx_execution_implementation_output_authentication_serialization_and_attempt_contract",
+      "q1_independent_equation_oracle_execution_contract",
+      "qualification_error_budget",
+      "provenance_custody_and_independence_attestations",
+      "sealed_expectation_commitment"
+    ],
+    "future_execution_identity_secret_case_binding_policy": "SAFE_HIDING_COMMITMENT_OR_AUTHENTICATED_CIPHERTEXT_NEVER_PLAINTEXT_LOW_ENTROPY_HASH"
+  },
+  "execution_qualification": {
+    "status": "AWAITING_NEW_CONTENT_DERIVED_EXECUTION_ENVELOPE",
+    "execution_qualification_id": null,
+    "path": null,
+    "size_bytes": null,
+    "sha256": null,
+    "canonical_sha256": null
+  },
+  "locked_files": [
+    {
+      "role": "successor_readme",
+      "path": "runs/v5_solar_1pn_qualification_successor_v2/README.md",
+      "sha256": "dd0709f2186e4b540a7e60a1f63657aba6e5cc47b8dc2ba9f8d8152d2f44204a",
+      "size_bytes": "7728",
+      "canonical_sha256": null
+    },
+    {
+      "role": "successor_schema",
+      "path": "schemas/jx-v5-solar-1pn-qualification-successor-v2.schema.json",
+      "sha256": "f4db0e9a654bd187c4e93a3ecef5f0a3058f2893bdea76f3fa68b74e6f330a86",
+      "size_bytes": "25382",
+      "canonical_sha256": "9027a9ad3a63f94ebdb9f0743c1cf0b903a840e981b294a671a21b4a33bf4909"
+    },
+    {
+      "role": "successor_verifier",
+      "path": "runs/v5_solar_1pn_qualification_successor_v2/verify_qualification_successor_v2.py",
+      "sha256": "005431008790078bb6e54c970a5c18224fe182d53852d929be625a953a10c2ec",
+      "size_bytes": "55349",
+      "canonical_sha256": null
+    },
+    {
+      "role": "successor_disclosed_tests",
+      "path": "tests/test_v5_solar_1pn_qualification_successor_v2.py",
+      "sha256": "9e31e4e98ca62dc677b542bba10f47fa23a9b0cfa29e30d0c417efbc5469b991",
+      "size_bytes": "23595",
+      "canonical_sha256": null
+    }
+  ],
+  "status": "SPECIFICATION_ONLY_BLOCKED",
+  "evidence_class": "MODEL_OUTPUT",
+  "scientific_evidence_artifact": false,
+  "outcomes_generated": false,
+  "execution_authorized": false,
+  "registry_authorized": false,
+  "ready_for_holdout_execution": false,
+  "unblinding_occurred": false,
+  "blocked_reasons": [
+    "SECRET_CASE_BINDING_DELIVERY_OR_DISCLOSED_OUTCOME_BLIND_BRANCH_UNRESOLVED",
+    "EXACT_JX_ALL_ARM_EXECUTION_SOURCE_RUNTIME_DEPENDENCIES_CONFIGURATION_OUTPUT_AND_ATTEMPT_CONTRACT_UNRESOLVED",
+    "Q1_INDEPENDENT_EQUATION_ORACLE_SOURCE_RUNTIME_DEPENDENCIES_CONFIG_FIXTURES_NORMS_BUDGET_AND_INDEPENDENCE_UNRESOLVED",
+    "CONTENT_DERIVED_EXTERNAL_Q2_SOURCE_RUNTIME_CONFIG_SIGNATURE_UNRESOLVED",
+    "SIGNATURE_TRUST_PROFILE_AND_KEYRING_UNREGISTERED",
+    "Q2_WRAPPER_PARSER_CANONICAL_OUTPUT_AND_RAW_TRAJECTORY_BINDING_UNRESOLVED",
+    "Q2_EXACT_24_CELL_MAPPING_EXTRAPOLATION_6PI_AND_PER_CELL_ADJUDICATION_UNRESOLVED",
+    "Q2_PLANARITY_IDENTIFIABILITY_OR_REMAINDER_POLICY_UNRESOLVED",
+    "Q3_EPOCHS_SCALES_NORMS_RUNTIME_DEPENDENCIES_CONFIG_NUMERICAL_FLOORS_SELF_CONVERGENCE_AND_INDEPENDENCE_UNRESOLVED",
+    "Q4_EVALUATOR_FIVE_ROLE_FIXTURES_CONVENTIONS_BACKREACTION_NORMS_RUNTIME_DEPENDENCIES_CONFIG_BUDGET_AND_INDEPENDENCE_UNRESOLVED",
+    "TYPED_EXPECTATION_CONTENT_SCHEMA_UNREGISTERED",
+    "SECRECY_PRESERVING_EXPECTATION_COMMITMENT_SCHEMA_UNREGISTERED",
+    "LEGACY_EXPECTATION_COMMITMENT_SCHEMA_NOT_EXECUTION_ACCEPTABLE",
+    "TYPED_OUTPUT_MANIFEST_SERIALIZATION_AUTHENTICATION_AND_ATTEMPT_ROSTER_UNREGISTERED",
+    "QUALIFICATION_NINE_COMPONENT_TOTAL_NORMS_SCOPES_MARGINS_DERIVATIONS_AND_EVIDENCE_ERROR_BUDGET_UNRESOLVED",
+    "Q2_PER_CELL_AND_HERMITE_EVENT_ERROR_BUDGETS_UNRESOLVED",
+    "Q0_PROVENANCE_CUSTODY_AND_INDEPENDENCE_ATTESTATIONS_UNRESOLVED",
+    "SEALED_EXPECTATION_COMMITMENT_UNRESOLVED",
+    "OUTPUT_MANIFEST_COMMITMENT_UNRESOLVED",
+    "UNBLINDING_FORBIDDEN_NOT_APPLICABLE_BEFORE_OUTPUT_COMMIT",
+    "FINAL_ADJUDICATION_AND_RESULT_RECORD_UNRESOLVED",
+    "EXECUTION_QUALIFICATION_ID_UNMINTED",
+    "HOLDOUT_EXECUTION_PROHIBITED",
+    "EXECUTION_NOT_AUTHORIZED",
+    "REGISTRY_NOT_AUTHORIZED",
+    "OUTCOMES_NOT_GENERATED"
+  ],
+  "claim_control": {
+    "claim_emitted": false,
+    "claim_text": null,
+    "maximum_effect": "BLOCKED_SUCCESSOR_SPECIFICATION_IDENTITY_ONLY"
+  },
+  "nonclaim": "This content-derived successor specification binds frozen inputs, the exact Q2 boundary, one chronology correction, two execution-eligibility and claim-boundary corrections, and an immutable null future-artifact roster. It is not an execution qualification or scientific result and grants no execution, registry, unblinding, adjudication, or claim authority."
+}

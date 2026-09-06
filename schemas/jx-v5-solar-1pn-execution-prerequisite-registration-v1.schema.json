@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-v5-solar-1pn-execution-prerequisite-registration-v1.schema.json",
+  "title": "JX V5 Solar 1PN execution-prerequisite design registration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema", "prerequisite_package_id", "predecessor", "status", "outcomes_generated", "registry_authorized", "execution_authorized", "ready", "evidence_class", "scientific_evidence_artifact", "artifacts", "schemas", "verifier", "readme", "blocked_reasons", "claim_control", "nonclaim"],
+  "properties": {
+    "$schema": {"const": "../../schemas/jx-v5-solar-1pn-execution-prerequisite-registration-v1.schema.json"},
+    "schema": {"const": "jx-v5-solar-1pn-execution-prerequisite-registration/v1"},
+    "prerequisite_package_id": {"const": "jx.v5.solar_1pn.execution_prerequisites.v1"},
+    "predecessor": {"$ref": "#/$defs/predecessor"},
+    "status": {"const": "DESIGN_ONLY_BLOCKED"},
+    "outcomes_generated": {"const": false},
+    "registry_authorized": {"const": false},
+    "execution_authorized": {"const": false},
+    "ready": {"const": false},
+    "evidence_class": {"const": "MODEL_OUTPUT"},
+    "scientific_evidence_artifact": {"const": false},
+    "artifacts": {"type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": {"$ref": "#/$defs/typedBinding"}},
+    "schemas": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"$ref": "#/$defs/typedBinding"}},
+    "verifier": {"$ref": "#/$defs/fileBinding"},
+    "readme": {"$ref": "#/$defs/fileBinding"},
+    "blocked_reasons": {"const": ["Q2_OBSERVER_UNREGISTERED", "Q2_RULES_EXPECTATION_BUDGET_UNRESOLVED", "Q3_ORACLE_UNREGISTERED", "Q3_SCALES_NORMS_SELF_CONVERGENCE_UNRESOLVED", "Q4_EIH_EVALUATOR_UNREGISTERED", "Q4_FIXTURES_CONVENTION_BACKREACTION_BUDGET_UNRESOLVED", "EXTERNAL_INDEPENDENCE_UNATTESTED", "SEALED_EXPECTATIONS_UNAVAILABLE", "EXECUTION_NOT_AUTHORIZED"]},
+    "claim_control": {"$ref": "#/$defs/claimControl"},
+    "nonclaim": {"const": "This additive package is design-only blocked metadata. It contains no execution implementation, numerical outcome, scientific evidence, or authority."}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitCommit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "path": {"type": "string", "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.{1,2}(?:/|$))[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*$"},
+    "size": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes", "canonical_sha256"],
+      "properties": {"path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/sha256"}, "size_bytes": {"$ref": "#/$defs/size"}, "canonical_sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "typedBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["role", "schema", "path", "sha256", "size_bytes", "canonical_sha256"],
+      "properties": {"role": {"type": "string", "pattern": "^[a-z0-9_]+$"}, "schema": {"type": "string", "minLength": 1}, "path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/sha256"}, "size_bytes": {"$ref": "#/$defs/size"}, "canonical_sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "fileBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes"],
+      "properties": {"path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/sha256"}, "size_bytes": {"$ref": "#/$defs/size"}}
+    },
+    "predecessor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["qualification_id", "package_sha256", "commit", "plan", "inputs", "registration"],
+      "properties": {
+        "qualification_id": {"const": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781"},
+        "package_sha256": {"const": "80b4b6196167d95ce6cc72bf5a5ffba90e0fdc748d9144d2d9f83183b974f237"},
+        "commit": {"const": "975b1b7002e358a980457acb18c9beaa90aa1c9f"},
+        "plan": {"$ref": "#/$defs/binding"}, "inputs": {"$ref": "#/$defs/binding"}, "registration": {"$ref": "#/$defs/binding"}
+      }
+    },
+    "claimControl": {
+      "type": "object", "additionalProperties": false,
+      "required": ["permitted_claim", "prohibited_claims"],
+      "properties": {"permitted_claim": {"const": "DESIGN_ONLY_BLOCKED_NONAUTHORIZING"}, "prohibited_claims": {"const": ["NO_QUALIFICATION_OUTCOME", "NO_EXECUTION_AUTHORITY", "NO_REGISTRY_AUTHORITY", "NO_OBSERVER_IMPLEMENTATION", "NO_ORACLE_IMPLEMENTATION", "NO_EIH_IMPLEMENTATION", "NO_INDEPENDENCE_ATTESTATION", "NO_SEALED_EXPECTATION", "NO_ERROR_BUDGET", "NO_SCIENTIFIC_CLAIM"]}}
+    }
+  }
+}

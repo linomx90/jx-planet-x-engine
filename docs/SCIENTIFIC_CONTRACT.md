@@ -2,10 +2,32 @@
 
 ## Objective
 
-Identify which physical mass configuration, if any, can reproduce the inferred
-outer-Solar-System gravitational and orbital effects. Candidate classes include
-a compact planet, compact swarm, eccentric disk, distributed disk, transient
-source, and the no-additional-source model.
+Screen which physical mass configurations, if any, reproduce declared
+outer-Solar-System model observables within explicitly limited force and
+measurement assumptions. Candidate classes include a compact planet, compact
+swarm, eccentric disk, distributed disk, transient source, and the
+no-additional-source model. Screening a model configuration is not identifying
+a physical source.
+
+## Physical-model boundary
+
+The implemented native propagation core is Newtonian point-mass dynamics.
+Relativity, gravity harmonics and oblateness, nongravitational accelerations,
+collision regularization, and observation equations are absent until a
+versioned JX model record proves otherwise. Declaring a model or parameter does
+not implement it.
+
+Each future physical term must bind its equations, units, frame, origin, time
+scale, epoch, source and target bodies, parameter values, uncertainties and
+covariances, provenance, validity interval, applicability domain, numerical
+method, independent qualification, and omitted-term error budget. Unknown
+values are blocking states. They receive no hidden default.
+
+Passing a force-model gate establishes at most forward-dynamics validity in the
+declared domain. Fixed-initial-state trajectory differences are `MODEL_OUTPUT`,
+not fitted residuals. They do not constitute orbit determination, an
+observational ephemeris, measurement reduction, or evidence for a physical
+source.
 
 ## Evidence classes
 
@@ -72,4 +94,3 @@ calculations as validated evidence. Do not infer mass and distance separately
 from a tidal tensor alone: the leading signal constrains approximately
 `M/R^3`; a gradient or wide-baseline parallax is required to break that
 degeneracy.
-
