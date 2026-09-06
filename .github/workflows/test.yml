@@ -40,6 +40,9 @@ jobs:
           export PYTHONPATH=src
           export PYTHONNOUSERSITE=1
           for test_path in tests/test_*.py; do
+            if [ "$(basename "$test_path")" = "test_jx_post_v5_precision_probe.py" ]; then
+              continue
+            fi
             python -m unittest discover \
               -s tests \
               -p "$(basename "$test_path")" \
@@ -59,6 +62,43 @@ jobs:
           PY
       - name: Run numerical validation gates
         run: PYTHONPATH=src python -m jxplanetx.cli validate --output validation.json
+
+  post-v5-precision-runtime:
+    name: Frozen post-V5 precision probe (CPython 3.14 / NumPy 2.3.5)
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONNOUSERSITE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install the exact independent precision runtime
+        run: python -m pip install -e '.[independent]'
+      - name: Verify precision-runtime dependency boundary
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import sys
+
+          import numpy
+
+          if sys.implementation.name != "cpython" or sys.version_info[:2] != (3, 14):
+              raise SystemExit("post-V5 precision probe requires CPython 3.14")
+          if numpy.__version__ != "2.3.5":
+              raise SystemExit("post-V5 precision probe requires NumPy 2.3.5")
+          if importlib.util.find_spec("rebound") is not None:
+              raise SystemExit("post-V5 no-REBOUND precision lane requires REBOUND to be absent")
+          PY
+      - name: Run the frozen post-V5 precision probe tests
+        run: |
+          export PYTHONPATH=src
+          export PYTHONNOUSERSITE=1
+          python -m unittest discover \
+            -s tests \
+            -p "test_jx_post_v5_precision_probe.py" \
+            -v
 
   legacy-rebound:
     name: Legacy REBOUND 4.4.11 smoke

@@ -12,7 +12,7 @@
     "github_release_kind": "prerelease",
     "base_ref": "origin/main",
     "base_commit": "82791ac28007421863a7c71cb5df9111e181aeba",
-    "working_tree_parent_head_at_generation": "aa918890bae124e56e89732e7e577111e2acccf1"
+    "working_tree_parent_head_at_generation": "6416970b043932d18a1c1b63188a6ab02399eb48"
   },
   "integrity_scope": {
     "algorithm": "SHA-256",
@@ -25,12 +25,12 @@
     "path_order": "UNICODE_CODE_POINT_ASCENDING",
     "row_stream_encoding": "FOR_EACH_SORTED_PATH_UTF8(PATH)||NUL||ASCII(BASE10_SIZE_BYTES)||NUL||ASCII(LOWERCASE_SHA256)||LF",
     "file_count": 164,
-    "total_size_bytes": 14184725,
-    "row_stream_sha256": "6fb9825301ae29d02387025ff6876a06039702c437662780c53f118f5585b964",
+    "total_size_bytes": 14186213,
+    "row_stream_sha256": "556f0f10bec38638fb2582c0305bce963c806384ac956e7662b8f178fb80cf74",
     "files": {
       ".github/workflows/test.yml": {
-        "size_bytes": 3795,
-        "sha256": "799018d1620c6829b7e665c0f343904e5dd1db3ba5c8670fbab84036e8e5750a"
+        "size_bytes": 5283,
+        "sha256": "76fef183afc432cd3cc77073080a776839c14b4f0942736b94a74d6ba9d0c1fc"
       },
       "CHANGELOG.md": {
         "size_bytes": 7484,
@@ -927,7 +927,7 @@
       },
       "package_version_coherence": "PASS_0.4.0a1",
       "workflow_yaml_parse": "PASS",
-      "workflow_shell_blocks": "10/10 BASH_N_PASS",
+      "workflow_shell_blocks": "13/13 BASH_N_PASS",
       "metadata_and_workflow_diff_check": "PASS",
       "final_checkpoint_checksums": "18/18 PASS",
       "post_precision_checkpoint_checksums": "11/11 PASS",
@@ -937,6 +937,7 @@
     "workflow_local_preflight": {
       "rebound_leapfrog_comparison": "17 PASS; 2 INTENTIONAL SKIPS",
       "rebound_whfast_comparison": "13 PASS; 1 INTENTIONAL CLASS SKIP",
+      "post_v5_precision_cpython_3_14_numpy_2_3_5_no_rebound": "24 PASS; 1 INTENTIONAL REBOUND SKIP",
       "legacy_rebound_4_4_11_clean_export": {
         "test_de441_population.py": "4/4 PASS",
         "test_encounter_tail.py": "4/4 PASS",
@@ -957,7 +958,8 @@
     },
     "github_actions": {
       "status_at_manifest_generation": "PENDING",
-      "engine_job": "PYTHON_3_12;INDEPENDENT_EXTRA;REBOUND_ABSENT;ONE_TEST_FILE_PER_PROCESS",
+      "engine_job": "PYTHON_3_12;INDEPENDENT_EXTRA;REBOUND_ABSENT;ONE_TEST_FILE_PER_PROCESS;FROZEN_POST_V5_PRECISION_TEST_EXCLUDED",
+      "post_v5_precision_runtime_job": "CPYTHON_3_14;NUMPY_2_3_5;REBOUND_ABSENT;FROZEN_POST_V5_PRECISION_TEST_ONLY",
       "legacy_rebound_job": "PYTHON_3_12;REBOUND_4_4_11;THREE_INTEGRATION_TEST_FILES"
     }
   },
