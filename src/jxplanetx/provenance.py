@@ -39,7 +39,16 @@ def source_manifest(root: str | Path) -> dict[str, Any]:
     """Hash the human and executable scientific source of a repository."""
     base = Path(root).resolve()
     selected: list[Path] = []
-    for pattern in ("src/**/*.py", "tests/**/*.py", "docs/**/*.md", "benchmarks/**/*.json", "README.md", "pyproject.toml"):
+    for pattern in (
+        "src/**/*.py",
+        "schemas/**/*.json",
+        "registries/**/*.json",
+        "tests/**/*.py",
+        "docs/**/*.md",
+        "benchmarks/**/*.json",
+        "README.md",
+        "pyproject.toml",
+    ):
         selected.extend(path for path in base.glob(pattern) if path.is_file())
     files = {str(path.relative_to(base)): sha256_file(path) for path in sorted(set(selected))}
     if not files:
@@ -53,9 +62,13 @@ def source_manifest(root: str | Path) -> dict[str, Any]:
 
 
 def package_source_manifest(package_dir: str | Path) -> dict[str, Any]:
-    """Hash executable Python source from an installed package tree."""
+    """Hash installed Python and machine-readable scientific source."""
     base = Path(package_dir).resolve()
-    selected = sorted(path for path in base.rglob("*.py") if path.is_file())
+    selected = sorted(
+        path
+        for path in base.rglob("*")
+        if path.is_file() and path.suffix in {".py", ".json"}
+    )
     files = {
         f"src/jxplanetx/{path.relative_to(base).as_posix()}": sha256_file(path)
         for path in selected

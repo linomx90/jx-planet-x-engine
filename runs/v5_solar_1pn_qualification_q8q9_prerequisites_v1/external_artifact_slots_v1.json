@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schemas/jx-v5-solar-1pn-q8q9-prerequisite-registration-v1.schema.json#/$defs/externalArtifactSlotsDocument",
+  "schema": "jx-v5-solar-1pn-q8q9-external-artifact-slots/v1",
+  "qualification_id": "jx.v5.solar_1pn.qualification.78d05102bac2588b7677ec5ef19c653c0102923a1ab499852194f423c8911781",
+  "predecessor_package_sha256": "80b4b6196167d95ce6cc72bf5a5ffba90e0fdc748d9144d2d9f83183b974f237",
+  "status": "DESIGN_ONLY_BLOCKED",
+  "slots": [
+    {
+      "role": "custody_attestation",
+      "target_schema": "jx-v5-solar-1pn-q8q9-custody-attestation/v1",
+      "status": "AWAITING_EXTERNAL_CUSTODIAN_ATTESTATION",
+      "phase_required": "BEFORE_EXECUTION",
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null,
+      "signer_identity": null,
+      "signing_key_id": null,
+      "signed_utc": null,
+      "signature": null
+    },
+    {
+      "role": "independence_attestation",
+      "target_schema": "jx-v5-solar-1pn-q8q9-independence-attestation/v1",
+      "status": "AWAITING_EXTERNAL_INDEPENDENCE_ATTESTATION",
+      "phase_required": "BEFORE_EXECUTION",
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null,
+      "signer_identity": null,
+      "signing_key_id": null,
+      "signed_utc": null,
+      "signature": null
+    },
+    {
+      "role": "sealed_expectation_commitment",
+      "target_schema": "jx-v5-solar-1pn-q8q9-sealed-expectation-commitment/v1",
+      "status": "AWAITING_EXTERNAL_SEALED_EXPECTATION_COMMITMENT",
+      "phase_required": "BEFORE_EXECUTION",
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null,
+      "signer_identity": null,
+      "signing_key_id": null,
+      "signed_utc": null,
+      "signature": null
+    },
+    {
+      "role": "unblinding_record",
+      "target_schema": "jx-v5-solar-1pn-q8q9-unblinding-record/v1",
+      "status": "NOT_APPLICABLE_PREEXECUTION",
+      "phase_required": "AFTER_OUTPUT_COMMIT_BEFORE_ADJUDICATION",
+      "path": null,
+      "size_bytes": null,
+      "sha256": null,
+      "canonical_sha256": null,
+      "signer_identity": null,
+      "signing_key_id": null,
+      "signed_utc": null,
+      "signature": null
+    }
+  ],
+  "nonclaim": "These are empty external-artifact slots only. No attestation, sealed expectation, unblinding record, identity, timestamp, signature, or outcome is present."
+}

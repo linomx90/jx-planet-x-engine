@@ -1,0 +1,791 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-v5-solar-1pn-preexecution-handoff-v1.schema.json",
+  "title": "JX V5 Solar 1PN pre-execution external handoff request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema",
+    "handoff_request_id",
+    "identity_contract",
+    "predecessor_successor",
+    "request_scope",
+    "trust_bootstrap",
+    "common_future_response_contract",
+    "artifact_requests",
+    "locked_files",
+    "status",
+    "evidence_class",
+    "scientific_evidence_artifact",
+    "outcomes_generated",
+    "execution_authorized",
+    "registry_authorized",
+    "qualification_authorized",
+    "adjudication_authorized",
+    "ready_for_holdout_execution",
+    "unblinding_occurred",
+    "case_branch_selected",
+    "execution_qualification_id",
+    "sealed_expectation_commitment_present",
+    "external_responses_present",
+    "root_trust_accepted",
+    "resolved_successor_slots",
+    "blocked_reasons",
+    "claim_control",
+    "nonclaim"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../schemas/jx-v5-solar-1pn-preexecution-handoff-v1.schema.json"
+    },
+    "schema": {
+      "const": "jx-v5-solar-1pn-preexecution-handoff-request/v1"
+    },
+    "handoff_request_id": {
+      "type": "string",
+      "pattern": "^jx[.]v5[.]solar_1pn[.]preexecution_handoff_request[.][0-9a-f]{64}$"
+    },
+    "identity_contract": {
+      "$ref": "#/$defs/identityContract"
+    },
+    "predecessor_successor": {
+      "$ref": "#/$defs/predecessorSuccessor"
+    },
+    "request_scope": {
+      "$ref": "#/$defs/requestScope"
+    },
+    "trust_bootstrap": {
+      "$ref": "#/$defs/trustBootstrap"
+    },
+    "common_future_response_contract": {
+      "$ref": "#/$defs/futureResponseContract"
+    },
+    "artifact_requests": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/artifactRequest"
+      }
+    },
+    "locked_files": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/lockedFile"
+      }
+    },
+    "status": {
+      "const": "HANDOFF_REQUEST_ONLY_BLOCKED"
+    },
+    "evidence_class": {
+      "const": "MODEL_OUTPUT"
+    },
+    "scientific_evidence_artifact": {
+      "const": false
+    },
+    "outcomes_generated": {
+      "const": false
+    },
+    "execution_authorized": {
+      "const": false
+    },
+    "registry_authorized": {
+      "const": false
+    },
+    "qualification_authorized": {
+      "const": false
+    },
+    "adjudication_authorized": {
+      "const": false
+    },
+    "ready_for_holdout_execution": {
+      "const": false
+    },
+    "unblinding_occurred": {
+      "const": false
+    },
+    "case_branch_selected": {
+      "const": false
+    },
+    "execution_qualification_id": {
+      "type": "null"
+    },
+    "sealed_expectation_commitment_present": {
+      "const": false
+    },
+    "external_responses_present": {
+      "const": false
+    },
+    "root_trust_accepted": {
+      "const": false
+    },
+    "resolved_successor_slots": {
+      "const": "0"
+    },
+    "blocked_reasons": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "claim_control": {
+      "$ref": "#/$defs/claimControl"
+    },
+    "nonclaim": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableSha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "identityContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "id_prefix",
+        "canonicalization",
+        "domain",
+        "envelope_keys",
+        "payload_field",
+        "sentinel",
+        "sentinelized_field",
+        "identity_scope"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "SHA-256"
+        },
+        "id_prefix": {
+          "const": "jx.v5.solar_1pn.preexecution_handoff_request."
+        },
+        "canonicalization": {
+          "const": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE"
+        },
+        "domain": {
+          "const": "jx-v5-solar-1pn-preexecution-handoff-request-identity/v1"
+        },
+        "envelope_keys": {
+          "const": [
+            "schema",
+            "sentinel",
+            "handoff"
+          ]
+        },
+        "payload_field": {
+          "const": "handoff"
+        },
+        "sentinel": {
+          "const": "CONTENT_DIGEST_SENTINEL"
+        },
+        "sentinelized_field": {
+          "const": "handoff_request_id"
+        },
+        "identity_scope": {
+          "const": "EXTERNAL_HANDOFF_REQUEST_ONLY_NOT_RESPONSE_OR_EXECUTION_QUALIFICATION"
+        }
+      }
+    },
+    "predecessorSuccessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "successor_spec_id",
+        "successor_package_sha256",
+        "manifest_path",
+        "manifest_size_bytes",
+        "manifest_sha256",
+        "manifest_canonical_sha256",
+        "closure_policy"
+      ],
+      "properties": {
+        "role": {
+          "const": "frozen_qualification_successor_specification"
+        },
+        "successor_spec_id": {
+          "const": "jx.v5.solar_1pn.qualification_successor_spec.f402f13c924543633925a99734d800911b01a8812ca7b293f7426fea6e07030c"
+        },
+        "successor_package_sha256": {
+          "const": "6f53606a452012269a9f43c7a5e62e1c39ae91501b117f424220a8941d623542"
+        },
+        "manifest_path": {
+          "const": "runs/v5_solar_1pn_qualification_successor_v2/qualification_successor_v2.json"
+        },
+        "manifest_size_bytes": {
+          "const": "39047"
+        },
+        "manifest_sha256": {
+          "const": "43dd622e651a80d7d42d31082170792b51ce646e394a5850ff2064c09d1ba21c"
+        },
+        "manifest_canonical_sha256": {
+          "const": "1416385b2c46af458579b23c8ac86d43b16b467665c443ab7acbc19782ff9221"
+        },
+        "closure_policy": {
+          "const": "DEREFERENCE_AND_RECOMPUTE_MANIFEST_ID_PACKAGE_ID_AND_FOUR_LOCKED_FILES_WITH_EXACT_PACKAGE_ROSTER"
+        }
+      }
+    },
+    "requestScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_slots",
+        "source_slot_order",
+        "source_slot_binding_domain",
+        "source_slot_binding_canonicalization",
+        "source_slot_binding_envelope_keys",
+        "source_slot_binding_payload",
+        "source_selector_format",
+        "identity_order_distinct_from_dependency_order",
+        "request_resolves_slots",
+        "responses_are_separate_immutable_artifacts",
+        "future_acceptance_requires_new_successor_specification",
+        "execution_qualification_id_available"
+      ],
+      "properties": {
+        "source_slots": {
+          "const": "FIRST_FOURTEEN_ORDERED_BEFORE_EXECUTION_SLOTS_FROM_FROZEN_SUCCESSOR"
+        },
+        "source_slot_order": {
+          "const": "SOURCE_SUCCESSOR_ORDER_EXACT"
+        },
+        "source_slot_binding_domain": {
+          "const": "jx-v5-solar-1pn-preexecution-handoff-source-slot-binding/v1"
+        },
+        "source_slot_binding_canonicalization": {
+          "const": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE"
+        },
+        "source_slot_binding_envelope_keys": {
+          "const": [
+            "schema",
+            "successor_spec_id",
+            "slot"
+          ]
+        },
+        "source_slot_binding_payload": {
+          "const": "EXACT_FULL_PREDECESSOR_SLOT_OBJECT_INCLUDING_STATUS_AND_NULL_RESPONSE_FIELDS"
+        },
+        "source_selector_format": {
+          "const": "unresolved_artifact_slots[ZERO_BASED_SOURCE_ORDINAL]"
+        },
+        "identity_order_distinct_from_dependency_order": {
+          "const": true
+        },
+        "request_resolves_slots": {
+          "const": false
+        },
+        "responses_are_separate_immutable_artifacts": {
+          "const": true
+        },
+        "future_acceptance_requires_new_successor_specification": {
+          "const": true
+        },
+        "execution_qualification_id_available": {
+          "const": false
+        }
+      }
+    },
+    "nullAcceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content_derived_acceptance_id",
+        "proposed_trust_profile_response_id",
+        "root_trust_policy_id",
+        "root_trust_policy_path",
+        "root_trust_policy_size_bytes",
+        "root_trust_policy_sha256",
+        "root_trust_policy_canonical_sha256",
+        "sponsor_identity",
+        "sponsor_delegation_record_id",
+        "path",
+        "size_bytes",
+        "sha256",
+        "canonical_sha256",
+        "accepting_authority",
+        "signed_payload_domain",
+        "signed_payload_canonicalization",
+        "signing_key_id",
+        "signature",
+        "evidence"
+      ],
+      "properties": {
+        "content_derived_acceptance_id": {
+          "type": "null"
+        },
+        "proposed_trust_profile_response_id": {
+          "type": "null"
+        },
+        "root_trust_policy_id": {
+          "type": "null"
+        },
+        "root_trust_policy_path": {
+          "type": "null"
+        },
+        "root_trust_policy_size_bytes": {
+          "type": "null"
+        },
+        "root_trust_policy_sha256": {
+          "type": "null"
+        },
+        "root_trust_policy_canonical_sha256": {
+          "type": "null"
+        },
+        "sponsor_identity": {
+          "type": "null"
+        },
+        "sponsor_delegation_record_id": {
+          "type": "null"
+        },
+        "path": {
+          "type": "null"
+        },
+        "size_bytes": {
+          "type": "null"
+        },
+        "sha256": {
+          "type": "null"
+        },
+        "canonical_sha256": {
+          "type": "null"
+        },
+        "accepting_authority": {
+          "type": "null"
+        },
+        "signed_payload_domain": {
+          "type": "null"
+        },
+        "signed_payload_canonicalization": {
+          "type": "null"
+        },
+        "signing_key_id": {
+          "type": "null"
+        },
+        "signature": {
+          "type": "null"
+        },
+        "evidence": {
+          "type": "null"
+        }
+      }
+    },
+    "trustBootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bootstrap_role",
+        "status",
+        "method",
+        "response_may_self_authorize",
+        "response_may_self_sign_for_acceptance",
+        "proposed_key_may_be_sole_acceptance_root",
+        "accepting_root_must_be_independently_pinned_out_of_band",
+        "all_other_responses_require_preaccepted_trust",
+        "accepted",
+        "acceptance"
+      ],
+      "properties": {
+        "bootstrap_role": {
+          "const": "signature_trust_profile_and_keyring"
+        },
+        "status": {
+          "const": "AWAITING_OUT_OF_BAND_ROOT_TRUST_ACCEPTANCE"
+        },
+        "method": {
+          "const": "SEPARATE_CONTENT_DERIVED_SPONSOR_ROOT_ACCEPTANCE_RECORD"
+        },
+        "response_may_self_authorize": {
+          "const": false
+        },
+        "response_may_self_sign_for_acceptance": {
+          "const": false
+        },
+        "proposed_key_may_be_sole_acceptance_root": {
+          "const": false
+        },
+        "accepting_root_must_be_independently_pinned_out_of_band": {
+          "const": true
+        },
+        "all_other_responses_require_preaccepted_trust": {
+          "const": true
+        },
+        "accepted": {
+          "const": false
+        },
+        "acceptance": {
+          "$ref": "#/$defs/nullAcceptance"
+        }
+      }
+    },
+    "responseIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "id_prefix",
+        "canonicalization",
+        "domain",
+        "envelope_keys",
+        "payload_field",
+        "sentinel",
+        "sentinelized_field",
+        "identity_is_derived_after_signature",
+        "execution_qualification_id_in_identity"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "SHA-256"
+        },
+        "id_prefix": {
+          "const": "jx.v5.solar_1pn.preexecution_handoff_response."
+        },
+        "canonicalization": {
+          "const": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE"
+        },
+        "domain": {
+          "const": "jx-v5-solar-1pn-preexecution-handoff-response-identity/v1"
+        },
+        "envelope_keys": {
+          "const": [
+            "schema",
+            "sentinel",
+            "response"
+          ]
+        },
+        "payload_field": {
+          "const": "response"
+        },
+        "sentinel": {
+          "const": "RESPONSE_CONTENT_DIGEST_SENTINEL"
+        },
+        "sentinelized_field": {
+          "const": "content_derived_response_id"
+        },
+        "identity_is_derived_after_signature": {
+          "const": true
+        },
+        "execution_qualification_id_in_identity": {
+          "const": false
+        }
+      }
+    },
+    "futureResponseContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_status",
+        "response_identity",
+        "required_bindings",
+        "signed_payload_domain",
+        "signed_payload_canonicalization",
+        "signed_payload_envelope_keys",
+        "signed_payload_schema_value",
+        "signed_payload_payload_field",
+        "signed_payload_sentinel",
+        "signed_payload_sentinelized_fields",
+        "signed_payload_replacement_map",
+        "dependency_response_id_rule",
+        "response_artifact_separate_from_request",
+        "request_mutation_permitted",
+        "accepted_response_requires_new_successor_spec_id",
+        "trust_bootstrap_exception_role",
+        "bootstrap_acceptance_rule",
+        "other_response_signature_rule",
+        "fresh_secret_public_binding_policy"
+      ],
+      "properties": {
+        "contract_status": {
+          "const": "DESCRIPTIVE_FROZEN_NO_RESPONSE_INSTANCE_OR_ACCEPTANCE_VALIDATOR"
+        },
+        "response_identity": {
+          "$ref": "#/$defs/responseIdentity"
+        },
+        "required_bindings": {
+          "const": [
+            "HANDOFF_REQUEST_ID",
+            "FROZEN_SUCCESSOR_SPEC_ID",
+            "EXACT_ROLE",
+            "SOURCE_SLOT_BINDING_SHA256",
+            "PREDECESSOR_RESPONSE_CONTENT_IDS_FOR_EVERY_DECLARED_DEPENDENCY_ROLE",
+            "PUBLIC_PAYLOAD_SCHEMA_AND_BINDINGS",
+            "SIGNER_TRUST_PROFILE_KEY_DOMAIN_AND_SIGNATURE_METADATA"
+          ]
+        },
+        "signed_payload_domain": {
+          "const": "jx-v5-solar-1pn-preexecution-handoff-response-signature/v1"
+        },
+        "signed_payload_canonicalization": {
+          "const": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE"
+        },
+        "signed_payload_envelope_keys": {
+          "const": [
+            "schema",
+            "sentinel",
+            "response"
+          ]
+        },
+        "signed_payload_schema_value": {
+          "const": "jx-v5-solar-1pn-preexecution-handoff-response-signature/v1"
+        },
+        "signed_payload_payload_field": {
+          "const": "response"
+        },
+        "signed_payload_sentinel": {
+          "const": "SIGNATURE_SENTINEL"
+        },
+        "signed_payload_sentinelized_fields": {
+          "const": [
+            "content_derived_response_id",
+            "signature"
+          ]
+        },
+        "signed_payload_replacement_map": {
+          "const": {
+            "content_derived_response_id": "RESPONSE_CONTENT_DIGEST_SENTINEL",
+            "signature": "SIGNATURE_SENTINEL"
+          }
+        },
+        "dependency_response_id_rule": {
+          "const": "EXACT_CONTENT_DERIVED_RESPONSE_ID_REQUIRED_FOR_EVERY_DECLARED_DEPENDENCY_ROLE"
+        },
+        "response_artifact_separate_from_request": {
+          "const": true
+        },
+        "request_mutation_permitted": {
+          "const": false
+        },
+        "accepted_response_requires_new_successor_spec_id": {
+          "const": true
+        },
+        "trust_bootstrap_exception_role": {
+          "const": "signature_trust_profile_and_keyring"
+        },
+        "bootstrap_acceptance_rule": {
+          "const": "SEPARATE_OUT_OF_BAND_PINNED_ROOT_ACCEPTANCE_NEVER_PROPOSED_KEYRING_SELF_ACCEPTANCE"
+        },
+        "other_response_signature_rule": {
+          "const": "MUST_CHAIN_TO_ALREADY_ACCEPTED_TRUST_PROFILE_AND_KEYRING"
+        },
+        "fresh_secret_public_binding_policy": {
+          "const": "HIDING_COMMITMENT_OR_AUTHENTICATED_CIPHERTEXT_OR_CUSTODIAN_SAFE_REFERENCE_ONLY_NEVER_PLAINTEXT_OR_UNSALTED_RAW_OR_CANONICAL_SECRET_DIGEST"
+        }
+      }
+    },
+    "nullResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content_derived_response_id",
+        "payload_schema",
+        "path",
+        "size_bytes",
+        "sha256",
+        "canonical_sha256",
+        "signer_identity",
+        "trust_profile_artifact_id",
+        "signing_key_id",
+        "signed_payload_domain",
+        "signature",
+        "submitted_utc"
+      ],
+      "properties": {
+        "content_derived_response_id": {
+          "type": "null"
+        },
+        "payload_schema": {
+          "type": "null"
+        },
+        "path": {
+          "type": "null"
+        },
+        "size_bytes": {
+          "type": "null"
+        },
+        "sha256": {
+          "type": "null"
+        },
+        "canonical_sha256": {
+          "type": "null"
+        },
+        "signer_identity": {
+          "type": "null"
+        },
+        "trust_profile_artifact_id": {
+          "type": "null"
+        },
+        "signing_key_id": {
+          "type": "null"
+        },
+        "signed_payload_domain": {
+          "type": "null"
+        },
+        "signature": {
+          "type": "null"
+        },
+        "submitted_utc": {
+          "type": "null"
+        }
+      }
+    },
+    "artifactRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_ordinal",
+        "role",
+        "phase_required",
+        "source_selector",
+        "source_slot_binding_sha256",
+        "requirements",
+        "responsible_party_class",
+        "confidentiality_class",
+        "dependency_roles",
+        "request_status",
+        "selection",
+        "evidence",
+        "response",
+        "slot_resolved",
+        "authority_granted"
+      ],
+      "properties": {
+        "request_ordinal": {
+          "type": "string",
+          "pattern": "^(0[1-9]|1[0-4])$"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phase_required": {
+          "const": "BEFORE_EXECUTION"
+        },
+        "source_selector": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_slot_binding_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "responsible_party_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidentiality_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dependency_roles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "request_status": {
+          "const": "AWAITING_ASSIGNED_PARTY_SUBMISSION"
+        },
+        "selection": {
+          "type": "null"
+        },
+        "evidence": {
+          "type": "null"
+        },
+        "response": {
+          "$ref": "#/$defs/nullResponse"
+        },
+        "slot_resolved": {
+          "const": false
+        },
+        "authority_granted": {
+          "const": false
+        }
+      }
+    },
+    "lockedFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "path",
+        "size_bytes",
+        "sha256",
+        "canonical_sha256"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "size_bytes": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "canonical_sha256": {
+          "$ref": "#/$defs/nullableSha256"
+        }
+      }
+    },
+    "claimControl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_emitted",
+        "claim_text",
+        "maximum_effect"
+      ],
+      "properties": {
+        "claim_emitted": {
+          "const": false
+        },
+        "claim_text": {
+          "type": "null"
+        },
+        "maximum_effect": {
+          "const": "HANDOFF_REQUEST_IDENTITY_ONLY"
+        }
+      }
+    }
+  }
+}

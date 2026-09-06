@@ -1,0 +1,944 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jx-planet-x-engine.invalid/schemas/jx-v5-solar-1pn-qualification-successor-v2.schema.json",
+  "title": "JX V5 Solar 1PN content-derived qualification successor specification v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema",
+    "successor_spec_id",
+    "identity_contract",
+    "bound_packages",
+    "effective_protocol",
+    "unresolved_artifact_slots",
+    "external_identity_policy",
+    "execution_qualification",
+    "locked_files",
+    "status",
+    "evidence_class",
+    "scientific_evidence_artifact",
+    "outcomes_generated",
+    "execution_authorized",
+    "registry_authorized",
+    "ready_for_holdout_execution",
+    "unblinding_occurred",
+    "blocked_reasons",
+    "claim_control",
+    "nonclaim"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../schemas/jx-v5-solar-1pn-qualification-successor-v2.schema.json"
+    },
+    "schema": {
+      "const": "jx-v5-solar-1pn-qualification-successor-spec/v2"
+    },
+    "successor_spec_id": {
+      "type": "string",
+      "pattern": "^jx[.]v5[.]solar_1pn[.]qualification_successor_spec[.][0-9a-f]{64}$"
+    },
+    "identity_contract": {
+      "$ref": "#/$defs/identityContract"
+    },
+    "bound_packages": {
+      "$ref": "#/$defs/boundPackages"
+    },
+    "effective_protocol": {
+      "$ref": "#/$defs/effectiveProtocol"
+    },
+    "unresolved_artifact_slots": {
+      "type": "array",
+      "minItems": 17,
+      "maxItems": 17,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nullArtifactSlot"
+      }
+    },
+    "external_identity_policy": {
+      "$ref": "#/$defs/externalIdentityPolicy"
+    },
+    "execution_qualification": {
+      "$ref": "#/$defs/executionQualification"
+    },
+    "locked_files": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/lockedFileBinding"
+      }
+    },
+    "status": {
+      "const": "SPECIFICATION_ONLY_BLOCKED"
+    },
+    "evidence_class": {
+      "const": "MODEL_OUTPUT"
+    },
+    "scientific_evidence_artifact": {
+      "const": false
+    },
+    "outcomes_generated": {
+      "const": false
+    },
+    "execution_authorized": {
+      "const": false
+    },
+    "registry_authorized": {
+      "const": false
+    },
+    "ready_for_holdout_execution": {
+      "const": false
+    },
+    "unblinding_occurred": {
+      "const": false
+    },
+    "blocked_reasons": {
+      "type": "array",
+      "minItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "claim_control": {
+      "$ref": "#/$defs/claimControl"
+    },
+    "nonclaim": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "gitTree": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "nullableSha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jsonFileBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "size_bytes",
+        "canonical_sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size_bytes": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "lockedFileBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "path",
+        "sha256",
+        "size_bytes",
+        "canonical_sha256"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size_bytes": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "canonical_sha256": {
+          "$ref": "#/$defs/nullableSha256"
+        }
+      }
+    },
+    "identityContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "id_prefix",
+        "canonicalization",
+        "domain",
+        "envelope_keys",
+        "payload_field",
+        "sentinel",
+        "sentinelized_field",
+        "identity_scope"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "SHA-256"
+        },
+        "id_prefix": {
+          "const": "jx.v5.solar_1pn.qualification_successor_spec."
+        },
+        "canonicalization": {
+          "const": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE"
+        },
+        "domain": {
+          "const": "jx-v5-solar-1pn-qualification-successor-spec-identity/v2"
+        },
+        "envelope_keys": {
+          "const": [
+            "schema",
+            "sentinel",
+            "successor"
+          ]
+        },
+        "payload_field": {
+          "const": "successor"
+        },
+        "sentinel": {
+          "const": "CONTENT_DIGEST_SENTINEL"
+        },
+        "sentinelized_field": {
+          "const": "successor_spec_id"
+        },
+        "identity_scope": {
+          "const": "BLOCKED_SPECIFICATION_NOT_EXECUTION_QUALIFICATION"
+        }
+      }
+    },
+    "frozenQualificationBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "package_id",
+        "qualification_id",
+        "commit",
+        "identity_kind",
+        "identity_sha256",
+        "plan",
+        "inputs",
+        "registration"
+      ],
+      "properties": {
+        "role": {
+          "const": "frozen_qualification"
+        },
+        "package_id": {
+          "type": "string"
+        },
+        "qualification_id": {
+          "type": "string"
+        },
+        "commit": {
+          "$ref": "#/$defs/gitCommit"
+        },
+        "identity_kind": {
+          "const": "QUALIFICATION_PACKAGE_SHA256"
+        },
+        "identity_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "plan": {
+          "$ref": "#/$defs/jsonFileBinding"
+        },
+        "inputs": {
+          "$ref": "#/$defs/jsonFileBinding"
+        },
+        "registration": {
+          "$ref": "#/$defs/jsonFileBinding"
+        }
+      }
+    },
+    "prerequisiteBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "package_id",
+        "commit",
+        "identity_kind",
+        "identity_sha256",
+        "registration"
+      ],
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "package_id": {
+          "type": "string"
+        },
+        "commit": {
+          "$ref": "#/$defs/gitCommit"
+        },
+        "identity_kind": {
+          "type": "string"
+        },
+        "identity_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "registration": {
+          "$ref": "#/$defs/jsonFileBinding"
+        }
+      }
+    },
+    "observerBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observer_id",
+        "commit",
+        "tree",
+        "source_tuple_sha256"
+      ],
+      "properties": {
+        "observer_id": {
+          "type": "string"
+        },
+        "commit": {
+          "$ref": "#/$defs/gitCommit"
+        },
+        "tree": {
+          "$ref": "#/$defs/gitTree"
+        },
+        "source_tuple_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "q2BoundaryBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "package_id",
+        "commit",
+        "tree",
+        "identity_kind",
+        "identity_sha256",
+        "registration",
+        "observer"
+      ],
+      "properties": {
+        "role": {
+          "const": "q2_observer_registration_boundary"
+        },
+        "package_id": {
+          "type": "string"
+        },
+        "commit": {
+          "$ref": "#/$defs/gitCommit"
+        },
+        "tree": {
+          "$ref": "#/$defs/gitTree"
+        },
+        "identity_kind": {
+          "const": "Q2_OBSERVER_BOUNDARY_PACKAGE_SHA256"
+        },
+        "identity_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "registration": {
+          "$ref": "#/$defs/jsonFileBinding"
+        },
+        "observer": {
+          "$ref": "#/$defs/observerBinding"
+        }
+      }
+    },
+    "boundPackages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frozen_qualification",
+        "execution_prerequisites",
+        "q8q9_prerequisites",
+        "q2_observer_registration_boundary"
+      ],
+      "properties": {
+        "frozen_qualification": {
+          "$ref": "#/$defs/frozenQualificationBinding"
+        },
+        "execution_prerequisites": {
+          "$ref": "#/$defs/prerequisiteBinding"
+        },
+        "q8q9_prerequisites": {
+          "$ref": "#/$defs/prerequisiteBinding"
+        },
+        "q2_observer_registration_boundary": {
+          "$ref": "#/$defs/q2BoundaryBinding"
+        }
+      }
+    },
+    "frozenSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collection",
+        "placeholder_id"
+      ],
+      "properties": {
+        "collection": {
+          "const": "blocked_artifacts"
+        },
+        "placeholder_id": {
+          "const": "blocker.q8.unblinding_record"
+        }
+      }
+    },
+    "frozenFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "artifact_kind",
+        "resolution_requirement",
+        "required_before_execution"
+      ],
+      "properties": {
+        "status": {
+          "const": "BLOCKED"
+        },
+        "artifact_kind": {
+          "const": "UNBLINDING_RECORD"
+        },
+        "resolution_requirement": {
+          "const": "Create the first-valid unblinding record only after execution."
+        },
+        "required_before_execution": {
+          "const": true
+        }
+      }
+    },
+    "frozenSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_path",
+        "document_sha256",
+        "selector",
+        "expected_fields"
+      ],
+      "properties": {
+        "document_path": {
+          "type": "string"
+        },
+        "document_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selector": {
+          "$ref": "#/$defs/frozenSelector"
+        },
+        "expected_fields": {
+          "$ref": "#/$defs/frozenFields"
+        }
+      }
+    },
+    "effectiveQ8Rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preexecution_unblinding_status",
+        "required_before_execution",
+        "required_predecessor_artifact_role",
+        "required_predecessor_custody_state",
+        "phase_required",
+        "first_valid_unblinding_only",
+        "valid_unblinding_ordinal",
+        "invalid_or_aborted_requests",
+        "post_unblinding_tuning_allowed",
+        "q8_readiness_effect",
+        "q8_postrun_adjudication_effect"
+      ],
+      "properties": {
+        "preexecution_unblinding_status": {
+          "const": "FORBIDDEN_NOT_APPLICABLE"
+        },
+        "required_before_execution": {
+          "const": false
+        },
+        "required_predecessor_artifact_role": {
+          "const": "output_manifest_commitment"
+        },
+        "required_predecessor_custody_state": {
+          "const": "OUTPUTS_COMMITTED_EXPECTATIONS_SEALED"
+        },
+        "phase_required": {
+          "const": "AFTER_OUTPUT_COMMIT_BEFORE_ADJUDICATION"
+        },
+        "first_valid_unblinding_only": {
+          "const": true
+        },
+        "valid_unblinding_ordinal": {
+          "const": "1"
+        },
+        "invalid_or_aborted_requests": {
+          "const": "REVEAL_NOTHING_AND_DO_NOT_CHANGE_VALID_ORDINAL"
+        },
+        "post_unblinding_tuning_allowed": {
+          "const": false
+        },
+        "q8_readiness_effect": {
+          "const": "UNBLINDING_RECORD_EXCLUDED_FROM_PREEXECUTION_READINESS"
+        },
+        "q8_postrun_adjudication_effect": {
+          "const": "FIRST_VALID_UNBLINDING_RECORD_REQUIRED"
+        }
+      }
+    },
+    "chronologyCorrection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "correction_id",
+        "scope",
+        "frozen_source",
+        "effective_rule"
+      ],
+      "properties": {
+        "correction_id": {
+          "const": "q8.unblinding_chronology.v2"
+        },
+        "scope": {
+          "const": "REPLACE_ONLY_CONTRADICTORY_PREEXECUTION_TIMING"
+        },
+        "frozen_source": {
+          "$ref": "#/$defs/frozenSource"
+        },
+        "effective_rule": {
+          "$ref": "#/$defs/effectiveQ8Rule"
+        }
+      }
+    },
+    "phaseRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase",
+        "required_artifact_roles"
+      ],
+      "properties": {
+        "phase": {
+          "enum": [
+            "BEFORE_EXECUTION",
+            "AFTER_EXECUTION_BEFORE_UNBLIND",
+            "AFTER_OUTPUT_COMMIT_BEFORE_ADJUDICATION",
+            "AFTER_ADJUDICATION"
+          ]
+        },
+        "required_artifact_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "effectiveProtocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inheritance",
+        "chronology_corrections",
+        "eligibility_and_claim_corrections",
+        "frozen_preexecution_blocker_resolution_map",
+        "phase_requirements",
+        "q8_readiness_and_postrun_adjudication_separated",
+        "legacy_sealed_expectation_schema_execution_acceptable",
+        "disclosed_fixture_classification",
+        "future_claim_boundary"
+      ],
+      "properties": {
+        "inheritance": {
+          "const": "FROZEN_BYTES_UNMODIFIED_WITH_EXACT_LISTED_CHRONOLOGY_AND_ELIGIBILITY_CORRECTIONS"
+        },
+        "chronology_corrections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "$ref": "#/$defs/chronologyCorrection"
+          }
+        },
+        "eligibility_and_claim_corrections": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/eligibilityCorrection"
+          }
+        },
+        "frozen_preexecution_blocker_resolution_map": {
+          "type": "array",
+          "minItems": 25,
+          "maxItems": 25,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/blockerResolution"
+          }
+        },
+        "phase_requirements": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/phaseRequirement"
+          }
+        },
+        "q8_readiness_and_postrun_adjudication_separated": {
+          "const": true
+        },
+        "legacy_sealed_expectation_schema_execution_acceptable": {
+          "const": false
+        },
+        "disclosed_fixture_classification": {
+          "const": "VALIDATION_CASES_NOT_INPUT_BLIND_HOLDOUTS"
+        },
+        "future_claim_boundary": {
+          "const": "FRESH_EXTERNAL_CUSTODIED_CASES_OR_EXPLICIT_OUTCOME_BLINDING_ONLY_CLAIM"
+        }
+      }
+    },
+    "eligibilityCorrection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "correction_id",
+        "scope",
+        "frozen_source_path",
+        "frozen_source_sha256",
+        "selector",
+        "expected_values",
+        "effective_rule"
+      ],
+      "properties": {
+        "correction_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "const": "EXECUTION_ELIGIBILITY_AND_CLAIM_BOUNDARY_ONLY"
+        },
+        "frozen_source_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "frozen_source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selector": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_values": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "effective_rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "blockerResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "placeholder_id",
+        "artifact_kind",
+        "successor_roles",
+        "discharge_requirement"
+      ],
+      "properties": {
+        "placeholder_id": {
+          "type": "string",
+          "pattern": "^blocker[.][a-z0-9_.]+$"
+        },
+        "artifact_kind": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]+$"
+        },
+        "successor_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "discharge_requirement": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]+$"
+        }
+      }
+    },
+    "nullArtifactSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "phase_required",
+        "status",
+        "requirements",
+        "content_derived_artifact_id",
+        "path",
+        "size_bytes",
+        "sha256",
+        "canonical_sha256"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phase_required": {
+          "enum": [
+            "BEFORE_EXECUTION",
+            "AFTER_EXECUTION_BEFORE_UNBLIND",
+            "AFTER_OUTPUT_COMMIT_BEFORE_ADJUDICATION",
+            "AFTER_ADJUDICATION"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "pattern": "^AWAITING_[A-Z0-9_]+$"
+        },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "content_derived_artifact_id": {
+          "type": "null"
+        },
+        "path": {
+          "type": "null"
+        },
+        "size_bytes": {
+          "type": "null"
+        },
+        "sha256": {
+          "type": "null"
+        },
+        "canonical_sha256": {
+          "type": "null"
+        }
+      }
+    },
+    "externalIdentityPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "static_external_registration_id",
+        "static_external_registration_id_effect",
+        "future_external_q2_id_scope",
+        "in_place_slot_resolution_allowed",
+        "resolved_artifact_requires_content_derived_id",
+        "preexecution_slot_resolution_requires_new_successor_spec_id",
+        "postexecution_slot_resolution_requires_new_successor_spec_id",
+        "execution_requires_new_content_derived_execution_id",
+        "postexecution_records_require_content_derived_child_ids",
+        "postexecution_records_bind_stable_execution_qualification_id",
+        "postexecution_records_mutate_execution_identity",
+        "postexecution_slots_remain_null_in_immutable_spec",
+        "postexecution_fulfillment_mechanism",
+        "future_execution_identity_domain",
+        "future_execution_identity_id_prefix",
+        "future_execution_identity_envelope_keys",
+        "future_execution_identity_canonicalization",
+        "future_execution_identity_preexecution_artifact_shape",
+        "future_execution_identity_acyclicity",
+        "future_execution_identity_preexecution_role_roster",
+        "future_execution_identity_secret_case_binding_policy"
+      ],
+      "properties": {
+        "static_external_registration_id": {
+          "const": "jx.v5.solar_1pn.q2_observer.external_registration.v1"
+        },
+        "static_external_registration_id_effect": {
+          "const": "TEMPLATE_LABEL_ONLY_INSUFFICIENT_FOR_EXECUTION"
+        },
+        "future_external_q2_id_scope": {
+          "const": "SOURCE_RUNTIME_DEPENDENCIES_CONFIGURATIONS_REVIEW_SIGNATURE"
+        },
+        "in_place_slot_resolution_allowed": {
+          "const": false
+        },
+        "resolved_artifact_requires_content_derived_id": {
+          "const": true
+        },
+        "preexecution_slot_resolution_requires_new_successor_spec_id": {
+          "const": true
+        },
+        "postexecution_slot_resolution_requires_new_successor_spec_id": {
+          "const": false
+        },
+        "execution_requires_new_content_derived_execution_id": {
+          "const": true
+        },
+        "postexecution_records_require_content_derived_child_ids": {
+          "const": true
+        },
+        "postexecution_records_bind_stable_execution_qualification_id": {
+          "const": true
+        },
+        "postexecution_records_mutate_execution_identity": {
+          "const": false
+        },
+        "postexecution_slots_remain_null_in_immutable_spec": {
+          "const": true
+        },
+        "postexecution_fulfillment_mechanism": {
+          "const": "SEPARATE_CONTENT_DERIVED_CHILD_RECORDS_NOT_SPEC_EDITS"
+        },
+        "future_execution_identity_domain": {
+          "const": "jx-v5-solar-1pn-execution-qualification-identity/v1"
+        },
+        "future_execution_identity_id_prefix": {
+          "const": "jx.v5.solar_1pn.execution_qualification."
+        },
+        "future_execution_identity_envelope_keys": {
+          "const": [
+            "schema",
+            "successor_spec_id",
+            "preexecution_artifacts"
+          ]
+        },
+        "future_execution_identity_canonicalization": {
+          "const": "UTF8_SORTED_KEYS_COMPACT_JSON_REJECT_DUPLICATE_KEYS_ALL_JSON_NUMBERS_AND_NONFINITE"
+        },
+        "future_execution_identity_preexecution_artifact_shape": {
+          "const": "ORDERED_ROLE_CONTENT_ID_PATH_SIZE_RAW_SHA256_CANONICAL_SHA256"
+        },
+        "future_execution_identity_acyclicity": {
+          "const": "PREEXECUTION_ARTIFACT_IDS_DERIVE_INDEPENDENTLY_FROM_THIS_SUCCESSOR_SPEC_ID_NEVER_FROM_THE_UNMINTED_EXECUTION_ID_THEN_EXECUTION_ID_DERIVES_LAST_FROM_SUCCESSOR_SPEC_AND_COMPLETE_ORDERED_ROSTER"
+        },
+        "future_execution_identity_preexecution_role_roster": {
+          "const": [
+            "fresh_external_case_custody_and_claim_scope",
+            "q2_content_derived_external_registration",
+            "signature_trust_profile_and_keyring",
+            "q2_execution_and_adjudication_contract",
+            "q2_planarity_identifiability_and_remainder_policy",
+            "q3_independent_oracle_execution_contract",
+            "q4_external_eih_execution_contract",
+            "typed_expectation_content_schema",
+            "secrecy_preserving_expectation_commitment_schema",
+            "jx_execution_implementation_output_authentication_serialization_and_attempt_contract",
+            "q1_independent_equation_oracle_execution_contract",
+            "qualification_error_budget",
+            "provenance_custody_and_independence_attestations",
+            "sealed_expectation_commitment"
+          ]
+        },
+        "future_execution_identity_secret_case_binding_policy": {
+          "const": "SAFE_HIDING_COMMITMENT_OR_AUTHENTICATED_CIPHERTEXT_NEVER_PLAINTEXT_LOW_ENTROPY_HASH"
+        }
+      }
+    },
+    "executionQualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "execution_qualification_id",
+        "path",
+        "size_bytes",
+        "sha256",
+        "canonical_sha256"
+      ],
+      "properties": {
+        "status": {
+          "const": "AWAITING_NEW_CONTENT_DERIVED_EXECUTION_ENVELOPE"
+        },
+        "execution_qualification_id": {
+          "type": "null"
+        },
+        "path": {
+          "type": "null"
+        },
+        "size_bytes": {
+          "type": "null"
+        },
+        "sha256": {
+          "type": "null"
+        },
+        "canonical_sha256": {
+          "type": "null"
+        }
+      }
+    },
+    "claimControl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_emitted",
+        "claim_text",
+        "maximum_effect"
+      ],
+      "properties": {
+        "claim_emitted": {
+          "const": false
+        },
+        "claim_text": {
+          "type": "null"
+        },
+        "maximum_effect": {
+          "const": "BLOCKED_SUCCESSOR_SPECIFICATION_IDENTITY_ONLY"
+        }
+      }
+    }
+  }
+}

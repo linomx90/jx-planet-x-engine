@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jxplanetx"
-version = "0.3.0"
-description = "Falsification-first scientific engine for outer-Solar-System gravity"
+version = "0.4.0a1"
+description = "Falsification-first general celestial-dynamics framework with explicit scientific claim controls"
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
-authors = [{name = "Lino Avila and JX Planet X contributors"}]
-keywords = ["celestial-mechanics", "n-body", "planet-x", "reproducibility"]
+authors = [{name = "Lino Avila and JX contributors"}]
+keywords = ["celestial-mechanics", "n-body", "gpu", "force-models", "planet-x", "reproducibility"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
@@ -20,6 +20,9 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
+engine = ["numpy>=2,<3"]
+gpu-cuda12 = ["numpy>=2,<3", "cupy-cuda12x[ctk]>=14,<15"]
+gpu-cuda13 = ["numpy>=2,<3", "cupy-cuda13x[ctk]>=14,<15"]
 rebound = ["rebound==4.4.11"]
 ias15 = ["rebound==4.4.11"]
 independent = ["numpy==2.3.5", "scipy==1.17.0"]

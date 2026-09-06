@@ -9,22 +9,42 @@ permissions:
 
 jobs:
   engine:
+    name: Generic suite (REBOUND intentionally absent)
     runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONNOUSERSITE: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install engine with pinned optional backends
-        run: python -m pip install -e '.[rebound,independent]'
+      - name: Install engine without an external REBOUND runtime
+        run: python -m pip install -e '.[independent]'
+      - name: Verify generic-suite dependency boundary
+        run: |
+          python - <<'PY'
+          import importlib.util
+
+          if importlib.util.find_spec("rebound") is not None:
+              raise SystemExit("generic suite requires REBOUND to be absent")
+          PY
       - name: Rebuild excluded deterministic population fixture
         run: |
           locked_manifest="$RUNNER_TEMP/population_manifest_v1.locked.json"
           mv runs/de441_population_100k/population_manifest_v1.json "$locked_manifest"
           python runs/de441_population_100k/generate_locked_population.py
           cmp "$locked_manifest" runs/de441_population_100k/population_manifest_v1.json
-      - name: Run unit tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Run unit tests with per-file process isolation
+        run: |
+          export PYTHONPATH=src
+          export PYTHONNOUSERSITE=1
+          for test_path in tests/test_*.py; do
+            python -m unittest discover \
+              -s tests \
+              -p "$(basename "$test_path")" \
+              -v
+          done
       - name: Verify locked JX-O1 contracts
         run: |
           PYTHONPATH=src python - <<'PY'
@@ -39,3 +59,46 @@ jobs:
           PY
       - name: Run numerical validation gates
         run: PYTHONPATH=src python -m jxplanetx.cli validate --output validation.json
+
+  legacy-rebound:
+    name: Legacy REBOUND 4.4.11 smoke
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONNOUSERSITE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the pinned legacy REBOUND backend
+        run: python -m pip install -e '.[rebound]'
+      - name: Verify legacy runtime identity
+        run: |
+          python - <<'PY'
+          import importlib.metadata
+          import rebound
+
+          expected = "4.4.11"
+          if importlib.metadata.version("rebound") != expected:
+              raise SystemExit("legacy REBOUND distribution version changed")
+          if rebound.__version__ != expected:
+              raise SystemExit("legacy REBOUND import version changed")
+          PY
+      - name: Rebuild excluded deterministic population fixture
+        run: |
+          locked_manifest="$RUNNER_TEMP/population_manifest_v1.locked.json"
+          mv runs/de441_population_100k/population_manifest_v1.json "$locked_manifest"
+          python runs/de441_population_100k/generate_locked_population.py
+          cmp "$locked_manifest" runs/de441_population_100k/population_manifest_v1.json
+      - name: Run legacy REBOUND integration smoke tests
+        run: |
+          export PYTHONPATH=src
+          export PYTHONNOUSERSITE=1
+          for test_file in \
+            test_de441_population.py \
+            test_encounter_tail.py \
+            test_population_scale.py
+          do
+            python -m unittest discover -s tests -p "$test_file" -v
+          done
