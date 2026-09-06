@@ -12,7 +12,7 @@
     "github_release_kind": "prerelease",
     "base_ref": "origin/main",
     "base_commit": "82791ac28007421863a7c71cb5df9111e181aeba",
-    "working_tree_parent_head_at_generation": "6416970b043932d18a1c1b63188a6ab02399eb48"
+    "working_tree_parent_head_at_generation": "29127b79d3802424ec706c4c721034620d4fee58"
   },
   "integrity_scope": {
     "algorithm": "SHA-256",
@@ -25,12 +25,12 @@
     "path_order": "UNICODE_CODE_POINT_ASCENDING",
     "row_stream_encoding": "FOR_EACH_SORTED_PATH_UTF8(PATH)||NUL||ASCII(BASE10_SIZE_BYTES)||NUL||ASCII(LOWERCASE_SHA256)||LF",
     "file_count": 164,
-    "total_size_bytes": 14186213,
-    "row_stream_sha256": "556f0f10bec38638fb2582c0305bce963c806384ac956e7662b8f178fb80cf74",
+    "total_size_bytes": 14188532,
+    "row_stream_sha256": "6f8dd5bb0fdbb9cc2242f8fbd174ce5b173f0a095231ebbcd3393981d53fa0c4",
     "files": {
       ".github/workflows/test.yml": {
-        "size_bytes": 5283,
-        "sha256": "76fef183afc432cd3cc77073080a776839c14b4f0942736b94a74d6ba9d0c1fc"
+        "size_bytes": 7602,
+        "sha256": "fb15e3803015b79bb1d685fb2540d247da7be0edc9151576a366fcb171062b48"
       },
       "CHANGELOG.md": {
         "size_bytes": 7484,
@@ -958,8 +958,8 @@
     },
     "github_actions": {
       "status_at_manifest_generation": "PENDING",
-      "engine_job": "PYTHON_3_12;INDEPENDENT_EXTRA;REBOUND_ABSENT;ONE_TEST_FILE_PER_PROCESS;FROZEN_POST_V5_PRECISION_TEST_EXCLUDED",
-      "post_v5_precision_runtime_job": "CPYTHON_3_14;NUMPY_2_3_5;REBOUND_ABSENT;FROZEN_POST_V5_PRECISION_TEST_ONLY",
+      "engine_job": "CPYTHON_3_12_13;INDEPENDENT_EXTRA;REBOUND_ABSENT;ONE_TEST_FILE_PER_PROCESS;FROZEN_POST_V5_PRECISION_TEST_EXCLUDED",
+      "post_v5_precision_runtime_job": "UBUNTU_26_04_CONTAINER;DISTRO_CPYTHON_3_14_4_EXECUTABLE_BYTE_PIN;DISTRO_NUMPY_2_3_5_SELECTED_BINARY_BYTE_PINS;REBOUND_ABSENT;FROZEN_POST_V5_PRECISION_TEST_ONLY",
       "legacy_rebound_job": "PYTHON_3_12;REBOUND_4_4_11;THREE_INTEGRATION_TEST_FILES"
     }
   },

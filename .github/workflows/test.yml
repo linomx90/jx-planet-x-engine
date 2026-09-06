@@ -18,14 +18,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.12.13"
       - name: Install engine without an external REBOUND runtime
         run: python -m pip install -e '.[independent]'
       - name: Verify generic-suite dependency boundary
         run: |
           python - <<'PY'
           import importlib.util
+          import sys
 
+          if sys.implementation.name != "cpython" or sys.version_info[:3] != (3, 12, 13):
+              raise SystemExit("generic suite requires the frozen CPython 3.12.13 runtime")
           if importlib.util.find_spec("rebound") is not None:
               raise SystemExit("generic suite requires REBOUND to be absent")
           PY
@@ -64,38 +67,80 @@ jobs:
         run: PYTHONPATH=src python -m jxplanetx.cli validate --output validation.json
 
   post-v5-precision-runtime:
-    name: Frozen post-V5 precision probe (CPython 3.14 / NumPy 2.3.5)
+    name: Frozen post-V5 precision probe (Ubuntu 26.04 distro runtime)
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:26.04
     env:
       PYTHONDONTWRITEBYTECODE: "1"
       PYTHONNOUSERSITE: "1"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.14"
-      - name: Install the exact independent precision runtime
-        run: python -m pip install -e '.[independent]'
-      - name: Verify precision-runtime dependency boundary
+      - name: Install the frozen distro runtime prerequisites
         run: |
-          python - <<'PY'
+          apt-get update
+          apt-get install --yes --no-install-recommends \
+            ca-certificates \
+            git \
+            python3-numpy
+      - uses: actions/checkout@v4
+      - name: Verify the exact frozen runtime boundary
+        run: |
+          PYTHONPATH=src python3 - <<'PY'
+          import hashlib
+          import importlib
           import importlib.util
+          from pathlib import Path
           import sys
 
           import numpy
 
-          if sys.implementation.name != "cpython" or sys.version_info[:2] != (3, 14):
-              raise SystemExit("post-V5 precision probe requires CPython 3.14")
+          expected_python = {
+              "version": (3, 14, 4),
+              "size_bytes": 7_481_192,
+              "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700",
+          }
+          executable = Path(sys.executable).resolve()
+          executable_bytes = executable.read_bytes()
+          if sys.implementation.name != "cpython" or sys.version_info[:3] != expected_python["version"]:
+              raise SystemExit("post-V5 precision probe requires the frozen CPython 3.14.4 runtime")
+          if len(executable_bytes) != expected_python["size_bytes"]:
+              raise SystemExit("frozen CPython executable size changed")
+          if hashlib.sha256(executable_bytes).hexdigest() != expected_python["sha256"]:
+              raise SystemExit("frozen CPython executable bytes changed")
           if numpy.__version__ != "2.3.5":
               raise SystemExit("post-V5 precision probe requires NumPy 2.3.5")
           if importlib.util.find_spec("rebound") is not None:
               raise SystemExit("post-V5 no-REBOUND precision lane requires REBOUND to be absent")
+
+          expected_numpy = {
+              "numpy/__init__.py": (
+                  Path(numpy.__file__).resolve(),
+                  25_919,
+                  "93924ac4b793328947dfd9eb9355e54eccdfd26a92c8dd52188aed2e52c7eb38",
+              ),
+              "numpy/_core/_multiarray_umath.cpython-314-x86_64-linux-gnu.so": (
+                  Path(importlib.import_module("numpy._core._multiarray_umath").__file__).resolve(),
+                  9_270_336,
+                  "ed49278029e17db9fc349d4181a2ee5a064a86bbb1241141592b8653824fd102",
+              ),
+              "numpy/linalg/_umath_linalg.cpython-314-x86_64-linux-gnu.so": (
+                  Path(importlib.import_module("numpy.linalg._umath_linalg").__file__).resolve(),
+                  126_592,
+                  "31f694e81c9c35a59979e5cf00cf52b5724830564761bcf535f48879e0ea9a98",
+              ),
+          }
+          for label, (path, expected_size, expected_sha256) in expected_numpy.items():
+              data = path.read_bytes()
+              if len(data) != expected_size:
+                  raise SystemExit(f"frozen runtime size changed for {label}")
+              if hashlib.sha256(data).hexdigest() != expected_sha256:
+                  raise SystemExit(f"frozen runtime bytes changed for {label}")
           PY
       - name: Run the frozen post-V5 precision probe tests
         run: |
           export PYTHONPATH=src
           export PYTHONNOUSERSITE=1
-          python -m unittest discover \
+          python3 -m unittest discover \
             -s tests \
             -p "test_jx_post_v5_precision_probe.py" \
             -v
