@@ -1,0 +1,28 @@
+{
+  "byte_identical_checkpoint_count": 0,
+  "checkpoint_count_each": 77,
+  "checks": {
+    "all_checks_exact": true,
+    "all_decoded_checkpoint_states_exact": true,
+    "all_primary_endpoint_state_hashes_exact": true,
+    "all_timestep_audits_exact": true,
+    "both_engineering_verdicts_valid": true,
+    "checkpoint_filename_sets_exact": true,
+    "embedded_payload_hashes_differ_only_due_to_included_container_hashes": true,
+    "semantic_payload_sha256_exact": true
+  },
+  "claim_ceiling": "ENGINEERING_SURROGATE_ONLY",
+  "contract_sha256": "2c14b4c5f703f50fc28900ab7ffccd22f30087697906ae9f60f05282159ca5b7",
+  "decoded_state_identical_checkpoint_count": 77,
+  "experiment_id": "jx-e1-p9-9x4-smoke-v2-semantic-replay",
+  "first_embedded_payload_sha256": "f38c80d08ab37b0cf2064813d73999d4063d032ef2dbe7a1a3a8d55a3536a240",
+  "first_result_sha256": "2b84270c7ae1135830e96ca7a18ffe6a0cc5cb34ab95d87fc74ac86bcbe9ce74",
+  "first_semantic_payload_sha256": "fc1cc3ab19dde8bf2e472f6e657c0b2b27537a57fd6d11e11721e6e3dea0be56",
+  "interpretation": "REBOUND's checkpoint container bytes are not canonical across writes on this runtime, but every decoded checkpoint state, primary endpoint state, numerical diagnostic, and timestep audit is exact across the two executions. Future deterministic payloads must bind decoded-state hashes and treat whole-file checkpoint hashes as provenance only.",
+  "nonclaim": "This verifies repeatability of a synthetic engineering surrogate only. It is not a reproduction, observational comparison, detection, exclusion, or evidence for or against Planet X.",
+  "schema": "jx-e1-semantic-replay-verification-receipt/v1",
+  "second_embedded_payload_sha256": "5dbae8930396cb6e195c59ccb19d14e51daaef4d72a4418118c6b49f26a63615",
+  "second_result_sha256": "d9da30acee86f23312bc1b5af7e9d89ff1df914d170d2689cdc59ac358c66e7e",
+  "second_semantic_payload_sha256": "fc1cc3ab19dde8bf2e472f6e657c0b2b27537a57fd6d11e11721e6e3dea0be56",
+  "verdict": "SEMANTIC_REPLAY_EXACT_WITH_NONCANONICAL_CHECKPOINT_CONTAINER"
+}

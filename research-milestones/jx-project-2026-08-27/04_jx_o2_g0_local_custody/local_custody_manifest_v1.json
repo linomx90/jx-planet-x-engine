@@ -1,0 +1,247 @@
+{
+  "schema": "jx-o2-g0-local-custody-manifest/v1",
+  "artifact_id": "jx-o2-g0-local-custody-manifest-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "LOCAL_PUBLIC_BYTES_CUSTODY_MANIFEST_ONLY",
+  "custody_status": "LOCAL_BYTES_HASH_VERIFIED_QUARANTINED",
+  "recorded_at_utc": "2026-08-23T15:56:40Z",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY_NO_EXTERNAL_TIMESTAMP",
+  "externally_timestamped": false,
+  "execution_authorized": false,
+  "outcomes_generated": false,
+  "custody_root": "evidence",
+  "file_count_including_notice": 25,
+  "total_bytes_including_notice": 680533216,
+  "quarantine_notice": {
+    "path": "evidence/LOCAL_ONLY_NO_REDISTRIBUTION.txt",
+    "byte_count": 330,
+    "sha256": "2e2014cc4de280fd545fc0da6cf66d69f398cae0b8cd5587e1adfb5cd1bf6a70"
+  },
+  "survey_artifacts": {
+    "ossos": [
+      {
+        "artifact_id": "SURVEYSIMULATOR_D4355C8_GIT_ARCHIVE",
+        "path": "evidence/ossos/SurveySimulator-d4355c8.tar",
+        "byte_count": 9789440,
+        "sha256": "90a2db413f9a57965bf8ff8a88bd05bdbd89bbed4a63fa45ba17a52432edaf2e",
+        "role": "INFERRED_SURVSIMB_CODE_AND_PARTIAL_DATA_SNAPSHOT",
+        "activation_status": "QUARANTINED_INCOMPLETE_NOT_TAGGED_RELEASE"
+      },
+      {
+        "artifact_id": "SURVSIMB_D4355C8_DATA_ONLY_ARCHIVE",
+        "path": "evidence/ossos/SurvSimB-data-d4355c8.tar",
+        "byte_count": 1167360,
+        "sha256": "84fe993ab937501ee9fdd16a267e29dabdcd9e569f75b3f5daf1eacd7e422652",
+        "role": "PARTIAL_SELECTION_BUNDLE_13AE_13AO_13BL_14BH_PLUS_LEGACY_SURVEYS",
+        "activation_status": "QUARANTINED_INCOMPLETE_LATER_OSSOS_COMPONENTS_ABSENT"
+      },
+      {
+        "artifact_id": "OSSOS_PUBLICATION_SOURCE_1805_11740",
+        "path": "evidence/ossos/OSSOS-1805.11740-source.tar",
+        "byte_count": 1373434,
+        "sha256": "485e4a878384af373608ca1bd6bf2d8d570f7d733c3f7f2559d04f05ce5b7ea4",
+        "role": "PUBLICATION_AND_CATALOG_SOURCE_WITH_EXAMPLE_SELECTION_ONLY",
+        "activation_status": "DOCUMENTATION_ONLY_NOT_COMPLETE_SELECTION"
+      },
+      {
+        "artifact_id": "OSSOS_CDS_README",
+        "path": "evidence/ossos/OSSOS-CDS-ReadMe",
+        "byte_count": 12708,
+        "sha256": "362db5bb7e4f39675f855285be448154f62eba1ba0997ecabbb4a52bb188e25d",
+        "role": "AUTHORITATIVE_PUBLICATION_CATALOG_METADATA",
+        "activation_status": "QUARANTINED_PENDING_LICENSE_AND_RULE_LOCK"
+      },
+      {
+        "artifact_id": "OSSOS_CHARACTERIZED_CATALOG",
+        "path": "evidence/ossos/OSSOS-CDS-t3char.dat",
+        "byte_count": 225960,
+        "record_count": 840,
+        "sha256": "35c6af083804788d589e1f7fbcbf3db30fecd6d32d94be3de359815e99da596f",
+        "role": "AUTHORITATIVE_PUBLICATION_CATALOG_PREVIOUSLY_INSPECTED",
+        "activation_status": "QUARANTINED_SELECTION_INCOMPLETE"
+      },
+      {
+        "artifact_id": "OSSOS_PLUS_ENSEMBLE_CATALOG",
+        "path": "evidence/ossos/OSSOS-CDS-t3ens.dat",
+        "byte_count": 308812,
+        "record_count": 1148,
+        "distinct_physical_object_count": 1142,
+        "sha256": "86ddb04586247103207722841b5e78cbea17d009217926ea0690a068b60683b8",
+        "role": "AUTHORITATIVE_PUBLICATION_CATALOG_PREVIOUSLY_INSPECTED",
+        "activation_status": "QUARANTINED_DEDUP_AND_SELECTION_RULES_UNLOCKED"
+      },
+      {
+        "artifact_id": "OSSOS_UNCHARACTERIZED_CATALOG",
+        "path": "evidence/ossos/OSSOS-CDS-t3unc.dat",
+        "byte_count": 29321,
+        "record_count": 109,
+        "sha256": "90c50df2ae9172792029611ccc71bb9d7f3bddba151debd0830a089737fce82b",
+        "role": "AUTHORITATIVE_PUBLICATION_CATALOG_PREVIOUSLY_INSPECTED",
+        "activation_status": "REFERENCE_ONLY_NOT_CHARACTERIZED_INPUT"
+      },
+      {
+        "artifact_id": "A16_CDS_README",
+        "path": "evidence/ossos/A16-CDS-ReadMe",
+        "byte_count": 13891,
+        "sha256": "104aaa1cb23a5047c2bef68ff7fd08cea8502ee3e954063554e939b45b836d9f",
+        "role": "ALEXANDERSEN_2016_CATALOG_METADATA",
+        "activation_status": "REFERENCE_ONLY_UNBOUND_LOCAL_BYTES",
+        "provenance_status": "UNBOUND_LOCAL_COPY_REQUIRES_REACQUISITION",
+        "canonical_source_locator": "https://cdsarc.cds.unistra.fr/ftp/J/AJ/152/111/ReadMe",
+        "retrieval_time_status": "NOT_RETAINED",
+        "license_status": "NOT_AUDITED"
+      },
+      {
+        "artifact_id": "A16_CDS_TABLE3",
+        "path": "evidence/ossos/A16-CDS-table3.dat",
+        "byte_count": 24006,
+        "record_count": 87,
+        "sha256": "d1813da465597760b8188d4106d5a1de026fc381d2b85b86b12a7f7e5facd7f9",
+        "role": "ALEXANDERSEN_2016_PUBLICATION_CATALOG",
+        "activation_status": "QUARANTINED_PENDING_GLOBAL_SURVEY_RULES"
+      },
+      {
+        "artifact_id": "HILAT_PUBLICATION_SOURCE_1608_02873",
+        "path": "evidence/ossos/HiLat-1608.02873-source.tar",
+        "byte_count": 122774,
+        "sha256": "29372278789733f413535d21537ae413b4895061764cab62de31c9cca364b8b7",
+        "role": "HILAT_PUBLICATION_SOURCE",
+        "activation_status": "REFERENCE_ONLY_UNBOUND_LOCAL_BYTES",
+        "provenance_status": "UNBOUND_LOCAL_COPY_REQUIRES_REACQUISITION",
+        "canonical_source_locator": "https://arxiv.org/src/1608.02873",
+        "retrieval_time_status": "NOT_RETAINED",
+        "license_status": "NOT_AUDITED"
+      }
+    ],
+    "des": [
+      {
+        "artifact_id": "DES_Y6_IOP_TABLE3_ARCHIVE",
+        "path": "evidence/des/DES-Y6-IOP-table3.tar.gz",
+        "byte_count": 327951,
+        "sha256": "1bc41364cb9d0ba3ad21b00e4f4467c5de83da0675a44c5e6ecb31df5457458e",
+        "role": "AUTHORITATIVE_FINAL_REVISION1_JOURNAL_CATALOG",
+        "activation_status": "QUARANTINED_RELEASE_AND_ELIGIBILITY_RULES_UNLOCKED"
+      },
+      {
+        "artifact_id": "DES_CDS_README",
+        "path": "evidence/des/DES-CDS-ReadMe",
+        "byte_count": 11035,
+        "sha256": "4dff6940798eafd4ad172ab81b8e531a9952839db5d67de9ca8e1f869f2eb5ca",
+        "role": "AUTHORITATIVE_CATALOG_METADATA",
+        "activation_status": "QUARANTINED_RELEASE_AND_ELIGIBILITY_RULES_UNLOCKED"
+      },
+      {
+        "artifact_id": "DES_CDS_CATALOG",
+        "path": "evidence/des/DES-CDS-catalog.dat",
+        "byte_count": 498168,
+        "record_count": 814,
+        "sha256": "457554872af8b55b44404f4dfbaeeceafb8120cc43cb09b1350f4e48c9bc1a92",
+        "role": "AUTHORITATIVE_FINAL_REVISION1_PUBLICATION_CATALOG_PREVIOUSLY_INSPECTED",
+        "activation_status": "QUARANTINED_RELEASE_AND_ELIGIBILITY_RULES_UNLOCKED"
+      },
+      {
+        "artifact_id": "DES_ENHANCED_AUTHOR_CATALOG_V1_0_0",
+        "path": "evidence/des/des_tno_catalog-v1.0.0.tar.gz",
+        "byte_count": 201725368,
+        "sha256": "84695bd1df8b726d8486a04ebd6bbb673ff7312a138227f3bc299ba8f47a46b2",
+        "role": "AUTHOR_RELEASE_CATALOG_AND_AUXILIARY_DATA",
+        "activation_status": "QUARANTINED_HR_RELEASE_SELECTION_UNLOCKED"
+      },
+      {
+        "artifact_id": "DESTNOSIM_E01395D_SOURCE",
+        "path": "evidence/des/DESTNOSIM-e01395d.tar.gz",
+        "byte_count": 3743958,
+        "sha256": "d63beb7ec108548a63881bf6c7d31c97be005b23aa6a1b0f969cb34310ab2c47",
+        "role": "NATIVE_PUBLIC_SIMULATOR_SOURCE",
+        "activation_status": "QUARANTINED_VERSION_DEPENDENCY_RNG_LICENSE_TESTS_UNLOCKED"
+      },
+      {
+        "artifact_id": "DES_Y6_EXPOSURE_POSITIONS",
+        "path": "evidence/des/y6a1c.exposures.positions.fits",
+        "byte_count": 14336640,
+        "sha256": "514dcf72a55f9cf37b168dc59bdd37bdd35141bb7efe0dbe9986579674883b56",
+        "role": "NATIVE_SELECTION_PAYLOAD",
+        "activation_status": "QUARANTINED_EXPOSURE_COUNT_AND_GRIZ_RULES_UNLOCKED"
+      },
+      {
+        "artifact_id": "DES_Y6_CCD_CORNERS",
+        "path": "evidence/des/y6a1c.ccdcorners.fits.gz",
+        "byte_count": 348474936,
+        "sha256": "45a95d48eff422347c68ae2cf46186b541455c16c523e10cee07e11539b1c4e7",
+        "role": "NATIVE_SELECTION_PAYLOAD",
+        "activation_status": "QUARANTINED_EXPOSURE_COUNT_AND_SELECTION_RULES_UNLOCKED"
+      },
+      {
+        "artifact_id": "ORBITSPP_A2D9796_SOURCE",
+        "path": "evidence/des/orbitspp-a2d9796.tar.gz",
+        "byte_count": 76336100,
+        "sha256": "86016f1381dd74c8b695c3d129c7feb368be8677722dc2812f0b89ec2ede177d",
+        "role": "PUBLIC_EPHEMERIS_BACKEND_SOURCE",
+        "activation_status": "QUARANTINED_PAPER_ERA_VERSION_DEPENDENCIES_LICENSE_UNLOCKED"
+      }
+    ]
+  },
+  "model_documentation_artifacts": [
+    {
+      "artifact_id": "BROWN_BATYGIN_2021_SOURCE",
+      "path": "evidence/literature/2108.09868v2-source.tar",
+      "byte_count": 1573271,
+      "sha256": "4acf8448c98e58cfb0e92d3d58fc0e705852ef2befb010ca7bdbab76ecb5fa0e",
+      "role": "SEPARATE_SUITE_METHOD_PRECEDENT_ONLY",
+      "activation_status": "DOCUMENTATION_ONLY_NEVER_RECOVERED_2024_STATE"
+    },
+    {
+      "artifact_id": "NESVORNY_2023_SOURCE",
+      "path": "evidence/literature/2308.11059v1-source.tar",
+      "byte_count": 2263011,
+      "sha256": "55ae68c68379b30e28be3dfb49a28d6ece8553ef84aa24fed81c3dbf3d3f2f90",
+      "role": "HIGH_LEVEL_PARENT_POPULATION_RECIPE_ONLY",
+      "activation_status": "DOCUMENTATION_ONLY_CHECKPOINT_ABSENT"
+    },
+    {
+      "artifact_id": "BATYGIN_2024_SOURCE",
+      "path": "evidence/literature/2404.11594v1-source.tar",
+      "byte_count": 4373401,
+      "sha256": "1078523dc00bb509c5763474d45cdc3c5b60362c18e3196d15a24f1fcbb6b9e0",
+      "role": "HIGH_LEVEL_SINGLE_MODEL_RECIPE_ONLY",
+      "activation_status": "DOCUMENTATION_ONLY_FULL_STATE_CHECKPOINT_SEEDS_OUTPUTS_ABSENT"
+    },
+    {
+      "artifact_id": "BANSAL_2026_SOURCE",
+      "path": "evidence/literature/2607.15646v1-source.tar",
+      "byte_count": 799451,
+      "sha256": "84a9b3d08cfc155b7aa4723de8699104f54c544e562d9ec31b494bea7d5c9719",
+      "role": "NINE_PUBLISHED_MASS_A_E_I_TUPLES_ONLY",
+      "activation_status": "DOCUMENTATION_ONLY_FULL_STATES_CHECKPOINT_SEEDS_OUTPUTS_ABSENT"
+    },
+    {
+      "artifact_id": "BB21_REFERENCE_POPULATION_V3_README",
+      "path": "evidence/model_catalogs/BB21-reference-population-v3-README.txt",
+      "byte_count": 1208,
+      "sha256": "89e96e080072d71aacd9c31110813e3a6a6f2cbfbae7e8d832d2bfafded3139b",
+      "role": "PRESENT_DAY_COMPACT_BODY_ORBIT_CATALOG_METADATA",
+      "activation_status": "REFERENCE_ONLY_NOT_SOURCE_POPULATION"
+    },
+    {
+      "artifact_id": "BB21_REFERENCE_POPULATION_V3",
+      "path": "evidence/model_catalogs/BB21-reference-population-v3.csv",
+      "byte_count": 13000682,
+      "record_count": 100000,
+      "sha256": "050b68182ecbf7fd76f280d8cc43c0683d207499aba1488a68092b834420a422",
+      "role": "PRESENT_DAY_HYPOTHETICAL_COMPACT_BODY_ORBIT_CATALOG_ONLY",
+      "activation_status": "NOT_MATCHED_TNO_SOURCE_POPULATION_CANDIDATE_9118_RETIRED"
+    }
+  ],
+  "custody_assertions": {
+    "all_listed_bytes_sha256_verified_after_local_copy": true,
+    "complete_authoritative_ossos_selection_bundle_present": false,
+    "withdrawn_2019_deep_surveys_payload_preserved_or_eligible": false,
+    "des_raw_selection_lineage_complete": false,
+    "physical_cluster_checkpoint_present": false,
+    "paired_physical_m0_m1_decks_present": false,
+    "eligible_finite_full_state_m1_family_present": false,
+    "candidate_9118_eligible_for_jx_o2": false,
+    "this_manifest_satisfies_g0": false
+  },
+  "mandatory_nonclaim": "This manifest records local custody of public bytes only. It does not make the survey inputs complete, recover a physical checkpoint or matched model pair, authorize execution, or provide evidence for or against Planet X."
+}

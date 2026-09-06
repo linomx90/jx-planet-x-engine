@@ -1,0 +1,27 @@
+{
+  "schema": "jx-e1-hardened-replay-verification-contract/v1",
+  "experiment_id": "jx-e1-p9-9x4-smoke-v3-replay",
+  "registration_status": "LOCKED_AFTER_TWO_EXECUTIONS_AND_BEFORE_HARDENED_REPLAY_VERIFICATION",
+  "experiment_contract_path": "contract_v3.json",
+  "experiment_contract_sha256": "770dbe118cedccbe0b81ee1f41412fa911654d5f68597d60715bffb2edd8aca7",
+  "verifier_sha256": "eea194e77a9d39b9c4e20ccaf1336c50576958b8e9d0a354a6101f9ce8fab453",
+  "outputs": [
+    {
+      "directory": "output_d",
+      "result_sha256": "acf5db1b4a05a85133762fcc60ba0c983a4895ea8f78c78fe9a868f21d76b139"
+    },
+    {
+      "directory": "output_e",
+      "result_sha256": "c8b4ff453a7b93e4882b6ffc7e74abd15ca796d736f93a11f7395119a8b8236f"
+    }
+  ],
+  "required_checks": [
+    "recompute each embedded semantic hash",
+    "derive exact primary and timestep-audit run-key sets from the experiment contract",
+    "load every checkpoint and compare its decoded configuration-state hash to its run record",
+    "require exact semantic object and semantic hash across executions",
+    "require exact endpoint hashes by stable run key",
+    "ignore elapsed time, paths, and raw checkpoint-container byte differences"
+  ],
+  "mandatory_nonclaim": "This verifies repeatability of a hardened synthetic engineering surrogate only. It is not a reproduction, observational comparison, detection, exclusion, or evidence for or against Planet X."
+}

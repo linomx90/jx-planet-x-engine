@@ -1,0 +1,13 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_XP2_V1_TO_V3",
+  "publication_category": "INVALID_DIAGNOSTIC_LINEAGE",
+  "canonical_publication_status": "HISTORICAL_INVALID_NONAUTHORIZING",
+  "claim_ceiling": "NONE",
+  "result_present": false,
+  "interpretation_allowed": "PROTOCOL_FAILURE_REPLAY_DEFECT_AND_FAILED_STARTUP_EVIDENCE_ONLY",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "RETROSPECTIVE_GITHUB_PUBLICATION_ONLY",
+  "superseded_by": "JX_XP2_V4_REVIEW_SNAPSHOT_FOR_PROTOCOL_ONLY"
+}

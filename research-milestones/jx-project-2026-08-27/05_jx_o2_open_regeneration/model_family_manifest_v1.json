@@ -1,0 +1,170 @@
+{
+  "schema": "jx-o2-open-regeneration-model-family/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "protocol_id": "jx-o2-g0-open-regeneration-prereg-v1",
+  "artifact_class": "DESIGN_ONLY_FINITE_MODEL_FAMILY_MANIFEST",
+  "manifest_state": "SUPPORT_AND_PAIRING_POLICY_LOCKED_STATES_NOT_REALIZED",
+  "execution_authorized": false,
+  "outcomes_generated": false,
+  "claim_ceiling": "OPEN_REGENERATION_PROTOCOL_ONLY",
+  "family_labels": {
+    "m0": "M0_OPEN_CLUSTER_LIKE_NO_ADDITIONAL_BODY",
+    "m1": "M1_OPEN_CLUSTER_LIKE_FINITE_ADDITIONAL_BODY_MIXTURE",
+    "neutral_labels_required": true,
+    "correct_wrong_preferred_or_disfavored_labels_allowed": false
+  },
+  "m0_definition": {
+    "additional_compact_body_count": 0,
+    "parent_checkpoint": "SAME_CONTENT_ADDRESSED_300_MYR_PARENT_AS_PAIRED_M1",
+    "semantics": "A finite new baseline family under the registered open generator; not the universal proposition that no distant planet exists."
+  },
+  "m1_definition": {
+    "additional_compact_body_count": 1,
+    "physical_support_count": 9,
+    "paired_history_and_angle_sample_count": 128,
+    "realized_physical_history_angle_member_count": 1152,
+    "realized_member_weight": "1/1152",
+    "support_semantics": "A finite literature-seeded design mixture, not a posterior and not every possible Planet X configuration."
+  },
+  "physical_support": {
+    "source_classification": "PREVIOUSLY_INSPECTED_2026_LITERATURE_SEED_GRID",
+    "published_probability_weights_supplied": false,
+    "equal_weights_are_new_design_assumption": true,
+    "weight_per_row": "1/9",
+    "published_outcomes_used_for_weights_pruning_or_order": false,
+    "rows": [
+      {"member_id": "P01", "mass_earth": "5/1", "a_au": "367/1", "e": "1/5", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P02", "mass_earth": "5/1", "a_au": "420/1", "e": "7/20", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P03", "mass_earth": "5/1", "a_au": "480/1", "e": "1/2", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P04", "mass_earth": "707/100", "a_au": "356/1", "e": "1/5", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P05", "mass_earth": "707/100", "a_au": "433/1", "e": "7/20", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P06", "mass_earth": "707/100", "a_au": "497/1", "e": "1/2", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P07", "mass_earth": "10/1", "a_au": "356/1", "e": "1/5", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P08", "mass_earth": "10/1", "a_au": "433/1", "e": "7/20", "i_deg": "20/1", "weight": "1/9"},
+      {"member_id": "P09", "mass_earth": "10/1", "a_au": "540/1", "e": "1/2", "i_deg": "20/1", "weight": "1/9"}
+    ]
+  },
+  "angular_support": {
+    "source": "NEW_OBSERVATIONALLY_UNCONDITIONED_RANDOMIZED_LATIN_HYPERCUBE_DESIGN_ASSUMPTION",
+    "coordinate_order": ["ASCENDING_NODE", "LONGITUDE_OF_PERIHELION", "MEAN_ANOMALY"],
+    "angle_unit": "TURN",
+    "probability_law": "THREE_INDEPENDENT_UNIFORM_ZERO_INCLUSIVE_ONE_EXCLUSIVE",
+    "sample_count": 128,
+    "construction": "INDEPENDENT_BEACON_DERIVED_RANDOMIZED_LATIN_HYPERCUBE_PER_DIMENSION_WITH_EXACT_UINT64_JITTER_CONVERSION",
+    "stratum_rule": "ANGLE_FRACTION_EQUALS_PERMUTED_STRATUM_INDEX_PLUS_UINT64_DIVIDED_BY_2_POW_64_ALL_DIVIDED_BY_128",
+    "permutation_rule": "UNBIASED_FISHER_YATES_WITH_UINT64_REJECTION_SAMPLING_AND_SEPARATE_REGISTERED_STREAM_PER_DIMENSION",
+    "argument_of_perihelion_rule": "OMEGA_EQUALS_LONGITUDE_OF_PERIHELION_MINUS_ASCENDING_NODE_MODULO_ONE_TURN",
+    "weight_per_realized_angle": "1/128",
+    "same_angle_triple_used_for_all_nine_physical_rows_within_history": true,
+    "angle_values_realized": false,
+    "zero_fill_for_missing_angles": false,
+    "single_favorable_angle_allowed": false,
+    "post_output_pruning_reweighting_resampling_or_expansion": "INVALID"
+  },
+  "joint_support": {
+    "definition": "ALL_9_PHYSICAL_ROWS_CROSSED_WITH_EACH_OF_128_PAIRED_HISTORY_ANGLE_REALIZATIONS",
+    "member_id_rule": "HISTORY_ID_PLUS_HYPHEN_PLUS_PHYSICAL_MEMBER_ID",
+    "count_after_seed_realization": 1152,
+    "each_weight": "1/1152",
+    "all_nine_rows_must_run_for_every_history_angle_realization": true,
+    "adaptive_member_selection": false,
+    "maximum_likelihood_angle_selection": false,
+    "weights_may_be_changed_using_published_or_future_outcomes": false
+  },
+  "history_ensemble_and_assignment": {
+    "history_distribution_status": "REQUIRES_EXTERNALLY_REGISTERED_GENERATOR_MANIFEST",
+    "history_count_realized": false,
+    "final_history_count": 128,
+    "convergence_block_count": 4,
+    "independent_joint_history_count_per_block": 32,
+    "independent_disk_draw_count": 128,
+    "independent_cluster_and_field_star_schedule_count": 128,
+    "assignment_rule": "ONE_UNIQUE_DISK_DRAW_AND_ONE_UNIQUE_CLUSTER_AND_FIELD_STAR_SCHEDULE_PER_HISTORY_NO_CROSS_REUSE",
+    "joint_history_angle_weight_within_each_physical_row": "1/128",
+    "physical_row_weight_within_each_history": "1/9",
+    "m0_run_count": 128,
+    "m1_run_count": 1152,
+    "m0_run_once_per_history_not_once_per_physical_row": true,
+    "same_history_distribution_for_m0_and_m1": true,
+    "same_angle_triple_for_all_nine_m1_rows_in_a_history": true,
+    "histories_may_be_treated_as_independent_joint_draws": true,
+    "convergence_blocks_may_be_treated_as_additional_independent_replicates": false,
+    "outcome_based_history_selection": false,
+    "closest_encounter_or_giant_survival_conditioning_status": "FORBIDDEN_UNLESS_EXACT_REJECTION_EVENT_AND_REJECTED_SCHEDULE_LEDGER_ARE_EXTERNALLY_PREREGISTERED_BEFORE_ANY_TNO_OR_COMPACT_BODY_OUTPUT",
+    "m0_reuse_across_nine_rows_in_same_history_counts_as_nine_independent_controls": false,
+    "inference_unit": "HISTORY",
+    "tracers_and_epochs_are_nested_independent_units": false
+  },
+  "state_and_insertion_policy": {
+    "element_epoch": "PARENT_CHECKPOINT_AT_300_MYR_FROM_GENERATOR_TIME_ZERO",
+    "element_axes": "FIXED_J2000_ECLIPTIC_ORIENTATION_IN_GENERATOR_INERTIAL_FRAME",
+    "element_origin": "SUN_CENTERED_FOR_KEPLERIAN_TO_CARTESIAN_CONVERSION",
+    "time_coordinate": "DYNAMICAL_YEARS_FROM_GENERATOR_TIME_ZERO",
+    "distance_unit": "AU",
+    "mass_unit": "SOLAR_MASS_WITH_EXACT_EARTH_TO_SOLAR_CONVERSION_LOCKED_LATER",
+    "velocity_unit": "AU_PER_DYNAMICAL_YEAR",
+    "kepler_solver_and_constants_status": "REQUIRES_HASHED_IMPLEMENTATION_AND_TEST_VECTORS_BEFORE_STATE_REALIZATION",
+    "insertion_mass_history": "INSTANTANEOUS_FULL_MASS_AT_CHECKPOINT_NO_RAMP",
+    "transient_is_part_of_estimand": true,
+    "coordinate_transform": "BUILD_SUN_CENTERED_RELATIVE_STATE; APPEND_BODY_FOR_M1_ONLY; TRANSLATE_AND_BOOST_EACH_ARM_TO_ITS_ACTIVE_SYSTEM_BARYCENTER",
+    "preexisting_sun_relative_states_must_match_bitwise_across_m0_m1": true,
+    "energy_momentum_or_transient_repair_after_inspection": false,
+    "terminal_state_to_survey_epoch_mapping": "REQUIRES_SEPARATE_HASHED_FORWARD_ADAPTER_AND_TEST_VECTORS_BEFORE_G1",
+    "historical_ephemeris_or_author_checkpoint_reconstruction_claim_allowed": false
+  },
+  "source_population_and_nuisance_policy": {
+    "source_generator_values_locked_in_this_artifact": false,
+    "required_before_checkpoint_generation": [
+      "FINITE_NORMALIZED_INITIAL_DISK_DISTRIBUTION",
+      "GIANT_PLANET_INITIAL_STATES_AND_MIGRATION_DAMPING_HISTORY",
+      "FINITE_NORMALIZED_CLUSTER_AND_STELLAR_ENCOUNTER_DISTRIBUTION",
+      "GALACTIC_TIDE_MODEL",
+      "PARTICLE_WEIGHTS_AND_SELECTION_RULES",
+      "ABSOLUTE_MAGNITUDE_COLOR_SIZE_ALBEDO_AND_CORRELATION_MODEL",
+      "SURVEY_STRATUM_SPECIFIC_FORWARD_ADAPTERS"
+    ],
+    "published_cluster_parameter_inconsistencies_are_unresolved": true,
+    "silent_choice_between_published_disk_profiles": false,
+    "observation_conditioned_nuisance_fit_must_repeat_in_every_calibration_replicate": true
+  },
+  "published_cluster_law_targets": {
+    "role": "HIGH_LEVEL_PUBLIC_RECIPE_TARGETS_NOT_AN_EXECUTABLE_GENERATOR",
+    "plummer_total_mass_solar": "1200/1",
+    "plummer_radius_pc": "7/20",
+    "solar_start_radius_rule": "SQRT_TWO_OVER_THREE_TIMES_PLUMMER_RADIUS",
+    "cluster_residence_myr": "10/1",
+    "stellar_velocity_distribution": "MAXWELL_BOLTZMANN_WITH_SCALE_SQRT_TWO_KM_PER_SECOND",
+    "cluster_star_insertion_and_removal_boundary_pc": "1/10",
+    "post_cluster_galactic_density_solar_per_pc3": "3/20",
+    "post_cluster_field_star_boundary_pc": "1/1",
+    "condition_on_reported_closest_encounter": false,
+    "unresolved_before_generation": [
+      "EXACT_INITIAL_MASS_FUNCTION_AND_MULTIPLICITY_LAW",
+      "EXACT_ENCOUNTER_RATE_DIRECTION_AND_PHASE_SPACE_ALGORITHM",
+      "EXACT_GIANT_PLANET_MIGRATION_AND_DAMPING_DECK",
+      "EXACT_DISK_DISTRIBUTION_AND_PARTICLE_WEIGHT_LAW",
+      "EXACT_GALACTIC_TIDE_AND_POST_CLUSTER_STELLAR_FORCE_IMPLEMENTATION"
+    ]
+  },
+  "intrinsic_absolute_magnitude_reference": {
+    "role": "LOCKABLE_STARTING_REFERENCE_FULL_NORMALIZED_NUISANCE_MODEL_STILL_UNRESOLVED",
+    "band": "r",
+    "h_min": "5/1",
+    "h_max": "12/1",
+    "divot_break_h": "83/10",
+    "bright_end_slope": "9/10",
+    "faint_end_slope": "1/2",
+    "contrast": "16/5",
+    "sample_h_directly": true,
+    "infer_diameter_or_albedo": false,
+    "colors_size_albedo_correlations_and_absolute_normalization_locked": false
+  },
+  "retired_candidate_policy": {
+    "governing_retirement_registration": "037c22ea0d1a9cb4c86eadc9056b8e1e605a7a5790cba60871daaa75aad1bbc5",
+    "eligible_as_member_source_angle_phase_weight_or_prior_influence": false,
+    "partial_or_transformed_reuse_allowed": false,
+    "automated_literal_scan_proves_absence_of_cartesian_or_encoded_derivatives": false,
+    "independent_transformation_and_lineage_nonuse_audit_required_before_g0_resolution": true
+  },
+  "mandatory_nonclaim": "This manifest enumerates a new finite design support but contains no generated checkpoint or complete physical state, no executable model, and no evidence for or against Planet X. Equal weights and angular support are new assumptions rather than recovered author inputs."
+}

@@ -1,0 +1,18 @@
+{
+  "analysis_state": "PRIMARY_NUMERICS_COMPLETE_AWAITING_REPLAY_AND_DOP853",
+  "artifact_class": "INDEPENDENT_STORED_ARTIFACT_VERIFICATION_FOR_B_GATE",
+  "checks": {
+    "all_50_arms_20_parent_commits_and_hash_chains": true,
+    "independent_metrics_effects_gates_and_labels": true,
+    "no_scientific_classification_emitted": true,
+    "registered_inputs_and_exact_initial_states": true
+  },
+  "execution_label": "A",
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v2",
+  "mandatory_nonclaim": "JX-XP2 is a locally frozen idealized one-million-year synthetic response screen with a limited DOP853 numerical sentinel. It uses no observed survey data or private author inputs, is not an author reproduction or independent physical validation, cannot detect or exclude Planet X or constrain its mass or orbit, cannot establish formation or Solar-System-age stability, and provides no evidence, permission, G0 result, or progress for JX-O2.",
+  "official_classification": null,
+  "result_sha256": "3532399c70090758ab048f3689e27e6342a52fd32bfe8e73ba06cdf81cbb7a44",
+  "schema": "jx-xp2-primary-a-verification/v1",
+  "semantic_sha256": "7e380574d1c5e43646ebeea99cc13407ea9fde0d860468f5efe71d291c18ea9a",
+  "verified_for_b": true
+}

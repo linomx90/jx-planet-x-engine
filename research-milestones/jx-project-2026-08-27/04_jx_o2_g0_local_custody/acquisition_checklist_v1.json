@@ -1,0 +1,298 @@
+{
+  "schema": "jx-o2-g0-local-acquisition-checklist/v1",
+  "artifact_id": "jx-o2-g0-local-acquisition-checklist-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "artifact_class": "ACQUISITION_CHECKLIST_AND_LOCAL_CUSTODY_ONLY",
+  "status": "BLOCKED_PARTIAL_LOCAL_CUSTODY",
+  "audit_status": "BLOCKED",
+  "g0_complete": false,
+  "eligible_for_g1": false,
+  "execution_authorized": false,
+  "gpu_run_authorized": false,
+  "observed_execution_authorized": false,
+  "outcomes_generated": false,
+  "claim_ceiling": "ACQUISITION_CHECKLIST_ONLY",
+  "source_bindings": [
+    {
+      "artifact_id": "REGISTERED_G0_AUDIT",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/g0_audit_v1.json",
+      "sha256": "5f7a5f9cef4f6bd73f7c36235e610d96c8475bd646bf5807aa591c58fbf002b0"
+    },
+    {
+      "artifact_id": "G0_REGISTRATION",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/registration_g0_v1.json",
+      "sha256": "21634c974ffdff0f59b1f7b33c80bdabdfe9fc337f3476bf6f20be3ede00bd03"
+    },
+    {
+      "artifact_id": "OSSOS_INVENTORY",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/ossos_inventory_v1.json",
+      "sha256": "67223671b3f5a983062ad3f7745eb52c3011cf138b737ad871a41141bb5a908b"
+    },
+    {
+      "artifact_id": "DES_Y6_INVENTORY",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/des_y6_inventory_v1.json",
+      "sha256": "ab180a22dab51aa70884d1f7f8db8bb442f2ba85f79bde687d9ca5191e86d18f"
+    },
+    {
+      "artifact_id": "SOURCE_MODEL_INVENTORY",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/source_model_inventory_v1.json",
+      "sha256": "0ac5ef9bc1fbf84313a9ee5a8650a3685cba3d2d06eea1d29a547c7eda59da9f"
+    },
+    {
+      "artifact_id": "PUBLIC_RECONSTRUCTION_DESIGN",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_public_reconstruction_design_v1/reconstruction_design_v1.json",
+      "sha256": "bf0035fe7595536b5c1fd96b447298654d2892be11426e6ea9774b2585aa9ac6"
+    },
+    {
+      "artifact_id": "PUBLIC_RECONSTRUCTION_REGISTRATION",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_public_reconstruction_design_v1/registration_reconstruction_design_v1.json",
+      "sha256": "de8295e0070745f251acc669d225e79fca7ae9f61e17af65c924eb24e02d9503"
+    },
+    {
+      "artifact_id": "PUBLIC_LITERATURE_GRID",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_public_reconstruction_design_v1/literature_prior_grid_v1.json",
+      "sha256": "b6fe87043937764976b26473b49004eecfefb2882178f5f41ccb98424534068c"
+    },
+    {
+      "artifact_id": "CANDIDATE_9118_RETIREMENT",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_candidate_9118_retirement_v1/candidate_9118_retirement_v1.json",
+      "sha256": "01a041382aa716293db9f61ae8917d44bd80c62347cc2aaa7c03d0442f6009cd"
+    },
+    {
+      "artifact_id": "CANDIDATE_9118_RETIREMENT_REGISTRATION",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_candidate_9118_retirement_v1/registration_retirement_v1.json",
+      "sha256": "037c22ea0d1a9cb4c86eadc9056b8e1e605a7a5790cba60871daaa75aad1bbc5"
+    },
+    {
+      "artifact_id": "JX_O2_DESIGN_CONTRACT",
+      "path": "work/jx-public-reconstruction-design/runs/planet_x_survey_model_comparison_v1/design_contract_v1.json",
+      "sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971"
+    },
+    {
+      "artifact_id": "JX_O2_SURVEY_INPUTS_DESIGN_MANIFEST",
+      "path": "work/jx-public-reconstruction-design/runs/planet_x_survey_model_comparison_v1/survey_inputs_manifest_v1.json",
+      "sha256": "d446ac5049add3409a6b5c0d0f3cd76ab1a1d7c9f1676f98069c1d9f5e42e3c4"
+    },
+    {
+      "artifact_id": "JX_O2_SOURCE_MODELS_DESIGN_MANIFEST",
+      "path": "work/jx-public-reconstruction-design/runs/planet_x_survey_model_comparison_v1/source_models_manifest_v1.json",
+      "sha256": "d723c2dede9dee4bd490751ca4b5ad334397ecf8e913094039ddb8d624b6ac73"
+    }
+  ],
+  "local_custody_binding": {
+    "path": "work/jx_o2_g0_local_acquisition_v1/local_custody_manifest_v1.json",
+    "sha256": "defc6413a76f56f6320440412a6f663513d5e892a24caeca75611dd141ebcd73",
+    "status": "BYTE_CUSTODY_VERIFIED_NOT_SEMANTICALLY_ACCEPTED"
+  },
+  "permissions": {
+    "preserve_and_hash_public_bytes_locally": true,
+    "draft_author_or_custodian_requests": true,
+    "network_or_github_action_authorized_by_this_artifact": false,
+    "activate_quarantined_input": false,
+    "generate_or_select_physical_checkpoint": false,
+    "realize_angle_grid_or_prior": false,
+    "realize_random_seeds": false,
+    "run_dynamics": false,
+    "run_synthetic_calibration": false,
+    "access_or_unblind_untouched_holdout": false,
+    "compute_observed_statistic": false,
+    "run_observed_model_comparison": false,
+    "start_large_gpu_job": false,
+    "create_g1_execution_contract": false,
+    "create_activation_receipt": false
+  },
+  "survey_acceptance_requirements": {
+    "ossos": [
+      {
+        "requirement_id": "OSSOS-A01",
+        "status": "AWAITING_AUTHORITY",
+        "required_evidence": "Maintainer-certified corrected 15AP/15AM/15BS/15BT/15BC/15BD efficiency files and complete pointings, each with canonical URL, version, byte count, and SHA-256."
+      },
+      {
+        "requirement_id": "OSSOS-A02",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "One finite manifest covering eight sky regions, ten characterization components, and eleven published footprint rows."
+      },
+      {
+        "requirement_id": "OSSOS-A03",
+        "status": "AWAITING_AUTHORITY",
+        "required_evidence": "Documented explanation of the 2019 bad-directory withdrawal plus an authoritative corrected/native later-component detection file, or deterministic reconstruction recipe, with canonical URL, version, byte count, SHA-256, resolution of the 605-versus-607 count and IDs o5c114/o5t58, and parity to the 840-row publication catalog."
+      },
+      {
+        "requirement_id": "OSSOS-A04",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Locked detection-level versus physical-object semantics and the six cross-survey alias pairs, preserving survey-stratum provenance."
+      },
+      {
+        "requirement_id": "OSSOS-A05",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Locked filter/color model, characterization limit, linking, tracking, lost-object, and exclusion semantics."
+      },
+      {
+        "requirement_id": "OSSOS-A06",
+        "status": "AWAITING_AUTHORITY",
+        "required_evidence": "Authoritative mapping from the named survey release to one simulator commit plus exact source/archive, build, compiler, native-dependency, runtime, RNG, driver/seed, and qualification-manifest bindings with a separately locked compatibility/parity test."
+      },
+      {
+        "requirement_id": "OSSOS-A07",
+        "status": "AWAITING_AUTHORITY",
+        "required_evidence": "Explicit software license for the exact historical simulator snapshot and explicit data-license and redistribution terms for catalogs, efficiencies, pointings, detection files, and derived archives; a current-repository EUPL notice is not silently inherited by historical code or data."
+      },
+      {
+        "requirement_id": "OSSOS-A08",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Content-addressed durable archive with independent byte/hash and semantic/count audit receipt."
+      }
+    ],
+    "des": [
+      {
+        "requirement_id": "DES-A01",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Choose and lock one catalog release and H_r version, with the 814/812 final-release versus 817/815 manuscript-prose discrepancy explicitly resolved."
+      },
+      {
+        "requirement_id": "DES-A02",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Lock the nc, Centaur, Oort-cloud-comet, and count-likelihood eligibility rules."
+      },
+      {
+        "requirement_id": "DES-A03",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Lock orbit epoch/time scale, state frame, covariance use, uncertainty propagation, and ephemeris backend."
+      },
+      {
+        "requirement_id": "DES-A04",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Resolve 76,217 paper exposures versus 76,162 simulator positions and 76,226 CCD-corner exposure IDs."
+      },
+      {
+        "requirement_id": "DES-A05",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Lock griz-only discovery behavior, colors/bandpasses, the 0.95529 transient factor, and the 60/90-day distance-dependent triplet rule."
+      },
+      {
+        "requirement_id": "DES-A06",
+        "status": "AWAITING_AUTHORITY",
+        "required_evidence": "Acquire or formally account for raw transient, fake-injection, linkage, candidate, inclusion, and confirmation lineage."
+      },
+      {
+        "requirement_id": "DES-A07",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Lock simulator and orbitspp versions, dependencies, RNG implementation and streams, tests, environment, software/data licenses, and independent qualification gates."
+      },
+      {
+        "requirement_id": "DES-A08",
+        "status": "NOT_SATISFIED",
+        "required_evidence": "Content-addressed durable archive with independent byte/hash, FITS schema/count, covariance, and selection parity audit receipt."
+      }
+    ]
+  },
+  "matched_model_acceptance_requirements": [
+    {
+      "requirement_id": "MODEL-A01",
+      "status": "AWAITING_AUTHORITY_OR_OPEN_REGENERATION",
+      "required_evidence": "Canonical binary and decoded common physical checkpoint with particle IDs/order/weights, Sun and known-body states, epoch, time standard, frame, origin, units, byte count, SHA-256, source, version, license, and archive."
+    },
+    {
+      "requirement_id": "MODEL-A02",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Paired M0/M1 decks and a machine-derived semantic diff proving that checkpoint particles, known-body history, tides/stars, code, integrator, cadence, loss rules, nuisance model, and random streams are identical and only the registered compact body differs."
+    },
+    {
+      "requirement_id": "MODEL-A03",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Finite M1 family with mass and complete six-dimensional phase state, epoch/frame/origin/units, immutable weights, selection lineage, and locked powered region."
+    },
+    {
+      "requirement_id": "MODEL-A04",
+      "status": "AWAITING_AUTHORITY_OR_OPEN_REGENERATION",
+      "required_evidence": "Physical source-population generator, exact initial particles, known-body migration and cluster history, compact-body emplacement time/state/algorithm, and estimand boundary."
+    },
+    {
+      "requirement_id": "MODEL-A05",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Locked RNG algorithm/version, future public beacon, canonical seed derivation and encoding, stream namespace, replicate counts, common-random-number mapping, and failure/retry record."
+    },
+    {
+      "requirement_id": "MODEL-A06",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Source, build, native dependency, container, input-deck, license, and redistribution hashes for both arms."
+    },
+    {
+      "requirement_id": "MODEL-A07",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Checkpoint/output inventory with exact finite counts, byte sizes, hashes, semantic identities, cadence, loss/event logs, and replay receipt."
+    },
+    {
+      "requirement_id": "MODEL-A08",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Independent audit proving no candidate-9118 row, state, fingerprint, derivative, or outcome-tuned selection enters the family, checkpoint, prior, grid, or weights."
+    },
+    {
+      "requirement_id": "MODEL-A09",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Explicit previously-inspected exposure ledger and claim boundary or a genuinely untouched holdout with custodian evidence."
+    },
+    {
+      "requirement_id": "MODEL-A10",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Locked integration duration, timestep or adaptive-step controls, numerical tolerances, sample/checkpoint cadence, loss boundaries, and predeclared numerical adequacy gates for every arm."
+    },
+    {
+      "requirement_id": "MODEL-A11",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Locked survival, removal, resonance, stability, classification, and censoring rules, including deterministic handling of failures and ambiguous states."
+    },
+    {
+      "requirement_id": "MODEL-A12",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Complete intrinsic absolute-magnitude, color, size, albedo, and correlation nuisance model with finite normalization, immutable parameters or weights, selection lineage, and propagation rules."
+    },
+    {
+      "requirement_id": "MODEL-A13",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Content-addressed model-to-survey forward-adapter binding with exact convention transforms, version compatibility, parity fixtures, and fail-closed interface checks."
+    },
+    {
+      "requirement_id": "MODEL-A14",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Immutable phase and orientation uncertainty policy: complete angles with epoch/frame or a preregistered finite grid or joint prior, fixed weights, symmetry validation, and no adaptive or outcome-conditioned selection."
+    },
+    {
+      "requirement_id": "MODEL-A15",
+      "status": "NOT_SATISFIED",
+      "required_evidence": "Locked hardware architecture and device model, compiler and flags, numerical libraries, determinism settings, worker topology, and reduction order, with a documented cross-hardware reproducibility policy."
+    }
+  ],
+  "acceptance_policy": {
+    "allowed_requirement_statuses": [
+      "AWAITING_AUTHORITY",
+      "AWAITING_AUTHORITY_OR_OPEN_REGENERATION",
+      "NOT_SATISFIED",
+      "BYTE_ACQUIRED_UNAUDITED",
+      "SEMANTICALLY_VERIFIED"
+    ],
+    "every_requirement_must_be_semantically_verified": true,
+    "missing_unknown_or_placeholder_values_allowed_at_acceptance": false,
+    "independent_audit_receipt_required": true,
+    "license_audit_required": true,
+    "durable_archive_required": true,
+    "maintainer_comment_or_link_alone_satisfies_requirement": false,
+    "withdrawn_2019_ossos_directory_satisfies_requirement": false,
+    "partial_selection_bundle_satisfies_complete_survey_requirement": false,
+    "software_license_inherited_by_data": false,
+    "publication_summary_or_orbit_catalog_satisfies_physical_checkpoint_requirement": false,
+    "engineering_surrogate_satisfies_matched_physical_model_requirement": false,
+    "maximum_state_after_all_requirements_verified": "READY_TO_DRAFT_G1",
+    "g1_execution_authorized_by_this_checklist": false,
+    "observed_execution_authorized_after_g0_only": false
+  },
+  "claim_firewall": {
+    "observed_statistic_or_model_preference_present": false,
+    "planet_x_detection_exclusion_or_confirmation_claim_present": false,
+    "more_particles_or_gpu_may_repair_missing_provenance": false,
+    "byte_hash_match_alone_may_establish_semantic_eligibility": false,
+    "candidate_9118_may_be_reintroduced": false
+  },
+  "mandatory_nonclaim": "This checklist and local custody package do not complete JX-O2 G0, authorize any simulation or observed-data execution, compare models, or provide evidence for or against Planet X."
+}

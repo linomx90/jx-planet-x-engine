@@ -1,0 +1,32 @@
+{
+  "claim_ceiling": "SYNTHETIC_250KYR_RESPONSE_ONLY",
+  "classification": "PRACTICALLY_SMALL",
+  "experiment_id": "jx-xp1-public-synthetic-response-v1",
+  "half_timestep": {
+    "final_bound_effect_denominator": 384,
+    "final_bound_effect_numerator": 0,
+    "q_below_30_effect_denominator": 384,
+    "q_below_30_effect_numerator": 0,
+    "q_below_35_effect_denominator": 384,
+    "q_below_35_effect_numerator": 0,
+    "w1_final_i_deg": 0.07330160430677651,
+    "w1_final_q_AU": 0.17633434853309318,
+    "w1_minimum_sampled_q_AU": 0.05927433040750042
+  },
+  "mandatory_nonclaim": "This synthetic-only result is not evidence for or against Planet X, an author reproduction, an observational test, a mass or orbit constraint, a formation or long-term stability result, or progress toward JX-O2 G0.",
+  "numerical_gates_passed": true,
+  "primary_timestep": {
+    "final_bound_effect_denominator": 384,
+    "final_bound_effect_numerator": 0,
+    "q_below_30_effect_denominator": 384,
+    "q_below_30_effect_numerator": 0,
+    "q_below_35_effect_denominator": 384,
+    "q_below_35_effect_numerator": 0,
+    "w1_final_i_deg": 0.07275166161723447,
+    "w1_final_q_AU": 0.18200564759438823,
+    "w1_minimum_sampled_q_AU": 0.05775001352923087
+  },
+  "registration_sha256": "9b8fb748ce3850cbf908c6b1dc8d22c0ffb7f94a2223d0d3f1fbfedb1e9dca81",
+  "replay_state": "XP1_SEMANTIC_REPLAY_EXACT",
+  "semantic_sha256": "1a04e928287e19558a621f09af128da76a69233c1e8c339306ef8b9c42499c9a"
+}
