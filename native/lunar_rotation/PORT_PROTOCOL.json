@@ -1,0 +1,45 @@
+{
+  "id": "JX-NATIVE-LUNAR-PORT-01",
+  "frozen_at_utc": "2026-09-16T01:50:54.848791+00:00",
+  "scope": "Native C++20 port only; four already examined 32-day arcs; prescribed DE440 orbit. No production merge, no new force, no original private 0.650038% reproduction.",
+  "parent_zip_sha256": "9499188563e74bce849f33543b92023315ea4ad5fdc9a497f28045284af1a996",
+  "native_base_ref": "experiment/bm6-rebound-5.1.1",
+  "native_base_sha": "6506a6079adf24bc02a3b11a724c6a7a733a2632",
+  "native_types_blob_sha": "8274391860b7c08aad8dc9b7f46e3d3c09b608d6",
+  "model": "same frozen total-inertia proxy, degree2 control, all-orders degree3--6 opt-in candidate",
+  "arc_starts_days": [
+    0,
+    32,
+    64,
+    96
+  ],
+  "duration_days": 32,
+  "sample_days": 0.25,
+  "integrator": "native fixed RK4, active Hamilton scalar-first quaternion and body rad/day; impulse and work states",
+  "steps_per_day": [
+    32,
+    64,
+    128
+  ],
+  "primary_steps_per_day": 128,
+  "normalization": "q normalized only to construct rotation matrix/scoring, never reset in integrated state",
+  "initialization": "CSPICE at arc start only; query counter must be exactly 4",
+  "source_geometry": "CSPICE geometric Earth/Sun relative Moon each ODE evaluation; no reference attitude in RHS",
+  "test_fixtures": "17 uniformly spaced selected rows per lane per arc from saved Python primary trajectories; no fitted parameters",
+  "limits": {
+    "torque_abs_s2": 1e-29,
+    "torque_relative": 1e-11,
+    "primary_vs_python_angle_rad": 2e-10,
+    "primary_vs_python_rate_rad_s": 2e-17,
+    "quaternion_norm_error": 1e-09,
+    "impulse_work_balance_scaled": 1e-09,
+    "compiler_variant_angle_rad": 2e-11,
+    "compiler_variant_rate_rad_s": 2e-17,
+    "port_numerical_angle_floor_rad": 2e-11,
+    "port_numerical_rate_floor_rad_s": 2e-17
+  },
+  "decision": "All valid-fixture torque checks, all sampled primary-vs-parent state checks, convergence toward saved DOP853, state/balance checks and repeatability pass; preserve parent 56 improvement criteria with max(parent empirical allowances, 10*primary/coarser native differences+floor). No change of thresholds after results.",
+  "default_feature_enabled": false,
+  "no_mutual_orbit_reaction": true,
+  "old_State_abi_and_bm6_step": "unchanged; native torque output not passed to orbital acceleration"
+}

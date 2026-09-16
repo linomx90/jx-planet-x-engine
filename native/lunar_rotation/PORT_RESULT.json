@@ -1,0 +1,32 @@
+{
+  "protocol": "JX-NATIVE-LUNAR-PORT-01",
+  "decision": "NATIVE_PORT_SUPPORTED",
+  "native_base_commit": "6506a6079adf24bc02a3b11a724c6a7a733a2632",
+  "date_utc": "2026-09-16",
+  "parent_zip_sha256": "9499188563e74bce849f33543b92023315ea4ad5fdc9a497f28045284af1a996",
+  "primary_scored_rows": 1032,
+  "max_angle_vs_Python_rad": 5.104367694083308e-14,
+  "max_rate_vs_Python_rad_s": 1.1897186891603968e-20,
+  "torque_comparisons": {
+    "torque_checks": 272,
+    "max_absolute_s2": 4.851903261979122e-30,
+    "max_relative": 8.008551289178887e-15,
+    "passed": true
+  },
+  "improvement_criteria_passed": 56,
+  "improvement_criteria_total": 56,
+  "native_h_refinement_angle_rad": {
+    "O2_h32": 1.0190913951748578e-11,
+    "O2_h64": 6.45771300711099e-13,
+    "O2_h128": 5.104367694083308e-14,
+    "O0_h128": 5.104367694083308e-14,
+    "replay_h128": 5.104367694083308e-14
+  },
+  "O0_O2_max_angle_rad": 0.0,
+  "O0_O2_max_rate_rad_s": 0.0,
+  "main_changed": false,
+  "orbital_stepper_changed": false,
+  "mutual_orbit_rotation_coupling": false,
+  "default_enabled": false,
+  "scope": "Port reproduction of four already evaluated 32-day externally forced rigid-rotation arcs. Not independent lunar observation, full DE440 reproduction, private JX-F026 reproduction or production qualification."
+}
