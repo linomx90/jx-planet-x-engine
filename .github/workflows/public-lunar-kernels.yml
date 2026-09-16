@@ -1,0 +1,52 @@
+name: Public DE440 lunar benchmark inputs
+
+on:
+  push:
+    branches: [experiment/public-lunar-kernels-20260916]
+    paths: [.github/workflows/public-lunar-kernels.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Retrieve public reference files only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact/inputs artifact/wheels
+          base=https://naif.jpl.nasa.gov/pub/naif/generic_kernels
+          curl --fail --location --connect-timeout 20 --max-time 180 --retry 2 "$base/spk/planets/de440s.bsp" -o artifact/inputs/de440s.bsp
+          curl --fail --location --connect-timeout 20 --max-time 180 --retry 2 "$base/pck/moon_pa_de440_200625.bpc" -o artifact/inputs/moon_pa_de440_200625.bpc
+          curl --fail --location --connect-timeout 20 --max-time 90 --retry 2 "$base/fk/satellites/moon_de440_250416.tf" -o artifact/inputs/moon_de440_250416.tf
+          curl --fail --location --connect-timeout 20 --max-time 90 --retry 2 "$base/pck/gm_de440.tpc" -o artifact/inputs/gm_de440.tpc
+          curl --fail --location --connect-timeout 20 --max-time 90 --retry 2 "$base/spk/planets/de440_tech-comments.txt" -o artifact/inputs/de440_tech-comments.txt
+          python3 -m pip download --only-binary=:all: --no-deps --platform manylinux2014_x86_64 --python-version 313 --implementation cp --abi cp313 --dest artifact/wheels spiceypy==8.0.0
+      - name: Record source identity and acquisition provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, datetime
+          root = pathlib.Path('artifact')
+          records = {}
+          for p in sorted(root.rglob('*')):
+              if p.is_file():
+                  records[str(p.relative_to(root))] = {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+          expected = 'c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2'
+          assert records['inputs/de440s.bsp']['sha256'] == expected, 'DE440s differs from previously recorded public bytes'
+          result = {'scope': 'Acquisition only of public NAIF kernels and a pinned PyPI wheel; no private data, no engine execution, no physical fit.', 'repository': os.environ['GITHUB_REPOSITORY'], 'commit': os.environ['GITHUB_SHA'], 'branch': os.environ['GITHUB_REF_NAME'], 'run_id': os.environ['GITHUB_RUN_ID'], 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'files': records}
+          (root/'ACQUISITION.json').write_text(json.dumps(result, indent=2)+'\n')
+          print(json.dumps(result, indent=2))
+          PY
+      - name: Preserve retrieved public inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-lunar-inputs
+          path: artifact
+          if-no-files-found: error
+          retention-days: 30
