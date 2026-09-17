@@ -1,0 +1,48 @@
+name: Public LLR station inputs
+on:
+  push:
+    branches: [experiment/llr-public-inputs-20260917]
+    paths: [.github/workflows/llr-station-inputs.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Public station and model sources
+        run: |
+          mkdir -p inputs
+          python3 - <<'PY'
+          import urllib.request,pathlib,concurrent.futures,json,hashlib,datetime
+          root=pathlib.Path('inputs')
+          urls={
+            'ITRF2000_SLR_2000.SSC':'https://datacenter.iers.org/products/reference-systems/terrestrial/itrf/itrf2000/ITRF2000_SLR_EPOCH-2000.0.SSC',
+            'ITRF2000_SLR.SSC':'https://itrf.ign.fr/ITRF_solutions/2000/ITRF2000_SLR.SSC',
+            'ITRF2000_SLR_ftp.SSC':'ftp://itrf-ftp.ign.fr/pub/itrf/itrf2000/ITRF2000_SLR.SSC',
+            'grasse_site.html':'https://edc.dgfi.tum.de/en/stations/7845/site_log/',
+            'ilrs_old_format.html':'https://ilrs.gsfc.nasa.gov/data_and_products/data/npt/npt_format.html',
+            'marini_murray_orekit.html':'https://www.orekit.org/site-orekit-11.1.1/jacoco/org.orekit.models.earth.troposphere/MariniMurrayModel.java.html',
+            'earth_latest_high_prec.bpc':'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/earth_latest_high_prec.bpc',
+            'earth_latest_high_prec.cmt':'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/earth_latest_high_prec.cmt',
+            'iers_chap7.pdf':'https://iers-conventions.obspm.fr/content/chapter7/icc7.pdf',
+            'iers_chap11.pdf':'https://iers-conventions.obspm.fr/content/chapter11/icc11.pdf',
+            'polac_llrdata2.html':'https://polac.obspm.fr/llrdata2.html'
+          }
+          def get(it):
+            name,url=it
+            try:
+              with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'JX-Lunar-Research/1.0'}),timeout=30) as r:data=r.read(16_000_001)
+              if len(data)>16_000_000:raise ValueError('size guard')
+              (root/name).write_bytes(data)
+              return dict(name=name,url=url,status='saved',bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+            except Exception as e:return dict(name=name,url=url,status='failed',error=str(e))
+          with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:res=list(ex.map(get,urls.items()))
+          (root/'ACQUISITION.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),scope='Public acquisition only; no model execution or private files',results=res),indent=2));print(json.dumps(res,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: llr-station-model-inputs
+          path: inputs
+          retention-days: 30
+          if-no-files-found: error
