@@ -1,0 +1,49 @@
+name: Public LLR endpoint sources
+on:
+  push:
+    branches: ['experiment/llr-public-input-audit-20260917']
+    paths: ['.github/workflows/llr-endpoint-sources.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Retrieve public reference source bytes only
+        shell: bash
+        run: |
+          mkdir -p payload/iers payload/docs
+          python - <<'PY'
+          import concurrent.futures, urllib.request, hashlib, json, pathlib, datetime
+          root=pathlib.Path('payload')
+          base='https://iers-conventions.obspm.fr/content/chapter7/software/dehanttideinel/'
+          names='CAL2JD.F DAT.F DEHANTTIDEINEL.F NORM8.F SPROD.F ST1IDIU.F ST1ISEM.F ST1L1.F STEP2DIU.F STEP2LON.F ZERO_VEC8.F makefile'.split()
+          jobs=[('iers/'+n,base+n) for n in names]+[
+            ('docs/iers_chapter7.pdf','https://iers-conventions.obspm.fr/content/chapter7/tn36_c7.pdf'),
+            ('docs/iers_chapter11.pdf','https://iers-conventions.obspm.fr/content/chapter11/tn36_c11.pdf'),
+            ('docs/pavlov_2016.pdf','https://arxiv.org/pdf/1606.08376'),
+            ('docs/de430.pdf','https://ipnpr.jpl.nasa.gov/progress_report/42-196/196C.pdf')]
+          def get(job):
+              name,url=job
+              record={'file':name,'url':url}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'JX research source audit'})
+                  with urllib.request.urlopen(req,timeout=25) as res:
+                      data=res.read();record.update(status=res.status,final_url=res.url)
+                  (root/name).write_bytes(data)
+                  record.update(bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+              except Exception as exc:record['error']=repr(exc)
+              return record
+          with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool: records=list(pool.map(get,jobs))
+          (root/'ACQUISITION.json').write_text(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'records':records,'scope':'Public data acquisition only; no scientific model executed.'},indent=2)+'\n')
+          print(json.dumps(records,indent=2))
+          PY
+      - name: Preserve sources and any acquisition failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llr-endpoint-sources
+          path: payload/
+          retention-days: 30
