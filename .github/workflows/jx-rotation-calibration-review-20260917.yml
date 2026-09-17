@@ -1,0 +1,141 @@
+name: Review rotation-calibration split
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/jx-rotation-calibration-review-20260917.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 scipy==1.16.3
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 35286444099
+          name: rotation-calibration-results
+          path: parent
+      - name: Diagnose split and verify packaged bytes
+        shell: bash
+        run: |
+          cat > review_design.py <<'PY'
+          from pathlib import Path
+          import csv,hashlib,io,json,zipfile,shutil
+          from datetime import datetime,timezone
+          import numpy as np
+          import scipy.linalg as la
+          out=Path('review'); out.mkdir()
+          protocol={'id':'JX-ROTATION-CALIBRATION-SPLIT-AUDIT-01','timing':'Post-outcome diagnosis, prompted by rank-deficient training and large withheld-template residuals in the preserved primary test','scope':'No change to observation split, templates, predictions, primary criteria or measured data','planned_checks':['per-reflector training coverage','training right-nullspace mapped onto held-out rows','weight/rank-threshold sensitivity summary','all parent delivery hashes','second independent execution']}
+          (out/'POST_OUTCOME_PROTOCOL.json').write_text(json.dumps(protocol,indent=2)+'\n')
+          (out/'REVIEW_SOURCE_RECORD.json').write_text(json.dumps({'utc':datetime.now(timezone.utc).isoformat(),'sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},indent=2)+'\n')
+          p=Path('parent/JX_Rotation_Calibration_Template_Results_2026-09-17.zip')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='e0fd27f018a31cdc44f1e81bb53fb2c066ef7ea9cd92977f16642e22f3682835'
+          with zipfile.ZipFile(p) as z:
+              prefix='JX_Rotation_Calibration_Templates/'
+              manifest=json.loads(z.read(prefix+'DELIVERY_MANIFEST.json'))
+              for name,h in manifest.items(): assert hashlib.sha256(z.read(prefix+name)).hexdigest()==h,name
+              def read(name):return z.read(prefix+name)
+              data=np.load(io.BytesIO(read('DESIGN_MATRICES.npz')))
+              roster=list(csv.DictReader(io.StringIO(read('SELECTED_DATES.csv').decode())))
+              comparisons=json.loads(read('COMPARISONS.json')); sensitivity=json.loads(read('RANK_SENSITIVITY.json'))
+              baseline=json.loads(read('BASELINE.json')); numerical=json.loads(read('NUMERICAL_CHECKS.json'))
+              oldreport=read('REPORT.md').decode(); oldstate=json.loads(read('RESULT_STATE.json'))
+              source=read('run_design.py'); replay=json.loads(read('REPLAY.json'))
+              primary_manifest_count=len(manifest)
+              for member in z.namelist():
+                  dest=Path('preserved_primary')/member
+                  if member.endswith('/'):continue
+                  dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(z.read(member))
+          records=[]
+          for label in ['year_A15','year_all_sites']:
+              ix=[i for i,r in enumerate(roster) if label!='year_A15' or int(r['site'])==3]
+              rr=[roster[i] for i in ix]
+              test=np.array([r['split_'+label]=='withheld_geometry_only' for r in rr]);train=~test
+              sites=sorted(set(int(r['site']) for r in rr))
+              coverage={}
+              for k in sites:
+                  ids=[j for j,r in enumerate(rr) if int(r['site'])==k]
+                  coverage[str(k)]={'training_records':sum(bool(train[j]) for j in ids),'withheld_records':sum(bool(test[j]) for j in ids),'training_dates':sorted({rr[j]['date'] for j in ids if train[j]}),'withheld_dates':sorted({rr[j]['date'] for j in ids if test[j]})}
+              for model in ['coordinates','coordinates_bias','station_velocity_bias','reflector_velocities_bias']:
+                  A=data[label+'_'+model];scales=np.linalg.norm(A[train],axis=0);scales[scales==0]=1
+                  B=A[train]/scales;V=A[test]/scales
+                  u,s,vh=la.svd(B,full_matrices=True,lapack_driver='gesvd');rank=int(np.sum(s>s[0]*1e-12))
+                  null=vh[rank:].T
+                  invisible_to_train_visible_to_test=float(np.linalg.norm(V@null,ord=2)) if null.shape[1] else 0.0
+                  rel=invisible_to_train_visible_to_test/max(float(np.linalg.norm(V,ord=2)),1e-300)
+                  records.append({'subset':label,'nuisance':model,'columns':int(A.shape[1]),'training_rank':rank,'nullity':int(A.shape[1]-rank),'heldout_response_to_training_nullspace_relative':rel,'unique_heldout_calibration_prediction':bool(rel<1e-8),'site_coverage':coverage})
+          (out/'SPLIT_DIAGNOSTIC.json').write_text(json.dumps(records,indent=2)+'\n')
+          rows=[]
+          for label in ['year_A15','year_all_sites']:
+              for model in ['coordinates_bias','station_velocity_bias','nightly_offsets']:
+                  for fam in ['drift','monthly','annual']:
+                      rr=[r for r in comparisons if r['subset']==label and r['nuisance']==model and r['template']==fam]
+                      lo=[r for r in sensitivity if r['subset']==label and r['nuisance']==model and r['template']==fam]
+                      primary=[r for r in rr if r['weighting']=='equal_records'][0]
+                      date=[r for r in rr if r['weighting']=='equal_dates'][0]
+                      rows.append({'subset':label,'nuisance':model,'template':fam,'equal_records_fraction':primary['basis_norm_fraction'],'equal_dates_fraction':date['basis_norm_fraction'],'rtol_control_min':min(r['basis_norm_fraction'] for r in lo),'rtol_control_max':max(r['basis_norm_fraction'] for r in lo),'minimum_mode_fraction':primary['minimum_mode_fraction'],'maximum_mode_fraction':primary['maximum_mode_fraction'],'nominal_basis_raw_rms_mm_per_mas':primary['raw_basis_rms_mm_per_mas'],'nominal_basis_remaining_rms_mm_per_mas':primary['retained_basis_rms_mm_per_mas']})
+          (out/'WEIGHT_AND_RANK_SENSITIVITY.json').write_text(json.dumps(rows,indent=2)+'\n')
+          state={'id':'JX-LUNAR-ROTATION-CALIBRATION-TEMPLATES-01','status':'KINEMATIC_TEMPLATE_SCREEN_EXECUTED__MULTIREFLECTOR_SPLIT_BLOCKED__ACTUAL_JX_SIGNATURE_NOT_TESTED','primary_numeric_checks_passed':sum(r['passed'] for r in numerical),'primary_numeric_checks_total':len(numerical),'parent_manifest_entries_verified':primary_manifest_count,'parent_archive_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'primary_replay':replay,'multireflector_withheld_coordinate_fit_unique':False,'no_new_observed_residuals':True,'no_JX_dynamics_integrated':True,'basis_frequencies_days':[27.5,365.25],'periods_are_engineering_templates':True,'primary_code_unchanged':True,'split_changed':False,'main_changed':False}
+          (out/'RESULT_STATE.json').write_text(json.dumps(state,indent=2)+'\n')
+          lines=['# JX rotation-versus-calibration numerical screen','', '## Decision', '',state['status'],'','This calculation was actually executed on a public-data-only isolated GitHub Actions branch after local execution tools failed. It is a geometric sensitivity screen using explicitly prescribed constant, linear and sinusoidal rotations. It is NOT the still-unexecuted test of dynamically propagated JX-minus-control signatures at 2006 observation epochs. No measured travel times, telescope coordinates, or Moon dynamics were fitted or changed.','','## New coverage','', 'The public first-year selection contains 162 timestamps on 40 UTC dates: Apollo11 19, Apollo14 15, Apollo15 124, Lunokhod2 4. No Lunokhod1 observation appears in this selected year. The all-reflector design has more nuisance-coordinate columns than the Apollo15-only design; comparing their raw condition numbers alone is not a fair measure of rotational usefulness.','','## Template results','', 'All entries below describe the Frobenius norm of the specified rotation-basis range signatures remaining after unconstrained linear nuisance adjustment, divided by its original norm. Both weights and nuisance parameters are declared; these are NOT accuracy percentages, information fractions, detection probabilities, or a fraction of actual JX error. The monthly period is exactly 27.5 days and annual period exactly 365.25 days, deliberately chosen engineering functions rather than derived lunar eigenmodes.','', '|Selection|Calibration freedom|Pattern|Equal-record retained %|Equal-date retained %|','|---|---|---|---:|---:|']
+          for r in rows:lines.append(f'|{r["subset"]}|{r["nuisance"]}|{r["template"]}|{100*r["equal_records_fraction"]:.6f}|{100*r["equal_dates_fraction"]:.6f}|')
+          lines+=['','Constant rotations disappear to numerical precision when all reflector coordinates can compensate. Linear drift disappears when independent reflector velocities are also freely adjustable. These confirm the frame/drift null controls of this local geometry; they are not statements that all real rotational dynamics are unobservable.','', 'The monthly example with station coordinates, per-reflector coordinates, station velocity and a constant offset retains 35.1734% with Apollo15 alone versus 52.4838% with all four available reflectors. Replacing the global offset with an independent offset on each UTC date leaves 0.1117% versus 25.8588%, respectively. More adjustable offsets can remove the feature under investigation; the outcome is not a recommendation to omit legitimate instrumental terms.','','## The originally fixed validation split did not qualify','', 'Every fifth chronological UTC date was withheld before calculating outcomes. The split was NOT retuned after seeing the results. Apollo15 alone has 103 training and 21 withheld records. The all-reflector set has 133 training and 29 withheld records, across 32 training and 8 withheld dates. Some reflector coordinates are underconstrained by its training portion. A minimum-norm least-squares answer in this rank-deficient problem is not a uniquely determined prediction on withheld rows. Apparent retained signal even for a constant frame rotation in that split must not be interpreted as physical distinguishability.','', '|Selection|Calibration model|Columns|Training rank|Unique withheld prediction?|','|---|---|---:|---:|---|']
+          for r in records:lines.append(f'|{r["subset"]}|{r["nuisance"]}|{r["columns"]}|{r["training_rank"]}|{r["unique_heldout_calibration_prediction"]}|')
+          lines+=['','Training/withheld coverage by reflector for the multi-reflector set:','',json.dumps(records[-1]['site_coverage'],indent=2),'','All original split outputs, including large extrapolation and constant-template mismatches, remain in the unchanged primary archive. This diagnostic investigates rank deficiency; it does not replace those outputs with a more favorable split. Metadata-aware coverage constraints would need a separately defined future calibration design.','', '## Verification and boundaries','',f'{state["primary_numeric_checks_passed"]}/{state["primary_numeric_checks_total"]} primary mathematical/finite-difference/reconstruction checks passed. Original two-date and first-year Apollo15 condition numbers were recovered within predeclared tolerances using a separate CSPICE geometry route. SVD versus pivoted QR, column-space nulls, finite differences and rank-threshold controls are saved. Twelve named primary text files replayed byte-identically; NPZ arrays replayed equal by value.', '',f'All {primary_manifest_count} parent delivery-manifest entries and the exact parent result ZIP SHA-256 were verified by this separate review job. Public-source kernel identities are retained in PUBLIC_INPUTS.json. A tight numerical null is not a physical uncertainty bound.','', 'Equal-date weighting is a sensitivity scenario, not an authenticated noise covariance. Ordinary UTC dates are not claimed to be the true hardware calibration/session grouping. There are no priors or bounds on nuisance adjustments, no full light-time physics, no observational residual evaluation and no new rotational propagation. The output cannot establish a percentage of JX accuracy or that the remaining signature is above instrumental/systematic uncertainty.','', '## What this permits next','', 'There is now numerical evidence that the choice of nuisance freedoms and reflector diversity materially affects the tested rotational patterns. The decisive actual-model test remains: supply matched dynamically generated JX and control attitudes at the selected dates, apply their predicted range difference to the same nuisance projection, and use a coverage-qualified calibration split with explicitly defined measurement conventions. Do not call these engineering sine/cosine inputs JX predictions. Do not repeat this template screen as a new physical result.','', '## Files and provenance','', 'The combined package preserves the exact primary ZIP, this report, all projected matrices, source, dates, numerical controls, unsuccessful split outputs, and this post-outcome diagnostic. Exact large public kernels are supplied in a separate public-input artifact. Sources: Colmenares et al. (2023) APOLLO v1, https://zenodo.org/records/7818557 ; format https://tmurphy.physics.ucsd.edu/apollo/norm_pts.html ; official NAIF generic kernels and state-transform documentation, https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html . No email, contacts, outreach, private source upload or scientific main-branch modification.', '', 'Library upload status is a separate operation; remote archive creation alone does not establish persistent Library saving.']
+          (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
+          print('REVIEW_REPORT_BEGIN\n'+(out/'REPORT.md').read_text()+'REVIEW_REPORT_END')
+          print('SENSITIVITY_BEGIN\n'+json.dumps(rows)+'\nSENSITIVITY_END')
+          PY
+          python review_design.py | tee review.log
+      - name: Replay diagnostic and assemble final result
+        shell: bash
+        run: |
+          mv review review_first
+          python review_design.py > diagnostic_replay.log
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,shutil,zipfile
+          root=Path('delivery');root.mkdir()
+          checks={n:(Path('review_first')/n).read_bytes()==(Path('review')/n).read_bytes() for n in ['SPLIT_DIAGNOSTIC.json','WEIGHT_AND_RANK_SENSITIVITY.json','RESULT_STATE.json','REPORT.md','POST_OUTCOME_PROTOCOL.json']}
+          assert all(checks.values()),checks
+          shutil.copytree('review_first',root/'review')
+          shutil.copyfile('review_design.py',root/'review'/'review_design.py')
+          shutil.copyfile('review.log',root/'review'/'execution.log')
+          shutil.copyfile('diagnostic_replay.log',root/'review'/'replay.log')
+          shutil.copyfile('parent/JX_Rotation_Calibration_Template_Results_2026-09-17.zip',root/'PRIMARY_RESULTS_UNCHANGED.zip')
+          for n in ['REPORT.md','RESULT_STATE.json']:shutil.copyfile(root/'review'/n,root/n)
+          (root/'REVIEW_REPLAY.json').write_text(json.dumps(checks,indent=2)+'\n')
+          hashes={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.rglob('*')) if p.is_file()}
+          (root/'MANIFEST.json').write_text(json.dumps(hashes,indent=2)+'\n')
+          with zipfile.ZipFile('JX_Rotation_Calibration_Screen_Complete_2026-09-17.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for p in sorted(root.rglob('*')):
+                  if p.is_file():z.write(p,'JX_Rotation_Calibration_Screen/'+str(p.relative_to(root)))
+          b=Path('JX_Rotation_Calibration_Screen_Complete_2026-09-17.zip').read_bytes()
+          print('FINAL_PACKAGE_SHA256',hashlib.sha256(b).hexdigest(),'BYTES',len(b))
+          print('POST_OUTCOME_REPLAY',json.dumps(checks))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rotation-calibration-complete
+          path: JX_Rotation_Calibration_Screen_Complete_2026-09-17.zip
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rotation-calibration-readable-review
+          path: |
+            delivery/REPORT.md
+            delivery/RESULT_STATE.json
+            delivery/REVIEW_REPLAY.json
+          retention-days: 30
