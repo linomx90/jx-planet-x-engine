@@ -1,0 +1,36 @@
+name: Public LLR station source table
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/llr-station-source-table.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Acquire published source for inspection only
+        shell: bash
+        run: |
+          mkdir artifact
+          python3 - <<'PY'
+          import urllib.request,pathlib,hashlib,json,os
+          urls={'INPOP17a_S108.pdf':'https://www.imcce.fr/content/medias/publications/publications-recherche/nst/docs/S108.pdf','erfa_c2t00a.c':'https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/c2t00a.c','erfa_c2t06a.c':'https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/c2t06a.c','erfa_c2tcio.c':'https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/c2tcio.c','erfa_dtdb.c':'https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/dtdb.c'}
+          out=[]
+          for name,url in urls.items():
+            r={'file':name,'url':url}
+            try:
+              with urllib.request.urlopen(url,timeout=30) as response:
+                b=response.read();r.update(status=response.status,final_url=response.url)
+              pathlib.Path('artifact',name).write_bytes(b);r.update(sha256=hashlib.sha256(b).hexdigest(),bytes=len(b))
+            except Exception as e:r['error']=repr(e)
+            out.append(r)
+          pathlib.Path('artifact/ACQUISITION.json').write_text(json.dumps({'commit':os.environ['GITHUB_SHA'],'run':os.environ['GITHUB_RUN_ID'],'files':out},indent=2))
+          PY
+      - name: Retain source download evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: llr-station-source-table
+          path: artifact
+          retention-days: 30
