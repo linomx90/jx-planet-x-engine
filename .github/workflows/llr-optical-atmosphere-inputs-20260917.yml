@@ -1,0 +1,45 @@
+name: Public optical atmosphere sources
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/llr-optical-atmosphere-inputs-20260917.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Download public reference sources only
+        run: |
+          mkdir -p optical-inputs
+          python - <<'PY'
+          import urllib.request, pathlib, json, hashlib, datetime
+          root=pathlib.Path('optical-inputs')
+          sources={
+            'FCUL_A.F':'https://iers-conventions.obspm.fr/content/chapter9/software/FCUL_A.F',
+            'FCUL_ZD_HPA.F':'https://iers-conventions.obspm.fr/content/chapter9/software/FCUL_ZD_HPA.F',
+            'IERS_chapter9.html':'https://iers-conventions.obspm.fr/chapter9.php',
+            'APOL_sitelog.html':'https://ilrs.gsfc.nasa.gov/network/stations/active/APOL_sitelog.html',
+            'Cipm2007.java':'https://raw.githubusercontent.com/CS-SI/Orekit/13.1/src/main/java/org/orekit/models/earth/weather/water/Cipm2007.java',
+            'Orekit_LICENSE.txt':'https://raw.githubusercontent.com/CS-SI/Orekit/13.1/LICENSE.txt'
+          }
+          log=[]
+          for name,url in sources.items():
+            rec={'name':name,'url':url,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+            try:
+              with urllib.request.urlopen(url,timeout=30) as response:
+                data=response.read(); rec['final_url']=response.url
+              (root/name).write_bytes(data)
+              rec.update(status='ok',bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+            except Exception as e:
+              rec.update(status='failed',error=repr(e))
+            log.append(rec)
+          (root/'ACQUISITION.json').write_text(json.dumps(log,indent=2)+'\n')
+          print(json.dumps(log,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: llr-optical-atmosphere-inputs
+          path: optical-inputs/
+          retention-days: 30
