@@ -1,0 +1,52 @@
+name: Public LLR observation inputs
+on:
+  push:
+    branches: [experiment/llr-public-inputs-20260917]
+    paths: [.github/workflows/llr-public-inputs.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Fetch public inputs without private data or model execution
+        shell: bash
+        run: |
+          mkdir -p inputs/wheels
+          python3 - <<'PY'
+          import urllib.request, pathlib, hashlib, json, concurrent.futures, datetime
+          root=pathlib.Path('inputs')
+          urls={
+           'earth_orientation.bpc':'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/earth_000101_261212_260915.bpc',
+           'earth_orientation.cmt':'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/earth_000101_261212_260915.cmt',
+           'naif0012.tls':'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls',
+           'finals2000A.all':'https://datacenter.iers.org/data/9/finals2000A.all',
+           'edc_apollo15_200001_http.txt':'https://edc.dgfi.tum.de/pub/slr/data/npt/apollo15/2000/apollo15.200001',
+           'edc_apollo15_200001_ftp.txt':'ftp://edc.dgfi.tum.de/pub/slr/data/npt/apollo15/2000/apollo15.200001',
+           'polac_llrdata.html':'https://polac.obspm.fr/llrdata.html',
+           'edc_apollo15_cstg.html':'https://edc.dgfi.tum.de/en/satellites/apollo15/np/',
+           'edc_wetl_20230228.html':'https://edc.dgfi.tum.de/en/data/npt/2813829/',
+           'edc_wetl_site.html':'https://edc.dgfi.tum.de/en/stations/8834/site_log/'
+          }
+          def get(item):
+              name,url=item
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'JX-Lunar-Research/1.0'}),timeout=25) as response:
+                      data=response.read(15_000_001)
+                  if len(data)>15_000_000: raise ValueError('size guard')
+                  (root/name).write_bytes(data)
+                  return {'name':name,'url':url,'status':'saved','bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+              except Exception as e: return {'name':name,'url':url,'status':'failed','error':str(e)}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool: results=list(pool.map(get,urls.items()))
+          (root/'ACQUISITION.json').write_text(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Public acquisition only; no lunar predictions or private files','results':results},indent=2))
+          print(json.dumps(results,indent=2))
+          PY
+          python3 -m pip download --only-binary=:all: --no-deps --platform manylinux2014_x86_64 --python-version 313 --implementation cp --abi cp313 --dest inputs/wheels pyerfa==2.0.1.5 || true
+      - name: Preserve all successes and failures
+        uses: actions/upload-artifact@v4
+        with:
+          name: llr-public-observation-inputs
+          path: inputs
+          if-no-files-found: error
+          retention-days: 30
