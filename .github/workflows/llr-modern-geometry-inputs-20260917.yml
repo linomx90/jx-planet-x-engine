@@ -1,0 +1,40 @@
+name: Public modern LLR geometry inputs
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/llr-modern-geometry-inputs-20260917.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Download public kernel and documentation only
+        shell: bash
+        run: |
+          mkdir -p acquired
+          python - <<'PY'
+          import urllib.request, pathlib, hashlib, json, datetime
+          root=pathlib.Path('acquired')
+          base='https://naif.jpl.nasa.gov/pub/naif/'
+          paths=['generic_kernels/pck/earth_000101_261213_260916.bpc','generic_kernels/pck/earth_000101_261213_260916.cmt','toolkit_docs/C/cspice/ltime_c.html','toolkit_docs/C/cspice/spkezr_c.html','toolkit_docs/C/req/pck.html','toolkit_docs/C/req/daf.html','toolkit_docs/C/req/spk.html']
+          records=[]
+          for p in paths:
+            u=base+p
+            try:
+              with urllib.request.urlopen(u,timeout=45) as r:
+                b=r.read(); headers=dict(r.headers); final=r.url
+              dest=root/p.split('/')[-1]; dest.write_bytes(b)
+              records.append(dict(url=u,final_url=final,file=dest.name,bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),headers=headers,status='retrieved'))
+            except Exception as e: records.append(dict(url=u,status='failed',error=repr(e)))
+          (root/'ACQUISITION.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),scope='Public inputs only; no JX science execution or private data',records=records),indent=2)+'\n')
+          if not (root/'earth_000101_261213_260916.bpc').exists(): raise SystemExit(1)
+          PY
+      - name: Preserve source bytes and acquisition failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llr-modern-geometry-inputs
+          path: acquired
+          retention-days: 30
