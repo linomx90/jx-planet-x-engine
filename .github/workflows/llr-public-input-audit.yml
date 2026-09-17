@@ -1,0 +1,76 @@
+name: Public LLR input acquisition
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/llr-public-input-audit.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Download public data and record provenance (no JX execution)
+        shell: bash
+        run: |
+          mkdir -p artifact/data artifact/wheels
+          python3 - <<'PY'
+          import urllib.request, pathlib, hashlib, json, datetime, os
+          from concurrent.futures import ThreadPoolExecutor
+          base = pathlib.Path('artifact/data')
+          urls = {
+           'APOLLO_2006_2020.np': 'https://zenodo.org/records/7818557/files/APOLLO_2006_2020.np?download=1',
+           'APOLLO_2006_2020.crd': 'https://zenodo.org/records/7818557/files/APOLLO_2006_2020.crd?download=1',
+           'zenodo_metadata.json': 'https://zenodo.org/api/records/7818557',
+           'finals2000A.all': 'https://maia.usno.navy.mil/ser7/finals2000A.all',
+           'readme.finals2000A': 'https://maia.usno.navy.mil/ser7/readme.finals2000A',
+           'APOL_sitelog.html': 'https://ilrs.gsfc.nasa.gov/network/stations/active/APOL_sitelog.html',
+           'SLRF2020_POS_VEL.snx': 'https://ilrs.gsfc.nasa.gov/docs/2026/SLRF2020_POS%2BVEL_2026.02.05.snx',
+           'norm_pts.html': 'https://tmurphy.physics.ucsd.edu/apollo/norm_pts.html',
+           'pyerfa_pypi.json': 'https://pypi.org/pypi/pyerfa/2.0.1.5/json',
+           'erfa_tests.c': 'https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/t_erfa_c.c'
+          }
+          expected = {'APOLLO_2006_2020.np':'d8923c930f93aea9dfc9eabeb928295a', 'APOLLO_2006_2020.crd':'d1e5d8dc2afd1c5c61884883cd0a0ef6'}
+          def fetch(item):
+              name,url = item
+              rec={'file': name, 'url': url, 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  request=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 public scientific data verification'})
+                  with urllib.request.urlopen(request,timeout=65) as response:
+                      data=response.read()
+                      rec.update(status=response.status,final_url=response.url,headers=dict(response.headers))
+                  (base/name).write_bytes(data)
+                  rec.update(bytes=len(data),sha256=hashlib.sha256(data).hexdigest(),md5=hashlib.md5(data).hexdigest())
+                  if name in expected: rec['published_md5_matches']=rec['md5']==expected[name]
+              except Exception as exc: rec['error']=repr(exc)
+              return rec
+          with ThreadPoolExecutor(max_workers=5) as ex: records=list(ex.map(fetch,urls.items()))
+          manifest={'scope':'Public input acquisition only. No checkout, private data, model fit or engine run. Main branch untouched.', 'commit':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'records':records}
+          pathlib.Path('artifact/ACQUISITION.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          print(json.dumps(manifest,indent=2))
+          PY
+      - name: Retain pinned ERFA wheel for offline local use
+        shell: bash
+        run: |
+          python3 -m pip download --only-binary=:all: --no-deps --platform manylinux2014_x86_64 --python-version 313 --implementation cp --abi cp313 --dest artifact/wheels pyerfa==2.0.1.5
+          python3 - <<'PY'
+          import pathlib,hashlib,json
+          root=pathlib.Path('artifact')
+          metadata=json.loads((root/'data/pyerfa_pypi.json').read_text())
+          expected={r['filename']:r['digests']['sha256'] for r in metadata['urls']}
+          checks=[]
+          for f in (root/'wheels').glob('*.whl'):
+              sha=hashlib.sha256(f.read_bytes()).hexdigest()
+              assert expected[f.name]==sha
+              checks.append({'file':f.name,'bytes':f.stat().st_size,'sha256':sha,'pypi_match':True})
+          (root/'WHEEL_VERIFICATION.json').write_text(json.dumps(checks,indent=2)+'\n')
+          PY
+      - name: Preserve all acquisition results, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llr-public-input-audit
+          path: artifact
+          retention-days: 30
+          if-no-files-found: error
