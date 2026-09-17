@@ -1,0 +1,364 @@
+name: Public-data rotation calibration design
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/jx-rotation-calibration-public-20260917.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  design:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install fixed numerical dependencies
+        run: python -m pip install numpy==2.3.5 scipy==1.16.3 spiceypy==8.0.0 pyerfa==2.0.1.5
+      - name: Write independent public-data design calculation
+        shell: bash
+        run: |
+          cat > run_design.py <<'PY'
+          """Kinematic rotation-template identifiability, NOT a JX dynamics forecast.
+          Public APOLLO timestamps/identifiers only; no observed travel-time fit.
+          No private archive or personal-account data are inputs.
+          """
+          from pathlib import Path
+          import argparse, csv, hashlib, json, math, platform, shutil, sys, time, urllib.request
+          from datetime import datetime, timezone
+          import numpy as np
+          import scipy, scipy.linalg as la
+          import spiceypy as sp
+          import erfa
+
+          C = 299792.458
+          YEAR = 365.25 * 86400.0
+          MAS = math.pi / (180 * 3600 * 1000)
+          STATION = np.array([-1463.999007298928,-5166.633027688641,3435.012345845150])
+          SITES = {0:[1591967.049,690698.573,21004.461],1:[1114291.452,-781299.273,1076059.049],2:[1652689.369,-520998.431,-109729.869],3:[1554678.104,98094.498,765005.863],4:[1339363.598,801870.995,756359.260]}
+          SITES = {k:np.array(v,dtype=float) for k,v in SITES.items()}
+          BASE = 'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/'
+          URLS = {
+            'de440s.bsp':BASE+'spk/planets/de440s.bsp',
+            'moon_pa_de440_200625.bpc':BASE+'pck/moon_pa_de440_200625.bpc',
+            'earth_000101_261213_260916.bpc':BASE+'pck/earth_000101_261213_260916.bpc',
+            'moon_de440_250416.tf':BASE+'fk/satellites/moon_de440_250416.tf',
+            'naif0012.tls':BASE+'lsk/naif0012.tls',
+            'APOLLO_2006_2020.np':'https://zenodo.org/records/7818557/files/APOLLO_2006_2020.np?download=1'}
+          PROTOCOL = {
+            'id':'JX-LUNAR-ROTATION-CALIBRATION-TEMPLATES-01',
+            'question':'Which prescribed time-dependent body-frame rotation templates remain outside specified endpoint/calibration column spaces?',
+            'scope':'Local geometric design only. No propagated rotational signature, no measured travel-time scoring, no complete LLR operator.',
+            'data':'APOLLO 2006-2020 v1; published MD5 verified; only date/time, station and reflector identifiers parsed',
+            'interval_utc':'[2006-04-07,2007-04-07)',
+            'sets':['first two UTC dates Apollo15','first year Apollo15','first year all available reflectors'],
+            'weights':['equal records','equal total weight per UTC date'],
+            'templates':{'constant':'three body-frame axes','drift':'three axes times elapsed Julian years from common midpoint','monthly':'sine and cosine, period exactly 27.5 days, each of three axes','annual':'sine and cosine, period exactly 365.25 days, each of three axes'},
+            'period_meaning':'Declared engineering templates, NOT measured periods, lunar normal modes, or newly generated JX trajectories',
+            'amplitude_unit':'1 milliarcsecond per basis coefficient; linearized template only',
+            'nuisance_models':['coordinates','coordinates_bias','station_velocity_bias','nightly_offsets','reflector_velocities_bias'],
+            'parameter_units':'position and additive range bias: metres; velocities: metres per Julian year; coordinate frames ITRF93/DE440 PA',
+            'nuisance_priors':'none; unconstrained linear adjustments; this is not authorization to fit physical offsets',
+            'split':'whole UTC dates in chronological order: every fifth date (index4 modulo5) withheld; no residuals examined; not asserted physical observing-session boundaries',
+            'rank_rule':'SVD after nuisance-column normalization, rtol=1e-12; controls 1e-10,1e-14. Projected normalized signature modes counted above 1e-7, a numerical resolution rule, NOT an observational significance test.',
+            'checks':{'finite_difference_position_abs_m_per_m':0.0005,'finite_difference_rotation_abs_m_per_rad':20.0,'null_relative_norm':1e-6,'svd_qr_projected_relative_difference':1e-5,'parent_short_condition_relative':0.005,'parent_year_condition_relative':0.001},
+            'exclusions':['relativistic observation corrections','atmosphere','surface tides','survey authentication','covariance','orbital uncertainty','actual JX forecast differences','observational fit or validation'],
+            'preservation':'public inputs, source hash before calculation, numerical arrays, outcomes and failures retained; no main-branch changes'}
+
+          def dump(path,obj):
+              path.write_text(json.dumps(obj,indent=2,allow_nan=False)+'\n')
+          def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+          def csvout(path,rows):
+              if not rows: return
+              with path.open('w',newline='') as f:
+                  w=csv.DictWriter(f,fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+          def acquire(cache):
+              cache.mkdir(parents=True,exist_ok=True)
+              receipt={}
+              for name,url in URLS.items():
+                  p=cache/name
+                  if not p.exists():
+                      err=None
+                      for attempt in range(3):
+                          try:
+                              req=urllib.request.Request(url,headers={'User-Agent':'JX-public-research-reproducibility/1.0'})
+                              with urllib.request.urlopen(req,timeout=90) as r: data=r.read()
+                              p.write_bytes(data); err=None; break
+                          except Exception as e:
+                              err=e; print('ACQUISITION_ATTEMPT',name,attempt,str(e),flush=True); time.sleep(2)
+                      if err: raise RuntimeError('Public input acquisition failed: '+name) from err
+                  receipt[name]={'url':url,'bytes':p.stat().st_size,'sha256':sha(p)}
+              assert hashlib.md5((cache/'APOLLO_2006_2020.np').read_bytes()).hexdigest()=='d8923c930f93aea9dfc9eabeb928295a'
+              return receipt
+          def load_records(path):
+              records=[]
+              for num,line in enumerate(path.read_text('ascii').splitlines(),1):
+                  if not line.strip(): continue
+                  if len(line)<43 or line[:2]!='51': raise ValueError('Unrecognized record '+str(num))
+                  y,mo,d,hh,mm=[int(line[a:b]) for a,b in [(2,6),(6,8),(8,10),(10,12),(12,14)]]
+                  sec=int(line[14:23])*1e-7
+                  site=int(line[37:38]); station=int(line[38:43])
+                  day=f'{y:04d}-{mo:02d}-{d:02d}'
+                  if station!=70610 or not ('2006-04-07'<=day<'2007-04-07'): continue
+                  if site not in SITES: raise ValueError('Unknown reflector code')
+                  u1,u2=erfa.dtf2d('UTC',y,mo,d,hh,mm,sec)
+                  a1,a2=erfa.utctai(u1,u2); t1,t2=erfa.taitt(a1,a2)
+                  delta=erfa.dtdb(t1,t2,0.0,0.0,0.0,0.0)
+                  et=float(((np.longdouble(t1)-2451545)+np.longdouble(t2))*86400+np.longdouble(delta))
+                  records.append({'source_line':num,'date':day,'utc':f'{day}T{hh:02d}:{mm:02d}:{sec:010.7f}','site':site,'et':et})
+              return records
+          def skew(b):
+              x,y,z=b; return np.array([[0,-z,y],[z,0,-x],[-y,x,0]])
+          def frame(body,et): return sp.sxform('ITRF93' if body=='399' else 'MOON_PA_DE440','J2000',float(et))
+          def center(body,et): return sp.spkezr(body,float(et),'J2000','NONE','0')[0]
+          def endpoint(body,et,b):
+              F=frame(body,et); cc=center(body,et)
+              return cc[:3]+F[:3,:3]@b,cc[3:]+F[3:,:3]@b,F[:3,:3]
+          def functions(et,tzero):
+              d=(et-tzero)/86400
+              return {'constant':np.array([1.0]),'drift':np.array([d/365.25]),'monthly':np.array([math.sin(2*math.pi*d/27.5),math.cos(2*math.pi*d/27.5)]),'annual':np.array([math.sin(2*math.pi*d/365.25),math.cos(2*math.pi*d/365.25)])}
+          def root(rec,tzero,ps=None,pr=None,rot=None):
+              b=SITES[rec['site']]/1000
+              sb=STATION+(np.zeros(3) if ps is None else ps/1000)
+              rb=b+(np.zeros(3) if pr is None else pr/1000)
+              t=rec['et']; s1=endpoint('399',t,sb)
+              def moon(et):
+                  rbb=rb
+                  if rot is not None:
+                      fam,j,phase,amp=rot; angle=functions(et,tzero)[fam][phase]*amp
+                      axis=np.eye(3)[j]; K=skew(axis)
+                      rbb=(np.eye(3)+math.sin(angle)*K+(1-math.cos(angle))*(K@K))@rb
+                  return endpoint('301',et,rbb)
+              u=np.linalg.norm(moon(t)[0]-s1[0])/C
+              for it in range(30):
+                  m=moon(t+u); nu=np.linalg.norm(m[0]-s1[0])/C
+                  if abs(nu-u)<1e-13: u=nu; break
+                  u=nu
+              else: raise RuntimeError('uplink did not settle')
+              m=moon(t+u); v=np.linalg.norm(endpoint('399',t+u,sb)[0]-m[0])/C
+              for it in range(30):
+                  s3=endpoint('399',t+u+v,sb); nv=np.linalg.norm(s3[0]-m[0])/C
+                  if abs(nv-v)<1e-13: v=nv; break
+                  v=nv
+              else: raise RuntimeError('downlink did not settle')
+              s3=endpoint('399',t+u+v,sb)
+              return u,v,s1,m,s3
+          def derivatives(rec,tzero):
+              u,v,S,M,T=root(rec,tzero)
+              nu=(M[0]-S[0]); nu/=np.linalg.norm(nu)
+              nd=(T[0]-M[0]); nd/=np.linalg.norm(nd)
+              def response(dS1,dM,dS3):
+                  du=(nu@(dM-dS1))/(C-nu@M[1])
+                  dv=(nd@(dS3-dM)+float(nd@(T[1]-M[1]))*du)/(C-nd@T[1])
+                  return C*(du+dv)*500
+              Z=np.zeros((3,3)); Q1,Q2,Q3=S[2]/1000,M[2]/1000,T[2]/1000
+              As=response(Q1,Z,Q3); Ar=response(Z,Q2,Z)
+              ts=(rec['et']-tzero)/YEAR; tb=ts+u/YEAR; tr=tb+v/YEAR
+              Av=response(Q1*ts,Z,Q3*tr); Br=Ar*tb
+              # d(Q b)/dtheta = Q*(-[b]_cross); b in metres.
+              G0=Ar@(-skew(SITES[rec['site']]))
+              fam={k:np.concatenate([G0*f for f in ff]) for k,ff in functions(rec['et']+u,tzero).items()}
+              return As,Ar,Av,Br,fam,(u,v)
+          def basis(A,rtol=1e-12):
+              if A.shape[1]==0: return np.zeros((len(A),0)),np.array([]),np.array([])
+              norms=np.linalg.norm(A,axis=0); nz=norms>0
+              scaled=A[:,nz]/norms[nz]
+              U,s,Vh=la.svd(scaled,full_matrices=False,lapack_driver='gesvd')
+              r=int(np.sum(s>s[0]*rtol)) if len(s) and s[0]>0 else 0
+              return U[:,:r],s,scaled
+          def projection(A,G,w,rtol=1e-12):
+              Aw=A*np.sqrt(w)[:,None]; Gw=G*np.sqrt(w)[:,None]
+              U,sa,scaled=basis(Aw,rtol)
+              H=Gw-U@(U.T@Gw)
+              Ug,sg,Vg=la.svd(Gw,full_matrices=False,lapack_driver='gesvd')
+              rg=int(np.sum(sg>sg[0]*1e-12)) if sg[0]>0 else 0
+              Q=Ug[:,:rg]; R=Q-U@(U.T@Q)
+              sv=la.svdvals(R) if rg else np.array([])
+              # Singular values of P*orth(G) are amplitude-retention factors.
+              Qr,rr,piv=la.qr(scaled,mode='economic',pivoting=True)
+              Hqr=Gw-Qr[:,:U.shape[1]]@(Qr[:,:U.shape[1]].T@Gw)
+              qrerr=float(np.linalg.norm(H-Hqr)/max(np.linalg.norm(Gw),1e-300))
+              return {'nuisance_rank':int(U.shape[1]),'raw_signature_rank':rg,'retained_modes_above_1e7':int(np.sum(sv>1e-7)),
+                      'basis_norm_fraction':float(np.linalg.norm(H)/max(np.linalg.norm(Gw),1e-300)),
+                      'minimum_mode_fraction':float(sv[-1]) if len(sv) else 0.0,'maximum_mode_fraction':float(sv[0]) if len(sv) else 0.0,
+                      'mode_fractions':[float(x) for x in sv],
+                      'raw_basis_rms_mm_per_mas':float(np.linalg.norm(Gw)/math.sqrt(np.sum(w)*G.shape[1])*MAS*1000),
+                      'retained_basis_rms_mm_per_mas':float(np.linalg.norm(H)/math.sqrt(np.sum(w)*G.shape[1])*MAS*1000),
+                      'qr_relative_difference':qrerr,'orthogonality_relative':float(np.linalg.norm(U.T@H)/max(np.linalg.norm(Gw),1e-300))},H
+          def matrices(ix,records,As,Ar,Av,Br):
+              sites=sorted({records[i]['site'] for i in ix}); N=len(ix)
+              E=np.zeros((N,3+3*len(sites))); E[:,:3]=As[ix]
+              V=np.zeros((N,3*len(sites)))
+              dates=sorted({records[i]['date'] for i in ix}); D=np.zeros((N,len(dates)))
+              for k,i in enumerate(ix):
+                  q=sites.index(records[i]['site']); E[k,3+q*3:6+q*3]=Ar[i]
+                  V[k,q*3:q*3+3]=Br[i]
+                  D[k,dates.index(records[i]['date'])]=1
+              B=np.ones((N,1))
+              return {'coordinates':E,'coordinates_bias':np.c_[E,B],'station_velocity_bias':np.c_[E,Av[ix],B],
+                      'nightly_offsets':np.c_[E,Av[ix],D],'reflector_velocities_bias':np.c_[E,Av[ix],V,B]}
+          def main():
+              pa=argparse.ArgumentParser(); pa.add_argument('--cache',type=Path,required=True); pa.add_argument('--out',type=Path,required=True); args=pa.parse_args()
+              out=args.out; out.mkdir(parents=True,exist_ok=False)
+              dump(out/'PROTOCOL.json',PROTOCOL)
+              dump(out/'PRE_RUN.json',{'utc':datetime.now(timezone.utc).isoformat(),'source_sha256':sha(Path(__file__)),'protocol_sha256':sha(out/'PROTOCOL.json')})
+              shutil.copyfile(__file__,out/'run_design.py')
+              inputs=acquire(args.cache); dump(out/'PUBLIC_INPUTS.json',inputs)
+              shutil.copyfile(args.cache/'APOLLO_2006_2020.np',out/'APOLLO_2006_2020.np')
+              for nm in URLS:
+                  if nm!='APOLLO_2006_2020.np': sp.furnsh(str(args.cache/nm))
+              rec=load_records(args.cache/'APOLLO_2006_2020.np'); N=len(rec)
+              assert N>0
+              # Common origin chosen from the declared span, not outcome optimized.
+              origin=float(sp.str2et('2006-04-07T00:00:00'))+YEAR/2
+              a=[]; b=[]; av=[]; br=[]; gg={k:[] for k in ['constant','drift','monthly','annual']}; events=[]
+              for r in rec:
+                  aa,bb,vv,rr,g,uv=derivatives(r,origin)
+                  a.append(aa); b.append(bb); av.append(vv); br.append(rr)
+                  for k in gg: gg[k].append(g[k])
+                  events.append({'source_line':r['source_line'],'uplink_seconds':uv[0],'downlink_seconds':uv[1]})
+              As,Ar,Av,Br=map(np.asarray,(a,b,av,br)); gg={k:np.asarray(v) for k,v in gg.items()}
+              ix15=np.array([i for i,r in enumerate(rec) if r['site']==3],int)
+              ix8=np.array([i for i,r in enumerate(rec) if r['site']==3 and r['date']<'2006-04-09'],int)
+              subsets={'two_dates_A15':ix8,'year_A15':ix15,'year_all_sites':np.arange(N)}
+              checks=[]
+              def check(name,condition,value=None): checks.append({'check':name,'passed':bool(condition),'value':value})
+              check('A15_roster_matches_pinned_selection',len(ix15)==124 and len({rec[i]['date'] for i in ix15})==40,{'records':len(ix15),'dates':len({rec[i]['date'] for i in ix15})})
+              check('original_two_dates_count',len(ix8)==8,len(ix8))
+              baseline={}; summary=[]; sensitivity=[]; validation=[]; arrays={'As':As,'Ar':Ar,'station_velocity':Av,'reflector_velocity':Br,**gg}
+              for label,ix in subsets.items():
+                  MM=matrices(ix,rec,As,Ar,Av,Br)
+                  cond6=float(np.linalg.cond(MM['coordinates'])); cond7=float(np.linalg.cond(MM['coordinates_bias']))
+                  dates=sorted({rec[i]['date'] for i in ix}); counts={d:sum(rec[i]['date']==d for i in ix) for d in dates}
+                  baseline[label]={'N':len(ix),'UTC_dates':len(dates),'reflector_counts':{str(k):sum(rec[i]['site']==k for i in ix) for k in sorted({rec[i]['site'] for i in ix})},'coordinate_condition':cond6,'coordinate_bias_condition':cond7}
+                  for weight in ['equal_records','equal_dates']:
+                      w=np.ones(len(ix)) if weight=='equal_records' else np.array([1/counts[rec[i]['date']] for i in ix])
+                      for model,A in MM.items():
+                          arrays[label+'_'+model]=A
+                          for family,Gall in gg.items():
+                              G=Gall[ix]; result,H=projection(A,G,w)
+                              row={'subset':label,'weighting':weight,'nuisance':model,'template':family,'N':len(ix),'nuisance_columns':A.shape[1],**result}
+                              summary.append(row)
+                              check('projection_QR_'+label+'_'+weight+'_'+model+'_'+family,result['qr_relative_difference']<1e-5,result['qr_relative_difference'])
+                              check('orthogonality_'+label+'_'+weight+'_'+model+'_'+family,result['orthogonality_relative']<1e-10,result['orthogonality_relative'])
+                              if family=='constant': check('constant_frame_null_'+label+'_'+weight+'_'+model,result['basis_norm_fraction']<1e-6,result['basis_norm_fraction'])
+                              if family=='drift' and model=='reflector_velocities_bias': check('linear_drift_free_reflector_velocity_null_'+label+'_'+weight,result['basis_norm_fraction']<1e-6,result['basis_norm_fraction'])
+                              if weight=='equal_records':
+                                  for tol in [1e-10,1e-14]:
+                                      z,_=projection(A,G,w,tol); sensitivity.append({'subset':label,'nuisance':model,'template':family,'rtol':tol,**z})
+                  # Fit template surrogates on training dates only; not measurement calibration.
+                  if label!='two_dates_A15':
+                      hold={d for j,d in enumerate(dates) if j%5==4}
+                      test=np.array([rec[i]['date'] in hold for i in ix]); train=~test
+                      for model in ['coordinates','coordinates_bias','station_velocity_bias','reflector_velocities_bias']:
+                          A=MM[model]; norms=np.linalg.norm(A[train],axis=0); norms[norms==0]=1
+                          for family,Gall in gg.items():
+                              G=Gall[ix]
+                              coef,_,rank,_=la.lstsq(A[train]/norms,G[train],cond=1e-12,lapack_driver='gelsd')
+                              prediction=(A/norms)@coef
+                              validation.append({'subset':label,'nuisance':model,'template':family,'training_records':int(train.sum()),'validation_records':int(test.sum()),'training_dates':len(dates)-len(hold),'validation_dates':len(hold),'training_rank':int(rank),
+                                'training_signal_remaining':float(np.linalg.norm((G-prediction)[train])/max(np.linalg.norm(G[train]),1e-300)),
+                                'withheld_signal_remaining':float(np.linalg.norm((G-prediction)[test])/max(np.linalg.norm(G[test]),1e-300))})
+                      for i in ix:
+                          rec[i]['split_'+label]='withheld_geometry_only' if rec[i]['date'] in hold else 'calibration_geometry_only'
+              check('short_parent_geometry_reconstruction',abs(baseline['two_dates_A15']['coordinate_condition']/13336427.95-1)<0.005,baseline['two_dates_A15']['coordinate_condition'])
+              check('year_parent_geometry_reconstruction',abs(baseline['year_A15']['coordinate_condition']/140.1945834953-1)<0.001,baseline['year_A15']['coordinate_condition'])
+              fd=[]
+              for i in np.unique(np.linspace(0,N-1,8,dtype=int)):
+                  r=rec[int(i)]
+                  for axis in range(3):
+                      e=np.eye(3)[axis]*4
+                      for kind,expected in [('station',As[i,axis]),('reflector',Ar[i,axis])]:
+                          rp=root(r,origin,ps=e if kind=='station' else None,pr=e if kind=='reflector' else None)
+                          rm=root(r,origin,ps=-e if kind=='station' else None,pr=-e if kind=='reflector' else None)
+                          estimate=(np.longdouble(rp[0])+rp[1]-np.longdouble(rm[0])-rm[1])*np.longdouble(C)*500/8
+                          err=float(abs(estimate-expected)); fd.append({'row':int(i),'kind':kind,'axis':axis,'analytic':float(expected),'finite_difference':float(estimate),'absolute_error':err})
+                          check('position_FD_'+str(i)+'_'+kind+'_'+str(axis),err<0.0005,err)
+                      amp=1e-4
+                      rp=root(r,origin,rot=('monthly',axis,0,amp)); rm=root(r,origin,rot=('monthly',axis,0,-amp))
+                      estimate=(np.longdouble(rp[0])+rp[1]-np.longdouble(rm[0])-rm[1])*np.longdouble(C)*500/(2*amp)
+                      expected=gg['monthly'][i,axis]; err=float(abs(estimate-expected))
+                      fd.append({'row':int(i),'kind':'monthly_rotation','axis':axis,'analytic':float(expected),'finite_difference':float(estimate),'absolute_error':err})
+                      check('rotation_FD_'+str(i)+'_'+str(axis),err<20,err)
+              dump(out/'BASELINE.json',baseline); dump(out/'COMPARISONS.json',summary); dump(out/'RANK_SENSITIVITY.json',sensitivity); dump(out/'SPLIT_TEMPLATE_TEST.json',validation); dump(out/'NUMERICAL_CHECKS.json',checks)
+              np.savez(out/'DESIGN_MATRICES.npz',**arrays)
+              keys=sorted({k for r in rec for k in r}); csvout(out/'SELECTED_DATES.csv',[{k:r.get(k,'') for k in keys} for r in rec]); csvout(out/'GEOMETRIC_EVENTS.csv',events); csvout(out/'FINITE_DIFFERENCES.csv',fd)
+              csvout(out/'COMPARISONS.csv',[{k:v for k,v in r.items() if k!='mode_fractions'} for r in summary]); csvout(out/'SPLIT_TEMPLATE_TEST.csv',validation)
+              failed=[x for x in checks if not x['passed']]
+              result={'id':PROTOCOL['id'],'status':'KINEMATIC_TEMPLATE_SCREEN_EXECUTED__NOT_DYNAMICAL_JX_DISCRIMINATION' if not failed else 'NUMERICAL_CHECK_FAILED__DO_NOT_QUALIFY','checks':len(checks),'failures':failed,'baselines':baseline,'actual_JX_trajectories':0,'measured_travel_times_scored':0,'observational_accuracy_established':False,'engine':'CSPICE geometry plus local implicit derivatives and SVD/QR; shared ephemeris inputs','runtime':{'python':sys.version,'numpy':np.__version__,'scipy':scipy.__version__,'spiceypy':sp.__version__,'erfa':erfa.__version__,'platform':platform.platform()}}
+              dump(out/'RESULT_STATE.json',result)
+              lines=['# Rotation versus calibration: executed public-data template screen','', 'Result: '+result['status'], '', 'This is a kinematic sensitivity experiment, not a new JX forecast or an observational fit.', 'Computed from public APOLLO timestamps and DE440 geometry. All actual range values and uncertainty fields were excluded from numerical parsing. Station and reflector coordinates are nominal engineering definitions.', '', '## Coverage', '', '|Selection|Records|UTC dates|Available reflector counts|Endpoint condition|', '|---|---:|---:|---|---:|']
+              for k,b in baseline.items(): lines.append(f'|{k}|{b["N"]}|{b["UTC_dates"]}|{b["reflector_counts"]}|{b["coordinate_condition"]:.8g}|')
+              lines+=['','## Rotational basis amplitude remaining after unconstrained nuisance projection','', 'Equal-record weighting. Percent is a Frobenius-norm ratio for the declared equally scaled basis; NOT percent physical accuracy, statistical information, or a detection probability. min/max mode values are singular values of projected orthonormal raw-signature columns. The 27.5-day and 365.25-day sine/cosine functions are engineering test templates, not physical lunar normal modes.','', '|Selection|Nuisance|Template|Basis norm retained %|Raw rank|Retained modes >1e-7|Min mode|Max mode|','|---|---|---|---:|---:|---:|---:|---:|']
+              for r in summary:
+                  if r['weighting']=='equal_records': lines.append(f'|{r["subset"]}|{r["nuisance"]}|{r["template"]}|{100*r["basis_norm_fraction"]:.7g}|{r["raw_signature_rank"]}|{r["retained_modes_above_1e7"]}|{r["minimum_mode_fraction"]:.6g}|{r["maximum_mode_fraction"]:.6g}|')
+              lines+=['','## What the design does not establish','', 'Constant orientation is a frame-coordinate null when reflector coordinates are free. A linear body-frame drift can be absorbed locally by free reflector velocities. This is not a proof that actual dynamical signals are invisible. Periodic-template outcomes depend on the declared frequencies, nuisance freedoms and weighting; weights are not an authenticated covariance. A fit of synthetic template columns is a mathematical decomposition, not an observational coordinate calibration.', '', 'Whole-date withheld tests use only geometric templates. They are not scored measured validation. One offset for each unseen date cannot be predicted from calibration dates, so the nightly-offset model is deliberately excluded from the withheld-prediction table.', '', 'No full optical/relativistic/clock correction was evaluated here. No source physical uncertainties, actual JX trajectories, or independent lunar accuracy are inferred. This experiment has not proved whether the saved JX-versus-control signature survives calibration: that requires matched dynamical predictions at these actual dates.','','## Numerical qualification','',f'{len(checks)-len(failed)}/{len(checks)} checks passed. Failures: '+json.dumps(failed), '', 'Saved SVD rank-threshold and equal-date-weight controls must accompany interpretation. Candidate geometry uses binary64 CSPICE. Very small projected fractions are numerical null diagnostics, not resolved physical effects. Source and protocol were recorded before the calculation.','', '## Public sources and reproduction','', 'APOLLO data: Colmenares et al. (2023), Zenodo DOI 10.5281/zenodo.7818557, CC BY 4.0. Format: https://tmurphy.physics.ucsd.edu/apollo/norm_pts.html . Ephemerides: official NAIF generic kernels as enumerated and hashed in PUBLIC_INPUTS.json. No private archive, email or personal contacts were used.', '', 'Reproduce with the fixed dependency versions in RESULT_STATE.json: python run_design.py --cache /new/input-cache --out /new/results . Exact acquired kernels are saved separately; public source hashes are checked in the workflow replay. No parent result or production default changed.']
+              report='\n'.join(lines)+'\n'; (out/'REPORT.md').write_text(report)
+              print('REPORT_BEGIN\n'+report+'REPORT_END',flush=True)
+              print('SPLIT_TEMPLATE_TEST_BEGIN\n'+json.dumps(validation)+'\nSPLIT_TEMPLATE_TEST_END',flush=True)
+              dump(out/'SHA256.json',{str(p.relative_to(out)):sha(p) for p in sorted(out.rglob('*')) if p.is_file() and p.name!='SHA256.json'})
+              if failed: raise SystemExit(2)
+          if __name__=='__main__': main()
+          PY
+      - name: Execute new template discrimination test
+        run: python run_design.py --cache public_inputs --out results | tee primary.log
+      - name: Fresh-process replay and payload assembly
+        if: always()
+        shell: bash
+        run: |
+          if [ -f results/RESULT_STATE.json ]; then
+            python run_design.py --cache public_inputs --out replay > replay.log 2>&1 || true
+          fi
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,zipfile,shutil
+          r=Path('results'); r.mkdir(exist_ok=True)
+          checks=[]
+          for n in ['PROTOCOL.json','BASELINE.json','COMPARISONS.json','RANK_SENSITIVITY.json','SPLIT_TEMPLATE_TEST.json','NUMERICAL_CHECKS.json','SELECTED_DATES.csv','GEOMETRIC_EVENTS.csv','FINITE_DIFFERENCES.csv','COMPARISONS.csv','SPLIT_TEMPLATE_TEST.csv','REPORT.md']:
+              a=r/n;b=Path('replay')/n
+              checks.append({'file':n,'matched':a.exists() and b.exists() and a.read_bytes()==b.read_bytes()})
+          if (r/'DESIGN_MATRICES.npz').exists() and Path('replay/DESIGN_MATRICES.npz').exists():
+              import numpy as np
+              a=np.load(r/'DESIGN_MATRICES.npz');b=np.load('replay/DESIGN_MATRICES.npz')
+              checks.append({'file':'DESIGN_MATRICES.npz arrays','matched':a.files==b.files and all(np.array_equal(a[k],b[k]) for k in a.files)})
+          rec={'replay_checks':checks,'all_matched':all(x['matched'] for x in checks)}
+          (r/'REPLAY.json').write_text(json.dumps(rec,indent=2)+'\n')
+          print('REPLAY',json.dumps(rec))
+          for n in ['primary.log','replay.log','run_design.py']:
+              if Path(n).exists():shutil.copyfile(n,r/n)
+          manifest={str(p.relative_to(r)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(r.rglob('*')) if p.is_file() and p.name!='DELIVERY_MANIFEST.json'}
+          (r/'DELIVERY_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          with zipfile.ZipFile('JX_Rotation_Calibration_Template_Results_2026-09-17.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for p in sorted(r.rglob('*')):
+                  if p.is_file():z.write(p,'JX_Rotation_Calibration_Templates/'+str(p.relative_to(r)))
+          print('DELIVERY_SHA256',hashlib.sha256(Path('JX_Rotation_Calibration_Template_Results_2026-09-17.zip').read_bytes()).hexdigest())
+          PY
+      - name: Preserve result archive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rotation-calibration-results
+          path: JX_Rotation_Calibration_Template_Results_2026-09-17.zip
+          retention-days: 30
+      - name: Preserve readable report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rotation-calibration-report
+          path: |
+            results/REPORT.md
+            results/RESULT_STATE.json
+            results/REPLAY.json
+          retention-days: 30
+      - name: Preserve original public inputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rotation-calibration-public-inputs
+          path: public_inputs
+          retention-days: 30
