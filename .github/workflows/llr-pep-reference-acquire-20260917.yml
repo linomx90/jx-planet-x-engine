@@ -1,0 +1,54 @@
+name: Public PEP reference acquisition
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/llr-pep-reference-acquire-20260917.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Retrieve public PEP code and documents without execution
+        shell: bash
+        run: |
+          mkdir -p acquired
+          python3 - <<'PY'
+          import urllib.request, json, hashlib, datetime
+          from pathlib import Path
+          out=Path('acquired'); records=[]
+          def fetch(url, name):
+              rec={'url':url,'file':name,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  req=urllib.request.Request(url, headers={'User-Agent':'JX-public-reference-acquisition/1.0'})
+                  with urllib.request.urlopen(req,timeout=45) as r:
+                      data=r.read(120_000_001)
+                      if len(data)>120_000_000: raise ValueError('size limit exceeded')
+                      rec.update(status=r.status, final_url=r.url, bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+                  (out/name).write_bytes(data)
+                  return data
+              except Exception as e:
+                  rec['error']=repr(e)
+                  return None
+              finally:
+                  records.append(rec)
+                  (out/'ACQUISITION.json').write_text(json.dumps(records,indent=2))
+                  print(json.dumps(rec),flush=True)
+          for project in ('pep_core','pep_doc'):
+              meta=fetch('https://gitlab.com/api/v4/projects/jbattat%2F'+project,project+'_project.json')
+              ref='master'
+              if meta:
+                  ref=json.loads(meta).get('default_branch','master')
+              commit=fetch('https://gitlab.com/api/v4/projects/jbattat%2F'+project+'/repository/commits/'+ref,project+'_commit.json')
+              if commit: ref=json.loads(commit)['id']
+              fetch('https://gitlab.com/jbattat/'+project+'/-/archive/'+ref+'/'+project+'-'+ref+'.tar.gz',project+'.tar.gz')
+          PY
+      - name: Preserve all public acquisitions and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llr-pep-reference-sources
+          path: acquired
+          retention-days: 30
+          if-no-files-found: error
