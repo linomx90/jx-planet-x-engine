@@ -1,0 +1,33 @@
+name: public-engine-snapshot-20260918
+on:
+  push:
+    branches: [experiment/llr-public-input-audit-20260917]
+    paths: [.github/workflows/public-engine-snapshot-20260918.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 7f70d10d6d49a694ea78a3042d542982a6f5226f
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Archive existing public commit only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 7f70d10d6d49a694ea78a3042d542982a6f5226f
+          mkdir -p "$RUNNER_TEMP/public-engine"
+          git archive --format=zip --prefix=jx_repository/ HEAD > "$RUNNER_TEMP/public-engine/jx_repository_7f70d10.zip"
+          git ls-tree -r HEAD > "$RUNNER_TEMP/public-engine/GIT_TREE.txt"
+          git rev-parse HEAD > "$RUNNER_TEMP/public-engine/COMMIT.txt"
+          cd "$RUNNER_TEMP/public-engine"
+          sha256sum jx_repository_7f70d10.zip GIT_TREE.txt COMMIT.txt > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-engine-source-7f70d10-20260918
+          path: ${{ runner.temp }}/public-engine/
+          retention-days: 30
+          if-no-files-found: error
