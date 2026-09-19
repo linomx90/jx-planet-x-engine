@@ -1,0 +1,52 @@
+name: JX Mars public asteroid inputs 20260919
+on:
+  push:
+    branches: [experiment/mars-asteroid-inputs-20260919]
+    paths: [.github/workflows/jx-mars-asteroid-inputs-20260919.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Fetch fixed public inputs only
+        shell: bash
+        run: |
+          mkdir -p public_inputs
+          python3 - <<'PY'
+          import urllib.request,urllib.parse,pathlib,json,hashlib,datetime,time
+          root=pathlib.Path('public_inputs'); ledger=[]
+          roster=[1,2,3,4,6,7,10,15,16,29,52,65,87,88,107,511]
+          for number in roster:
+              args={'format':'json','COMMAND':"'%d;'"%number,'OBJ_DATA':"'YES'",'MAKE_EPHEM':"'YES'",'EPHEM_TYPE':"'VECTORS'",'CENTER':"'500@0'",'TLIST':"'2453832.0 2453848.0 2453864.0'",'REF_PLANE':"'FRAME'",'REF_SYSTEM':"'ICRF'",'OUT_UNITS':"'KM-S'",'VEC_TABLE':"'2'",'VEC_CORR':"'NONE'",'CSV_FORMAT':"'YES'"}
+              url='https://ssd.jpl.nasa.gov/api/horizons.api?'+urllib.parse.urlencode(args)
+              entry={'number':number,'url':url,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  with urllib.request.urlopen(url,timeout=18) as r:
+                      b=r.read(250001)
+                      if len(b)>250000:raise ValueError('response exceeds bounded size')
+                      entry.update(status=r.status,headers=dict(r.headers))
+                  (root/('asteroid_%04d.json'%number)).write_bytes(b)
+                  obj=json.loads(b); text=obj.get('result','')
+                  entry.update(bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),ephemeris_returned=('$$SOE' in text and '$$EOE' in text),error=obj.get('error'))
+              except Exception as e:entry.update(ephemeris_returned=False,error=repr(e))
+              ledger.append(entry); print(number,entry.get('ephemeris_returned'),entry.get('error'));time.sleep(.2)
+          for name,url in [('de440_tech-comments.txt','https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440_tech-comments.txt'),('assist_ephem_source.c','https://raw.githubusercontent.com/matthewholman/assist/main/src/ephem.c')]:
+              entry={'name':name,'url':url}
+              try:
+                  with urllib.request.urlopen(url,timeout=18) as r:b=r.read(500001)
+                  if len(b)>500000:raise ValueError('bounded source size exceeded')
+                  (root/name).write_bytes(b);entry.update(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+              except Exception as e:entry['error']=repr(e)
+              ledger.append(entry)
+          (root/'ACQUISITION.json').write_text(json.dumps({'purpose':'Public input acquisition only; no JX engine run, fit, or accuracy verdict','roster_fixed_before_results':roster,'initial_jd_tdb':2453832.0,'later_state_use':'prospective asteroid propagation checks only, not future inputs to major-body propagation','records':ledger},indent=2)+'\n')
+          if not all(x.get('ephemeris_returned') for x in ledger[:len(roster)]):raise SystemExit('One or more public state acquisitions failed; failures preserved')
+          PY
+      - name: Preserve inputs and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-mars-asteroid-inputs-20260919
+          path: public_inputs/
+          retention-days: 30
