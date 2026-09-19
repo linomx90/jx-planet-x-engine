@@ -1,0 +1,51 @@
+name: JX flyby survey inputs 20260919
+on:
+  push:
+    branches: [experiment/flyby-survey-inputs-20260919]
+    paths: [.github/workflows/jx-flyby-survey-inputs-20260919.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Acquire bounded public sources only
+        shell: bash
+        run: |
+          mkdir -p public_inputs
+          python3 - <<'PY'
+          import urllib.request,urllib.parse,json,pathlib,hashlib,datetime
+          root=pathlib.Path('public_inputs'); ledger=[]
+          def get(name,url,cap=4000000):
+              item={'name':name,'url':url,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'JX-public-input-audit/1.0'})
+                  with urllib.request.urlopen(req,timeout=25) as r:
+                      b=r.read(cap+1);item.update(status=r.status,final_url=r.url)
+                  if len(b)>cap:raise ValueError('bounded size exceeded')
+                  (root/name).write_bytes(b);item.update(success=True,bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+                  ledger.append(item);return b
+              except Exception as e:item.update(success=False,error=repr(e));ledger.append(item);return None
+          for label,sha in [('jx_o1_pin','86ce0936c0585ea1120830831c66276e05b076aa'),('surveys_current','126d5281b69bd632f41c8cd5e144f4a6db90ec95')]:
+              get('ossos_'+label+'.zip','https://codeload.github.com/OSSOS/SurveySimulator/zip/'+sha,80000000)
+          get('datacite_flyby.json','https://api.datacite.org/dois?'+urllib.parse.urlencode({'query':'creators.name:Pfalzner AND flyby','page[size]':'100'}))
+          get('destiny_datasets.html','https://destiny.fz-juelich.de/datasets/')
+          get('dataverse_flyby_search.json','https://data.fz-juelich.de/api/search?'+urllib.parse.urlencode({'q':'flyby','type':'dataset','per_page':'100'}))
+          for suffix in ['LGBORQ','9Z9K47']:
+              for host in ['data.fz-juelich.de','data-legacy.fz-juelich.de']:
+                  b=get(suffix+'_'+host+'.json','https://'+host+'/api/datasets/:persistentId/?'+urllib.parse.urlencode({'persistentId':'doi:10.26165/JUELICH-DATA/'+suffix}))
+                  try:o=json.loads(b);assert o.get('status')=='OK'
+                  except Exception:continue
+                  break
+          get('ossos_tnodb.html','https://www.ossos-survey.org/tnodb.html')
+          (root/'ACQUISITION.json').write_text(json.dumps({'scope':'Public bytes and source metadata only; no engine modification, simulated telescope run, orbital integration or physical verdict. Missing2026 final catalogue must not be replaced by the older1Gyr output.','records':ledger},indent=2)+'\n')
+          print(json.dumps(ledger,indent=2))
+          PY
+      - name: Preserve inputs and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-flyby-survey-inputs-20260919
+          path: public_inputs/
+          retention-days: 30
