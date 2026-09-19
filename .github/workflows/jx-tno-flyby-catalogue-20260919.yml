@@ -1,0 +1,55 @@
+name: JX public flyby catalogue 20260919
+on:
+  push:
+    branches: [experiment/tno-flyby-catalogue-20260919]
+    paths: [.github/workflows/jx-tno-flyby-catalogue-20260919.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Acquire public data and provenance only
+        shell: bash
+        run: |
+          mkdir -p public_inputs
+          python3 - <<'PY'
+          import urllib.request,urllib.parse,json,pathlib,hashlib,datetime
+          root=pathlib.Path('public_inputs'); ledger=[]
+          def get(name,url,cap=2000000):
+              r={'name':name,'url':url,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'JX-public-scientific-data-audit/1.0'})
+                  with urllib.request.urlopen(req,timeout=18) as h:
+                      b=h.read(cap+1);r.update(status=h.status,final_url=h.url)
+                  if len(b)>cap:raise ValueError('bounded response cap exceeded')
+                  (root/name).write_bytes(b);r.update(bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),success=True)
+                  ledger.append(r);return b
+              except Exception as e:r.update(success=False,error=repr(e));ledger.append(r);return None
+          get('destiny_datasets.html','https://destiny.fz-juelich.de/datasets/')
+          get('destiny_documentation.html','https://destiny.fz-juelich.de/documentation/')
+          for suffix in ['LGBORQ','9Z9K47']:
+              for host in ['data.fz-juelich.de','data-legacy.fz-juelich.de']:
+                  url='https://'+host+'/api/datasets/:persistentId/?persistentId=doi:10.26165/JUELICH-DATA/'+suffix
+                  raw=get(suffix+'_'+host+'.json',url)
+                  try:obj=json.loads(raw);meta=obj['data']['latestVersion'];entries=meta['files']
+                  except Exception:continue
+                  for f in entries:
+                      d=f['dataFile'];name=d.get('filename','');size=d.get('filesize',0)
+                      wanted=('readme' in name.lower() or (suffix=='LGBORQ' and name=='solar_system_1.0000_Gyr.dat'))
+                      if wanted and size<15000000:
+                          get(suffix+'_'+name,'https://'+host+'/api/access/datafile/'+str(d['id']),15000000)
+                  break
+          for paper in ['2609.03575v1','2607.15646v1','2102.05601v2','2404.11594v1']:
+              get('arxiv_'+paper+'.html','https://arxiv.org/html/'+paper,3000000)
+          (root/'ACQUISITION.json').write_text(json.dumps({'scope':'Public source and endpoint acquisition only; no new N-body run, survey simulation, fit, or scientific verdict. The 2025 one-Gyr archive must not be relabeled as the 2026 final 4.5-Gyr catalogue.','records':ledger},indent=2)+'\n')
+          print(json.dumps(ledger,indent=2))
+          PY
+      - name: Preserve bounded inputs and failure records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-tno-flyby-catalogue-20260919
+          path: public_inputs/
+          retention-days: 30
