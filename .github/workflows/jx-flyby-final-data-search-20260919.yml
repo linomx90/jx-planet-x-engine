@@ -1,0 +1,58 @@
+name: JX final flyby dataset audit 20260919
+on:
+  push:
+    branches: [experiment/tno-flyby-catalogue-20260919]
+    paths: [.github/workflows/jx-flyby-final-data-search-20260919.yml]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Bounded public metadata reads
+        run: |
+          mkdir -p public_inputs
+          python3 - <<'PY'
+          import urllib.request,urllib.parse,json,pathlib,hashlib,datetime,time
+          root=pathlib.Path('public_inputs'); ledger=[]; links=set()
+          def get(name,url,cap=8000000):
+              item={'file':name,'url':url,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'JX-public-research-catalogue-audit/1.0'})
+                  with urllib.request.urlopen(req,timeout=15) as h:
+                      b=h.read(cap+1); item.update(status=h.status,final_url=h.url)
+                  if len(b)>cap: raise ValueError('bounded response cap exceeded')
+                  (root/name).write_bytes(b); item.update(bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),success=True)
+                  ledger.append(item); return json.loads(b)
+              except Exception as e:
+                  item.update(success=False,error=repr(e)); ledger.append(item);return None
+          host='https://data.fz-juelich.de'
+          for query in ['flyby','Pfalzner','Bischoff']:
+              obj=get('search_'+query+'.json',host+'/api/search?'+urllib.parse.urlencode({'q':query,'type':'dataset','per_page':100,'start':0}))
+              if obj and obj.get('status')=='OK':
+                  for d in obj.get('data',{}).get('items',[]):
+                      if d.get('global_id'):links.add(d['global_id'])
+              time.sleep(.2)
+          links.add('doi:10.26165/JUELICH-DATA/LGBORQ');links.add('doi:10.26165/JUELICH-DATA/9Z9K47')
+          for number,pid in enumerate(sorted(links)[:16]):
+              q=urllib.parse.urlencode({'persistentId':pid})
+              obj=get('dataset_%02d.json'%number,host+'/api/datasets/:persistentId/?'+q)
+              if obj and obj.get('status')=='OK':
+                  ident=obj['data']['id']
+                  get('versions_%02d.json'%number,host+'/api/datasets/'+str(ident)+'/versions')
+                  for f in obj['data'].get('latestVersion',{}).get('files',[]):
+                      d=f['dataFile']; n=d.get('filename',''); size=d.get('filesize',0)
+                      if ('readme' in n.lower() or n=='param.dat') and size<1000000:
+                          get('file_%02d_%s'%(number,pathlib.Path(n).name),host+'/api/access/datafile/'+str(d['id']),1000000)
+          get('datacite_search.json','https://api.datacite.org/dois?'+urllib.parse.urlencode({'query':'creators.name:Pfalzner AND (titles.title:flyby OR titles.title:Neptunian)','page[size]':100}))
+          (root/'ACQUISITION.json').write_text(json.dumps({'scope':'Public metadata and README/config retrieval. No trajectories, observations, fits, rankings or private files uploaded. No author contacted. First100 results per query and at most16 dataset detail records; completeness must be checked from returned totals.','dataset_ids_found':sorted(links),'records':ledger},indent=2)+'\n')
+          print(json.dumps([{'file':x['file'],'success':x['success'],'bytes':x.get('bytes'),'error':x.get('error')} for x in ledger],indent=2))
+          PY
+      - name: Preserve metadata and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-flyby-final-data-search-20260919
+          path: public_inputs/
+          retention-days: 30
