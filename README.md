@@ -1,18 +1,184 @@
-# JX N-Body Engine
+# JX Celestial Dynamics Framework
 
-**Version:** 0.3.0  
+**Version:** 0.6.0rc1
+
+**Release date:** 2026-09-19
+
 **License:** MIT  
 **Scientific claim state:** `SCREENING_ONLY`
 
-JX N-Body Engine is a high-precision numerical toolkit for testing gravitational
-source hypotheses in the outer Solar System. It was developed inside the JX
-Planet X research project, but it is a general N-body engine: a planet is one
-possible source, not an assumed answer.
+JX is a falsification-first, general celestial-dynamics framework for explicit
+physical models, reproducible numerical experiments, and scientific claim
+control. Outer-Solar-System and Planet X studies are important applications,
+not assumptions built into the engine. Model output is not astronomical
+evidence.
 
 This repository contains the engine source, packaging metadata, unit tests,
 locked protocols, and compact result summaries. It intentionally excludes the
 project's large observational inputs, bulk execution archives, and
 candidate-search catalogs.
+
+The installable distribution and command remain `jxplanetx` for backward
+compatibility. Version 0.6.0rc1 aligns the package with General Dynamics
+registry v17, adds byte-reproducible wheel and source-archive construction,
+and retains the existing public force and trajectory surface. Registry v17
+states `SCREENING_ONLY` explicitly and does not promote any capability beyond
+its exact evidence and claim ceiling. The legacy propagation core, CLI, locked
+experiments, and scientific records remain unchanged.
+
+## General engine
+
+The additive `jxplanetx.engine` API evaluates ordered acceleration terms on
+caller-owned, backend-native arrays and advances explicitly requested
+checkpoints with an adaptive RKF78 method. It implements exactly three
+unqualified physics models:
+
+- direct, unsoftened Newtonian point-mass gravity;
+- restricted static-central Schwarzschild test-particle 1PN, as a
+  correction-only term; and
+- unshadowed isotropic cannonball solar-radiation pressure.
+
+`integrate_trajectory` implements the 13-stage Fehlberg RK7(8) pair from
+NASA-TR-R-287. It advances the hatted order-eight solution, uses the ordinary
+order-seven solution for the defect, applies a normalized maximum
+per-component error test, and reaches each forward or backward checkpoint by
+step clipping without interpolation. Every force and trajectory result remains
+`MODEL_OUTPUT`, with registry and qualification authority fixed false. Inputs
+bind units, frame, origin, epoch, provenance, parameter validity, backend,
+device, binary64 dtype, deterministic reduction scope, summation tile size,
+error tolerances, and every controller limit. Unsupported combinations fail
+before arithmetic; backend selection never silently falls back or transfers
+arrays between host and GPU.
+
+The additive [Dynamics scenarios V1](docs/DYNAMICS_SCENARIOS.md) layer now
+assembles one state, force plan, and adaptive-RKF78 request as an explicit
+scenario. Its matched mode runs a same-state, same-solver control followed by a
+candidate that appends named force terms, retaining both trajectories and
+per-body checkpoint differences. The candidate starts from the control run's
+retained baseline copies. Those differences are model-to-model diagnostics,
+not accuracy, improvement, or physics claims; every result remains
+unqualified `MODEL_OUTPUT`. A canonical portable manifest records NumPy/CPU
+binary64 scenarios with hexadecimal floats and an external SHA-256 identity;
+loading reconstructs read-only arrays and does not authenticate or qualify the
+scenario.
+
+`integrate_encounter_segment` adds a standalone full-Cartesian adaptive
+RKF78 segment for exact NumPy/CPU binary64, barycentric-inertial, fully mutual,
+all-active positive-GM unsoftened Newtonian states. It advances an
+authoritative signed mathematical duration on exact local offsets; its
+separately supplied endpoint epoch is an independent provenance label, not the
+source of the state duration. Pair-relative and GM-centroid defect control,
+Kahan accepted updates, exact pair floors, bounded exact-arithmetic witnesses,
+transactional rejection, and one separately accounted mandatory semantic
+replay are explicit public contracts.
+
+The encounter certificate proves only that the exact Newtonian local IVP
+issuing from each accepted numerical node does not cross the retained pair
+floors during that accepted substep. A failed certificate is merely
+uncertified; it is not collision evidence. The solver does not locate events
+or minimum distance, respond to collisions, regularize, switch integrators,
+or claim clearance of a global physical trajectory, and every result remains
+unqualified `MODEL_OUTPUT`.
+
+Two additive fixed-step NumPy/CPU maps are also public and unqualified:
+fully mutual Cartesian KDK, and an ordered-Jacobi Wisdom--Holman KDK map for
+all-active, positive-GM, low-secondary-mass hierarchical elliptic systems.
+The Wisdom--Holman path uses analytic universal-variable Kepler subflows,
+integer map-index checkpoints, mandatory hierarchy/periapse/step/Hill/path
+guards, and one full semantic validation replay. It has no passive tracers,
+close-encounter switching, adaptive fallback, or production claim. Its formal
+exact-subflow symplectic statement does not apply to floating-point execution;
+small sampled energy error does not imply small phase or trajectory error.
+
+`integrate_hybrid_wisdom_holman_rkf78_trajectory` implements the narrowly
+defined
+`integrator.hybrid.wisdom_holman_jacobi_rkf78_cartesian.v1` method for at most
+16 bodies. Every fixed outer interval first
+runs one typed, provisional Wisdom--Holman far probe. A far pass commits that
+candidate. A finite named near exit discards the complete candidate and reruns
+the untouched original node over the full interval through the private guarded
+Cartesian encounter execution; static, numerical, resource, custody, and
+replay failures are fatal. The outer integer lattice never adapts, and there
+is no hysteresis, latch, partial-prefix commit, grouping, or event location.
+
+The near certificate keeps exactly the standalone solver's local-IVP scope;
+it is not collision or event detection and gives no global clearance claim.
+One full hybrid semantic replay, with no nested public child replay, recomputes
+all states, decisions, ledgers, digests, and accounting. All-far runs preserve
+the frozen public Wisdom--Holman state/checkpoint/diagnostic/accounting
+projection bit-for-bit. The complete hybrid is not globally symplectic,
+formally or exactly reversible, regularized, globally order-qualified, or
+scientifically qualified.
+
+The accompanying 46-capability catalog contains exactly twelve `IMPLEMENTED`
+and 34 `DECLARED` rows and covers the alpha surface and broader JX roadmap.
+The implemented set includes the standalone guarded encounter segment, the
+two experimental unqualified fixed-step Newtonian maps, and the one specific
+whole-step hybrid. The broader roster spans
+gravity, relativity, harmonics, tides,
+nongravitational forces, encounters, integrators, accelerator backends,
+precision modes, sensitivities, orbit determination, and measurements. Every
+entry is `UNQUALIFIED`. A `DECLARED` entry validates its known parameter roster
+and then refuses execution.
+
+NumPy CPU and optional CuPy CUDA 12/13 code paths are available. The
+[GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md) records
+fixture-specific CPU/CUDA parity, the complete live-engine test scope, a
+reduced eleven-body replay, descriptive interleaved timings, and a large
+mutual-gravity CUDA scale observation on one project-owned RTX 5060 Ti. That
+package does not establish reproducibility across devices, a portable speedup,
+general GPU qualification, production fitness, or physical accuracy.
+
+For `0.6.0rc1`, a fail-closed current-core gate was also run on the same model
+of project-owned GPU: an RTX 5060 Ti with driver 595.91.07, CUDA 13.2, NumPy
+2.3.5, and CuPy 14.2.0. All 13 isolated engine modules passed with the hardware
+tests active (233 tests, zero skips), and the five GPU-specific backend and
+trajectory tests also passed under optimized Python. This verifies the exact
+recorded runtime/device core contracts only, including CPU/GPU numerical
+parity, device residency, no implicit transfer, mixed-input refusal, float32
+refusal, and CuPy trajectory custody. It is not cross-device qualification, a
+performance or speedup claim, production fitness, or scientific validation.
+
+The additive [eleven-body portable evidence V1](runs/jx_eleven_body_portable_v1/README.md)
+provides the compact Ubuntu workflow: offline integrity verification, exact
+dependency records, a host-readiness doctor, a fresh bounded CPU/GPU replay,
+and the saved 100-year REBOUND comparator. It remains `SCREENING_ONLY`; the
+historical 100-year result is offline-verifiable but its fresh standalone
+rerun is explicitly blocked by incomplete archived JX source closure.
+
+The additive [R0 source-closed 100-year confirmation package](runs/jx_reph_v1_r0_source_closed_100y/README.md)
+resolves that archived source closure from a provenance-bound Git bundle plus
+the four accepted comparator overlays. Its bounded construction preflight
+passes, but the 100-year pair has not yet run. Any future run remains
+`SCREENING_ONLY`, requires a fresh monitored preflight and short-lived
+authorization, and must pass the separate offline execution verifier before
+its result is described as verified.
+
+The additive [cosmology particle-mesh foundation](runs/jx_cosmology_pm_foundation_v1/README.md)
+extends the same project with a native NumPy/CuPy periodic collisionless-gravity
+solver in a prescribed flat expanding background. Its frozen analytic
+growing-mode benchmarks pass at 128^3 and 256^3 particles, with
+near-second-order spatial and temporal convergence, CPU/GPU parity, and an
+independently coded planar NumPy reference. The
+[256^3 validation package](runs/jx_cosmology_pm_256_independent_r2/README.md)
+retains the complete cross-code evidence. The first 256^3 attempt is retained
+as a stopped accumulator failure; the repaired run keeps its thresholds and
+workload unchanged. This is a qualification of one controlled
+foundation workload only. It is not a realistic structure-formation run and
+does not include gas, radiation, plasma, nuclear physics, general relativity,
+an observational fit, or a production cosmology claim.
+
+The [R4 dark-matter plus baryon benchmark](runs/jx_cosmology_baryons_3d_r4/README.md)
+adds a native 128^3 adiabatic gas mesh coupled to 2,097,152 dark-matter particles
+through the same spectral gravity field. It validates three-direction linear
+and complex phase, periodic conservation, gas positivity, sound-wave
+convergence, a Sod shock, exact GPU repetition, and NumPy/CuPy full-state
+agreement. The stopped R2 and R3 records preserve discovery of a half-cell
+particle/gas phase error, an unsafe multidimensional CFL bound, and the
+corrected 64^3 accuracy failure. R4 keeps the accuracy threshold unchanged and
+passes at the convergence-selected resolution. This is a controlled
+first-order supercomoving validation, not yet an externally validated nonlinear
+galaxy-formation or production cosmology solver.
 
 ## Scientific boundary
 
@@ -40,15 +206,142 @@ The source includes:
   populations, checkpointed execution, calibration/power tests, and fail-closed verdicts;
 - a command-line interface for reproducible validation workflows.
 
-The software is not a complete orbit-determination or global ephemeris-fit
-system. Observation-level use would additionally require validated light-time,
-station, media, clock, calibration, and simultaneous-fit models.
+The most important present limitation is that no general engine model or
+integrator is scientifically qualified. Exact benchmark qualifications do not
+promote the wider engine. The RKF78 path is explicit and
+nonstiff, with no dense output, event location, collision response,
+or regularization. The specific hybrid adds guarded whole-step mode selection,
+not a collision/event system or a general close-encounter framework. The
+unchanged native propagation core remains Newtonian point-mass dynamics. JX has no qualified built-in
+relativity, oblateness, nongravitational-force, collision-regularization,
+orbit-determination, or observational-ephemeris capability.
+
+## JX V5 physics foundation
+
+The V5 foundation begins the controlled expansion beyond gravity-only
+propagation. Its force-parameter registry covers relativity, gravity harmonics,
+nongravitational forces, physical-body properties, collision capability, and
+future measurement modeling. Every declaration is bound to units, frames,
+epochs, provenance, uncertainty, covariance, applicability, and validation
+requirements.
+
+This foundation is deliberately `DRAFT_NONEXECUTABLE`. Unresolved scientific
+values are recorded as `TBD_BLOCKED`; they are never replaced by guessed
+defaults. Declared-but-unimplemented models cannot authorize a run or increase
+the scientific claim state. See the
+[V5 force-parameter registry](docs/FORCE_PARAMETER_REGISTRY_V5.md).
+
+V5 now includes a JX-owned Decimal reference kernel for the
+restricted Solar Schwarzschild 1PN correction. It is equation-level,
+correction-only, and permanently reports `registry_authorized=false`. It is not
+wired into the existing Yoshida integrator because the relativistic term is
+velocity-dependent and that integrator assumes a separable, position-only
+force. A separate fixed-step Decimal implicit-midpoint path now tests the
+six-component restricted Newtonian-plus-1PN first-order equation with an explicit precision, rounding,
+force-ledger, and nonlinear-residual contract. That path is reference-only,
+retains `MODEL_OUTPUT`, and cannot make the draft registry executable. Full
+N-body EIH relativity, production propagation, and scientific claim promotion
+remain blocked. See the
+[V5 reference-integrator protocol](docs/V5_REFERENCE_INTEGRATOR.md).
+
+A separate [Solar 1PN qualification package](runs/v5_solar_1pn_qualification/README.md)
+now freezes the source artifacts, unit and time-scale transformations, fresh
+holdout fixtures, Q0--Q9 gate definitions, prior-development disclosure, and
+claim ceiling needed for a later qualification attempt. The package contains
+no outcomes and exposes no trajectory runner: its execution implementation is
+`NOT_REGISTERED`, its evidence ceiling is `MODEL_OUTPUT`, and even a future
+all-gates pass could make the reference path only
+`ELIGIBLE_FOR_REVIEW_NONAUTHORIZING`. It cannot change the draft registry or
+authorize physical Solar-System propagation.
+
+### Step 5 Solar-System preparation
+
+The opt-in, unpublished Step 5 boundary verifies isolated CSPICE/DE440s
+geometric-state evidence and the retained DE440 GM parameter artifact, resolves
+Earth and Moon into an exact eleven-body roster, converts the state and
+parameters to SI, and recenters them at the selected model's operational-GM
+barycenter. It then creates fresh owned read-only NumPy arrays, an engine state,
+and one direct mutual unsoftened Newtonian force plan with a checked primary and
+preparation replay.
+
+This boundary prepares initial inputs only; it does not run a trajectory. The
+reduced Newtonian model is not DE440 itself, the model-barycenter origin is not
+NAIF body 0, and the frame crosswalk is nonauthorizing. The artifacts and
+receipts provide unauthenticated content integrity, not source authority,
+continuous custody, physical accuracy, Wisdom--Holman domain qualification, or
+scientific/production authorization. Outputs remain unqualified `MODEL_OUTPUT`.
+
+### Challenger V1 and post-V5 precision probe
+
+[JX Challenger V1](docs/JX_CHALLENGER_V1.md) runs three locked smoke fixtures in
+separate subprocesses: an analytic binary, a weak hierarchy, and a close
+scatter. It retains each solver's native metrics and can add optional exact
+REBOUND 5.1.1 lanes. It creates no common score or ranking and makes no
+equivalence, accuracy-superiority, speed-superiority, or timing-comparability
+claim. Its reports remain unauthenticated, unqualified `MODEL_OUTPUT`.
+
+The additive post-V5 precision probe evaluates only the exact equal-mass
+circular-binary fixture at P/256, P/512, and P/1024. It records one- and
+100-period JX KDK results, optional exact REBOUND 5.1.1 leapfrog results, a
+specified analytic oracle, complete lane replays, sampled invariants, and
+fixture-specific empirical state/phase refinement. It does not establish a
+general or theoretical convergence order, continuous-time energy bounds,
+long-term stability, REBOUND superiority or equivalence, scientific
+qualification, or production fitness; its reports remain unauthenticated,
+unqualified `MODEL_OUTPUT`.
+
+### Packaged native orbital benchmark
+
+The [portable-scenario equal-binary qualification](runs/jx_dynamics_scenario_equal_binary_v1/README.md)
+freezes three content-addressed public `DynamicsScenario` inputs, the complete
+engine source used to execute them, a prewritten analytic oracle and 17 gates,
+three byte-identical accepted reports, and an independent offline verifier.
+On that locked two-body fixture, RKF78 passes the absolute, refinement,
+conservation, symmetry, accounting, manifest, and reproducibility checks. This
+is a fixture-specific numerical qualification, not a general N-body,
+eleven-body, lunar-rotation, or production claim.
+
+The [100-period equal-binary reproducibility package](runs/jx_equal_binary_100_period_repro_v1/README.md)
+turns one existing benchmark into a self-contained, offline artifact. It
+includes the exact JX source snapshot, frozen inputs and gates, the complete
+path-normalized reference result, an independent checksum/result verifier, and a
+create-only reproduction runner. Native KDK and RKF78 both pass their declared
+analytic-workload gates; the reproduced scientific fingerprint matches the
+reference exactly on the recorded runtime. REBOUND is deliberately disabled,
+timings are excluded, and the result makes no general N-body, superiority, or
+production-qualification claim.
+
+The [orbital validation ladder v4](runs/jx_orbital_validation_ladder_v4/README.md)
+combines that analytic foundation with a fresh one-day, DE440-initialized
+resolved-eleven-body Earth–Moon J2 fixture and an accepted broader J2 study.
+The third tier covers three start epochs, 1-, 7-, and 30-day horizons, and a
+900-to-450-second step-size sensitivity check. The top-level runner executes
+the first two trajectories from fresh state and labels the multi-epoch tier as
+preserved accepted evidence. All three components retain separate claim
+boundaries: there is no cross-tier score, no long-term qualification, and no
+lunar fluid-core result. Its machine-readable scientific acceptance matrix
+marks engineering reproducibility `PASS` while retaining scientific
+qualification as `NOT_QUALIFIED` and the project claim state as
+`SCREENING_ONLY`.
+
+The [GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md)
+extends the engineering evidence across the live NumPy and CuPy paths. On its
+recorded runtime, all 228 engine tests pass in normal and optimized Python, and
+the frozen one-day reduced eleven-body RKF78 endpoint is bitwise identical on
+CPU, repeated GPU runs, and the preserved CPU reference. Its timing and large
+CUDA rows are descriptive only, and it does not decide lunar rotation or any
+other physical model.
 
 ## Requirements
 
 - Python 3.12 or newer
-- No third-party dependency for the core engine and unit tests
+- No third-party dependency for the legacy core and its legacy unit tests
+- Optional: `numpy>=2,<3` for the public general force and trajectory API
+- Optional: CuPy 14 toolkit bundles (`cupy-cuda12x[ctk]` or
+  `cupy-cuda13x[ctk]`) for the explicit CUDA path
 - Optional: `rebound==4.4.11` for IAS15 and population-scale commands
+- Optional: an isolated `rebound==5.1.1` environment for Challenger V1 and the
+  post-V5 precision probe's external comparison lanes
 - Optional: `numpy==2.3.5` and `scipy==1.17.0` for the independent DOP853 runner
 
 ## Install and test
@@ -57,7 +350,7 @@ station, media, clock, calibration, and simultaneous-fit models.
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
-python -m unittest discover -s tests -v
+python tools/run_local_test_matrix.py --profile engine
 ```
 
 Install the pinned REBOUND backend with
@@ -67,14 +360,67 @@ alias for compatibility.
 Install the independent population-replication backend with
 `python -m pip install -e '.[independent]'`.
 
+Install the public CPU dynamics API with
+`python -m pip install -e '.[engine]'`. For an NVIDIA GPU, install exactly one
+matching wheel extra: `.[gpu-cuda12]` for CUDA 12.x or `.[gpu-cuda13]` for
+CUDA 13.x. These extras request CuPy's `[ctk]` bundles; a compatible NVIDIA
+driver is still required. Do not install both CuPy wheel families in one
+environment. JX will not fall back to CPU if the requested GPU backend is
+unavailable.
+
 Without installing the package:
 
 ```bash
-PYTHONPATH=src python3 -m unittest discover -s tests -v
+python3 tools/run_local_test_matrix.py --profile engine
 PYTHONPATH=src python3 -m jxplanetx.cli validate --output validation.json
 ```
 
-The test suite contains 102 tests covering integrator behavior,
+Build the release artifacts twice from the declared package-only input boundary
+and require byte identity with:
+
+```bash
+python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc1
+```
+
+The builder requires the exact backend pinned in `pyproject.toml`, normalizes
+source-archive timestamps, ownership, modes, ordering, and gzip metadata, and
+writes artifact hashes to `ARTIFACTS.json`. Research evidence and frozen runs
+are not distribution inputs.
+
+The source-closed evidence tests intentionally span mutually incompatible
+runtime contracts, so do not use one monolithic Python process to judge the
+expanded local evidence tree. The local matrix runner isolates the current
+engine tests, REBOUND 5.1.1 bridge, retained-wheel lunar checks, and exact R2
+launcher runtime:
+
+```bash
+python3 tools/run_local_test_matrix.py --profile engine
+python3 tools/run_local_test_matrix.py --profile evidence
+```
+
+The evidence profile verifies the retained wheel and shared-library hashes
+before importing them. If absent, it reconstructs the frozen ephemeral
+`/tmp/jx-reference-core-runtime` with the system Python; it never installs
+packages or changes frozen run artifacts. Use `--library-root PATH` when the
+read-only library mirror is mounted elsewhere.
+
+The complete 189-file ownership and runtime policy is documented in
+[JX test profiles](docs/TEST_PROFILES.md). Validate it with
+`python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
+with `--list-files`, or run all current-source profiles with `--profile live`.
+
+The synthetic dynamics probe is opt-in and is not part of validation:
+
+```bash
+python benchmarks/engine_force_benchmark.py --backend numpy --device cpu
+python benchmarks/engine_force_benchmark.py --backend cupy --device cuda:0
+```
+
+It runs the complete three-force plan and an RKF78 trajectory, reporting
+elapsed time and explicitly counted model interactions per second for one
+backend. It does not compare backends or claim a GPU speedup.
+
+The test suite covers integrator behavior,
 convergence gates, force-evaluation accounting, independent-reference logic,
 installed-package provenance, deterministic ensemble generation, strict
 trajectory registration, distribution metrics, official OSSOS tracked-output
@@ -179,8 +525,18 @@ or validation of a physical distant-source model. See the
 
 ```text
 src/jxplanetx/
+  engine/                   public alpha force/trajectory contracts, catalog,
+                            backends, kernels, evaluator, RKF78, and standalone
+                            encounter-segment runtime
   decimal_math.py          precision and vector primitives
   dynamics.py              N-body acceleration, state, and invariants
+  force_registry_v5.py     fail-closed V5 physics-registry inspection
+  solar_1pn.py             nonauthorizing Decimal Solar 1PN reference kernel
+  v5_reference_dynamics.py nonauthorizing Newtonian-plus-1PN force ledger
+  v5_implicit_midpoint.py  fixed-step Decimal velocity-dependent reference
+  v5_solar_1pn_qualification.py fail-closed frozen-package inspector only
+  solar_system/            unpublished opt-in CSPICE/DE440s contracts and
+                           resolved-eleven Newtonian input preparation
   yoshida6.py              sixth-order symmetric integrator
   decimal_bs.py            independent Bulirsch–Stoer reference
   ias15_gate.py            IAS15 and population comparison gates
@@ -209,7 +565,8 @@ and validation command.
 
 ## Citation and license
 
-Citation metadata is provided in `CITATION.cff`. Original JX N-Body Engine code
-is released under the MIT License. Optional third-party packages retain their
-own licenses. `RELEASE_MANIFEST_v0.3.0.json` records the portable release and
-scientific-artifact hashes.
+Citation metadata is provided in `CITATION.cff`. Original JX code is released
+under the MIT License. Optional third-party packages retain their own licenses.
+`RELEASE_MANIFEST_v0.6.0rc1.json` records this local release candidate and its
+remaining external gates. Earlier release manifests retain their historical
+metadata and remain unchanged.

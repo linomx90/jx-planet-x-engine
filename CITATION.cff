@@ -1,17 +1,19 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
-title: "JX N-Body Engine"
+title: "JX Celestial Dynamics Framework"
 type: software
-version: 0.3.0
-date-released: 2026-08-22
+version: "0.6.0rc1"
+date-released: 2026-09-19
 authors:
   - family-names: Avila
     given-names: Lino
 license: MIT
-abstract: "A high-precision, falsification-first N-body integration and ensemble-validation engine developed for outer-Solar-System gravity research."
+abstract: "A falsification-first general celestial-dynamics framework with explicit force contracts, reproducible numerical validation, and scientific claim controls; Planet X research is one application."
 keywords:
   - celestial mechanics
   - N-body integration
+  - force models
+  - GPU computing
   - numerical validation
   - outer Solar System
   - reproducibility

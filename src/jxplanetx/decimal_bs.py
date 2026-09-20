@@ -17,6 +17,7 @@ from .decimal_math import D, precision_context, sin_cos
 PI = D("3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628")
 G = D(4) * PI * PI
 SEQUENCE = (2, 4, 6, 8, 10, 12)
+MASSIVE_BODY_COUNT = 5
 
 
 @dataclass
@@ -27,14 +28,29 @@ class BSStats:
     maximum_level: int = 0
 
 
+def _validate_mass_layout(masses: list[Decimal], body_count: int) -> None:
+    if len(masses) != body_count:
+        raise ValueError("body names and masses must have equal lengths")
+    if body_count < MASSIVE_BODY_COUNT:
+        raise ValueError("DE441 reference blocks require at least five bodies")
+    if any(not mass.is_finite() for mass in masses):
+        raise ValueError("DE441 reference masses must be finite")
+    if any(mass <= 0 for mass in masses[:MASSIVE_BODY_COUNT]) or any(
+        mass != 0 for mass in masses[MASSIVE_BODY_COUNT:]
+    ):
+        raise ValueError(
+            "DE441 reference blocks require exactly five positive-mass bodies "
+            "at indices 0 through 4 followed only by massless bodies"
+        )
+
+
 class NBodySystem:
     def __init__(self, names: list[str], masses: list[Decimal]):
+        _validate_mass_layout(masses, len(names))
         self.names = names
         self.masses = masses
         self.nb = len(names)
-        self.nm = sum(mass > 0 for mass in masses)
-        if self.nb < 5 or self.nm != 5:
-            raise ValueError("DE441 reference blocks require exactly 5 massive bodies")
+        self.nm = MASSIVE_BODY_COUNT
         self.stats = BSStats()
 
     def rhs(self, state: list[Decimal]) -> list[Decimal]:
@@ -112,11 +128,24 @@ def validate_bs_oscillator(decimal_digits: int = 78) -> dict:
         }
 
 
-def load_state(path: str | Path) -> tuple[NBodySystem, list[Decimal]]:
-    rows = list(csv.DictReader(Path(path).open(newline="", encoding="utf-8")))
+def _load_state_rows(path: str | Path) -> list[dict[str, str]]:
+    with Path(path).open(newline="", encoding="utf-8") as stream:
+        rows = list(csv.DictReader(stream))
     if len(rows) < 5:
         raise ValueError("expected at least five state rows")
-    rows.sort(key=lambda row: int(row["index"]))
+    try:
+        indexed_rows = [(int(row["index"]), row) for row in rows]
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("state row indices must be integers") from exc
+    observed_indices = sorted(index for index, _ in indexed_rows)
+    if observed_indices != list(range(len(rows))):
+        raise ValueError("state row indices must be unique, contiguous, and zero-based")
+    indexed_rows.sort(key=lambda item: item[0])
+    return [row for _, row in indexed_rows]
+
+
+def load_state(path: str | Path) -> tuple[NBodySystem, list[Decimal]]:
+    rows = _load_state_rows(path)
     names = [row["name"] for row in rows]
     masses = [D(row["mass"]) for row in rows]
     positions = [D(row[key]) for row in rows for key in ("x", "y", "z")]
@@ -326,9 +355,10 @@ def run_block_reference(
     workers: int = 4,
 ) -> dict:
     """Exploit the exact massless-tracer block structure for independent BS runs."""
-    source_rows = list(csv.DictReader(Path(initial_state).open(newline="", encoding="utf-8")))
-    if len(source_rows) != 20 or any(D(row["mass"]) != 0 for row in source_rows[5:]):
+    source_rows = _load_state_rows(initial_state)
+    if len(source_rows) != 20:
         raise ValueError("block decomposition requires five massive plus fifteen massless bodies")
+    _validate_mass_layout([D(row["mass"]) for row in source_rows], len(source_rows))
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
     jobs: list[tuple[str, str, str, int, int]] = []

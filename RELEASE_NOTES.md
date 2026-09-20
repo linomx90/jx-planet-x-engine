@@ -1,3 +1,177 @@
+# JX General Dynamics 0.6.0rc1
+
+Release date: 19 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+This candidate aligns the installable `jxplanetx` package with General
+Dynamics registry v17. The registry remains a capability-and-evidence map, not
+a declaration that every listed domain shares one solver or is scientifically
+qualified. It explicitly records `production_ready: false` and
+`unified_multiphysics_execution: false`.
+
+The CPU engine and optimized-Python engine matrices pass on the preparation
+host. NumPy RKF78 results retain disjoint, read-only owned arrays with a full
+content digest. CuPy results retain disjoint owning device arrays but remain
+caller-mutable and deliberately have no implicit host content hash.
+
+The current core was revalidated on an NVIDIA GeForce RTX 5060 Ti using driver
+595.91.07, CUDA 13.2, NumPy 2.3.5, and CuPy 14.2.0. The CUDA-enabled 13-module
+engine matrix passed 233 tests with zero skips, and all five GPU-specific
+backend/trajectory tests passed again under optimized Python. This is exact-
+runtime/device engineering validation only, not cross-device qualification,
+performance evidence, production fitness, or scientific validation.
+
+Release packaging now uses an exact setuptools backend, a declared
+package-only staging boundary, and canonical source archives. The release tool
+builds twice in independent temporary trees and refuses output unless both the
+wheel and source archive are byte-identical. It also records exact hashes and
+sizes without modifying research evidence.
+
+No new scientific model, threshold, evidence result, or capability promotion
+is part of this release candidate. Frozen runs, archives, registry v16, and
+all earlier records remain unchanged.
+
+---
+
+# JX Celestial Dynamics Framework 0.4.0a1
+
+Release date: 6 September 2026
+Release stage: alpha
+Scientific claim state: `SCREENING_ONLY`
+
+## General-purpose engine surface
+
+- Reframed JX as a general celestial-dynamics framework while retaining the
+  `jxplanetx` package name, existing command, and Planet X workflows.
+- Added the public `jxplanetx.engine` API with immutable state, backend,
+  parameter, force-plan, contribution, checkpoint, and result contracts.
+- Implemented direct unsoftened Newtonian point-mass gravity, restricted
+  static-central Schwarzschild test-particle 1PN correction, and unshadowed
+  isotropic cannonball solar-radiation pressure.
+- Implemented an explicit 13-stage adaptive Fehlberg RK7(8) trajectory path
+  with a hatted order-eight accepted solution, an ordinary order-seven defect,
+  normalized maximum per-component error control, exact checkpoint clipping,
+  forward/backward propagation, and velocity-dependent-force compatibility.
+- Implemented a standalone full-Cartesian adaptive RKF78 encounter segment for
+  NumPy/CPU binary64, all-active positive-GM mutual unsoftened Newtonian
+  states. It uses authoritative signed local-duration accounting, independent
+  endpoint provenance labels, caller-supplied pair floors, exact simultaneous
+  local-IVP clearance certificates, pair-relative and GM-centroid defect
+  control, Kahan accepted updates, bounded witness/checksum custody, and one
+  separately accounted mandatory semantic replay.
+- Implemented an experimental, unqualified ordered-Jacobi second-order
+  Wisdom--Holman KDK map for NumPy/CPU, fully mutual active positive-GM
+  Newtonian hierarchies. It uses fixed integer map nodes, elliptic
+  universal-variable Kepler subflows, strict hierarchy/periapse/interaction/
+  step/Hill/path guards, and one mandatory deterministic semantic replay.
+- Implemented the specific, unqualified whole-system
+  `integrator.hybrid.wisdom_holman_jacobi_rkf78_cartesian.v1` method. On every
+  fixed outer interval it transactionally commits a complete typed far probe
+  or discards it and redoes the untouched original full interval through the
+  private guarded Cartesian encounter execution. One outer replay recomputes
+  all mode decisions, work, states, private-child digests, and accounting;
+  public child wrappers and nested child replay are not used.
+- Added an ordered 46-capability catalog spanning physics, integrators,
+  backends, precision, determinism, sensitivity, orbit determination, and
+  measurements: exactly twelve rows are `IMPLEMENTED` and 34 are `DECLARED`.
+  The implemented set includes the standalone guarded encounter segment and
+  the experimental, unqualified Cartesian KDK and ordered-Jacobi
+  Wisdom--Holman maps plus the specific whole-step hybrid; broad event-driven
+  encounter switching, generic hybrid integration, regularization, and the
+  generic split stay declared.
+  Every row is `UNQUALIFIED`; declared rows validate and then refuse execution.
+- Kept all outputs at `MODEL_OUTPUT` with registry and qualification authority
+  fixed false. Units, frame, origin, epoch, parameter validity, provenance,
+  float64 dtype, backend/device identity, and summation grouping are explicit.
+
+## Backend and packaging boundary
+
+- Added a NumPy CPU extra, `engine`, constrained to NumPy 2.x.
+- Added mutually exclusive `gpu-cuda12` and `gpu-cuda13` extras using the
+  corresponding CuPy 14 `[ctk]` wheel bundles; a compatible driver remains
+  required.
+- Backend selection is explicit. The API performs no implicit host/device
+  transfer and never falls back from a requested GPU to CPU.
+- The CuPy code path is present but has not been run on project-owned GPU
+  hardware or independently qualified. Version 0.4.0a1 makes no GPU
+  correctness, cross-device reproducibility, performance, or speedup claim.
+- The RKF78 path is unqualified and deliberately narrow: float64 only, no dense
+  output, event location, collision response, close-encounter switching, or
+  regularization. All other cataloged integrator families remain declared and
+  fail closed, including the generic split, implicit velocity-dependent, and
+  hybrid close-encounter rows.
+- The standalone encounter screen makes only a retained-floor noncollision
+  claim for the exact Newtonian local IVP issuing from each accepted numerical
+  node on the certified substep. Failure is uncertified rather than collision
+  evidence. It does not locate events or minima, respond to collisions,
+  regularize, switch integrators, certify trajectory accuracy, or establish
+  global/future physical-trajectory clearance. Exact resources and actual
+  force calls are capped and reported separately for primary execution and
+  the mandatory replay, plus their public totals.
+- The Wisdom--Holman path is CPU/all-active/elliptic/non-encounter only. Its
+  symplectic and reversible statements concern formal exact subflows, not
+  floating-point execution. Sampled energy behavior is not phase accuracy or
+  a general long-term stability claim; registry, qualification, production,
+  and superiority authority remain false. The implementation and tests were
+  independently written from published equations; no external REBOUND source
+  was copied or vendored.
+- The specific hybrid is NumPy/CPU binary64, all-active positive-GM mutual
+  Newtonian, central-first, and limited to 16 bodies on a fixed signed outer
+  lattice. A typed near choice discards the full provisional far candidate and
+  redoes the original whole interval. There is no hysteresis, latch, partial
+  prefix, grouping, dense output, event location, collision response, or
+  regularization. Its exact encounter screen proves only accepted-node local-
+  IVP retained-floor noncollision, not global trajectory clearance. The
+  complete method is not globally symplectic, formally or exactly reversible,
+  globally order-qualified, superior, production-ready, or qualified. Hard
+  logical-record caps do not replace external process, timeout, memory, and
+  concurrency isolation.
+
+## Step 5 Solar-System preparation
+
+- Added an opt-in, unpublished preparation boundary from isolated
+  CSPICE/DE440s geometric-state evidence and retained DE440 GM parameters to an
+  exact resolved-Earth/Moon eleven-body Newtonian engine input.
+- The boundary performs explicit binary64-to-SI projection, operational-GM
+  model-barycenter recentering, primary/replay semantic checks, and construction
+  of fresh owned read-only NumPy arrays, an engine snapshot, and one direct
+  mutual unsoftened Newtonian force plan.
+- This is initial-input preparation only. It runs no trajectory and does not
+  claim that the reduced Newtonian model is DE440, authenticate or authorize
+  source artifacts, establish continuous custody, qualify the roster for
+  Wisdom--Holman, or authorize scientific or production use. Every resulting
+  engine object remains unqualified `MODEL_OUTPUT`.
+
+## Challenger V1 and post-V5 precision evidence
+
+- Added Challenger V1, a subprocess orchestrator that retains the native
+  reports for locked analytic-binary, weak-hierarchy, and close-scatter smoke
+  fixtures. Optional comparison lanes require exact REBOUND 5.1.1; the bundle
+  defines no cross-study score, ranking, or engine-equivalence rule.
+- Added an equal-mass circular-binary precision probe at fixed steps P/256,
+  P/512, and P/1024. Its smoke and full profiles cover one and 100 periods,
+  respectively, and record analytic-oracle state/phase errors, sampled
+  invariants, complete lane replays, and fixture-specific refinement gates for
+  JX KDK and optional exact REBOUND 5.1.1 leapfrog.
+- These results are narrow numerical regression evidence. They do not establish
+  general or theoretical convergence, continuous-time energy bounds,
+  equivalence, REBOUND accuracy or speed superiority, timing comparability,
+  long-term stability, scientific qualification, or production fitness. All
+  reports remain unauthenticated, unqualified `MODEL_OUTPUT`.
+
+## Compatibility and preserved records
+
+The legacy Decimal/Newtonian core, Yoshida and reference integrators, CLI,
+previously frozen V4/V5 assets, and prior scientific result sections are
+unchanged. The Step 5, Challenger V1, and post-V5 precision assets are
+additive. The 0.3.0 release manifest and checksums remain historical records
+and were not rewritten for this alpha.
+
+---
+
 # JX N-Body Engine 0.3.0
 
 Release date: 22 August 2026  

@@ -46,6 +46,8 @@ NONCLAIMS = (
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_MAX_MEMBER_JSON_CONTAINER_DEPTH = 256
+_MAX_MEMBER_JSON_NODES = 1_000_000
 
 
 class EnsembleVerdict(str, Enum):
@@ -93,6 +95,35 @@ def _atomic_json(path: str | Path, data: Mapping[str, Any], *, refuse_overwrite:
 
 def _reject_json_constant(value: str) -> None:
     _fail("nonfinite_json_constant", f"JSON constant {value!r} is not permitted")
+
+
+def _check_member_json_resource_limits(value: Any, context: str) -> None:
+    """Bound parsed member trees without recursively walking attacker input."""
+
+    stack: list[tuple[Any, int]] = [(value, 0)]
+    node_count = 0
+    while stack:
+        current, depth = stack.pop()
+        node_count += 1
+        if node_count > _MAX_MEMBER_JSON_NODES:
+            _fail(
+                "invalid_member_json",
+                f"{context} exceeds the member JSON node limit",
+            )
+        if isinstance(current, dict):
+            if depth >= _MAX_MEMBER_JSON_CONTAINER_DEPTH:
+                _fail(
+                    "invalid_member_json",
+                    f"{context} exceeds the member JSON nesting limit",
+                )
+            stack.extend((child, depth + 1) for child in current.values())
+        elif isinstance(current, list):
+            if depth >= _MAX_MEMBER_JSON_CONTAINER_DEPTH:
+                _fail(
+                    "invalid_member_json",
+                    f"{context} exceeds the member JSON nesting limit",
+                )
+            stack.extend((child, depth + 1) for child in current)
 
 
 def _load_json(path: str | Path, code: str) -> dict[str, Any]:
@@ -1275,6 +1306,7 @@ def _read_member_records(run_root: str | Path, plan: Mapping[str, Any]) -> tuple
     for path in sorted(supplied_paths):
         try:
             raw = json.loads(path.read_text(encoding="utf-8"), parse_constant=_reject_json_constant)
+            _check_member_json_resource_limits(raw, str(path))
         except EnsembleValidationError as exc:
             invalid.append({"code": exc.code, "message": f"{path}: {exc.message}"})
             continue
