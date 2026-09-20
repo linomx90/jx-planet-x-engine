@@ -1,572 +1,2 @@
-# JX Celestial Dynamics Framework
-
-**Version:** 0.6.0rc1
-
-**Release date:** 2026-09-19
-
-**License:** MIT  
-**Scientific claim state:** `SCREENING_ONLY`
-
-JX is a falsification-first, general celestial-dynamics framework for explicit
-physical models, reproducible numerical experiments, and scientific claim
-control. Outer-Solar-System and Planet X studies are important applications,
-not assumptions built into the engine. Model output is not astronomical
-evidence.
-
-This repository contains the engine source, packaging metadata, unit tests,
-locked protocols, and compact result summaries. It intentionally excludes the
-project's large observational inputs, bulk execution archives, and
-candidate-search catalogs.
-
-The installable distribution and command remain `jxplanetx` for backward
-compatibility. Version 0.6.0rc1 aligns the package with General Dynamics
-registry v17, adds byte-reproducible wheel and source-archive construction,
-and retains the existing public force and trajectory surface. Registry v17
-states `SCREENING_ONLY` explicitly and does not promote any capability beyond
-its exact evidence and claim ceiling. The legacy propagation core, CLI, locked
-experiments, and scientific records remain unchanged.
-
-## General engine
-
-The additive `jxplanetx.engine` API evaluates ordered acceleration terms on
-caller-owned, backend-native arrays and advances explicitly requested
-checkpoints with an adaptive RKF78 method. It implements exactly three
-unqualified physics models:
-
-- direct, unsoftened Newtonian point-mass gravity;
-- restricted static-central Schwarzschild test-particle 1PN, as a
-  correction-only term; and
-- unshadowed isotropic cannonball solar-radiation pressure.
-
-`integrate_trajectory` implements the 13-stage Fehlberg RK7(8) pair from
-NASA-TR-R-287. It advances the hatted order-eight solution, uses the ordinary
-order-seven solution for the defect, applies a normalized maximum
-per-component error test, and reaches each forward or backward checkpoint by
-step clipping without interpolation. Every force and trajectory result remains
-`MODEL_OUTPUT`, with registry and qualification authority fixed false. Inputs
-bind units, frame, origin, epoch, provenance, parameter validity, backend,
-device, binary64 dtype, deterministic reduction scope, summation tile size,
-error tolerances, and every controller limit. Unsupported combinations fail
-before arithmetic; backend selection never silently falls back or transfers
-arrays between host and GPU.
-
-The additive [Dynamics scenarios V1](docs/DYNAMICS_SCENARIOS.md) layer now
-assembles one state, force plan, and adaptive-RKF78 request as an explicit
-scenario. Its matched mode runs a same-state, same-solver control followed by a
-candidate that appends named force terms, retaining both trajectories and
-per-body checkpoint differences. The candidate starts from the control run's
-retained baseline copies. Those differences are model-to-model diagnostics,
-not accuracy, improvement, or physics claims; every result remains
-unqualified `MODEL_OUTPUT`. A canonical portable manifest records NumPy/CPU
-binary64 scenarios with hexadecimal floats and an external SHA-256 identity;
-loading reconstructs read-only arrays and does not authenticate or qualify the
-scenario.
-
-`integrate_encounter_segment` adds a standalone full-Cartesian adaptive
-RKF78 segment for exact NumPy/CPU binary64, barycentric-inertial, fully mutual,
-all-active positive-GM unsoftened Newtonian states. It advances an
-authoritative signed mathematical duration on exact local offsets; its
-separately supplied endpoint epoch is an independent provenance label, not the
-source of the state duration. Pair-relative and GM-centroid defect control,
-Kahan accepted updates, exact pair floors, bounded exact-arithmetic witnesses,
-transactional rejection, and one separately accounted mandatory semantic
-replay are explicit public contracts.
-
-The encounter certificate proves only that the exact Newtonian local IVP
-issuing from each accepted numerical node does not cross the retained pair
-floors during that accepted substep. A failed certificate is merely
-uncertified; it is not collision evidence. The solver does not locate events
-or minimum distance, respond to collisions, regularize, switch integrators,
-or claim clearance of a global physical trajectory, and every result remains
-unqualified `MODEL_OUTPUT`.
-
-Two additive fixed-step NumPy/CPU maps are also public and unqualified:
-fully mutual Cartesian KDK, and an ordered-Jacobi Wisdom--Holman KDK map for
-all-active, positive-GM, low-secondary-mass hierarchical elliptic systems.
-The Wisdom--Holman path uses analytic universal-variable Kepler subflows,
-integer map-index checkpoints, mandatory hierarchy/periapse/step/Hill/path
-guards, and one full semantic validation replay. It has no passive tracers,
-close-encounter switching, adaptive fallback, or production claim. Its formal
-exact-subflow symplectic statement does not apply to floating-point execution;
-small sampled energy error does not imply small phase or trajectory error.
-
-`integrate_hybrid_wisdom_holman_rkf78_trajectory` implements the narrowly
-defined
-`integrator.hybrid.wisdom_holman_jacobi_rkf78_cartesian.v1` method for at most
-16 bodies. Every fixed outer interval first
-runs one typed, provisional Wisdom--Holman far probe. A far pass commits that
-candidate. A finite named near exit discards the complete candidate and reruns
-the untouched original node over the full interval through the private guarded
-Cartesian encounter execution; static, numerical, resource, custody, and
-replay failures are fatal. The outer integer lattice never adapts, and there
-is no hysteresis, latch, partial-prefix commit, grouping, or event location.
-
-The near certificate keeps exactly the standalone solver's local-IVP scope;
-it is not collision or event detection and gives no global clearance claim.
-One full hybrid semantic replay, with no nested public child replay, recomputes
-all states, decisions, ledgers, digests, and accounting. All-far runs preserve
-the frozen public Wisdom--Holman state/checkpoint/diagnostic/accounting
-projection bit-for-bit. The complete hybrid is not globally symplectic,
-formally or exactly reversible, regularized, globally order-qualified, or
-scientifically qualified.
-
-The accompanying 46-capability catalog contains exactly twelve `IMPLEMENTED`
-and 34 `DECLARED` rows and covers the alpha surface and broader JX roadmap.
-The implemented set includes the standalone guarded encounter segment, the
-two experimental unqualified fixed-step Newtonian maps, and the one specific
-whole-step hybrid. The broader roster spans
-gravity, relativity, harmonics, tides,
-nongravitational forces, encounters, integrators, accelerator backends,
-precision modes, sensitivities, orbit determination, and measurements. Every
-entry is `UNQUALIFIED`. A `DECLARED` entry validates its known parameter roster
-and then refuses execution.
-
-NumPy CPU and optional CuPy CUDA 12/13 code paths are available. The
-[GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md) records
-fixture-specific CPU/CUDA parity, the complete live-engine test scope, a
-reduced eleven-body replay, descriptive interleaved timings, and a large
-mutual-gravity CUDA scale observation on one project-owned RTX 5060 Ti. That
-package does not establish reproducibility across devices, a portable speedup,
-general GPU qualification, production fitness, or physical accuracy.
-
-For `0.6.0rc1`, a fail-closed current-core gate was also run on the same model
-of project-owned GPU: an RTX 5060 Ti with driver 595.91.07, CUDA 13.2, NumPy
-2.3.5, and CuPy 14.2.0. All 13 isolated engine modules passed with the hardware
-tests active (233 tests, zero skips), and the five GPU-specific backend and
-trajectory tests also passed under optimized Python. This verifies the exact
-recorded runtime/device core contracts only, including CPU/GPU numerical
-parity, device residency, no implicit transfer, mixed-input refusal, float32
-refusal, and CuPy trajectory custody. It is not cross-device qualification, a
-performance or speedup claim, production fitness, or scientific validation.
-
-The additive [eleven-body portable evidence V1](runs/jx_eleven_body_portable_v1/README.md)
-provides the compact Ubuntu workflow: offline integrity verification, exact
-dependency records, a host-readiness doctor, a fresh bounded CPU/GPU replay,
-and the saved 100-year REBOUND comparator. It remains `SCREENING_ONLY`; the
-historical 100-year result is offline-verifiable but its fresh standalone
-rerun is explicitly blocked by incomplete archived JX source closure.
-
-The additive [R0 source-closed 100-year confirmation package](runs/jx_reph_v1_r0_source_closed_100y/README.md)
-resolves that archived source closure from a provenance-bound Git bundle plus
-the four accepted comparator overlays. Its bounded construction preflight
-passes, but the 100-year pair has not yet run. Any future run remains
-`SCREENING_ONLY`, requires a fresh monitored preflight and short-lived
-authorization, and must pass the separate offline execution verifier before
-its result is described as verified.
-
-The additive [cosmology particle-mesh foundation](runs/jx_cosmology_pm_foundation_v1/README.md)
-extends the same project with a native NumPy/CuPy periodic collisionless-gravity
-solver in a prescribed flat expanding background. Its frozen analytic
-growing-mode benchmarks pass at 128^3 and 256^3 particles, with
-near-second-order spatial and temporal convergence, CPU/GPU parity, and an
-independently coded planar NumPy reference. The
-[256^3 validation package](runs/jx_cosmology_pm_256_independent_r2/README.md)
-retains the complete cross-code evidence. The first 256^3 attempt is retained
-as a stopped accumulator failure; the repaired run keeps its thresholds and
-workload unchanged. This is a qualification of one controlled
-foundation workload only. It is not a realistic structure-formation run and
-does not include gas, radiation, plasma, nuclear physics, general relativity,
-an observational fit, or a production cosmology claim.
-
-The [R4 dark-matter plus baryon benchmark](runs/jx_cosmology_baryons_3d_r4/README.md)
-adds a native 128^3 adiabatic gas mesh coupled to 2,097,152 dark-matter particles
-through the same spectral gravity field. It validates three-direction linear
-and complex phase, periodic conservation, gas positivity, sound-wave
-convergence, a Sod shock, exact GPU repetition, and NumPy/CuPy full-state
-agreement. The stopped R2 and R3 records preserve discovery of a half-cell
-particle/gas phase error, an unsafe multidimensional CFL bound, and the
-corrected 64^3 accuracy failure. R4 keeps the accuracy threshold unchanged and
-passes at the convergence-selected resolution. This is a controlled
-first-order supercomoving validation, not yet an externally validated nonlinear
-galaxy-formation or production cosmology solver.
-
-## Scientific boundary
-
-The code does **not** claim a Planet X detection, sky position, mass, or
-distance. Numerical simulation is not astronomical measurement. The engine's
-claim-control logic keeps ordinary numerical output at `SCREENING_ONLY` and
-blocks observational claims when required evidence gates are absent or fail.
-
-The source includes:
-
-- deterministic arbitrary-precision arithmetic using Python `decimal`;
-- N-body acceleration, invariants, and state objects;
-- a sixth-order symmetric Yoshida integrator;
-- an independent Decimal Bulirschâ€“Stoer reference integrator;
-- optional REBOUND trajectory, IAS15, and large massless-population scale gates;
-- deterministic uncertainty/phase ensemble plans with locked contracts;
-- paired source/control population validation across numerical methods;
-- perihelion, injection, survival, inclination-width, and Wasserstein metrics;
-- fail-closed `PASSED`, `BLOCKED`, and `INVALID` ensemble verdicts;
-- convergence, conservation, provenance, and claim-control utilities;
-- a prelocked ten-year JPL Horizons/DE441 outer-planet compatibility test;
-- a real-epoch, checkpointed, matched 100,000-tracer-per-arm population screen;
-- an independent SciPy DOP853 force, integration, checkpoint, and replication path;
-- a pinned official OSSOS telescope-selection adapter with deterministic paired
-  populations, checkpointed execution, calibration/power tests, and fail-closed verdicts;
-- a command-line interface for reproducible validation workflows.
-
-The most important present limitation is that no general engine model or
-integrator is scientifically qualified. Exact benchmark qualifications do not
-promote the wider engine. The RKF78 path is explicit and
-nonstiff, with no dense output, event location, collision response,
-or regularization. The specific hybrid adds guarded whole-step mode selection,
-not a collision/event system or a general close-encounter framework. The
-unchanged native propagation core remains Newtonian point-mass dynamics. JX has no qualified built-in
-relativity, oblateness, nongravitational-force, collision-regularization,
-orbit-determination, or observational-ephemeris capability.
-
-## JX V5 physics foundation
-
-The V5 foundation begins the controlled expansion beyond gravity-only
-propagation. Its force-parameter registry covers relativity, gravity harmonics,
-nongravitational forces, physical-body properties, collision capability, and
-future measurement modeling. Every declaration is bound to units, frames,
-epochs, provenance, uncertainty, covariance, applicability, and validation
-requirements.
-
-This foundation is deliberately `DRAFT_NONEXECUTABLE`. Unresolved scientific
-values are recorded as `TBD_BLOCKED`; they are never replaced by guessed
-defaults. Declared-but-unimplemented models cannot authorize a run or increase
-the scientific claim state. See the
-[V5 force-parameter registry](docs/FORCE_PARAMETER_REGISTRY_V5.md).
-
-V5 now includes a JX-owned Decimal reference kernel for the
-restricted Solar Schwarzschild 1PN correction. It is equation-level,
-correction-only, and permanently reports `registry_authorized=false`. It is not
-wired into the existing Yoshida integrator because the relativistic term is
-velocity-dependent and that integrator assumes a separable, position-only
-force. A separate fixed-step Decimal implicit-midpoint path now tests the
-six-component restricted Newtonian-plus-1PN first-order equation with an explicit precision, rounding,
-force-ledger, and nonlinear-residual contract. That path is reference-only,
-retains `MODEL_OUTPUT`, and cannot make the draft registry executable. Full
-N-body EIH relativity, production propagation, and scientific claim promotion
-remain blocked. See the
-[V5 reference-integrator protocol](docs/V5_REFERENCE_INTEGRATOR.md).
-
-A separate [Solar 1PN qualification package](runs/v5_solar_1pn_qualification/README.md)
-now freezes the source artifacts, unit and time-scale transformations, fresh
-holdout fixtures, Q0--Q9 gate definitions, prior-development disclosure, and
-claim ceiling needed for a later qualification attempt. The package contains
-no outcomes and exposes no trajectory runner: its execution implementation is
-`NOT_REGISTERED`, its evidence ceiling is `MODEL_OUTPUT`, and even a future
-all-gates pass could make the reference path only
-`ELIGIBLE_FOR_REVIEW_NONAUTHORIZING`. It cannot change the draft registry or
-authorize physical Solar-System propagation.
-
-### Step 5 Solar-System preparation
-
-The opt-in, unpublished Step 5 boundary verifies isolated CSPICE/DE440s
-geometric-state evidence and the retained DE440 GM parameter artifact, resolves
-Earth and Moon into an exact eleven-body roster, converts the state and
-parameters to SI, and recenters them at the selected model's operational-GM
-barycenter. It then creates fresh owned read-only NumPy arrays, an engine state,
-and one direct mutual unsoftened Newtonian force plan with a checked primary and
-preparation replay.
-
-This boundary prepares initial inputs only; it does not run a trajectory. The
-reduced Newtonian model is not DE440 itself, the model-barycenter origin is not
-NAIF body 0, and the frame crosswalk is nonauthorizing. The artifacts and
-receipts provide unauthenticated content integrity, not source authority,
-continuous custody, physical accuracy, Wisdom--Holman domain qualification, or
-scientific/production authorization. Outputs remain unqualified `MODEL_OUTPUT`.
-
-### Challenger V1 and post-V5 precision probe
-
-[JX Challenger V1](docs/JX_CHALLENGER_V1.md) runs three locked smoke fixtures in
-separate subprocesses: an analytic binary, a weak hierarchy, and a close
-scatter. It retains each solver's native metrics and can add optional exact
-REBOUND 5.1.1 lanes. It creates no common score or ranking and makes no
-equivalence, accuracy-superiority, speed-superiority, or timing-comparability
-claim. Its reports remain unauthenticated, unqualified `MODEL_OUTPUT`.
-
-The additive post-V5 precision probe evaluates only the exact equal-mass
-circular-binary fixture at P/256, P/512, and P/1024. It records one- and
-100-period JX KDK results, optional exact REBOUND 5.1.1 leapfrog results, a
-specified analytic oracle, complete lane replays, sampled invariants, and
-fixture-specific empirical state/phase refinement. It does not establish a
-general or theoretical convergence order, continuous-time energy bounds,
-long-term stability, REBOUND superiority or equivalence, scientific
-qualification, or production fitness; its reports remain unauthenticated,
-unqualified `MODEL_OUTPUT`.
-
-### Packaged native orbital benchmark
-
-The [portable-scenario equal-binary qualification](runs/jx_dynamics_scenario_equal_binary_v1/README.md)
-freezes three content-addressed public `DynamicsScenario` inputs, the complete
-engine source used to execute them, a prewritten analytic oracle and 17 gates,
-three byte-identical accepted reports, and an independent offline verifier.
-On that locked two-body fixture, RKF78 passes the absolute, refinement,
-conservation, symmetry, accounting, manifest, and reproducibility checks. This
-is a fixture-specific numerical qualification, not a general N-body,
-eleven-body, lunar-rotation, or production claim.
-
-The [100-period equal-binary reproducibility package](runs/jx_equal_binary_100_period_repro_v1/README.md)
-turns one existing benchmark into a self-contained, offline artifact. It
-includes the exact JX source snapshot, frozen inputs and gates, the complete
-path-normalized reference result, an independent checksum/result verifier, and a
-create-only reproduction runner. Native KDK and RKF78 both pass their declared
-analytic-workload gates; the reproduced scientific fingerprint matches the
-reference exactly on the recorded runtime. REBOUND is deliberately disabled,
-timings are excluded, and the result makes no general N-body, superiority, or
-production-qualification claim.
-
-The [orbital validation ladder v4](runs/jx_orbital_validation_ladder_v4/README.md)
-combines that analytic foundation with a fresh one-day, DE440-initialized
-resolved-eleven-body Earthâ€“Moon J2 fixture and an accepted broader J2 study.
-The third tier covers three start epochs, 1-, 7-, and 30-day horizons, and a
-900-to-450-second step-size sensitivity check. The top-level runner executes
-the first two trajectories from fresh state and labels the multi-epoch tier as
-preserved accepted evidence. All three components retain separate claim
-boundaries: there is no cross-tier score, no long-term qualification, and no
-lunar fluid-core result. Its machine-readable scientific acceptance matrix
-marks engineering reproducibility `PASS` while retaining scientific
-qualification as `NOT_QUALIFIED` and the project claim state as
-`SCREENING_ONLY`.
-
-The [GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md)
-extends the engineering evidence across the live NumPy and CuPy paths. On its
-recorded runtime, all 228 engine tests pass in normal and optimized Python, and
-the frozen one-day reduced eleven-body RKF78 endpoint is bitwise identical on
-CPU, repeated GPU runs, and the preserved CPU reference. Its timing and large
-CUDA rows are descriptive only, and it does not decide lunar rotation or any
-other physical model.
-
-## Requirements
-
-- Python 3.12 or newer
-- No third-party dependency for the legacy core and its legacy unit tests
-- Optional: `numpy>=2,<3` for the public general force and trajectory API
-- Optional: CuPy 14 toolkit bundles (`cupy-cuda12x[ctk]` or
-  `cupy-cuda13x[ctk]`) for the explicit CUDA path
-- Optional: `rebound==4.4.11` for IAS15 and population-scale commands
-- Optional: an isolated `rebound==5.1.1` environment for Challenger V1 and the
-  post-V5 precision probe's external comparison lanes
-- Optional: `numpy==2.3.5` and `scipy==1.17.0` for the independent DOP853 runner
-
-## Install and test
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e .
-python tools/run_local_test_matrix.py --profile engine
-```
-
-Install the pinned REBOUND backend with
-`python -m pip install -e '.[rebound]'`. The legacy `ias15` extra remains an
-alias for compatibility.
-
-Install the independent population-replication backend with
-`python -m pip install -e '.[independent]'`.
-
-Install the public CPU dynamics API with
-`python -m pip install -e '.[engine]'`. For an NVIDIA GPU, install exactly one
-matching wheel extra: `.[gpu-cuda12]` for CUDA 12.x or `.[gpu-cuda13]` for
-CUDA 13.x. These extras request CuPy's `[ctk]` bundles; a compatible NVIDIA
-driver is still required. Do not install both CuPy wheel families in one
-environment. JX will not fall back to CPU if the requested GPU backend is
-unavailable.
-
-Without installing the package:
-
-```bash
-python3 tools/run_local_test_matrix.py --profile engine
-PYTHONPATH=src python3 -m jxplanetx.cli validate --output validation.json
-```
-
-Build the release artifacts twice from the declared package-only input boundary
-and require byte identity with:
-
-```bash
-python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc1
-```
-
-The builder requires the exact backend pinned in `pyproject.toml`, normalizes
-source-archive timestamps, ownership, modes, ordering, and gzip metadata, and
-writes artifact hashes to `ARTIFACTS.json`. Research evidence and frozen runs
-are not distribution inputs.
-
-The source-closed evidence tests intentionally span mutually incompatible
-runtime contracts, so do not use one monolithic Python process to judge the
-expanded local evidence tree. The local matrix runner isolates the current
-engine tests, REBOUND 5.1.1 bridge, retained-wheel lunar checks, and exact R2
-launcher runtime:
-
-```bash
-python3 tools/run_local_test_matrix.py --profile engine
-python3 tools/run_local_test_matrix.py --profile evidence
-```
-
-The evidence profile verifies the retained wheel and shared-library hashes
-before importing them. If absent, it reconstructs the frozen ephemeral
-`/tmp/jx-reference-core-runtime` with the system Python; it never installs
-packages or changes frozen run artifacts. Use `--library-root PATH` when the
-read-only library mirror is mounted elsewhere.
-
-The complete 189-file ownership and runtime policy is documented in
-[JX test profiles](docs/TEST_PROFILES.md). Validate it with
-`python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
-with `--list-files`, or run all current-source profiles with `--profile live`.
-
-The synthetic dynamics probe is opt-in and is not part of validation:
-
-```bash
-python benchmarks/engine_force_benchmark.py --backend numpy --device cpu
-python benchmarks/engine_force_benchmark.py --backend cupy --device cuda:0
-```
-
-It runs the complete three-force plan and an RKF78 trajectory, reporting
-elapsed time and explicitly counted model interactions per second for one
-backend. It does not compare backends or claim a GPU speedup.
-
-The test suite covers integrator behavior,
-convergence gates, force-evaluation accounting, independent-reference logic,
-installed-package provenance, deterministic ensemble generation, strict
-trajectory registration, distribution metrics, official OSSOS tracked-output
-normalization, exact finite-pool statistics, and fail-closed verdicts.
-
-## Command line
-
-```bash
-jxplanetx --help
-jxplanetx validate --output validation.json
-jxplanetx write-ensemble-contract --output ensemble-contract.json
-jxplanetx prepare-ensemble --contract ensemble-contract.json --output plan.lock.json
-```
-
-The general ensemble workflow validates externally computed trajectories. The
-project-specific DOP853 module now supplies an independent 10,000-year
-population replication, but not a general physical state builder or complete
-100,000-year source/control backend. See
-[the ensemble validation guide](docs/ENSEMBLE_VALIDATION.md).
-
-`run-population-scale-gate` is a narrower execution backend for locked,
-paired, massless-tracer scalability tests. It does not turn the preserved
-15-orbit template set into a physical TNO population model. See
-[the population scale-gate guide](docs/POPULATION_SCALE_GATE.md).
-
-`run-encounter-tail-pilot` runs the checkpointed 10,000-tracer controlled-
-synthetic encounter-tail experiment and its prelocked timestep-halving audit.
-See [the encounter-tail pilot guide](docs/ENCOUNTER_TAIL_PILOT.md).
-
-The JX-O1 survey-selection workflow generates paired calibration populations,
-executes a separately installed and hash-locked official OSSOS SurveySimulator,
-normalizes its real 14-field tracked output, and evaluates calibration, power,
-adapter, replay, scale, independence, and seed-stability gates. A public
-preregistration and fresh official V4 execution now provide independent
-computational confirmation. See
-[the survey-selection validation report](docs/SURVEY_SELECTION_VALIDATION.md).
-
-Some CLI subcommands reproduce project-specific DE441, benchmark, or IAS15
-experiments. Those commands require external input bundles that are not part of
-this engine-only repository. They fail closed when required manifests or inputs
-are unavailable or inconsistent.
-
-## DE441/Horizons compatibility result
-
-The locked ten-year external-reference validation passed. With all ten major
-Solar-System barycenters active, the maximum annual heliocentric residual among
-Jupiter, Saturn, Uranus, and Neptune was 33.6013 km in position and
-0.000510045 m/s in velocity. All predeclared convergence, conservation, and
-completion gates also passed. This validates only the stated short-arc
-Newtonian compatibility scope; it is not a full DE441 reconstruction or an
-observational Planet X result. See the
-[complete protocol and report](runs/de441_horizons_10yr/README.md).
-
-## DE441-backed 100,000-tracer result
-
-The locked 10,000-year source/control screen completed 100,000 matched
-massless tracers per arm plus 40,000 audit trajectories. All numerical gates
-passed. The control arm produced 4,377 sampled low-perihelion injections and
-the candidate-9118 source arm produced 4,374. The source-minus-control fraction
-was âˆ’0.00003 with a paired-block 95% bootstrap interval of
-[âˆ’0.00009, +0.00003], entirely inside the predeclared Â±0.001 equivalence
-margin. The result is therefore `EQUIVALENT_WITHIN_LOCKED_MARGIN` and remains
-`SCREENING_ONLY`â€”it is not a Planet X detection or exclusion. See the
-[complete protocol, audit, and interpretation](runs/de441_population_100k/README.md).
-
-## Independent DOP853 replication result
-
-An outcome-blind SHA-256 selection of ten 1,000-tracer blocks from the
-100,000-tracer experiment was independently rerun with a separate Newtonian
-force implementation and SciPy DOP853. The corrective high-resolution run
-passed every unchanged numerical and cross-software gate. DOP853 and REBOUND
-identified exactly the same 433 injections in control and the same 433 in
-source, with zero identity disagreement, 100% survival, and a paired source-
-minus-control effect of 0.0 with bootstrap interval `[0.0, 0.0]`.
-
-The first independent attempt is preserved as `INVALID`: it missed one strict
-endpoint-position gate by 27.5% while all population gates passed. A locked
-diagnostic attributed the miss to adaptive resolution; v2 doubled temporal
-resolution without relaxing any threshold and passed. A separate artifact
-audit then rehashed 100 checkpoints, reconstructed final orbital elements, and
-recomputed the `PASSED` verdict. The conclusion remains `SCREENING_ONLY`. See
-the [full independent replication report](runs/independent_dop853_10k/README.md).
-
-## JX-O1 telescope-selection result
-
-V4 independently repeated the locked calibration with fresh intrinsic
-populations, official-driver seeds, resampling streams, raw outputs, and pool
-hashes. It processed 33,500,335 intrinsic objects and produced 212 correct-model
-and 205 deliberately wrong-model tracked detections. Every unchanged gate
-passed: 4.65% false rejection, 100% wrong-model power, exact finite-pool zeta
-moments, exact replay, raw-adapter identity, checkpoint replay, and stable
-verdicts for all ten leave-one-block-out evaluations.
-
-The design was published and CI-validated before V4 execution. The original V2
-result remains `INVALID`, and the V3 corrective replay remains a non-independent
-`PASSED` record. V4 is independent computational confirmation of the locked
-telescope-selection calibration workflowâ€”not a Planet X detection, exclusion,
-or validation of a physical distant-source model. See the
-[complete JX-O1 report](runs/survey_selection_o1/README.md).
-
-## Package map
-
-```text
-src/jxplanetx/
-  engine/                   public alpha force/trajectory contracts, catalog,
-                            backends, kernels, evaluator, RKF78, and standalone
-                            encounter-segment runtime
-  decimal_math.py          precision and vector primitives
-  dynamics.py              N-body acceleration, state, and invariants
-  force_registry_v5.py     fail-closed V5 physics-registry inspection
-  solar_1pn.py             nonauthorizing Decimal Solar 1PN reference kernel
-  v5_reference_dynamics.py nonauthorizing Newtonian-plus-1PN force ledger
-  v5_implicit_midpoint.py  fixed-step Decimal velocity-dependent reference
-  v5_solar_1pn_qualification.py fail-closed frozen-package inspector only
-  solar_system/            unpublished opt-in CSPICE/DE440s contracts and
-                           resolved-eleven Newtonian input preparation
-  yoshida6.py              sixth-order symmetric integrator
-  decimal_bs.py            independent Bulirschâ€“Stoer reference
-  ias15_gate.py            IAS15 and population comparison gates
-  ensemble_validation.py  locked chaotic-population ensemble validation
-  population_scale.py     paired large-population execution scale gate
-  encounter_tail.py       checkpointed synthetic encounter-tail pilot
-  de441_anchor.py          declared DE441-anchor import workflow
-  de441_population.py      real-epoch paired population execution and gates
-  independent_dop853.py    independent DOP853 population replication backend
-  survey_selection.py      frozen v1 survey-selection audit implementation
-  survey_selection_v2.py   corrected official 14-field OSSOS adapter
-  survey_selection_v3.py   exact-zeta corrective replay evaluator
-  survey_selection_v4.py   fresh-pool independent confirmation evaluator
-  production_benchmark.py locked benchmark verification
-  gates.py                 numerical validation gates
-  claims.py                scientific claim-control state machine
-  provenance.py            canonical hashes and atomic run records
-  cli.py                   command-line interface
-```
-
-## Runtime independence
-
-ChatGPT/JX helped develop and organize the project, but the released engine does
-not require ChatGPT, an API key, or an internet connection to run its core tests
-and validation command.
-
-## Citation and license
-
-Citation metadata is provided in `CITATION.cff`. Original JX code is released
-under the MIT License. Optional third-party packages retain their own licenses.
-`RELEASE_MANIFEST_v0.6.0rc1.json` records this local release candidate and its
-remaining external gates. Earlier release manifests retain their historical
-metadata and remain unchanged.
+¨¥yÛhr·šµë-­æ¦}Ó©z¶­Š‰ç¢Ú^®h­µçEj)^vÚ­æ­zËky©Ÿtê^­«b¢yè¶—«š+myÑZŠW¶‡+y«^²ÚÞjgÝ:—«jØ¨žz-¥êæŠÛ^tŒ)`•±•ÍÑ¥…°å¹…µ¥ÌÉ…µ•Ý½É¬((¨©Y•ÉÍ¥½¸è¨¨€À¸Ø¸ÁÉŒÄ((¨©I•±•…Í”‘…Ñ”è¨¨€ÈÀÈØ´Àä´Ää((¨©1¥•¹Í”è¨¨AÉ½ÁÉ¥•Ñ…ÉäƒŠP…±°É¥¡ÑÌÉ•Í•ÉÙ•(¨©M¥•¹Ñ¥™¥Œ±…¥´ÍÑ…Ñ”è¨¨MI9%9}=91e€())`¥Ì„™…±Í¥™¥…Ñ¥½¸µ™¥ÉÍÐ°•¹•É…°•±•ÍÑ¥…°µ‘å¹…µ¥Ì™É…µ•Ý½É¬™½È•áÁ±¥¥Ð)Á¡åÍ¥…°µ½‘•±Ì°É•ÁÉ½‘Õ¥‰±”¹Õµ•É¥…°•áÁ•É¥µ•¹ÑÌ°…¹Í¥•¹Ñ¥™¥Œ±…¥´)½¹ÑÉ½°¸=ÕÑ•ÈµM½±…ÈµMåÍÑ•´…¹A±…¹•Ð`ÍÑÕ‘¥•Ì…É”¥µÁ½ÉÑ…¹Ð…ÁÁ±¥…Ñ¥½¹Ì°)¹½Ð…ÍÍÕµÁÑ¥½¹Ì‰Õ¥±Ð¥¹Ñ¼Ñ¡”•¹¥¹”¸5½‘•°½ÕÑÁÕÐ¥Ì¹½Ð…ÍÑÉ½¹½µ¥…°)•Ù¥‘•¹”¸()Q¡¥ÌÉ•Á½Í¥Ñ½Éä½¹Ñ…¥¹ÌÑ¡”•¹¥¹”Í½ÕÉ”°Á…­…¥¹œµ•Ñ…‘…Ñ„°Õ¹¥ÐÑ•ÍÑÌ°)±½­•ÁÉ½Ñ½½±Ì°…¹½µÁ…ÐÉ•ÍÕ±ÐÍÕµµ…É¥•Ì¸%Ð¥¹Ñ•¹Ñ¥½¹…±±ä•á±Õ‘•ÌÑ¡”)ÁÉ½©•ÐÌ±…É”½‰Í•ÉÙ…Ñ¥½¹…°¥¹ÁÕÑÌ°‰Õ±¬•á•ÕÑ¥½¸…É¡¥Ù•Ì°…¹)…¹‘¥‘…Ñ”µÍ•…É …Ñ…±½Ì¸()Q¡”¥¹ÍÑ…±±…‰±”‘¥ÍÑÉ¥‰ÕÑ¥½¸…¹½µµ…¹É•µ…¥¸©áÁ±…¹•Ñá€™½È‰…­Ý…É)½µÁ…Ñ¥‰¥±¥Ñä¸Y•ÉÍ¥½¸€À¸Ø¸ÁÉŒÄ…±¥¹ÌÑ¡”Á…­…”Ý¥Ñ •¹•É…°å¹…µ¥Ì)É•¥ÍÑÉäØÄÜ°…‘‘Ì‰åÑ”µÉ•ÁÉ½‘Õ¥‰±”Ý¡••°…¹Í½ÕÉ”µ…É¡¥Ù”½¹ÍÑÉÕÑ¥½¸°)…¹É•Ñ…¥¹ÌÑ¡”•á¥ÍÑ¥¹œÁÕ‰±¥Œ™½É”…¹ÑÉ…©•Ñ½ÉäÍÕÉ™…”¸I•¥ÍÑÉäØÄÜ)ÍÑ…Ñ•ÌMI9%9}=91e€•áÁ±¥¥Ñ±ä…¹‘½•Ì¹½ÐÁÉ½µ½Ñ”…¹ä…Á…‰¥±¥Ñä‰•å½¹)¥ÑÌ•á…Ð•Ù¥‘•¹”…¹±…¥´•¥±¥¹œ¸Q¡”±•…äÁÉ½Á……Ñ¥½¸½É”°1$°±½­•)•áÁ•É¥µ•¹ÑÌ°…¹Í¥•¹Ñ¥™¥ŒÉ•½É‘ÌÉ•µ…¥¸Õ¹¡…¹•¸((ŒŒ•¹•É…°•¹¥¹”()Q¡”…‘‘¥Ñ¥Ù”©áÁ±…¹•Ñà¹•¹¥¹•€A$•Ù…±Õ…Ñ•Ì½É‘•É•…•±•É…Ñ¥½¸Ñ•ÉµÌ½¸)…±±•Èµ½Ý¹•°‰…­•¹µ¹…Ñ¥Ù”…ÉÉ…åÌ…¹…‘Ù…¹•Ì•áÁ±¥¥Ñ±äÉ•ÅÕ•ÍÑ•)¡•­Á½¥¹ÑÌÝ¥Ñ …¸…‘…ÁÑ¥Ù”I-Üàµ•Ñ¡½¸%Ð¥µÁ±•µ•¹ÑÌ•á…Ñ±äÑ¡É•”)Õ¹ÅÕ…±¥™¥•Á¡åÍ¥Ìµ½‘•±Ìè((´‘¥É•Ð°Õ¹Í½™Ñ•¹•9•ÝÑ½¹¥…¸Á½¥¹Ðµµ…ÍÌÉ…Ù¥Ñäì(´É•ÍÑÉ¥Ñ•ÍÑ…Ñ¥Œµ•¹ÑÉ…°M¡Ý…ÉéÍ¡¥±Ñ•ÍÐµÁ…ÉÑ¥±”€ÅA8°…Ì„(€½ÉÉ•Ñ¥½¸µ½¹±äÑ•É´ì…¹(´Õ¹Í¡…‘½Ý•¥Í½ÑÉ½Á¥Œ…¹¹½¹‰…±°Í½±…ÈµÉ…‘¥…Ñ¥½¸ÁÉ•ÍÍÕÉ”¸()¥¹Ñ•É…Ñ•}ÑÉ…©•Ñ½Éå€¥µÁ±•µ•¹ÑÌÑ¡”€ÄÌµÍÑ…”•¡±‰•ÉœI,Ü à¤Á…¥È™É½´)9MµQHµH´ÈàÜ¸%Ð…‘Ù…¹•ÌÑ¡”¡…ÑÑ•½É‘•Èµ•¥¡ÐÍ½±ÕÑ¥½¸°ÕÍ•ÌÑ¡”½É‘¥¹…Éä)½É‘•ÈµÍ•Ù•¸Í½±ÕÑ¥½¸™½ÈÑ¡”‘•™•Ð°…ÁÁ±¥•Ì„¹½Éµ…±¥é•µ…á¥µÕ´)Á•Èµ½µÁ½¹•¹Ð•ÉÉ½ÈÑ•ÍÐ°…¹É•…¡•Ì•… ™½ÉÝ…É½È‰…­Ý…É¡•­Á½¥¹Ð‰ä)ÍÑ•À±¥ÁÁ¥¹œÝ¥Ñ¡½ÕÐ¥¹Ñ•ÉÁ½±…Ñ¥½¸¸Ù•Éä™½É”…¹ÑÉ…©•Ñ½ÉäÉ•ÍÕ±ÐÉ•µ…¥¹Ì)5=1}=UQAUQ€°Ý¥Ñ É•¥ÍÑÉä…¹ÅÕ…±¥™¥…Ñ¥½¸…ÕÑ¡½É¥Ñä™¥á•™…±Í”¸%¹ÁÕÑÌ)‰¥¹Õ¹¥ÑÌ°™É…µ”°½É¥¥¸°•Á½ °ÁÉ½Ù•¹…¹”°Á…É…µ•Ñ•ÈÙ…±¥‘¥Ñä°‰…­•¹°)‘•Ù¥”°‰¥¹…ÉäØÐ‘ÑåÁ”°‘•Ñ•Éµ¥¹¥ÍÑ¥ŒÉ•‘ÕÑ¥½¸Í½Á”°ÍÕµµ…Ñ¥½¸Ñ¥±”Í¥é”°)•ÉÉ½ÈÑ½±•É…¹•Ì°…¹•Ù•Éä½¹ÑÉ½±±•È±¥µ¥Ð¸U¹ÍÕÁÁ½ÉÑ•½µ‰¥¹…Ñ¥½¹Ì™…¥°)‰•™½É”…É¥Ñ¡µ•Ñ¥Œì‰…­•¹Í•±•Ñ¥½¸¹•Ù•ÈÍ¥±•¹Ñ±ä™…±±Ì‰…¬½ÈÑÉ…¹Í™•ÉÌ)…ÉÉ…åÌ‰•ÑÝ••¸¡½ÍÐ…¹AT¸()Q¡”…‘‘¥Ñ¥Ù”må¹…µ¥ÌÍ•¹…É¥½ÌXÅt¡‘½Ì½e95%M}M9I%=L¹µ¤±…å•È¹½Ü)…ÍÍ•µ‰±•Ì½¹”ÍÑ…Ñ”°™½É”Á±…¸°…¹…‘…ÁÑ¥Ù”µI-ÜàÉ•ÅÕ•ÍÐ…Ì…¸•áÁ±¥¥Ð)Í•¹…É¥¼¸%ÑÌµ…Ñ¡•µ½‘”ÉÕ¹Ì„Í…µ”µÍÑ…Ñ”°Í…µ”µÍ½±Ù•È½¹ÑÉ½°™½±±½Ý•‰ä„)…¹‘¥‘…Ñ”Ñ¡…Ð…ÁÁ•¹‘Ì¹…µ•™½É”Ñ•ÉµÌ°É•Ñ…¥¹¥¹œ‰½Ñ ÑÉ…©•Ñ½É¥•Ì…¹)Á•Èµ‰½‘ä¡•­Á½¥¹Ð‘¥™™•É•¹•Ì¸Q¡”…¹‘¥‘…Ñ”ÍÑ…ÉÑÌ™É½´Ñ¡”½¹ÑÉ½°ÉÕ¸Ì)É•Ñ…¥¹•‰…Í•±¥¹”½Á¥•Ì¸Q¡½Í”‘¥™™•É•¹•Ì…É”µ½‘•°µÑ¼µµ½‘•°‘¥…¹½ÍÑ¥Ì°)¹½Ð…ÕÉ…ä°¥µÁÉ½Ù•µ•¹Ð°½ÈÁ¡åÍ¥Ì±…¥µÌì•Ù•ÉäÉ•ÍÕ±ÐÉ•µ…¥¹Ì)Õ¹ÅÕ…±¥™¥•5=1}=UQAUQ€¸…¹½¹¥…°Á½ÉÑ…‰±”µ…¹¥™•ÍÐÉ•½É‘Ì9ÕµAä½AT)‰¥¹…ÉäØÐÍ•¹…É¥½ÌÝ¥Ñ ¡•á…‘•¥µ…°™±½…ÑÌ…¹…¸•áÑ•É¹…°M!´ÈÔØ¥‘•¹Ñ¥Ñäì)±½…‘¥¹œÉ•½¹ÍÑÉÕÑÌÉ•…µ½¹±ä…ÉÉ…åÌ…¹‘½•Ì¹½Ð…ÕÑ¡•¹Ñ¥…Ñ”½ÈÅÕ…±¥™äÑ¡”)Í•¹…É¥¼¸()¥¹Ñ•É…Ñ•}•¹½Õ¹Ñ•É}Í•µ•¹Ñ€…‘‘Ì„ÍÑ…¹‘…±½¹”™Õ±°µ…ÉÑ•Í¥…¸…‘…ÁÑ¥Ù”)I-ÜàÍ•µ•¹Ð™½È•á…Ð9ÕµAä½AT‰¥¹…ÉäØÐ°‰…Éå•¹ÑÉ¥Œµ¥¹•ÉÑ¥…°°™Õ±±äµÕÑÕ…°°)…±°µ…Ñ¥Ù”Á½Í¥Ñ¥Ù”µ4Õ¹Í½™Ñ•¹•9•ÝÑ½¹¥…¸ÍÑ…Ñ•Ì¸%Ð…‘Ù…¹•Ì…¸)…ÕÑ¡½É¥Ñ…Ñ¥Ù”Í¥¹•µ…Ñ¡•µ…Ñ¥…°‘ÕÉ…Ñ¥½¸½¸•á…Ð±½…°½™™Í•ÑÌì¥ÑÌ)Í•Á…É…Ñ•±äÍÕÁÁ±¥••¹‘Á½¥¹Ð•Á½ ¥Ì…¸¥¹‘•Á•¹‘•¹ÐÁÉ½Ù•¹…¹”±…‰•°°¹½ÐÑ¡”)Í½ÕÉ”½˜Ñ¡”ÍÑ…Ñ”‘ÕÉ…Ñ¥½¸¸A…¥ÈµÉ•±…Ñ¥Ù”…¹4µ•¹ÑÉ½¥‘•™•Ð½¹ÑÉ½°°)-…¡…¸…•ÁÑ•ÕÁ‘…Ñ•Ì°•á…ÐÁ…¥È™±½½ÉÌ°‰½Õ¹‘••á…Ðµ…É¥Ñ¡µ•Ñ¥ŒÝ¥Ñ¹•ÍÍ•Ì°)ÑÉ…¹Í…Ñ¥½¹…°É•©•Ñ¥½¸°…¹½¹”Í•Á…É…Ñ•±ä…½Õ¹Ñ•µ…¹‘…Ñ½ÉäÍ•µ…¹Ñ¥Œ)É•Á±…ä…É”•áÁ±¥¥ÐÁÕ‰±¥Œ½¹ÑÉ…ÑÌ¸()Q¡”•¹½Õ¹Ñ•È•ÉÑ¥™¥…Ñ”ÁÉ½Ù•Ì½¹±äÑ¡…ÐÑ¡”•á…Ð9•ÝÑ½¹¥…¸±½…°%Y@)¥ÍÍÕ¥¹œ™É½´•… …•ÁÑ•¹Õµ•É¥…°¹½‘”‘½•Ì¹½ÐÉ½ÍÌÑ¡”É•Ñ…¥¹•Á…¥È)™±½½ÉÌ‘ÕÉ¥¹œÑ¡…Ð…•ÁÑ•ÍÕ‰ÍÑ•À¸™…¥±••ÉÑ¥™¥…Ñ”¥Ìµ•É•±ä)Õ¹•ÉÑ¥™¥•ì¥Ð¥Ì¹½Ð½±±¥Í¥½¸•Ù¥‘•¹”¸Q¡”Í½±Ù•È‘½•Ì¹½Ð±½…Ñ”•Ù•¹ÑÌ)½Èµ¥¹¥µÕ´‘¥ÍÑ…¹”°É•ÍÁ½¹Ñ¼½±±¥Í¥½¹Ì°É•Õ±…É¥é”°ÍÝ¥Ñ ¥¹Ñ•É…Ñ½ÉÌ°)½È±…¥´±•…É…¹”½˜„±½‰…°Á¡åÍ¥…°ÑÉ…©•Ñ½Éä°…¹•Ù•ÉäÉ•ÍÕ±ÐÉ•µ…¥¹Ì)Õ¹ÅÕ…±¥™¥•5=1}=UQAUQ€¸()QÝ¼…‘‘¥Ñ¥Ù”™¥á•µÍÑ•À9ÕµAä½ATµ…ÁÌ…É”…±Í¼ÁÕ‰±¥Œ…¹Õ¹ÅÕ…±¥™¥•è)™Õ±±äµÕÑÕ…°…ÉÑ•Í¥…¸-,°…¹…¸½É‘•É•µ)…½‰¤]¥Í‘½´´µ!½±µ…¸-,µ…À™½È)…±°µ…Ñ¥Ù”°Á½Í¥Ñ¥Ù”µ4°±½ÜµÍ•½¹‘…Éäµµ…ÍÌ¡¥•É…É¡¥…°•±±¥ÁÑ¥ŒÍåÍÑ•µÌ¸)Q¡”]¥Í‘½´´µ!½±µ…¸Á…Ñ ÕÍ•Ì…¹…±åÑ¥ŒÕ¹¥Ù•ÉÍ…°µÙ…É¥…‰±”-•Á±•ÈÍÕ‰™±½ÝÌ°)¥¹Ñ••Èµ…Àµ¥¹‘•à¡•­Á½¥¹ÑÌ°µ…¹‘…Ñ½Éä¡¥•É…É¡ä½Á•É¥…ÁÍ”½ÍÑ•À½!¥±°½Á…Ñ )Õ…É‘Ì°…¹½¹”™Õ±°Í•µ…¹Ñ¥ŒÙ…±¥‘…Ñ¥½¸É•Á±…ä¸%Ð¡…Ì¹¼Á…ÍÍ¥Ù”ÑÉ…•ÉÌ°)±½Í”µ•¹½Õ¹Ñ•ÈÍÝ¥Ñ¡¥¹œ°…‘…ÁÑ¥Ù”™…±±‰…¬°½ÈÁÉ½‘ÕÑ¥½¸±…¥´¸%ÑÌ™½Éµ…°)•á…ÐµÍÕ‰™±½ÜÍåµÁ±•Ñ¥ŒÍÑ…Ñ•µ•¹Ð‘½•Ì¹½Ð…ÁÁ±äÑ¼™±½…Ñ¥¹œµÁ½¥¹Ð•á•ÕÑ¥½¸ì)Íµ…±°Í…µÁ±••¹•Éä•ÉÉ½È‘½•Ì¹½Ð¥µÁ±äÍµ…±°Á¡…Í”½ÈÑÉ…©•Ñ½Éä•ÉÉ½È¸()¥¹Ñ•É…Ñ•}¡å‰É¥‘}Ý¥Í‘½µ}¡½±µ…¹}É­˜Üá}ÑÉ…©•Ñ½Éå€¥µÁ±•µ•¹ÑÌÑ¡”¹…ÉÉ½Ý±ä)‘•™¥¹•)¥¹Ñ•É…Ñ½È¹¡å‰É¥¹Ý¥Í‘½µ}¡½±µ…¹}©…½‰¥}É­˜Üá}…ÉÑ•Í¥…¸¹ØÅ€µ•Ñ¡½™½È…Ðµ½ÍÐ(ÄØ‰½‘¥•Ì¸Ù•Éä™¥á•½ÕÑ•È¥¹Ñ•ÉÙ…°™¥ÉÍÐ)ÉÕ¹Ì½¹”ÑåÁ•°ÁÉ½Ù¥Í¥½¹…°]¥Í‘½´´µ!½±µ…¸™…ÈÁÉ½‰”¸™…ÈÁ…ÍÌ½µµ¥ÑÌÑ¡…Ð)…¹‘¥‘…Ñ”¸™¥¹¥Ñ”¹…µ•¹•…È•á¥Ð‘¥Í…É‘ÌÑ¡”½µÁ±•Ñ”…¹‘¥‘…Ñ”…¹É•ÉÕ¹Ì)Ñ¡”Õ¹Ñ½Õ¡•½É¥¥¹…°¹½‘”½Ù•ÈÑ¡”™Õ±°¥¹Ñ•ÉÙ…°Ñ¡É½Õ Ñ¡”ÁÉ¥Ù…Ñ”Õ…É‘•)…ÉÑ•Í¥…¸•¹½Õ¹Ñ•È•á•ÕÑ¥½¸ìÍÑ…Ñ¥Œ°¹Õµ•É¥…°°É•Í½ÕÉ”°ÕÍÑ½‘ä°…¹)É•Á±…ä™…¥±ÕÉ•Ì…É”™…Ñ…°¸Q¡”½ÕÑ•È¥¹Ñ••È±…ÑÑ¥”¹•Ù•È…‘…ÁÑÌ°…¹Ñ¡•É”)¥Ì¹¼¡åÍÑ•É•Í¥Ì°±…Ñ °Á…ÉÑ¥…°µÁÉ•™¥à½µµ¥Ð°É½ÕÁ¥¹œ°½È•Ù•¹Ð±½…Ñ¥½¸¸()Q¡”¹•…È•ÉÑ¥™¥…Ñ”­••ÁÌ•á…Ñ±äÑ¡”ÍÑ…¹‘…±½¹”Í½±Ù•ÈÌ±½…°µ%Y@Í½Á”ì)¥Ð¥Ì¹½Ð½±±¥Í¥½¸½È•Ù•¹Ð‘•Ñ•Ñ¥½¸…¹¥Ù•Ì¹¼±½‰…°±•…É…¹”±…¥´¸)=¹”™Õ±°¡å‰É¥Í•µ…¹Ñ¥ŒÉ•Á±…ä°Ý¥Ñ ¹¼¹•ÍÑ•ÁÕ‰±¥Œ¡¥±É•Á±…ä°É•½µÁÕÑ•Ì)…±°ÍÑ…Ñ•Ì°‘•¥Í¥½¹Ì°±•‘•ÉÌ°‘¥•ÍÑÌ°…¹…½Õ¹Ñ¥¹œ¸±°µ™…ÈÉÕ¹ÌÁÉ•Í•ÉÙ”)Ñ¡”™É½é•¸ÁÕ‰±¥Œ]¥Í‘½´´µ!½±µ…¸ÍÑ…Ñ”½¡•­Á½¥¹Ð½‘¥…¹½ÍÑ¥Œ½…½Õ¹Ñ¥¹œ)ÁÉ½©•Ñ¥½¸‰¥Ðµ™½Èµ‰¥Ð¸Q¡”½µÁ±•Ñ”¡å‰É¥¥Ì¹½Ð±½‰…±±äÍåµÁ±•Ñ¥Œ°)™½Éµ…±±ä½È•á…Ñ±äÉ•Ù•ÉÍ¥‰±”°É•Õ±…É¥é•°±½‰…±±ä½É‘•ÈµÅÕ…±¥™¥•°½È)Í¥•¹Ñ¥™¥…±±äÅÕ…±¥™¥•¸()Q¡”…½µÁ…¹å¥¹œ€ÐØµ…Á…‰¥±¥Ñä…Ñ…±½œ½¹Ñ…¥¹Ì•á…Ñ±äÑÝ•±Ù”%5A159Q€)…¹€ÌÐ1I€É½ÝÌ…¹½Ù•ÉÌÑ¡”…±Á¡„ÍÕÉ™…”…¹‰É½…‘•È)`É½…‘µ…À¸)Q¡”¥µÁ±•µ•¹Ñ•Í•Ð¥¹±Õ‘•ÌÑ¡”ÍÑ…¹‘…±½¹”Õ…É‘••¹½Õ¹Ñ•ÈÍ•µ•¹Ð°Ñ¡”)ÑÝ¼•áÁ•É¥µ•¹Ñ…°Õ¹ÅÕ…±¥™¥•™¥á•µÍÑ•À9•ÝÑ½¹¥…¸µ…ÁÌ°…¹Ñ¡”½¹”ÍÁ•¥™¥Œ)Ý¡½±”µÍÑ•À¡å‰É¥¸Q¡”‰É½…‘•ÈÉ½ÍÑ•ÈÍÁ…¹Ì)É…Ù¥Ñä°É•±…Ñ¥Ù¥Ñä°¡…Éµ½¹¥Ì°Ñ¥‘•Ì°)¹½¹É…Ù¥Ñ…Ñ¥½¹…°™½É•Ì°•¹½Õ¹Ñ•ÉÌ°¥¹Ñ•É…Ñ½ÉÌ°…•±•É…Ñ½È‰…­•¹‘Ì°)ÁÉ•¥Í¥½¸µ½‘•Ì°Í•¹Í¥Ñ¥Ù¥Ñ¥•Ì°½É‰¥Ð‘•Ñ•Éµ¥¹…Ñ¥½¸°…¹µ•…ÍÕÉ•µ•¹ÑÌ¸Ù•Éä)•¹ÑÉä¥ÌU9EU1%%€¸1I€•¹ÑÉäÙ…±¥‘…Ñ•Ì¥ÑÌ­¹½Ý¸Á…É…µ•Ñ•ÈÉ½ÍÑ•È)…¹Ñ¡•¸É•™ÕÍ•Ì•á•ÕÑ¥½¸¸()9ÕµAäAT…¹½ÁÑ¥½¹…°ÕAäU€ÄÈ¼ÄÌ½‘”Á…Ñ¡Ì…É”…Ù…¥±…‰±”¸Q¡”)mATÍ¥•¹Ñ¥™¥Œ±…‘‘•ÈXÅt¡ÉÕ¹Ì½©á}ÁÕ}Í¥•¹Ñ¥™¥}±…‘‘•É}ØÄ½I5¹µ¤É•½É‘Ì)™¥áÑÕÉ”µÍÁ•¥™¥ŒAT½UÁ…É¥Ñä°Ñ¡”½µÁ±•Ñ”±¥Ù”µ•¹¥¹”Ñ•ÍÐÍ½Á”°„)É•‘Õ••±•Ù•¸µ‰½‘äÉ•Á±…ä°‘•ÍÉ¥ÁÑ¥Ù”¥¹Ñ•É±•…Ù•Ñ¥µ¥¹Ì°…¹„±…É”)µÕÑÕ…°µÉ…Ù¥ÑäUÍ…±”½‰Í•ÉÙ…Ñ¥½¸½¸½¹”ÁÉ½©•Ðµ½Ý¹•IQ`€ÔÀØÀQ¤¸Q¡…Ð)Á…­…”‘½•Ì¹½Ð•ÍÑ…‰±¥Í É•ÁÉ½‘Õ¥‰¥±¥Ñä…É½ÍÌ‘•Ù¥•Ì°„Á½ÉÑ…‰±”ÍÁ••‘ÕÀ°)•¹•É…°ATÅÕ…±¥™¥…Ñ¥½¸°ÁÉ½‘ÕÑ¥½¸™¥Ñ¹•ÍÌ°½ÈÁ¡åÍ¥…°…ÕÉ…ä¸()½È€À¸Ø¸ÁÉŒÅ€°„™…¥°µ±½Í•ÕÉÉ•¹Ðµ½É”…Ñ”Ý…Ì…±Í¼ÉÕ¸½¸Ñ¡”Í…µ”µ½‘•°)½˜ÁÉ½©•Ðµ½Ý¹•ATè…¸IQ`€ÔÀØÀQ¤Ý¥Ñ ‘É¥Ù•È€ÔäÔ¸äÄ¸ÀÜ°U€ÄÌ¸È°9ÕµAä(È¸Ì¸Ô°…¹ÕAä€ÄÐ¸È¸À¸±°€ÄÌ¥Í½±…Ñ••¹¥¹”µ½‘Õ±•ÌÁ…ÍÍ•Ý¥Ñ Ñ¡”¡…É‘Ý…É”)Ñ•ÍÑÌ…Ñ¥Ù”€ ÈÌÌÑ•ÍÑÌ°é•É¼Í­¥ÁÌ¤°…¹Ñ¡”™¥Ù”ATµÍÁ•¥™¥Œ‰…­•¹…¹)ÑÉ…©•Ñ½ÉäÑ•ÍÑÌ…±Í¼Á…ÍÍ•Õ¹‘•È½ÁÑ¥µ¥é•AåÑ¡½¸¸Q¡¥ÌÙ•É¥™¥•ÌÑ¡”•á…Ð)É•½É‘•ÉÕ¹Ñ¥µ”½‘•Ù¥”½É”½¹ÑÉ…ÑÌ½¹±ä°¥¹±Õ‘¥¹œAT½AT¹Õµ•É¥…°)Á…É¥Ñä°‘•Ù¥”É•Í¥‘•¹ä°¹¼¥µÁ±¥¥ÐÑÉ…¹Í™•È°µ¥á•µ¥¹ÁÕÐÉ•™ÕÍ…°°™±½…ÐÌÈ)É•™ÕÍ…°°…¹ÕAäÑÉ…©•Ñ½ÉäÕÍÑ½‘ä¸%Ð¥Ì¹½ÐÉ½ÍÌµ‘•Ù¥”ÅÕ…±¥™¥…Ñ¥½¸°„)Á•É™½Éµ…¹”½ÈÍÁ••‘ÕÀ±…¥´°ÁÉ½‘ÕÑ¥½¸™¥Ñ¹•ÍÌ°½ÈÍ¥•¹Ñ¥™¥ŒÙ…±¥‘…Ñ¥½¸¸()Q¡”…‘‘¥Ñ¥Ù”m•±•Ù•¸µ‰½‘äÁ½ÉÑ…‰±”•Ù¥‘•¹”XÅt¡ÉÕ¹Ì½©á}•±•Ù•¹}‰½‘å}Á½ÉÑ…‰±•}ØÄ½I5¹µ¤)ÁÉ½Ù¥‘•ÌÑ¡”½µÁ…ÐU‰Õ¹ÑÔÝ½É­™±½Üè½™™±¥¹”¥¹Ñ•É¥ÑäÙ•É¥™¥…Ñ¥½¸°•á…Ð)‘•Á•¹‘•¹äÉ•½É‘Ì°„¡½ÍÐµÉ•…‘¥¹•ÍÌ‘½Ñ½È°„™É•Í ‰½Õ¹‘•AT½ATÉ•Á±…ä°)…¹Ñ¡”Í…Ù•€ÄÀÀµå•…ÈI	=U9½µÁ…É…Ñ½È¸%ÐÉ•µ…¥¹ÌMI9%9}=91e€ìÑ¡”)¡¥ÍÑ½É¥…°€ÄÀÀµå•…ÈÉ•ÍÕ±Ð¥Ì½™™±¥¹”µÙ•É¥™¥…‰±”‰ÕÐ¥ÑÌ™É•Í ÍÑ…¹‘…±½¹”)É•ÉÕ¸¥Ì•áÁ±¥¥Ñ±ä‰±½­•‰ä¥¹½µÁ±•Ñ”…É¡¥Ù•)`Í½ÕÉ”±½ÍÕÉ”¸()Q¡”…‘‘¥Ñ¥Ù”mHÀÍ½ÕÉ”µ±½Í•€ÄÀÀµå•…È½¹™¥Éµ…Ñ¥½¸Á…­…•t¡ÉÕ¹Ì½©á}É•Á¡}ØÅ}ÈÁ}Í½ÕÉ•}±½Í•‘|ÄÀÁä½I5¹µ¤)É•Í½±Ù•ÌÑ¡…Ð…É¡¥Ù•Í½ÕÉ”±½ÍÕÉ”™É½´„ÁÉ½Ù•¹…¹”µ‰½Õ¹¥Ð‰Õ¹‘±”Á±ÕÌ)Ñ¡”™½ÕÈ…•ÁÑ•½µÁ…É…Ñ½È½Ù•É±…åÌ¸%ÑÌ‰½Õ¹‘•½¹ÍÑÉÕÑ¥½¸ÁÉ•™±¥¡Ð)Á…ÍÍ•Ì°‰ÕÐÑ¡”€ÄÀÀµå•…ÈÁ…¥È¡…Ì¹½Ðå•ÐÉÕ¸¸¹ä™ÕÑÕÉ”ÉÕ¸É•µ…¥¹Ì)MI9%9}=91e€°É•ÅÕ¥É•Ì„™É•Í µ½¹¥Ñ½É•ÁÉ•™±¥¡Ð…¹Í¡½ÉÐµ±¥Ù•)…ÕÑ¡½É¥é…Ñ¥½¸°…¹µÕÍÐÁ…ÍÌÑ¡”Í•Á…É…Ñ”½™™±¥¹”•á•ÕÑ¥½¸Ù•É¥™¥•È‰•™½É”)¥ÑÌÉ•ÍÕ±Ð¥Ì‘•ÍÉ¥‰•…ÌÙ•É¥™¥•¸()Q¡”…‘‘¥Ñ¥Ù”m½Íµ½±½äÁ…ÉÑ¥±”µµ•Í ™½Õ¹‘…Ñ¥½¹t¡ÉÕ¹Ì½©á}½Íµ½±½å}Áµ}™½Õ¹‘…Ñ¥½¹}ØÄ½I5¹µ¤)•áÑ•¹‘ÌÑ¡”Í…µ”ÁÉ½©•ÐÝ¥Ñ „¹…Ñ¥Ù”9ÕµAä½ÕAäÁ•É¥½‘¥Œ½±±¥Í¥½¹±•ÍÌµÉ…Ù¥Ñä)Í½±Ù•È¥¸„ÁÉ•ÍÉ¥‰•™±…Ð•áÁ…¹‘¥¹œ‰…­É½Õ¹¸%ÑÌ™É½é•¸…¹…±åÑ¥Œ)É½Ý¥¹œµµ½‘”‰•¹¡µ…É­ÌÁ…ÍÌ…Ð€ÄÈáxÌ…¹€ÈÔÙxÌÁ…ÉÑ¥±•Ì°Ý¥Ñ )¹•…ÈµÍ•½¹µ½É‘•ÈÍÁ…Ñ¥…°…¹Ñ•µÁ½É…°½¹Ù•É•¹”°AT½ATÁ…É¥Ñä°…¹…¸)¥¹‘•Á•¹‘•¹Ñ±ä½‘•Á±…¹…È9ÕµAäÉ•™•É•¹”¸Q¡”)lÈÔÙxÌÙ…±¥‘…Ñ¥½¸Á…­…•t¡ÉÕ¹Ì½©á}½Íµ½±½å}Áµ|ÈÔÙ}¥¹‘•Á•¹‘•¹Ñ}ÈÈ½I5¹µ¤)É•Ñ…¥¹ÌÑ¡”½µÁ±•Ñ”É½ÍÌµ½‘”•Ù¥‘•¹”¸Q¡”™¥ÉÍÐ€ÈÔÙxÌ…ÑÑ•µÁÐ¥ÌÉ•Ñ…¥¹•)…Ì„ÍÑ½ÁÁ•…ÕµÕ±…Ñ½È™…¥±ÕÉ”ìÑ¡”É•Á…¥É•ÉÕ¸­••ÁÌ¥ÑÌÑ¡É•Í¡½±‘Ì…¹)Ý½É­±½…Õ¹¡…¹•¸Q¡¥Ì¥Ì„ÅÕ…±¥™¥…Ñ¥½¸½˜½¹”½¹ÑÉ½±±•)™½Õ¹‘…Ñ¥½¸Ý½É­±½…½¹±ä¸%Ð¥Ì¹½Ð„É•…±¥ÍÑ¥ŒÍÑÉÕÑÕÉ”µ™½Éµ…Ñ¥½¸ÉÕ¸…¹)‘½•Ì¹½Ð¥¹±Õ‘”…Ì°É…‘¥…Ñ¥½¸°Á±…Íµ„°¹Õ±•…ÈÁ¡åÍ¥Ì°•¹•É…°É•±…Ñ¥Ù¥Ñä°)…¸½‰Í•ÉÙ…Ñ¥½¹…°™¥Ð°½È„ÁÉ½‘ÕÑ¥½¸½Íµ½±½ä±…¥´¸()Q¡”mHÐ‘…É¬µµ…ÑÑ•ÈÁ±ÕÌ‰…Éå½¸‰•¹¡µ…É­t¡ÉÕ¹Ì½©á}½Íµ½±½å}‰…Éå½¹Í|Í‘}ÈÐ½I5¹µ¤)…‘‘Ì„¹…Ñ¥Ù”€ÄÈáxÌ…‘¥…‰…Ñ¥Œ…Ìµ•Í ½ÕÁ±•Ñ¼€È°ÀäÜ°ÄÔÈ‘…É¬µµ…ÑÑ•ÈÁ…ÉÑ¥±•Ì)Ñ¡É½Õ Ñ¡”Í…µ”ÍÁ•ÑÉ…°É…Ù¥Ñä™¥•±¸%ÐÙ…±¥‘…Ñ•ÌÑ¡É•”µ‘¥É•Ñ¥½¸±¥¹•…È)…¹½µÁ±•àÁ¡…Í”°Á•É¥½‘¥Œ½¹Í•ÉÙ…Ñ¥½¸°…ÌÁ½Í¥Ñ¥Ù¥Ñä°Í½Õ¹µÝ…Ù”)½¹Ù•É•¹”°„M½Í¡½¬°•á…ÐATÉ•Á•Ñ¥Ñ¥½¸°…¹9ÕµAä½ÕAä™Õ±°µÍÑ…Ñ”)…É••µ•¹Ð¸Q¡”ÍÑ½ÁÁ•HÈ…¹HÌÉ•½É‘ÌÁÉ•Í•ÉÙ”‘¥Í½Ù•Éä½˜„¡…±˜µ•±°)Á…ÉÑ¥±”½…ÌÁ¡…Í”•ÉÉ½È°…¸Õ¹Í…™”µÕ±Ñ¥‘¥µ•¹Í¥½¹…°0‰½Õ¹°…¹Ñ¡”)½ÉÉ•Ñ•€ØÑxÌ…ÕÉ…ä™…¥±ÕÉ”¸HÐ­••ÁÌÑ¡”…ÕÉ…äÑ¡É•Í¡½±Õ¹¡…¹•…¹)Á…ÍÍ•Ì…ÐÑ¡”½¹Ù•É•¹”µÍ•±•Ñ•É•Í½±ÕÑ¥½¸¸Q¡¥Ì¥Ì„½¹ÑÉ½±±•)™¥ÉÍÐµ½É‘•ÈÍÕÁ•É½µ½Ù¥¹œÙ…±¥‘…Ñ¥½¸°¹½Ðå•Ð…¸•áÑ•É¹…±±äÙ…±¥‘…Ñ•¹½¹±¥¹•…È)…±…áäµ™½Éµ…Ñ¥½¸½ÈÁÉ½‘ÕÑ¥½¸½Íµ½±½äÍ½±Ù•È¸((ŒŒM¥•¹Ñ¥™¥Œ‰½Õ¹‘…Éä()Q¡”½‘”‘½•Ì€¨©¹½Ð¨¨±…¥´„A±…¹•Ð`‘•Ñ•Ñ¥½¸°Í­äÁ½Í¥Ñ¥½¸°µ…ÍÌ°½È)‘¥ÍÑ…¹”¸9Õµ•É¥…°Í¥µÕ±…Ñ¥½¸¥Ì¹½Ð…ÍÑÉ½¹½µ¥…°µ•…ÍÕÉ•µ•¹Ð¸Q¡”•¹¥¹”Ì)±…¥´µ½¹ÑÉ½°±½¥Œ­••ÁÌ½É‘¥¹…Éä¹Õµ•É¥…°½ÕÑÁÕÐ…ÐMI9%9}=91e€…¹)‰±½­Ì½‰Í•ÉÙ…Ñ¥½¹…°±…¥µÌÝ¡•¸É•ÅÕ¥É••Ù¥‘•¹”…Ñ•Ì…É”…‰Í•¹Ð½È™…¥°¸()Q¡”Í½ÕÉ”¥¹±Õ‘•Ìè((´‘•Ñ•Éµ¥¹¥ÍÑ¥Œ…É‰¥ÑÉ…ÉäµÁÉ•¥Í¥½¸…É¥Ñ¡µ•Ñ¥ŒÕÍ¥¹œAåÑ¡½¸‘•¥µ…±€ì(´8µ‰½‘ä…•±•É…Ñ¥½¸°¥¹Ù…É¥…¹ÑÌ°…¹ÍÑ…Ñ”½‰©•ÑÌì(´„Í¥áÑ µ½É‘•ÈÍåµµ•ÑÉ¥Œe½Í¡¥‘„¥¹Ñ•É…Ñ½Èì(´…¸¥¹‘•Á•¹‘•¹Ð•¥µ…°	Õ±¥ÉÍ£ŠMMÑ½•ÈÉ•™•É•¹”¥¹Ñ•É…Ñ½Èì(´½ÁÑ¥½¹…°I	=U9ÑÉ…©•Ñ½Éä°%LÄÔ°…¹±…É”µ…ÍÍ±•ÍÌµÁ½ÁÕ±…Ñ¥½¸Í…±”…Ñ•Ìì(´‘•Ñ•Éµ¥¹¥ÍÑ¥ŒÕ¹•ÉÑ…¥¹Ñä½Á¡…Í”•¹Í•µ‰±”Á±…¹ÌÝ¥Ñ ±½­•½¹ÑÉ…ÑÌì(´Á…¥É•Í½ÕÉ”½½¹ÑÉ½°Á½ÁÕ±…Ñ¥½¸Ù…±¥‘…Ñ¥½¸…É½ÍÌ¹Õµ•É¥…°µ•Ñ¡½‘Ìì(´Á•É¥¡•±¥½¸°¥¹©•Ñ¥½¸°ÍÕÉÙ¥Ù…°°¥¹±¥¹…Ñ¥½¸µÝ¥‘Ñ °…¹]…ÍÍ•ÉÍÑ•¥¸µ•ÑÉ¥Ìì(´™…¥°µ±½Í•AMM€°	1=-€°…¹%9Y1%€•¹Í•µ‰±”Ù•É‘¥ÑÌì(´½¹Ù•É•¹”°½¹Í•ÉÙ…Ñ¥½¸°ÁÉ½Ù•¹…¹”°…¹±…¥´µ½¹ÑÉ½°ÕÑ¥±¥Ñ¥•Ìì(´„ÁÉ•±½­•Ñ•¸µå•…È)A0!½É¥é½¹Ì½ÐÐÄ½ÕÑ•ÈµÁ±…¹•Ð½µÁ…Ñ¥‰¥±¥ÑäÑ•ÍÐì(´„É•…°µ•Á½ °¡•­Á½¥¹Ñ•°µ…Ñ¡•€ÄÀÀ°ÀÀÀµÑÉ…•ÈµÁ•Èµ…É´Á½ÁÕ±…Ñ¥½¸ÍÉ••¸ì(´…¸¥¹‘•Á•¹‘•¹ÐM¥Aä=@àÔÌ™½É”°¥¹Ñ•É…Ñ¥½¸°¡•­Á½¥¹Ð°…¹É•Á±¥…Ñ¥½¸Á…Ñ ì(´„Á¥¹¹•½™™¥¥…°=MM=LÑ•±•Í½Á”µÍ•±•Ñ¥½¸…‘…ÁÑ•ÈÝ¥Ñ ‘•Ñ•Éµ¥¹¥ÍÑ¥ŒÁ…¥É•(€Á½ÁÕ±…Ñ¥½¹Ì°¡•­Á½¥¹Ñ••á•ÕÑ¥½¸°…±¥‰É…Ñ¥½¸½Á½Ý•ÈÑ•ÍÑÌ°…¹™…¥°µ±½Í•Ù•É‘¥ÑÌì(´„½µµ…¹µ±¥¹”¥¹Ñ•É™…”™½ÈÉ•ÁÉ½‘Õ¥‰±”Ù…±¥‘…Ñ¥½¸Ý½É­™±½ÝÌ¸()Q¡”µ½ÍÐ¥µÁ½ÉÑ…¹ÐÁÉ•Í•¹Ð±¥µ¥Ñ…Ñ¥½¸¥ÌÑ¡…Ð¹¼•¹•É…°•¹¥¹”µ½‘•°½È)¥¹Ñ•É…Ñ½È¥ÌÍ¥•¹Ñ¥™¥…±±äÅÕ…±¥™¥•¸á…Ð‰•¹¡µ…É¬ÅÕ…±¥™¥…Ñ¥½¹Ì‘¼¹½Ð)ÁÉ½µ½Ñ”Ñ¡”Ý¥‘•È•¹¥¹”¸Q¡”I-ÜàÁ…Ñ ¥Ì•áÁ±¥¥Ð…¹)¹½¹ÍÑ¥™˜°Ý¥Ñ ¹¼‘•¹Í”½ÕÑÁÕÐ°•Ù•¹Ð±½…Ñ¥½¸°½±±¥Í¥½¸É•ÍÁ½¹Í”°)½ÈÉ•Õ±…É¥é…Ñ¥½¸¸Q¡”ÍÁ•¥™¥Œ¡å‰É¥…‘‘ÌÕ…É‘•Ý¡½±”µÍÑ•Àµ½‘”Í•±•Ñ¥½¸°)¹½Ð„½±±¥Í¥½¸½•Ù•¹ÐÍåÍÑ•´½È„•¹•É…°±½Í”µ•¹½Õ¹Ñ•È™É…µ•Ý½É¬¸Q¡”)Õ¹¡…¹•¹…Ñ¥Ù”ÁÉ½Á……Ñ¥½¸½É”É•µ…¥¹Ì9•ÝÑ½¹¥…¸Á½¥¹Ðµµ…ÍÌ‘å¹…µ¥Ì¸)`¡…Ì¹¼ÅÕ…±¥™¥•‰Õ¥±Ðµ¥¸)É•±…Ñ¥Ù¥Ñä°½‰±…Ñ•¹•ÍÌ°¹½¹É…Ù¥Ñ…Ñ¥½¹…°µ™½É”°½±±¥Í¥½¸µÉ•Õ±…É¥é…Ñ¥½¸°)½É‰¥Ðµ‘•Ñ•Éµ¥¹…Ñ¥½¸°½È½‰Í•ÉÙ…Ñ¥½¹…°µ•Á¡•µ•É¥Ì…Á…‰¥±¥Ñä¸((ŒŒ)`XÔÁ¡åÍ¥Ì™½Õ¹‘…Ñ¥½¸()Q¡”XÔ™½Õ¹‘…Ñ¥½¸‰•¥¹ÌÑ¡”½¹ÑÉ½±±••áÁ…¹Í¥½¸‰•å½¹É…Ù¥Ñäµ½¹±ä)ÁÉ½Á……Ñ¥½¸¸%ÑÌ™½É”µÁ…É…µ•Ñ•ÈÉ•¥ÍÑÉä½Ù•ÉÌÉ•±…Ñ¥Ù¥Ñä°É…Ù¥Ñä¡…Éµ½¹¥Ì°)¹½¹É…Ù¥Ñ…Ñ¥½¹…°™½É•Ì°Á¡åÍ¥…°µ‰½‘äÁÉ½Á•ÉÑ¥•Ì°½±±¥Í¥½¸…Á…‰¥±¥Ñä°…¹)™ÕÑÕÉ”µ•…ÍÕÉ•µ•¹Ðµ½‘•±¥¹œ¸Ù•Éä‘•±…É…Ñ¥½¸¥Ì‰½Õ¹Ñ¼Õ¹¥ÑÌ°™É…µ•Ì°)•Á½¡Ì°ÁÉ½Ù•¹…¹”°Õ¹•ÉÑ…¥¹Ñä°½Ù…É¥…¹”°…ÁÁ±¥…‰¥±¥Ñä°…¹Ù…±¥‘…Ñ¥½¸)É•ÅÕ¥É•µ•¹ÑÌ¸()Q¡¥Ì™½Õ¹‘…Ñ¥½¸¥Ì‘•±¥‰•É…Ñ•±äIQ}9=9aUQ	1€¸U¹É•Í½±Ù•Í¥•¹Ñ¥™¥Œ)Ù…±Õ•Ì…É”É•½É‘•…ÌQ	}	1=-€ìÑ¡•ä…É”¹•Ù•ÈÉ•Á±…•‰äÕ•ÍÍ•)‘•™…Õ±ÑÌ¸•±…É•µ‰ÕÐµÕ¹¥µÁ±•µ•¹Ñ•µ½‘•±Ì…¹¹½Ð…ÕÑ¡½É¥é”„ÉÕ¸½È¥¹É•…Í”)Ñ¡”Í¥•¹Ñ¥™¥Œ±…¥´ÍÑ…Ñ”¸M•”Ñ¡”)mXÔ™½É”µÁ…É…µ•Ñ•ÈÉ•¥ÍÑÉåt¡‘½Ì½=I}AI5QI}I%MQIe}XÔ¹µ¤¸()XÔ¹½Ü¥¹±Õ‘•Ì„)`µ½Ý¹••¥µ…°É•™•É•¹”­•É¹•°™½ÈÑ¡”)É•ÍÑÉ¥Ñ•M½±…ÈM¡Ý…ÉéÍ¡¥±€ÅA8½ÉÉ•Ñ¥½¸¸%Ð¥Ì•ÅÕ…Ñ¥½¸µ±•Ù•°°)½ÉÉ•Ñ¥½¸µ½¹±ä°…¹Á•Éµ…¹•¹Ñ±äÉ•Á½ÉÑÌÉ•¥ÍÑÉå}…ÕÑ¡½É¥é•õ™…±Í•€¸%Ð¥Ì¹½Ð)Ý¥É•¥¹Ñ¼Ñ¡”•á¥ÍÑ¥¹œe½Í¡¥‘„¥¹Ñ•É…Ñ½È‰•…ÕÍ”Ñ¡”É•±…Ñ¥Ù¥ÍÑ¥ŒÑ•É´¥Ì)Ù•±½¥Ñäµ‘•Á•¹‘•¹Ð…¹Ñ¡…Ð¥¹Ñ•É…Ñ½È…ÍÍÕµ•Ì„Í•Á…É…‰±”°Á½Í¥Ñ¥½¸µ½¹±ä)™½É”¸Í•Á…É…Ñ”™¥á•µÍÑ•À•¥µ…°¥µÁ±¥¥Ðµµ¥‘Á½¥¹ÐÁ…Ñ ¹½ÜÑ•ÍÑÌÑ¡”)Í¥àµ½µÁ½¹•¹ÐÉ•ÍÑÉ¥Ñ•9•ÝÑ½¹¥…¸µÁ±ÕÌ´ÅA8™¥ÉÍÐµ½É‘•È•ÅÕ…Ñ¥½¸Ý¥Ñ …¸•áÁ±¥¥ÐÁÉ•¥Í¥½¸°É½Õ¹‘¥¹œ°)™½É”µ±•‘•È°…¹¹½¹±¥¹•…ÈµÉ•Í¥‘Õ…°½¹ÑÉ…Ð¸Q¡…ÐÁ…Ñ ¥ÌÉ•™•É•¹”µ½¹±ä°)É•Ñ…¥¹Ì5=1}=UQAUQ€°…¹…¹¹½Ðµ…­”Ñ¡”‘É…™ÐÉ•¥ÍÑÉä•á•ÕÑ…‰±”¸Õ±°)8µ‰½‘ä% É•±…Ñ¥Ù¥Ñä°ÁÉ½‘ÕÑ¥½¸ÁÉ½Á……Ñ¥½¸°…¹Í¥•¹Ñ¥™¥Œ±…¥´ÁÉ½µ½Ñ¥½¸)É•µ…¥¸‰±½­•¸M•”Ñ¡”)mXÔÉ•™•É•¹”µ¥¹Ñ•É…Ñ½ÈÁÉ½Ñ½½±t¡‘½Ì½XÕ}II9}%9QIQ=H¹µ¤¸()Í•Á…É…Ñ”mM½±…È€ÅA8ÅÕ…±¥™¥…Ñ¥½¸Á…­…•t¡ÉÕ¹Ì½ØÕ}Í½±…É|ÅÁ¹}ÅÕ…±¥™¥…Ñ¥½¸½I5¹µ¤)¹½Ü™É••é•ÌÑ¡”Í½ÕÉ”…ÉÑ¥™…ÑÌ°Õ¹¥Ð…¹Ñ¥µ”µÍ…±”ÑÉ…¹Í™½Éµ…Ñ¥½¹Ì°™É•Í )¡½±‘½ÕÐ™¥áÑÕÉ•Ì°DÀ´µDä…Ñ”‘•™¥¹¥Ñ¥½¹Ì°ÁÉ¥½Èµ‘•Ù•±½Áµ•¹Ð‘¥Í±½ÍÕÉ”°…¹)±…¥´•¥±¥¹œ¹••‘•™½È„±…Ñ•ÈÅÕ…±¥™¥…Ñ¥½¸…ÑÑ•µÁÐ¸Q¡”Á…­…”½¹Ñ…¥¹Ì)¹¼½ÕÑ½µ•Ì…¹•áÁ½Í•Ì¹¼ÑÉ…©•Ñ½ÉäÉÕ¹¹•Èè¥ÑÌ•á•ÕÑ¥½¸¥µÁ±•µ•¹Ñ…Ñ¥½¸¥Ì)9=Q}I%MQI€°¥ÑÌ•Ù¥‘•¹”•¥±¥¹œ¥Ì5=1}=UQAUQ€°…¹•Ù•¸„™ÕÑÕÉ”)…±°µ…Ñ•ÌÁ…ÍÌ½Õ±µ…­”Ñ¡”É•™•É•¹”Á…Ñ ½¹±ä)1%%	1}=I}IY%]}9=9UQ!=I%i%9€¸%Ð…¹¹½Ð¡…¹”Ñ¡”‘É…™ÐÉ•¥ÍÑÉä½È)…ÕÑ¡½É¥é”Á¡åÍ¥…°M½±…ÈµMåÍÑ•´ÁÉ½Á……Ñ¥½¸¸((ŒŒŒMÑ•À€ÔM½±…ÈµMåÍÑ•´ÁÉ•Á…É…Ñ¥½¸()Q¡”½ÁÐµ¥¸°Õ¹ÁÕ‰±¥Í¡•MÑ•À€Ô‰½Õ¹‘…ÉäÙ•É¥™¥•Ì¥Í½±…Ñ•MA%½ÐÐÁÌ)•½µ•ÑÉ¥ŒµÍÑ…Ñ”•Ù¥‘•¹”…¹Ñ¡”É•Ñ…¥¹•ÐÐÀ4Á…É…µ•Ñ•È…ÉÑ¥™…Ð°É•Í½±Ù•Ì)…ÉÑ …¹5½½¸¥¹Ñ¼…¸•á…Ð•±•Ù•¸µ‰½‘äÉ½ÍÑ•È°½¹Ù•ÉÑÌÑ¡”ÍÑ…Ñ”…¹)Á…É…µ•Ñ•ÉÌÑ¼M$°…¹É••¹Ñ•ÉÌÑ¡•´…ÐÑ¡”Í•±•Ñ•µ½‘•°Ì½Á•É…Ñ¥½¹…°µ4)‰…Éå•¹Ñ•È¸%ÐÑ¡•¸É•…Ñ•Ì™É•Í ½Ý¹•É•…µ½¹±ä9ÕµAä…ÉÉ…åÌ°…¸•¹¥¹”ÍÑ…Ñ”°)…¹½¹”‘¥É•ÐµÕÑÕ…°Õ¹Í½™Ñ•¹•9•ÝÑ½¹¥…¸™½É”Á±…¸Ý¥Ñ „¡•­•ÁÉ¥µ…Éä…¹)ÁÉ•Á…É…Ñ¥½¸É•Á±…ä¸()Q¡¥Ì‰½Õ¹‘…ÉäÁÉ•Á…É•Ì¥¹¥Ñ¥…°¥¹ÁÕÑÌ½¹±äì¥Ð‘½•Ì¹½ÐÉÕ¸„ÑÉ…©•Ñ½Éä¸Q¡”)É•‘Õ•9•ÝÑ½¹¥…¸µ½‘•°¥Ì¹½ÐÐÐÀ¥ÑÍ•±˜°Ñ¡”µ½‘•°µ‰…Éå•¹Ñ•È½É¥¥¸¥Ì¹½Ð)9%‰½‘ä€À°…¹Ñ¡”™É…µ”É½ÍÍÝ…±¬¥Ì¹½¹…ÕÑ¡½É¥é¥¹œ¸Q¡”…ÉÑ¥™…ÑÌ…¹)É••¥ÁÑÌÁÉ½Ù¥‘”Õ¹…ÕÑ¡•¹Ñ¥…Ñ•½¹Ñ•¹Ð¥¹Ñ•É¥Ñä°¹½ÐÍ½ÕÉ”…ÕÑ¡½É¥Ñä°)½¹Ñ¥¹Õ½ÕÌÕÍÑ½‘ä°Á¡åÍ¥…°…ÕÉ…ä°]¥Í‘½´´µ!½±µ…¸‘½µ…¥¸ÅÕ…±¥™¥…Ñ¥½¸°½È)Í¥•¹Ñ¥™¥Œ½ÁÉ½‘ÕÑ¥½¸…ÕÑ¡½É¥é…Ñ¥½¸¸=ÕÑÁÕÑÌÉ•µ…¥¸Õ¹ÅÕ…±¥™¥•5=1}=UQAUQ€¸((ŒŒŒ¡…±±•¹•ÈXÄ…¹Á½ÍÐµXÔÁÉ•¥Í¥½¸ÁÉ½‰”()m)`¡…±±•¹•ÈXÅt¡‘½Ì½)a}!119I}XÄ¹µ¤ÉÕ¹ÌÑ¡É•”±½­•Íµ½­”™¥áÑÕÉ•Ì¥¸)Í•Á…É…Ñ”ÍÕ‰ÁÉ½•ÍÍ•Ìè…¸…¹…±åÑ¥Œ‰¥¹…Éä°„Ý•…¬¡¥•É…É¡ä°…¹„±½Í”)Í…ÑÑ•È¸%ÐÉ•Ñ…¥¹Ì•… Í½±Ù•ÈÌ¹…Ñ¥Ù”µ•ÑÉ¥Ì…¹…¸…‘½ÁÑ¥½¹…°•á…Ð)I	=U9€Ô¸Ä¸Ä±…¹•Ì¸%ÐÉ•…Ñ•Ì¹¼½µµ½¸Í½É”½ÈÉ…¹­¥¹œ…¹µ…­•Ì¹¼)•ÅÕ¥Ù…±•¹”°…ÕÉ…äµÍÕÁ•É¥½É¥Ñä°ÍÁ••µÍÕÁ•É¥½É¥Ñä°½ÈÑ¥µ¥¹œµ½µÁ…É…‰¥±¥Ñä)±…¥´¸%ÑÌÉ•Á½ÉÑÌÉ•µ…¥¸Õ¹…ÕÑ¡•¹Ñ¥…Ñ•°Õ¹ÅÕ…±¥™¥•5=1}=UQAUQ€¸()Q¡”…‘‘¥Ñ¥Ù”Á½ÍÐµXÔÁÉ•¥Í¥½¸ÁÉ½‰”•Ù…±Õ…Ñ•Ì½¹±äÑ¡”•á…Ð•ÅÕ…°µµ…ÍÌ)¥ÉÕ±…Èµ‰¥¹…Éä™¥áÑÕÉ”…Ð@¼ÈÔØ°@¼ÔÄÈ°…¹@¼ÄÀÈÐ¸%ÐÉ•½É‘Ì½¹”´…¹(ÄÀÀµÁ•É¥½)`-,É•ÍÕ±ÑÌ°½ÁÑ¥½¹…°•á…ÐI	=U9€Ô¸Ä¸Ä±•…Á™É½œÉ•ÍÕ±ÑÌ°„)ÍÁ•¥™¥•…¹…±åÑ¥Œ½É…±”°½µÁ±•Ñ”±…¹”É•Á±…åÌ°Í…µÁ±•¥¹Ù…É¥…¹ÑÌ°…¹)™¥áÑÕÉ”µÍÁ•¥™¥Œ•µÁ¥É¥…°ÍÑ…Ñ”½Á¡…Í”É•™¥¹•µ•¹Ð¸%Ð‘½•Ì¹½Ð•ÍÑ…‰±¥Í „)•¹•É…°½ÈÑ¡•½É•Ñ¥…°½¹Ù•É•¹”½É‘•È°½¹Ñ¥¹Õ½ÕÌµÑ¥µ”•¹•Éä‰½Õ¹‘Ì°)±½¹œµÑ•É´ÍÑ…‰¥±¥Ñä°I	=U9ÍÕÁ•É¥½É¥Ñä½È•ÅÕ¥Ù…±•¹”°Í¥•¹Ñ¥™¥Œ)ÅÕ…±¥™¥…Ñ¥½¸°½ÈÁÉ½‘ÕÑ¥½¸™¥Ñ¹•ÍÌì¥ÑÌÉ•Á½ÉÑÌÉ•µ…¥¸Õ¹…ÕÑ¡•¹Ñ¥…Ñ•°)Õ¹ÅÕ…±¥™¥•5=1}=UQAUQ€¸((ŒŒŒA…­…•¹…Ñ¥Ù”½É‰¥Ñ…°‰•¹¡µ…É¬()Q¡”mÁ½ÉÑ…‰±”µÍ•¹…É¥¼•ÅÕ…°µ‰¥¹…ÉäÅÕ…±¥™¥…Ñ¥½¹t¡ÉÕ¹Ì½©á}‘å¹…µ¥Í}Í•¹…É¥½}•ÅÕ…±}‰¥¹…Éå}ØÄ½I5¹µ¤)™É••é•ÌÑ¡É•”½¹Ñ•¹Ðµ…‘‘É•ÍÍ•ÁÕ‰±¥Œå¹…µ¥ÍM•¹…É¥½€¥¹ÁÕÑÌ°Ñ¡”½µÁ±•Ñ”)•¹¥¹”Í½ÕÉ”ÕÍ•Ñ¼•á•ÕÑ”Ñ¡•´°„ÁÉ•ÝÉ¥ÑÑ•¸…¹…±åÑ¥Œ½É…±”…¹€ÄÜ…Ñ•Ì°)Ñ¡É•”‰åÑ”µ¥‘•¹Ñ¥…°…•ÁÑ•É•Á½ÉÑÌ°…¹…¸¥¹‘•Á•¹‘•¹Ð½™™±¥¹”Ù•É¥™¥•È¸)=¸Ñ¡…Ð±½­•ÑÝ¼µ‰½‘ä™¥áÑÕÉ”°I-ÜàÁ…ÍÍ•ÌÑ¡”…‰Í½±ÕÑ”°É•™¥¹•µ•¹Ð°)½¹Í•ÉÙ…Ñ¥½¸°Íåµµ•ÑÉä°…½Õ¹Ñ¥¹œ°µ…¹¥™•ÍÐ°…¹É•ÁÉ½‘Õ¥‰¥±¥Ñä¡•­Ì¸Q¡¥Ì)¥Ì„™¥áÑÕÉ”µÍÁ•¥™¥Œ¹Õµ•É¥…°ÅÕ…±¥™¥…Ñ¥½¸°¹½Ð„•¹•É…°8µ‰½‘ä°)•±•Ù•¸µ‰½‘ä°±Õ¹…ÈµÉ½Ñ…Ñ¥½¸°½ÈÁÉ½‘ÕÑ¥½¸±…¥´¸()Q¡”lÄÀÀµÁ•É¥½•ÅÕ…°µ‰¥¹…ÉäÉ•ÁÉ½‘Õ¥‰¥±¥ÑäÁ…­…•t¡ÉÕ¹Ì½©á}•ÅÕ…±}‰¥¹…Éå|ÄÀÁ}Á•É¥½‘}É•ÁÉ½}ØÄ½I5¹µ¤)ÑÕÉ¹Ì½¹”•á¥ÍÑ¥¹œ‰•¹¡µ…É¬¥¹Ñ¼„Í•±˜µ½¹Ñ…¥¹•°½™™±¥¹”…ÉÑ¥™…Ð¸%Ð)¥¹±Õ‘•ÌÑ¡”•á…Ð)`Í½ÕÉ”Í¹…ÁÍ¡½Ð°™É½é•¸¥¹ÁÕÑÌ…¹…Ñ•Ì°Ñ¡”½µÁ±•Ñ”)Á…Ñ µ¹½Éµ…±¥é•É•™•É•¹”É•ÍÕ±Ð°…¸¥¹‘•Á•¹‘•¹Ð¡•­ÍÕ´½É•ÍÕ±ÐÙ•É¥™¥•È°…¹„)É•…Ñ”µ½¹±äÉ•ÁÉ½‘ÕÑ¥½¸ÉÕ¹¹•È¸9…Ñ¥Ù”-,…¹I-Üà‰½Ñ Á…ÍÌÑ¡•¥È‘•±…É•)…¹…±åÑ¥ŒµÝ½É­±½……Ñ•ÌìÑ¡”É•ÁÉ½‘Õ•Í¥•¹Ñ¥™¥Œ™¥¹•ÉÁÉ¥¹Ðµ…Ñ¡•ÌÑ¡”)É•™•É•¹”•á…Ñ±ä½¸Ñ¡”É•½É‘•ÉÕ¹Ñ¥µ”¸I	=U9¥Ì‘•±¥‰•É…Ñ•±ä‘¥Í…‰±•°)Ñ¥µ¥¹Ì…É”•á±Õ‘•°…¹Ñ¡”É•ÍÕ±Ðµ…­•Ì¹¼•¹•É…°8µ‰½‘ä°ÍÕÁ•É¥½É¥Ñä°½È)ÁÉ½‘ÕÑ¥½¸µÅÕ…±¥™¥…Ñ¥½¸±…¥´¸()Q¡”m½É‰¥Ñ…°Ù…±¥‘…Ñ¥½¸±…‘‘•ÈØÑt¡ÉÕ¹Ì½©á}½É‰¥Ñ…±}Ù…±¥‘…Ñ¥½¹}±…‘‘•É}ØÐ½I5¹µ¤)½µ‰¥¹•ÌÑ¡…Ð…¹…±åÑ¥Œ™½Õ¹‘…Ñ¥½¸Ý¥Ñ „™É•Í ½¹”µ‘…ä°ÐÐÀµ¥¹¥Ñ¥…±¥é•)É•Í½±Ù•µ•±•Ù•¸µ‰½‘ä…ÉÑ£ŠM5½½¸(È™¥áÑÕÉ”…¹…¸…•ÁÑ•‰É½…‘•È(ÈÍÑÕ‘ä¸)Q¡”Ñ¡¥ÉÑ¥•È½Ù•ÉÌÑ¡É•”ÍÑ…ÉÐ•Á½¡Ì°€Ä´°€Ü´°…¹€ÌÀµ‘…ä¡½É¥é½¹Ì°…¹„(äÀÀµÑ¼´ÐÔÀµÍ•½¹ÍÑ•ÀµÍ¥é”Í•¹Í¥Ñ¥Ù¥Ñä¡•¬¸Q¡”Ñ½Àµ±•Ù•°ÉÕ¹¹•È•á•ÕÑ•Ì)Ñ¡”™¥ÉÍÐÑÝ¼ÑÉ…©•Ñ½É¥•Ì™É½´™É•Í ÍÑ…Ñ”…¹±…‰•±ÌÑ¡”µÕ±Ñ¤µ•Á½ Ñ¥•È…Ì)ÁÉ•Í•ÉÙ•…•ÁÑ••Ù¥‘•¹”¸±°Ñ¡É•”½µÁ½¹•¹ÑÌÉ•Ñ…¥¸Í•Á…É…Ñ”±…¥´)‰½Õ¹‘…É¥•ÌèÑ¡•É”¥Ì¹¼É½ÍÌµÑ¥•ÈÍ½É”°¹¼±½¹œµÑ•É´ÅÕ…±¥™¥…Ñ¥½¸°…¹¹¼)±Õ¹…È™±Õ¥µ½É”É•ÍÕ±Ð¸%ÑÌµ…¡¥¹”µÉ•…‘…‰±”Í¥•¹Ñ¥™¥Œ…•ÁÑ…¹”µ…ÑÉ¥à)µ…É­Ì•¹¥¹••É¥¹œÉ•ÁÉ½‘Õ¥‰¥±¥ÑäAMM€Ý¡¥±”É•Ñ…¥¹¥¹œÍ¥•¹Ñ¥™¥Œ)ÅÕ…±¥™¥…Ñ¥½¸…Ì9=Q}EU1%%€…¹Ñ¡”ÁÉ½©•Ð±…¥´ÍÑ…Ñ”…Ì)MI9%9}=91e€¸()Q¡”mATÍ¥•¹Ñ¥™¥Œ±…‘‘•ÈXÅt¡ÉÕ¹Ì½©á}ÁÕ}Í¥•¹Ñ¥™¥}±…‘‘•É}ØÄ½I5¹µ¤)•áÑ•¹‘ÌÑ¡”•¹¥¹••É¥¹œ•Ù¥‘•¹”…É½ÍÌÑ¡”±¥Ù”9ÕµAä…¹ÕAäÁ…Ñ¡Ì¸=¸¥ÑÌ)É•½É‘•ÉÕ¹Ñ¥µ”°…±°€ÈÈà•¹¥¹”Ñ•ÍÑÌÁ…ÍÌ¥¸¹½Éµ…°…¹½ÁÑ¥µ¥é•AåÑ¡½¸°…¹)Ñ¡”™É½é•¸½¹”µ‘…äÉ•‘Õ••±•Ù•¸µ‰½‘äI-Üà•¹‘Á½¥¹Ð¥Ì‰¥ÑÝ¥Í”¥‘•¹Ñ¥…°½¸)AT°É•Á•…Ñ•ATÉÕ¹Ì°…¹Ñ¡”ÁÉ•Í•ÉÙ•ATÉ•™•É•¹”¸%ÑÌÑ¥µ¥¹œ…¹±…É”)UÉ½ÝÌ…É”‘•ÍÉ¥ÁÑ¥Ù”½¹±ä°…¹¥Ð‘½•Ì¹½Ð‘•¥‘”±Õ¹…ÈÉ½Ñ…Ñ¥½¸½È…¹ä)½Ñ¡•ÈÁ¡åÍ¥…°µ½‘•°¸((ŒŒI•ÅÕ¥É•µ•¹ÑÌ((´AåÑ¡½¸€Ì¸ÄÈ½È¹•Ý•È(´9¼Ñ¡¥ÉµÁ…ÉÑä‘•Á•¹‘•¹ä™½ÈÑ¡”±•…ä½É”…¹¥ÑÌ±•…äÕ¹¥ÐÑ•ÍÑÌ(´=ÁÑ¥½¹…°è¹ÕµÁäøôÈ°ðÍ€™½ÈÑ¡”ÁÕ‰±¥Œ•¹•É…°™½É”…¹ÑÉ…©•Ñ½ÉäA$(´=ÁÑ¥½¹…°èÕAä€ÄÐÑ½½±­¥Ð‰Õ¹‘±•Ì€¡ÕÁäµÕ‘„ÄÉámÑ­u€½È(€ÕÁäµÕ‘„ÄÍámÑ­u€¤™½ÈÑ¡”•áÁ±¥¥ÐUÁ…Ñ (´=ÁÑ¥½¹…°èÉ•‰½Õ¹ôôÐ¸Ð¸ÄÅ€™½È%LÄÔ…¹Á½ÁÕ±…Ñ¥½¸µÍ…±”½µµ…¹‘Ì(´=ÁÑ¥½¹…°è…¸¥Í½±…Ñ•É•‰½Õ¹ôôÔ¸Ä¸Å€•¹Ù¥É½¹µ•¹Ð™½È¡…±±•¹•ÈXÄ…¹Ñ¡”(€Á½ÍÐµXÔÁÉ•¥Í¥½¸ÁÉ½‰”Ì•áÑ•É¹…°½µÁ…É¥Í½¸±…¹•Ì(´=ÁÑ¥½¹…°è¹ÕµÁäôôÈ¸Ì¸Õ€…¹Í¥ÁäôôÄ¸ÄÜ¸Á€™½ÈÑ¡”¥¹‘•Á•¹‘•¹Ð=@àÔÌÉÕ¹¹•È((ŒŒ%¹ÍÑ…±°…¹Ñ•ÍÐ()‰…Í )ÁåÑ¡½¸Ì€µ´Ù•¹Ø€¹Ù•¹Ø)Í½ÕÉ”€¹Ù•¹Ø½‰¥¸½…Ñ¥Ù…Ñ”)ÁåÑ¡½¸€µ´Á¥À¥¹ÍÑ…±°€µ”€¸)ÁåÑ¡½¸Ñ½½±Ì½ÉÕ¹}±½…±}Ñ•ÍÑ}µ…ÑÉ¥à¹Áä€´µÁÉ½™¥±”•¹¥¹”)€()%¹ÍÑ…±°Ñ¡”Á¥¹¹•I	=U9‰…­•¹Ý¥Ñ )ÁåÑ¡½¸€µ´Á¥À¥¹ÍÑ…±°€µ”€œ¹mÉ•‰½Õ¹‘t€¸Q¡”±•…ä¥…ÌÄÕ€•áÑÉ„É•µ…¥¹Ì…¸)…±¥…Ì™½È½µÁ…Ñ¥‰¥±¥Ñä¸()%¹ÍÑ…±°Ñ¡”¥¹‘•Á•¹‘•¹ÐÁ½ÁÕ±…Ñ¥½¸µÉ•Á±¥…Ñ¥½¸‰…­•¹Ý¥Ñ )ÁåÑ¡½¸€µ´Á¥À¥¹ÍÑ…±°€µ”€œ¹m¥¹‘•Á•¹‘•¹Ñt€¸()%¹ÍÑ…±°Ñ¡”ÁÕ‰±¥ŒAT‘å¹…µ¥ÌA$Ý¥Ñ )ÁåÑ¡½¸€µ´Á¥À¥¹ÍÑ…±°€µ”€œ¹m•¹¥¹•t€¸½È…¸9Y%%AT°¥¹ÍÑ…±°•á…Ñ±ä½¹”)µ…Ñ¡¥¹œÝ¡••°•áÑÉ„è€¹mÁÔµÕ‘„ÄÉu€™½ÈU€ÄÈ¹à½È€¹mÁÔµÕ‘„ÄÍu€™½È)U€ÄÌ¹à¸Q¡•Í”•áÑÉ…ÌÉ•ÅÕ•ÍÐÕAäÌmÑ­u€‰Õ¹‘±•Ìì„½µÁ…Ñ¥‰±”9Y%%)‘É¥Ù•È¥ÌÍÑ¥±°É•ÅÕ¥É•¸¼¹½Ð¥¹ÍÑ…±°‰½Ñ ÕAäÝ¡••°™…µ¥±¥•Ì¥¸½¹”)•¹Ù¥É½¹µ•¹Ð¸)`Ý¥±°¹½Ð™…±°‰…¬Ñ¼AT¥˜Ñ¡”É•ÅÕ•ÍÑ•AT‰…­•¹¥Ì)Õ¹…Ù…¥±…‰±”¸()]¥Ñ¡½ÕÐ¥¹ÍÑ…±±¥¹œÑ¡”Á…­…”è()‰…Í )ÁåÑ¡½¸ÌÑ½½±Ì½ÉÕ¹}±½…±}Ñ•ÍÑ}µ…ÑÉ¥à¹Áä€´µÁÉ½™¥±”•¹¥¹”)AeQ!=9AQ õÍÉŒÁåÑ¡½¸Ì€µ´©áÁ±…¹•Ñà¹±¤Ù…±¥‘…Ñ”€´µ½ÕÑÁÕÐÙ…±¥‘…Ñ¥½¸¹©Í½¸)€()	Õ¥±Ñ¡”É•±•…Í”…ÉÑ¥™…ÑÌÑÝ¥”™É½´Ñ¡”‘•±…É•Á…­…”µ½¹±ä¥¹ÁÕÐ‰½Õ¹‘…Éä)…¹É•ÅÕ¥É”‰åÑ”¥‘•¹Ñ¥ÑäÝ¥Ñ è()‰…Í )ÁåÑ¡½¸ÌÑ½½±Ì½‰Õ¥±‘}É•±•…Í”¹Áä€´µ½ÕÑÁÕÐµ‘¥È€½ÑµÀ½©áÁ±…¹•Ñà´À¸Ø¸ÁÉŒÄ)€()Q¡”‰Õ¥±‘•ÈÉ•ÅÕ¥É•ÌÑ¡”•á…Ð‰…­•¹Á¥¹¹•¥¸ÁåÁÉ½©•Ð¹Ñ½µ±€°¹½Éµ…±¥é•Ì)Í½ÕÉ”µ…É¡¥Ù”Ñ¥µ•ÍÑ…µÁÌ°½Ý¹•ÉÍ¡¥À°µ½‘•Ì°½É‘•É¥¹œ°…¹é¥Àµ•Ñ…‘…Ñ„°…¹)ÝÉ¥Ñ•Ì…ÉÑ¥™…Ð¡…Í¡•ÌÑ¼IQ%QL¹©Í½¹€¸I•Í•…É •Ù¥‘•¹”…¹™É½é•¸ÉÕ¹Ì)…É”¹½Ð‘¥ÍÑÉ¥‰ÕÑ¥½¸¥¹ÁÕÑÌ¸()Q¡”Í½ÕÉ”µ±½Í••Ù¥‘•¹”Ñ•ÍÑÌ¥¹Ñ•¹Ñ¥½¹…±±äÍÁ…¸µÕÑÕ…±±ä¥¹½µÁ…Ñ¥‰±”)ÉÕ¹Ñ¥µ”½¹ÑÉ…ÑÌ°Í¼‘¼¹½ÐÕÍ”½¹”µ½¹½±¥Ñ¡¥ŒAåÑ¡½¸ÁÉ½•ÍÌÑ¼©Õ‘”Ñ¡”)•áÁ…¹‘•±½…°•Ù¥‘•¹”ÑÉ•”¸Q¡”±½…°µ…ÑÉ¥àÉÕ¹¹•È¥Í½±…Ñ•ÌÑ¡”ÕÉÉ•¹Ð)•¹¥¹”Ñ•ÍÑÌ°I	=U9€Ô¸Ä¸Ä‰É¥‘”°É•Ñ…¥¹•µÝ¡••°±Õ¹…È¡•­Ì°…¹•á…ÐHÈ)±…Õ¹¡•ÈÉÕ¹Ñ¥µ”è()‰…Í )ÁåÑ¡½¸ÌÑ½½±Ì½ÉÕ¹}±½…±}Ñ•ÍÑ}µ…ÑÉ¥à¹Áä€´µÁÉ½™¥±”•¹¥¹”)ÁåÑ¡½¸ÌÑ½½±Ì½ÉÕ¹}±½…±}Ñ•ÍÑ}µ…ÑÉ¥à¹Áä€´µÁÉ½™¥±”•Ù¥‘•¹”)€()Q¡”•Ù¥‘•¹”ÁÉ½™¥±”Ù•É¥™¥•ÌÑ¡”É•Ñ…¥¹•Ý¡••°…¹Í¡…É•µ±¥‰É…Éä¡…Í¡•Ì)‰•™½É”¥µÁ½ÉÑ¥¹œÑ¡•´¸%˜…‰Í•¹Ð°¥ÐÉ•½¹ÍÑÉÕÑÌÑ¡”™É½é•¸•Á¡•µ•É…°)€½ÑµÀ½©àµÉ•™•É•¹”µ½É”µÉÕ¹Ñ¥µ•€Ý¥Ñ Ñ¡”ÍåÍÑ•´AåÑ¡½¸ì¥Ð¹•Ù•È¥¹ÍÑ…±±Ì)Á…­…•Ì½È¡…¹•Ì™É½é•¸ÉÕ¸…ÉÑ¥™…ÑÌ¸UÍ”€´µ±¥‰É…ÉäµÉ½½ÐAQ!€Ý¡•¸Ñ¡”)É•…µ½¹±ä±¥‰É…Éäµ¥ÉÉ½È¥Ìµ½Õ¹Ñ••±Í•Ý¡•É”¸()Q¡”½µÁ±•Ñ”€Äàäµ™¥±”½Ý¹•ÉÍ¡¥À…¹ÉÕ¹Ñ¥µ”Á½±¥ä¥Ì‘½Õµ•¹Ñ•¥¸)m)`Ñ•ÍÐÁÉ½™¥±•Ít¡‘½Ì½QMQ}AI=%1L¹µ¤¸Y…±¥‘…Ñ”¥ÐÝ¥Ñ )ÁåÑ¡½¸ÌÑ½½±Ì½ÉÕ¹}±½…±}Ñ•ÍÑ}µ…ÑÉ¥à¹Áä€´µÙ…±¥‘…Ñ”µ½¹±å€°±¥ÍÐ•Ù•Éä…ÍÍ¥¹µ•¹Ð)Ý¥Ñ €´µ±¥ÍÐµ™¥±•Í€°½ÈÉÕ¸…±°ÕÉÉ•¹ÐµÍ½ÕÉ”ÁÉ½™¥±•ÌÝ¥Ñ €´µÁÉ½™¥±”±¥Ù•€¸()Q¡”Íå¹Ñ¡•Ñ¥Œ‘å¹…µ¥ÌÁÉ½‰”¥Ì½ÁÐµ¥¸…¹¥Ì¹½ÐÁ…ÉÐ½˜Ù…±¥‘…Ñ¥½¸è()‰…Í )ÁåÑ¡½¸‰•¹¡µ…É­Ì½•¹¥¹•}™½É•}‰•¹¡µ…É¬¹Áä€´µ‰…­•¹¹ÕµÁä€´µ‘•Ù¥”ÁÔ)ÁåÑ¡½¸‰•¹¡µ…É­Ì½•¹¥¹•}™½É•}‰•¹¡µ…É¬¹Áä€´µ‰…­•¹ÕÁä€´µ‘•Ù¥”Õ‘„èÀ)€()%ÐÉÕ¹ÌÑ¡”½µÁ±•Ñ”Ñ¡É•”µ™½É”Á±…¸…¹…¸I-ÜàÑÉ…©•Ñ½Éä°É•Á½ÉÑ¥¹œ)•±…ÁÍ•Ñ¥µ”…¹•áÁ±¥¥Ñ±ä½Õ¹Ñ•µ½‘•°¥¹Ñ•É…Ñ¥½¹ÌÁ•ÈÍ•½¹™½È½¹”)‰…­•¹¸%Ð‘½•Ì¹½Ð½µÁ…É”‰…­•¹‘Ì½È±…¥´„ATÍÁ••‘ÕÀ¸()Q¡”Ñ•ÍÐÍÕ¥Ñ”½Ù•ÉÌ¥¹Ñ•É…Ñ½È‰•¡…Ù¥½È°)½¹Ù•É•¹”…Ñ•Ì°™½É”µ•Ù…±Õ…Ñ¥½¸…½Õ¹Ñ¥¹œ°¥¹‘•Á•¹‘•¹ÐµÉ•™•É•¹”±½¥Œ°)¥¹ÍÑ…±±•µÁ…­…”ÁÉ½Ù•¹…¹”°‘•Ñ•Éµ¥¹¥ÍÑ¥Œ•¹Í•µ‰±”•¹•É…Ñ¥½¸°ÍÑÉ¥Ð)ÑÉ…©•Ñ½ÉäÉ•¥ÍÑÉ…Ñ¥½¸°‘¥ÍÑÉ¥‰ÕÑ¥½¸µ•ÑÉ¥Ì°½™™¥¥…°=MM=LÑÉ…­•µ½ÕÑÁÕÐ)¹½Éµ…±¥é…Ñ¥½¸°•á…Ð™¥¹¥Ñ”µÁ½½°ÍÑ…Ñ¥ÍÑ¥Ì°…¹™…¥°µ±½Í•Ù•É‘¥ÑÌ¸((ŒŒ½µµ…¹±¥¹”()‰…Í )©áÁ±…¹•Ñà€´µ¡•±À)©áÁ±…¹•ÑàÙ…±¥‘…Ñ”€´µ½ÕÑÁÕÐÙ…±¥‘…Ñ¥½¸¹©Í½¸)©áÁ±…¹•ÑàÝÉ¥Ñ”µ•¹Í•µ‰±”µ½¹ÑÉ…Ð€´µ½ÕÑÁÕÐ•¹Í•µ‰±”µ½¹ÑÉ…Ð¹©Í½¸)©áÁ±…¹•ÑàÁÉ•Á…É”µ•¹Í•µ‰±”€´µ½¹ÑÉ…Ð•¹Í•µ‰±”µ½¹ÑÉ…Ð¹©Í½¸€´µ½ÕÑÁÕÐÁ±…¸¹±½¬¹©Í½¸)€()Q¡”•¹•É…°•¹Í•µ‰±”Ý½É­™±½ÜÙ…±¥‘…Ñ•Ì•áÑ•É¹…±±ä½µÁÕÑ•ÑÉ…©•Ñ½É¥•Ì¸Q¡”)ÁÉ½©•ÐµÍÁ•¥™¥Œ=@àÔÌµ½‘Õ±”¹½ÜÍÕÁÁ±¥•Ì…¸¥¹‘•Á•¹‘•¹Ð€ÄÀ°ÀÀÀµå•…È)Á½ÁÕ±…Ñ¥½¸É•Á±¥…Ñ¥½¸°‰ÕÐ¹½Ð„•¹•É…°Á¡åÍ¥…°ÍÑ…Ñ”‰Õ¥±‘•È½È½µÁ±•Ñ”(ÄÀÀ°ÀÀÀµå•…ÈÍ½ÕÉ”½½¹ÑÉ½°‰…­•¹¸M•”)mÑ¡”•¹Í•µ‰±”Ù…±¥‘…Ñ¥½¸Õ¥‘•t¡‘½Ì½9M5	1}Y1%Q%=8¹µ¤¸()ÉÕ¸µÁ½ÁÕ±…Ñ¥½¸µÍ…±”µ…Ñ•€¥Ì„¹…ÉÉ½Ý•È•á•ÕÑ¥½¸‰…­•¹™½È±½­•°)Á…¥É•°µ…ÍÍ±•ÍÌµÑÉ…•ÈÍ…±…‰¥±¥ÑäÑ•ÍÑÌ¸%Ð‘½•Ì¹½ÐÑÕÉ¸Ñ¡”ÁÉ•Í•ÉÙ•(ÄÔµ½É‰¥ÐÑ•µÁ±…Ñ”Í•Ð¥¹Ñ¼„Á¡åÍ¥…°Q9<Á½ÁÕ±…Ñ¥½¸µ½‘•°¸M•”)mÑ¡”Á½ÁÕ±…Ñ¥½¸Í…±”µ…Ñ”Õ¥‘•t¡‘½Ì½A=AU1Q%=9}M1}Q¹µ¤¸()ÉÕ¸µ•¹½Õ¹Ñ•ÈµÑ…¥°µÁ¥±½Ñ€ÉÕ¹ÌÑ¡”¡•­Á½¥¹Ñ•€ÄÀ°ÀÀÀµÑÉ…•È½¹ÑÉ½±±•´)Íå¹Ñ¡•Ñ¥Œ•¹½Õ¹Ñ•ÈµÑ…¥°•áÁ•É¥µ•¹Ð…¹¥ÑÌÁÉ•±½­•Ñ¥µ•ÍÑ•Àµ¡…±Ù¥¹œ…Õ‘¥Ð¸)M•”mÑ¡”•¹½Õ¹Ñ•ÈµÑ…¥°Á¥±½ÐÕ¥‘•t¡‘½Ì½9=U9QI}Q%1}A%1=P¹µ¤¸()Q¡”)`µ<ÄÍÕÉÙ•äµÍ•±•Ñ¥½¸Ý½É­™±½Ü•¹•É…Ñ•ÌÁ…¥É•…±¥‰É…Ñ¥½¸Á½ÁÕ±…Ñ¥½¹Ì°)•á•ÕÑ•Ì„Í•Á…É…Ñ•±ä¥¹ÍÑ…±±•…¹¡…Í µ±½­•½™™¥¥…°=MM=LMÕÉÙ•åM¥µÕ±…Ñ½È°)¹½Éµ…±¥é•Ì¥ÑÌÉ•…°€ÄÐµ™¥•±ÑÉ…­•½ÕÑÁÕÐ°…¹•Ù…±Õ…Ñ•Ì…±¥‰É…Ñ¥½¸°Á½Ý•È°)…‘…ÁÑ•È°É•Á±…ä°Í…±”°¥¹‘•Á•¹‘•¹”°…¹Í••µÍÑ…‰¥±¥Ñä…Ñ•Ì¸ÁÕ‰±¥Œ)ÁÉ•É•¥ÍÑÉ…Ñ¥½¸…¹™É•Í ½™™¥¥…°XÐ•á•ÕÑ¥½¸¹½ÜÁÉ½Ù¥‘”¥¹‘•Á•¹‘•¹Ð)½µÁÕÑ…Ñ¥½¹…°½¹™¥Éµ…Ñ¥½¸¸M•”)mÑ¡”ÍÕÉÙ•äµÍ•±•Ñ¥½¸Ù…±¥‘…Ñ¥½¸É•Á½ÉÑt¡‘½Ì½MUIYe}M1Q%=9}Y1%Q%=8¹µ¤¸()M½µ”1$ÍÕ‰½µµ…¹‘ÌÉ•ÁÉ½‘Õ”ÁÉ½©•ÐµÍÁ•¥™¥ŒÐÐÄ°‰•¹¡µ…É¬°½È%LÄÔ)•áÁ•É¥µ•¹ÑÌ¸Q¡½Í”½µµ…¹‘ÌÉ•ÅÕ¥É”•áÑ•É¹…°¥¹ÁÕÐ‰Õ¹‘±•ÌÑ¡…Ð…É”¹½ÐÁ…ÉÐ½˜)Ñ¡¥Ì•¹¥¹”µ½¹±äÉ•Á½Í¥Ñ½Éä¸Q¡•ä™…¥°±½Í•Ý¡•¸É•ÅÕ¥É•µ…¹¥™•ÍÑÌ½È¥¹ÁÕÑÌ)…É”Õ¹…Ù…¥±…‰±”½È¥¹½¹Í¥ÍÑ•¹Ð¸((ŒŒÐÐÄ½!½É¥é½¹Ì½µÁ…Ñ¥‰¥±¥ÑäÉ•ÍÕ±Ð()Q¡”±½­•Ñ•¸µå•…È•áÑ•É¹…°µÉ•™•É•¹”Ù…±¥‘…Ñ¥½¸Á…ÍÍ•¸]¥Ñ …±°Ñ•¸µ…©½È)M½±…ÈµMåÍÑ•´‰…Éå•¹Ñ•ÉÌ…Ñ¥Ù”°Ñ¡”µ…á¥µÕ´…¹¹Õ…°¡•±¥½•¹ÑÉ¥ŒÉ•Í¥‘Õ…°…µ½¹œ))ÕÁ¥Ñ•È°M…ÑÕÉ¸°UÉ…¹ÕÌ°…¹9•ÁÑÕ¹”Ý…Ì€ÌÌ¸ØÀÄÌ­´¥¸Á½Í¥Ñ¥½¸…¹(À¸ÀÀÀÔÄÀÀÐÔ´½Ì¥¸Ù•±½¥Ñä¸±°ÁÉ•‘•±…É•½¹Ù•É•¹”°½¹Í•ÉÙ…Ñ¥½¸°…¹)½µÁ±•Ñ¥½¸…Ñ•Ì…±Í¼Á…ÍÍ•¸Q¡¥ÌÙ…±¥‘…Ñ•Ì½¹±äÑ¡”ÍÑ…Ñ•Í¡½ÉÐµ…ÉŒ)9•ÝÑ½¹¥…¸½µÁ…Ñ¥‰¥±¥ÑäÍ½Á”ì¥Ð¥Ì¹½Ð„™Õ±°ÐÐÄÉ•½¹ÍÑÉÕÑ¥½¸½È…¸)½‰Í•ÉÙ…Ñ¥½¹…°A±…¹•Ð`É•ÍÕ±Ð¸M•”Ñ¡”)m½µÁ±•Ñ”ÁÉ½Ñ½½°…¹É•Á½ÉÑt¡ÉÕ¹Ì½‘”ÐÐÅ}¡½É¥é½¹Í|ÄÁåÈ½I5¹µ¤¸((ŒŒÐÐÄµ‰…­•€ÄÀÀ°ÀÀÀµÑÉ…•ÈÉ•ÍÕ±Ð()Q¡”±½­•€ÄÀ°ÀÀÀµå•…ÈÍ½ÕÉ”½½¹ÑÉ½°ÍÉ••¸½µÁ±•Ñ•€ÄÀÀ°ÀÀÀµ…Ñ¡•)µ…ÍÍ±•ÍÌÑÉ…•ÉÌÁ•È…É´Á±ÕÌ€ÐÀ°ÀÀÀ…Õ‘¥ÐÑÉ…©•Ñ½É¥•Ì¸±°¹Õµ•É¥…°…Ñ•Ì)Á…ÍÍ•¸Q¡”½¹ÑÉ½°…É´ÁÉ½‘Õ•€Ð°ÌÜÜÍ…µÁ±•±½ÜµÁ•É¥¡•±¥½¸¥¹©•Ñ¥½¹Ì…¹)Ñ¡”…¹‘¥‘…Ñ”´äÄÄàÍ½ÕÉ”…É´ÁÉ½‘Õ•€Ð°ÌÜÐ¸Q¡”Í½ÕÉ”µµ¥¹ÕÌµ½¹ÑÉ½°™É…Ñ¥½¸)Ý…ÌƒŠ"HÀ¸ÀÀÀÀÌÝ¥Ñ „Á…¥É•µ‰±½¬€äÔ”‰½½ÑÍÑÉ…À¥¹Ñ•ÉÙ…°½˜)oŠ"HÀ¸ÀÀÀÀä°€¬À¸ÀÀÀÀÍt°•¹Ñ¥É•±ä¥¹Í¥‘”Ñ¡”ÁÉ•‘•±…É•ƒ
+ÄÀ¸ÀÀÄ•ÅÕ¥Ù…±•¹”)µ…É¥¸¸Q¡”É•ÍÕ±Ð¥ÌÑ¡•É•™½É”EU%Y19Q}]%Q!%9}1=-}5I%9€…¹É•µ…¥¹Ì)MI9%9}=91eƒŠQ¥Ð¥Ì¹½Ð„A±…¹•Ð`‘•Ñ•Ñ¥½¸½È•á±ÕÍ¥½¸¸M•”Ñ¡”)m½µÁ±•Ñ”ÁÉ½Ñ½½°°…Õ‘¥Ð°…¹¥¹Ñ•ÉÁÉ•Ñ…Ñ¥½¹t¡ÉÕ¹Ì½‘”ÐÐÅ}Á½ÁÕ±…Ñ¥½¹|ÄÀÁ¬½I5¹µ¤¸((ŒŒ%¹‘•Á•¹‘•¹Ð=@àÔÌÉ•Á±¥…Ñ¥½¸É•ÍÕ±Ð()¸½ÕÑ½µ”µ‰±¥¹M!´ÈÔØÍ•±•Ñ¥½¸½˜Ñ•¸€Ä°ÀÀÀµÑÉ…•È‰±½­Ì™É½´Ñ¡”(ÄÀÀ°ÀÀÀµÑÉ…•È•áÁ•É¥µ•¹ÐÝ…Ì¥¹‘•Á•¹‘•¹Ñ±äÉ•ÉÕ¸Ý¥Ñ „Í•Á…É…Ñ”9•ÝÑ½¹¥…¸)™½É”¥µÁ±•µ•¹Ñ…Ñ¥½¸…¹M¥Aä=@àÔÌ¸Q¡”½ÉÉ•Ñ¥Ù”¡¥ µÉ•Í½±ÕÑ¥½¸ÉÕ¸)Á…ÍÍ••Ù•ÉäÕ¹¡…¹•¹Õµ•É¥…°…¹É½ÍÌµÍ½™ÑÝ…É”…Ñ”¸=@àÔÌ…¹I	=U9)¥‘•¹Ñ¥™¥••á…Ñ±äÑ¡”Í…µ”€ÐÌÌ¥¹©•Ñ¥½¹Ì¥¸½¹ÑÉ½°…¹Ñ¡”Í…µ”€ÐÌÌ¥¸)Í½ÕÉ”°Ý¥Ñ é•É¼¥‘•¹Ñ¥Ñä‘¥Í…É••µ•¹Ð°€ÄÀÀ”ÍÕÉÙ¥Ù…°°…¹„Á…¥É•Í½ÕÉ”´)µ¥¹ÕÌµ½¹ÑÉ½°•™™•Ð½˜€À¸ÀÝ¥Ñ ‰½½ÑÍÑÉ…À¥¹Ñ•ÉÙ…°lÀ¸À°€À¸Áu€¸()Q¡”™¥ÉÍÐ¥¹‘•Á•¹‘•¹Ð…ÑÑ•µÁÐ¥ÌÁÉ•Í•ÉÙ•…Ì%9Y1%€è¥Ðµ¥ÍÍ•½¹”ÍÑÉ¥Ð)•¹‘Á½¥¹ÐµÁ½Í¥Ñ¥½¸…Ñ”‰ä€ÈÜ¸Ô”Ý¡¥±”…±°Á½ÁÕ±…Ñ¥½¸…Ñ•ÌÁ…ÍÍ•¸±½­•)‘¥…¹½ÍÑ¥Œ…ÑÑÉ¥‰ÕÑ•Ñ¡”µ¥ÍÌÑ¼…‘…ÁÑ¥Ù”É•Í½±ÕÑ¥½¸ìØÈ‘½Õ‰±•Ñ•µÁ½É…°)É•Í½±ÕÑ¥½¸Ý¥Ñ¡½ÕÐÉ•±…á¥¹œ…¹äÑ¡É•Í¡½±…¹Á…ÍÍ•¸Í•Á…É…Ñ”…ÉÑ¥™…Ð)…Õ‘¥ÐÑ¡•¸É•¡…Í¡•€ÄÀÀ¡•­Á½¥¹ÑÌ°É•½¹ÍÑÉÕÑ•™¥¹…°½É‰¥Ñ…°•±•µ•¹ÑÌ°…¹)É•½µÁÕÑ•Ñ¡”AMM€Ù•É‘¥Ð¸Q¡”½¹±ÕÍ¥½¸É•µ…¥¹ÌMI9%9}=91e€¸M•”)Ñ¡”m™Õ±°¥¹‘•Á•¹‘•¹ÐÉ•Á±¥…Ñ¥½¸É•Á½ÉÑt¡ÉÕ¹Ì½¥¹‘•Á•¹‘•¹Ñ}‘½ÀàÔÍ|ÄÁ¬½I5¹µ¤¸((ŒŒ)`µ<ÄÑ•±•Í½Á”µÍ•±•Ñ¥½¸É•ÍÕ±Ð()XÐ¥¹‘•Á•¹‘•¹Ñ±äÉ•Á•…Ñ•Ñ¡”±½­•…±¥‰É…Ñ¥½¸Ý¥Ñ ™É•Í ¥¹ÑÉ¥¹Í¥Œ)Á½ÁÕ±…Ñ¥½¹Ì°½™™¥¥…°µ‘É¥Ù•ÈÍ••‘Ì°É•Í…µÁ±¥¹œÍÑÉ•…µÌ°É…Ü½ÕÑÁÕÑÌ°…¹Á½½°)¡…Í¡•Ì¸%ÐÁÉ½•ÍÍ•€ÌÌ°ÔÀÀ°ÌÌÔ¥¹ÑÉ¥¹Í¥Œ½‰©•ÑÌ…¹ÁÉ½‘Õ•€ÈÄÈ½ÉÉ•Ðµµ½‘•°)…¹€ÈÀÔ‘•±¥‰•É…Ñ•±äÝÉ½¹œµµ½‘•°ÑÉ…­•‘•Ñ•Ñ¥½¹Ì¸Ù•ÉäÕ¹¡…¹•…Ñ”)Á…ÍÍ•è€Ð¸ØÔ”™…±Í”É•©•Ñ¥½¸°€ÄÀÀ”ÝÉ½¹œµµ½‘•°Á½Ý•È°•á…Ð™¥¹¥Ñ”µÁ½½°é•Ñ„)µ½µ•¹ÑÌ°•á…ÐÉ•Á±…ä°É…Üµ…‘…ÁÑ•È¥‘•¹Ñ¥Ñä°¡•­Á½¥¹ÐÉ•Á±…ä°…¹ÍÑ…‰±”)Ù•É‘¥ÑÌ™½È…±°Ñ•¸±•…Ù”µ½¹”µ‰±½¬µ½ÕÐ•Ù…±Õ…Ñ¥½¹Ì¸()Q¡”‘•Í¥¸Ý…ÌÁÕ‰±¥Í¡•…¹$µÙ…±¥‘…Ñ•‰•™½É”XÐ•á•ÕÑ¥½¸¸Q¡”½É¥¥¹…°XÈ)É•ÍÕ±ÐÉ•µ…¥¹Ì%9Y1%€°…¹Ñ¡”XÌ½ÉÉ•Ñ¥Ù”É•Á±…äÉ•µ…¥¹Ì„¹½¸µ¥¹‘•Á•¹‘•¹Ð)AMM€É•½É¸XÐ¥Ì¥¹‘•Á•¹‘•¹Ð½µÁÕÑ…Ñ¥½¹…°½¹™¥Éµ…Ñ¥½¸½˜Ñ¡”±½­•)Ñ•±•Í½Á”µÍ•±•Ñ¥½¸…±¥‰É…Ñ¥½¸Ý½É­™±½ßŠQ¹½Ð„A±…¹•Ð`‘•Ñ•Ñ¥½¸°•á±ÕÍ¥½¸°)½ÈÙ…±¥‘…Ñ¥½¸½˜„Á¡åÍ¥…°‘¥ÍÑ…¹ÐµÍ½ÕÉ”µ½‘•°¸M•”Ñ¡”)m½µÁ±•Ñ”)`µ<ÄÉ•Á½ÉÑt¡ÉÕ¹Ì½ÍÕÉÙ•å}Í•±•Ñ¥½¹}¼Ä½I5¹µ¤¸((ŒŒA…­…”µ…À()Ñ•áÐ)ÍÉŒ½©áÁ±…¹•Ñà¼(€•¹¥¹”¼€€€€€€€€€€€€€€€€€€ÁÕ‰±¥Œ…±Á¡„™½É”½ÑÉ…©•Ñ½Éä½¹ÑÉ…ÑÌ°…Ñ…±½œ°(€€€€€€€€€€€€€€€€€€€€€€€€€€€‰…­•¹‘Ì°­•É¹•±Ì°•Ù…±Õ…Ñ½È°I-Üà°…¹ÍÑ…¹‘…±½¹”(€€€€€€€€€€€€€€€€€€€€€€€€€€€•¹½Õ¹Ñ•ÈµÍ•µ•¹ÐÉÕ¹Ñ¥µ”(€‘•¥µ…±}µ…Ñ ¹Áä€€€€€€€€€ÁÉ•¥Í¥½¸…¹Ù•Ñ½ÈÁÉ¥µ¥Ñ¥Ù•Ì(€‘å¹…µ¥Ì¹Áä€€€€€€€€€€€€€8µ‰½‘ä…•±•É…Ñ¥½¸°ÍÑ…Ñ”°…¹¥¹Ù…É¥…¹ÑÌ(€™½É•}É•¥ÍÑÉå}ØÔ¹Áä€€€€™…¥°µ±½Í•XÔÁ¡åÍ¥ÌµÉ•¥ÍÑÉä¥¹ÍÁ•Ñ¥½¸(€Í½±…É|ÅÁ¸¹Áä€€€€€€€€€€€€¹½¹…ÕÑ¡½É¥é¥¹œ•¥µ…°M½±…È€ÅA8É•™•É•¹”­•É¹•°(€ØÕ}É•™•É•¹•}‘å¹…µ¥Ì¹Áä¹½¹…ÕÑ¡½É¥é¥¹œ9•ÝÑ½¹¥…¸µÁ±ÕÌ´ÅA8™½É”±•‘•È(€ØÕ}¥µÁ±¥¥Ñ}µ¥‘Á½¥¹Ð¹Áä€™¥á•µÍÑ•À•¥µ…°Ù•±½¥Ñäµ‘•Á•¹‘•¹ÐÉ•™•É•¹”(€ØÕ}Í½±…É|ÅÁ¹}ÅÕ…±¥™¥…Ñ¥½¸¹Áä™…¥°µ±½Í•™É½é•¸µÁ…­…”¥¹ÍÁ•Ñ½È½¹±ä(€Í½±…É}ÍåÍÑ•´¼€€€€€€€€€€€Õ¹ÁÕ‰±¥Í¡•½ÁÐµ¥¸MA%½ÐÐÁÌ½¹ÑÉ…ÑÌ…¹(€€€€€€€€€€€€€€€€€€€€€€€€€€É•Í½±Ù•µ•±•Ù•¸9•ÝÑ½¹¥…¸¥¹ÁÕÐÁÉ•Á…É…Ñ¥½¸(€å½Í¡¥‘„Ø¹Áä€€€€€€€€€€€€€Í¥áÑ µ½É‘•ÈÍåµµ•ÑÉ¥Œ¥¹Ñ•É…Ñ½È(€‘•¥µ…±}‰Ì¹Áä€€€€€€€€€€€¥¹‘•Á•¹‘•¹Ð	Õ±¥ÉÍ£ŠMMÑ½•ÈÉ•™•É•¹”(€¥…ÌÄÕ}…Ñ”¹Áä€€€€€€€€€€€%LÄÔ…¹Á½ÁÕ±…Ñ¥½¸½µÁ…É¥Í½¸…Ñ•Ì(€•¹Í•µ‰±•}Ù…±¥‘…Ñ¥½¸¹Áä€±½­•¡…½Ñ¥ŒµÁ½ÁÕ±…Ñ¥½¸•¹Í•µ‰±”Ù…±¥‘…Ñ¥½¸(€Á½ÁÕ±…Ñ¥½¹}Í…±”¹Áä€€€€Á…¥É•±…É”µÁ½ÁÕ±…Ñ¥½¸•á•ÕÑ¥½¸Í…±”…Ñ”(€•¹½Õ¹Ñ•É}Ñ…¥°¹Áä€€€€€€¡•­Á½¥¹Ñ•Íå¹Ñ¡•Ñ¥Œ•¹½Õ¹Ñ•ÈµÑ…¥°Á¥±½Ð(€‘”ÐÐÅ}…¹¡½È¹Áä€€€€€€€€€‘•±…É•ÐÐÄµ…¹¡½È¥µÁ½ÉÐÝ½É­™±½Ü(€‘”ÐÐÅ}Á½ÁÕ±…Ñ¥½¸¹Áä€€€€€É•…°µ•Á½ Á…¥É•Á½ÁÕ±…Ñ¥½¸•á•ÕÑ¥½¸…¹…Ñ•Ì(€¥¹‘•Á•¹‘•¹Ñ}‘½ÀàÔÌ¹Áä€€€¥¹‘•Á•¹‘•¹Ð=@àÔÌÁ½ÁÕ±…Ñ¥½¸É•Á±¥…Ñ¥½¸‰…­•¹(€ÍÕÉÙ•å}Í•±•Ñ¥½¸¹Áä€€€€€™É½é•¸ØÄÍÕÉÙ•äµÍ•±•Ñ¥½¸…Õ‘¥Ð¥µÁ±•µ•¹Ñ…Ñ¥½¸(€ÍÕÉÙ•å}Í•±•Ñ¥½¹}ØÈ¹Áä€€½ÉÉ•Ñ•½™™¥¥…°€ÄÐµ™¥•±=MM=L…‘…ÁÑ•È(€ÍÕÉÙ•å}Í•±•Ñ¥½¹}ØÌ¹Áä€€•á…Ðµé•Ñ„½ÉÉ•Ñ¥Ù”É•Á±…ä•Ù…±Õ…Ñ½È(€ÍÕÉÙ•å}Í•±•Ñ¥½¹}ØÐ¹Áä€€™É•Í µÁ½½°¥¹‘•Á•¹‘•¹Ð½¹™¥Éµ…Ñ¥½¸•Ù…±Õ…Ñ½È(€ÁÉ½‘ÕÑ¥½¹}‰•¹¡µ…É¬¹Áä±½­•‰•¹¡µ…É¬Ù•É¥™¥…Ñ¥½¸(€…Ñ•Ì¹Áä€€€€€€€€€€€€€€€€¹Õµ•É¥…°Ù…±¥‘…Ñ¥½¸…Ñ•Ì(€±…¥µÌ¹Áä€€€€€€€€€€€€€€€Í¥•¹Ñ¥™¥Œ±…¥´µ½¹ÑÉ½°ÍÑ…Ñ”µ…¡¥¹”(€ÁÉ½Ù•¹…¹”¹Áä€€€€€€€€€€€…¹½¹¥…°¡…Í¡•Ì…¹…Ñ½µ¥ŒÉÕ¸É•½É‘Ì(€±¤¹Áä€€€€€€€€€€€€€€€€€€½µµ…¹µ±¥¹”¥¹Ñ•É™…”)€((ŒŒIÕ¹Ñ¥µ”¥¹‘•Á•¹‘•¹”()¡…ÑAP½)`¡•±Á•‘•Ù•±½À…¹½É…¹¥é”Ñ¡”ÁÉ½©•Ð°‰ÕÐÑ¡”É•±•…Í••¹¥¹”‘½•Ì)¹½ÐÉ•ÅÕ¥É”¡…ÑAP°…¸A$­•ä°½È…¸¥¹Ñ•É¹•Ð½¹¹•Ñ¥½¸Ñ¼ÉÕ¸¥ÑÌ½É”Ñ•ÍÑÌ)…¹Ù…±¥‘…Ñ¥½¸½µµ…¹¸((ŒŒ¥Ñ…Ñ¥½¸…¹±¥•¹Í”()¥Ñ…Ñ¥½¸µ•Ñ…‘…Ñ„¥ÌÁÉ½Ù¥‘•¥¸%QQ%=8¹™™€¸=É¥¥¹…°)`µ…Ñ•É¥…°¥¸Ñ¡”)ÕÉÉ•¹ÐÉ•Á½Í¥Ñ½ÉäÉ•Ù¥Í¥½¸¥ÌÁÉ½ÁÉ¥•Ñ…Éä…¹…±°É¥¡ÑÌ…É”É•Í•ÉÙ•‰ä)1¥¹¼Ù¥±„ìÕÍ”°½Áå¥¹œ°µ½‘¥™¥…Ñ¥½¸°ÁÕ‰±¥…Ñ¥½¸°‘¥ÍÑÉ¥‰ÕÑ¥½¸°½µµ•É¥…°)ÕÍ”°…¹‘•É¥Ù…Ñ¥Ù”Ý½É­ÌÉ•ÅÕ¥É”ÁÉ¥½ÈÝÉ¥ÑÑ•¸…ÕÑ¡½É¥é…Ñ¥½¸¸=ÁÑ¥½¹…°)Ñ¡¥ÉµÁ…ÉÑäÁ…­…•ÌÉ•Ñ…¥¸Ñ¡•¥È½Ý¸±¥•¹Í•Ì¸…É±¥•ÈÁÕ‰±¥Œ½Á¥•ÌÉ•Ñ…¥¸)Ñ¡”±¥•¹Í•ÌÑ¡…Ð…½µÁ…¹¥•Ñ¡•´°…¹¡¥ÍÑ½É¥…°É•±•…Í”µ…¹¥™•ÍÑÌÉ•µ…¥¸)Õ¹¡…¹•¸(

@@ -1,16 +1,1 @@
-# Third-party notices
-
-The JX source code in `src/jxplanetx/` is released under the MIT License in
-the repository root.
-
-The complete research archive also preserves REBOUND 4.4.11 source and a
-Python 3.12 Linux wheel solely to reproduce the optional IAS15 comparison
-path. REBOUND is distributed under the GNU General Public License version 3;
-its complete license text is included in both preserved distributions. The
-REBOUND source archive is provided alongside the wheel as corresponding
-source.
-
-The other preserved ZIP bundles under `imports/` are JX project evidence and
-benchmark inputs. They are included for reproducibility and retain their own
-embedded provenance and notices.
-
+¨¥yÛhr·šµë-­æ¦}Ó©z¶­Š‰ç¢Ú^®h­µçEj)^vÚ­æ­zËky©Ÿtê^­«b¢yè¶—«š+myÑZŠW¶‡+y«^²ÚŞjgİ:—«jØ¨z-¥êæŠÛ^tŒQ¡¥ÉµÁ…ÉÑä¹½Ñ¥•Ì()=É¥¥¹…°)`Í½ÕÉ”½‘”…¹ÁÉ½©•Ğµ…Ñ•É¥…°¥¸Ñ¡”ÕÉÉ•¹ĞÉ•Á½Í¥Ñ½ÉäÉ•Ù¥Í¥½¸)…É”½Ù•É¹•‰äÑ¡”ÁÉ½ÁÉ¥•Ñ…Éä…±°µÉ¥¡ÑÌµÉ•Í•ÉÙ•¹½Ñ¥”¥¸Ñ¡”É•Á½Í¥Ñ½Éä)É½½Ğ¸…É±¥•ÈÁÕ‰±¥Œ½Á¥•ÌÉ•Ñ…¥¸Ñ¡”±¥•¹Í•Ì…¹¹½Ñ¥•ÌÑ¡…Ğ…½µÁ…¹¥•)Ñ¡•´¸()Q¡”½µÁ±•Ñ”É•Í•…É …É¡¥Ù”…±Í¼ÁÉ•Í•ÉÙ•ÌI	=U9€Ğ¸Ğ¸ÄÄÍ½ÕÉ”…¹„)AåÑ¡½¸€Ì¸ÄÈ1¥¹Õàİ¡••°Í½±•±äÑ¼É•ÁÉ½‘Õ”Ñ¡”½ÁÑ¥½¹…°%LÄÔ½µÁ…É¥Í½¸)Á…Ñ ¸I	=U9¥Ì‘¥ÍÑÉ¥‰ÕÑ•Õ¹‘•ÈÑ¡”9T•¹•É…°AÕ‰±¥Œ1¥•¹Í”Ù•ÉÍ¥½¸€Ìì)¥ÑÌ½µÁ±•Ñ”±¥•¹Í”Ñ•áĞ¥Ì¥¹±Õ‘•¥¸‰½Ñ ÁÉ•Í•ÉÙ•‘¥ÍÑÉ¥‰ÕÑ¥½¹Ì¸Q¡”)I	=U9Í½ÕÉ”…É¡¥Ù”¥ÌÁÉ½Ù¥‘•…±½¹Í¥‘”Ñ¡”İ¡••°…Ì½ÉÉ•ÍÁ½¹‘¥¹œ)Í½ÕÉ”¸()Q¡”½Ñ¡•ÈÁÉ•Í•ÉÙ•i%@‰Õ¹‘±•ÌÕ¹‘•È¥µÁ½ÉÑÌ½€…É”)`ÁÉ½©•Ğ•Ù¥‘•¹”…¹)‰•¹¡µ…É¬¥¹ÁÕÑÌ¸Q¡•ä…É”¥¹±Õ‘•™½ÈÉ•ÁÉ½‘Õ¥‰¥±¥Ñä…¹É•Ñ…¥¸Ñ¡•¥È½İ¸)•µ‰•‘‘•ÁÉ½Ù•¹…¹”…¹¹½Ñ¥•Ì¸
