@@ -5,7 +5,8 @@
 The `jxplanetx.engine` package is a **general-purpose experimental
 force/right-hand-side and trajectory alpha**. It is not specific to Planet X. The current
 release provides instantaneous acceleration evaluation, an adaptive
-checkpoint trajectory integrator, a narrow fixed-step Newtonian KDK map, and
+checkpoint trajectory integrator, an adaptive-RKF78 scenario and matched
+additive-force comparison layer, a narrow fixed-step Newtonian KDK map, and
 an ordered-Jacobi Wisdom--Holman KDK map for a strictly guarded hierarchical
 Newtonian domain. It also provides one standalone adaptive full-Cartesian
 Newtonian encounter-segment solver with an exact local-IVP clearance
@@ -24,7 +25,8 @@ engines. Every result is `MODEL_OUTPUT`, `registry_authorized=False`,
 `qualification_authorized=False`, and `qualified=False`.
 
 `evaluate()` and `evaluate_forces()` return accelerations only.
-`integrate_trajectory()`, `integrate_encounter_segment()`,
+`integrate_trajectory()`, `run_dynamics_scenario()`,
+`run_matched_scenario_comparison()`, `integrate_encounter_segment()`,
 `integrate_kdk_trajectory()`,
 `integrate_wisdom_holman_trajectory()`, and
 `integrate_hybrid_wisdom_holman_rkf78_trajectory()` are separate, explicit
@@ -49,6 +51,7 @@ intentionally narrow map, not a general symplectic framework.
 | Repeatability | Same runtime, device, software stack, force order, body order, and tile size | No cross-device or cross-backend bitwise guarantee |
 | Composition | Exact built-in types in canonical order: Newtonian, restricted 1PN, SRP | Unknown types, duplicate model IDs, reversed order, and missing dependencies fail closed |
 | Integration | Fehlberg's 13-stage adaptive RK7(8), advancing the hatted eighth-order solution | One global adaptive step, exact checkpoints by clipping, no interpolation or event system |
+| Scenario assembly | One RKF78 state/force/integrator request and same-state additive-force control/candidate comparisons | Model-to-model checkpoint differences only; no error, improvement, or physics claim |
 | Standalone encounter segment | Full-Cartesian adaptive RK7(8), exact signed-duration accounting, pair/centroid defect control, and exact all-pair local-IVP clearance certificates | NumPy CPU only; mutual all-active positive-GM Newtonian scope; no event, collision, global-clearance, or hybrid-switching claim |
 | Fixed-step mapping | Second-order kick-drift-kick for fully mutual Newtonian active bodies | NumPy CPU only; integer step-index outputs, mandatory encounter and resolution guards, no passive tracers |
 | Hierarchical mapping | Second-order ordered-Jacobi interaction-kick/Kepler-drift/interaction-kick | NumPy CPU only; elliptic, low-secondary-mass, non-encounter domain; mandatory semantic replay; no passive tracers |
@@ -386,6 +389,18 @@ result bindings. Checkpoints expose copies of the accepted high-word state;
 the internal compensation carries continue across checkpoints but are not a
 public restart state. No checkpoint-restart equivalence is claimed.
 
+For NumPy, every retained array is owned, pairwise disjoint, C-contiguous,
+read-only, and covered with the other retained result fields by
+`result_content_sha256`. This unauthenticated content checksum detects a stale
+or incoherently replaced result when
+`validate_trajectory_result_integrity(result)` is called; it is not a signature
+or proof of origin. CuPy exposes no equivalent read-only flag,
+and JX does not copy numerical results to the host merely to hash them. A CuPy
+result therefore has `result_content_sha256=None` and reports
+`DEVICE_RESIDENT_OWNED_DISJOINT_NO_HOST_CONTENT_HASH`; its buffers are owned
+and disjoint but remain directly mutable by the caller. This is an explicit
+GPU custody limitation, not a hidden device-to-host synchronization.
+
 Checkpoint position and velocity arrays stay on the selected backend and
 device. The adaptive controller synchronizes only scalar decisions. There is
 no implicit host/device conversion, CPU fallback, or float32 trajectory path.
@@ -396,6 +411,41 @@ collision response, close-encounter switching, regularization, symplectic
 mapping, multirate stepping, or implicit solve. Coincidence and finite-radius
 contact continue to fail in the force layer; the trajectory runtime does not
 step through or resolve them.
+
+## Public dynamics scenario API
+
+`DynamicsScenario` assembles one existing snapshot, force plan, and adaptive
+RKF78 request under an explicit role and description. A standalone scenario
+runs through `run_dynamics_scenario()` and retains the complete underlying
+`TrajectoryResult`.
+
+`MatchedScenarioComparison` supports one deliberately narrow experiment: an
+explicit control and a candidate that appends named force terms. The two arms
+must share the exact snapshot and integration-spec objects, equal backend
+contracts, and the exact ordered control force-object prefix. The candidate
+is executed from the control result's retained copies of the state,
+integration request, backend, and force prefix. This prevents the executed
+baseline from silently changing between arms.
+
+`run_matched_scenario_comparison()` runs control then candidate and returns
+both trajectories plus fixed-order per-body checkpoint norms of candidate
+minus control position and velocity. Those scalar records are explicitly
+`MODEL_TO_MODEL_CHECKPOINT_DIFFERENCE_NOT_ACCURACY_OR_IMPROVEMENT`. Every
+accuracy, improvement, physics, registry, and qualification control remains
+false.
+
+`dump_dynamics_scenario_manifest()` and
+`load_dynamics_scenario_manifest()` provide the V1 portable boundary for these
+scenarios. The canonical ASCII JSON uses exact hexadecimal binary64 values,
+explicit C-order arrays, the complete fixed RKF78 contract, and an external
+SHA-256 identity. Loading currently supports NumPy/CPU only and returns
+read-only arrays. The hash detects changed bytes but is not a signature or a
+scientific qualification.
+
+V1 is RKF78-only and additive-force-only. It does not expose the research J2,
+full EIH, eleven-body, or lunar-rotation paths as public engine capabilities.
+The complete contract, example, arithmetic policy, and next qualification
+steps are in [Dynamics scenarios V1](DYNAMICS_SCENARIOS.md).
 
 ## Public standalone adaptive encounter-segment API
 

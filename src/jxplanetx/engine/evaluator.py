@@ -255,9 +255,12 @@ def _indices_for_ids(
         raise EvaluationError(f"{label} must be a nonempty immutable tuple")
     if len(set(body_ids)) != len(body_ids):
         raise EvaluationError(f"{label} contains duplicate body identifiers")
+    index_by_id = {
+        body_id: index for index, body_id in enumerate(snapshot.body_ids)
+    }
     try:
-        return tuple(snapshot.body_ids.index(body_id) for body_id in body_ids)
-    except ValueError as exc:
+        return tuple(index_by_id[body_id] for body_id in body_ids)
+    except KeyError as exc:
         raise EvaluationError(f"{label} references a body absent from the snapshot") from exc
 
 

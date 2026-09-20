@@ -1,6 +1,7 @@
 import dataclasses
 import importlib
 import sys
+from types import SimpleNamespace
 import unittest
 from unittest import mock
 
@@ -23,9 +24,15 @@ from jxplanetx.engine import (
     evaluate,
 )
 from jxplanetx.engine.backends import resolve_backend
+from jxplanetx.engine.evaluator import _indices_for_ids
 
 
 UNIT_SYSTEM_ID = "fixture.au_day_solar_mass"
+
+
+class _NoLinearIndexTuple(tuple):
+    def index(self, *args, **kwargs):
+        raise AssertionError("body lookup must not perform repeated tuple.index scans")
 
 
 def provenance() -> Provenance:
@@ -127,6 +134,17 @@ def state_and_plan(xp, backend_id: str, device: str):
         (newtonian, relativity, srp),
     )
     return state, plan
+
+
+class IdentifierLookupTests(unittest.TestCase):
+    def test_body_lookup_uses_one_linear_index_map(self):
+        snapshot = SimpleNamespace(
+            body_ids=_NoLinearIndexTuple(("SUN", "EARTH", "MOON", "MARS"))
+        )
+        self.assertEqual(
+            _indices_for_ids(snapshot, ("MARS", "SUN", "MOON"), "fixture ids"),
+            (3, 0, 2),
+        )
 
 
 class BackendSelectionTests(unittest.TestCase):

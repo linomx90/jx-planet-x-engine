@@ -3,6 +3,78 @@
 All notable package changes are recorded here. Scientific outcomes and their
 claim boundaries remain documented in the corresponding locked run reports.
 
+## 0.6.0rc1 — 2026-09-19
+
+### Added
+
+- General Dynamics registry v17 with explicit top-level `SCREENING_ONLY`,
+  package-version binding, and preserved capability-specific claim ceilings.
+- A create-only release builder that performs two independent clean builds,
+  canonicalizes source-archive metadata, and rejects non-identical artifacts.
+- A fail-closed CUDA release gate with an exact five-test GPU core roster and
+  a create-only machine-readable hardware/runtime report.
+- Modern MIT license metadata, the full license text, packaging regressions,
+  and independent wheel/source-install smoke gates.
+
+### Changed
+
+- Aligned package, CLI, citation, documentation, and registry identity at
+  `0.6.0rc1`.
+- Corrected CuPy trajectory documentation to match its actual no-host-hash,
+  device-resident ownership contract. No numerical behavior changed.
+- Preserved explicitly selected virtual-environment Python paths in the test
+  matrix runner instead of resolving them to the base interpreter.
+
+### Boundaries
+
+- The release remains `SCREENING_ONLY`, is not production-ready, and is not a
+  unified multiphysics execution qualification.
+- Benchmark qualifications remain limited to their exact frozen workloads.
+- Current CPU tests pass locally. The current CUDA core gate also passes on the
+  exact recorded RTX 5060 Ti/CUDA 13.2/CuPy 14.2.0 runtime: 233 engine tests
+  with no skips plus the five GPU-specific tests under optimized Python. This
+  does not generalize across devices or authorize performance/scientific claims.
+- Registry v16, frozen runs, evidence, archives, and earlier manifests remain
+  immutable.
+
+## 0.4.0a2 — 2026-09-12
+
+### Added
+
+- Portable NumPy/CPU dynamics scenarios with canonical binary64 manifests and
+  same-state, same-integrator control/candidate comparisons.
+- Reproducible portable-scenario equal-binary, narrow CPU/CUDA parity, and GPU
+  scientific-ladder packages with offline standard-library verifiers.
+- A project-owned CUDA qualification on an NVIDIA GeForce RTX 5060 Ti: the
+  frozen package's then-current 228-test engine scope passed in normal and
+  optimized Python, the final 231-test checkpoint scope also passes in both
+  modes, and a
+  one-day reduced eleven-body RKF78 endpoint reproduced bit-for-bit across
+  NumPy CPU, repeated CuPy GPU runs, and the preserved CPU reference.
+- A descriptive large mutual-Newtonian CUDA scale lane covering 4,096 through
+  65,536 bodies, with device residency, finite-output digests, memory guards,
+  and sampled hardware telemetry.
+
+### Changed
+
+- Force-plan body identifiers are resolved through a linear lookup map instead
+  of repeated tuple scans. A non-timing regression test prevents restoration
+  of the quadratic lookup.
+- Optional CuPy trajectory residency tests now inspect each checkpoint array
+  rather than mistakenly treating the result's array tuples as device arrays.
+- Root documentation now separates recorded-machine GPU evidence from general
+  GPU, performance, production, and scientific claims.
+
+### Boundaries
+
+- GPU evidence is fixture-, device-, runtime-, dtype-, force-order-, body-order-,
+  and tile-size-specific. It is not a portable speedup or general production
+  qualification.
+- The eleven-body fixture is a reduced Newtonian model initialized from
+  DE440-derived data, not a reproduction of the DE440 ephemeris.
+- Lunar rotation, fluid-core physics, Planet X, and all observational outcomes
+  remain outside this engineering checkpoint and undecided.
+
 ## 0.4.0a1 — 2026-09-06
 
 ### Added

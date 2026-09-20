@@ -335,14 +335,14 @@ def parser() -> argparse.ArgumentParser:
     g.add_argument("--run-dir", default="runs/de441_anchor/gate")
     g.add_argument("--output", default="runs/de441_anchor/gate.json")
     g.set_defaults(func=run_de441)
-    b = sub.add_parser("run-bs-reference", help="run independent Decimal Bulirsch-Stoer reference")
+    b = sub.add_parser("run-bs-reference", help="run the same-package Decimal Bulirsch-Stoer cross-check")
     b.add_argument("--state-csv", required=True)
     b.add_argument("--trajectory", required=True)
     b.add_argument("--summary", required=True)
     b.add_argument("--years", type=int, default=100)
     b.add_argument("--decimal-digits", type=int, default=78)
     b.set_defaults(func=run_bs)
-    k = sub.add_parser("run-bs-block-reference", help="run parallel independent BS massless-tracer blocks")
+    k = sub.add_parser("run-bs-block-reference", help="run same-package BS massless-tracer blocks")
     k.add_argument("--state-csv", required=True)
     k.add_argument("--run-dir", required=True)
     k.add_argument("--trajectory", required=True)
@@ -351,11 +351,17 @@ def parser() -> argparse.ArgumentParser:
     k.add_argument("--decimal-digits", type=int, default=78)
     k.add_argument("--workers", type=int, default=4)
     k.set_defaults(func=run_bs_blocks)
-    a = sub.add_parser("audit-de441-independent-reference", help="close the DE441 numerical gate against independent BS")
-    a.add_argument("--pair-record", default="runs/de441_anchor/gate.json")
-    a.add_argument("--y6-trajectory", default="runs/de441_anchor/gate/de441_anchor_y6_224.csv")
-    a.add_argument("--bs-trajectory", default="runs/de441_anchor/bs_reference_224_blocked_corrected.csv")
-    a.add_argument("--bs-summary", default="runs/de441_anchor/bs_reference_224_blocked_corrected_summary.json")
+    a = sub.add_parser(
+        "audit-de441-independent-reference",
+        help=(
+            "legacy command name: check supplied Y6/BS artifacts for consistency; "
+            "does not establish independent provenance or close the DE441 gate"
+        ),
+    )
+    a.add_argument("--pair-record", required=True, help="fresh v2 precision-pair run record")
+    a.add_argument("--y6-trajectory", required=True, help="fresh v2 224-bit Y6 trajectory")
+    a.add_argument("--bs-trajectory", required=True, help="caller-supplied BS trajectory (provenance unverified)")
+    a.add_argument("--bs-summary", required=True, help="caller-supplied BS summary (provenance unverified)")
     a.add_argument("--output", default="runs/de441_anchor/independent_reference_gate.json")
     a.set_defaults(func=audit_de441)
     i = sub.add_parser("run-ias15-member", help="run one preserved-state adaptive IAS15 member")

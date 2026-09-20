@@ -1,8 +1,8 @@
 # JX Celestial Dynamics Framework
 
-**Version:** 0.4.0a1
+**Version:** 0.6.0rc1
 
-**Release date:** 2026-09-06
+**Release date:** 2026-09-19
 
 **License:** MIT  
 **Scientific claim state:** `SCREENING_ONLY`
@@ -19,13 +19,14 @@ project's large observational inputs, bulk execution archives, and
 candidate-search catalogs.
 
 The installable distribution and command remain `jxplanetx` for backward
-compatibility. Version 0.4.0a1 adds a separate public alpha force-evaluation
-and trajectory API, including a standalone guarded Newtonian encounter
-segment and one specifically contracted whole-step Wisdom--Holman/RKF78
-hybrid; the legacy propagation core, CLI, locked
+compatibility. Version 0.6.0rc1 aligns the package with General Dynamics
+registry v17, adds byte-reproducible wheel and source-archive construction,
+and retains the existing public force and trajectory surface. Registry v17
+states `SCREENING_ONLY` explicitly and does not promote any capability beyond
+its exact evidence and claim ceiling. The legacy propagation core, CLI, locked
 experiments, and scientific records remain unchanged.
 
-## General engine alpha
+## General engine
 
 The additive `jxplanetx.engine` API evaluates ordered acceleration terms on
 caller-owned, backend-native arrays and advances explicitly requested
@@ -48,6 +49,18 @@ device, binary64 dtype, deterministic reduction scope, summation tile size,
 error tolerances, and every controller limit. Unsupported combinations fail
 before arithmetic; backend selection never silently falls back or transfers
 arrays between host and GPU.
+
+The additive [Dynamics scenarios V1](docs/DYNAMICS_SCENARIOS.md) layer now
+assembles one state, force plan, and adaptive-RKF78 request as an explicit
+scenario. Its matched mode runs a same-state, same-solver control followed by a
+candidate that appends named force terms, retaining both trajectories and
+per-body checkpoint differences. The candidate starts from the control run's
+retained baseline copies. Those differences are model-to-model diagnostics,
+not accuracy, improvement, or physics claims; every result remains
+unqualified `MODEL_OUTPUT`. A canonical portable manifest records NumPy/CPU
+binary64 scenarios with hexadecimal floats and an external SHA-256 identity;
+loading reconstructs read-only arrays and does not authenticate or qualify the
+scenario.
 
 `integrate_encounter_segment` adds a standalone full-Cartesian adaptive
 RKF78 segment for exact NumPy/CPU binary64, barycentric-inertial, fully mutual,
@@ -108,10 +121,64 @@ precision modes, sensitivities, orbit determination, and measurements. Every
 entry is `UNQUALIFIED`. A `DECLARED` entry validates its known parameter roster
 and then refuses execution.
 
-NumPy CPU and optional CuPy CUDA 12/13 code paths are available. The CuPy path
-has not yet been exercised on project-owned GPU hardware or independently
-qualified. This release makes no GPU correctness, reproducibility across
-devices, performance, or speedup claim.
+NumPy CPU and optional CuPy CUDA 12/13 code paths are available. The
+[GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md) records
+fixture-specific CPU/CUDA parity, the complete live-engine test scope, a
+reduced eleven-body replay, descriptive interleaved timings, and a large
+mutual-gravity CUDA scale observation on one project-owned RTX 5060 Ti. That
+package does not establish reproducibility across devices, a portable speedup,
+general GPU qualification, production fitness, or physical accuracy.
+
+For `0.6.0rc1`, a fail-closed current-core gate was also run on the same model
+of project-owned GPU: an RTX 5060 Ti with driver 595.91.07, CUDA 13.2, NumPy
+2.3.5, and CuPy 14.2.0. All 13 isolated engine modules passed with the hardware
+tests active (233 tests, zero skips), and the five GPU-specific backend and
+trajectory tests also passed under optimized Python. This verifies the exact
+recorded runtime/device core contracts only, including CPU/GPU numerical
+parity, device residency, no implicit transfer, mixed-input refusal, float32
+refusal, and CuPy trajectory custody. It is not cross-device qualification, a
+performance or speedup claim, production fitness, or scientific validation.
+
+The additive [eleven-body portable evidence V1](runs/jx_eleven_body_portable_v1/README.md)
+provides the compact Ubuntu workflow: offline integrity verification, exact
+dependency records, a host-readiness doctor, a fresh bounded CPU/GPU replay,
+and the saved 100-year REBOUND comparator. It remains `SCREENING_ONLY`; the
+historical 100-year result is offline-verifiable but its fresh standalone
+rerun is explicitly blocked by incomplete archived JX source closure.
+
+The additive [R0 source-closed 100-year confirmation package](runs/jx_reph_v1_r0_source_closed_100y/README.md)
+resolves that archived source closure from a provenance-bound Git bundle plus
+the four accepted comparator overlays. Its bounded construction preflight
+passes, but the 100-year pair has not yet run. Any future run remains
+`SCREENING_ONLY`, requires a fresh monitored preflight and short-lived
+authorization, and must pass the separate offline execution verifier before
+its result is described as verified.
+
+The additive [cosmology particle-mesh foundation](runs/jx_cosmology_pm_foundation_v1/README.md)
+extends the same project with a native NumPy/CuPy periodic collisionless-gravity
+solver in a prescribed flat expanding background. Its frozen analytic
+growing-mode benchmarks pass at 128^3 and 256^3 particles, with
+near-second-order spatial and temporal convergence, CPU/GPU parity, and an
+independently coded planar NumPy reference. The
+[256^3 validation package](runs/jx_cosmology_pm_256_independent_r2/README.md)
+retains the complete cross-code evidence. The first 256^3 attempt is retained
+as a stopped accumulator failure; the repaired run keeps its thresholds and
+workload unchanged. This is a qualification of one controlled
+foundation workload only. It is not a realistic structure-formation run and
+does not include gas, radiation, plasma, nuclear physics, general relativity,
+an observational fit, or a production cosmology claim.
+
+The [R4 dark-matter plus baryon benchmark](runs/jx_cosmology_baryons_3d_r4/README.md)
+adds a native 128^3 adiabatic gas mesh coupled to 2,097,152 dark-matter particles
+through the same spectral gravity field. It validates three-direction linear
+and complex phase, periodic conservation, gas positivity, sound-wave
+convergence, a Sod shock, exact GPU repetition, and NumPy/CuPy full-state
+agreement. The stopped R2 and R3 records preserve discovery of a half-cell
+particle/gas phase error, an unsafe multidimensional CFL bound, and the
+corrected 64^3 accuracy failure. R4 keeps the accuracy threshold unchanged and
+passes at the convergence-selected resolution. This is a controlled
+first-order supercomoving validation, not yet an externally validated nonlinear
+galaxy-formation or production cosmology solver.
 
 ## Scientific boundary
 
@@ -139,8 +206,9 @@ The source includes:
   populations, checkpointed execution, calibration/power tests, and fail-closed verdicts;
 - a command-line interface for reproducible validation workflows.
 
-The most important present limitation is that no new engine model or
-integrator is scientifically qualified. The alpha RKF78 path is explicit and
+The most important present limitation is that no general engine model or
+integrator is scientifically qualified. Exact benchmark qualifications do not
+promote the wider engine. The RKF78 path is explicit and
 nonstiff, with no dense output, event location, collision response,
 or regularization. The specific hybrid adds guarded whole-step mode selection,
 not a collision/event system or a general close-encounter framework. The
@@ -222,6 +290,48 @@ long-term stability, REBOUND superiority or equivalence, scientific
 qualification, or production fitness; its reports remain unauthenticated,
 unqualified `MODEL_OUTPUT`.
 
+### Packaged native orbital benchmark
+
+The [portable-scenario equal-binary qualification](runs/jx_dynamics_scenario_equal_binary_v1/README.md)
+freezes three content-addressed public `DynamicsScenario` inputs, the complete
+engine source used to execute them, a prewritten analytic oracle and 17 gates,
+three byte-identical accepted reports, and an independent offline verifier.
+On that locked two-body fixture, RKF78 passes the absolute, refinement,
+conservation, symmetry, accounting, manifest, and reproducibility checks. This
+is a fixture-specific numerical qualification, not a general N-body,
+eleven-body, lunar-rotation, or production claim.
+
+The [100-period equal-binary reproducibility package](runs/jx_equal_binary_100_period_repro_v1/README.md)
+turns one existing benchmark into a self-contained, offline artifact. It
+includes the exact JX source snapshot, frozen inputs and gates, the complete
+path-normalized reference result, an independent checksum/result verifier, and a
+create-only reproduction runner. Native KDK and RKF78 both pass their declared
+analytic-workload gates; the reproduced scientific fingerprint matches the
+reference exactly on the recorded runtime. REBOUND is deliberately disabled,
+timings are excluded, and the result makes no general N-body, superiority, or
+production-qualification claim.
+
+The [orbital validation ladder v4](runs/jx_orbital_validation_ladder_v4/README.md)
+combines that analytic foundation with a fresh one-day, DE440-initialized
+resolved-eleven-body Earth–Moon J2 fixture and an accepted broader J2 study.
+The third tier covers three start epochs, 1-, 7-, and 30-day horizons, and a
+900-to-450-second step-size sensitivity check. The top-level runner executes
+the first two trajectories from fresh state and labels the multi-epoch tier as
+preserved accepted evidence. All three components retain separate claim
+boundaries: there is no cross-tier score, no long-term qualification, and no
+lunar fluid-core result. Its machine-readable scientific acceptance matrix
+marks engineering reproducibility `PASS` while retaining scientific
+qualification as `NOT_QUALIFIED` and the project claim state as
+`SCREENING_ONLY`.
+
+The [GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md)
+extends the engineering evidence across the live NumPy and CuPy paths. On its
+recorded runtime, all 228 engine tests pass in normal and optimized Python, and
+the frozen one-day reduced eleven-body RKF78 endpoint is bitwise identical on
+CPU, repeated GPU runs, and the preserved CPU reference. Its timing and large
+CUDA rows are descriptive only, and it does not decide lunar rotation or any
+other physical model.
+
 ## Requirements
 
 - Python 3.12 or newer
@@ -240,7 +350,7 @@ unqualified `MODEL_OUTPUT`.
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
-python -m unittest discover -s tests -v
+python tools/run_local_test_matrix.py --profile engine
 ```
 
 Install the pinned REBOUND backend with
@@ -261,9 +371,43 @@ unavailable.
 Without installing the package:
 
 ```bash
-PYTHONPATH=src python3 -m unittest discover -s tests -v
+python3 tools/run_local_test_matrix.py --profile engine
 PYTHONPATH=src python3 -m jxplanetx.cli validate --output validation.json
 ```
+
+Build the release artifacts twice from the declared package-only input boundary
+and require byte identity with:
+
+```bash
+python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc1
+```
+
+The builder requires the exact backend pinned in `pyproject.toml`, normalizes
+source-archive timestamps, ownership, modes, ordering, and gzip metadata, and
+writes artifact hashes to `ARTIFACTS.json`. Research evidence and frozen runs
+are not distribution inputs.
+
+The source-closed evidence tests intentionally span mutually incompatible
+runtime contracts, so do not use one monolithic Python process to judge the
+expanded local evidence tree. The local matrix runner isolates the current
+engine tests, REBOUND 5.1.1 bridge, retained-wheel lunar checks, and exact R2
+launcher runtime:
+
+```bash
+python3 tools/run_local_test_matrix.py --profile engine
+python3 tools/run_local_test_matrix.py --profile evidence
+```
+
+The evidence profile verifies the retained wheel and shared-library hashes
+before importing them. If absent, it reconstructs the frozen ephemeral
+`/tmp/jx-reference-core-runtime` with the system Python; it never installs
+packages or changes frozen run artifacts. Use `--library-root PATH` when the
+read-only library mirror is mounted elsewhere.
+
+The complete 189-file ownership and runtime policy is documented in
+[JX test profiles](docs/TEST_PROFILES.md). Validate it with
+`python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
+with `--list-files`, or run all current-source profiles with `--profile live`.
 
 The synthetic dynamics probe is opt-in and is not part of validation:
 
@@ -423,6 +567,6 @@ and validation command.
 
 Citation metadata is provided in `CITATION.cff`. Original JX code is released
 under the MIT License. Optional third-party packages retain their own licenses.
-`RELEASE_MANIFEST_v0.4.0a1.json` is the release-metadata pointer for this
-alpha. `RELEASE_MANIFEST_v0.3.0.json` continues to record the prior portable
-release and scientific-artifact hashes and remains unchanged.
+`RELEASE_MANIFEST_v0.6.0rc1.json` records this local release candidate and its
+remaining external gates. Earlier release manifests retain their historical
+metadata and remain unchanged.

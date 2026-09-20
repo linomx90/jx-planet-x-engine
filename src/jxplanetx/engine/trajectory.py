@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, fields, is_dataclass, replace
 from typing import Any
 
 from .backends import ArrayBackend, resolve_backend
@@ -62,6 +62,18 @@ from .trajectory_contracts import (
 
 TRAJECTORY_SCOPE = "ADAPTIVE_TRAJECTORY_INTEGRATION"
 MODEL_OUTPUT = "MODEL_OUTPUT"
+RKF78_RESULT_CONTENT_CHECKSUM_ALGORITHM = (
+    "SHA256_DOMAIN_SEPARATED_FLOAT_HEX_JSON_V1"
+)
+RKF78_RESULT_CONTENT_CHECKSUM_DOMAIN = (
+    "jxplanetx.adaptive-rkf78-result.content-integrity.v1"
+)
+RKF78_NUMPY_RESULT_CONTENT_INTEGRITY_STATUS = (
+    "FULL_RETAINED_CONTENT_SHA256_READONLY_ARRAYS"
+)
+RKF78_CUPY_RESULT_CONTENT_INTEGRITY_STATUS = (
+    "DEVICE_RESIDENT_OWNED_DISJOINT_NO_HOST_CONTENT_HASH"
+)
 
 
 class TrajectoryError(EvaluationError):
@@ -155,6 +167,15 @@ class TrajectoryResult:
     untruncated host ledgers.  Magnitudes retain ``abs(signed_step)`` from the
     actual RKF78 call; the fixed representation makes that argument
     bit-exactly equal to the corresponding representable endpoint delta.
+
+    NumPy arrays retained by a result are disjoint, owned, C-contiguous,
+    read-only copies and their complete retained content is bound by
+    ``result_content_sha256``.  CuPy does not expose NumPy's write-disable
+    mechanism, and the engine's no-implicit-transfer contract forbids copying
+    numerical results back to the host merely to hash them.  CuPy results
+    therefore retain disjoint owned device copies and set
+    ``result_content_sha256`` to ``None``; direct caller mutation remains a
+    documented limitation rather than a hidden transfer.
     """
 
     snapshot_id: str
@@ -181,6 +202,7 @@ class TrajectoryResult:
     last_accepted_step: float
     direction: str
     accepted_step_ledger_content_sha256: str
+    result_content_sha256: str | None
     accepted_state_accumulation: str = RKF78_ACCEPTED_STATE_ACCUMULATION
     accepted_step_magnitude_source: str = RKF78_ACCEPTED_STEP_MAGNITUDE_SOURCE
     accepted_step_ledger_checksum_algorithm: str = (
@@ -191,6 +213,10 @@ class TrajectoryResult:
     )
     time_step_representation: str = RKF78_TIME_STEP_REPRESENTATION
     checkpoint_proposal_policy: str = RKF78_CHECKPOINT_PROPOSAL_POLICY
+    result_content_checksum_algorithm: str = (
+        RKF78_RESULT_CONTENT_CHECKSUM_ALGORITHM
+    )
+    result_content_checksum_domain: str = RKF78_RESULT_CONTENT_CHECKSUM_DOMAIN
     method_id: str = RKF78_METHOD_ID
     tableau_id: str = RKF78_TABLEAU_ID
     tableau_source: str = RKF78_TABLEAU_SOURCE
@@ -232,6 +258,10 @@ class TrajectoryResult:
             ),
             "time_step_representation": RKF78_TIME_STEP_REPRESENTATION,
             "checkpoint_proposal_policy": RKF78_CHECKPOINT_PROPOSAL_POLICY,
+            "result_content_checksum_algorithm": (
+                RKF78_RESULT_CONTENT_CHECKSUM_ALGORITHM
+            ),
+            "result_content_checksum_domain": RKF78_RESULT_CONTENT_CHECKSUM_DOMAIN,
             "scope": TRAJECTORY_SCOPE,
             "evidence_class": MODEL_OUTPUT,
             "registry_authorized": False,
@@ -244,16 +274,29 @@ class TrajectoryResult:
                 raise TrajectoryContractError(
                     f"{field} must equal the fixed trajectory value {expected!r}"
                 )
-        if (
-            type(self.accepted_step_ledger_content_sha256) is not str
-            or len(self.accepted_step_ledger_content_sha256) != 64
-            or any(
-                character not in "0123456789abcdef"
-                for character in self.accepted_step_ledger_content_sha256
-            )
-        ):
+        for field in ("accepted_step_ledger_content_sha256",):
+            value = getattr(self, field)
+            if (
+                type(value) is not str
+                or len(value) != 64
+                or any(character not in "0123456789abcdef" for character in value)
+            ):
+                raise TrajectoryContractError(
+                    f"{field} must be lowercase SHA-256 hex"
+                )
+        if self.backend_id == "numpy":
+            value = self.result_content_sha256
+            if (
+                type(value) is not str
+                or len(value) != 64
+                or any(character not in "0123456789abcdef" for character in value)
+            ):
+                raise TrajectoryContractError(
+                    "NumPy result_content_sha256 must be lowercase SHA-256 hex"
+                )
+        elif self.backend_id == "cupy" and self.result_content_sha256 is not None:
             raise TrajectoryContractError(
-                "accepted_step_ledger_content_sha256 must be lowercase SHA-256 hex"
+                "CuPy result_content_sha256 must be None under the no-transfer contract"
             )
         _validate_result_bindings(self)
 
@@ -284,6 +327,12 @@ class TrajectoryResult:
     @property
     def integrated(self) -> bool:
         return True
+
+    @property
+    def result_content_integrity_status(self) -> str:
+        if self.backend_id == "numpy":
+            return RKF78_NUMPY_RESULT_CONTENT_INTEGRITY_STATUS
+        return RKF78_CUPY_RESULT_CONTENT_INTEGRITY_STATUS
 
     @property
     def qualified(self) -> bool:
@@ -366,6 +415,149 @@ def _accepted_step_ledger_content_sha256(
     ).encode("utf-8")
     preimage = (
         RKF78_ACCEPTED_STEP_LEDGER_CHECKSUM_DOMAIN.encode("utf-8")
+        + b"\x00"
+        + serialized
+    )
+    return hashlib.sha256(preimage).hexdigest()
+
+
+def _canonical_result_content(backend: ArrayBackend, value: object) -> Any:
+    """Return exact JSON-safe result content without implicit array coercion.
+
+    The content digest is a NumPy-only contract. CuPy arrays are rejected so
+    this helper can never introduce an implicit device-to-host transfer.
+    """
+
+    if value is None:
+        return None
+    if type(value) in (bool, int, str):
+        return value
+    if isinstance(value, float):
+        canonical_float = float(value)
+        if not math.isfinite(canonical_float):
+            raise TrajectoryContractError(
+                "RKF78 result checksum content must contain only finite floats"
+            )
+        return {"binary64_hex": canonical_float.hex()}
+    if type(value) is tuple:
+        return [_canonical_result_content(backend, item) for item in value]
+    if type(value) is list:
+        return [_canonical_result_content(backend, item) for item in value]
+    if type(value) is dict:
+        if any(type(key) is not str for key in value):
+            raise TrajectoryContractError(
+                "RKF78 result checksum mappings require built-in string keys"
+            )
+        return {
+            key: _canonical_result_content(backend, item)
+            for key, item in value.items()
+        }
+    if type(value) is backend.array_type:
+        if value.dtype not in (backend.xp.dtype("float64"), backend.xp.dtype("bool")):
+            raise TrajectoryContractError(
+                "RKF78 result checksum arrays must be float64 or bool"
+            )
+        if backend.name != "numpy":
+            raise TrajectoryContractError(
+                "CuPy result content is not host-hashed implicitly"
+            )
+        host_value = value
+        if str(value.dtype) == "float64":
+            values = [float(item).hex() for item in host_value.reshape(-1)]
+        else:
+            values = [bool(item) for item in host_value.reshape(-1)]
+        return {
+            "dtype": str(value.dtype),
+            "shape": list(value.shape),
+            "values": values,
+        }
+    if is_dataclass(value) and type(value).__module__.startswith("jxplanetx."):
+        return {
+            "dataclass": f"{type(value).__module__}.{type(value).__qualname__}",
+            "fields": {
+                field.name: _canonical_result_content(
+                    backend, getattr(value, field.name)
+                )
+                for field in fields(value)
+            },
+        }
+    raise TrajectoryContractError(
+        f"unsupported RKF78 result checksum content type {type(value).__name__!r}"
+    )
+
+
+def _result_content_sha256(
+    *,
+    backend: ArrayBackend,
+    initial_snapshot: StateSnapshot,
+    force_plan: ForcePlan,
+    integration_spec: AdaptiveRKF78Spec,
+    checkpoints: tuple[TrajectoryCheckpoint, ...],
+    force_model_ids: tuple[str, ...],
+    force_ledger: tuple[ForceLedgerEntry, ...],
+    accepted_step_epochs: tuple[float, ...],
+    accepted_step_magnitudes: tuple[float, ...],
+    attempted_steps: int,
+    accepted_steps: int,
+    rejected_steps: int,
+    force_evaluations: int,
+    minimum_accepted_step: float,
+    maximum_accepted_step: float,
+    last_accepted_step: float,
+    direction: str,
+    accepted_step_ledger_content_sha256: str,
+) -> str:
+    """Hash all retained adaptive-RKF78 result content; not authentication."""
+
+    if backend.name != "numpy":
+        raise TrajectoryContractError(
+            "full RKF78 result-content hashing is available only for NumPy; "
+            "CuPy numerical results remain device resident"
+        )
+
+    payload = {
+        "accepted_step_epochs": accepted_step_epochs,
+        "accepted_step_ledger_content_sha256": (
+            accepted_step_ledger_content_sha256
+        ),
+        "accepted_step_magnitudes": accepted_step_magnitudes,
+        "accounting": {
+            "accepted_steps": accepted_steps,
+            "attempted_steps": attempted_steps,
+            "force_evaluations": force_evaluations,
+            "rejected_steps": rejected_steps,
+        },
+        "checkpoints": checkpoints,
+        "checksum_algorithm": RKF78_RESULT_CONTENT_CHECKSUM_ALGORITHM,
+        "control": {
+            "dense_output": False,
+            "evidence_class": MODEL_OUTPUT,
+            "qualification_authorized": False,
+            "registry_authorized": False,
+            "scope": TRAJECTORY_SCOPE,
+        },
+        "direction": direction,
+        "extrema": {
+            "last_accepted_step": last_accepted_step,
+            "maximum_accepted_step": maximum_accepted_step,
+            "minimum_accepted_step": minimum_accepted_step,
+        },
+        "force_ledger": force_ledger,
+        "force_model_ids": force_model_ids,
+        "force_plan": force_plan,
+        "initial_snapshot": initial_snapshot,
+        "integration_spec": integration_spec,
+        "schema": "jxplanetx.adaptive-rkf78-result.v1",
+    }
+    serialized = json.dumps(
+        _canonical_result_content(backend, payload),
+        allow_nan=False,
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    preimage = (
+        RKF78_RESULT_CONTENT_CHECKSUM_DOMAIN.encode("utf-8")
         + b"\x00"
         + serialized
     )
@@ -518,10 +710,33 @@ def _validate_result_bindings(result: TrajectoryResult) -> None:
             state_shape,
         )
 
-        retained_array_ids = {id(array) for array in initial_state}
-        if id(position_atol) in retained_array_ids or id(velocity_atol) in retained_array_ids:
-            raise TrajectoryContractError("retained tolerance arrays must own separate buffers")
-        retained_array_ids.update((id(position_atol), id(velocity_atol)))
+        retained_arrays: list[Any] = []
+        for label, array in zip(
+            (
+                "initial_snapshot.positions",
+                "initial_snapshot.velocities",
+                "initial_snapshot.gravitational_parameters",
+                "initial_snapshot.masses",
+                "initial_snapshot.radii",
+                "initial_snapshot.massive",
+            ),
+            initial_state,
+        ):
+            _validate_retained_array_custody(
+                backend, array, label, retained_arrays
+            )
+        _validate_retained_array_custody(
+            backend,
+            position_atol,
+            "integration_spec.position_atol",
+            retained_arrays,
+        )
+        _validate_retained_array_custody(
+            backend,
+            velocity_atol,
+            "integration_spec.velocity_atol",
+            retained_arrays,
+        )
 
         for model in result.force_plan.models:
             if type(model) is not CannonballSRP:
@@ -548,9 +763,9 @@ def _validate_result_bindings(result: TrajectoryResult) -> None:
                     f"{label} domain check",
                 ):
                     raise TrajectoryDomainError(f"{label} must be finite and nonnegative")
-                if id(array) in retained_array_ids:
-                    raise TrajectoryContractError("retained numerical bindings must not alias")
-                retained_array_ids.add(id(array))
+                _validate_retained_array_custody(
+                    backend, array, f"force_plan.{label}", retained_arrays
+                )
 
         if type(result.checkpoints) is not tuple or len(result.checkpoints) != len(
             result.checkpoint_epochs
@@ -580,10 +795,16 @@ def _validate_result_bindings(result: TrajectoryResult) -> None:
                 ),
                 state_shape,
             )
-            for array in (checkpoint.positions, checkpoint.velocities):
-                if id(array) in retained_array_ids:
-                    raise TrajectoryContractError("checkpoint arrays must own separate buffers")
-                retained_array_ids.add(id(array))
+            for name, array in (
+                ("positions", checkpoint.positions),
+                ("velocities", checkpoint.velocities),
+            ):
+                _validate_retained_array_custody(
+                    backend,
+                    array,
+                    f"checkpoint[{index}].{name}",
+                    retained_arrays,
+                )
             if index == 0:
                 if checkpoint.accepted_steps != 0 or checkpoint.rejected_steps != 0:
                     raise TrajectoryContractError("initial checkpoint counters must be zero")
@@ -768,6 +989,51 @@ def _validate_result_bindings(result: TrajectoryResult) -> None:
         raise TrajectoryContractError(
             "accepted-step ledger content checksum does not match its exact float-hex content"
         )
+    if backend.name == "numpy":
+        with backend.activate():
+            expected_result_content_sha256 = _result_content_sha256(
+                backend=backend,
+                initial_snapshot=result.initial_snapshot,
+                force_plan=result.force_plan,
+                integration_spec=result.integration_spec,
+                checkpoints=result.checkpoints,
+                force_model_ids=result.force_model_ids,
+                force_ledger=result.force_ledger,
+                accepted_step_epochs=result.accepted_step_epochs,
+                accepted_step_magnitudes=result.accepted_step_magnitudes,
+                attempted_steps=result.attempted_steps,
+                accepted_steps=result.accepted_steps,
+                rejected_steps=result.rejected_steps,
+                force_evaluations=result.force_evaluations,
+                minimum_accepted_step=result.minimum_accepted_step,
+                maximum_accepted_step=result.maximum_accepted_step,
+                last_accepted_step=result.last_accepted_step,
+                direction=result.direction,
+                accepted_step_ledger_content_sha256=(
+                    result.accepted_step_ledger_content_sha256
+                ),
+            )
+        if result.result_content_sha256 != expected_result_content_sha256:
+            raise TrajectoryContractError(
+                "RKF78 result content checksum does not match the retained trajectory"
+            )
+    elif result.result_content_sha256 is not None:
+        raise TrajectoryContractError(
+            "CuPy result content hash would violate the no-transfer contract"
+        )
+
+
+def validate_trajectory_result_integrity(result: TrajectoryResult) -> None:
+    """Revalidate one retained result without granting scientific authority.
+
+    NumPy content is checked against its full retained-content digest.  CuPy
+    validation remains structural because device arrays deliberately stay on
+    device and remain caller-mutable under the documented backend contract.
+    """
+
+    if type(result) is not TrajectoryResult:
+        raise TrajectoryContractError("result must be an exact TrajectoryResult")
+    _validate_result_bindings(result)
 
 
 def _validate_trial_arrays(
@@ -785,6 +1051,55 @@ def _validate_trial_arrays(
             raise TrajectoryDomainError(f"{label} contains a nonfinite value")
 
 
+def _owned_retained_copy(backend: ArrayBackend, array: Any) -> Any:
+    """Copy one retained buffer and apply the backend's custody guarantee."""
+
+    copied = backend.xp.copy(array, order="C")
+    if backend.name == "numpy":
+        copied.setflags(write=False)
+    # CuPy 14 has neither ndarray.setflags nor a writeable flag. A disjoint
+    # owning device copy is its strongest no-transfer custody mechanism;
+    # TrajectoryResult documents the residual mutability and absent host hash.
+    return copied
+
+
+def _validate_retained_array_custody(
+    backend: ArrayBackend,
+    array: Any,
+    label: str,
+    retained_arrays: list[Any],
+) -> None:
+    """Require exact owned, disjoint result buffers and NumPy read-only state."""
+
+    if type(array) is not backend.array_type:
+        raise TrajectoryContractError(
+            f"{label} must be an exact {backend.name} ndarray"
+        )
+    if not bool(array.flags.c_contiguous):
+        raise TrajectoryContractError(f"{label} must be C-contiguous")
+    if backend.name == "numpy":
+        if not bool(array.flags.owndata) or bool(array.flags.writeable):
+            raise TrajectoryContractError(
+                f"{label} must own its memory and be read-only"
+            )
+    elif array.base is not None:
+        raise TrajectoryContractError(
+            f"{label} must be an owning CuPy array rather than a view"
+        )
+    for previous in retained_arrays:
+        try:
+            overlaps = bool(backend.xp.shares_memory(array, previous))
+        except Exception as exc:
+            raise TrajectoryContractError(
+                "retained RKF78 array overlap could not be resolved exactly"
+            ) from exc
+        if overlaps:
+            raise TrajectoryContractError(
+                "retained RKF78 arrays must not overlap memory"
+            )
+    retained_arrays.append(array)
+
+
 def _copy_initial_snapshot(
     backend: ArrayBackend,
     snapshot: StateSnapshot,
@@ -795,12 +1110,14 @@ def _copy_initial_snapshot(
     )
     return replace(
         snapshot,
-        positions=backend.xp.copy(positions),
-        velocities=backend.xp.copy(velocities),
-        gravitational_parameters=backend.xp.copy(gravitational_parameters),
-        masses=backend.xp.copy(masses),
-        radii=backend.xp.copy(radii),
-        massive=backend.xp.copy(massive),
+        positions=_owned_retained_copy(backend, positions),
+        velocities=_owned_retained_copy(backend, velocities),
+        gravitational_parameters=_owned_retained_copy(
+            backend, gravitational_parameters
+        ),
+        masses=_owned_retained_copy(backend, masses),
+        radii=_owned_retained_copy(backend, radii),
+        massive=_owned_retained_copy(backend, massive),
     )
 
 
@@ -818,8 +1135,10 @@ def _copy_force_plan(backend: ArrayBackend, plan: ForcePlan) -> ForcePlan:
             copied_models.append(
                 replace(
                     model,
-                    area_to_mass=backend.xp.copy(area_to_mass),
-                    radiation_pressure_coefficient=backend.xp.copy(coefficient),
+                    area_to_mass=_owned_retained_copy(backend, area_to_mass),
+                    radiation_pressure_coefficient=_owned_retained_copy(
+                        backend, coefficient
+                    ),
                 )
             )
         else:
@@ -839,8 +1158,8 @@ def _copy_integration_spec(
 ) -> AdaptiveRKF78Spec:
     return replace(
         spec,
-        position_atol=backend.xp.copy(position_atol),
-        velocity_atol=backend.xp.copy(velocity_atol),
+        position_atol=_owned_retained_copy(backend, position_atol),
+        velocity_atol=_owned_retained_copy(backend, velocity_atol),
     )
 
 
@@ -1067,8 +1386,12 @@ def integrate_trajectory(
         current_velocity_carry = backend.xp.zeros_like(
             current_velocities, dtype=backend.xp.float64
         )
-        initial_checkpoint_positions = backend.xp.copy(current_positions)
-        initial_checkpoint_velocities = backend.xp.copy(current_velocities)
+        initial_checkpoint_positions = _owned_retained_copy(
+            backend, current_positions
+        )
+        initial_checkpoint_velocities = _owned_retained_copy(
+            backend, current_velocities
+        )
         checkpoints = [
             TrajectoryCheckpoint(
                 index=0,
@@ -1194,8 +1517,8 @@ def integrate_trajectory(
                     proposed_step = reduced
 
             # The loop reaches each checkpoint only by an accepted clipped step.
-            copied_positions = backend.xp.copy(current_positions)
-            copied_velocities = backend.xp.copy(current_velocities)
+            copied_positions = _owned_retained_copy(backend, current_positions)
+            copied_velocities = _owned_retained_copy(backend, current_velocities)
             checkpoints.append(
                 TrajectoryCheckpoint(
                     index=checkpoint_index,
@@ -1237,6 +1560,30 @@ def integrate_trajectory(
                 magnitude_source=RKF78_ACCEPTED_STEP_MAGNITUDE_SOURCE,
             )
         )
+        result_content_sha256 = None
+        if backend.name == "numpy":
+            result_content_sha256 = _result_content_sha256(
+                backend=backend,
+                initial_snapshot=initial_snapshot,
+                force_plan=force_plan,
+                integration_spec=integration_spec,
+                checkpoints=checkpoint_records,
+                force_model_ids=stage_evaluator.force_model_ids,
+                force_ledger=stage_evaluator.force_ledger,
+                accepted_step_epochs=accepted_epoch_records,
+                accepted_step_magnitudes=accepted_magnitude_records,
+                attempted_steps=attempted_steps,
+                accepted_steps=accepted_steps,
+                rejected_steps=rejected_steps,
+                force_evaluations=stage_evaluator.force_evaluations,
+                minimum_accepted_step=minimum_accepted_step,
+                maximum_accepted_step=maximum_accepted_step,
+                last_accepted_step=last_accepted_step,
+                direction=integration_spec.direction,
+                accepted_step_ledger_content_sha256=(
+                    accepted_step_ledger_content_sha256
+                ),
+            )
 
         return TrajectoryResult(
             snapshot_id=snapshot.snapshot_id,
@@ -1265,10 +1612,15 @@ def integrate_trajectory(
             accepted_step_ledger_content_sha256=(
                 accepted_step_ledger_content_sha256
             ),
+            result_content_sha256=result_content_sha256,
         )
 
 
 __all__ = [
+    "RKF78_CUPY_RESULT_CONTENT_INTEGRITY_STATUS",
+    "RKF78_NUMPY_RESULT_CONTENT_INTEGRITY_STATUS",
+    "RKF78_RESULT_CONTENT_CHECKSUM_ALGORITHM",
+    "RKF78_RESULT_CONTENT_CHECKSUM_DOMAIN",
     "TRAJECTORY_SCOPE",
     "TrajectoryContractError",
     "TrajectoryCheckpoint",
@@ -1277,4 +1629,5 @@ __all__ = [
     "TrajectoryResult",
     "TrajectoryStepLimitError",
     "integrate_trajectory",
+    "validate_trajectory_result_integrity",
 ]

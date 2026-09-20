@@ -1,7 +1,9 @@
 import dataclasses
 import hashlib
+import subprocess
 import sys
 import unittest
+from pathlib import Path
 from unittest import mock
 
 import numpy as np
@@ -1277,7 +1279,26 @@ class HybridRuntimeTests(unittest.TestCase):
             )
 
     def test_no_rebound_import_is_required(self):
-        self.assertNotIn("rebound", sys.modules)
+        root = Path(__file__).resolve().parents[1]
+        probe = subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                "-c",
+                (
+                    "import sys; "
+                    f"sys.path.insert(0, {str(root / 'src')!r}); "
+                    "import jxplanetx.engine.hybrid; "
+                    "assert 'rebound' not in sys.modules"
+                ),
+            ],
+            cwd=root,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(probe.returncode, 0, probe.stderr)
         self.assertIs(type(hybrid_runtime.__all__), list)
         self.assertIn(
             "integrate_hybrid_wisdom_holman_rkf78_trajectory",

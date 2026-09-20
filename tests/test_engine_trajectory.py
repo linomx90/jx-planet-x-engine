@@ -1,6 +1,7 @@
 import dataclasses
 import hashlib
 import importlib
+import inspect
 import math
 import sys
 import unittest
@@ -30,6 +31,7 @@ from jxplanetx.engine import (
     TrajectoryResult,
     TrajectoryStepLimitError,
     integrate_trajectory,
+    validate_trajectory_result_integrity,
 )
 from jxplanetx.engine.backends import resolve_backend
 from jxplanetx.engine.contracts import ContractError
@@ -66,8 +68,14 @@ from jxplanetx.engine.trajectory_contracts import (
     RKF78_TIME_STEP_REPRESENTATION,
 )
 from jxplanetx.engine.trajectory import (
+    RKF78_RESULT_CONTENT_CHECKSUM_ALGORITHM,
+    RKF78_RESULT_CONTENT_CHECKSUM_DOMAIN,
+    RKF78_CUPY_RESULT_CONTENT_INTEGRITY_STATUS,
+    RKF78_NUMPY_RESULT_CONTENT_INTEGRITY_STATUS,
+    _canonical_result_content,
     _accepted_step_ledger_content_sha256,
     _normalized_max_error,
+    _result_content_sha256,
     _trial_endpoint,
 )
 
@@ -832,6 +840,15 @@ class TrajectoryRuntimeTests(unittest.TestCase):
             RKF78_CHECKPOINT_PROPOSAL_POLICY,
         )
         self.assertRegex(result.accepted_step_ledger_content_sha256, r"^[0-9a-f]{64}$")
+        self.assertRegex(result.result_content_sha256, r"^[0-9a-f]{64}$")
+        self.assertEqual(
+            result.result_content_checksum_algorithm,
+            RKF78_RESULT_CONTENT_CHECKSUM_ALGORITHM,
+        )
+        self.assertEqual(
+            result.result_content_checksum_domain,
+            RKF78_RESULT_CONTENT_CHECKSUM_DOMAIN,
+        )
         self.assertEqual(len(result.accepted_step_epochs), result.accepted_steps)
         self.assertEqual(len(result.accepted_step_magnitudes), result.accepted_steps)
         self.assertEqual(
@@ -914,6 +931,90 @@ class TrajectoryRuntimeTests(unittest.TestCase):
             force_plan.models[2].radiation_pressure_coefficient,
             srp_originals[1],
         )
+
+    def test_retained_numpy_arrays_are_owned_readonly_disjoint_and_checksum_bound(self):
+        result = integrate_trajectory(
+            trajectory_state(),
+            trajectory_plan(newtonian(), one_pn(), srp()),
+            runtime_spec(checkpoint_epochs=(0.0, 0.05)),
+        )
+        arrays = [
+            result.initial_snapshot.positions,
+            result.initial_snapshot.velocities,
+            result.initial_snapshot.gravitational_parameters,
+            result.initial_snapshot.masses,
+            result.initial_snapshot.radii,
+            result.initial_snapshot.massive,
+            result.integration_spec.position_atol,
+            result.integration_spec.velocity_atol,
+            result.force_plan.models[2].area_to_mass,
+            result.force_plan.models[2].radiation_pressure_coefficient,
+        ]
+        arrays.extend(
+            array
+            for checkpoint in result.checkpoints
+            for array in (checkpoint.positions, checkpoint.velocities)
+        )
+        for array in arrays:
+            self.assertIs(type(array), np.ndarray)
+            self.assertTrue(array.flags.owndata)
+            self.assertTrue(array.flags.c_contiguous)
+            self.assertFalse(array.flags.writeable)
+        for left in range(len(arrays) - 1):
+            for right in range(left + 1, len(arrays)):
+                self.assertFalse(np.shares_memory(arrays[left], arrays[right]))
+        with self.assertRaises(ValueError):
+            result.final_positions[0, 0] = 1.0
+        self.assertEqual(
+            result.result_content_integrity_status,
+            RKF78_NUMPY_RESULT_CONTENT_INTEGRITY_STATUS,
+        )
+
+        altered_positions = result.checkpoints[-1].positions.copy()
+        altered_positions[0, 0] = math.nextafter(
+            float(altered_positions[0, 0]), math.inf
+        )
+        altered_positions.setflags(write=False)
+        altered_checkpoint = dataclasses.replace(
+            result.checkpoints[-1], positions=altered_positions
+        )
+        with self.assertRaisesRegex(
+            TrajectoryContractError, "result content checksum"
+        ):
+            dataclasses.replace(
+                result,
+                checkpoints=result.checkpoints[:-1] + (altered_checkpoint,),
+            )
+
+    def test_accepted_numpy_float64_scalars_are_checksum_compatible(self):
+        epoch = np.float64(0.0)
+        stop = np.float64(0.05)
+        result = integrate_trajectory(
+            trajectory_state(epoch=epoch),
+            trajectory_plan(),
+            runtime_spec(checkpoint_epochs=(epoch, stop)),
+        )
+        self.assertEqual(result.final_epoch, stop)
+        self.assertRegex(result.result_content_sha256, r"^[0-9a-f]{64}$")
+
+    def test_public_numpy_result_revalidation_detects_direct_buffer_mutation(self):
+        result = integrate_trajectory(
+            trajectory_state(),
+            trajectory_plan(),
+            runtime_spec(checkpoint_epochs=(0.0, 0.05)),
+        )
+        result.final_positions.setflags(write=True)
+        result.final_positions[0, 0] = math.nextafter(
+            float(result.final_positions[0, 0]), math.inf
+        )
+        result.final_positions.setflags(write=False)
+        with self.assertRaisesRegex(TrajectoryContractError, "result content checksum"):
+            validate_trajectory_result_integrity(result)
+
+    def test_checksum_implementation_contains_no_implicit_gpu_transfer(self):
+        source = inspect.getsource(_canonical_result_content)
+        self.assertNotIn(".get(", source)
+        self.assertNotIn("asnumpy", source)
 
     def test_forward_and_backward_checkpoints_are_hit_exactly_without_interpolation(self):
         cases = (
@@ -1323,6 +1424,9 @@ class TrajectoryFailureTests(unittest.TestCase):
             {"accepted_step_magnitude_source": "ENDPOINT_SUBTRACTION"},
             {"accepted_step_ledger_checksum_algorithm": "SHA256"},
             {"accepted_step_ledger_checksum_domain": "other.domain"},
+            {"result_content_checksum_algorithm": "SHA256"},
+            {"result_content_checksum_domain": "other.domain"},
+            {"result_content_sha256": "0" * 64},
             {"time_step_representation": "REQUESTED_STEP"},
             {"checkpoint_proposal_policy": "RESET_TO_CLIPPED_STEP"},
             {"attempted_steps": result.attempted_steps + 1},
@@ -1358,7 +1462,7 @@ class TrajectoryFailureTests(unittest.TestCase):
             ):
                 dataclasses.replace(result, **changes)
 
-    def test_coherent_step_metadata_rewrite_requires_a_new_checksum(self):
+    def test_coherent_step_metadata_rewrite_requires_new_ledger_and_result_checksums(self):
         result = integrate_trajectory(
             trajectory_state(),
             trajectory_plan(),
@@ -1397,6 +1501,38 @@ class TrajectoryFailureTests(unittest.TestCase):
             last_accepted_step=last_step,
             magnitude_source=result.accepted_step_magnitude_source,
         )
+        replacement_result_checksum = _result_content_sha256(
+            backend=resolve_backend(result.backend_spec),
+            initial_snapshot=result.initial_snapshot,
+            force_plan=result.force_plan,
+            integration_spec=result.integration_spec,
+            checkpoints=result.checkpoints,
+            force_model_ids=result.force_model_ids,
+            force_ledger=result.force_ledger,
+            accepted_step_epochs=mutated_epoch_tuple,
+            accepted_step_magnitudes=mutated_magnitudes,
+            attempted_steps=result.attempted_steps,
+            accepted_steps=result.accepted_steps,
+            rejected_steps=result.rejected_steps,
+            force_evaluations=result.force_evaluations,
+            minimum_accepted_step=minimum_step,
+            maximum_accepted_step=maximum_step,
+            last_accepted_step=last_step,
+            direction=result.direction,
+            accepted_step_ledger_content_sha256=replacement_checksum,
+        )
+        with self.assertRaisesRegex(
+            TrajectoryContractError, "result content checksum"
+        ):
+            dataclasses.replace(
+                result,
+                accepted_step_epochs=mutated_epoch_tuple,
+                accepted_step_magnitudes=mutated_magnitudes,
+                minimum_accepted_step=minimum_step,
+                maximum_accepted_step=maximum_step,
+                last_accepted_step=last_step,
+                accepted_step_ledger_content_sha256=replacement_checksum,
+            )
         coherent_model_output = dataclasses.replace(
             result,
             accepted_step_epochs=mutated_epoch_tuple,
@@ -1405,6 +1541,7 @@ class TrajectoryFailureTests(unittest.TestCase):
             maximum_accepted_step=maximum_step,
             last_accepted_step=last_step,
             accepted_step_ledger_content_sha256=replacement_checksum,
+            result_content_sha256=replacement_result_checksum,
         )
         self.assertFalse(coherent_model_output.qualified)
         self.assertFalse(coherent_model_output.registry_authorized)
@@ -1536,21 +1673,32 @@ class OptionalCuPyTrajectoryTests(unittest.TestCase):
             self.assertGreater(observed_carry_calls, 0)
 
             arrays = [
-                result.positions,
-                result.velocities,
                 result.initial_snapshot.positions,
                 result.initial_snapshot.velocities,
+                result.initial_snapshot.gravitational_parameters,
+                result.initial_snapshot.masses,
+                result.initial_snapshot.radii,
+                result.initial_snapshot.massive,
                 result.integration_spec.position_atol,
                 result.integration_spec.velocity_atol,
                 result.force_plan.models[2].area_to_mass,
                 result.force_plan.models[2].radiation_pressure_coefficient,
             ]
+            arrays.extend(result.positions)
+            arrays.extend(result.velocities)
             arrays.extend(checkpoint.positions for checkpoint in result.checkpoints)
             arrays.extend(checkpoint.velocities for checkpoint in result.checkpoints)
             for array in arrays:
                 self.assertIsInstance(array, cp.ndarray)
                 self.assertEqual(int(array.device.id), 0)
-                self.assertEqual(array.dtype, cp.dtype("float64"))
+                self.assertIn(array.dtype, (cp.dtype("float64"), cp.dtype("bool")))
+                self.assertIsNone(array.base)
+                self.assertFalse(hasattr(array, "setflags"))
+            self.assertIsNone(result.result_content_sha256)
+            self.assertEqual(
+                result.result_content_integrity_status,
+                RKF78_CUPY_RESULT_CONTENT_INTEGRITY_STATUS,
+            )
             np.testing.assert_allclose(
                 cp.asnumpy(cp.stack(result.positions, axis=0)),
                 np.stack(cpu_result.positions, axis=0),

@@ -1,3 +1,41 @@
+# JX General Dynamics 0.6.0rc1
+
+Release date: 19 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+This candidate aligns the installable `jxplanetx` package with General
+Dynamics registry v17. The registry remains a capability-and-evidence map, not
+a declaration that every listed domain shares one solver or is scientifically
+qualified. It explicitly records `production_ready: false` and
+`unified_multiphysics_execution: false`.
+
+The CPU engine and optimized-Python engine matrices pass on the preparation
+host. NumPy RKF78 results retain disjoint, read-only owned arrays with a full
+content digest. CuPy results retain disjoint owning device arrays but remain
+caller-mutable and deliberately have no implicit host content hash.
+
+The current core was revalidated on an NVIDIA GeForce RTX 5060 Ti using driver
+595.91.07, CUDA 13.2, NumPy 2.3.5, and CuPy 14.2.0. The CUDA-enabled 13-module
+engine matrix passed 233 tests with zero skips, and all five GPU-specific
+backend/trajectory tests passed again under optimized Python. This is exact-
+runtime/device engineering validation only, not cross-device qualification,
+performance evidence, production fitness, or scientific validation.
+
+Release packaging now uses an exact setuptools backend, a declared
+package-only staging boundary, and canonical source archives. The release tool
+builds twice in independent temporary trees and refuses output unless both the
+wheel and source archive are byte-identical. It also records exact hashes and
+sizes without modifying research evidence.
+
+No new scientific model, threshold, evidence result, or capability promotion
+is part of this release candidate. Frozen runs, archives, registry v16, and
+all earlier records remain unchanged.
+
+---
+
 # JX Celestial Dynamics Framework 0.4.0a1
 
 Release date: 6 September 2026
