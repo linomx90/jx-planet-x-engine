@@ -1,0 +1,24 @@
+{
+  "artifacts": {
+    "sdist": {
+      "filename": "jxplanetx-0.6.0rc8.tar.gz",
+      "sha256": "b66c97dcded679401ccd423b224f8826ac9f695a6a71c430afcfcdc99ff3f82f",
+      "size_bytes": 699448
+    },
+    "wheel": {
+      "filename": "jxplanetx-0.6.0rc8-cp314-cp314-linux_x86_64.whl",
+      "sha256": "bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5",
+      "size_bytes": 847708
+    }
+  },
+  "build_backend": "setuptools==78.1.1",
+  "byte_identical": {
+    "sdist": true,
+    "wheel": true
+  },
+  "independent_clean_builds": 2,
+  "schema": "jxplanetx.reproducible-release-artifacts.v1",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "source_date_epoch": 1700000000,
+  "version": "0.6.0rc8"
+}

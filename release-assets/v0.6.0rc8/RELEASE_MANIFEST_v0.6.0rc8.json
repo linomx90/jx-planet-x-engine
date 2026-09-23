@@ -1,0 +1,279 @@
+{
+  "schema": "jx-release-candidate-manifest/v1",
+  "project": "JX General Dynamics",
+  "version": "0.6.0rc8",
+  "prepared": "2026-09-22",
+  "release_stage": "release-candidate",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "candidate_readiness": "LOCAL_RC8_CPU_CUDA_CORE_REPRODUCIBLE_PACKAGING_EXPERIMENT_CATALOG_AND_EXACT_WHEEL_RACE_PASS_EXTERNAL_INDEPENDENT_REPLICATION_PENDING",
+  "release_scope": {
+    "supported_cpu_cuda_core_preserved": true,
+    "supported_wisdom_holman_numerical_kernel_changed_from_rc7": false,
+    "experiment_catalog_added": true,
+    "development_hybrid_promoted": false,
+    "general_rebound_superiority_claimed": false,
+    "production_or_scientific_qualification_claimed": false
+  },
+  "ownership": {
+    "human_author": "Lino Avila",
+    "copyright_notice": "Copyright (c) 2026 Lino Avila. All rights reserved.",
+    "license_expression": "LicenseRef-JX-Proprietary",
+    "license_file": "LICENSE",
+    "ai_systems_are_authors_or_owners": false,
+    "external_contributions_require_written_agreement": true,
+    "earlier_release_licenses_rewritten": false,
+    "third_party_licenses_rewritten": false
+  },
+  "source": {
+    "branch": "research/post-v5-rkf78-step5-probes",
+    "parent_commit": "31890c335ec85cc7ed4b2858e169f98ea829fb64",
+    "dirty_worktree_preserved": true,
+    "earlier_artifacts_or_manifests_rewritten": false,
+    "frozen_runs_evidence_archives_and_library_treated_read_only": true
+  },
+  "general_dynamics_registry": {
+    "generation": 18,
+    "registry_version": "0.6.0rc3",
+    "historical_binding_preserved": true,
+    "path": "runs/jx_general_dynamics_registry_v18/REGISTRY.json",
+    "sha256": "7637705f74cdf003a8f51d376b3f82db0902a4ec53abb86047aa2973606f7329",
+    "production_ready": false,
+    "unified_multiphysics_execution": false,
+    "capability_statuses_changed_for_rc8": false,
+    "new_registry_generation_created_for_rc8": false
+  },
+  "reproducible_packaging": {
+    "build_backend": "setuptools==78.1.1",
+    "source_date_epoch": 1700000000,
+    "independent_clean_builds": 2,
+    "wheel_byte_identical": true,
+    "sdist_byte_identical": true,
+    "local_output_directory": "/tmp/jxplanetx-0.6.0rc8-build-v4",
+    "artifact_manifest": {
+      "filename": "ARTIFACTS.json",
+      "size_bytes": 709,
+      "sha256": "9833a5847c7ce86358bfd3a79cdb7a1f02045c701995ceed04f60e8402db1a4e"
+    },
+    "artifacts": {
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc8-cp314-cp314-linux_x86_64.whl",
+        "size_bytes": 847708,
+        "sha256": "bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5"
+      },
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc8.tar.gz",
+        "size_bytes": 699448,
+        "sha256": "b66c97dcded679401ccd423b224f8826ac9f695a6a71c430afcfcdc99ff3f82f"
+      }
+    },
+    "fresh_wheel_supported_api_smoke": "PASS",
+    "fresh_sdist_supported_api_smoke": "PASS"
+  },
+  "fast_wisdom_holman": {
+    "supported_api": "jxplanetx.fast_wisdom_holman",
+    "api_id": "jx.fast-wisdom-holman.screening-api.v2",
+    "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+    "universal_g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+    "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+    "public_wrapper_sha256": "99da08305f5c0a191dd53e64d02a9a396b471aaf9f7b3a062545b1de220f7a72",
+    "native_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+    "native_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+    "native_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+    "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+    "default_verification": "COMPLETE_MAP_POSTCONDITION_CERTIFICATE",
+    "default_exact_replay": false,
+    "exact_replay_available": true,
+    "exact_replay_required_for_release_qualification": true,
+    "maximum_bodies": 32,
+    "production_authorized": false,
+    "scientific_qualification_claimed": false,
+    "general_rebound_superiority_claimed": false
+  },
+  "development_hybrid_performance": {
+    "supported_api": false,
+    "promoted_for_rc8": false,
+    "implementation_status": "DEVELOPMENT_PROTOTYPE_GENERATED_BY_SOURCE_TRANSFORM_NOT_PACKAGED_AUDITED_EXTENSION",
+    "stateful_near": {
+      "timing_report": {
+        "path": "results/performance_20260922/jx_stateful_near_timing_v1.json",
+        "size_bytes": 22837,
+        "sha256": "ddcf813a816a48eb4442663cff2c7affdb2a8fad693310c97e304a0401ad4b77",
+        "overall_pass": true
+      },
+      "close_scatter": {
+        "parent_near_attempts": 192,
+        "candidate_near_attempts": 66,
+        "parent_over_candidate_speedup": 1.5236624957868148
+      },
+      "central_pericenter": {
+        "parent_near_attempts": 354,
+        "candidate_near_attempts": 264,
+        "parent_over_candidate_speedup": 1.245638408615953
+      }
+    },
+    "endpoint_sync_negative": {
+      "path": "results/performance_20260922/jx_endpoint_sync_negative_v1.json",
+      "size_bytes": 12534,
+      "sha256": "340cbee23f36b331b88c7006f8a330b465bae16eed0df571b84144739416449e",
+      "overall_pass": false,
+      "minimum_required_speedup": 1.02,
+      "parent_over_candidate_speedup": 1.00539277307549,
+      "numerical_output_bitwise_equal": true
+    },
+    "raw_c_trace_screen": {
+      "path": "results/performance_20260922/jx_raw_c_trace_stateful_near_v2.json",
+      "size_bytes": 41277,
+      "sha256": "0cab0fb03693f737b8f73b1e7772e1759e0f5aae03defccfd3ff13aefea3e538",
+      "status": "COMPLETED_SCREEN",
+      "jx_runtime_relative_to_trace": {
+        "all_far_two_body": 2.1581136542501644,
+        "three_body_close_scatter": 1.4146850346743,
+        "central_pericenter": 2.4119162495110005
+      },
+      "accuracy_matched": false,
+      "single_host_short_synthetic_fixtures": true,
+      "general_solver_ranking": false
+    }
+  },
+  "experiment_catalog": {
+    "purpose": "NAVIGATION_AND_CUSTODY_NOT_SCIENTIFIC_REINTERPRETATION",
+    "catalog": {
+      "path": "catalog/JX_EXPERIMENT_CATALOG.json",
+      "size_bytes": 530342,
+      "sha256": "923a06bcf06b472813df32f709b49ae12495561292b5848c1b71c47314feaba4",
+      "semantic_content_sha256": "5bd516725297200ccea724c79690030d10a0bd18e1928a4ab192d59e1e3085f8"
+    },
+    "csv": {
+      "path": "catalog/JX_EXPERIMENT_CATALOG.csv",
+      "size_bytes": 87034,
+      "sha256": "0d2d506ea4392131b6b1a08c73dda3005124e7e0812e8fb9c4bb5a5b6019f69b"
+    },
+    "human_index": {
+      "path": "docs/JX_EXPERIMENT_DATA_INDEX.md",
+      "size_bytes": 20390,
+      "sha256": "c27772011baf99547d87d12cb2b3493a92ef66b9940f5c5c18692aa79e63c62c"
+    },
+    "record_count": 207,
+    "records_by_collection": {
+      "immutable_library": 99,
+      "active_runs": 83,
+      "active_results": 1,
+      "benchmark_definitions": 24
+    },
+    "total_indexed_file_count": 6187,
+    "total_navigated_stored_bytes": 22723976089,
+    "library_authority_catalog": {
+      "path": "../../library/JX_AUTHORITY_CATALOG.json",
+      "package_count": 99,
+      "size_bytes": 367707,
+      "sha256": "02290fb5d71ff2b1fa961bd72544ba47cc76fd7d086abe578600308f98016b34"
+    },
+    "active_workspace_hygiene": {
+      "scope": "ACTIVE_RUNS_AND_RESULTS_ONLY",
+      "records_with_flags": 72,
+      "empty_directory": 1,
+      "no_checksum_detected": 45,
+      "no_manifest_detected": 64,
+      "no_protocol_detected": 29,
+      "no_result_or_validation_detected": 12,
+      "flags_are_scientific_validity_judgements": false
+    }
+  },
+  "verification": {
+    "test_profile_inventory": {
+      "manifest_path": "tools/test_matrix_manifest.json",
+      "manifest_size_bytes": 20726,
+      "manifest_sha256": "ee57823cf41dcfe162e65dfde107d568983a08d20b39b326500f648e2564000d",
+      "files": 258,
+      "profiles": 12,
+      "exact_non_overlapping_coverage": true
+    },
+    "engine_matrix_normal": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "engine_matrix_python_optimized": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "performance_local": {
+      "tests_run": 14,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "library_catalog_local": {
+      "tests_run": 6,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "focused_release_solver_catalog_and_performance": {
+      "tests_run": 45,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "cuda_core_release_gate": {
+      "path": "/tmp/jx-cuda-core-0.6.0rc8-device-v1.json",
+      "size_bytes": 813,
+      "sha256": "9868717d1b39790be490a943ab52fc84a4b3fe817e9222b61ffdaa56f9215508",
+      "status": "PASS",
+      "tests_run": 5,
+      "skips": 0,
+      "device": "NVIDIA GeForce RTX 5060 Ti",
+      "compute_capability": "12.0",
+      "cupy_version": "14.2.0",
+      "driver_version": 13020,
+      "runtime_version": 13020,
+      "general_gpu_qualification": false
+    },
+    "exact_wheel_cpu_rebound_race": {
+      "path": "/tmp/jx_fast_wh_rc8_rebound_race_v3.json",
+      "size_bytes": 32544,
+      "sha256": "5829202be78fb17f819010f31cafec44bebfcec8b5a465b90594325e906bfc28",
+      "semantic_content_sha256": "f232aa4239f0229603262e3445ce04621080c7decab6fc41ef95e2052176a633",
+      "protocol_path": "benchmarks/jx_fast_wisdom_holman_rc8_rebound_race_protocol.json",
+      "protocol_size_bytes": 7104,
+      "protocol_sha256": "e7c2e025a6a6b28d54978828dfc098286019f8d60f86bea7f5841caa8e48d46f",
+      "runner_sha256": "a04e7ec5b13ca9ef5e2544fd34efb1839ddba39a0ef72845040573832a3fcead",
+      "required_wheel_sha256": "bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5",
+      "status": "PASS_ACCURACY_AND_DETERMINISM_SCREENING_ONLY",
+      "model": "WEAK_HIERARCHY_MUTUAL_NEWTONIAN_THREE_BODY",
+      "periods": 100,
+      "fixed_steps": 6400,
+      "retained_checkpoints": 401,
+      "timed_repetitions": 9,
+      "jx_single_pass_median_seconds": 0.009127909026574343,
+      "jx_replay_median_seconds": 0.018439611012581736,
+      "rebound_whfast_median_seconds": 0.01095210702624172,
+      "jx_single_pass_throughput_relative_to_rebound": 1.1998483983962303,
+      "rebound_throughput_relative_to_jx_replay": 1.6836587670664314,
+      "public_jx_100_period_bitwise_parity": true,
+      "accuracy_and_conservation_gate_passed": true,
+      "all_timed_repetitions_deterministic": true,
+      "single_host_workload_specific": true,
+      "portable_or_general_claim": false
+    }
+  },
+  "known_limits": [
+    "The exact-wheel CPU speed classification covers one weak hierarchical three-body workload for 100 periods on one host.",
+    "The replay-enabled supported lane remains slower than REBOUND WHFast on that workload.",
+    "The stateful NEAR RKF78 work remains a generated development prototype and is not part of the supported packaged API.",
+    "The equal-scope raw-C TRACE screens are not accuracy-matched and TRACE remains faster on all three short synthetic fixtures.",
+    "The endpoint-synchronization prototype missed its preregistered incremental speed gate and remains a negative result.",
+    "The rc8 CPU race does not test long Solar-System, broad close-encounter, MERCURIUS, TRACE, parallel-worker, or portable multi-machine performance.",
+    "The rc8 CUDA gate establishes current-host core parity and residency behavior only; it does not establish general GPU qualification.",
+    "The experiment catalog identifies data and hygiene gaps but does not upgrade, merge, or reinterpret historical scientific outcomes.",
+    "No production fitness, scientific qualification, lunar-model promotion, or general solver ranking is claimed."
+  ],
+  "release_actions": {
+    "git_reset_performed": false,
+    "clean_performed": false,
+    "push_performed": false,
+    "publication_performed": false,
+    "earlier_release_republished_or_relabelled": false,
+    "frozen_runs_or_archives_modified": false
+  }
+}

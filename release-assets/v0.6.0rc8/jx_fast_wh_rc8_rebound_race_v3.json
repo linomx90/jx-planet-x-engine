@@ -1,0 +1,821 @@
+{
+  "accuracy": {
+    "both_within_same_preexisting_envelope": true,
+    "jx_rc8_supported_api": {
+      "envelope": {
+        "center_of_mass_position_max": 1e-12,
+        "phase_proxy_max_abs_radians": 0.002,
+        "position_vector_l2_max": 0.001,
+        "relative_angular_momentum_max": 1e-12,
+        "relative_total_energy_max": 5e-06,
+        "total_momentum_max": 1e-12,
+        "velocity_vector_l2_max": 0.001
+      },
+      "invariants": {
+        "center_of_mass_position_max": 1.5198764342308456e-16,
+        "initial_angular_momentum_norm": 0.0036025462749098274,
+        "initial_total_energy": -0.0010889833720971309,
+        "relative_angular_momentum_max": 3.852216390520014e-15,
+        "relative_total_energy_max": 2.153408939887924e-06,
+        "total_momentum_max": 1.1006788202360487e-18
+      },
+      "phase_proxy": {
+        "bodies": {
+          "INNER": {
+            "final_wrapped_radians": -0.00034479708140727766,
+            "max_abs_radians": 0.0003626663511571148,
+            "rms_radians": 0.00019692801029132012
+          },
+          "OUTER": {
+            "final_wrapped_radians": 5.147531212479351e-05,
+            "max_abs_radians": 5.954167979238534e-05,
+            "rms_radians": 3.25354457837489e-05
+          }
+        },
+        "definition": "WRAPPED_PLANAR_POLAR_ANGLE_OF_BODY_MINUS_PRIMARY_CANDIDATE_MINUS_IAS15_REFERENCE",
+        "max_abs_radians": 0.0003626663511571148,
+        "not_osculating_mean_longitude": true,
+        "rms_radians": 0.00014113680680397572
+      },
+      "position": {
+        "component_abs_max": 0.0003484367758454787,
+        "component_rms": 6.797717171792199e-05,
+        "vector_l2_max": 0.00034886053621177197,
+        "vector_l2_rms": 0.00011773991517027503
+      },
+      "reference": "REBOUND_IAS15_EPSILON_1E_MINUS_13_MODEL_OUTPUT",
+      "reference_truth_claimed": false,
+      "velocity": {
+        "component_abs_max": 0.00036146558312352695,
+        "component_rms": 6.618636274463334e-05,
+        "vector_l2_max": 0.00036210732604210767,
+        "vector_l2_rms": 0.00011463814304188884
+      },
+      "within_preexisting_descriptive_envelope": true
+    },
+    "rebound_whfast": {
+      "envelope": {
+        "center_of_mass_position_max": 1e-12,
+        "phase_proxy_max_abs_radians": 0.002,
+        "position_vector_l2_max": 0.001,
+        "relative_angular_momentum_max": 1e-12,
+        "relative_total_energy_max": 5e-06,
+        "total_momentum_max": 1e-12,
+        "velocity_vector_l2_max": 0.001
+      },
+      "invariants": {
+        "center_of_mass_position_max": 3.0337161177022898e-15,
+        "initial_angular_momentum_norm": 0.0036025462749098274,
+        "initial_total_energy": -0.0010889833720971309,
+        "relative_angular_momentum_max": 1.1797412695967543e-14,
+        "relative_total_energy_max": 1.0692450126426957e-06,
+        "total_momentum_max": 1.7040954328532715e-17
+      },
+      "phase_proxy": {
+        "bodies": {
+          "INNER": {
+            "final_wrapped_radians": 0.0001840312041862524,
+            "max_abs_radians": 0.00019293387928520644,
+            "rms_radians": 0.00010466328732092593
+          },
+          "OUTER": {
+            "final_wrapped_radians": -3.0744977925545314e-05,
+            "max_abs_radians": 3.5265455768263e-05,
+            "rms_radians": 1.9389342372696563e-05
+          }
+        },
+        "definition": "WRAPPED_PLANAR_POLAR_ANGLE_OF_BODY_MINUS_PRIMARY_CANDIDATE_MINUS_IAS15_REFERENCE",
+        "max_abs_radians": 0.00019293387928520644,
+        "not_osculating_mean_longitude": true,
+        "rms_radians": 7.526735783348696e-05
+      },
+      "position": {
+        "component_abs_max": 0.000185365721202993,
+        "component_rms": 3.646332252747473e-05,
+        "vector_l2_max": 0.00018559916853846698,
+        "vector_l2_rms": 6.315632723035705e-05
+      },
+      "reference": "REBOUND_IAS15_EPSILON_1E_MINUS_13_MODEL_OUTPUT",
+      "reference_truth_claimed": false,
+      "velocity": {
+        "component_abs_max": 0.00019225300661177003,
+        "component_rms": 3.524785021933764e-05,
+        "vector_l2_max": 0.00019258004009312658,
+        "vector_l2_rms": 6.105106743747059e-05
+      },
+      "within_preexisting_descriptive_envelope": true
+    }
+  },
+  "benchmark_id": "jx.fast-wh-rc8.rebound-whfast.100-period.v1",
+  "claim_controls": {
+    "general_solver_superiority_claimed": false,
+    "long_solar_system_integration_tested": false,
+    "portable_performance_claimed": false,
+    "production_authorized": false,
+    "public_engine_backend_changed": false,
+    "rebound_parallel_workers_tested": false,
+    "scientific_qualification_claimed": false,
+    "single_host_workload_specific_timing_only": true,
+    "supported_opt_in_api_added": true,
+    "whfast_mercurius_trace_workload_roster_complete": false
+  },
+  "determinism": {
+    "all_timed_repetitions_stable": true,
+    "native_result_content_sha256": "c32317350c9a9eebf8b83155e02337bb1b0b159849011abc138d55d67ca0c873",
+    "rebound_lane_content_sha256": "5d493d7664d8e274ee8683106ac90fbc0ed5d7ae1cf3c7326fbcd48db3b2ddc8"
+  },
+  "execution_order": [
+    [
+      "jx_rc8_single_pass",
+      "rebound_whfast",
+      "jx_rc8_replay"
+    ],
+    [
+      "rebound_whfast",
+      "jx_rc8_replay",
+      "jx_rc8_single_pass"
+    ],
+    [
+      "jx_rc8_replay",
+      "jx_rc8_single_pass",
+      "rebound_whfast"
+    ],
+    [
+      "jx_rc8_single_pass",
+      "rebound_whfast",
+      "jx_rc8_replay"
+    ],
+    [
+      "rebound_whfast",
+      "jx_rc8_replay",
+      "jx_rc8_single_pass"
+    ],
+    [
+      "jx_rc8_replay",
+      "jx_rc8_single_pass",
+      "rebound_whfast"
+    ],
+    [
+      "jx_rc8_single_pass",
+      "rebound_whfast",
+      "jx_rc8_replay"
+    ],
+    [
+      "rebound_whfast",
+      "jx_rc8_replay",
+      "jx_rc8_single_pass"
+    ],
+    [
+      "jx_rc8_replay",
+      "jx_rc8_single_pass",
+      "rebound_whfast"
+    ]
+  ],
+  "installed_package_path": "/tmp/jx-rc8-wheel-smoke-v4/lib/python3.14/site-packages/jxplanetx/__init__.py",
+  "protocol": {
+    "path": "/home/linoavila/Documents/Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine/benchmarks/jx_fast_wisdom_holman_rc8_rebound_race_protocol.json",
+    "sha256": "e7c2e025a6a6b28d54978828dfc098286019f8d60f86bea7f5841caa8e48d46f",
+    "size_bytes": 7104
+  },
+  "protocol_prior_evidence_disclosure": {
+    "endpoint_sync_negative_result_known_before_lock": {
+      "minimum_required_speedup": 1.02,
+      "overall_pass": false,
+      "parent_over_candidate_speedup": 1.00539277307549
+    },
+    "exact_rc7_wheel_result_known_before_lock": {
+      "jx_replay_median_seconds": 0.01822223502676934,
+      "jx_single_pass_median_seconds": 0.009141534043010324,
+      "rebound_whfast_median_seconds": 0.010037141968496144
+    },
+    "exact_rc8_artifacts_known_before_lock": {
+      "sdist_sha256": "b66c97dcded679401ccd423b224f8826ac9f695a6a71c430afcfcdc99ff3f82f",
+      "wheel_and_sdist_smokes_passed": true,
+      "wheel_sha256": "bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5"
+    },
+    "exact_rc8_recorded_timing_samples_unknown": true,
+    "exact_rc8_report_hash_unknown": true,
+    "normal_engine_matrix_known_before_lock": {
+      "isolated_lanes": 13,
+      "skips": 0,
+      "tests_run": 233
+    },
+    "rc8_cuda_core_gate_known_before_lock": {
+      "general_gpu_qualification": false,
+      "skips": 0,
+      "status": "PASS",
+      "tests_run": 5
+    },
+    "scope": "The retained v3 algorithm, rc7 result, development hybrid results, rc8 artifact hashes, package smokes, normal engine matrix, and CUDA gate were known. Only the nine balanced exact-rc8-wheel timing samples and their bound report are prospective.",
+    "stateful_near_development_result_known_before_lock": {
+      "close_scatter_parent_over_candidate_speedup": 1.5236624957868148,
+      "pericenter_parent_over_candidate_speedup": 1.245638408615953,
+      "promoted_to_supported_api": false
+    },
+    "supported_numerical_kernel_unchanged_from_rc7": true
+  },
+  "public_jx_bitwise_parity_gate": {
+    "epoch_bitwise_equal": true,
+    "executed": true,
+    "native_result_content_sha256": "c32317350c9a9eebf8b83155e02337bb1b0b159849011abc138d55d67ca0c873",
+    "passed": true,
+    "position_bitwise_equal": true,
+    "public_result_content_sha256": "c62e9feb3c5a61f07ba48aeacbac42b81fb12dc682e28151794497d95683c62e",
+    "velocity_bitwise_equal": true
+  },
+  "release_wheel": {
+    "filename": "jxplanetx-0.6.0rc8-cp314-cp314-linux_x86_64.whl",
+    "path": "/tmp/jxplanetx-0.6.0rc8-build-v4/jxplanetx-0.6.0rc8-cp314-cp314-linux_x86_64.whl",
+    "sha256": "bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5",
+    "size_bytes": 847708
+  },
+  "runtime": {
+    "hostname": "Galaxy-PC",
+    "jx": "0.6.0rc8",
+    "native": {
+      "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+      "compiler_version": "15.2.0",
+      "counter_count": 12,
+      "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+      "extension_binary": {
+        "path": "/tmp/jx-rc8-wheel-smoke-v4/lib/python3.14/site-packages/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+        "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+        "size_bytes": 42520
+      },
+      "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+      "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+      "maximum_bodies": 32,
+      "metric_count": 17,
+      "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+      "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+      "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+      "scientific_claim_state": "SCREENING_ONLY"
+    },
+    "numpy": "2.3.5",
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+    "python": "3.14.4",
+    "python_executable": "/tmp/jx-rc8-wheel-smoke-v4/bin/python",
+    "rebound": {
+      "authority_authorized": false,
+      "c_library": {
+        "path": "/home/linoavila/Documents/Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine/.venv/lib/python3.14/site-packages/librebound.cpython-314-x86_64-linux-gnu.so",
+        "sha256": "52df4fe1050b98d6b0db11f31c18ec14ed00697a987e904bd7587cce4a0ccdef",
+        "size_bytes": 2104024
+      },
+      "classification": "OPTIONAL_EXTERNAL_GPL_V3_FAMILY_COMPARATOR",
+      "distribution_license_file": {
+        "path": "/home/linoavila/Documents/Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine/.venv/lib/python3.14/site-packages/rebound-5.1.1.dist-info/licenses/LICENSE",
+        "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+        "size_bytes": 35147
+      },
+      "distribution_metadata": {
+        "path": "/home/linoavila/Documents/Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine/.venv/lib/python3.14/site-packages/rebound-5.1.1.dist-info/METADATA",
+        "sha256": "cb8b4530f733ac4b2ed6bf385c5198f5244e2382181cf0733a08d8aff5c22bb8",
+        "size_bytes": 9389
+      },
+      "distribution_name": "rebound",
+      "distribution_root": "/home/linoavila/Documents/Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine/.venv/lib/python3.14/site-packages",
+      "distribution_version": "5.1.1",
+      "installed_license_expression": "GPL-3.0-only",
+      "jx_core_linked_to_rebound": false,
+      "legal_or_redistribution_conclusion_authorized": false,
+      "license_text_inconsistency_observed": true,
+      "module_source": {
+        "path": "/home/linoavila/Documents/Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine/.venv/lib/python3.14/site-packages/rebound/__init__.py",
+        "sha256": "924e19bfddb22bca9cbff0c641eaf3b2f791287f33df2d8d852f80aac78f8cdd",
+        "size_bytes": 3824
+      },
+      "official_license_page": "https://github.com/hannorein/rebound/blob/5.1.1/LICENSE",
+      "official_repository": "https://github.com/hannorein/rebound",
+      "omp_num_threads": "1",
+      "project_description_mentions_v3_or_later": true,
+      "python_sources": {
+        "authority_authorized": false,
+        "classification": "PROVENANCE_DIAGNOSTIC",
+        "file_count": 67,
+        "files": [
+          {
+            "path": "rebound/__init__.py",
+            "sha256": "924e19bfddb22bca9cbff0c641eaf3b2f791287f33df2d8d852f80aac78f8cdd",
+            "size_bytes": 3824
+          },
+          {
+            "path": "rebound/binarydata_field_descriptor.py",
+            "sha256": "f6de7dac55577572c34a5d07db64b2e0a4443d4bf8312ce2ebf50a144306e1d5",
+            "size_bytes": 5872
+          },
+          {
+            "path": "rebound/citations.py",
+            "sha256": "90ee875a6fce17c5bb5c1dd363dc6d9c354c6eddbcc119de4dc621b6da2e23a5",
+            "size_bytes": 15301
+          },
+          {
+            "path": "rebound/frequency_analysis.py",
+            "sha256": "c0ee3240b6faeef66e28af59dd7de04754ecb45f9b4e0e767724b2becba9c337",
+            "size_bytes": 3332
+          },
+          {
+            "path": "rebound/horizons.py",
+            "sha256": "00956f7e751b5206dd20b39188873e3d19ce323355bdd3d9db5311752e05a863",
+            "size_bytes": 11225
+          },
+          {
+            "path": "rebound/integrator.py",
+            "sha256": "83463e6771246f09f06b587a4ff84662f7a77f176e5ca7a1516db367d8d77c46",
+            "size_bytes": 4580
+          },
+          {
+            "path": "rebound/ode.py",
+            "sha256": "9978a8c7bee13600cc3f7cb6077ddd8a62968bb6e88380fa159882e2a44ccd36",
+            "size_bytes": 1688
+          },
+          {
+            "path": "rebound/orbit.py",
+            "sha256": "49a4121a5f3cde16d48a745d16e5c989af0d05f3256a4110b623ce96afca458e",
+            "size_bytes": 3644
+          },
+          {
+            "path": "rebound/particle.py",
+            "sha256": "f63fb37b02f652b929ca9187f795ad5aa20a21c93c89e9e0af441ba720d8e52d",
+            "size_bytes": 45726
+          },
+          {
+            "path": "rebound/particles.py",
+            "sha256": "ff2f3ea477b78b5ff1c808c0e29b39b02c134c340ee72e8ea8744ccf796182f6",
+            "size_bytes": 3614
+          },
+          {
+            "path": "rebound/plotting.py",
+            "sha256": "8cbc9e04c0da7cf20328fd0a22945d2c9ce72724c216c0fcc95b455d48f75238",
+            "size_bytes": 17035
+          },
+          {
+            "path": "rebound/rotation.py",
+            "sha256": "cb4c17c32a5f555114876d43120ef8c9585ee256991a83203f00d84f7e61f035",
+            "size_bytes": 10896
+          },
+          {
+            "path": "rebound/simulation.py",
+            "sha256": "8ca884f94ab29cd9a5d7575e9aae76d3878a3e61827eede2c07c2567299aa9e7",
+            "size_bytes": 63795
+          },
+          {
+            "path": "rebound/simulationarchive.py",
+            "sha256": "e7168ccd5f2d79a3daffe91869dd0d17febb276c7b219dc1dcb5e68d6d28374f",
+            "size_bytes": 14076
+          },
+          {
+            "path": "rebound/tests/__init__.py",
+            "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+            "size_bytes": 1
+          },
+          {
+            "path": "rebound/tests/test_additional_forces.py",
+            "sha256": "f49d372bd814350f3d59057c30ff9f1bd63f2b4dd90d99098b8c568bd11cec06",
+            "size_bytes": 3656
+          },
+          {
+            "path": "rebound/tests/test_binary_fields.py",
+            "sha256": "f6ec9a38b1326b3f0caff0032471f83ff91b5ddd761943755ed4f9e8576fb747",
+            "size_bytes": 859
+          },
+          {
+            "path": "rebound/tests/test_boundary.py",
+            "sha256": "f2a7769c0fc9f5cc0a130ade1b5b81bf2da38e0f51e8cc5e4fed019e2b42dea8",
+            "size_bytes": 2768
+          },
+          {
+            "path": "rebound/tests/test_bs.py",
+            "sha256": "6e4d2f1298e9f0415eca7bd77906246dc238d8e4afefd346377ba35317d9cf96",
+            "size_bytes": 15235
+          },
+          {
+            "path": "rebound/tests/test_collisions.py",
+            "sha256": "30202bb2c8d96108273d6fa7c3a6037b683c43bc07c8c1c6c197e3591ed72dfb",
+            "size_bytes": 6435
+          },
+          {
+            "path": "rebound/tests/test_copy.py",
+            "sha256": "2734c36802f2d1861950cb9b6ae45e2f15ed58395dfc1a12077e5bb1fe5806ac",
+            "size_bytes": 9362
+          },
+          {
+            "path": "rebound/tests/test_data.py",
+            "sha256": "67881613379405e63a4fae6337a0555e0b4e4d1e9995486fb1794e98ffe5fccd",
+            "size_bytes": 828
+          },
+          {
+            "path": "rebound/tests/test_eos.py",
+            "sha256": "2f40468f1998beba81b25df2ea02b6dc092eeb4b0e356fac12d440675e874cfe",
+            "size_bytes": 3468
+          },
+          {
+            "path": "rebound/tests/test_fpcontract.py",
+            "sha256": "0d031955b7df92190c587f2560cd477d74c59a0a6f81cc4c5cc788a203fc1835",
+            "size_bytes": 607
+          },
+          {
+            "path": "rebound/tests/test_frequency_analysis.py",
+            "sha256": "a1f19c287830da0caa7f29f47711a60b077cbf8d9c66ee10658fda0ba0bea160",
+            "size_bytes": 2497
+          },
+          {
+            "path": "rebound/tests/test_gravity.py",
+            "sha256": "ffb08ae7d8f82b7ce62ced6023ca39d52e956673d1cba1ce596cc510446647b1",
+            "size_bytes": 3209
+          },
+          {
+            "path": "rebound/tests/test_horizons.py",
+            "sha256": "37ad2f2edeaca668f76d8c9f1bd53a4cec2b2bfd88fcf794bb9927799557ec03",
+            "size_bytes": 1061
+          },
+          {
+            "path": "rebound/tests/test_import.py",
+            "sha256": "63a124bf4ed3db28a774f78116e061873cd486226e4b350e3010a25988dfb0d4",
+            "size_bytes": 330
+          },
+          {
+            "path": "rebound/tests/test_integrator.py",
+            "sha256": "41c2140fcd1f6c825fafbc0e803f760b6ef3b8f21d630163e6919a9c99dfdefa",
+            "size_bytes": 8451
+          },
+          {
+            "path": "rebound/tests/test_janus.py",
+            "sha256": "1b972eeabc0019a8d780329f009d830ee7efab9b6f4557e3b78fb4c5d5721294",
+            "size_bytes": 3543
+          },
+          {
+            "path": "rebound/tests/test_leapfrog.py",
+            "sha256": "eac22b14b38070557e259f7ea3e1210956c3903c295c1f580abe0570c39a94fb",
+            "size_bytes": 1901
+          },
+          {
+            "path": "rebound/tests/test_megno.py",
+            "sha256": "963e68b6f6207cf0a78a9699ad72a1144b16fc81d2c7692193317b45dc6445c5",
+            "size_bytes": 3517
+          },
+          {
+            "path": "rebound/tests/test_mercurius.py",
+            "sha256": "c27f213771eaef868d7cec23f297980b07d5ba17f19be9a77858d5d4d4dda323",
+            "size_bytes": 10914
+          },
+          {
+            "path": "rebound/tests/test_modify_orbital_parameters.py",
+            "sha256": "406a2049799736743718cf3d6bceac6211c741f0ec56e867b1e8a482af649582",
+            "size_bytes": 8039
+          },
+          {
+            "path": "rebound/tests/test_name.py",
+            "sha256": "c494df6dff5eb702ebde6dfc7e9e25f3b03900b56dbb5ac817401549b1d9f034",
+            "size_bytes": 1637
+          },
+          {
+            "path": "rebound/tests/test_orbital_elements.py",
+            "sha256": "ab3dc8c4ae3da83b5955ca0863d3444d9020cc872729b40929beaf795e3eb2ed",
+            "size_bytes": 17384
+          },
+          {
+            "path": "rebound/tests/test_particle.py",
+            "sha256": "a9a803c9b9dac41de38c70e56fc63e1093f7532810a5759c18a35e70426cf064",
+            "size_bytes": 12833
+          },
+          {
+            "path": "rebound/tests/test_pickle.py",
+            "sha256": "3efb6c9c0040c7fc910979a51bc511e6949e0cf8f16c0954b08f15e092bdd752",
+            "size_bytes": 1743
+          },
+          {
+            "path": "rebound/tests/test_plotting.py",
+            "sha256": "ca19d054911b9d42900ed707b0ba3064977edee27e9dea310a203f7e50acd7e2",
+            "size_bytes": 1412
+          },
+          {
+            "path": "rebound/tests/test_post_timestep_modifications.py",
+            "sha256": "d24a816f511013c591180fd9a172b4cbac306262d49ef8c0f09f1514276827db",
+            "size_bytes": 2251
+          },
+          {
+            "path": "rebound/tests/test_random.py",
+            "sha256": "8caa58cdaaf6212f825e684fe34f25a49a578100374170cc3c6f428928a50995",
+            "size_bytes": 2794
+          },
+          {
+            "path": "rebound/tests/test_restart_mercurius.py",
+            "sha256": "0b5868e1dc7a78762c7b511c4d9cf398688e6b084eca09d2d313dc30f22945e8",
+            "size_bytes": 1516
+          },
+          {
+            "path": "rebound/tests/test_rotations.py",
+            "sha256": "bf537ae0627f81e850f0371984da025a298f22e72d29707ec79bf6aef93d2ccd",
+            "size_bytes": 7131
+          },
+          {
+            "path": "rebound/tests/test_saba.py",
+            "sha256": "c813ba071d604e7c7e8778bf0834cc59690308417794533cc75e3965aa3c4297",
+            "size_bytes": 5077
+          },
+          {
+            "path": "rebound/tests/test_serialize.py",
+            "sha256": "b40521cc9a4bd3fd17965f5b6fe546a4630ae2954e282eaa7ab0465a63891044",
+            "size_bytes": 1909
+          },
+          {
+            "path": "rebound/tests/test_server.py",
+            "sha256": "37e66383944162880efcd37b4965247315309e166ca72940f8aa630a257ee743",
+            "size_bytes": 2083
+          },
+          {
+            "path": "rebound/tests/test_shearingsheet.py",
+            "sha256": "5440ab24a8435cd1d31f86f905652be306ca0d6e5e11eec0ae97dc2d02356264",
+            "size_bytes": 2169
+          },
+          {
+            "path": "rebound/tests/test_simulation.py",
+            "sha256": "8d4e7dcdec3744835d9e1cacdc498f5aca45e2ddbf373bf73e2792f12e6c6986",
+            "size_bytes": 10250
+          },
+          {
+            "path": "rebound/tests/test_simulationarchive.py",
+            "sha256": "33688a33a63f0bdd41f7262e714a4147fc1218e9521047449734a594ade33397",
+            "size_bytes": 22643
+          },
+          {
+            "path": "rebound/tests/test_simulationarchive_matrix.py",
+            "sha256": "3a2f7f0f35cdf1795975320a4105bdd4b165fa80496748fc7bd3056c82aaaf2e",
+            "size_bytes": 5170
+          },
+          {
+            "path": "rebound/tests/test_size_of_simulation.py",
+            "sha256": "01e97dce1287c6aa6a95cae08debee6d04804c3969a773199b89ea610541fc65",
+            "size_bytes": 460
+          },
+          {
+            "path": "rebound/tests/test_tponly_encounter.py",
+            "sha256": "0db7d4acdff445c7075c3826eb005bf229deae5f7b4f5bf01cc989fa40226a5e",
+            "size_bytes": 1818
+          },
+          {
+            "path": "rebound/tests/test_trace.py",
+            "sha256": "4720b3a9b6085336a813a665ce05dd6c157d087bd6ae464b2487c35a96ce5a05",
+            "size_bytes": 16850
+          },
+          {
+            "path": "rebound/tests/test_trace_full_bs.py",
+            "sha256": "22e23079253b2aa25eab19b9ec205eda3ffacdf1273aa88dabf27416d4738d21",
+            "size_bytes": 15182
+          },
+          {
+            "path": "rebound/tests/test_trace_full_ias15.py",
+            "sha256": "b9ad0e68e839ca9982631e9cebe3ca0627ad3e5a0c5ad51d91aa1f256844a8d1",
+            "size_bytes": 14963
+          },
+          {
+            "path": "rebound/tests/test_transformations.py",
+            "sha256": "230a6ddc976f06472978ee2d2c744c2f2f456e6bea9baaf166a17c8ea7bca139",
+            "size_bytes": 5643
+          },
+          {
+            "path": "rebound/tests/test_units.py",
+            "sha256": "9ba06391503a2afb5cd4d6a2cb153fd912e96b7323db644908677ee53d71317c",
+            "size_bytes": 2331
+          },
+          {
+            "path": "rebound/tests/test_variational.py",
+            "sha256": "856cab7879bb03a7b14304c2e98fd533baac73bc41cb23e8efde9575c3978e6d",
+            "size_bytes": 13967
+          },
+          {
+            "path": "rebound/tests/test_whfast.py",
+            "sha256": "e102aa4bb1196657054aa904fbec67b59f3d9776828797025eda98e5a89e1743",
+            "size_bytes": 11915
+          },
+          {
+            "path": "rebound/tests/test_whfast512.py",
+            "sha256": "5efaa6c12e78d712b7b3da0731a893ae616a80a7235ffdf267b2d3c47f46b82a",
+            "size_bytes": 12346
+          },
+          {
+            "path": "rebound/tests/test_whfast_advanced.py",
+            "sha256": "aef2eed1a6ef057d290819f74e1f520ff71a646f51fcbee261ef851f551723fe",
+            "size_bytes": 6179
+          },
+          {
+            "path": "rebound/tests/test_whfast_testparticles.py",
+            "sha256": "6482d7f349114c7a0e0a69c3b9dbacbd04ec59880318ef7730840253fc8ec6e3",
+            "size_bytes": 6992
+          },
+          {
+            "path": "rebound/tools.py",
+            "sha256": "0833101bfd4e251b7fda4f33e60f4c8efec00f76db1b31d50ada71d4333d43c7",
+            "size_bytes": 2412
+          },
+          {
+            "path": "rebound/units.py",
+            "sha256": "faa002c2a6568a8bc7b9b37531b50af3c53bcaf21563a30ab901602e5fc2d6bc",
+            "size_bytes": 4526
+          },
+          {
+            "path": "rebound/variation.py",
+            "sha256": "4910356c7ef13cb005b0f631a5fe82fe2ae1eb1ebfb76fecfb9490d5baabba05",
+            "size_bytes": 6920
+          },
+          {
+            "path": "rebound/vectors.py",
+            "sha256": "f0723c805fa70d1c62f1af1ea13cb788b2a0376e1ca4ad0c40a2844004627a8c",
+            "size_bytes": 4334
+          },
+          {
+            "path": "rebound/widget.py",
+            "sha256": "959062541c2aeaed38570415e161a9d3431f464b7d959a2d7527c414986e17d5",
+            "size_bytes": 26665
+          }
+        ],
+        "required_execution_wrappers": [
+          "rebound/__init__.py",
+          "rebound/integrator.py",
+          "rebound/particle.py",
+          "rebound/particles.py",
+          "rebound/simulation.py"
+        ],
+        "schema": "rebound.distribution-python-source-manifest.v1",
+        "selection": "ALL_DISTRIBUTION_RECORDED_REBOUND_PACKAGE_PYTHON_SOURCES",
+        "tree_hash_algorithm": "SHA256_DOMAIN_SEPARATED_SORTED_JSON_V1",
+        "tree_hash_domain": "rebound.distribution-python-source-tree.v1",
+        "tree_sha256": "e64bb210040368bfbf82d2993e8e1824f1571bd788755bc20028d41aaad3c40e"
+      },
+      "rebound_build": "Jul 22 2026 18:38:09",
+      "rebound_code_copied": false,
+      "rebound_code_vendored": false,
+      "rebound_githash": "33549d1d50d616a95a6d6a79e5e2c9c3b3730b1f",
+      "rebound_version": "5.1.1"
+    },
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    }
+  },
+  "schema": "jxplanetx.fast-wh-rc8-rebound-race.report.v1",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "semantic_content_sha256": "f232aa4239f0229603262e3445ce04621080c7decab6fc41ef95e2052176a633",
+  "solver_prerequisite_gate": {
+    "adaptive_series_terms": 140220,
+    "dense_series_bitwise_equal_to_exact_v1_bundle": true,
+    "dense_series_cases": 5035,
+    "exact_v1_series_terms": 1288960,
+    "invalid_domain_cases": 4,
+    "invalid_domain_cases_rejected": 4,
+    "series_term_reduction_fraction": 0.8912146226415094,
+    "status": "PASS",
+    "trigonometric_branch_equal_to_exact_v1_bundle": true,
+    "trigonometric_cases": 12
+  },
+  "speed_classification": {
+    "jx_rc8_replay_vs_rebound_whfast": {
+      "classification": "REBOUND_FASTER_ON_RECORDED_HOST_AND_WORKLOAD",
+      "jx_throughput_relative_to_rebound": 0.5939445804344173,
+      "portable_or_general_claim": false,
+      "rebound_throughput_relative_to_jx": 1.6836587670664314,
+      "resolution_fraction": 0.05
+    },
+    "jx_rc8_single_pass_vs_rebound_whfast": {
+      "classification": "JX_FASTER_ON_RECORDED_HOST_AND_WORKLOAD",
+      "jx_throughput_relative_to_rebound": 1.1998483983962303,
+      "portable_or_general_claim": false,
+      "rebound_throughput_relative_to_jx": 0.8334386255268946,
+      "resolution_fraction": 0.05
+    }
+  },
+  "status": "PASS_ACCURACY_AND_DETERMINISM_SCREENING_ONLY",
+  "timing_scope": {
+    "end_to_end_primary_comparison": true,
+    "ias15_accuracy_reference_excluded": true,
+    "jx_includes_output_allocation_hashing_and_result_construction": true,
+    "jx_raw_includes_exact_replay": false,
+    "jx_replay_includes_exact_replay": true,
+    "rebound_includes_configuration_checkpoint_readback_and_evidence_construction": true,
+    "state_fixture_construction_excluded": true
+  },
+  "timings": {
+    "jx_rc8_replay": {
+      "end_to_end": {
+        "maximum_seconds": 0.018565837002824992,
+        "median_seconds": 0.018439611012581736,
+        "minimum_seconds": 0.018108423973899335,
+        "population_coefficient_of_variation": 0.008813337526492424,
+        "samples_seconds": [
+          0.01849516498623416,
+          0.018425585003569722,
+          0.018108423973899335,
+          0.018248745996970683,
+          0.018439611012581736,
+          0.018549436004832387,
+          0.018565837002824992,
+          0.01844017201801762,
+          0.018136265978682786
+        ]
+      },
+      "numerical_execution": {
+        "maximum_seconds": 0.01787832600530237,
+        "median_seconds": 0.017786044045351446,
+        "minimum_seconds": 0.01752480905270204,
+        "population_coefficient_of_variation": 0.007161191258141501,
+        "samples_seconds": [
+          0.017853570054285228,
+          0.017757550987880677,
+          0.01752480905270204,
+          0.01764502201694995,
+          0.017787336953915656,
+          0.01787832600530237,
+          0.017863479035440832,
+          0.017786044045351446,
+          0.017545114969834685
+        ]
+      }
+    },
+    "jx_rc8_single_pass": {
+      "end_to_end": {
+        "maximum_seconds": 0.00938157201744616,
+        "median_seconds": 0.009127909026574343,
+        "minimum_seconds": 0.009076713991817087,
+        "population_coefficient_of_variation": 0.011135793707310888,
+        "samples_seconds": [
+          0.009105658042244613,
+          0.00922418903792277,
+          0.009324865997768939,
+          0.009122750023379922,
+          0.009127909026574343,
+          0.009092313004657626,
+          0.009210973978042603,
+          0.009076713991817087,
+          0.00938157201744616
+        ]
+      },
+      "numerical_execution": {
+        "maximum_seconds": 0.009029195993207395,
+        "median_seconds": 0.008785591984633356,
+        "minimum_seconds": 0.008747540996409953,
+        "population_coefficient_of_variation": 0.01093950714050971,
+        "samples_seconds": [
+          0.008747540996409953,
+          0.008865982003044337,
+          0.00897522602463141,
+          0.00876518402947113,
+          0.008800429990515113,
+          0.00877093500457704,
+          0.008785591984633356,
+          0.008761076023802161,
+          0.009029195993207395
+        ]
+      }
+    },
+    "rebound_whfast": {
+      "end_to_end": {
+        "maximum_seconds": 0.011479509004857391,
+        "median_seconds": 0.01095210702624172,
+        "minimum_seconds": 0.010743127961177379,
+        "population_coefficient_of_variation": 0.02260907699374185,
+        "samples_seconds": [
+          0.01115882198791951,
+          0.01091464702039957,
+          0.01095210702624172,
+          0.011479509004857391,
+          0.010805082973092794,
+          0.011386746016796678,
+          0.010743127961177379,
+          0.01079007500084117,
+          0.011101225041784346
+        ]
+      },
+      "numerical_execution": {
+        "maximum_seconds": 0.009419393027201295,
+        "median_seconds": 0.00883306103060022,
+        "minimum_seconds": 0.008719618956092745,
+        "population_coefficient_of_variation": 0.022702438941240154,
+        "samples_seconds": [
+          0.008843098999932408,
+          0.008824534015730023,
+          0.00883306103060022,
+          0.009419393027201295,
+          0.008771104970946908,
+          0.008960747974924743,
+          0.008719618956092745,
+          0.00872244400670752,
+          0.008876591047737747
+        ]
+      }
+    }
+  },
+  "workload": {
+    "fixed_steps": 6400,
+    "jx_raw_complete_native_map_passes": 1,
+    "jx_replay_complete_native_map_passes": 2,
+    "model": "WEAK_HIERARCHY_MUTUAL_NEWTONIAN_THREE_BODY",
+    "periods": 100,
+    "rebound_whfast_coordinates": "jacobi",
+    "rebound_whfast_safe_mode": 1,
+    "retained_checkpoints": 401,
+    "step_divisor": 64
+  }
+}
