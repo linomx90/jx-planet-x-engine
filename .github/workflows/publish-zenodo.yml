@@ -44,25 +44,102 @@ jobs:
           test -n "$ZENODO_ACCESS_TOKEN"
           api="https://zenodo.org/api"
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
+          metadata="source/.zenodo/jx-0.6.0rc8.json"
+          title="$(jq -er '.metadata.title' "$metadata")"
+          version="$(jq -er '.metadata.version' "$metadata")"
+
+          find_owned_deposition() {
+            local status="$1"
+            local response="/tmp/depositions-$status.json"
+            curl --fail-with-body --silent --show-error \
+              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+              --get -H "$auth" \
+              --data-urlencode "status=$status" \
+              --data-urlencode "size=100" \
+              --data-urlencode "q=title:\"$title\"" \
+              "$api/deposit/depositions" > "$response"
+            jq -r --arg title "$title" --arg version "$version" \
+              '[.[] | select(.metadata.title == $title and .metadata.version == $version)]
+               | sort_by(.id) | last | .id // empty' "$response"
+          }
+
+          published_id="$(find_owned_deposition published)"
+          if [[ -n "$published_id" ]]; then
+            curl --fail-with-body --silent --show-error \
+              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+              -H "$auth" "$api/deposit/depositions/$published_id" > /tmp/published.json
+            jq -er '{id,doi,record_url:(.links.record_html // .record_url // .doi_url)}' /tmp/published.json
+            exit 0
+          fi
+
+          deposition_id="$(find_owned_deposition draft)"
+          if [[ -z "$deposition_id" ]]; then
+            jq '{metadata:{upload_type:.metadata.upload_type,title:.metadata.title,version:.metadata.version}}' \
+              "$metadata" > /tmp/create-request.json
+            for attempt in 1 2 3 4 5; do
+              http_code="$(curl --silent --show-error --max-time 120 \
+                -o /tmp/create-response.json -w '%{http_code}' \
+                -X POST -H "$auth" -H "Content-Type: application/json" \
+                --data-binary @/tmp/create-request.json \
+                "$api/deposit/depositions" || true)"
+              if [[ "$http_code" == "201" ]]; then
+                deposition_id="$(jq -er '.id' /tmp/create-response.json)"
+                break
+              fi
+              if [[ "$http_code" =~ ^5 ]]; then
+                sleep "$((attempt * 5))"
+                deposition_id="$(find_owned_deposition draft)"
+                [[ -n "$deposition_id" ]] && break
+                continue
+              fi
+              cat /tmp/create-response.json
+              echo "Zenodo create failed with HTTP $http_code" >&2
+              exit 1
+            done
+          fi
+          test -n "$deposition_id"
+          echo "Using Zenodo deposition $deposition_id"
+
           curl --fail-with-body --silent --show-error \
-            -X POST \
-            -H "$auth" \
-            -H "Content-Type: application/json" \
-            --data-binary @source/.zenodo/jx-0.6.0rc8.json \
-            "$api/deposit/depositions" > /tmp/deposition.json
-          deposition_id="$(jq -er '.id' /tmp/deposition.json)"
+            --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+            -X PUT -H "$auth" -H "Content-Type: application/json" \
+            --data-binary @"$metadata" \
+            "$api/deposit/depositions/$deposition_id" > /tmp/deposition.json
           bucket="$(jq -er '.links.bucket' /tmp/deposition.json)"
+
           for file in assets/release-assets/v0.6.0rc8/*; do
             name="$(basename "$file")"
             curl --fail-with-body --silent --show-error \
-              -X PUT \
-              -H "$auth" \
-              -H "Content-Type: application/octet-stream" \
-              --upload-file "$file" \
-              "$bucket/$name" > /dev/null
+              --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
+              -X PUT -H "$auth" -H "Content-Type: application/octet-stream" \
+              --upload-file "$file" "$bucket/$name" > /dev/null
           done
-          curl --fail-with-body --silent --show-error \
-            -X POST \
-            -H "$auth" \
-            "$api/deposit/depositions/$deposition_id/actions/publish" > /tmp/published.json
-          jq -er '{id,doi,record_url:.links.record_html}' /tmp/published.json
+
+          published=false
+          for attempt in 1 2 3 4 5; do
+            http_code="$(curl --silent --show-error --max-time 180 \
+              -o /tmp/published.json -w '%{http_code}' \
+              -X POST -H "$auth" \
+              "$api/deposit/depositions/$deposition_id/actions/publish" || true)"
+            if [[ "$http_code" == "200" || "$http_code" == "201" || "$http_code" == "202" ]]; then
+              published=true
+              break
+            fi
+            curl --fail-with-body --silent --show-error \
+              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+              -H "$auth" "$api/deposit/depositions/$deposition_id" > /tmp/deposition-state.json
+            if jq -e '.submitted == true or .state == "done"' /tmp/deposition-state.json > /dev/null; then
+              cp /tmp/deposition-state.json /tmp/published.json
+              published=true
+              break
+            fi
+            if [[ "$http_code" =~ ^(409|5) ]]; then
+              sleep "$((attempt * 10))"
+              continue
+            fi
+            cat /tmp/published.json
+            echo "Zenodo publish failed with HTTP $http_code for deposition $deposition_id" >&2
+            exit 1
+          done
+          [[ "$published" == true ]]
+          jq -er '{id,doi,record_url:(.links.record_html // .record_url // .doi_url)}' /tmp/published.json
