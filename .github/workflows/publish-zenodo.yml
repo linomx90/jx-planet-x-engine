@@ -147,11 +147,21 @@ jobs:
           fi
           bucket="$(jq -er '.links.bucket' /tmp/legacy-draft.json)"
           echo "Zenodo bucket discovered for pinned draft $record_id"
+          curl --fail-with-body --silent --show-error \
+            -H "$auth" -H "$accept" "$files_url" > /tmp/existing-files.json
 
           for file in assets/release-assets/v0.6.0rc8/*; do
             name="$(basename "$file")"
             expected_size="$(stat -c %s "$file")"
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
+            current="$(jq -c --arg name "$name" '.entries[]? | select(.key == $name)' /tmp/existing-files.json)"
+            if [[ -n "$current" ]] &&
+               [[ "$(jq -r '.status' <<< "$current")" == "completed" ]] &&
+               [[ "$(jq -r '.size' <<< "$current")" == "$expected_size" ]] &&
+               [[ "$(jq -r '.checksum' <<< "$current")" == "$expected_md5" ]]; then
+              echo "$name: already uploaded and verified"
+              continue
+            fi
             python3 - "$file" "$bucket/$name" > /tmp/file-upload.json <<'PY'
           import os
           import pathlib
@@ -185,11 +195,17 @@ jobs:
             -o /tmp/published.json -w '%{http_code}' \
             -X POST -H "$auth" -H "$accept" "$publish_url" || true)"
           if [[ "$http_code" != "200" && "$http_code" != "201" && "$http_code" != "202" ]]; then
-            verify_http="$(curl --silent --show-error --max-time 120 \
-              -o /tmp/published.json -w '%{http_code}' \
-              -H "$accept" "$api/records/$record_id" || true)"
-            if [[ "$verify_http" != "200" ]]; then
-              cat /tmp/published.json
+            cp /tmp/published.json /tmp/publish-error.json
+            if [[ "$http_code" =~ ^5 ]]; then
+              verify_http="$(curl --silent --show-error --max-time 120 \
+                -o /tmp/published.json -w '%{http_code}' \
+                -H "$accept" "$api/records/$record_id" || true)"
+              if [[ "$verify_http" == "200" ]]; then
+                http_code="200"
+              fi
+            fi
+            if [[ "$http_code" != "200" ]]; then
+              cat /tmp/publish-error.json
               echo "Zenodo publish failed with HTTP $http_code for draft $record_id" >&2
               exit 1
             fi
