@@ -47,9 +47,11 @@ jobs:
           ZENODO_ACCESS_TOKEN: ${{ secrets.ZENODO_ACCESS_TOKEN }}
         run: |
           set -euo pipefail
+          trap 'echo "::error::Zenodo publication failed at shell line $LINENO"' ERR
           test -n "$ZENODO_ACCESS_TOKEN"
           ZENODO_ACCESS_TOKEN="$(printf '%s' "$ZENODO_ACCESS_TOKEN" | tr -d '\r\n')"
           test -n "$ZENODO_ACCESS_TOKEN"
+          echo "Zenodo token is configured"
 
           api="https://zenodo.org/api"
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
@@ -82,6 +84,7 @@ jobs:
               subjects:[.metadata.keywords[] | {subject:.}]
             }
           }' "$metadata" > /tmp/rdm-metadata.json
+          echo "Zenodo rc10 metadata is valid"
 
           verify_public_files() {
             local record_json="$1"
@@ -104,6 +107,7 @@ jobs:
             "$api/records/$anchor_id/versions/latest" > /tmp/latest-public.json
           latest_id="$(jq -er '.id' /tmp/latest-public.json)"
           latest_version="$(jq -er '.metadata.version' /tmp/latest-public.json)"
+          echo "Latest public Zenodo version is $latest_version ($latest_id)"
 
           if [[ "$latest_version" == "$target_version" ]]; then
             verify_public_files /tmp/latest-public.json
@@ -122,6 +126,7 @@ jobs:
             -X POST -H "$auth" \
             "$api/deposit/depositions/$latest_id/actions/newversion" \
             > /tmp/new-version.json
+          echo "New-version response link keys: $(jq -c '.links | keys' /tmp/new-version.json)"
           draft_url="$(jq -er '.links.latest_draft' /tmp/new-version.json)"
           curl --fail-with-body --silent --show-error \
             --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
