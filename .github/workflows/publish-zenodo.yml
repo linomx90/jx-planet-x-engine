@@ -103,25 +103,14 @@ jobs:
             exit 0
           fi
 
-          record_id="$(find_owned_draft)"
-          if [[ -z "$record_id" ]]; then
-            http_code="$(curl --silent --show-error --max-time 180 \
-              -o /tmp/create-response.json -w '%{http_code}' \
-              -X POST -H "$auth" -H "$accept" -H "Content-Type: application/json" \
-              --data-binary @/tmp/rdm-metadata.json "$api/records" || true)"
-            if [[ "$http_code" == "200" || "$http_code" == "201" ]]; then
-              record_id="$(jq -er '.id' /tmp/create-response.json)"
-            elif [[ "$http_code" =~ ^5 ]]; then
-              sleep 10
-              record_id="$(find_owned_draft)"
-            else
-              cat /tmp/create-response.json
-              echo "Zenodo draft creation failed with HTTP $http_code" >&2
-              exit 1
-            fi
-          fi
-          test -n "$record_id"
-          echo "Using Zenodo draft $record_id"
+          # Recovery is pinned after ambiguous legacy API failures created hidden drafts.
+          # Never create another draft automatically for this release.
+          record_id="22908602"
+          curl --fail-with-body --silent --show-error \
+            --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+            -H "$auth" -H "$accept" \
+            "$api/records/$record_id/draft" > /tmp/existing-draft.json
+          echo "Using pinned Zenodo draft $record_id"
 
           http_code="$(curl --silent --show-error --max-time 120 \
             -o /tmp/draft.json -w '%{http_code}' \
@@ -135,15 +124,20 @@ jobs:
           fi
           files_url="$(jq -er '.links.files' /tmp/draft.json)"
           publish_url="$(jq -er '.links.publish' /tmp/draft.json)"
-          echo "Zenodo draft links accepted for $record_id"
+          echo "Zenodo draft links accepted for $record_id: files=$files_url publish=$publish_url"
 
           for file in assets/release-assets/v0.6.0rc8/*; do
             name="$(basename "$file")"
             expected_size="$(stat -c %s "$file")"
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
-            curl --fail-with-body --silent --show-error \
-              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              -H "$auth" -H "$accept" "$files_url" > /tmp/files.json
+            files_http="$(curl --silent --show-error --max-time 120 \
+              -o /tmp/files.json -w '%{http_code}' \
+              -H "$auth" -H "$accept" "$files_url" || true)"
+            if [[ "$files_http" != "200" ]]; then
+              cat /tmp/files.json
+              echo "Zenodo file listing failed with HTTP $files_http at $files_url" >&2
+              exit 1
+            fi
             current="$(jq -c --arg name "$name" '.entries[]? | select(.key == $name)' /tmp/files.json)"
             if [[ -n "$current" ]] &&
                [[ "$(jq -r '.status' <<< "$current")" == "completed" ]] &&
