@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - .github/publish-pypi-v0.6.0rc8
+      - .github/publish-pypi-v0.6.0rc10
 
 permissions:
   contents: read
@@ -20,20 +20,24 @@ jobs:
       - name: Check out verified release assets
         uses: actions/checkout@v4
         with:
-          ref: release-assets/v0.6.0rc8
+          ref: 044035a6e72457e5477eeee2dfc224b3489a740a
           path: assets
-          sparse-checkout: release-assets/v0.6.0rc8
+          sparse-checkout: release-assets/v0.6.0rc10
           sparse-checkout-cone-mode: false
 
       - name: Verify and select distributions
         shell: bash
         run: |
-          cd assets/release-assets/v0.6.0rc8
-          sha256sum --check JX_0.6.0rc8_SHA256SUMS
-          echo "c480b6c91394cac594369a8ed32bd82dcc10ae8cad4e566364bd4a9c66b6989e  jxplanetx-0.6.0rc8-cp314-cp314-manylinux_2_31_x86_64.whl" | sha256sum --check -
+          set -euo pipefail
+          cd assets/release-assets/v0.6.0rc10
+          sha256sum --check JX_0.6.0rc10_SHA256SUMS
+          echo "5e68b4d7a5d3a656bdebdab7f0dd34ab44feb134617642211a15a15d1d9f5c5a  jxplanetx-0.6.0rc10-cp314-cp314-manylinux_2_31_x86_64.whl" | sha256sum --check -
+          echo "af390c558aa46eefa869edf2062a81869ef0d0147588467ce5af2f61c7b07e5a  jxplanetx-0.6.0rc10.tar.gz" | sha256sum --check -
+          test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc10.json)" = \
+            "4d6866fe5e9b8a64c6924325baa233ca97e0afc3"
           mkdir -p "$GITHUB_WORKSPACE/dist"
-          cp jxplanetx-0.6.0rc8-cp314-cp314-manylinux_2_31_x86_64.whl "$GITHUB_WORKSPACE/dist/"
-          cp jxplanetx-0.6.0rc8.tar.gz "$GITHUB_WORKSPACE/dist/"
+          cp jxplanetx-0.6.0rc10-cp314-cp314-manylinux_2_31_x86_64.whl "$GITHUB_WORKSPACE/dist/"
+          cp jxplanetx-0.6.0rc10.tar.gz "$GITHUB_WORKSPACE/dist/"
 
       - name: Publish exact distributions with attestations
         uses: pypa/gh-action-pypi-publish@release/v1

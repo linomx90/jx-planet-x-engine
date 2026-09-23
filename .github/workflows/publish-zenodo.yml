@@ -5,10 +5,14 @@ on:
     branches:
       - main
     paths:
-      - .github/publish-zenodo-v0.6.0rc8
+      - .github/publish-zenodo-v0.6.0rc10
 
 permissions:
   contents: read
+
+concurrency:
+  group: publish-zenodo-v0.6.0rc10
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -19,23 +23,25 @@ jobs:
         with:
           path: source
 
-      - name: Check out verified release assets
+      - name: Check out immutable release assets
         uses: actions/checkout@v4
         with:
-          ref: release-assets/v0.6.0rc8
+          ref: 044035a6e72457e5477eeee2dfc224b3489a740a
           path: assets
-          sparse-checkout: release-assets/v0.6.0rc8
+          sparse-checkout: release-assets/v0.6.0rc10
           sparse-checkout-cone-mode: false
 
       - name: Verify every archival file
         shell: bash
         run: |
-          cd assets/release-assets/v0.6.0rc8
-          sha256sum --check JX_0.6.0rc8_SHA256SUMS
-          echo "c480b6c91394cac594369a8ed32bd82dcc10ae8cad4e566364bd4a9c66b6989e  jxplanetx-0.6.0rc8-cp314-cp314-manylinux_2_31_x86_64.whl" | sha256sum --check -
-          echo "88ea71e6526ec5e9e2190e0ddf05ab3ff7a2f98e15258d65f7be402176556bbb  PYPI_ARTIFACTS_v0.6.0rc8.json" | sha256sum --check -
+          set -euo pipefail
+          cd assets/release-assets/v0.6.0rc10
+          sha256sum --check JX_0.6.0rc10_SHA256SUMS
+          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 12
+          test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc10.json)" = \
+            "4d6866fe5e9b8a64c6924325baa233ca97e0afc3"
 
-      - name: Create and publish the Zenodo software record
+      - name: Create and publish the rc10 version of the Zenodo record
         shell: bash
         env:
           ZENODO_ACCESS_TOKEN: ${{ secrets.ZENODO_ACCESS_TOKEN }}
@@ -44,11 +50,16 @@ jobs:
           test -n "$ZENODO_ACCESS_TOKEN"
           ZENODO_ACCESS_TOKEN="$(printf '%s' "$ZENODO_ACCESS_TOKEN" | tr -d '\r\n')"
           test -n "$ZENODO_ACCESS_TOKEN"
+
           api="https://zenodo.org/api"
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
           native="application/vnd.inveniordm.v1+json"
           accept="Accept: $native"
-          legacy="source/.zenodo/jx-0.6.0rc8.json"
+          metadata="source/.zenodo/jx-0.6.0rc10.json"
+          assets="assets/release-assets/v0.6.0rc10"
+          anchor_id="22908602"
+          expected_previous="0.6.0rc8"
+          target_version="0.6.0rc10"
 
           jq '{
             access:{record:"public",files:"public"},
@@ -70,149 +81,107 @@ jobs:
               version:.metadata.version,
               subjects:[.metadata.keywords[] | {subject:.}]
             }
-          }' "$legacy" > /tmp/rdm-metadata.json
+          }' "$metadata" > /tmp/rdm-metadata.json
 
-          title="$(jq -er '.metadata.title' /tmp/rdm-metadata.json)"
-          version="$(jq -er '.metadata.version' /tmp/rdm-metadata.json)"
-
-          find_public_record() {
-            curl --fail-with-body --silent --show-error \
-              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              --get --data-urlencode "size=100" \
-              --data-urlencode "q=metadata.title:\"$title\"" \
-              "$api/records" > /tmp/public-records.json
-            jq -r --arg title "$title" --arg version "$version" \
-              '[.hits.hits[]? | select(.metadata.title == $title and .metadata.version == $version)]
-               | sort_by(.id) | last | .id // empty' /tmp/public-records.json
+          verify_public_files() {
+            local record_json="$1"
+            local expected_count
+            expected_count="$(find "$assets" -maxdepth 1 -type f | wc -l)"
+            test "$(jq '.files | length' "$record_json")" -eq "$expected_count"
+            for file in "$assets"/*; do
+              local name size md5
+              name="$(basename "$file")"
+              size="$(stat -c %s "$file")"
+              md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
+              jq -e --arg name "$name" --arg md5 "$md5" --argjson size "$size" \
+                'any(.files[]; .key == $name and .size == $size and .checksum == $md5)' \
+                "$record_json" >/dev/null
+            done
           }
 
-          find_owned_draft() {
-            curl --fail-with-body --silent --show-error \
-              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              --get -H "$auth" -H "$accept" --data-urlencode "size=100" \
-              "$api/user/records" > /tmp/user-records.json
-            jq -r --arg title "$title" --arg version "$version" \
-              '[.hits.hits[]? | select(
-                (.is_draft == true or .is_published == false or .status == "draft") and
-                .metadata.title == $title and .metadata.version == $version
-              )] | sort_by(.id) | last | .id // empty' /tmp/user-records.json
-          }
-
-
-
-          # Recovery is pinned after ambiguous legacy API failures created hidden drafts.
-          # Never create another draft automatically for this release.
-          record_id="22908602"
           curl --fail-with-body --silent --show-error \
             --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-            -H "$auth" -H "$accept" \
-            "$api/records/$record_id/draft" > /tmp/existing-draft.json
-          echo "Using pinned Zenodo draft $record_id"
+            "$api/records/$anchor_id/versions/latest" > /tmp/latest-public.json
+          latest_id="$(jq -er '.id' /tmp/latest-public.json)"
+          latest_version="$(jq -er '.metadata.version' /tmp/latest-public.json)"
 
-          python3 - "$api/records/$record_id/draft" /tmp/rdm-metadata.json > /tmp/draft.json <<'PY'
-          import os
-          import pathlib
-          import sys
-          import urllib.error
-          import urllib.request
-          url, payload_path = sys.argv[1:3]
-          payload = pathlib.Path(payload_path).read_bytes()
-          request = urllib.request.Request(
-              url,
-              data=payload,
-              method="PUT",
-              headers={
-                  "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN'].strip()}",
-                  "Accept": "application/vnd.inveniordm.v1+json",
-                  "Content-Type": "application/json",
-              },
-          )
-          try:
-              with urllib.request.urlopen(request, timeout=120) as response:
-                  sys.stdout.buffer.write(response.read())
-          except urllib.error.HTTPError as error:
-              sys.stderr.buffer.write(error.read())
-              raise SystemExit(f"Zenodo metadata update failed with HTTP {error.code}")
-          PY
-          files_url="$(jq -er '.links.files' /tmp/draft.json)"
-          publish_url="$(jq -er '.links.publish' /tmp/draft.json)"
-          echo "Zenodo draft links accepted for $record_id: files=$files_url publish=$publish_url"
-
-          legacy_http="$(curl --silent --show-error --max-time 120 \
-            -o /tmp/legacy-draft.json -w '%{http_code}' \
-            -H "$auth" "$api/deposit/depositions/$record_id" || true)"
-          if [[ "$legacy_http" != "200" ]]; then
-            cat /tmp/legacy-draft.json
-            echo "Zenodo bucket discovery failed with HTTP $legacy_http for draft $record_id" >&2
+          if [[ "$latest_version" == "$target_version" ]]; then
+            verify_public_files /tmp/latest-public.json
+            jq -er '{id,doi:(.pids.doi.identifier // .doi),url:(.links.self_html // .links.record_html)}' \
+              /tmp/latest-public.json
+            echo "Zenodo rc10 already exists and every public file is verified."
+            exit 0
+          fi
+          if [[ "$latest_version" != "$expected_previous" ]]; then
+            echo "Refusing to version unexpected latest Zenodo release: $latest_version ($latest_id)" >&2
             exit 1
           fi
-          bucket="$(jq -er '.links.bucket' /tmp/legacy-draft.json)"
-          echo "Zenodo bucket discovered for pinned draft $record_id"
-          curl --fail-with-body --silent --show-error \
-            -H "$auth" -H "$accept" "$files_url" > /tmp/existing-files.json
 
-          for file in assets/release-assets/v0.6.0rc8/*; do
+          curl --fail-with-body --silent --show-error \
+            --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+            -X POST -H "$auth" \
+            "$api/deposit/depositions/$latest_id/actions/newversion" \
+            > /tmp/new-version.json
+          draft_url="$(jq -er '.links.latest_draft' /tmp/new-version.json)"
+          curl --fail-with-body --silent --show-error \
+            --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+            -H "$auth" "$draft_url" > /tmp/draft.json
+          draft_id="$(jq -er '.id' /tmp/draft.json)"
+          bucket="$(jq -er '.links.bucket' /tmp/draft.json)"
+          echo "Using Zenodo new-version draft $draft_id from published record $latest_id"
+
+          legacy_files_url="$draft_url/files"
+          curl --fail-with-body --silent --show-error -H "$auth" "$legacy_files_url" \
+            > /tmp/inherited-files.json
+          jq -r --arg base "$legacy_files_url" \
+            '.[] | (.links.self // ($base + "/" + (.id | tostring)))' \
+            /tmp/inherited-files.json | while IFS= read -r file_url; do
+            curl --fail-with-body --silent --show-error -X DELETE -H "$auth" "$file_url" \
+              >/dev/null
+          done
+
+          rdm_draft_url="$api/records/$draft_id/draft"
+          curl --fail-with-body --silent --show-error \
+            --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+            -X PUT -H "$auth" -H "$accept" -H "Content-Type: application/json" \
+            --data-binary @/tmp/rdm-metadata.json "$rdm_draft_url" > /tmp/updated-draft.json
+          test "$(jq -er '.metadata.version' /tmp/updated-draft.json)" = "$target_version"
+          files_url="$(jq -er '.links.files' /tmp/updated-draft.json)"
+          publish_url="$(jq -er '.links.publish' /tmp/updated-draft.json)"
+
+          for file in "$assets"/*; do
             name="$(basename "$file")"
             expected_size="$(stat -c %s "$file")"
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
-            current="$(jq -c --arg name "$name" '.entries[]? | select(.key == $name)' /tmp/existing-files.json)"
-            if [[ -n "$current" ]] &&
-               [[ "$(jq -r '.status' <<< "$current")" == "completed" ]] &&
-               [[ "$(jq -r '.size' <<< "$current")" == "$expected_size" ]] &&
-               [[ "$(jq -r '.checksum' <<< "$current")" == "$expected_md5" ]]; then
-              echo "$name: already uploaded and verified"
-              continue
-            fi
-            python3 - "$file" "$bucket/$name" > /tmp/file-upload.json <<'PY'
-          import os
-          import pathlib
-          import sys
-          import urllib.error
-          import urllib.request
-          path, url = sys.argv[1:3]
-          payload = pathlib.Path(path).read_bytes()
-          request = urllib.request.Request(
-              url,
-              data=payload,
-              method="PUT",
-              headers={
-                  "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN'].strip()}",
-                  "Content-Type": "application/octet-stream",
-              },
-          )
-          try:
-              with urllib.request.urlopen(request, timeout=600) as response:
-                  sys.stdout.buffer.write(response.read())
-          except urllib.error.HTTPError as error:
-              sys.stderr.buffer.write(error.read())
-              raise SystemExit(f"Zenodo bucket upload failed with HTTP {error.code}")
-          PY
+            curl --fail-with-body --silent --show-error \
+              --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
+              -X PUT -H "$auth" -H "Content-Type: application/octet-stream" \
+              --data-binary "@$file" "$bucket/$name" > /tmp/file-upload.json
             jq -e --arg md5 "$expected_md5" --argjson size "$expected_size" \
-              '.checksum == $md5 and .size == $size' /tmp/file-upload.json > /dev/null
+              '.checksum == $md5 and .size == $size' /tmp/file-upload.json >/dev/null
             echo "$name: uploaded and verified"
           done
 
-          http_code="$(curl --silent --show-error --max-time 300 \
+          curl --fail-with-body --silent --show-error -H "$auth" -H "$accept" \
+            "$files_url" > /tmp/uploaded-files.json
+          test "$(jq '.entries | length' /tmp/uploaded-files.json)" -eq \
+            "$(find "$assets" -maxdepth 1 -type f | wc -l)"
+
+          publish_http="$(curl --silent --show-error --max-time 300 \
             -o /tmp/published.json -w '%{http_code}' \
             -X POST -H "$auth" -H "$accept" "$publish_url" || true)"
-          if [[ "$http_code" != "200" && "$http_code" != "201" && "$http_code" != "202" ]]; then
-            cp /tmp/published.json /tmp/publish-error.json
-            if [[ "$http_code" =~ ^5 ]]; then
-              verify_http="$(curl --silent --show-error --max-time 120 \
-                -o /tmp/published.json -w '%{http_code}' \
-                -H "$accept" "$api/records/$record_id" || true)"
-              if [[ "$verify_http" == "200" ]]; then
-                http_code="200"
-              fi
-            fi
-            if [[ "$http_code" != "200" ]]; then
-              cat /tmp/publish-error.json
-              echo "Zenodo publish failed with HTTP $http_code for draft $record_id" >&2
-              exit 1
-            fi
+          if [[ "$publish_http" != "200" && "$publish_http" != "201" && "$publish_http" != "202" ]]; then
+            curl --fail-with-body --silent --show-error \
+              --retry 8 --retry-all-errors --retry-delay 5 --max-time 120 \
+              "$api/records/$draft_id" > /tmp/published.json
           fi
-          jq -er '{
-            id,
-            doi:(.pids.doi.identifier // .doi),
-            record_url:(.links.self_html // .links.record_html // .record_url)
-          }' /tmp/published.json
+          published_id="$(jq -er '.id' /tmp/published.json)"
+          test "$published_id" = "$draft_id"
+
+          curl --fail-with-body --silent --show-error \
+            --retry 8 --retry-all-errors --retry-delay 5 --max-time 120 \
+            "$api/records/$published_id" > /tmp/public-rc10.json
+          test "$(jq -er '.metadata.version' /tmp/public-rc10.json)" = "$target_version"
+          verify_public_files /tmp/public-rc10.json
+          jq -er '{id,doi:(.pids.doi.identifier // .doi),url:(.links.self_html // .links.record_html)}' \
+            /tmp/public-rc10.json

@@ -1,0 +1,76 @@
+name: Publish JX 0.6.0rc10
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-v0.6.0rc10.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-jx-v0.6.0rc10
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the immutable release source
+        uses: actions/checkout@v4
+        with:
+          ref: 4d6866fe5e9b8a64c6924325baa233ca97e0afc3
+          path: source
+          fetch-depth: 0
+
+      - name: Check out the immutable release assets
+        uses: actions/checkout@v4
+        with:
+          ref: 044035a6e72457e5477eeee2dfc224b3489a740a
+          path: assets
+          sparse-checkout: release-assets/v0.6.0rc10
+          sparse-checkout-cone-mode: false
+
+      - name: Verify every release asset and its provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd assets/release-assets/v0.6.0rc10
+          sha256sum --check JX_0.6.0rc10_SHA256SUMS
+          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 12
+          test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc10.json)" = \
+            "4d6866fe5e9b8a64c6924325baa233ca97e0afc3"
+          test "$(jq -er '.version' PYPI_ARTIFACTS_v0.6.0rc10.json)" = "0.6.0rc10"
+          test "$(jq -er '.version' RELEASE_MANIFEST_v0.6.0rc10.json)" = "0.6.0rc10"
+
+      - name: Create the annotated tag and GitHub prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd source
+          expected="4d6866fe5e9b8a64c6924325baa233ca97e0afc3"
+          if git rev-parse --verify refs/tags/v0.6.0rc10 >/dev/null 2>&1; then
+            test "$(git rev-list -n 1 v0.6.0rc10)" = "$expected"
+          else
+            git config user.name "linomx90"
+            git config user.email "33378469+linomx90@users.noreply.github.com"
+            git tag --annotate v0.6.0rc10 "$expected" \
+              --message "JX General Dynamics 0.6.0rc10"
+            git push origin refs/tags/v0.6.0rc10
+          fi
+          cd "$GITHUB_WORKSPACE"
+          if gh release view v0.6.0rc10 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release v0.6.0rc10 already exists; verified tag remains unchanged."
+            exit 0
+          fi
+          gh release create v0.6.0rc10 \
+            assets/release-assets/v0.6.0rc10/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --prerelease \
+            --title "JX General Dynamics 0.6.0rc10" \
+            --notes-file source/RELEASE_NOTES.md
