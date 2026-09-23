@@ -1,0 +1,66 @@
+name: Archive JX on Zenodo
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/publish-zenodo-v0.6.0rc8
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release metadata
+        uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Check out verified release assets
+        uses: actions/checkout@v4
+        with:
+          ref: release-assets/v0.6.0rc8
+          path: assets
+          sparse-checkout: release-assets/v0.6.0rc8
+          sparse-checkout-cone-mode: false
+
+      - name: Verify every archival file
+        shell: bash
+        run: |
+          cd assets/release-assets/v0.6.0rc8
+          sha256sum --check JX_0.6.0rc8_SHA256SUMS
+
+      - name: Create and publish the Zenodo software record
+        shell: bash
+        env:
+          ZENODO_ACCESS_TOKEN: ${{ secrets.ZENODO_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$ZENODO_ACCESS_TOKEN"
+          api="https://zenodo.org/api"
+          auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
+          curl --fail-with-body --silent --show-error \
+            -X POST \
+            -H "$auth" \
+            -H "Content-Type: application/json" \
+            --data-binary @source/.zenodo/jx-0.6.0rc8.json \
+            "$api/deposit/depositions" > /tmp/deposition.json
+          deposition_id="$(jq -er '.id' /tmp/deposition.json)"
+          bucket="$(jq -er '.links.bucket' /tmp/deposition.json)"
+          for file in assets/release-assets/v0.6.0rc8/*; do
+            name="$(basename "$file")"
+            curl --fail-with-body --silent --show-error \
+              -X PUT \
+              -H "$auth" \
+              -H "Content-Type: application/octet-stream" \
+              --upload-file "$file" \
+              "$bucket/$name" > /dev/null
+          done
+          curl --fail-with-body --silent --show-error \
+            -X POST \
+            -H "$auth" \
+            "$api/deposit/depositions/$deposition_id/actions/publish" > /tmp/published.json
+          jq -er '{id,doi,record_url:.links.record_html}' /tmp/published.json

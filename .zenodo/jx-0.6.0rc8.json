@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "title": "JX General Dynamics 0.6.0rc8",
+    "upload_type": "software",
+    "description": "<p>JX General Dynamics 0.6.0rc8 is a reproducible release candidate of the JX celestial-dynamics engine. This archive contains the exact Python source distribution, CPython 3.14 Linux x86-64 wheel, release manifest, artifact manifest, CUDA release-gate record, accuracy-matched JX/REBOUND screening benchmark, and SHA-256 inventory published with the GitHub prerelease.</p><p>Scientific status: <strong>SCREENING_ONLY</strong>. Model output is not astronomical evidence, and this record does not establish production fitness, a Planet X detection, or broad superiority over REBOUND.</p><p>Rights: Copyright 2026 Lino Avila. The JX source is publicly viewable but proprietary; no permission to copy, modify, redistribute, sublicense, sell, or create derivative works is granted except by prior written authorization. Third-party components retain their own licenses.</p>",
+    "creators": [
+      {
+        "name": "Avila, Lino"
+      }
+    ],
+    "version": "0.6.0rc8",
+    "publication_date": "2026-09-22",
+    "access_right": "open",
+    "license": "other-closed",
+    "keywords": [
+      "celestial mechanics",
+      "N-body integration",
+      "CUDA",
+      "reproducibility",
+      "scientific screening"
+    ],
+    "related_identifiers": [
+      {
+        "identifier": "https://github.com/linomx90/jx-planet-x-engine/releases/tag/v0.6.0rc8",
+        "relation": "isSupplementTo",
+        "scheme": "url"
+      }
+    ]
+  }
+}
+

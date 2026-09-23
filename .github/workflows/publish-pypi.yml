@@ -1,0 +1,41 @@
+name: Publish JX to PyPI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/publish-pypi-v0.6.0rc8
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out verified release assets
+        uses: actions/checkout@v4
+        with:
+          ref: release-assets/v0.6.0rc8
+          path: assets
+          sparse-checkout: release-assets/v0.6.0rc8
+          sparse-checkout-cone-mode: false
+
+      - name: Verify and select distributions
+        shell: bash
+        run: |
+          cd assets/release-assets/v0.6.0rc8
+          sha256sum --check JX_0.6.0rc8_SHA256SUMS
+          mkdir -p "$GITHUB_WORKSPACE/dist"
+          cp jxplanetx-0.6.0rc8-cp314-cp314-linux_x86_64.whl "$GITHUB_WORKSPACE/dist/"
+          cp jxplanetx-0.6.0rc8.tar.gz "$GITHUB_WORKSPACE/dist/"
+
+      - name: Publish exact distributions with attestations
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist
+
