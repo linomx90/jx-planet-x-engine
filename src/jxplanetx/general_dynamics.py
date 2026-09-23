@@ -116,10 +116,10 @@ _CAPABILITIES = (
         "ROTATIONAL_AND_INTERIOR_DYNAMICS",
         EvidenceState.INCONCLUSIVE,
         IntegrationState.RESEARCH_BINDING_ONLY,
-        "runs/jx_lunar_gpu_endpoint_witness_search_v1/SUMMARY.json",
-        "49cc7fc2a6323229ce7db6580bbe966f1805a2aba297c28fa945c34890027986",
-        "ENDPOINT_AMBIGUITY_EVIDENCE_PHYSICAL_OUTCOME_UNDECIDED",
-        "NEW_SEPARATELY_PREREGISTERED_NUMERICAL_QUESTION_REQUIRED",
+        "runs/jx_lunar_deformation_geodetic_screen_v1/SUMMARY.json",
+        "3c09b91a60f9f4b0ffa16596c335f0a422a6122ceaae26e62458e2f317be9d95",
+        "COMPLETE_DEFORMATION_AND_GEODETIC_PROMOTION_GATES_FAILED_NO_LLR_OR_DE440_REPRODUCTION_CLAIM",
+        "PREREGISTER_SIMULTANEOUS_TRANSLATION_ROTATION_WITH_COMPLETE_DELAYED_DEFORMATION_AND_COMMON_POTENTIAL_REACTIONS",
     ),
     GeneralDynamicsCapability(
         "cosmology.collisionless_particle_mesh",
@@ -270,7 +270,7 @@ def registry_summary() -> dict[str, object]:
     return {
         "schema": "jxplanetx.general-dynamics-capability-registry.v1",
         "project": "JX_GENERAL_DYNAMICS",
-        "version": "0.6.0rc1",
+        "version": "0.6.0rc3",
         "overall_status": "PARTIALLY_QUALIFIED_RESEARCH_PLATFORM",
         "scientific_claim_state": "SCREENING_ONLY",
         "production_ready": False,

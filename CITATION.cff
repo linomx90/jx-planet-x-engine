@@ -1,1 +1,18 @@
-¨¥yÛhr·šµë-­æ¦}Ó©z¶­Š‰ç¢Ú^®h­µçEj)^vÚ­æ­zËky©Ÿtê^­«b¢yè¶—«š+myÑZŠW¶‡+y«^²ÚŞjgİ:—«jØ¨z-¥êæŠÛ^u™˜µÙ•ÉÍ¥½¸è€Ä¸È¸À)µ•ÍÍ…”è€‰%˜å½ÔÕÍ”Ñ¡¥ÌÍ½™Ñİ…É”°Á±•…Í”¥Ñ”¥ĞÕÍ¥¹œÑ¡”µ•Ñ…‘…Ñ„‰•±½Ü¸ˆ)Ñ¥Ñ±”è€‰)`•±•ÍÑ¥…°å¹…µ¥ÌÉ…µ•İ½É¬ˆ)ÑåÁ”èÍ½™Ñİ…É”)Ù•ÉÍ¥½¸è€ˆÀ¸Ø¸ÁÉŒÄˆ)‘…Ñ”µÉ•±•…Í•è€ÈÀÈØ´Àä´Ää)…ÕÑ¡½ÉÌè(€€´™…µ¥±äµ¹…µ•ÌèÙ¥±„(€€€¥Ù•¸µ¹…µ•Ìè1¥¹¼)…‰ÍÑÉ…Ğè€‰™…±Í¥™¥…Ñ¥½¸µ™¥ÉÍĞ•¹•É…°•±•ÍÑ¥…°µ‘å¹…µ¥Ì™É…µ•İ½É¬İ¥Ñ •áÁ±¥¥Ğ™½É”½¹ÑÉ…ÑÌ°É•ÁÉ½‘Õ¥‰±”¹Õµ•É¥…°Ù…±¥‘…Ñ¥½¸°…¹Í¥•¹Ñ¥™¥Œ±…¥´½¹ÑÉ½±ÌìA±…¹•Ğ`É•Í•…É ¥Ì½¹”…ÁÁ±¥…Ñ¥½¸¸ˆ)­•åİ½É‘Ìè(€€´•±•ÍÑ¥…°µ•¡…¹¥Ì(€€´8µ‰½‘ä¥¹Ñ•É…Ñ¥½¸(€€´™½É”µ½‘•±Ì(€€´AT½µÁÕÑ¥¹œ(€€´¹Õµ•É¥…°Ù…±¥‘…Ñ¥½¸(€€´½ÕÑ•ÈM½±…ÈMåÍÑ•´(€€´É•ÁÉ½‘Õ¥‰¥±¥Ñä(
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "JX Celestial Dynamics Framework"
+type: software
+version: "0.6.0rc8"
+date-released: 2026-09-22
+authors:
+  - family-names: Avila
+    given-names: Lino
+abstract: "A falsification-first general celestial-dynamics framework with explicit force contracts, reproducible numerical validation, and scientific claim controls; Planet X research is one application."
+keywords:
+  - celestial mechanics
+  - N-body integration
+  - force models
+  - GPU computing
+  - numerical validation
+  - outer Solar System
+  - reproducibility

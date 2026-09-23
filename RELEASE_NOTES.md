@@ -1,13 +1,150 @@
-# JX General Dynamics 0.6.0rc1
+# JX General Dynamics 0.6.0rc8
 
-Release date: 19 September 2026
+Release date: 22 September 2026
 
 Release stage: release candidate
 
 Scientific claim state: `SCREENING_ONLY`
 
-This candidate aligns the installable `jxplanetx` package with General
-Dynamics registry v17. The registry remains a capability-and-evidence map, not
+Rc8 is the evidence-integrity and native-hybrid research candidate. It keeps
+the supported rc7 numerical APIs unchanged while adding a deterministic
+catalog over the complete local experiment collection, explicit links to
+archive copies, lifecycle and family groupings, and a metadata-hygiene queue.
+The immutable library authority catalog remains controlling; active workspace
+records are never silently promoted.
+
+The preregistered stateful-NEAR RKF78 candidate passed its locked correctness,
+classification, work-reduction, accuracy-envelope, and timing gates. It cut
+attempted adaptive substeps from 192 to 66 on close scatter and from 354 to 264
+at pericenter, producing 1.524x and 1.246x internal speedups. The separate
+endpoint-synchronization candidate preserved exact output but missed its
+minimum speed threshold and remains a negative result.
+
+The equal-output raw-C screen still measured JX slower than TRACE by 2.158x,
+1.415x, and 2.412x on the all-far, close-scatter, and pericenter fixtures. TRACE
+retained its own tolerance defaults, the cases are short and synthetic, and
+the result is therefore not an accuracy-matched or general solver ranking.
+Stateful NEAR remains a source-bound development prototype rather than a
+supported installed API.
+
+The exact rc8 wheel separately passed the locked supported-API 100-period
+WHFast race. Its single-pass end-to-end median was 9.128 ms versus 10.952 ms
+for REBOUND WHFast, producing 1.200x JX throughput on that recorded host and
+weak-hierarchy workload. The exact replay lane took 18.440 ms, so REBOUND was
+1.684x faster than that lane. Both solvers passed the same preexisting accuracy
+and conservation envelope; this result remains single-host, workload-specific,
+and `SCREENING_ONLY`.
+
+The release gate now assigns every one of the 258 test modules to exactly one
+compatible runtime profile. The 13-lane engine matrix passes 233 tests, and
+the new local performance and library-catalog profiles pass their source-bound
+checks. General Dynamics registry v18 remains immutable evidence bound to
+`0.6.0rc3`; no capability, lunar status, production status, or scientific
+claim is promoted.
+
+## Independent ownership and license
+
+This release retains the proprietary, all-rights-reserved license held by
+Lino Avila. Earlier public releases and third-party materials retain their
+original notices. AI systems are development tools, not authors or owners.
+
+---
+
+# JX General Dynamics 0.6.0rc7
+
+Release date: 22 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc7 advances the supported `jxplanetx.fast_wisdom_holman` CPU interface to the
+checkpoint-synchronized v3 native map. The final interaction kick does not
+force an unnecessary full coordinate transform: complete position/velocity
+transforms occur at retained checkpoints, while the exact position transform
+needed by every guard is preserved. The default route executes once and binds
+all native-step postconditions, guards, accounting, input/output custody, and
+result content in a deterministic certificate. Exact complete replay remains
+available by request and is mandatory in release qualification.
+
+The package also contains an implementation-private endpoint-seeded Kepler v4
+prototype with observable exact-v2 fallback accounting. Its locked 100-period
+development race used zero fallbacks, reduced universal-G evaluations by
+24.49%, and was 5.23% faster than v3 in the recorded numerical scope. Against
+equal-output tuned REBOUND 5.1.1 WHFast it was 1.99% slower, which is below the
+predeclared five-percent timing resolution and is classified as an unresolved
+tie. Endpoint-only WHFast remained 4.42x faster but did not return the same
+checkpoint cadence. These are one-host, weak-hierarchy development results.
+V4 remains private and is not the supported rc7 backend.
+
+The final rc7 wheel and source archive were each reproduced byte-for-byte in
+two independent temporary build trees and passed fresh-install supported-API
+smokes. The exact wheel then passed public-JX bitwise parity, exact replay,
+deterministic-output, universal-G, IAS15-envelope, and conservation gates. On
+the locked host/workload its supported single-pass end-to-end median was
+9.142 ms versus 10.037 ms for WHFast (1.098x JX throughput); the release-gate
+replay lane was 18.222 ms (1.815x REBOUND throughput). This classification is
+limited to the exact 100-period weak-hierarchy protocol and does not transfer
+to other workloads or machines.
+
+The current-source CUDA core gate also passed all five non-skippable parity,
+dtype-rejection, transfer-rejection, tolerance-custody, and device-resident
+trajectory tests with zero skips on the NVIDIA GeForce RTX 5060 Ti using CuPy
+14.2.0 and CUDA runtime/driver 13.2. This validates the rc7 core on that device;
+it does not rerun the earlier two-machine scaling matrix or establish general
+GPU qualification.
+
+No portable solver ranking, general REBOUND superiority, production fitness,
+or scientific qualification is claimed. The exact public map is restricted to
+its guarded 2--32-body hierarchical Newtonian scope. General Dynamics registry
+v18 remains immutable evidence historically bound to `0.6.0rc3`; no capability
+or lunar status is promoted. Frozen runs, archives, historical evidence, rc6
+artifacts, and all earlier manifests are unchanged.
+
+## Independent ownership and license
+
+This release retains the proprietary, all-rights-reserved license held by
+Lino Avila. Earlier public releases and third-party materials retain their
+original notices. AI systems are development tools, not authors or owners.
+
+---
+
+# JX General Dynamics 0.6.0rc6
+
+Release date: 22 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc6 adds the opt-in supported `jxplanetx.fast_wisdom_holman` CPU interface.
+It moves the complete guarded fixed-step map into one compiled call, uses a
+binary64 no-change termination rule for the universal-G series, and preserves
+the fixed 64-term rc5 evaluator as the exact fallback. Input and output custody,
+failure-domain checks, deterministic replay, and non-production claim controls
+remain explicit.
+
+The preregistered 100-period weak-hierarchy race passed every accuracy,
+conservation, exact-replay, failure-domain, and public-JX bitwise gate. On the
+recorded host, the single-pass v2 lane had 9.358 ms median end-to-end latency
+versus 11.013 ms for REBOUND 5.1.1 WHFast, while the default replay lane took
+18.748 ms. These are single-host, single-workload screening measurements—not a
+portable ranking, scientific qualification, or general victory over REBOUND's
+solver portfolio. The rc5 artifacts and manifest remain immutable.
+
+## Independent ownership and license
+
+This release retains the proprietary, all-rights-reserved license held by
+Lino Avila. No permission is granted to
+copy, modify, publish, distribute, sublicense, sell, commercially exploit, or
+create derivative works without prior written authorization. `AUTHORS.md`
+records the human author; AI systems are development tools rather than authors
+or owners. Earlier public releases and third-party materials retain the
+licenses and notices that accompanied them.
+
+This candidate carries the immutable General Dynamics registry v18 evidence
+historically bound to `0.6.0rc3`; it does not rewrite that record or create a
+new registry generation. The registry remains a capability-and-evidence map, not
 a declaration that every listed domain shares one solver or is scientifically
 qualified. It explicitly records `production_ready: false` and
 `unified_multiphysics_execution: false`.
@@ -30,9 +167,102 @@ builds twice in independent temporary trees and refuses output unless both the
 wheel and source archive are byte-identical. It also records exact hashes and
 sizes without modifying research evidence.
 
-No new scientific model, threshold, evidence result, or capability promotion
-is part of this release candidate. Frozen runs, archives, registry v16, and
-all earlier records remain unchanged.
+The candidate compiles the audited 2--32-body point-mass RKF78 C core into an
+implementation-private CPython extension with strict floating-point compiler
+options. The supported `jxplanetx.smalln` surface routes measured low-lane
+NumPy workloads to that core and measured batched CuPy workloads to the fused
+CUDA controller without implicit transfers. Native wheels are ABI/platform
+specific, and source installs require a C11 toolchain. This engineering API is
+still `SCREENING_ONLY`; it is not registered as a scientifically qualified or
+production backend.
+
+Rc5 reduces public CPU call overhead without changing the native numerical
+core: immutable RKF78 tableau arrays, checkpoint epochs, and read-only
+checkpoint views are cached in frozen workspaces and validated before native
+execution. The installed-wheel accuracy gate passed with byte-identical state
+and ledger behavior. On the recorded RTX 5060 Ti desktop, the public CPU path
+had lower individual-system latency than REBOUND IAS15 for the sampled 2-,
+11-, and 32-body synthetic workloads. The revised discrete crossover keeps CPU
+through eight lanes for bodies 2--31, preserves the nearly tied measured CUDA
+choice for 32 bodies at eight lanes, and selects CUDA at 16 or more lanes. A
+101-repetition boundary audit is authoritative for the noise-sensitive
+28--32-body/eight-lane points and is retained alongside the broader
+five-repetition sweep. This is one-host engineering evidence and does not
+establish portable routing or general JX superiority.
+
+The exact final rc5 wheel was rerun against eight parallel REBOUND 5.1.1 IAS15
+workers on the recorded RTX 5060 Ti desktop. Every 256-system row passed the
+shared `1e-10` checkpoint-error gate. JX throughput was 2.01x, 3.56x, and
+3.60x REBOUND's eight-worker integration critical path for 2, 11, and 32
+bodies. Sequential REBOUND IAS15 still had lower one-lane latency than fused
+CUDA. These are short synthetic, one-machine batch results, not a general speed
+claim.
+
+For historical cross-hardware context, the corrected rc4 deterministic kit
+passed on the separate RTX 4050 Laptop GPU, and the fail-closed two-machine
+aggregate passed. On that laptop, JX throughput relative to eight-worker
+REBOUND's integration critical path was 1.02x, 1.56x, and 1.27x for 2, 11,
+and 32 bodies. The initial kit
+correctly failed before timing because one benchmark import was absent; the
+rebuilt byte-identical kit includes and hashes the complete import closure.
+Both hosts share common ownership, so this remains a finite hardware screen,
+not an independent replication or portable ranking. The laptop and aggregate
+were not rerun for rc5.
+
+The exact rc5 wheel also passed the registered 10-, 30-, and 100-year
+eleven-body mutual-Newtonian point-mass comparison with REBOUND IAS15. At 100
+years, the maximum body-position difference was 1.911314 m and the resolved
+Earth--Moon relative-position difference was 0.476182 m. This is an accuracy
+screen only: the recorded timings are non-comparable, and the model omits the
+coupled lunar mantle/core physics required for an ephemeris or lunar-physics
+claim.
+
+The rc5 Challenger v2 full portfolio passed its self-validating Leapfrog,
+WHFast/IAS15, and MERCURIUS/TRACE/IAS15 workloads, including the registered
+limitation witnesses. Its wall times are diagnostic only; it authorizes no
+cross-study solver ranking or performance-superiority claim.
+
+A separate prospectively locked three-repetition timing protocol now makes the
+long single-trajectory scopes comparable. Every candidate passed its common
+workload-specific accuracy envelope. On the recorded desktop, REBOUND IAS15
+with an AMD Ryzen 5 5500 and RTX 5060 Ti, REBOUND IAS15 was 23.62x faster than
+fused CUDA RKF78 on the 100-year eleven-body point-mass
+arc; WHFast was 3,331.94x faster than JX Wisdom--Holman on the 100-period smooth
+hierarchy; and MERCURIUS and TRACE were 2,650.18x and 18,819.64x faster than the
+JX hybrid on the close-scatter workload. JX timings include the mandatory
+public semantic replay. These results show a large current implementation gap
+for long single trajectories; they do not negate the distinct 256-system
+short-batch CUDA result or establish portable algorithmic rankings.
+
+The initial timing protocol stopped before any measured lane because of a
+REBOUND provenance field-name check and produced no report. Its bytes remain
+unchanged. A hash-bound v2 overlay changes only that preflight lookup and binds
+the successful report. Existing screening outcomes were known before this
+protocol and are disclosed; only the new timing sample was prospective.
+
+Additive experimental Moon boundaries now advance translation, lunar mantle
+attitude/rate, and lunar fluid-core rate in one RKF78 state. The v1 isolated
+Earth--Moon model established common-potential orbit/spin reaction and a
+converged numerical chassis. The v2 model simultaneously integrates the Sun,
+Earth, and Moon; adds Sun and Earth static-lunar-figure force/torque; and adds a
+reaction-balanced Earth-J2 orbital correction around a held J2000 pole. Its
+one-day Earth--Moon difference from retained DE440 is 1.251 m, down from v1's
+95.99 km, and the Earth-J2 ablation is 5.170 m. This remains unregistered
+`SCREENING_ONLY` research: it is not a complete DE440 model, raw LLR
+validation, independent physical validation, or a lunar capability promotion.
+
+Two additional opt-in lunar research components now implement the complete
+delayed tidal-plus-spin mantle-deformation balance and source-fixed geodetic
+transport in the mantle/core relative-frame terms. Their frozen 90/365-day
+screens completed 784,368 RKF78 stages each. Neither passed its registered
+promotion rule: deformation improved all four metrics but only one cleared the
+one-percent threshold, while geodetic transport improved none. Registry v18
+therefore keeps the lunar capability `INCONCLUSIVE`; the next clean gate is a
+separately preregistered simultaneous translation/rotation model containing
+the complete deformation package and common-potential orbital reactions.
+
+No frozen scientific threshold or registry capability was promoted. Frozen
+runs, archives, registry v18, and all earlier records remain unchanged.
 
 ---
 

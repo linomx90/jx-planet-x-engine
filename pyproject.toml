@@ -1,1 +1,84 @@
-¨¥yÛhr·šµë-­æ¦}Ó©z¶­Š‰ç¢Ú^®h­µçEj)^vÚ­æ­zËky©Ÿtê^­«b¢yè¶—«š+myÑZŠW¶‡+y«^²ÚÞjgÝ:—«jØ¨žz-¥êæŠÛ^um‰Õ¥±µÍåÍÑ•µt)É•ÅÕ¥É•Ì€ôl‰Í•ÑÕÁÑ½½±ÌôôÜà¸Ä¸Ä‰t)‰Õ¥±µ‰…­•¹€ô€‰Í•ÑÕÁÑ½½±Ì¹‰Õ¥±‘}µ•Ñ„ˆ()mÁÉ½©•Ñt)¹…µ”€ô€‰©áÁ±…¹•Ñàˆ)Ù•ÉÍ¥½¸€ô€ˆÀ¸Ø¸ÁÉŒÄˆ)‘•ÍÉ¥ÁÑ¥½¸€ô€‰…±Í¥™¥…Ñ¥½¸µ™¥ÉÍÐ•¹•É…°•±•ÍÑ¥…°µ‘å¹…µ¥Ì™É…µ•Ý½É¬Ý¥Ñ •áÁ±¥¥ÐÍ¥•¹Ñ¥™¥Œ±…¥´½¹ÑÉ½±Ìˆ)É•…‘µ”€ô€‰I5¹µˆ)É•ÅÕ¥É•ÌµÁåÑ¡½¸€ô€ˆøôÌ¸ÄÈˆ)±¥•¹Í”€ô€‰1¥•¹Í•I•˜µ)`µAÉ½ÁÉ¥•Ñ…Éäˆ)±¥•¹Í”µ™¥±•Ì€ôl‰1%9M‰t)…ÕÑ¡½ÉÌ€ômí¹…µ”€ô€‰1¥¹¼Ù¥±„‰õt)­•åÝ½É‘Ì€ôl‰•±•ÍÑ¥…°µµ•¡…¹¥Ìˆ°€‰¸µ‰½‘äˆ°€‰ÁÔˆ°€‰™½É”µµ½‘•±Ìˆ°€‰Á±…¹•Ðµàˆ°€‰É•ÁÉ½‘Õ¥‰¥±¥Ñä‰t)±…ÍÍ¥™¥•ÉÌ€ôl(€€‰•Ù•±½Áµ•¹ÐMÑ…ÑÕÌ€èè€Ð€´	•Ñ„ˆ°(€€‰%¹Ñ•¹‘•Õ‘¥•¹”€èèM¥•¹”½I•Í•…É ˆ°(€€‰AÉ½É…µµ¥¹œ1…¹Õ…”€èèAåÑ¡½¸€èè€Ì¸ÄÈˆ°(€€‰Q½Á¥Œ€èèM¥•¹Ñ¥™¥Œ½¹¥¹••É¥¹œ€èèÍÑÉ½¹½µäˆ°)t()mÁÉ½©•Ð¹½ÁÑ¥½¹…°µ‘•Á•¹‘•¹¥•Ít)•¹¥¹”€ôl‰¹ÕµÁäøôÈ°ðÌ‰t)ÁÔµÕ‘„ÄÈ€ôl‰¹ÕµÁäøôÈ°ðÌˆ°€‰ÕÁäµÕ‘„ÄÉámÑ­tøôÄÐ°ðÄÔ‰t)ÁÔµÕ‘„ÄÌ€ôl‰¹ÕµÁäøôÈ°ðÌˆ°€‰ÕÁäµÕ‘„ÄÍámÑ­tøôÄÐ°ðÄÔ‰t)É•‰½Õ¹€ôl‰É•‰½Õ¹ôôÐ¸Ð¸ÄÄ‰t)¥…ÌÄÔ€ôl‰É•‰½Õ¹ôôÐ¸Ð¸ÄÄ‰t)¥¹‘•Á•¹‘•¹Ð€ôl‰¹ÕµÁäôôÈ¸Ì¸Ôˆ°€‰Í¥ÁäôôÄ¸ÄÜ¸À‰t()mÁÉ½©•Ð¹ÍÉ¥ÁÑÍt)©áÁ±…¹•Ñà€ô€‰©áÁ±…¹•Ñà¹±¤éµ…¥¸ˆ()mÑ½½°¹Í•ÑÕÁÑ½½±Ít)Á…­…”µ‘¥È€ôìˆˆ€ô€‰ÍÉŒ‰ô()mÑ½½°¹Í•ÑÕÁÑ½½±Ì¹Á…­…•Ì¹™¥¹‘t)Ý¡•É”€ôl‰ÍÉŒ‰t(
+[build-system]
+requires = ["setuptools==78.1.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jxplanetx"
+version = "0.6.0rc8"
+description = "Falsification-first general celestial-dynamics framework with explicit scientific claim controls"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "LicenseRef-JX-Proprietary"
+license-files = ["LICENSE", "AUTHORS.md", "THIRD_PARTY_NOTICES.md"]
+authors = [{name = "Lino Avila"}]
+keywords = ["celestial-mechanics", "n-body", "gpu", "force-models", "planet-x", "reproducibility"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Astronomy",
+]
+
+[project.optional-dependencies]
+engine = ["numpy>=2,<3"]
+gpu-cuda12 = ["numpy>=2,<3", "cupy-cuda12x[ctk]>=14,<15"]
+gpu-cuda13 = ["numpy>=2,<3", "cupy-cuda13x[ctk]>=14,<15"]
+rebound = ["rebound==4.4.11"]
+ias15 = ["rebound==4.4.11"]
+rebound-competition = ["rebound==5.1.1"]
+independent = ["numpy==2.3.5", "scipy==1.17.0"]
+llr-screen = ["numpy==2.3.5", "pyerfa==2.0.1.5", "spiceypy==8.2.0"]
+
+[project.scripts]
+jxplanetx = "jxplanetx.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._smalln_cpu"
+sources = [
+  "src/jxplanetx/_smalln_cpu_module.c",
+  "benchmarks/jx_smalln_cpu_rkf78.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._wisdom_holman_cpu"
+sources = [
+  "src/jxplanetx/_wisdom_holman_cpu_module.c",
+  "src/jxplanetx/_wisdom_holman_loop.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._wisdom_holman_cpu_v2"
+sources = [
+  "src/jxplanetx/_wisdom_holman_cpu_v2_module.c",
+  "src/jxplanetx/_wisdom_holman_loop_v2.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._wisdom_holman_cpu_v3"
+sources = [
+  "src/jxplanetx/_wisdom_holman_cpu_v3_module.c",
+  "src/jxplanetx/_wisdom_holman_loop_v3.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._wisdom_holman_cpu_v4"
+sources = [
+  "src/jxplanetx/_wisdom_holman_cpu_v4_module.c",
+  "src/jxplanetx/_wisdom_holman_loop_v4.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

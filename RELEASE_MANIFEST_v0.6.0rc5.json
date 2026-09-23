@@ -1,0 +1,505 @@
+{
+  "schema": "jx-release-candidate-manifest/v1",
+  "project": "JX General Dynamics",
+  "version": "0.6.0rc5",
+  "prepared": "2026-09-21",
+  "release_stage": "release-candidate",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "candidate_readiness": "LOCAL_RC5_CPU_CUDA_CORE_PACKAGING_LATENCY_LONG_HORIZON_SOLVER_PORTFOLIO_AND_PROSPECTIVE_LONG_TIMING_SCREENS_PASS_EXTERNAL_REPLICATION_PENDING",
+  "ownership": {
+    "human_author": "Lino Avila",
+    "copyright_notice": "Copyright (c) 2026 Lino Avila. All rights reserved.",
+    "license_expression": "LicenseRef-JX-Proprietary",
+    "license_file": "LICENSE",
+    "ai_systems_are_authors_or_owners": false,
+    "external_contributions_require_written_agreement": true,
+    "earlier_release_licenses_rewritten": false,
+    "third_party_licenses_rewritten": false
+  },
+  "source": {
+    "branch": "research/post-v5-rkf78-step5-probes",
+    "parent_commit": "31890c335ec85cc7ed4b2858e169f98ea829fb64",
+    "dirty_worktree_preserved": true
+  },
+  "general_dynamics_registry": {
+    "generation": 18,
+    "registry_version": "0.6.0rc3",
+    "historical_binding_preserved": true,
+    "path": "runs/jx_general_dynamics_registry_v18/REGISTRY.json",
+    "sha256": "7637705f74cdf003a8f51d376b3f82db0902a4ec53abb86047aa2973606f7329",
+    "production_ready": false,
+    "unified_multiphysics_execution": false,
+    "capability_statuses_changed_for_rc5": false,
+    "new_registry_generation_created_for_rc5": false
+  },
+  "reproducible_packaging": {
+    "build_backend": "setuptools==78.1.1",
+    "source_date_epoch": 1700000000,
+    "independent_clean_builds": 2,
+    "wheel_byte_identical": true,
+    "sdist_byte_identical": true,
+    "local_output_directory": "/tmp/jxplanetx-0.6.0rc5-latency-v2",
+    "artifact_manifest": {
+      "filename": "ARTIFACTS.json",
+      "size_bytes": 709,
+      "sha256": "48dafaba66d1f04ef0051589f249ef74d8e3a2c0696a484f72285c61a41b42cd"
+    },
+    "artifacts": {
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc5-cp314-cp314-linux_x86_64.whl",
+        "size_bytes": 724364,
+        "sha256": "61eb165eae1c0ae9c0f6518759b4b32ea25ac785b12b992ff828e4fe4675dd26"
+      },
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc5.tar.gz",
+        "size_bytes": 667050,
+        "sha256": "c530898f5c6b30b414a3def1b1c8c0eedbff11d429cd9101b2d49ea7506b7277"
+      }
+    },
+    "native_smalln_extension": {
+      "module": "jxplanetx._smalln_cpu",
+      "core_source_sha256": "3952fb198482261d2ac210f3a9ef3f941af60c56c9e97bcf403b3b937c73397c",
+      "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+      "tested_wheel_target": "cp314-cp314-linux_x86_64",
+      "scientific_claim_state": "SCREENING_ONLY",
+      "implementation_private": true,
+      "supported_public_wrapper": "jxplanetx.smalln",
+      "public_wrapper_sha256": "ae50a68af87d0bdd1fb85bcd22213cc6eb05b0bb8ad01b2965dc6c95a31e767a",
+      "native_arithmetic_changed_for_rc5": false,
+      "immutable_wrapper_invariants_cached": [
+        "rkf78_tableau",
+        "checkpoint_epochs",
+        "checkpoint_position_views",
+        "checkpoint_velocity_views",
+        "verified_native_extension_identity"
+      ]
+    },
+    "fresh_wheel_install_and_public_cpu_smoke": "PASS",
+    "fresh_wheel_public_cuda_dispatch_on_recorded_device": "PASS",
+    "fresh_sdist_build_install_and_public_cpu_smoke": "PASS"
+  },
+  "verification": {
+    "focused_smalln_release_tests": {
+      "tests_run": 27,
+      "skips": 2,
+      "skip_reason": "source-only sandbox process had no CUDA device or packaged native extension; exact installed-wheel CPU/CUDA contract passed separately",
+      "status": "PASS"
+    },
+    "installed_wheel_public_contract_tests": {
+      "tests_run": 14,
+      "skips": 0,
+      "status": "PASS",
+      "real_cuda_device_exercised": true
+    },
+    "test_profile_inventory": {
+      "files": 235,
+      "profiles": 10,
+      "exact_non_overlapping_coverage": true
+    },
+    "engine_matrix_normal": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0,
+      "status": "PASS",
+      "real_cuda_device_exercised": true
+    },
+    "engine_matrix_python_optimized": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0,
+      "status": "PASS",
+      "real_cuda_device_exercised": true
+    },
+    "cuda_core_release_gate": {
+      "path": "/tmp/jx-cuda-core-0.6.0rc5.json",
+      "size_bytes": 813,
+      "sha256": "bf1748fa504b88c746e95148c8ca6c42701c19f1cee9f38afebb8742b9aad628",
+      "tests_run": 5,
+      "skips": 0,
+      "status": "PASS",
+      "device": "NVIDIA GeForce RTX 5060 Ti",
+      "compute_capability": "12.0",
+      "cupy_version": "14.2.0",
+      "cuda_runtime_version": 13020
+    },
+    "accuracy_matched_public_cpu_cuda_rebound": {
+      "path": "/tmp/jx_smalln_hybrid_matrix_rc5_final_v2.json",
+      "size_bytes": 31557,
+      "sha256": "88ddce1554e8f7fbc0f8828cd457a01a6688ab1327e1775fdd0850681c1fa17c",
+      "schema": "jxplanetx.smalln-cpu-cuda-rebound-hybrid-matrix.v2",
+      "status": "PASS",
+      "jx_version": "0.6.0rc5",
+      "rebound_version": "5.1.1",
+      "machine_label": "rtx5060ti-desktop",
+      "independent_systems": 256,
+      "body_counts": [
+        2,
+        11,
+        32
+      ],
+      "timed_repetitions": 5,
+      "maximum_componentwise_checkpoint_error_gate": 1e-10,
+      "source_roster_includes_public_wrapper_and_hybrid_benchmark": true,
+      "rows": [
+        {
+          "body_count": 2,
+          "public_cpu_median_seconds": 5.649498780258e-05,
+          "rebound_ias15_median_seconds": 8.12909856904298e-05,
+          "public_cpu_to_rebound_latency_ratio": 0.6949723554555326,
+          "public_cpu_speedup_over_rebound": 1.4389061552592712,
+          "cuda_to_sequential_cpu_batch_throughput_ratio": 6.007896017967045
+        },
+        {
+          "body_count": 11,
+          "public_cpu_median_seconds": 0.00010171998292207718,
+          "rebound_ias15_median_seconds": 0.0003986320225521922,
+          "public_cpu_to_rebound_latency_ratio": 0.25517263332440676,
+          "public_cpu_speedup_over_rebound": 3.91891554737642,
+          "cuda_to_sequential_cpu_batch_throughput_ratio": 4.123321762585136
+        },
+        {
+          "body_count": 32,
+          "public_cpu_median_seconds": 0.000381240010028705,
+          "rebound_ias15_median_seconds": 0.001832292997278273,
+          "public_cpu_to_rebound_latency_ratio": 0.2080671653469216,
+          "public_cpu_speedup_over_rebound": 4.806140355363837,
+          "cuda_to_sequential_cpu_batch_throughput_ratio": 3.9999086021490857
+        }
+      ],
+      "single_system_fastest_for_recorded_rows": "jx-compiled-cpu-rkf78",
+      "batch_throughput_fastest_for_recorded_rows": "jx-fused-cuda-rkf78"
+    },
+    "accuracy_matched_fused_cuda_rebound_eight_workers": {
+      "path": "/tmp/jx_fused_rebound_matrix_rc5_v8_rtx5060ti.json",
+      "size_bytes": 25248,
+      "sha256": "e18ea8fec04410ab9584cec7000a5f77068fcd3958c96b6dda5d6a3d1a34c0dc",
+      "schema": "jxplanetx.fused-cuda-rebound-batched-matrix.v8",
+      "status": "PASS",
+      "jx_version": "0.6.0rc5",
+      "rebound_version": "5.1.1",
+      "machine_label": "rtx5060ti-desktop",
+      "body_counts": [
+        2,
+        11,
+        32
+      ],
+      "independent_systems": 256,
+      "rebound_process_workers": 8,
+      "timed_repetitions": 5,
+      "maximum_componentwise_checkpoint_error_gate": 1e-10,
+      "rows": [
+        {
+          "body_count": 2,
+          "jx_systems_per_second": 132715.85939419412,
+          "rebound_sequential_systems_per_second": 13014.199452893043,
+          "rebound_eight_worker_integration_systems_per_second": 65942.18014647841,
+          "rebound_eight_worker_end_to_end_systems_per_second": 10287.03314310429,
+          "jx_to_rebound_sequential_throughput_ratio": 10.197773583736764,
+          "jx_to_rebound_eight_worker_integration_throughput_ratio": 2.0126095179047807,
+          "jx_to_rebound_eight_worker_end_to_end_throughput_ratio": 12.901276543777598
+        },
+        {
+          "body_count": 11,
+          "jx_systems_per_second": 44258.305920701445,
+          "rebound_sequential_systems_per_second": 2504.3628051889164,
+          "rebound_eight_worker_integration_systems_per_second": 12443.89745945906,
+          "rebound_eight_worker_end_to_end_systems_per_second": 8276.516078395969,
+          "jx_to_rebound_sequential_throughput_ratio": 17.672481730283014,
+          "jx_to_rebound_eight_worker_integration_throughput_ratio": 3.556627340018709,
+          "jx_to_rebound_eight_worker_end_to_end_throughput_ratio": 5.347456043277442
+        },
+        {
+          "body_count": 32,
+          "jx_systems_per_second": 10678.279731749979,
+          "rebound_sequential_systems_per_second": 552.843199074559,
+          "rebound_eight_worker_integration_systems_per_second": 2962.8464354446955,
+          "rebound_eight_worker_end_to_end_systems_per_second": 2395.1473939855455,
+          "jx_to_rebound_sequential_throughput_ratio": 19.31520501586175,
+          "jx_to_rebound_eight_worker_integration_throughput_ratio": 3.6040611501173765,
+          "jx_to_rebound_eight_worker_end_to_end_throughput_ratio": 4.458297538833813
+        }
+      ],
+      "single_system_fastest_for_recorded_rows": "rebound-ias15-sequential",
+      "batch_throughput_fastest_for_recorded_rows": "jx-fused-cuda-rkf78",
+      "portable_speed_ranking_claimed": false
+    },
+    "solar_system_point_mass_100_year_screen": {
+      "path": "/tmp/jx_fused_package_solar_lunar_100yr_rc5.json",
+      "size_bytes": 6271,
+      "sha256": "f39a919ff1f4d3561d7c8c99c2da1b1afd10224a410bd99f73af7941b3cc3cd6",
+      "schema": "jxplanetx.fused-package-solar-lunar-long-horizon.v1",
+      "status": "PASS_SCREENING_ONLY",
+      "jx_version": "0.6.0rc5",
+      "rebound_version": "5.1.1",
+      "model": "ELEVEN_BODY_MUTUAL_NEWTONIAN_POINT_MASS",
+      "horizons_years": [
+        10,
+        30,
+        100
+      ],
+      "input_sha256": "0718ba6c05444c720d012bc7906e3eee226664b58d7929648917f9f19003d4c5",
+      "accepted_steps": 584400,
+      "rejected_steps": 0,
+      "kernel_launches": 143,
+      "hundred_year_maximum_body_position_difference_metres": 1.9113140004626685,
+      "hundred_year_maximum_body_velocity_difference_metres_per_second": 1.4308693188075322e-6,
+      "hundred_year_earth_moon_relative_position_difference_metres": 0.4761816084612515,
+      "hundred_year_earth_moon_relative_velocity_difference_metres_per_second": 1.323299230858037e-6,
+      "timing_comparable": false,
+      "coupled_lunar_physics_tested": false,
+      "ephemeris_accuracy_claimed": false
+    },
+    "appropriate_rebound_solver_portfolio": {
+      "directory": "/tmp/jx_challenger_v2_rc5_full",
+      "bundle_path": "/tmp/jx_challenger_v2_rc5_full/challenger_v2.json",
+      "bundle_size_bytes": 8232,
+      "bundle_sha256": "97bf6b1691d8ff1e7c6e2e17e4e1f797f2f00c60ea895a11368b1d38ec40291a",
+      "semantic_content_sha256": "4aaddd1bb246b4f0196bf9db6a0ef869786bb4438f71d56065338bedefa510ee",
+      "schema": "jx.challenger.current-source-bundle.v2",
+      "status": "PASS_CURRENT_SOURCE_SOLVER_PORTFOLIO_SCREENING",
+      "jx_version": "0.6.0rc5",
+      "rebound_version": "5.1.1",
+      "profile": "full",
+      "studies": [
+        {
+          "study_id": "leapfrog_binary",
+          "external_methods": [
+            "REBOUND leapfrog"
+          ],
+          "raw_report_size_bytes": 152773,
+          "raw_report_sha256": "c59681e17b443dd011b46ce8d6ef2c527f92671187ecc410382ebb461fb27ea5",
+          "status": "PASS_CHILD_SELF_VALIDATION_SCREENING_ONLY"
+        },
+        {
+          "study_id": "whfast_weak_three_body",
+          "external_methods": [
+            "REBOUND WHFast",
+            "REBOUND IAS15"
+          ],
+          "raw_report_size_bytes": 223692,
+          "raw_report_sha256": "a2de3be854c45b4c42e87bd5362aeed16041c953c0d0ce3175b171fbb7d74bdf",
+          "status": "PASS_CHILD_SELF_VALIDATION_SCREENING_ONLY"
+        },
+        {
+          "study_id": "hybrid_close_scatter",
+          "external_methods": [
+            "REBOUND MERCURIUS",
+            "REBOUND TRACE",
+            "REBOUND IAS15"
+          ],
+          "raw_report_size_bytes": 760875,
+          "raw_report_sha256": "4f902480fc758018c0d1cdceb8dd68b4efa7b3ef9ca6a54104c3ace1540fa5d8",
+          "status": "PASS_CHILD_SELF_VALIDATION_SCREENING_ONLY"
+        }
+      ],
+      "sha256sums_file_sha256": "2b7897d4bd13060c5083982dab54a73ec9899367388245fae14e600b57530d64",
+      "performance_superiority_claimed": false,
+      "cross_study_ranking_authorized": false,
+      "timings_comparable": false
+    },
+    "prospective_long_timing_race": {
+      "report_path": "/tmp/jx_rebound_long_timing_race_rc5_v2.json",
+      "report_size_bytes": 43660,
+      "report_sha256": "dbd7f46b0cecc95b5f81a69b57e201855fbe8165b3adb3e83b072d2ae2531eba",
+      "semantic_content_sha256": "cb104eb7f8e161fce1a80d080045a9bb5de000dec95f3722a4f74faabdda6bdd",
+      "schema": "jxplanetx.rebound-long-timing-race.v1",
+      "status": "PASS_PROSPECTIVE_TIMING_SCREENING_ONLY",
+      "jx_version": "0.6.0rc5",
+      "timed_repetitions": 3,
+      "speed_resolution_fraction": 0.05,
+      "protocol": {
+        "v1_stopped_before_measured_execution": true,
+        "v1_path": "benchmarks/jx_rebound_long_timing_race_v1_protocol.json",
+        "v1_size_bytes": 9004,
+        "v1_sha256": "a137ce85d676b53c066ea31e5b80c8cb2307f27b4d41a19d247f63acfae479b0",
+        "v2_path": "benchmarks/jx_rebound_long_timing_race_v2_protocol.json",
+        "v2_size_bytes": 943,
+        "v2_sha256": "5d43f9ade52cabfe6ca99f33c80d0d046927945fe6f53d465f3264a4fbcc047c",
+        "runner_size_bytes": 34718,
+        "runner_sha256": "f614906bf2f98ac595b2422f240d1c62604a6be88f8f4caacf7eb19cc44cbc7d",
+        "existing_screening_results_disclosed_before_protocol": true,
+        "timing_sample_locked_before_measured_execution": true
+      },
+      "timing_contract": {
+        "candidate_setup_excluded": true,
+        "host_resident_retained_checkpoint_states_included": true,
+        "jx_public_mandatory_semantic_replay_included": true,
+        "external_reference_generation_excluded": true,
+        "cpu_threads": 1,
+        "single_trajectory_rebound_process_workers": 1,
+        "median_is_primary_statistic": true,
+        "accuracy_gate_passed_before_performance_interpretation": true
+      },
+      "post_run_host_observation": {
+        "cpu_model": "AMD Ryzen 5 5500",
+        "logical_cpu_count": 12,
+        "gpu_name": "NVIDIA GeForce RTX 5060 Ti",
+        "gpu_uuid": "GPU-66041ce7-445e-a391-aadd-703ae6ebc672",
+        "gpu_memory_total_mib": 16311,
+        "nvidia_driver_version": "595.91.07",
+        "read_only_observation_after_run": true,
+        "gpu_uuid_embedded_in_timing_report": false
+      },
+      "studies": {
+        "solar_system_100_year": {
+          "accuracy_passed": true,
+          "jx_median_seconds": 44.18701038698782,
+          "rebound_ias15_median_seconds": 1.8704673589963932,
+          "external_throughput_relative_to_jx": 23.623513222222996,
+          "classification": "EXTERNAL_FASTER_ON_RECORDED_HOST_AND_WORKLOAD"
+        },
+        "smooth_hierarchy_100_period": {
+          "accuracy_passed_for_both": true,
+          "jx_wisdom_holman_median_seconds": 40.07377030199859,
+          "rebound_whfast_median_seconds": 0.012027153978124261,
+          "external_throughput_relative_to_jx": 3331.9412368784224,
+          "classification": "EXTERNAL_FASTER_ON_RECORDED_HOST_AND_WORKLOAD"
+        },
+        "close_scatter": {
+          "accuracy_passed_for_all": true,
+          "jx_hybrid_median_seconds": 110.39256490700063,
+          "rebound_mercurius_median_seconds": 0.0416547869972419,
+          "rebound_trace_median_seconds": 0.005865817016456276,
+          "mercurius_throughput_relative_to_jx": 2650.1771552525306,
+          "trace_throughput_relative_to_jx": 18819.640059909718,
+          "mercurius_classification": "EXTERNAL_FASTER_ON_RECORDED_HOST_AND_WORKLOAD",
+          "trace_classification": "EXTERNAL_FASTER_ON_RECORDED_HOST_AND_WORKLOAD"
+        }
+      },
+      "portable_performance_claimed": false,
+      "general_solver_superiority_claimed": false,
+      "scientific_qualification_claimed": false
+    },
+    "discrete_crossover_full": {
+      "path": "/tmp/jx_smalln_hybrid_crossover_rc5_final_v2.json",
+      "size_bytes": 248792,
+      "sha256": "37df8cce436c012911738973613dd20372f770d7039dd0bf15b8f5de780248bc",
+      "schema": "jxplanetx.smalln-cpu-cuda-lane-crossover.v2",
+      "status": "PASS",
+      "body_count_range": [
+        2,
+        32
+      ],
+      "lane_counts": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256
+      ],
+      "timed_repetitions": 5,
+      "source_roster_includes_public_wrapper_hybrid_and_crossover_benchmarks": true,
+      "noise_sensitive_eight_lane_rows": [
+        29,
+        30,
+        31,
+        32
+      ],
+      "portable_routing_threshold_claimed": false
+    },
+    "discrete_crossover_boundary_audit": {
+      "path": "/tmp/jx_smalln_hybrid_crossover_rc5_boundary101_a.json",
+      "size_bytes": 11969,
+      "sha256": "2e8a93e61c6f79a81e3135c9552e16454bf750db8337ba4defd837f8dcb79ca8",
+      "status": "PASS",
+      "body_counts": [
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "lane_counts": [
+        8,
+        16
+      ],
+      "timed_repetitions": 101,
+      "eight_lane_cuda_to_cpu_elapsed_ratios": {
+        "28": 1.0929129606240666,
+        "29": 1.075944628272706,
+        "30": 1.0458637347042712,
+        "31": 1.014854733072301,
+        "32": 0.9873382632008306
+      },
+      "authoritative_for_public_route_boundary": true
+    },
+    "public_dispatch_route": {
+      "qualified_body_count_range": [
+        2,
+        32
+      ],
+      "qualified_lane_counts": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256
+      ],
+      "eight_lane_cuda_body_counts": [
+        32
+      ],
+      "cuda_selected_for_all_body_counts_at_or_above_lanes": 16,
+      "implicit_transfer": false,
+      "production_authorized": false,
+      "scientific_qualification_claimed": false,
+      "portable_routing_threshold_claimed": false
+    },
+    "rc4_two_machine_evidence": {
+      "carried_without_reinterpretation": true,
+      "rerun_for_rc5": false,
+      "organizational_independence_claimed": false
+    },
+    "coupled_lunar_increment": {
+      "carried_from_rc3_without_promotion": true,
+      "scientific_claim_state": "SCREENING_ONLY",
+      "capability_status": "INCONCLUSIVE",
+      "binding_path": "runs/jx_lunar_deformation_geodetic_screen_v1/SUMMARY.json",
+      "binding_sha256": "3c09b91a60f9f4b0ffa16596c335f0a422a6122ceaae26e62458e2f317be9d95"
+    },
+    "full_live_research_matrix": {
+      "rerun_for_rc5": false,
+      "status": "NOT_CLAIMED"
+    },
+    "historical_integrity": {
+      "registry_v18": "PASS_UNCHANGED",
+      "release_manifest_rc1": "PASS_UNCHANGED",
+      "release_manifest_rc2": "PASS_UNCHANGED",
+      "release_manifest_rc3": "PASS_UNCHANGED",
+      "release_manifest_rc4": "PASS_UNCHANGED"
+    }
+  },
+  "claim_limits": [
+    "No production-readiness claim.",
+    "No scientific qualification or unified-multiphysics execution claim.",
+    "The small-N dispatcher is limited to its exact measured 2--32-body and discrete-lane screening contract.",
+    "The public CPU latency wins apply only to the recorded one-system 2-, 11-, and 32-body synthetic rows on one labeled desktop.",
+    "The 29--32-body eight-lane crossover is timing-noise-sensitive; the 101-repetition audit, not the five-repetition broad sweep alone, controls the recorded public route.",
+    "No portable routing threshold or general JX superiority over REBOUND, WHFast, MERCURIUS, TRACE, or any other solver is claimed.",
+    "The rc5 eight-worker result applies only to the recorded 256-independent-system synthetic workload on the labeled RTX 5060 Ti desktop.",
+    "The rc4 laptop and two-machine aggregate were not rerun for rc5 and are not reinterpreted as rc5 evidence.",
+    "The 100-year result is an eleven-body mutual-Newtonian point-mass accuracy screen with non-comparable timing diagnostics; it is not a speed, ephemeris, lunar-physics, or long-term-stability qualification.",
+    "The Leapfrog, WHFast, MERCURIUS, TRACE, and IAS15 portfolio passed its method-specific screening gates but authorizes no cross-study timing comparison or solver ranking.",
+    "In the prospectively locked single-trajectory long-timing screen, REBOUND IAS15, WHFast, MERCURIUS, and TRACE were faster than the current JX public implementations on their exact recorded workloads; this does not negate the separate 256-independent-system fused-CUDA batch result.",
+    "The long-timing ratios include JX public mandatory semantic replay and apply only to one host, one output contract, and the exact registered workloads; they are not portable algorithmic-complexity or general solver rankings.",
+    "Registry v18 remains historically bound to rc3 and no lunar capability is promoted.",
+    "The full live and historical research matrix was not rerun for rc5.",
+    "No Planet X detection, exclusion, orbital solution, or observational inference claim."
+  ],
+  "release_actions": {
+    "git_commit_created": false,
+    "git_tag_created": false,
+    "remote_push_performed": false,
+    "package_index_upload_performed": false,
+    "publication_performed": false,
+    "github_license_or_visibility_changed": false,
+    "github_branch_protection_changed": false
+  }
+}

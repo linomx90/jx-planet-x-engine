@@ -1,0 +1,188 @@
+{
+  "schema": "jx-release-candidate-manifest/v1",
+  "project": "JX General Dynamics",
+  "version": "0.6.0rc7",
+  "prepared": "2026-09-22",
+  "release_stage": "release-candidate",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "candidate_readiness": "LOCAL_RC7_CPU_CUDA_CORE_REPRODUCIBLE_PACKAGING_AND_EXACT_WHEEL_RACE_PASS_EXTERNAL_INDEPENDENT_REPLICATION_PENDING",
+  "ownership": {
+    "human_author": "Lino Avila",
+    "copyright_notice": "Copyright (c) 2026 Lino Avila. All rights reserved.",
+    "license_expression": "LicenseRef-JX-Proprietary",
+    "license_file": "LICENSE",
+    "ai_systems_are_authors_or_owners": false,
+    "external_contributions_require_written_agreement": true,
+    "earlier_release_licenses_rewritten": false,
+    "third_party_licenses_rewritten": false
+  },
+  "source": {
+    "branch": "research/post-v5-rkf78-step5-probes",
+    "parent_commit": "31890c335ec85cc7ed4b2858e169f98ea829fb64",
+    "dirty_worktree_preserved": true,
+    "earlier_artifacts_or_manifests_rewritten": false
+  },
+  "general_dynamics_registry": {
+    "generation": 18,
+    "registry_version": "0.6.0rc3",
+    "historical_binding_preserved": true,
+    "path": "runs/jx_general_dynamics_registry_v18/REGISTRY.json",
+    "sha256": "7637705f74cdf003a8f51d376b3f82db0902a4ec53abb86047aa2973606f7329",
+    "production_ready": false,
+    "unified_multiphysics_execution": false,
+    "capability_statuses_changed_for_rc7": false,
+    "new_registry_generation_created_for_rc7": false
+  },
+  "reproducible_packaging": {
+    "build_backend": "setuptools==78.1.1",
+    "source_date_epoch": 1700000000,
+    "independent_clean_builds": 2,
+    "wheel_byte_identical": true,
+    "sdist_byte_identical": true,
+    "local_output_directory": "/tmp/jxplanetx-0.6.0rc7-build-v1",
+    "artifact_manifest": {
+      "filename": "ARTIFACTS.json",
+      "size_bytes": 709,
+      "sha256": "4c2425ae903faacf6ff789450fd32e79c9e964993be92a9d136c34221f3998c2"
+    },
+    "artifacts": {
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc7-cp314-cp314-linux_x86_64.whl",
+        "size_bytes": 847613,
+        "sha256": "17663fa6c971be36be5c702766d65be604a6a23d11860768d52c6d21df7a54b4"
+      },
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc7.tar.gz",
+        "size_bytes": 699194,
+        "sha256": "b680e7a11485105df7cc0e5cb6ea839e535461b9c59781c74210a891e5d1fd9c"
+      }
+    },
+    "fresh_wheel_supported_api_smoke": "PASS",
+    "fresh_sdist_supported_api_smoke": "PASS",
+    "one_period_exact_replay_result_content_sha256": "6307590b0c425d116953efc8f0e35813cdd898184b3bf32095f97cd67317ad1b"
+  },
+  "fast_wisdom_holman": {
+    "supported_api": "jxplanetx.fast_wisdom_holman",
+    "api_id": "jx.fast-wisdom-holman.screening-api.v2",
+    "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+    "universal_g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+    "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+    "public_wrapper_sha256": "99da08305f5c0a191dd53e64d02a9a396b471aaf9f7b3a062545b1de220f7a72",
+    "native_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+    "native_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+    "native_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+    "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+    "default_verification": "COMPLETE_MAP_POSTCONDITION_CERTIFICATE",
+    "default_exact_replay": false,
+    "exact_replay_available": true,
+    "exact_replay_required_for_release_qualification": true,
+    "maximum_bodies": 32,
+    "production_authorized": false,
+    "scientific_qualification_claimed": false,
+    "general_rebound_superiority_claimed": false
+  },
+  "private_kepler_v4_prototype": {
+    "supported_api": false,
+    "promoted_for_rc7": false,
+    "map_kernel_id": "jx.wisdom-holman.native-complete-map.endpoint-seed.prototype.v4",
+    "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+    "fallback_accounting_observable": true,
+    "recorded_fallback_count": 0,
+    "loop_source_sha256": "10981b416e4bb90a89babfc05cdd9c97bf1e5b49a0956490300bc5cbc591a16c",
+    "wrapper_source_sha256": "73feb1b1dbb4c24afacdd2bca1917471da7e6fa9e85965c72d988b8167b6e356",
+    "development_report": {
+      "path": "/tmp/jx_native_kepler_v4_rebound_race_v2.json",
+      "size_bytes": 39047,
+      "sha256": "a6c64b6d1d7ed45791a30f0d016818bd89050731f840d12864dc44198a032a3a",
+      "semantic_content_sha256": "8ce5c8c916016e5aaecd1e19deeec35e7c9a792dd6a39ad71da3c5b408c799ae",
+      "status": "PASS_DEVELOPMENT_SCREENING_ONLY",
+      "v3_over_v4_numerical_speedup": 1.0523439909342283,
+      "tuned_retained_whfast_throughput_relative_to_v4": 1.0199334033350227,
+      "tuned_endpoint_whfast_throughput_relative_to_v4": 4.420465699203733
+    }
+  },
+  "verification": {
+    "focused_release_and_solver_tests": {
+      "tests_run": 30,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "test_profile_inventory": {
+      "files": 244,
+      "profiles": 10,
+      "exact_non_overlapping_coverage": true
+    },
+    "engine_matrix_normal": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "engine_matrix_python_optimized": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "cuda_core_release_gate": {
+      "path": "/tmp/jx-cuda-core-0.6.0rc7-device-v1.json",
+      "size_bytes": 813,
+      "sha256": "cd5991dd5d6066a7bc411e56df50960989f1b97f2138140bc9f4bab7dea43dff",
+      "status": "PASS",
+      "tests_run": 5,
+      "skips": 0,
+      "device": "NVIDIA GeForce RTX 5060 Ti",
+      "compute_capability": "12.0",
+      "cupy_version": "14.2.0",
+      "driver_version": 13020,
+      "runtime_version": 13020,
+      "general_gpu_qualification": false,
+      "initial_sandbox_visibility_preflight": {
+        "path": "/tmp/jx-cuda-core-0.6.0rc7.json",
+        "size_bytes": 560,
+        "sha256": "236c826f32bc6e85924b159bfcb2efb567f2ae5e3d31bdc22f804998330fb988",
+        "status": "BLOCKED_RUNTIME_OR_DEVICE_UNAVAILABLE",
+        "tests_run": 0,
+        "interpretation": "The filesystem sandbox hid the CUDA device; the retained device-visible rerun is authoritative."
+      }
+    },
+    "exact_wheel_cpu_rebound_race": {
+      "path": "/tmp/jx_fast_wh_rc7_rebound_race_v1.json",
+      "size_bytes": 32178,
+      "sha256": "7dec5cd0d247abed56522d0c9e98f8b3d2068496ba7b88f10ab33f1dc2c16fad",
+      "semantic_content_sha256": "fc3ca65f3fc20adf9f592d872e551103bc79f93d397ce0b3f8768e5b4bf32c92",
+      "protocol_sha256": "b701ebe7d3dd3f1463ca7d7f478c1bf6eb8c334c495beba4643f87ef65048098",
+      "required_wheel_sha256": "17663fa6c971be36be5c702766d65be604a6a23d11860768d52c6d21df7a54b4",
+      "status": "PASS_ACCURACY_AND_DETERMINISM_SCREENING_ONLY",
+      "periods": 100,
+      "timed_repetitions": 9,
+      "jx_single_pass_median_seconds": 0.009141534043010324,
+      "jx_replay_median_seconds": 0.01822223502676934,
+      "rebound_whfast_median_seconds": 0.010037141968496144,
+      "jx_single_pass_throughput_relative_to_rebound": 1.0979712946724305,
+      "rebound_throughput_relative_to_jx_replay": 1.815480450905644,
+      "public_jx_100_period_bitwise_parity": true,
+      "accuracy_and_conservation_gate_passed": true,
+      "all_timed_repetitions_deterministic": true,
+      "single_host_workload_specific": true,
+      "portable_or_general_claim": false
+    }
+  },
+  "known_limits": [
+    "The exact-wheel CPU speed classification covers one weak hierarchical three-body workload for 100 periods on one host.",
+    "The replay-enabled supported lane remains slower than REBOUND WHFast on that workload.",
+    "The private v4 endpoint-seeded solver is not the supported rc7 backend and has not passed broad solver-portfolio or final-wheel promotion gates.",
+    "Endpoint-only WHFast remains materially faster when unequal output cadence is allowed.",
+    "The rc7 CPU race does not test long Solar-System, close-encounter, MERCURIUS, TRACE, parallel-worker, or portable multi-machine performance.",
+    "The rc7 CUDA gate establishes current-host core parity/residency behavior only; it does not rerun the earlier two-machine scaling study or establish general GPU qualification.",
+    "No production fitness, scientific qualification, lunar promotion, or general solver ranking is claimed."
+  ],
+  "release_actions": {
+    "git_reset_performed": false,
+    "clean_performed": false,
+    "push_performed": false,
+    "publication_performed": false,
+    "earlier_release_republished_or_relabelled": false,
+    "frozen_runs_or_archives_modified": false
+  }
+}

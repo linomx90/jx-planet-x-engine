@@ -21,7 +21,14 @@ import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE_DATE_EPOCH = 1_700_000_000
-STAGE_FILES = ("pyproject.toml", "README.md", "LICENSE")
+STAGE_FILES = (
+    "pyproject.toml",
+    "README.md",
+    "LICENSE",
+    "AUTHORS.md",
+    "THIRD_PARTY_NOTICES.md",
+    "benchmarks/jx_smalln_cpu_rkf78.c",
+)
 STAGE_DIRECTORIES = ("src/jxplanetx",)
 IGNORED_STAGE_NAMES = {"__pycache__", ".pytest_cache"}
 
@@ -75,6 +82,9 @@ def _ignore_stage(directory: str, names: list[str]) -> set[str]:
         if name in IGNORED_STAGE_NAMES
         or name.endswith(".pyc")
         or name.endswith(".pyo")
+        or name.endswith(".so")
+        or name.endswith(".pyd")
+        or name.endswith(".dylib")
         or name.endswith(".egg-info")
     }
 

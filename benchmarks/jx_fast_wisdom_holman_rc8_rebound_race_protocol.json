@@ -1,0 +1,136 @@
+{
+  "schema": "jxplanetx.fast-wh-rc8-rebound-race.protocol.v1",
+  "benchmark_id": "jx.fast-wh-rc8.rebound-whfast.100-period.v1",
+  "status": "LOCKED_AFTER_DISCLOSED_RESULTS_BEFORE_EXACT_RC8_WHEEL_TIMING",
+  "periods": 100,
+  "step_divisor": 64,
+  "samples_per_period": 4,
+  "timed_repetitions": 9,
+  "native_replay_count": 1,
+  "speed_resolution_fraction": 0.05,
+  "required_jx_version": "0.6.0rc8",
+  "required_rebound_version": "5.1.1",
+  "required_rebound_githash": "33549d1d50d616a95a6d6a79e5e2c9c3b3730b1f",
+  "required_release_wheel": {
+    "filename": "jxplanetx-0.6.0rc8-cp314-cp314-linux_x86_64.whl",
+    "size_bytes": 847708,
+    "sha256": "bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5"
+  },
+  "lane_names": [
+    "jx_rc8_single_pass",
+    "jx_rc8_replay",
+    "rebound_whfast"
+  ],
+  "execution_order": [
+    ["jx_rc8_single_pass", "rebound_whfast", "jx_rc8_replay"],
+    ["rebound_whfast", "jx_rc8_replay", "jx_rc8_single_pass"],
+    ["jx_rc8_replay", "jx_rc8_single_pass", "rebound_whfast"],
+    ["jx_rc8_single_pass", "rebound_whfast", "jx_rc8_replay"],
+    ["rebound_whfast", "jx_rc8_replay", "jx_rc8_single_pass"],
+    ["jx_rc8_replay", "jx_rc8_single_pass", "rebound_whfast"],
+    ["jx_rc8_single_pass", "rebound_whfast", "jx_rc8_replay"],
+    ["rebound_whfast", "jx_rc8_replay", "jx_rc8_single_pass"],
+    ["jx_rc8_replay", "jx_rc8_single_pass", "rebound_whfast"]
+  ],
+  "accuracy_and_conservation_gate": {
+    "center_of_mass_position_max": 1e-12,
+    "phase_proxy_max_abs_radians": 0.002,
+    "position_vector_l2_max": 0.001,
+    "relative_angular_momentum_max": 1e-12,
+    "relative_total_energy_max": 5e-06,
+    "total_momentum_max": 1e-12,
+    "velocity_vector_l2_max": 0.001
+  },
+  "runtime_contract": {
+    "cpu_lanes_only": true,
+    "exact_built_wheel_required": true,
+    "installed_package_must_be_outside_repository": true,
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    }
+  },
+  "solver_prerequisite_gate": {
+    "require_dense_universal_g_bitwise_equality_to_v1": true,
+    "require_universal_g_series_term_reduction": true,
+    "require_invalid_domain_rejection": true,
+    "require_100_period_public_jx_bitwise_parity": true,
+    "require_deterministic_exact_replay": true
+  },
+  "prior_evidence_disclosure": {
+    "supported_numerical_kernel_unchanged_from_rc7": true,
+    "exact_rc7_wheel_result_known_before_lock": {
+      "jx_single_pass_median_seconds": 0.009141534043010324,
+      "jx_replay_median_seconds": 0.01822223502676934,
+      "rebound_whfast_median_seconds": 0.010037141968496144
+    },
+    "stateful_near_development_result_known_before_lock": {
+      "close_scatter_parent_over_candidate_speedup": 1.5236624957868148,
+      "pericenter_parent_over_candidate_speedup": 1.245638408615953,
+      "promoted_to_supported_api": false
+    },
+    "endpoint_sync_negative_result_known_before_lock": {
+      "parent_over_candidate_speedup": 1.00539277307549,
+      "minimum_required_speedup": 1.02,
+      "overall_pass": false
+    },
+    "exact_rc8_artifacts_known_before_lock": {
+      "wheel_sha256": "bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5",
+      "sdist_sha256": "b66c97dcded679401ccd423b224f8826ac9f695a6a71c430afcfcdc99ff3f82f",
+      "wheel_and_sdist_smokes_passed": true
+    },
+    "rc8_cuda_core_gate_known_before_lock": {
+      "status": "PASS",
+      "tests_run": 5,
+      "skips": 0,
+      "general_gpu_qualification": false
+    },
+    "normal_engine_matrix_known_before_lock": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0
+    },
+    "exact_rc8_recorded_timing_samples_unknown": true,
+    "exact_rc8_report_hash_unknown": true,
+    "scope": "The retained v3 algorithm, rc7 result, development hybrid results, rc8 artifact hashes, package smokes, normal engine matrix, and CUDA gate were known. Only the nine balanced exact-rc8-wheel timing samples and their bound report are prospective."
+  },
+  "timing_contract": {
+    "end_to_end_primary_comparison": true,
+    "fixture_construction_excluded": true,
+    "ias15_accuracy_reference_excluded": true,
+    "public_jx_bitwise_gate_untimed": true,
+    "solver_prerequisite_gate_untimed": true,
+    "single_pass_scope": "One supported v3 complete native map plus Python validation, allocation, certificate hashing, and result construction.",
+    "replay_scope": "Two independently executed supported v3 complete native maps plus bitwise replay validation, certificate hashing, and result construction.",
+    "rebound_scope": "REBOUND configuration, safe-mode WHFast integration, synchronized checkpoint readback, implementation evidence, and retained lane construction.",
+    "single_host_workload_specific": true
+  },
+  "source_roster": [
+    {"path": "benchmarks/jx_fast_wisdom_holman_rc8_rebound_race.py", "size_bytes": 5919, "sha256": "a04e7ec5b13ca9ef5e2544fd34efb1839ddba39a0ef72845040573832a3fcead"},
+    {"path": "benchmarks/jx_fast_wisdom_holman_rc7_rebound_race.py", "size_bytes": 6875, "sha256": "c1a30ab22668eb7113c20a3bc88e5190c268fea273a8e5e6c60beb3b86da17aa"},
+    {"path": "benchmarks/jx_fast_wisdom_holman_rc6_rebound_race.py", "size_bytes": 25080, "sha256": "58a5224a4fc9373f546bd0a8c8688615079fdef1cd905d869a04f644f4a8de63"},
+    {"path": "src/jxplanetx/fast_wisdom_holman.py", "size_bytes": 36182, "sha256": "99da08305f5c0a191dd53e64d02a9a396b471aaf9f7b3a062545b1de220f7a72"},
+    {"path": "src/jxplanetx/_wisdom_holman_cpu_v3_module.c", "size_bytes": 8178, "sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3"},
+    {"path": "src/jxplanetx/_wisdom_holman_loop_v3.c", "size_bytes": 15642, "sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629"},
+    {"path": "src/jxplanetx/_wisdom_holman_loop_v2.c", "size_bytes": 58558, "sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750"},
+    {"path": "src/jxplanetx/engine/wisdom_holman.py", "size_bytes": 230474, "sha256": "2c3ed08e04d6a622af63f6be82afa1a222582e772a891179cdc01aa0f2a7383f"},
+    {"path": "benchmarks/rebound_whfast_comparison.py", "size_bytes": 72936, "sha256": "2a3b233eeda1ec3b99e4bee6e999ead6753c9d51e996f2282919a0057ff4123d"},
+    {"path": "src/jxplanetx/__init__.py", "size_bytes": 98, "sha256": "4cb4e5ba83d9ae751896a74d0d9e5dc0ca09fca4301d1e478ff8685e14e7d7d1"},
+    {"path": "pyproject.toml", "size_bytes": 2667, "sha256": "224a50f91b642550064df05913f1324bddf259f479a595ad51370f4963c40dbc"},
+    {"path": "README.md", "size_bytes": 37226, "sha256": "1d226bd7b28bd59c0338d3e9b901474ccef6c544937c6317e4c3306c8ab59f0c"}
+  ],
+  "claim_controls": {
+    "final_rc8_wheel_required": true,
+    "public_backend": "checkpoint-synchronized-v3",
+    "stateful_near_promoted": false,
+    "private_v4_promoted": false,
+    "general_solver_superiority_claimed": false,
+    "portable_performance_claimed": false,
+    "scientific_qualification_claimed": false,
+    "production_authorized": false,
+    "registry_generation_changed": false,
+    "frozen_evidence_changed": false
+  }
+}

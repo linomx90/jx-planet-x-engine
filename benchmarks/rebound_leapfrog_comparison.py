@@ -80,6 +80,8 @@ REQUIRED_ENGINE_SOURCE_PATHS = (
     "jxplanetx/engine/hybrid.py",
     "jxplanetx/engine/hybrid_contracts.py",
     "jxplanetx/engine/rkf78.py",
+    "jxplanetx/engine/scenario.py",
+    "jxplanetx/engine/scenario_manifest.py",
     "jxplanetx/engine/symplectic.py",
     "jxplanetx/engine/symplectic_contracts.py",
     "jxplanetx/engine/trajectory.py",

@@ -1,1 +1,39 @@
-¨¥yÛhr·šµë-­æ¦}Ó©z¶­Š‰ç¢Ú^®h­µçEj)^vÚ­æ­zËky©Ÿtê^­«b¢yè¶—«š+myÑZŠW¶‡+y«^²ÚŞjgİ:—«jØ¨z-¥êæŠÛ^tŒQ¡¥ÉµÁ…ÉÑä¹½Ñ¥•Ì()=É¥¥¹…°)`Í½ÕÉ”½‘”…¹ÁÉ½©•Ğµ…Ñ•É¥…°¥¸Ñ¡”ÕÉÉ•¹ĞÉ•Á½Í¥Ñ½ÉäÉ•Ù¥Í¥½¸)…É”½Ù•É¹•‰äÑ¡”ÁÉ½ÁÉ¥•Ñ…Éä…±°µÉ¥¡ÑÌµÉ•Í•ÉÙ•¹½Ñ¥”¥¸Ñ¡”É•Á½Í¥Ñ½Éä)É½½Ğ¸…É±¥•ÈÁÕ‰±¥Œ½Á¥•ÌÉ•Ñ…¥¸Ñ¡”±¥•¹Í•Ì…¹¹½Ñ¥•ÌÑ¡…Ğ…½µÁ…¹¥•)Ñ¡•´¸()Q¡”½µÁ±•Ñ”É•Í•…É …É¡¥Ù”…±Í¼ÁÉ•Í•ÉÙ•ÌI	=U9€Ğ¸Ğ¸ÄÄÍ½ÕÉ”…¹„)AåÑ¡½¸€Ì¸ÄÈ1¥¹Õàİ¡••°Í½±•±äÑ¼É•ÁÉ½‘Õ”Ñ¡”½ÁÑ¥½¹…°%LÄÔ½µÁ…É¥Í½¸)Á…Ñ ¸I	=U9¥Ì‘¥ÍÑÉ¥‰ÕÑ•Õ¹‘•ÈÑ¡”9T•¹•É…°AÕ‰±¥Œ1¥•¹Í”Ù•ÉÍ¥½¸€Ìì)¥ÑÌ½µÁ±•Ñ”±¥•¹Í”Ñ•áĞ¥Ì¥¹±Õ‘•¥¸‰½Ñ ÁÉ•Í•ÉÙ•‘¥ÍÑÉ¥‰ÕÑ¥½¹Ì¸Q¡”)I	=U9Í½ÕÉ”…É¡¥Ù”¥ÌÁÉ½Ù¥‘•…±½¹Í¥‘”Ñ¡”İ¡••°…Ì½ÉÉ•ÍÁ½¹‘¥¹œ)Í½ÕÉ”¸()Q¡”½Ñ¡•ÈÁÉ•Í•ÉÙ•i%@‰Õ¹‘±•ÌÕ¹‘•È¥µÁ½ÉÑÌ½€…É”)`ÁÉ½©•Ğ•Ù¥‘•¹”…¹)‰•¹¡µ…É¬¥¹ÁÕÑÌ¸Q¡•ä…É”¥¹±Õ‘•™½ÈÉ•ÁÉ½‘Õ¥‰¥±¥Ñä…¹É•Ñ…¥¸Ñ¡•¥È½İ¸)•µ‰•‘‘•ÁÉ½Ù•¹…¹”…¹¹½Ñ¥•Ì¸
+# Third-party notices
+
+Original JX source code and project material in version `0.6.0rc8` is governed
+by the proprietary all-rights-reserved notice in the repository root. Earlier
+public JX releases retain the licenses and notices that accompanied them.
+
+The complete research archive also preserves REBOUND 4.4.11 source and a
+Python 3.12 Linux wheel solely to reproduce the optional IAS15 comparison
+path. REBOUND is distributed under the GNU General Public License version 3;
+its complete license text is included in both preserved distributions. The
+REBOUND source archive is provided alongside the wheel as corresponding
+source.
+
+The other preserved ZIP bundles under `imports/` are JX project evidence and
+benchmark inputs. They are included for reproducibility and retain their own
+embedded provenance and notices. No JX ownership claim is made over third-party
+software, data, standards, papers, or licenses preserved for reproducibility.
+
+The optional `llr-screen` dependency group installs PyERFA 2.0.1.5 under its
+BSD 3-Clause license and SpiceyPy 8.2.0 under its MIT license. Those packages
+are not JX source and retain their upstream copyrights and license terms. The
+LLR runner consumes separately supplied IERS, ILRS, JPL/NAIF, and APOLLO data;
+JX does not claim ownership of those third-party inputs.
+
+`src/jxplanetx/solar_system/solid_earth_tide.py` is a renamed Python
+adaptation of the algorithms and coefficient tables in the IERS Conventions
+Chapter 7 `DEHANTTIDEINEL`, `ST1*`, and `STEP2*` routines. It is not official
+IERS Conventions software and is neither distributed nor endorsed by the IERS
+Conventions Center. The adaptation, its differences, upstream file hashes,
+and the complete IERS Conventions Software License notice are preserved in
+that source file. Any published work using results from this component must
+acknowledge the IERS Conventions software as required by that notice.
+
+`src/jxplanetx/solar_system/solid_pole_tide.py` independently implements the
+published equations in the 2018 working version of IERS Conventions Chapter 7;
+it is not official IERS software and is not endorsed by IERS. The LLR runner's
+FES2014B HARPOS coefficients are a separately supplied NASA International Mass
+Loading Service data input. They are hash-bound for reproducibility, remain
+outside the JX source tree, and are not owned by JX.

@@ -1,0 +1,133 @@
+{
+  "schema": "jxplanetx.fast-wh-rc7-rebound-race.protocol.v1",
+  "benchmark_id": "jx.fast-wh-rc7.rebound-whfast.100-period.v1",
+  "status": "LOCKED_AFTER_DISCLOSED_RESULTS_BEFORE_EXACT_RC7_WHEEL_TIMING",
+  "periods": 100,
+  "step_divisor": 64,
+  "samples_per_period": 4,
+  "timed_repetitions": 9,
+  "native_replay_count": 1,
+  "speed_resolution_fraction": 0.05,
+  "required_jx_version": "0.6.0rc7",
+  "required_rebound_version": "5.1.1",
+  "required_rebound_githash": "33549d1d50d616a95a6d6a79e5e2c9c3b3730b1f",
+  "required_release_wheel": {
+    "filename": "jxplanetx-0.6.0rc7-cp314-cp314-linux_x86_64.whl",
+    "size_bytes": 847613,
+    "sha256": "17663fa6c971be36be5c702766d65be604a6a23d11860768d52c6d21df7a54b4"
+  },
+  "lane_names": [
+    "jx_rc7_single_pass",
+    "jx_rc7_replay",
+    "rebound_whfast"
+  ],
+  "execution_order": [
+    ["jx_rc7_single_pass", "rebound_whfast", "jx_rc7_replay"],
+    ["rebound_whfast", "jx_rc7_replay", "jx_rc7_single_pass"],
+    ["jx_rc7_replay", "jx_rc7_single_pass", "rebound_whfast"],
+    ["jx_rc7_single_pass", "rebound_whfast", "jx_rc7_replay"],
+    ["rebound_whfast", "jx_rc7_replay", "jx_rc7_single_pass"],
+    ["jx_rc7_replay", "jx_rc7_single_pass", "rebound_whfast"],
+    ["jx_rc7_single_pass", "rebound_whfast", "jx_rc7_replay"],
+    ["rebound_whfast", "jx_rc7_replay", "jx_rc7_single_pass"],
+    ["jx_rc7_replay", "jx_rc7_single_pass", "rebound_whfast"]
+  ],
+  "accuracy_and_conservation_gate": {
+    "center_of_mass_position_max": 1e-12,
+    "phase_proxy_max_abs_radians": 0.002,
+    "position_vector_l2_max": 0.001,
+    "relative_angular_momentum_max": 1e-12,
+    "relative_total_energy_max": 5e-06,
+    "total_momentum_max": 1e-12,
+    "velocity_vector_l2_max": 0.001
+  },
+  "runtime_contract": {
+    "cpu_lanes_only": true,
+    "exact_built_wheel_required": true,
+    "installed_package_must_be_outside_repository": true,
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    }
+  },
+  "solver_prerequisite_gate": {
+    "require_dense_universal_g_bitwise_equality_to_v1": true,
+    "require_universal_g_series_term_reduction": true,
+    "require_invalid_domain_rejection": true,
+    "require_100_period_public_jx_bitwise_parity": true,
+    "require_deterministic_exact_replay": true
+  },
+  "prior_evidence_disclosure": {
+    "public_v3_algorithm_and_likely_outcome_known_before_lock": true,
+    "normal_engine_matrix_passed_before_lock": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0
+    },
+    "optimized_engine_matrix_passed_before_lock": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "skips": 0
+    },
+    "exact_rc7_artifact_smoke_before_lock": {
+      "wheel_api_execution_passed": true,
+      "sdist_api_execution_passed": true,
+      "one_period_exact_replay_result_content_sha256": "6307590b0c425d116953efc8f0e35813cdd898184b3bf32095f97cd67317ad1b"
+    },
+    "fallback_audited_private_v4_development_report": {
+      "path_outside_repository": "/tmp/jx_native_kepler_v4_rebound_race_v2.json",
+      "size_bytes": 39047,
+      "sha256": "a6c64b6d1d7ed45791a30f0d016818bd89050731f840d12864dc44198a032a3a",
+      "semantic_content_sha256": "8ce5c8c916016e5aaecd1e19deeec35e7c9a792dd6a39ad71da3c5b408c799ae",
+      "v4_fallback_count": 0,
+      "v3_over_v4_numerical_speedup": 1.0523439909342283,
+      "tuned_retained_whfast_throughput_relative_to_v4": 1.0199334033350227,
+      "tuned_endpoint_whfast_throughput_relative_to_v4": 4.420465699203733
+    },
+    "exact_rc6_wheel_result_known_before_lock": {
+      "single_pass_median_seconds": 0.009473917016293854,
+      "replay_median_seconds": 0.018996154016349465,
+      "rebound_whfast_median_seconds": 0.01102952499059029
+    },
+    "exact_rc7_recorded_timing_samples_unknown": true,
+    "exact_rc7_report_hash_unknown": true,
+    "scope": "The v3 algorithm, source tests, rc6 exact-wheel outcome, private-v4 development result, rc7 build hashes, and rc7 one-period artifact smokes were known. Only the nine balanced exact-rc7-wheel timing samples and their bound report are prospective."
+  },
+  "timing_contract": {
+    "end_to_end_primary_comparison": true,
+    "fixture_construction_excluded": true,
+    "ias15_accuracy_reference_excluded": true,
+    "public_jx_bitwise_gate_untimed": true,
+    "solver_prerequisite_gate_untimed": true,
+    "single_pass_scope": "One supported v3 complete native map plus Python validation, allocation, certificate hashing, and result construction.",
+    "replay_scope": "Two independently executed supported v3 complete native maps plus bitwise replay validation, certificate hashing, and result construction.",
+    "rebound_scope": "REBOUND configuration, safe-mode WHFast integration, synchronized checkpoint readback, implementation evidence, and retained lane construction.",
+    "single_host_workload_specific": true
+  },
+  "source_roster": [
+    {"path": "benchmarks/jx_fast_wisdom_holman_rc7_rebound_race.py", "size_bytes": 6875, "sha256": "c1a30ab22668eb7113c20a3bc88e5190c268fea273a8e5e6c60beb3b86da17aa"},
+    {"path": "benchmarks/jx_fast_wisdom_holman_rc6_rebound_race.py", "size_bytes": 25080, "sha256": "58a5224a4fc9373f546bd0a8c8688615079fdef1cd905d869a04f644f4a8de63"},
+    {"path": "src/jxplanetx/fast_wisdom_holman.py", "size_bytes": 36182, "sha256": "99da08305f5c0a191dd53e64d02a9a396b471aaf9f7b3a062545b1de220f7a72"},
+    {"path": "src/jxplanetx/_wisdom_holman_cpu_v3_module.c", "size_bytes": 8178, "sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3"},
+    {"path": "src/jxplanetx/_wisdom_holman_loop_v3.c", "size_bytes": 15642, "sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629"},
+    {"path": "src/jxplanetx/_wisdom_holman_loop_v2.c", "size_bytes": 58558, "sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750"},
+    {"path": "src/jxplanetx/engine/wisdom_holman.py", "size_bytes": 230474, "sha256": "2c3ed08e04d6a622af63f6be82afa1a222582e772a891179cdc01aa0f2a7383f"},
+    {"path": "benchmarks/rebound_whfast_comparison.py", "size_bytes": 72936, "sha256": "2a3b233eeda1ec3b99e4bee6e999ead6753c9d51e996f2282919a0057ff4123d"},
+    {"path": "src/jxplanetx/__init__.py", "size_bytes": 98, "sha256": "2dd1e81fec7e6bddf831472f0b6ffc0a29abf7656cc63eca01eb060871ee5d69"},
+    {"path": "pyproject.toml", "size_bytes": 2667, "sha256": "16b88c1f01917ac54016fb89374c898d9db119405db376dbb5031b262d67a643"},
+    {"path": "README.md", "size_bytes": 36864, "sha256": "da8d5fe9affcdc082182a73adeef6ff24e27c64d741842e91ba08ac5a80c6fe9"}
+  ],
+  "claim_controls": {
+    "final_rc7_wheel_required": true,
+    "public_backend": "checkpoint-synchronized-v3",
+    "private_v4_promoted": false,
+    "general_solver_superiority_claimed": false,
+    "portable_performance_claimed": false,
+    "scientific_qualification_claimed": false,
+    "production_authorized": false,
+    "registry_generation_changed": false,
+    "frozen_evidence_changed": false
+  }
+}
