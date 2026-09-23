@@ -4,4 +4,4 @@ github_release=https://github.com/linomx90/jx-planet-x-engine/releases/tag/v0.6.
 pypi_release=https://pypi.org/project/jxplanetx/0.6.0rc8/
 scientific_claim_state=SCREENING_ONLY
 publication=production-zenodo
-attempt=4-metadata-diagnostics
+attempt=5-native-records-api
