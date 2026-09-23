@@ -1,0 +1,35 @@
+{
+  "schema": "jx.pypi_artifacts.v1",
+  "version": "0.6.0rc10",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "source_release_commit": "4d6866fe5e9b8a64c6924325baa233ca97e0afc3",
+  "source_wheel": {
+    "filename": "jxplanetx-0.6.0rc10-cp314-cp314-linux_x86_64.whl",
+    "size_bytes": 911070,
+    "sha256": "01bff6e4f418268a0acd0954e91f201397c8e62b3ef84852d332282aed13fa7e"
+  },
+  "pypi_wheel": {
+    "filename": "jxplanetx-0.6.0rc10-cp314-cp314-manylinux_2_31_x86_64.whl",
+    "size_bytes": 911706,
+    "sha256": "5e68b4d7a5d3a656bdebdab7f0dd34ab44feb134617642211a15a15d1d9f5c5a",
+    "platform_tag": "manylinux_2_31_x86_64"
+  },
+  "sdist": {
+    "filename": "jxplanetx-0.6.0rc10.tar.gz",
+    "size_bytes": 734202,
+    "sha256": "af390c558aa46eefa869edf2062a81869ef0d0147588467ce5af2f61c7b07e5a"
+  },
+  "repair": {
+    "auditwheel": "6.8.2",
+    "patchelf": "0.19.1",
+    "source_date_epoch": 1700000000,
+    "independent_repairs": 2,
+    "byte_identical": true
+  },
+  "verification": {
+    "auditwheel_show": "PASS",
+    "twine_check_strict": "PASS",
+    "fresh_python_3_14_install": "PASS",
+    "native_extension_imports": "PASS"
+  }
+}

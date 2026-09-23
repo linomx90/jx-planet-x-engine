@@ -1,0 +1,255 @@
+{
+  "schema": "jx-release-candidate-manifest/v1",
+  "project": "JX General Dynamics",
+  "version": "0.6.0rc10",
+  "prepared": "2026-09-23",
+  "release_stage": "release-candidate",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "candidate_readiness": "LOCAL_RC10_GR15_V3_CROSS_CHECKOUT_REPRODUCIBLE_PACKAGING_TWO_HOST_CPU_CUDA_GATES_PASS_PUBLICATION_NOT_PERFORMED",
+  "release_scope": {
+    "gr15_v3_supported_cpu_component_promoted": true,
+    "gr15_v2_private_fallback_preserved": true,
+    "supported_cpu_cuda_core_preserved": true,
+    "general_dynamics_registry_changed": false,
+    "lunar_model_promoted": false,
+    "general_rebound_superiority_claimed": false,
+    "production_or_scientific_qualification_claimed": false
+  },
+  "ownership": {
+    "human_author": "Lino Avila",
+    "copyright_notice": "Copyright (c) 2026 Lino Avila. All rights reserved.",
+    "license_expression": "LicenseRef-JX-Proprietary",
+    "license_file": "LICENSE",
+    "ai_systems_are_authors_or_owners": false,
+    "external_contributions_require_written_agreement": true,
+    "earlier_release_licenses_rewritten": false,
+    "third_party_licenses_rewritten": false
+  },
+  "source": {
+    "publication_base_branch": "main",
+    "publication_base_commit": "56cce1b57eac7eeb17b2cc147d6db35eff1becb6",
+    "development_branch": "research/post-v5-rkf78-step5-probes",
+    "development_parent_commit": "31890c335ec85cc7ed4b2858e169f98ea829fb64",
+    "dirty_worktree_preserved": true,
+    "earlier_artifacts_or_manifests_rewritten": false,
+    "frozen_runs_evidence_archives_and_library_treated_read_only": true
+  },
+  "general_dynamics_registry": {
+    "generation": 18,
+    "registry_version": "0.6.0rc3",
+    "historical_binding_preserved": true,
+    "path": "runs/jx_general_dynamics_registry_v18/REGISTRY.json",
+    "sha256": "7637705f74cdf003a8f51d376b3f82db0902a4ec53abb86047aa2973606f7329",
+    "production_ready": false,
+    "unified_multiphysics_execution": false,
+    "capability_statuses_changed_for_rc10": false,
+    "new_registry_generation_created_for_rc10": false
+  },
+  "gr15_v3": {
+    "supported_api": "jxplanetx.gr15",
+    "method_id": "JX_GAUSS_RADAU15_V3",
+    "model_id": "jx.gr15.mutual-unsoftened-newtonian.v1",
+    "body_count_minimum": 2,
+    "body_count_maximum": 32,
+    "fully_mutual": true,
+    "unsoftened_newtonian_point_mass": true,
+    "positive_gravitational_parameters_required": true,
+    "dtype": "float64",
+    "default_convergence_factor": 256.0,
+    "residual_gated_terminal_force_reuse": true,
+    "rejection_controller_changed_from_v2": false,
+    "public_wrapper_sha256": "f9972994c42e1a0ba38e090355ddac650e25140620b94ae4834b262e742ac094",
+    "native_core_sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41",
+    "native_header_sha256": "65efaa1b16ff5e7fe2b9e8afe26f90e11f6e6ad8b75711e4fc2b1e3e3b3967f5",
+    "native_wrapper_sha256": "ec46ae8610574ab7fa12e6ebae669f038b7a026f7e378b9af8888a85ba2e4092",
+    "private_v2_reference_sha256": "704d311c00474234074090388bd51ea457fe164e22a26b0a24fd46ea5539874c",
+    "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+    "production_authorized": false,
+    "scientific_qualification_claimed": false,
+    "general_rebound_superiority_claimed": false
+  },
+  "reproducible_packaging": {
+    "build_backend": "setuptools==78.1.1",
+    "source_date_epoch": 1700000000,
+    "independent_clean_builds": 4,
+    "independent_checkout_contexts": 2,
+    "wheel_byte_identical": true,
+    "sdist_byte_identical": true,
+    "stage_modes_canonicalized": true,
+    "release_builder_sha256": "1e4cbee19f44ce3256c83f4729ebe70ddf222db860949bed327265a8150d750e",
+    "unpublished_rc9_replaced": false,
+    "unpublished_rc9_preserved_as_historical_candidate": true,
+    "local_output_directory": "/tmp/jxplanetx-0.6.0rc10-build-v1",
+    "artifact_manifest": {
+      "filename": "ARTIFACTS.json",
+      "size_bytes": 712,
+      "sha256": "2e2b8a1810870d582498090d0f3bd465fc6f82b4fa0c4de3c7839489a433d033"
+    },
+    "artifacts": {
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc10-cp314-cp314-linux_x86_64.whl",
+        "size_bytes": 911070,
+        "sha256": "01bff6e4f418268a0acd0954e91f201397c8e62b3ef84852d332282aed13fa7e"
+      },
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc10.tar.gz",
+        "size_bytes": 734202,
+        "sha256": "af390c558aa46eefa869edf2062a81869ef0d0147588467ce5af2f61c7b07e5a"
+      }
+    },
+    "pypi_wheel": {
+      "filename": "jxplanetx-0.6.0rc10-cp314-cp314-manylinux_2_31_x86_64.whl",
+      "size_bytes": 911706,
+      "sha256": "5e68b4d7a5d3a656bdebdab7f0dd34ab44feb134617642211a15a15d1d9f5c5a",
+      "auditwheel": "6.8.2",
+      "patchelf": "0.19.1",
+      "independent_repairs": 2,
+      "byte_identical": true,
+      "twine_strict": "PASS",
+      "fresh_native_import_smoke": "PASS"
+    },
+    "fresh_wheel_record_hashed_files_verified": 125,
+    "fresh_wheel_supported_api_and_qualification": "PASS",
+    "fresh_sdist_supported_api_smoke": "PASS"
+  },
+  "verification": {
+    "test_profile_inventory": {
+      "manifest_path": "tools/test_matrix_manifest.json",
+      "manifest_size_bytes": 21050,
+      "manifest_sha256": "05db1458ffe14bce930d2163cb8201ea3edba01cb7df8bc4f9205bce6fdf0eb7",
+      "files": 265,
+      "profiles": 12,
+      "exact_non_overlapping_coverage": true
+    },
+    "live_current_matrix": {
+      "isolated_lanes": 191,
+      "status": "PASS"
+    },
+    "engine_matrix_normal": {
+      "isolated_lanes": 13,
+      "tests_run": 228,
+      "skipped_optional_gpu_classes": 2,
+      "status": "PASS"
+    },
+    "engine_matrix_python_optimized": {
+      "isolated_lanes": 13,
+      "tests_run": 233,
+      "status": "PASS"
+    },
+    "rebound_5_1_1_profile": {
+      "isolated_lanes": 5,
+      "tests_run": 17,
+      "status": "PASS"
+    },
+    "cuda_core_release_gate": {
+      "path": "/tmp/jx-cuda-core-0.6.0rc10-rtx5060ti.json",
+      "size_bytes": 814,
+      "sha256": "fef330c9052a367772f76648751e5e9edd08e9f44313490ad8979ec54f8a46fd",
+      "status": "PASS",
+      "tests_run": 5,
+      "skips": 0,
+      "device": "NVIDIA GeForce RTX 5060 Ti",
+      "compute_capability": "12.0",
+      "cupy_version": "14.2.0",
+      "driver_version": 13020,
+      "runtime_version": 13020,
+      "general_gpu_qualification": false
+    },
+    "second_host_cuda_core_release_gate": {
+      "path": "/tmp/jx_cuda_core_rc10_rtx4050.json",
+      "size_bytes": 820,
+      "sha256": "1e557c4abe5457ddf23311bc7eafa533a1335d5efbcdf33c661810a2ea7e80f9",
+      "status": "PASS",
+      "tests_run": 5,
+      "skips": 0,
+      "device": "NVIDIA GeForce RTX 4050 Laptop GPU",
+      "compute_capability": "8.9",
+      "common_ownership": true,
+      "general_gpu_qualification": false
+    },
+    "gr15_v3_development_holdout": {
+      "preregistration_path": "benchmarks/jx_gr15_v3_preregistration.json",
+      "preregistration_sha256": "64c5e9acd9b0a8cfe643c9be0dc2209d3503302dccbb4600973f4c3513d04026",
+      "report_path": "/tmp/jx_gr15_v3_qualification_v1.json",
+      "report_sha256": "1226492348fe8a4ac0607afad793083bf049e69f34f8e326811ca5b3e7f8d9fa",
+      "semantic_content_sha256": "293a745675855f803b615c4687ff9cb52071faaf8afb1b9c36967a6325e0e07a",
+      "all_fixed_gates_passed": true,
+      "force_evaluation_reduction_range": [0.2459, 0.2670],
+      "v2_over_v3_speedup_range": [1.2345, 1.2916],
+      "rejection_controller_improvement_claimed": false
+    },
+    "exact_rc10_wheel_gr15_acceptance": {
+      "protocol_path": "benchmarks/jx_gr15_rc10_acceptance_protocol.json",
+      "protocol_size_bytes": 4081,
+      "protocol_sha256": "cd3fa44f20779a2ef06d823a2cae0b20755e31b04ea9ea2edcbfe994d6645b7b",
+      "runner_sha256": "4a3d8cd79ef7b96aab062c7ea0db8f72b2be3209031b691a3c5fc216b05d7bcc",
+      "required_wheel_sha256": "01bff6e4f418268a0acd0954e91f201397c8e62b3ef84852d332282aed13fa7e",
+      "report_path": "/tmp/jx_gr15_rc10_acceptance_v1.json",
+      "report_size_bytes": 35989,
+      "report_sha256": "e61b8f970f7fe1b0f676096895cde00a0e38ee3d8568b7fbc5ab2a89294404a3",
+      "semantic_content_sha256": "cf4c674b07516aab907b8f491ce43db5dca0625597dedbb5aa75c43526e4603d",
+      "repeat_report_sha256": "531b7b10d3f43240fd7a9252637ca14c531ad2e13f699a2b1cda4e5c0c707566",
+      "repeat_semantic_content_sha256": "a9395c3896667067d5252535bb69af788911f8a91ad2c48b312b7eefbfab674a",
+      "repeat_non_timing_content_equal": true,
+      "non_timing_content_sha256": "ef74e3fc8776cb683ea5be9a5fa5ded498148713e32e292dcdd123b66ac4f067",
+      "wheel_record_hashed_files_verified": 125,
+      "status": "PASS_SCREENING_ONLY",
+      "direct_ias15": {
+        "all_shared_accuracy_gates_passed": true,
+        "selected_epsilon_for_both_methods": 0.000001,
+        "output_rich_jx_throughput_relative_to_ias15": 1.008219391121849,
+        "output_rich_repeat_jx_throughput_relative_to_ias15": 1.015193599970294,
+        "endpoint_ias15_speed_relative_to_jx": 1.1933515477755416,
+        "endpoint_repeat_ias15_speed_relative_to_jx": 1.199084490271646,
+        "eccentric_ias15_speed_relative_to_jx": 1.3911480340464912,
+        "eccentric_repeat_ias15_speed_relative_to_jx": 1.3770937273193287,
+        "timing_resolution_fraction": 0.05,
+        "output_rich_classification": "TIE_WITHIN_TIMING_RESOLUTION",
+        "general_speed_claim": false
+      },
+      "adversarial_portfolio": {
+        "case_count": 5,
+        "body_counts_covered": [2, 3, 11, 32],
+        "high_eccentricity": 0.99,
+        "extreme_mass_ratio": 1000000000000.0,
+        "three_body_close_scatter": true,
+        "long_11_body_inner_periods": 20,
+        "maximum_supported_body_count_executed": 32,
+        "all_fixed_gates_passed": true,
+        "failure_domain_gates_passed": true,
+        "largest_scaled_jx_ias15_state_difference": 1.3564007860417082e-08,
+        "general_accuracy_claim": false
+      },
+      "second_host": {
+        "report_path": "/tmp/jx_gr15_rc10_acceptance_rtx4050.json",
+        "report_size_bytes": 35910,
+        "report_sha256": "6b66a14d8b6d8c8fafc662ae1801b1048e94836b4a89992cf6b2a4196dd051a2",
+        "semantic_content_sha256": "31cd3fc9f4e5c38bd08f77b6ce1c479c814f58dc09ae592c0089d6aad102cf47",
+        "status": "PASS_SCREENING_ONLY",
+        "same_exact_wheel": true,
+        "common_ownership": true,
+        "output_rich_ias15_speed_relative_to_jx": 1.1520018302808306,
+        "endpoint_ias15_speed_relative_to_jx": 1.3774010640540257,
+        "eccentric_ias15_speed_relative_to_jx": 1.6233585946512212,
+        "desktop_timing_classification_portable": false
+      }
+    }
+  },
+  "known_limits": [
+    "GR15 supports only 2--32 positive-GM fully mutual unsoftened Newtonian point masses in binary64.",
+    "GR15 has no massless particles, arbitrary force callbacks, collision response, event location, regularization, relativity, dense output, or GPU implementation.",
+    "The exact-wheel direct IAS15 matrix has three two-body synthetic workloads on two commonly owned hosts; the desktop output-rich tie did not reproduce on the laptop and is not portable or general.",
+    "The adversarial portfolio is finite and synthetic; retained minimum separation is not event-time localization, and IAS15 is a numerical reference rather than physical truth.",
+    "The eccentric rejection count remains 20 in the direct matrix; the rejection controller was not improved in rc10.",
+    "The CUDA core gate covers an RTX 5060 Ti and RTX 4050 under common ownership; it does not establish independent validation or general GPU qualification.",
+    "No production fitness, production ephemeris, scientific qualification, lunar-model promotion, or general solver superiority is claimed."
+  ],
+  "release_actions": {
+    "git_reset_performed": false,
+    "clean_performed": false,
+    "push_performed": false,
+    "publication_performed": false,
+    "earlier_release_republished_or_relabelled": false,
+    "frozen_runs_or_archives_modified": false
+  }
+}

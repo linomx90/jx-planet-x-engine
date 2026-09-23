@@ -1,0 +1,926 @@
+{
+  "adversarial": {
+    "benchmark_id": "jx.public-gr15-v3.long-adversarial-qualification.v1",
+    "cases": {
+      "close_scatter_three_body": {
+        "analytic": null,
+        "body_count": 3,
+        "checkpoint_count": 38,
+        "corrector": {
+          "maximum_residual": 5.528600596938029e-14,
+          "threshold": 5.684341886080802e-14
+        },
+        "final_epoch": 40.00621894805752,
+        "fixed_gates": {
+          "jx_scaled_state_max": 2e-06,
+          "maximum_retained_pair_separation": 0.2,
+          "minimum_retained_pair_separation": 1e-05,
+          "reference_scaled_state_max": 1e-08,
+          "relative_total_energy_max": 2e-08,
+          "reverse_scaled_state_max": 2e-05,
+          "scaled_angular_momentum_max": 2e-09,
+          "scaled_center_of_mass_linearity_max": 2e-12,
+          "scaled_linear_momentum_max": 2e-13
+        },
+        "fixture": "close_scatter_three_body",
+        "gate_results": {
+          "angular_momentum": true,
+          "center_of_mass": true,
+          "challenge_geometry_reached": true,
+          "corrector_residual": true,
+          "deterministic_replay": true,
+          "ias15_reference_stability": true,
+          "jx_vs_ias15_state": true,
+          "linear_momentum": true,
+          "positive_retained_separation": true,
+          "relative_energy": true,
+          "reverse_time": true,
+          "terminal_force_accounting": true
+        },
+        "ias15_accounting": {
+          "primary_steps_done": 1098,
+          "sensitivity_steps_done": 1522
+        },
+        "ias15_primary_digest": "b50b9e58bc6139a9fa9d48f77f95ecfc9a49dc002044767e6bade53963a83e7c",
+        "ias15_sensitivity_digest": "b98f81c9de22b9c6ac0e8a2f7d770ae2457092ebbfa61b0ef7803d98fd2b56c1",
+        "initial_epoch": 0.0,
+        "jx_accounting": {
+          "accepted_steps": 845,
+          "attempted_steps": 856,
+          "force_evaluations": 14880,
+          "nonconverged_retries": 0,
+          "predictor_corrector_iterations": 1753,
+          "rejected_steps": 11,
+          "terminal_force_reuses": 856,
+          "terminal_force_sweeps": 0
+        },
+        "jx_digest": "0b0e33c173d860e8b861365c13fe2c7cd5e31c62ad3377f0a36d1d8e68198bf7",
+        "jx_repeat_digest": "0b0e33c173d860e8b861365c13fe2c7cd5e31c62ad3377f0a36d1d8e68198bf7",
+        "jx_trajectory_metrics": {
+          "minimum_retained_pair_separation": 0.05367421667085467,
+          "relative_total_energy_max": 1.2934237473461574e-14,
+          "scaled_angular_momentum_max": 9.384958327138486e-18,
+          "scaled_center_of_mass_linearity_max": 1.1825279471026673e-17,
+          "scaled_linear_momentum_max": 1.4405402938325991e-18
+        },
+        "jx_vs_ias15": {
+          "position_scaled_max": 1.7671051025456168e-11,
+          "position_vector_l2_max": 5.153580259348958e-11,
+          "velocity_scaled_max": 1.022818883673221e-11,
+          "velocity_vector_l2_max": 1.2243500464909088e-11
+        },
+        "reference_stability": {
+          "position_scaled_max": 1.3232721046204353e-14,
+          "position_vector_l2_max": 3.859186975520023e-14,
+          "velocity_scaled_max": 3.716211346145976e-14,
+          "velocity_vector_l2_max": 4.4484352088649193e-14
+        },
+        "reverse_time": {
+          "position_scaled_max": 1.5689757503100609e-12,
+          "position_vector_l2_max": 1.9514720751247156e-12,
+          "velocity_scaled_max": 1.40040136002389e-12,
+          "velocity_vector_l2_max": 1.40040136002389e-12
+        },
+        "status": "PASS_FIXED_GATES"
+      },
+      "extreme_mass_ratio_binary_25_periods": {
+        "analytic": {
+          "ias15_primary": {
+            "position_scaled_max": 2.9479709984979957e-12,
+            "position_vector_l2_max": 5.60114489714059e-12,
+            "velocity_scaled_max": 2.947961272744435e-11,
+            "velocity_vector_l2_max": 1.2849865277358114e-10
+          },
+          "jx": {
+            "position_scaled_max": 2.4460937499306122e-11,
+            "position_vector_l2_max": 4.647578124863515e-11,
+            "velocity_scaled_max": 2.446219990064593e-10,
+            "velocity_vector_l2_max": 1.06628257303553e-09
+          }
+        },
+        "body_count": 2,
+        "checkpoint_count": 101,
+        "corrector": {
+          "maximum_residual": 5.575791175505393e-14,
+          "threshold": 5.684341886080802e-14
+        },
+        "final_epoch": 157.0796326794111,
+        "fixed_gates": {
+          "analytic_scaled_state_max": 2e-07,
+          "jx_scaled_state_max": 2e-07,
+          "maximum_retained_pair_separation": 0.11,
+          "minimum_retained_pair_separation": 0.05,
+          "reference_scaled_state_max": 5e-10,
+          "relative_total_energy_max": 1e-08,
+          "reverse_scaled_state_max": 1e-06,
+          "scaled_angular_momentum_max": 2e-09,
+          "scaled_center_of_mass_linearity_max": 2e-12,
+          "scaled_linear_momentum_max": 2e-13
+        },
+        "fixture": "analytic_binary",
+        "gate_results": {
+          "angular_momentum": true,
+          "center_of_mass": true,
+          "challenge_geometry_reached": true,
+          "corrector_residual": true,
+          "deterministic_replay": true,
+          "ias15_reference_stability": true,
+          "ias15_vs_analytic_state": true,
+          "jx_vs_analytic_state": true,
+          "jx_vs_ias15_state": true,
+          "linear_momentum": true,
+          "positive_retained_separation": true,
+          "relative_energy": true,
+          "reverse_time": true,
+          "terminal_force_accounting": true
+        },
+        "ias15_accounting": {
+          "primary_steps_done": 9125,
+          "sensitivity_steps_done": 12625
+        },
+        "ias15_primary_digest": "31e11845c06c0a441a4d50cb2ba1c4e511edf4d1566cefeb36385c17ce152147",
+        "ias15_sensitivity_digest": "5a630b988ea33921d6b64a55dd76a35232efd39256261bb61331c73f2b242faa",
+        "initial_epoch": 0.0,
+        "jx_accounting": {
+          "accepted_steps": 9206,
+          "attempted_steps": 9208,
+          "force_evaluations": 157576,
+          "nonconverged_retries": 0,
+          "predictor_corrector_iterations": 18546,
+          "rejected_steps": 2,
+          "terminal_force_reuses": 9208,
+          "terminal_force_sweeps": 0
+        },
+        "jx_digest": "da4b379efaa8f06cb6cf062dfb4217980310298a179f8bccef94f9a74bc57023",
+        "jx_repeat_digest": "da4b379efaa8f06cb6cf062dfb4217980310298a179f8bccef94f9a74bc57023",
+        "jx_trajectory_metrics": {
+          "minimum_retained_pair_separation": 0.09999999999999858,
+          "relative_total_energy_max": 7.128778228301218e-14,
+          "scaled_angular_momentum_max": 4.267249598154692e-28,
+          "scaled_center_of_mass_linearity_max": 1.2696929141855745e-26,
+          "scaled_linear_momentum_max": 2.110994584501343e-28
+        },
+        "jx_vs_ias15": {
+          "position_scaled_max": 2.1512966503842097e-11,
+          "position_vector_l2_max": 4.087463635725906e-11,
+          "velocity_scaled_max": 2.1514238630319017e-10,
+          "velocity_vector_l2_max": 9.377839203673262e-10
+        },
+        "reference_stability": {
+          "position_scaled_max": 2.4211405458896024e-12,
+          "position_vector_l2_max": 4.600167037185638e-12,
+          "velocity_scaled_max": 2.4211354661385312e-11,
+          "velocity_vector_l2_max": 1.0553484825514826e-10
+        },
+        "reverse_time": {
+          "position_scaled_max": 5.834826452236316e-11,
+          "position_vector_l2_max": 5.834826452236316e-11,
+          "velocity_scaled_max": 3.0709675591872994e-10,
+          "velocity_vector_l2_max": 1.3386037249382508e-09
+        },
+        "status": "PASS_FIXED_GATES"
+      },
+      "high_eccentricity_binary_10_periods": {
+        "analytic": {
+          "ias15_primary": {
+            "position_scaled_max": 8.238174533583913e-11,
+            "position_vector_l2_max": 1.6393950927881058e-10,
+            "velocity_scaled_max": 8.238174659687024e-09,
+            "velocity_vector_l2_max": 1.1621369677174481e-07
+          },
+          "jx": {
+            "position_scaled_max": 5.3258262225108516e-11,
+            "position_vector_l2_max": 1.059838358441301e-10,
+            "velocity_scaled_max": 5.3258332007344915e-09,
+            "velocity_vector_l2_max": 7.513008526946711e-08
+          }
+        },
+        "body_count": 2,
+        "checkpoint_count": 81,
+        "corrector": {
+          "maximum_residual": 5.6818794774506654e-14,
+          "threshold": 5.684341886080802e-14
+        },
+        "final_epoch": 62.83182165589288,
+        "fixed_gates": {
+          "analytic_scaled_state_max": 5e-07,
+          "jx_scaled_state_max": 5e-07,
+          "maximum_retained_pair_separation": 0.011,
+          "minimum_retained_pair_separation": 0.005,
+          "reference_scaled_state_max": 5e-10,
+          "relative_total_energy_max": 2e-08,
+          "reverse_scaled_state_max": 2e-06,
+          "scaled_angular_momentum_max": 2e-09,
+          "scaled_center_of_mass_linearity_max": 2e-12,
+          "scaled_linear_momentum_max": 2e-13
+        },
+        "fixture": "analytic_binary",
+        "gate_results": {
+          "angular_momentum": true,
+          "center_of_mass": true,
+          "challenge_geometry_reached": true,
+          "corrector_residual": true,
+          "deterministic_replay": true,
+          "ias15_reference_stability": true,
+          "ias15_vs_analytic_state": true,
+          "jx_vs_analytic_state": true,
+          "jx_vs_ias15_state": true,
+          "linear_momentum": true,
+          "positive_retained_separation": true,
+          "relative_energy": true,
+          "reverse_time": true,
+          "terminal_force_accounting": true
+        },
+        "ias15_accounting": {
+          "primary_steps_done": 5980,
+          "sensitivity_steps_done": 8290
+        },
+        "ias15_primary_digest": "ac16abd7356c902d2f691f114fee1607c954608721c96b71d84179a40262b5f8",
+        "ias15_sensitivity_digest": "ca93f0352596f28bf76cd32162b936bc4978c2ffdd4bbec6fd2264fcc2cf848c",
+        "initial_epoch": 0.0,
+        "jx_accounting": {
+          "accepted_steps": 6021,
+          "attempted_steps": 6043,
+          "force_evaluations": 103187,
+          "nonconverged_retries": 1,
+          "predictor_corrector_iterations": 12143,
+          "rejected_steps": 22,
+          "terminal_force_reuses": 6042,
+          "terminal_force_sweeps": 0
+        },
+        "jx_digest": "c0af1583a692a078614ae2e53f560eca889f5b6382fa7f20589d22a62c93153f",
+        "jx_repeat_digest": "c0af1583a692a078614ae2e53f560eca889f5b6382fa7f20589d22a62c93153f",
+        "jx_trajectory_metrics": {
+          "minimum_retained_pair_separation": 0.010000000000000009,
+          "relative_total_energy_max": 2.7232109254228785e-13,
+          "scaled_angular_momentum_max": 4.054519405124092e-23,
+          "scaled_center_of_mass_linearity_max": 7.905434402419295e-21,
+          "scaled_linear_momentum_max": 1.3002360394367947e-22
+        },
+        "jx_vs_ias15": {
+          "position_scaled_max": 1.3564000756088974e-10,
+          "position_vector_l2_max": 2.6992334512286067e-10,
+          "velocity_scaled_max": 1.3564007860417082e-08,
+          "velocity_vector_l2_max": 1.9134378204114942e-07
+        },
+        "reference_stability": {
+          "position_scaled_max": 4.608942990920135e-12,
+          "position_vector_l2_max": 9.171787380144906e-12,
+          "velocity_scaled_max": 4.608941775605909e-10,
+          "velocity_vector_l2_max": 6.501709226558703e-09
+        },
+        "reverse_time": {
+          "position_scaled_max": 7.91969142724544e-11,
+          "position_vector_l2_max": 7.91969142724544e-11,
+          "velocity_scaled_max": 3.979748727482762e-09,
+          "velocity_vector_l2_max": 5.614123649339937e-08
+        },
+        "status": "PASS_FIXED_GATES"
+      },
+      "planetary_boundary_32_body_2_periods": {
+        "analytic": null,
+        "body_count": 32,
+        "checkpoint_count": 9,
+        "corrector": {
+          "maximum_residual": 5.5973492792577806e-14,
+          "threshold": 5.684341886080802e-14
+        },
+        "final_epoch": 12.566370614359172,
+        "fixed_gates": {
+          "jx_scaled_state_max": 2e-06,
+          "minimum_retained_pair_separation": 1e-05,
+          "reference_scaled_state_max": 2e-09,
+          "relative_total_energy_max": 2e-08,
+          "reverse_scaled_state_max": 2e-05,
+          "scaled_angular_momentum_max": 2e-09,
+          "scaled_center_of_mass_linearity_max": 2e-12,
+          "scaled_linear_momentum_max": 2e-13
+        },
+        "fixture": "planetary_hierarchy",
+        "gate_results": {
+          "angular_momentum": true,
+          "center_of_mass": true,
+          "corrector_residual": true,
+          "deterministic_replay": true,
+          "ias15_reference_stability": true,
+          "jx_vs_ias15_state": true,
+          "linear_momentum": true,
+          "positive_retained_separation": true,
+          "relative_energy": true,
+          "reverse_time": true,
+          "terminal_force_accounting": true
+        },
+        "ias15_accounting": {
+          "primary_steps_done": 280,
+          "sensitivity_steps_done": 390
+        },
+        "ias15_primary_digest": "334fa69abcd1c69e79f54ec3c7073225a7c8c3488aab0abaa89754a860688b17",
+        "ias15_sensitivity_digest": "a8f383d29fd917d141f3c87b3e8bd03be102214991e34e1277a72eaf53750240",
+        "initial_epoch": 0.0,
+        "jx_accounting": {
+          "accepted_steps": 83,
+          "attempted_steps": 83,
+          "force_evaluations": 1987,
+          "nonconverged_retries": 0,
+          "predictor_corrector_iterations": 238,
+          "rejected_steps": 0,
+          "terminal_force_reuses": 83,
+          "terminal_force_sweeps": 0
+        },
+        "jx_digest": "f70fbd90b5d93ecfbef37c4dd099d5dba18753ae82741c1ddd2f4f53df46fe58",
+        "jx_repeat_digest": "f70fbd90b5d93ecfbef37c4dd099d5dba18753ae82741c1ddd2f4f53df46fe58",
+        "jx_trajectory_metrics": {
+          "minimum_retained_pair_separation": 0.3000475114431935,
+          "relative_total_energy_max": 5.407175889128178e-15,
+          "scaled_angular_momentum_max": 1.5245452024707667e-20,
+          "scaled_center_of_mass_linearity_max": 1.385739947789481e-21,
+          "scaled_linear_momentum_max": 7.980212354121107e-22
+        },
+        "jx_vs_ias15": {
+          "position_scaled_max": 1.209625610492733e-13,
+          "position_vector_l2_max": 4.838499706138439e-13,
+          "velocity_scaled_max": 4.189276020611027e-13,
+          "velocity_vector_l2_max": 4.1894412780934037e-13
+        },
+        "reference_stability": {
+          "position_scaled_max": 1.5720547380395776e-15,
+          "position_vector_l2_max": 6.288215396613193e-15,
+          "velocity_scaled_max": 6.362983325638263e-15,
+          "velocity_vector_l2_max": 6.3632343309670155e-15
+        },
+        "reverse_time": {
+          "position_scaled_max": 1.1420368499341226e-13,
+          "position_vector_l2_max": 4.56814481677074e-13,
+          "velocity_scaled_max": 4.55040113206884e-13,
+          "velocity_vector_l2_max": 4.55040113206884e-13
+        },
+        "status": "PASS_FIXED_GATES"
+      },
+      "planetary_hierarchy_11_body_20_periods": {
+        "analytic": null,
+        "body_count": 11,
+        "checkpoint_count": 41,
+        "corrector": {
+          "maximum_residual": 5.673153230061621e-14,
+          "threshold": 5.684341886080802e-14
+        },
+        "final_epoch": 125.66370614359172,
+        "fixed_gates": {
+          "jx_scaled_state_max": 2e-06,
+          "minimum_retained_pair_separation": 1e-05,
+          "reference_scaled_state_max": 2e-09,
+          "relative_total_energy_max": 2e-08,
+          "reverse_scaled_state_max": 2e-05,
+          "scaled_angular_momentum_max": 2e-09,
+          "scaled_center_of_mass_linearity_max": 2e-12,
+          "scaled_linear_momentum_max": 2e-13
+        },
+        "fixture": "planetary_hierarchy",
+        "gate_results": {
+          "angular_momentum": true,
+          "center_of_mass": true,
+          "corrector_residual": true,
+          "deterministic_replay": true,
+          "ias15_reference_stability": true,
+          "jx_vs_ias15_state": true,
+          "linear_momentum": true,
+          "positive_retained_separation": true,
+          "relative_energy": true,
+          "reverse_time": true,
+          "terminal_force_accounting": true
+        },
+        "ias15_accounting": {
+          "primary_steps_done": 2826,
+          "sensitivity_steps_done": 3922
+        },
+        "ias15_primary_digest": "5bc8be3046ab8293541f30ab6f7080395cf4bef5eb69f5331f78883a811dc73f",
+        "ias15_sensitivity_digest": "dc4adf5b53e011fd8454ebffc18cf741958d04292663e33f8b34feca0c43730d",
+        "initial_epoch": 0.0,
+        "jx_accounting": {
+          "accepted_steps": 1214,
+          "attempted_steps": 1227,
+          "force_evaluations": 23619,
+          "nonconverged_retries": 0,
+          "predictor_corrector_iterations": 2799,
+          "rejected_steps": 13,
+          "terminal_force_reuses": 1227,
+          "terminal_force_sweeps": 0
+        },
+        "jx_digest": "9ba3ddd7d3e6a27649553dcd3452df8cf8c5974adbd9340c1ab4b83936daf239",
+        "jx_repeat_digest": "9ba3ddd7d3e6a27649553dcd3452df8cf8c5974adbd9340c1ab4b83936daf239",
+        "jx_trajectory_metrics": {
+          "minimum_retained_pair_separation": 0.1011532071059602,
+          "relative_total_energy_max": 8.536739167054893e-14,
+          "scaled_angular_momentum_max": 2.0929180171525804e-19,
+          "scaled_center_of_mass_linearity_max": 1.9853484025512924e-20,
+          "scaled_linear_momentum_max": 1.4289933647175675e-21
+        },
+        "jx_vs_ias15": {
+          "position_scaled_max": 1.48309640939156e-11,
+          "position_vector_l2_max": 2.82033992552542e-11,
+          "velocity_scaled_max": 2.8284088877543617e-11,
+          "velocity_vector_l2_max": 2.8291207516974372e-11
+        },
+        "reference_stability": {
+          "position_scaled_max": 1.6613895270687637e-13,
+          "position_vector_l2_max": 3.1593921914787253e-13,
+          "velocity_scaled_max": 3.1618656174835886e-13,
+          "velocity_vector_l2_max": 3.1626614069946743e-13
+        },
+        "reverse_time": {
+          "position_scaled_max": 2.5720122840400337e-11,
+          "position_vector_l2_max": 4.886821488535307e-11,
+          "velocity_scaled_max": 4.8752909755342974e-11,
+          "velocity_vector_l2_max": 4.8752909755342974e-11
+        },
+        "status": "PASS_FIXED_GATES"
+      }
+    },
+    "claim_controls": {
+      "general_superiority_claim_authorized": false,
+      "performance_claim_authorized": false,
+      "production_ephemeris_claim_authorized": false,
+      "release_promotion_authorized_by_this_report_alone": false,
+      "screening_only": true
+    },
+    "failure_domain": {
+      "gates": {
+        "body_count_above_32_rejected": true,
+        "coincident_state_failed_closed": true,
+        "minimum_step_failed_closed": true
+      },
+      "observed": {
+        "minimum_step_status": 6,
+        "oversized_rejected": true,
+        "singularity_status": 3
+      },
+      "status": "PASS_FIXED_GATES"
+    },
+    "runtime": {
+      "gr15": {
+        "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+        "compiler_version": "15.2.0",
+        "method_id": "JX_GAUSS_RADAU15_V3",
+        "scientific_claim_state": "SCREENING_ONLY",
+        "source_sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41"
+      },
+      "jxplanetx": "0.6.0rc10",
+      "numpy": "2.5.3",
+      "omp_num_threads": "1",
+      "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+      "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+      "rebound": "5.1.1",
+      "rebound_githash": "33549d1d50d616a95a6d6a79e5e2c9c3b3730b1f"
+    },
+    "schema": "jxplanetx.gr15-v3.adversarial-report.v1",
+    "scientific_claim_state": "SCREENING_ONLY",
+    "status": "PASS_SCREENING_ONLY"
+  },
+  "artifacts": {
+    "sdist": {
+      "filename": "jxplanetx-0.6.0rc10.tar.gz",
+      "sha256": "af390c558aa46eefa869edf2062a81869ef0d0147588467ce5af2f61c7b07e5a",
+      "size_bytes": 734202
+    },
+    "wheel": {
+      "filename": "jxplanetx-0.6.0rc10-cp314-cp314-linux_x86_64.whl",
+      "installed_distribution_root": "/tmp/jx-rc10-wheel-acceptance/lib/python3.14/site-packages",
+      "record_hashed_files_verified": 125,
+      "sha256": "01bff6e4f418268a0acd0954e91f201397c8e62b3ef84852d332282aed13fa7e",
+      "size_bytes": 911070
+    }
+  },
+  "benchmark_id": "jx.gr15-v3.rc10.exact-artifact-acceptance.v1",
+  "claim_controls": {
+    "general_superiority_claim_authorized": false,
+    "production_ephemeris_claim_authorized": false,
+    "publication_authorized_by_this_report": false,
+    "screening_only": true
+  },
+  "direct_ias15": {
+    "benchmark_id": "jx.public-gr15-vs-rebound-ias15.accuracy-gated.v1",
+    "claim_controls": {
+      "general_superiority_claimed": false,
+      "production_qualification_claimed": false,
+      "release_promotion_authorized": false,
+      "single_host_observation": true
+    },
+    "runtime": {
+      "gr15": {
+        "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+        "compiler_version": "15.2.0",
+        "method_id": "JX_GAUSS_RADAU15_V3",
+        "scientific_claim_state": "SCREENING_ONLY",
+        "source_sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41"
+      },
+      "jxplanetx": "0.6.0rc10",
+      "numpy": "2.5.3",
+      "omp_num_threads": "1",
+      "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+      "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+      "rebound": "5.1.1"
+    },
+    "schema": "jxplanetx.gr15-ias15.screening-report.v1",
+    "scientific_claim_state": "SCREENING_ONLY",
+    "status": "PASS_SCREENING_ONLY",
+    "workloads": {
+      "circular_binary_100_periods_101_outputs": {
+        "accounting": {
+          "jx_gr15": {
+            "accepted_steps": 1503,
+            "attempted_steps": 1503,
+            "corrector_iterations": 7438,
+            "force_evaluations": 73015,
+            "rejected_steps": 0
+          },
+          "rebound_ias15": {
+            "steps_done": 1401
+          }
+        },
+        "accuracy": {
+          "jx_gr15": {
+            "position_vector_l2_max": 3.1638743506948077e-10,
+            "relative_angular_momentum_max": 6.554756737386924e-13,
+            "relative_total_energy_max": 1.3111733920823099e-12,
+            "velocity_vector_l2_max": 3.1608792292721825e-10
+          },
+          "rebound_ias15": {
+            "position_vector_l2_max": 7.352107378739159e-13,
+            "relative_angular_momentum_max": 1.2212453270876722e-15,
+            "relative_total_energy_max": 2.6645352591003757e-15,
+            "velocity_vector_l2_max": 7.360571736093426e-13
+          }
+        },
+        "accuracy_gate": {
+          "position_vector_l2_max": 2e-09,
+          "relative_angular_momentum_max": 2e-11,
+          "relative_total_energy_max": 2e-11,
+          "velocity_vector_l2_max": 2e-09
+        },
+        "calibration": {
+          "jx_gr15": [
+            {
+              "epsilon": 1e-06,
+              "metrics": {
+                "position_vector_l2_max": 3.1638743506948077e-10,
+                "relative_angular_momentum_max": 6.554756737386924e-13,
+                "relative_total_energy_max": 1.3111733920823099e-12,
+                "velocity_vector_l2_max": 3.1608792292721825e-10
+              },
+              "passed": true
+            }
+          ],
+          "rebound_ias15": [
+            {
+              "epsilon": 1e-06,
+              "metrics": {
+                "position_vector_l2_max": 7.352107378739159e-13,
+                "relative_angular_momentum_max": 1.2212453270876722e-15,
+                "relative_total_energy_max": 2.6645352591003757e-15,
+                "velocity_vector_l2_max": 7.360571736093426e-13
+              },
+              "passed": true
+            }
+          ]
+        },
+        "checkpoint_count": 101,
+        "determinism": {
+          "jx_gr15": "134986829d34c12f97c02e7d789bf684942fc7e01c1836a3002b3623329d2d87",
+          "rebound_ias15": "dfc2a15052234da5313dab951420d0f77f327f6294d873c8c767adb497ac9fbe"
+        },
+        "ratios": {
+          "jx_over_ias15_median_time": 0.9918476165066581,
+          "jx_over_ias15_throughput": 1.008219391121849
+        },
+        "reference_class": "CLOSED_FORM_TWO_BODY_KEPLER_SOLUTION",
+        "selected_epsilon": {
+          "jx_gr15": 1e-06,
+          "rebound_ias15": 1e-06
+        },
+        "status": "PASS_SHARED_ACCURACY_GATE",
+        "timing": {
+          "jx_gr15": {
+            "maximum_seconds": 0.009683543000000001,
+            "mean_seconds": 0.009140298875000001,
+            "median_seconds": 0.0090857095,
+            "minimum_seconds": 0.009021300000000001,
+            "samples_seconds": [
+              0.009237172,
+              0.00907528,
+              0.009179685,
+              0.009302303000000001,
+              0.009683543000000001,
+              0.009110717,
+              0.009066063000000001,
+              0.009061886,
+              0.009022051000000001,
+              0.009058779000000001,
+              0.009099826,
+              0.009088134000000001,
+              0.009120684,
+              0.009034074000000001,
+              0.009021300000000001,
+              0.009083285
+            ]
+          },
+          "rebound_ias15": {
+            "maximum_seconds": 0.009665019,
+            "mean_seconds": 0.009187836750000001,
+            "median_seconds": 0.0091603885,
+            "minimum_seconds": 0.009097642000000001,
+            "samples_seconds": [
+              0.009154458,
+              0.009190736000000001,
+              0.009125774000000001,
+              0.009139259,
+              0.009203729,
+              0.009665019,
+              0.009160118,
+              0.009183252000000001,
+              0.009097642000000001,
+              0.009172672,
+              0.009184413,
+              0.009125844000000001,
+              0.009160659,
+              0.009114353,
+              0.009214369,
+              0.009113091
+            ]
+          }
+        }
+      },
+      "circular_binary_100_periods_endpoint": {
+        "accounting": {
+          "jx_gr15": {
+            "accepted_steps": 1474,
+            "attempted_steps": 1474,
+            "corrector_iterations": 7381,
+            "force_evaluations": 72306,
+            "rejected_steps": 0
+          },
+          "rebound_ias15": {
+            "steps_done": 1340
+          }
+        },
+        "accuracy": {
+          "jx_gr15": {
+            "position_vector_l2_max": 2.2912312416069857e-10,
+            "relative_angular_momentum_max": 4.685141163918161e-13,
+            "relative_total_energy_max": 9.372502773885572e-13,
+            "velocity_vector_l2_max": 2.2911710271015953e-10
+          },
+          "rebound_ias15": {
+            "position_vector_l2_max": 2.703542339320335e-13,
+            "relative_angular_momentum_max": 3.3306690738754696e-16,
+            "relative_total_energy_max": 8.881784197001252e-16,
+            "velocity_vector_l2_max": 2.7081090616520844e-13
+          }
+        },
+        "accuracy_gate": {
+          "position_vector_l2_max": 2e-09,
+          "relative_angular_momentum_max": 2e-11,
+          "relative_total_energy_max": 2e-11,
+          "velocity_vector_l2_max": 2e-09
+        },
+        "calibration": {
+          "jx_gr15": [
+            {
+              "epsilon": 1e-06,
+              "metrics": {
+                "position_vector_l2_max": 2.2912312416069857e-10,
+                "relative_angular_momentum_max": 4.685141163918161e-13,
+                "relative_total_energy_max": 9.372502773885572e-13,
+                "velocity_vector_l2_max": 2.2911710271015953e-10
+              },
+              "passed": true
+            }
+          ],
+          "rebound_ias15": [
+            {
+              "epsilon": 1e-06,
+              "metrics": {
+                "position_vector_l2_max": 2.703542339320335e-13,
+                "relative_angular_momentum_max": 3.3306690738754696e-16,
+                "relative_total_energy_max": 8.881784197001252e-16,
+                "velocity_vector_l2_max": 2.7081090616520844e-13
+              },
+              "passed": true
+            }
+          ]
+        },
+        "checkpoint_count": 2,
+        "determinism": {
+          "jx_gr15": "8f5c698576cf9c22dceaec84cec77918c866b70d531e21a870e04b330fc6948b",
+          "rebound_ias15": "b647653502a8ec5df23b02ce018f51a723440c65b41c17372316e425acb787ac"
+        },
+        "ratios": {
+          "jx_over_ias15_median_time": 1.1933515477755416,
+          "jx_over_ias15_throughput": 0.8379760363692014
+        },
+        "reference_class": "CLOSED_FORM_TWO_BODY_KEPLER_SOLUTION",
+        "selected_epsilon": {
+          "jx_gr15": 1e-06,
+          "rebound_ias15": 1e-06
+        },
+        "status": "PASS_SHARED_ACCURACY_GATE",
+        "timing": {
+          "jx_gr15": {
+            "maximum_seconds": 0.009055573,
+            "mean_seconds": 0.008938414625,
+            "median_seconds": 0.0089096265,
+            "minimum_seconds": 0.008873044,
+            "samples_seconds": [
+              0.009039544,
+              0.009002274000000001,
+              0.008897589000000001,
+              0.009055573,
+              0.009009898,
+              0.009047839,
+              0.008910633000000001,
+              0.008893311000000001,
+              0.008873044,
+              0.008913589000000001,
+              0.008914341000000001,
+              0.008899503000000001,
+              0.008893161,
+              0.00890862,
+              0.008877342,
+              0.008878373
+            ]
+          },
+          "rebound_ias15": {
+            "maximum_seconds": 0.007526225,
+            "mean_seconds": 0.0074736508125000005,
+            "median_seconds": 0.0074660535,
+            "minimum_seconds": 0.0074443930000000005,
+            "samples_seconds": [
+              0.007457317000000001,
+              0.0074530690000000005,
+              0.007475271,
+              0.007467977000000001,
+              0.007447499000000001,
+              0.007472506,
+              0.007501189,
+              0.0074443930000000005,
+              0.007526225,
+              0.007447680000000001,
+              0.007525174000000001,
+              0.00746413,
+              0.007502181,
+              0.007446477000000001,
+              0.007494657,
+              0.007452668000000001
+            ]
+          }
+        }
+      },
+      "eccentric_binary_e_0_9_one_period_17_outputs": {
+        "accounting": {
+          "jx_gr15": {
+            "accepted_steps": 110,
+            "attempted_steps": 130,
+            "corrector_iterations": 501,
+            "force_evaluations": 4634,
+            "rejected_steps": 20
+          },
+          "rebound_ias15": {
+            "steps_done": 54
+          }
+        },
+        "accuracy": {
+          "jx_gr15": {
+            "position_vector_l2_max": 1.1119395200054537e-12,
+            "relative_angular_momentum_max": 3.400648691443648e-15,
+            "relative_total_energy_max": 6.4374503991327e-14,
+            "velocity_vector_l2_max": 2.5501760624636312e-11
+          },
+          "rebound_ias15": {
+            "position_vector_l2_max": 9.98955916451754e-13,
+            "relative_angular_momentum_max": 8.25871825064886e-15,
+            "relative_total_energy_max": 9.849299110673032e-12,
+            "velocity_vector_l2_max": 2.6963521948035847e-12
+          }
+        },
+        "accuracy_gate": {
+          "position_vector_l2_max": 1e-09,
+          "relative_angular_momentum_max": 1e-11,
+          "relative_total_energy_max": 1e-11,
+          "velocity_vector_l2_max": 1e-09
+        },
+        "calibration": {
+          "jx_gr15": [
+            {
+              "epsilon": 1e-06,
+              "metrics": {
+                "position_vector_l2_max": 1.1119395200054537e-12,
+                "relative_angular_momentum_max": 3.400648691443648e-15,
+                "relative_total_energy_max": 6.4374503991327e-14,
+                "velocity_vector_l2_max": 2.5501760624636312e-11
+              },
+              "passed": true
+            }
+          ],
+          "rebound_ias15": [
+            {
+              "epsilon": 1e-06,
+              "metrics": {
+                "position_vector_l2_max": 9.98955916451754e-13,
+                "relative_angular_momentum_max": 8.25871825064886e-15,
+                "relative_total_energy_max": 9.849299110673032e-12,
+                "velocity_vector_l2_max": 2.6963521948035847e-12
+              },
+              "passed": true
+            }
+          ]
+        },
+        "checkpoint_count": 17,
+        "determinism": {
+          "jx_gr15": "61879004b94baa4094ca402b2a0c7d0c70abf63db060d4bacd718ecf282ac30c",
+          "rebound_ias15": "484186b08dfb3e2c92dd51a7d9354bfd4cca96c76978963afb13ce0883a185cb"
+        },
+        "ratios": {
+          "jx_over_ias15_median_time": 1.3911480340464912,
+          "jx_over_ias15_throughput": 0.7188307610163224
+        },
+        "reference_class": "CLOSED_FORM_TWO_BODY_KEPLER_SOLUTION",
+        "selected_epsilon": {
+          "jx_gr15": 1e-06,
+          "rebound_ias15": 1e-06
+        },
+        "status": "PASS_SHARED_ACCURACY_GATE",
+        "timing": {
+          "jx_gr15": {
+            "maximum_seconds": 0.000714821,
+            "mean_seconds": 0.0006879236250000001,
+            "median_seconds": 0.0006854715000000001,
+            "minimum_seconds": 0.0006688460000000001,
+            "samples_seconds": [
+              0.000691979,
+              0.0006848350000000001,
+              0.0006914180000000001,
+              0.000688673,
+              0.0006790040000000001,
+              0.000678203,
+              0.0006695570000000001,
+              0.000699342,
+              0.000680467,
+              0.000686108,
+              0.0006688460000000001,
+              0.0006844650000000001,
+              0.0006772210000000001,
+              0.000714821,
+              0.000711765,
+              0.0007000740000000001
+            ]
+          },
+          "rebound_ias15": {
+            "maximum_seconds": 0.000548822,
+            "mean_seconds": 0.0004951690000000001,
+            "median_seconds": 0.000492738,
+            "minimum_seconds": 0.00048229800000000004,
+            "samples_seconds": [
+              0.00048487300000000003,
+              0.000548822,
+              0.00049953,
+              0.00048358000000000006,
+              0.000497937,
+              0.0005003420000000001,
+              0.000497446,
+              0.00048238800000000004,
+              0.000486576,
+              0.0004950320000000001,
+              0.000494321,
+              0.00048229800000000004,
+              0.000485815,
+              0.0004911550000000001,
+              0.000508477,
+              0.00048411200000000003
+            ]
+          }
+        }
+      }
+    }
+  },
+  "protocol": {
+    "path": "/home/linoavila/Documents/Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine/benchmarks/jx_gr15_rc10_acceptance_protocol.json",
+    "sha256": "cd3fa44f20779a2ef06d823a2cae0b20755e31b04ea9ea2edcbfe994d6645b7b",
+    "size_bytes": 4081
+  },
+  "runtime": {
+    "gr15": {
+      "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+      "compiler_version": "15.2.0",
+      "method_id": "JX_GAUSS_RADAU15_V3",
+      "scientific_claim_state": "SCREENING_ONLY",
+      "source_sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41"
+    },
+    "jxplanetx": "0.6.0rc10",
+    "package_path": "/tmp/jx-rc10-wheel-acceptance/lib/python3.14/site-packages/jxplanetx/__init__.py",
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+    "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]"
+  },
+  "schema": "jxplanetx.gr15-rc10.artifact-acceptance-report.v1",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "semantic_content_sha256": "cf4c674b07516aab907b8f491ce43db5dca0625597dedbb5aa75c43526e4603d",
+  "status": "PASS_SCREENING_ONLY"
+}
