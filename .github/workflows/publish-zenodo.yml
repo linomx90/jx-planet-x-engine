@@ -65,6 +65,7 @@ jobs:
                 }
               }],
               description:.metadata.description,
+              publisher:.metadata.publisher,
               rights:[{id:.metadata.license}],
               version:.metadata.version,
               subjects:[.metadata.keywords[] | {subject:.}]
