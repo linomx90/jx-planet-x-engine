@@ -44,7 +44,8 @@ jobs:
           test -n "$ZENODO_ACCESS_TOKEN"
           api="https://zenodo.org/api"
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
-          accept="Accept: application/vnd.inveniordm.v1+json"
+          native="application/vnd.inveniordm.v1+json"
+          accept="Accept: $native"
           legacy="source/.zenodo/jx-0.6.0rc8.json"
 
           jq '{
@@ -156,7 +157,7 @@ jobs:
             echo "Zenodo file initialization request: $file_init"
             file_start_http="$(curl --silent --show-error --max-time 120 \
               -o /tmp/file-start.json -w '%{http_code}' \
-              -X POST -H "$auth" -H "$accept" -H "Content-Type: application/json" \
+              -X POST -H "$auth" -H "$accept" -H "Content-Type: $native" \
               --data "$file_init" "$files_url" || true)"
             if [[ "$file_start_http" != "200" && "$file_start_http" != "201" ]]; then
               cat /tmp/file-start.json
