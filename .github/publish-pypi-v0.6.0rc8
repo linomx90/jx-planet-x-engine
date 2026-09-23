@@ -1,0 +1,5 @@
+version=0.6.0rc8
+release_commit=e99dd12b7f551c050480398920660f701e102c3f
+wheel_sha256=bb9ebbb81c8b847a61d947d78c47c3f78d1c4a67f0336b1a8ae0a8756ea52af5
+sdist_sha256=b66c97dcded679401ccd423b224f8826ac9f695a6a71c430afcfcdc99ff3f82f
+publication=production-pypi
