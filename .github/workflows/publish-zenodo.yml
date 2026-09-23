@@ -74,8 +74,8 @@ jobs:
           find_public_record() {
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              --get -H "$accept" --data-urlencode "size=100" \
-              --data-urlencode "q=$title" \
+              --get --data-urlencode "size=100" \
+              --data-urlencode "q=metadata.title:\"$title\"" \
               "$api/records" > /tmp/public-records.json
             jq -r --arg title "$title" --arg version "$version" \
               '[.hits.hits[]? | select(.metadata.title == $title and .metadata.version == $version)]
@@ -86,11 +86,12 @@ jobs:
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
               --get -H "$auth" -H "$accept" --data-urlencode "size=100" \
-              --data-urlencode "q=$title" \
               "$api/user/records" > /tmp/user-records.json
             jq -r --arg title "$title" --arg version "$version" \
-              '[.hits.hits[]? | select(.is_draft == true and .metadata.title == $title and .metadata.version == $version)]
-               | sort_by(.id) | last | .id // empty' /tmp/user-records.json
+              '[.hits.hits[]? | select(
+                (.is_draft == true or .is_published == false or .status == "draft") and
+                .metadata.title == $title and .metadata.version == $version
+              )] | sort_by(.id) | last | .id // empty' /tmp/user-records.json
           }
 
           published_id="$(find_public_record)"
@@ -132,6 +133,9 @@ jobs:
             echo "Zenodo metadata update failed with HTTP $http_code for draft $record_id" >&2
             exit 1
           fi
+          files_url="$(jq -er '.links.files' /tmp/draft.json)"
+          publish_url="$(jq -er '.links.publish' /tmp/draft.json)"
+          echo "Zenodo draft links accepted for $record_id"
 
           for file in assets/release-assets/v0.6.0rc8/*; do
             name="$(basename "$file")"
@@ -139,7 +143,7 @@ jobs:
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              -H "$auth" -H "$accept" "$api/records/$record_id/draft/files" > /tmp/files.json
+              -H "$auth" -H "$accept" "$files_url" > /tmp/files.json
             current="$(jq -c --arg name "$name" '.entries[]? | select(.key == $name)' /tmp/files.json)"
             if [[ -n "$current" ]] &&
                [[ "$(jq -r '.status' <<< "$current")" == "completed" ]] &&
@@ -151,28 +155,27 @@ jobs:
             if [[ -n "$current" ]]; then
               curl --fail-with-body --silent --show-error \
                 -X DELETE -H "$auth" -H "$accept" \
-                "$api/records/$record_id/draft/files/$name" > /dev/null
+                "$files_url/$name" > /dev/null
             fi
             jq -n --arg key "$name" '[{key:$key}]' > /tmp/file-init.json
             curl --fail-with-body --silent --show-error \
               -X POST -H "$auth" -H "$accept" -H "Content-Type: application/json" \
               --data-binary @/tmp/file-init.json \
-              "$api/records/$record_id/draft/files" > /tmp/file-start.json
+              "$files_url" > /tmp/file-start.json
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
               -X PUT -H "$auth" -H "$accept" -H "Content-Type: application/octet-stream" \
               --upload-file "$file" \
-              "$api/records/$record_id/draft/files/$name/content" > /dev/null
+              "$files_url/$name/content" > /dev/null
             curl --fail-with-body --silent --show-error \
               -X POST -H "$auth" -H "$accept" \
-              "$api/records/$record_id/draft/files/$name/commit" > /tmp/file-commit.json
+              "$files_url/$name/commit" > /tmp/file-commit.json
             jq -e --arg md5 "$expected_md5" --argjson size "$expected_size" \
               '.status == "completed" and .checksum == $md5 and .size == $size' \
               /tmp/file-commit.json > /dev/null
             echo "$name: uploaded and verified"
           done
 
-          publish_url="$api/records/$record_id/draft/actions/publish"
           http_code="$(curl --silent --show-error --max-time 300 \
             -o /tmp/published.json -w '%{http_code}' \
             -X POST -H "$auth" -H "$accept" "$publish_url" || true)"
