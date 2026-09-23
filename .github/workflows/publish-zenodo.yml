@@ -102,7 +102,7 @@ jobs:
             done
           }
 
-          curl --fail-with-body --silent --show-error \
+          curl --fail-with-body --silent --show-error --location \
             --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
             "$api/records/$anchor_id/versions/latest" > /tmp/latest-public.json
           latest_id="$(jq -er '.id' /tmp/latest-public.json)"
