@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jxplanetx"
-version = "0.6.0rc8"
+version = "0.6.0rc10"
 description = "Falsification-first general celestial-dynamics framework with explicit scientific claim controls"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -28,6 +28,7 @@ ias15 = ["rebound==4.4.11"]
 rebound-competition = ["rebound==5.1.1"]
 independent = ["numpy==2.3.5", "scipy==1.17.0"]
 llr-screen = ["numpy==2.3.5", "pyerfa==2.0.1.5", "spiceypy==8.2.0"]
+ephemeris = ["spiceypy==8.2.0"]
 
 [project.scripts]
 jxplanetx = "jxplanetx.cli:main"
@@ -77,6 +78,26 @@ sources = [
   "src/jxplanetx/_wisdom_holman_cpu_v4_module.c",
   "src/jxplanetx/_wisdom_holman_loop_v4.c",
 ]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._gr15_cpu"
+sources = [
+  "src/jxplanetx/_gr15_cpu_module.c",
+  "src/jxplanetx/_gr15_core.c",
+]
+depends = ["src/jxplanetx/_gr15_core.h"]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._gr15_v3_cpu"
+sources = [
+  "src/jxplanetx/_gr15_v3_cpu_module.c",
+  "src/jxplanetx/_gr15_v3_core.c",
+]
+depends = ["src/jxplanetx/_gr15_v3_core.h"]
 libraries = ["m"]
 extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
 

@@ -3,6 +3,88 @@
 All notable package changes are recorded here. Scientific outcomes and their
 claim boundaries remain documented in the corresponding locked run reports.
 
+## 0.6.0rc10 — 2026-09-23
+
+### Fixed
+
+- Canonicalized release-stage directory and file modes before wheel and source
+  construction. Wheel ZIP metadata is now independent of checkout group-write
+  bits and umask policy.
+- Rebuilt the unchanged GR15 V3 package under a new candidate version rather
+  than replacing the already-qualified, unpublished rc9 artifact identity.
+
+### Verification
+
+- Reproduced the exact wheel and source archive across the active tree and a
+  clean GitHub-main overlay.
+- Passed the exact-wheel IAS15 and five-case adversarial portfolios twice on
+  the desktop and once on the RTX 4050 laptop.
+- Passed the five-test CUDA core gate on both the RTX 5060 Ti and RTX 4050.
+- Produced a byte-reproducible `manylinux_2_31_x86_64` PyPI wheel with strict
+  Auditwheel/Twine and fresh-install checks.
+
+### Boundaries
+
+- Numerical GR15 behavior is unchanged from rc9. All results remain
+  `SCREENING_ONLY`; no production, ephemeris, lunar, general GPU, or general
+  REBOUND-superiority claim is made.
+
+## 0.6.0rc9 — 2026-09-23
+
+### Added
+
+- Promoted the validated Gauss--Radau order-15 V2 numerical core from a
+  benchmark-private experiment into the packaged `jxplanetx.gr15` CPU
+  interface. The wheel now carries the native extension; normal execution no
+  longer compiles temporary C code or imports the benchmark tree.
+- Added a stable specification, reusable workspace, immutable successful
+  result, named failure statuses, native build identity, tableau export,
+  deterministic replay digest, public documentation, and installed-component
+  acceptance tests.
+- Added a prospectively locked public-GR15/REBOUND-5.1.1-IAS15 comparison
+  using closed-form two-body truth, method-specific tolerance selection from a
+  common fixed grid, shared accuracy/conservation gates, balanced timing, and
+  separate endpoint-only and retained-output workloads.
+- Added and promoted the preregistered GR15 V3 native corrector. V3 uses a
+  tolerance-aware stopping threshold and residual-gated terminal-force reuse,
+  reports both paths explicitly, and retains the exact V2 package path as a
+  bitwise-tested private reference.
+- Added a sealed correctness-only V3 adversarial portfolio spanning analytic
+  high-eccentricity and extreme-mass-ratio binaries, a retained three-body
+  close scatter, a long 11-body hierarchy, and the supported 32-body boundary.
+  It uses strict IAS15 primary/sensitivity references and requires replay,
+  conservation, reverse-time, residual, accounting, and failure-domain gates.
+
+### Development results
+
+- Both methods selected epsilon `1e-6` and passed every shared analytic gate.
+  On this one CPU host, IAS15 was 1.540x faster for the 100-period endpoint
+  workload, 1.293x faster with 101 retained outputs, and 1.657x faster for the
+  eccentricity-0.9 workload with 17 outputs. These are bounded screening
+  results, not a general ranking.
+- V3 passed all three sealed holdouts, reduced V2 force evaluations by
+  24.6%--26.7%, and was 1.234x--1.292x faster than V2. In the subsequent
+  direct IAS15 rerun, the 101-output row was an unresolved tie (JX throughput
+  1.016x, below the 5% resolution threshold); IAS15 remained 1.189x faster
+  endpoint-only and 1.393x faster on the eccentric row. The eccentric
+  rejection count remained unchanged at 20.
+- Every sealed adversarial gate passed, and the complete report repeated
+  byte-for-byte. The largest scaled JX/IAS15 state difference was 1.36e-8 for
+  the eccentricity-0.99 velocity trajectory; the 32-body row was within
+  4.19e-13. These are finite synthetic correctness screens, not production or
+  general-accuracy qualification.
+
+### Boundaries
+
+- GR15 remains `SCREENING_ONLY` and supports only 2--32 positive-GM, fully
+  mutual, unsoftened Newtonian point masses in binary64. Promotion changes the
+  software support boundary, not scientific or production authorization.
+- The exact local rc9 wheel/source pair, installed-wheel qualification,
+  installed-source smoke, normal/optimized engine matrices, 191-lane current
+  matrix, four-lane REBOUND profile, and five-test CUDA core gate pass. No push
+  or publication was performed; modified source must never be republished as
+  rc8.
+
 ## 0.6.0rc8 — 2026-09-22
 
 ### Added

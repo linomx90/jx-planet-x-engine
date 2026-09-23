@@ -1,6 +1,6 @@
 # Third-party notices
 
-Original JX source code and project material in version `0.6.0rc8` is governed
+Original JX source code and project material in version `0.6.0rc10` is governed
 by the proprietary all-rights-reserved notice in the repository root. Earlier
 public JX releases retain the licenses and notices that accompanied them.
 

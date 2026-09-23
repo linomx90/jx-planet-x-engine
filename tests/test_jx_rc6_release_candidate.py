@@ -110,8 +110,8 @@ class JXRC6ReleaseCandidateTests(unittest.TestCase):
             )
         )
 
-        self.assertEqual(__version__, "0.6.0rc8")
-        self.assertEqual(manifest["version"], __version__)
+        self.assertEqual(__version__, "0.6.0rc10")
+        self.assertEqual(manifest["version"], "0.6.0rc8")
         self.assertEqual(manifest["scientific_claim_state"], "SCREENING_ONLY")
         self.assertFalse(manifest["release_scope"]["general_rebound_superiority_claimed"])
 
@@ -147,6 +147,81 @@ class JXRC6ReleaseCandidateTests(unittest.TestCase):
         self.assertFalse(actions["push_performed"])
         self.assertFalse(actions["publication_performed"])
         self.assertFalse(actions["frozen_runs_or_archives_modified"])
+
+    def test_rc9_manifest_binds_exact_gr15_artifacts_and_claim_ceiling(self) -> None:
+        protocol = ROOT / "benchmarks/jx_gr15_rc9_acceptance_protocol.json"
+        manifest = json.loads(
+            (ROOT / "RELEASE_MANIFEST_v0.6.0rc9.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(__version__, "0.6.0rc10")
+        self.assertEqual(manifest["version"], "0.6.0rc9")
+        self.assertEqual(manifest["scientific_claim_state"], "SCREENING_ONLY")
+        self.assertFalse(
+            manifest["release_scope"]["general_rebound_superiority_claimed"]
+        )
+        self.assertFalse(
+            manifest["release_scope"]["production_or_scientific_qualification_claimed"]
+        )
+        self.assertEqual(
+            manifest["verification"]["exact_rc9_wheel_gr15_acceptance"][
+                "protocol_sha256"
+            ],
+            _sha256(protocol),
+        )
+        self.assertEqual(
+            manifest["verification"]["exact_rc9_wheel_gr15_acceptance"][
+                "required_wheel_sha256"
+            ],
+            "b5db276d9e4293e3a17a380ecbefb614b7ecea0671fb876736e090112dbde842",
+        )
+        self.assertTrue(
+            manifest["verification"]["exact_rc9_wheel_gr15_acceptance"][
+                "repeat_non_timing_content_equal"
+            ]
+        )
+        self.assertTrue(
+            manifest["verification"]["exact_rc9_wheel_gr15_acceptance"][
+                "adversarial_portfolio"
+            ]["all_fixed_gates_passed"]
+        )
+        self.assertFalse(manifest["release_actions"]["push_performed"])
+        self.assertFalse(manifest["release_actions"]["publication_performed"])
+        self.assertFalse(manifest["release_actions"]["frozen_runs_or_archives_modified"])
+
+    def test_rc10_manifest_binds_reproducible_and_two_host_gates(self) -> None:
+        protocol = ROOT / "benchmarks/jx_gr15_rc10_acceptance_protocol.json"
+        manifest = json.loads(
+            (ROOT / "RELEASE_MANIFEST_v0.6.0rc10.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(__version__, "0.6.0rc10")
+        self.assertEqual(manifest["version"], __version__)
+        self.assertEqual(manifest["scientific_claim_state"], "SCREENING_ONLY")
+        packaging = manifest["reproducible_packaging"]
+        self.assertTrue(packaging["stage_modes_canonicalized"])
+        self.assertEqual(packaging["independent_checkout_contexts"], 2)
+        self.assertTrue(packaging["pypi_wheel"]["byte_identical"])
+        acceptance = manifest["verification"]["exact_rc10_wheel_gr15_acceptance"]
+        self.assertEqual(acceptance["protocol_sha256"], _sha256(protocol))
+        self.assertEqual(
+            acceptance["required_wheel_sha256"],
+            packaging["artifacts"]["wheel"]["sha256"],
+        )
+        self.assertTrue(acceptance["repeat_non_timing_content_equal"])
+        self.assertEqual(acceptance["second_host"]["status"], "PASS_SCREENING_ONLY")
+        self.assertFalse(
+            acceptance["second_host"]["desktop_timing_classification_portable"]
+        )
+        self.assertFalse(
+            manifest["release_scope"]["general_rebound_superiority_claimed"]
+        )
+        self.assertFalse(
+            manifest["release_scope"]["production_or_scientific_qualification_claimed"]
+        )
+        self.assertFalse(manifest["release_actions"]["publication_performed"])
 
 
 if __name__ == "__main__":

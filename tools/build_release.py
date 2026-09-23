@@ -106,6 +106,19 @@ def stage_source(source_root: Path, destination: Path) -> None:
             raise ReleaseBuildError(f"required stage directory is missing: {relative}")
         shutil.copytree(source, destination / relative, ignore=_ignore_stage)
 
+    # Git does not preserve group-write bits, while copytree does.  Normalize
+    # the complete stage so wheel ZIP metadata is independent of the checkout
+    # umask and source-directory permission policy.
+    for path in sorted(destination.rglob("*")):
+        if path.is_symlink():
+            raise ReleaseBuildError(f"symbolic link entered release stage: {path}")
+        if path.is_dir():
+            path.chmod(0o755)
+        elif path.is_file():
+            path.chmod(0o755 if path.stat().st_mode & 0o111 else 0o644)
+        else:
+            raise ReleaseBuildError(f"unsupported release stage entry: {path}")
+
 
 def _build_environment(source_date_epoch: int) -> dict[str, str]:
     environment = os.environ.copy()

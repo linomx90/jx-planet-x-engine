@@ -1,0 +1,151 @@
+{
+  "schema": "jxplanetx.gr15-v3.qualification-protocol.v1",
+  "benchmark_id": "jx.public-gr15.corrector-controller-v3.holdout.v1",
+  "status": "LOCKED_AFTER_CALIBRATION_BEFORE_HOLDOUT_OR_TIMING",
+  "locked_date": "2026-09-23",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "package_version": "0.6.0rc8",
+  "v3_core_source_sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41",
+  "preregistration_sha256": "64c5e9acd9b0a8cfe643c9be0dc2209d3503302dccbb4600973f4c3513d04026",
+  "calibration_report_sha256": "2044c936ddcf1691630f6fcd3fea6939cffb754eae189218523c00cc0ef08307",
+  "calibration_result": "FACTOR_256_LARGEST_PASSING_TERMINAL_REUSE_THRESHOLD_ON_BOTH_CALIBRATION_WORKLOADS",
+  "lane_names": [
+    "gr15_v2",
+    "gr15_v3"
+  ],
+  "v2_convergence_factor": 16.0,
+  "v3_convergence_factor": 256.0,
+  "maximum_v3_force_fraction": 0.8,
+  "minimum_v3_speedup": 1.15,
+  "reverse_time_position_max": 2e-09,
+  "reverse_time_velocity_max": 2e-09,
+  "timed_repetitions": 16,
+  "execution_order": [
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"],
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"],
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"],
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"],
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"],
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"],
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"],
+    ["gr15_v2", "gr15_v3"],
+    ["gr15_v3", "gr15_v2"]
+  ],
+  "workloads": {
+    "circular_binary_100_periods_endpoint": {
+      "eccentricity": 0.0,
+      "gravitational_parameters": [0.5, 0.5],
+      "periods": 100,
+      "checkpoint_count": 2,
+      "initial_step": 0.05,
+      "maximum_step": 0.5,
+      "epsilon": 1e-06,
+      "accuracy_gate": {
+        "position_vector_l2_max": 2e-09,
+        "velocity_vector_l2_max": 2e-09,
+        "relative_total_energy_max": 2e-11,
+        "relative_angular_momentum_max": 2e-11
+      }
+    },
+    "circular_binary_100_periods_101_outputs": {
+      "eccentricity": 0.0,
+      "gravitational_parameters": [0.5, 0.5],
+      "periods": 100,
+      "checkpoint_count": 101,
+      "initial_step": 0.05,
+      "maximum_step": 0.5,
+      "epsilon": 1e-06,
+      "accuracy_gate": {
+        "position_vector_l2_max": 2e-09,
+        "velocity_vector_l2_max": 2e-09,
+        "relative_total_energy_max": 2e-11,
+        "relative_angular_momentum_max": 2e-11
+      }
+    },
+    "eccentric_binary_e_0_9_one_period_17_outputs": {
+      "eccentricity": 0.9,
+      "gravitational_parameters": [1.0, 1e-06],
+      "periods": 1,
+      "checkpoint_count": 17,
+      "initial_step": 0.006283182165589288,
+      "maximum_step": 1.570795541397322,
+      "epsilon": 1e-06,
+      "accuracy_gate": {
+        "position_vector_l2_max": 1e-09,
+        "velocity_vector_l2_max": 1e-09,
+        "relative_total_energy_max": 1e-11,
+        "relative_angular_momentum_max": 1e-11
+      }
+    }
+  },
+  "timing_scope": {
+    "warmup_excluded": true,
+    "fixture_and_workspace_allocation_excluded": true,
+    "public_or_private_python_boundary_and_result_construction_included": true,
+    "exact_checkpoint_writes_included": true,
+    "balanced_order": true,
+    "single_host_observation": true
+  },
+  "claim_controls": {
+    "holdouts_not_used_during_calibration": true,
+    "v2_retained_unchanged": true,
+    "general_superiority_claim_authorized": false,
+    "production_qualification_authorized": false,
+    "release_version_change_authorized": false,
+    "public_default_promotion_requires_all_fixed_gates": true
+  },
+  "source_roster": [
+    {
+      "path": "benchmarks/jx_gr15_v3_preregistration.json",
+      "size_bytes": 4171,
+      "sha256": "64c5e9acd9b0a8cfe643c9be0dc2209d3503302dccbb4600973f4c3513d04026"
+    },
+    {
+      "path": "benchmarks/jx_gr15_v3_qualification.py",
+      "size_bytes": 12929,
+      "sha256": "943bfef4061e18da42424336325c6529cec4ff5351ebeaf7d3c9715c4642d1c2"
+    },
+    {
+      "path": "pyproject.toml",
+      "size_bytes": 3295,
+      "sha256": "5897ff6cc458eb9743646ca1d2a51172a849f788c823dfe867b8224e40caafbd"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_core.c",
+      "size_bytes": 28505,
+      "sha256": "9a6cb532e88c732f6653c2763d9510036432d9930d930c19a5d259a03b3b514c"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_v3_candidate.py",
+      "size_bytes": 9145,
+      "sha256": "da05e5551cd4a29c88edd5895a94afbdaa470129b4163a760511755333df2e81"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_v3_core.c",
+      "size_bytes": 29796,
+      "sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_v3_core.h",
+      "size_bytes": 1151,
+      "sha256": "65efaa1b16ff5e7fe2b9e8afe26f90e11f6e6ad8b75711e4fc2b1e3e3b3967f5"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_v3_cpu_module.c",
+      "size_bytes": 8241,
+      "sha256": "ec46ae8610574ab7fa12e6ebae669f038b7a026f7e378b9af8888a85ba2e4092"
+    },
+    {
+      "path": "src/jxplanetx/gr15.py",
+      "size_bytes": 21829,
+      "sha256": "704d311c00474234074090388bd51ea457fe164e22a26b0a24fd46ea5539874c"
+    }
+  ]
+}

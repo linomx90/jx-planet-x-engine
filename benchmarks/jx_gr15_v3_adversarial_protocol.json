@@ -1,0 +1,269 @@
+{
+  "schema": "jxplanetx.gr15-v3.adversarial-protocol.v1",
+  "benchmark_id": "jx.public-gr15-v3.long-adversarial-qualification.v1",
+  "status": "LOCKED_BEFORE_FIRST_ADVERSARIAL_EXECUTION",
+  "locked_date": "2026-09-23",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "package_version": "0.6.0rc8",
+  "gr15_core_source_sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41",
+  "convergence_factor": 256.0,
+  "rebound_version": "5.1.1",
+  "rebound_githash": "33549d1d50d616a95a6d6a79e5e2c9c3b3730b1f",
+  "ias15_primary_epsilon": 1e-13,
+  "ias15_sensitivity_epsilon": 1e-14,
+  "case_order": [
+    "high_eccentricity_binary_10_periods",
+    "extreme_mass_ratio_binary_25_periods",
+    "close_scatter_three_body",
+    "planetary_hierarchy_11_body_20_periods",
+    "planetary_boundary_32_body_2_periods"
+  ],
+  "cases": {
+    "high_eccentricity_binary_10_periods": {
+      "fixture": "analytic_binary",
+      "expected_body_count": 2,
+      "gravitational_parameters": [1.0, 1e-06],
+      "eccentricity": 0.99,
+      "periods": 10,
+      "checkpoint_count": 81,
+      "initial_step": 0.0015339800208958223,
+      "minimum_step": 1e-15,
+      "maximum_step": 1.570795541397322,
+      "jx_epsilon": 1e-10,
+      "maximum_steps": 10000000,
+      "maximum_rejections": 100000,
+      "gates": {
+        "reference_scaled_state_max": 5e-10,
+        "jx_scaled_state_max": 5e-07,
+        "analytic_scaled_state_max": 5e-07,
+        "reverse_scaled_state_max": 2e-06,
+        "relative_total_energy_max": 2e-08,
+        "scaled_angular_momentum_max": 2e-09,
+        "scaled_linear_momentum_max": 2e-13,
+        "scaled_center_of_mass_linearity_max": 2e-12,
+        "minimum_retained_pair_separation": 0.005,
+        "maximum_retained_pair_separation": 0.011
+      }
+    },
+    "extreme_mass_ratio_binary_25_periods": {
+      "fixture": "analytic_binary",
+      "expected_body_count": 2,
+      "gravitational_parameters": [1.0, 1e-12],
+      "eccentricity": 0.9,
+      "periods": 25,
+      "checkpoint_count": 101,
+      "initial_step": 0.006135923151539497,
+      "minimum_step": 1e-15,
+      "maximum_step": 1.5707963267941112,
+      "jx_epsilon": 1e-10,
+      "maximum_steps": 10000000,
+      "maximum_rejections": 100000,
+      "gates": {
+        "reference_scaled_state_max": 5e-10,
+        "jx_scaled_state_max": 2e-07,
+        "analytic_scaled_state_max": 2e-07,
+        "reverse_scaled_state_max": 1e-06,
+        "relative_total_energy_max": 1e-08,
+        "scaled_angular_momentum_max": 2e-09,
+        "scaled_linear_momentum_max": 2e-13,
+        "scaled_center_of_mass_linearity_max": 2e-12,
+        "minimum_retained_pair_separation": 0.05,
+        "maximum_retained_pair_separation": 0.11
+      }
+    },
+    "close_scatter_three_body": {
+      "fixture": "close_scatter_three_body",
+      "expected_body_count": 3,
+      "initial_rows_hex": [
+        [
+          "0x1.0000000000000p+0",
+          "0x0.0p+0",
+          "-0x1.d8a0a98cbf91ep-8",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "-0x1.65b6be128f912p-8",
+          "0x0.0p+0"
+        ],
+        [
+          "0x1.0624dd2f1a9fcp-10",
+          "0x0.0p+0",
+          "0x1.fc4ebeace680ep-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.fd761789f219cp-1",
+          "0x0.0p+0"
+        ],
+        [
+          "0x1.47ae147ae147bp-8",
+          "0x0.0p+0",
+          "0x1.3e68d7cb11d03p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.c9091de16980bp-1",
+          "0x0.0p+0"
+        ]
+      ],
+      "base_step_hex": "0x1.921fb54442d18p-6",
+      "checkpoint_indices": [
+        0,
+        64,
+        128,
+        192,
+        256,
+        320,
+        384,
+        448,
+        512,
+        576,
+        640,
+        704,
+        768,
+        832,
+        896,
+        960,
+        1024,
+        1088,
+        1152,
+        1160,
+        1168,
+        1176,
+        1184,
+        1192,
+        1200,
+        1208,
+        1216,
+        1224,
+        1232,
+        1240,
+        1248,
+        1280,
+        1344,
+        1408,
+        1472,
+        1536,
+        1600,
+        1630
+      ],
+      "initial_step": 0.02454369260617026,
+      "minimum_step": 1e-15,
+      "maximum_step": 0.39269908169872414,
+      "jx_epsilon": 1e-10,
+      "maximum_steps": 10000000,
+      "maximum_rejections": 100000,
+      "gates": {
+        "reference_scaled_state_max": 1e-08,
+        "jx_scaled_state_max": 2e-06,
+        "reverse_scaled_state_max": 2e-05,
+        "relative_total_energy_max": 2e-08,
+        "scaled_angular_momentum_max": 2e-09,
+        "scaled_linear_momentum_max": 2e-13,
+        "scaled_center_of_mass_linearity_max": 2e-12,
+        "minimum_retained_pair_separation": 1e-05,
+        "maximum_retained_pair_separation": 0.2
+      }
+    },
+    "planetary_hierarchy_11_body_20_periods": {
+      "fixture": "planetary_hierarchy",
+      "expected_body_count": 11,
+      "body_count": 11,
+      "inner_periods": 20.0,
+      "checkpoint_count": 41,
+      "initial_step": 0.02,
+      "minimum_step": 1e-15,
+      "maximum_step": 0.5,
+      "jx_epsilon": 1e-10,
+      "maximum_steps": 10000000,
+      "maximum_rejections": 100000,
+      "gates": {
+        "reference_scaled_state_max": 2e-09,
+        "jx_scaled_state_max": 2e-06,
+        "reverse_scaled_state_max": 2e-05,
+        "relative_total_energy_max": 2e-08,
+        "scaled_angular_momentum_max": 2e-09,
+        "scaled_linear_momentum_max": 2e-13,
+        "scaled_center_of_mass_linearity_max": 2e-12,
+        "minimum_retained_pair_separation": 1e-05
+      }
+    },
+    "planetary_boundary_32_body_2_periods": {
+      "fixture": "planetary_hierarchy",
+      "expected_body_count": 32,
+      "body_count": 32,
+      "inner_periods": 2.0,
+      "checkpoint_count": 9,
+      "initial_step": 0.01,
+      "minimum_step": 1e-15,
+      "maximum_step": 0.25,
+      "jx_epsilon": 1e-09,
+      "maximum_steps": 10000000,
+      "maximum_rejections": 100000,
+      "gates": {
+        "reference_scaled_state_max": 2e-09,
+        "jx_scaled_state_max": 2e-06,
+        "reverse_scaled_state_max": 2e-05,
+        "relative_total_energy_max": 2e-08,
+        "scaled_angular_momentum_max": 2e-09,
+        "scaled_linear_momentum_max": 2e-13,
+        "scaled_center_of_mass_linearity_max": 2e-12,
+        "minimum_retained_pair_separation": 1e-05
+      }
+    }
+  },
+  "qualification_policy": {
+    "performance_timing_in_scope": false,
+    "jx_replay_count": 2,
+    "ias15_reference_count": 2,
+    "ias15_sensitivity_changes_epsilon_and_initial_step": true,
+    "retained_epoch_policy": "EXACT_SHARED_CHECKPOINTS_NO_INTERPOLATION",
+    "state_error_policy": "MAX_BODY_VECTOR_L2_ERROR_SCALED_BY_MAX_ONE_AND_MAX_REFERENCE_VECTOR_NORM",
+    "minimum_separation_policy": "RETAINED_CHECKPOINTS_ONLY_NOT_EVENT_LOCALIZATION",
+    "all_fixed_gates_required": true
+  },
+  "claim_controls": {
+    "general_superiority_claim_authorized": false,
+    "performance_claim_authorized": false,
+    "production_ephemeris_claim_authorized": false,
+    "release_promotion_authorized_by_this_report_alone": false,
+    "screening_only": true
+  },
+  "source_roster": [
+    {
+      "path": "benchmarks/jx_gr15_v3_adversarial.py",
+      "size_bytes": 27602,
+      "sha256": "a399afc55396603a683c31b015770dae9475087dd2404dc3ad975f57ffb31e81"
+    },
+    {
+      "path": "pyproject.toml",
+      "size_bytes": 3295,
+      "sha256": "5897ff6cc458eb9743646ca1d2a51172a849f788c823dfe867b8224e40caafbd"
+    },
+    {
+      "path": "src/jxplanetx/__init__.py",
+      "size_bytes": 787,
+      "sha256": "70a9af3d9b9a524422d0116490b8c18b4ce5460ff3100e3e15bc074ee995dc98"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_v3_core.c",
+      "size_bytes": 29796,
+      "sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_v3_core.h",
+      "size_bytes": 1151,
+      "sha256": "65efaa1b16ff5e7fe2b9e8afe26f90e11f6e6ad8b75711e4fc2b1e3e3b3967f5"
+    },
+    {
+      "path": "src/jxplanetx/_gr15_v3_cpu_module.c",
+      "size_bytes": 8241,
+      "sha256": "ec46ae8610574ab7fa12e6ebae669f038b7a026f7e378b9af8888a85ba2e4092"
+    },
+    {
+      "path": "src/jxplanetx/gr15.py",
+      "size_bytes": 22745,
+      "sha256": "f9972994c42e1a0ba38e090355ddac650e25140620b94ae4834b262e742ac094"
+    }
+  ]
+}

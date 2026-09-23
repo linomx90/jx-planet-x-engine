@@ -1,8 +1,8 @@
 # JX Celestial Dynamics Framework
 
-**Version:** 0.6.0rc8
+**Version:** 0.6.0rc10
 
-**Release date:** 2026-09-22
+**Release date:** 2026-09-23
 
 **License:** Proprietary — all rights reserved
 **Scientific claim state:** `SCREENING_ONLY`
@@ -25,7 +25,7 @@ the library authority catalog as the source of truth and does not promote
 workspace results.
 
 The installable distribution and command remain `jxplanetx` for backward
-compatibility. Version 0.6.0rc8 carries the immutable General Dynamics
+compatibility. Version 0.6.0rc10 carries the immutable General Dynamics
 registry v18 evidence historically bound to rc3, retains the supported
 measured small-N CPU/CUDA interfaces, and advances the supported fast
 Wisdom--Holman CPU screen to a checkpoint-synchronized native map. Its default
@@ -33,7 +33,9 @@ single execution produces a complete-map postcondition certificate; an exact
 second execution remains opt-in and is required by release qualification.
 The packaged endpoint-seeded v4 solver remains an implementation-private,
 fallback-audited research prototype. Byte-reproducible wheel and source-archive
-construction and the existing force and trajectory surface are preserved.
+construction and the existing force and trajectory surface are preserved. Rc10
+carries the prospectively qualified GR15 V3 CPU component while retaining
+the exact V2 implementation as a private fallback/reference.
 Registry v18
 states `SCREENING_ONLY` explicitly and does not promote any capability beyond
 its exact evidence and claim ceiling. The legacy propagation core, CLI, locked
@@ -62,6 +64,24 @@ device, binary64 dtype, deterministic reduction scope, summation tile size,
 error tolerances, and every controller limit. Unsupported combinations fail
 before arithmetic; backend selection never silently falls back or transfers
 arrays between host and GPU.
+
+The rc10 candidate packages the qualified V3 Gauss--Radau order-15
+numerical core behind the supported `jxplanetx.gr15` CPU interface and retains
+the bitwise-validated V2 implementation as an exact private reference.
+`integrate_gr15` advances 2--32 fully mutual, positive-GM, unsoftened
+Newtonian point masses in binary64, exposes complete controller and predictor
+accounting, and fails with named statuses. It is built into the wheel and does
+not compile code at runtime or import the benchmark tree. Its scope remains
+`SCREENING_ONLY`, and no production, ephemeris, collision-handling, broad
+force-model, or general IAS15 superiority claim is authorized. See the
+[GR15 user and contract guide](docs/JX_GR15.md).
+
+The preregistered V3 correctness portfolio now passes analytic eccentric and
+extreme-mass-ratio binaries, a three-body close scatter, a 20-period 11-body
+hierarchy, and the 32-body boundary against strict REBOUND 5.1.1 IAS15
+primary/sensitivity references. The whole report repeats byte-for-byte. This
+extends screening coverage; it does not make GR15 a production ephemeris or
+authorize a general accuracy or speed claim.
 
 The additive [Dynamics scenarios V1](docs/DYNAMICS_SCENARIOS.md) layer now
 assembles one state, force plan, and adaptive-RKF78 request as an explicit
@@ -411,11 +431,12 @@ Build the release artifacts twice from the declared package-only input boundary
 and require byte identity with:
 
 ```bash
-python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc8
+python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc10
 ```
 
 The builder requires the exact backend pinned in `pyproject.toml`, normalizes
-source-archive timestamps, ownership, modes, ordering, and gzip metadata, and
+staged source modes plus source-archive timestamps, ownership, modes, ordering,
+and gzip metadata, and
 writes artifact hashes to `ARTIFACTS.json`. Research evidence and frozen runs
 are not distribution inputs. The distribution does include the exact audited
 small-N RKF78 C source and builds it as the implementation-private
@@ -427,6 +448,13 @@ Python ABI and platform rather than tagged `py3-none-any`; building from the
 source archive requires a C11 compiler and Python development headers. The
 interface is not registered as a scientifically qualified or production
 backend.
+
+The rc10 source tree builds `jxplanetx._gr15_v3_cpu` from the package-owned
+GR15 V3 core and exposes it through `jxplanetx.gr15`; `jxplanetx._gr15_cpu`
+retains V2 for exact fallback/reference checks. The public wrapper verifies the
+compiled V3 identity before execution. Source and wheel installations therefore
+use the same native implementation; the old benchmark-private runtime
+compilation path is not used by the supported API.
 
 In rc5 the public CPU workspace freezes and reuses immutable RKF78 tableau,
 checkpoint-epoch, and checkpoint-view metadata instead of rebuilding it for
@@ -456,7 +484,7 @@ before importing them. If absent, it reconstructs the frozen ephemeral
 packages or changes frozen run artifacts. Use `--library-root PATH` when the
 read-only library mirror is mounted elsewhere.
 
-The complete 258-file ownership and runtime policy is documented in
+The complete 260-file ownership and runtime policy is documented in
 [JX test profiles](docs/TEST_PROFILES.md). Validate it with
 `python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
 with `--list-files`, or run all current-source profiles with `--profile live`.
@@ -618,14 +646,14 @@ and validation command.
 ## Citation and license
 
 Citation metadata and human authorship are recorded in `CITATION.cff` and
-`AUTHORS.md`. Original JX material in version `0.6.0rc8` is proprietary and
+`AUTHORS.md`. Original JX material in version `0.6.0rc10` is proprietary and
 all rights are reserved by Lino Avila; copying, modification, distribution,
 commercial use, and derivative works require prior written authorization.
 Optional third-party packages retain their own licenses. Earlier public JX
 releases and frozen artifacts retain the notices that accompanied them.
-The rc6 and rc7 manifests remain immutable historical records. The rc8
-candidate receives its own manifest after final package verification; it never
-overwrites or relabels earlier artifacts.
+The rc6, rc7, rc8, and unpublished rc9 manifests remain historical records.
+The rc10 candidate receives its own manifest after final package verification;
+it never overwrites or relabels earlier artifacts.
 
 The candidate also contains opt-in, unregistered coupled lunar screening
 models. The v2 boundary advances Sun--Earth--Moon translation, lunar mantle

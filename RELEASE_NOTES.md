@@ -1,3 +1,109 @@
+# JX General Dynamics 0.6.0rc10
+
+Release date: 23 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc10 carries the unchanged GR15 V3 numerical core from the unpublished rc9
+candidate and fixes a release-engineering defect found during clean-checkout
+reproduction. The builder now canonicalizes every staged directory and file
+mode before invoking the pinned backend, so wheel ZIP metadata no longer
+depends on the source checkout's group-write policy. Two builds in the active
+tree and a third build from a clean GitHub-main overlay produced byte-identical
+wheel and source archives.
+
+The exact installed rc10 wheel passed the fixed REBOUND 5.1.1 IAS15 matrix and
+the complete five-case adversarial portfolio twice on the desktop, with every
+non-timing field identical. On that host, the output-rich row remained a tie
+inside the declared 5% timing resolution: JX throughput was 1.008x and 1.015x
+IAS15. IAS15 remained about 1.19x faster endpoint-only and 1.38--1.39x faster
+on the eccentric row. No general speed claim is authorized.
+
+The same exact wheel then passed both correctness portfolios on the RTX 4050
+laptop. Laptop timing did not reproduce the desktop tie: IAS15 was 1.152x,
+1.377x, and 1.623x faster on the output-rich, endpoint-only, and eccentric
+rows. This is useful evidence that the performance result is host-dependent.
+The separately scoped five-test CUDA core gate passed with zero skips on both
+the RTX 5060 Ti and RTX 4050 Laptop GPU. Common ownership means this is
+two-machine reproducibility, not organizationally independent validation or
+general GPU qualification.
+
+The exact local Linux wheel remains the acceptance artifact. A separately
+hashed `manylinux_2_31_x86_64` wheel was repaired twice with Auditwheel 6.8.2
+and Patchelf 0.19.1, reproduced byte-for-byte, passed strict Twine validation,
+and passed a fresh native-extension import smoke. It is the PyPI artifact;
+both wheel identities and their relationship are recorded explicitly.
+
+GR15 remains limited to 2--32 positive-GM, fully mutual, unsoftened Newtonian
+point masses in binary64. Rc10 is not a production ephemeris, a lunar-model
+promotion, a scientific qualification, or a general REBOUND superiority
+claim. General Dynamics registry v18 remains immutable historical evidence
+bound to 0.6.0rc3.
+
+## Independent ownership and license
+
+This release retains the proprietary, all-rights-reserved license held by
+Lino Avila. Earlier public releases and third-party materials retain their
+original notices. AI systems are development tools, not authors or owners.
+
+---
+
+# JX General Dynamics 0.6.0rc9 (unpublished)
+
+Release date: 23 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc9 promotes the package-owned GR15 V3 CPU component for 2--32 fully mutual,
+positive-GM, unsoftened Newtonian point masses. V3 uses a tolerance-aware
+corrector threshold and residual-gated terminal-force reuse; the exact V2 path
+remains packaged as a private fallback/reference. On three preregistered
+holdouts, V3 reduced force evaluations by 24.6%--26.7% and ran 1.234x--1.292x
+faster than V2 without increasing rejections or exceeding the locked accuracy,
+conservation, reverse-time, residual, or determinism gates.
+
+The exact rc9 wheel passed the direct REBOUND 5.1.1 IAS15 matrix. The
+101-output circular row remains a timing tie inside the predeclared 5% band
+(1.020x JX throughput in the recorded run and 1.015x on immediate repeat).
+IAS15 remained 1.194x and 1.386x faster on the endpoint-only and eccentric
+rows; the repeat measured 1.186x and 1.390x. This is not a general solver
+ranking.
+
+The sealed correctness portfolio also passed from the exact installed wheel:
+an eccentricity-0.99 binary for 10 periods, a 1e12:1 mass-ratio binary for 25
+periods, a three-body close scatter, an 11-body hierarchy for 20 inner periods,
+and the supported 32-body boundary. Every case passed deterministic replay,
+strict IAS15 primary/sensitivity agreement, conservation, forward/backward,
+corrector, terminal-force accounting, and retained-separation gates. The
+binary cases also passed closed-form Kepler gates. This remains finite,
+synthetic, one-host screening evidence.
+
+The wheel and source archive were each reproduced byte-for-byte in two clean
+builds. A fresh wheel installation verified all 125 hashed files against the
+wheel RECORD before qualification; a fresh source-archive installation passed
+the public V3 smoke. Normal and optimized engine matrices, all 191 current-
+source lanes, the exact REBOUND profile, and the five-test CUDA core gate pass.
+The CUDA gate ran on the NVIDIA GeForce RTX 5060 Ti with CuPy 14.2.0 and CUDA
+runtime/driver 13.2.
+
+GR15 remains `SCREENING_ONLY`. It has no arbitrary force callbacks, massless
+particles, collision response, event location, regularization, relativity,
+dense output, GPU implementation, or production-ephemeris authorization.
+General Dynamics registry v18 remains immutable historical evidence bound to
+0.6.0rc3; rc9 creates no new registry generation or lunar-model promotion.
+
+## Independent ownership and license
+
+This release retains the proprietary, all-rights-reserved license held by
+Lino Avila. Earlier public releases and third-party materials retain their
+original notices. AI systems are development tools, not authors or owners.
+
+---
+
 # JX General Dynamics 0.6.0rc8
 
 Release date: 22 September 2026

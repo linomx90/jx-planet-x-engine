@@ -1,0 +1,102 @@
+{
+  "schema": "jxplanetx.gr15-v3.preregistration.v1",
+  "benchmark_id": "jx.public-gr15.corrector-controller-v3.v1",
+  "status": "LOCKED_AFTER_PUBLIC_V2_IAS15_REPORT_BEFORE_V3_EXPERIMENTS_OR_TIMING",
+  "locked_date": "2026-09-23",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "baseline": {
+    "method_id": "JX_GAUSS_RADAU15_V2",
+    "core_source_sha256": "9a6cb532e88c732f6653c2763d9510036432d9930d930c19a5d259a03b3b514c",
+    "comparison_protocol_sha256": "69adccaa3d151ef5da364e7b45f1608500ab6fa1d9b04dfccf6865bae400a7ed",
+    "comparison_report_sha256": "67ae4818f3874960aa0a46185a01190e8756bd1f0b70d5008d784ac45ae2ec8f",
+    "comparison_report_semantic_sha256": "56968d8389c538e0be3a7ac28e7bff2a7dc1014a9e69384612f5fbd50f86361d",
+    "selected_epsilon": 1e-06,
+    "circular_endpoint": {
+      "attempted_steps": 1474,
+      "accepted_steps": 1474,
+      "rejected_steps": 0,
+      "force_evaluations": 95882,
+      "corrector_iterations": 10327
+    },
+    "circular_101_outputs": {
+      "attempted_steps": 1503,
+      "accepted_steps": 1503,
+      "rejected_steps": 0,
+      "force_evaluations": 97039,
+      "corrector_iterations": 10439
+    },
+    "eccentric_e_0_9_17_outputs": {
+      "attempted_steps": 130,
+      "accepted_steps": 110,
+      "rejected_steps": 20,
+      "force_evaluations": 6322,
+      "corrector_iterations": 644
+    }
+  },
+  "implementation_order": [
+    "TOLERANCE_AWARE_CORRECTOR_CONVERGENCE",
+    "TERMINAL_FORCE_SWEEP_REUSE_IF_RESIDUAL_GATE_PASSES",
+    "HISTORY_AWARE_REJECTION_RETRY_CONTROLLER"
+  ],
+  "corrector_candidate": {
+    "mechanism": "REPLACE_THE_FIXED_16_ULP_DEFAULT_WITH_A_REQUESTED_EPSILON_SCALED_THRESHOLD_WHILE_RETAINING_THE_USER_CONVERGENCE_FACTOR",
+    "calibration_convergence_factor_grid": [
+      16.0,
+      256.0,
+      4096.0,
+      65536.0,
+      1000000.0
+    ],
+    "selection_rule": "SELECT_THE_LARGEST_FACTOR_THAT_PASSES_EVERY_CALIBRATION_ACCURACY_CONSERVATION_REVERSE_TIME_AND_FIXED_POINT_RESIDUAL_GATE",
+    "calibration_workloads": [
+      "CIRCULAR_BINARY_10_PERIODS_11_OUTPUTS",
+      "ECCENTRIC_BINARY_E_0_7_ONE_PERIOD_9_OUTPUTS"
+    ],
+    "holdout_workloads": [
+      "CIRCULAR_BINARY_100_PERIODS_ENDPOINT",
+      "CIRCULAR_BINARY_100_PERIODS_101_OUTPUTS",
+      "ECCENTRIC_BINARY_E_0_9_ONE_PERIOD_17_OUTPUTS"
+    ]
+  },
+  "terminal_force_candidate": {
+    "mechanism": "REUSE_THE_LAST_CORRECTOR_FORCE_VECTOR_ONLY_WHEN_AN_EXPLICIT_POST_UPDATE_FIXED_POINT_RESIDUAL_REMAINS_WITHIN_THE_SELECTED_THRESHOLD",
+    "fallback": "EXECUTE_THE_EXISTING_EIGHT_FORCE_TERMINAL_SWEEP",
+    "promotion_requires_fallback_accounting": true
+  },
+  "rejection_controller_candidate": {
+    "mechanism": "USE_THE_OBSERVED_ERROR_RATIO_AND_LAST_CORRECTOR_CONTRACTION_TO_PROPOSE_A_BOUNDED_RETRY_INSTEAD_OF_UNCONDITIONALLY_HALVING_NONCONVERGED_STEPS",
+    "minimum_retry_scale": 0.25,
+    "maximum_retry_scale": 0.8,
+    "fallback": "EXISTING_HALF_STEP_RETRY"
+  },
+  "fixed_scientific_gates": {
+    "circular_position_vector_l2_max": 2e-09,
+    "circular_velocity_vector_l2_max": 2e-09,
+    "eccentric_position_vector_l2_max": 1e-09,
+    "eccentric_velocity_vector_l2_max": 1e-09,
+    "relative_total_energy_max": 2e-11,
+    "relative_angular_momentum_max": 2e-11,
+    "reverse_time_position_max": 2e-09,
+    "reverse_time_velocity_max": 2e-09,
+    "deterministic_replay_required": true,
+    "failure_domain_parity_with_v2_required": true,
+    "maximum_body_count_execution_required": true
+  },
+  "fixed_efficiency_gates": {
+    "circular_force_evaluation_reduction_min_fraction": 0.2,
+    "eccentric_force_evaluation_reduction_min_fraction": 0.2,
+    "eccentric_rejections_not_above_v2": true,
+    "median_speedup_over_v2_each_holdout_min": 1.15,
+    "timed_repetitions": 16,
+    "balanced_v2_v3_execution_order": true
+  },
+  "promotion_policy": {
+    "v2_retained_as_exact_fallback_and_reference": true,
+    "public_default_changes_only_after_all_fixed_gates_pass": true,
+    "final_artifact_rerun_required": true,
+    "ias15_rerun_required_after_promotion": true,
+    "general_superiority_claim_authorized": false,
+    "production_qualification_authorized": false,
+    "release_version_change_authorized": false
+  }
+}
