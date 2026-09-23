@@ -44,102 +44,144 @@ jobs:
           test -n "$ZENODO_ACCESS_TOKEN"
           api="https://zenodo.org/api"
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
-          metadata="source/.zenodo/jx-0.6.0rc8.json"
-          title="$(jq -er '.metadata.title' "$metadata")"
-          version="$(jq -er '.metadata.version' "$metadata")"
+          legacy="source/.zenodo/jx-0.6.0rc8.json"
 
-          find_owned_deposition() {
-            local status="$1"
-            local response="/tmp/depositions-$status.json"
+          jq '{
+            access:{record:"public",files:"public"},
+            files:{enabled:true},
+            metadata:{
+              title:.metadata.title,
+              publication_date:.metadata.publication_date,
+              resource_type:{id:"software"},
+              creators:[.metadata.creators[] | {
+                person_or_org:{
+                  type:"personal",
+                  family_name:(.name | split(", ")[0]),
+                  given_name:(.name | split(", ")[1])
+                }
+              }],
+              description:.metadata.description,
+              rights:[{id:.metadata.license}],
+              version:.metadata.version,
+              subjects:[.metadata.keywords[] | {subject:.}]
+            }
+          }' "$legacy" > /tmp/rdm-metadata.json
+
+          title="$(jq -er '.metadata.title' /tmp/rdm-metadata.json)"
+          version="$(jq -er '.metadata.version' /tmp/rdm-metadata.json)"
+
+          find_public_record() {
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              --get -H "$auth" \
-              --data-urlencode "status=$status" \
-              --data-urlencode "size=100" \
-              --data-urlencode "q=title:\"$title\"" \
-              "$api/deposit/depositions" > "$response"
+              --get --data-urlencode "size=100" \
+              --data-urlencode "q=metadata.title:\"$title\"" \
+              "$api/records" > /tmp/public-records.json
             jq -r --arg title "$title" --arg version "$version" \
-              '[.[] | select(.metadata.title == $title and .metadata.version == $version)]
-               | sort_by(.id) | last | .id // empty' "$response"
+              '[.hits.hits[]? | select(.metadata.title == $title and .metadata.version == $version)]
+               | sort_by(.id) | last | .id // empty' /tmp/public-records.json
           }
 
-          published_id="$(find_owned_deposition published)"
-          if [[ -n "$published_id" ]]; then
+          find_owned_draft() {
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              -H "$auth" "$api/deposit/depositions/$published_id" > /tmp/published.json
-            jq -er '{id,doi,record_url:(.links.record_html // .record_url // .doi_url)}' /tmp/published.json
+              --get -H "$auth" --data-urlencode "size=100" \
+              --data-urlencode "q=metadata.title:\"$title\"" \
+              "$api/user/records" > /tmp/user-records.json
+            jq -r --arg title "$title" --arg version "$version" \
+              '[.hits.hits[]? | select(.is_draft == true and .metadata.title == $title and .metadata.version == $version)]
+               | sort_by(.id) | last | .id // empty' /tmp/user-records.json
+          }
+
+          published_id="$(find_public_record)"
+          if [[ -n "$published_id" ]]; then
+            jq -er --arg id "$published_id" \
+              '.hits.hits[] | select((.id | tostring) == $id) | {
+                id,doi,record_url:.links.self_html
+              }' /tmp/public-records.json
             exit 0
           fi
 
-          deposition_id="$(find_owned_deposition draft)"
-          if [[ -z "$deposition_id" ]]; then
-            jq '{metadata:{upload_type:.metadata.upload_type,title:.metadata.title,version:.metadata.version}}' \
-              "$metadata" > /tmp/create-request.json
-            for attempt in 1 2 3 4 5; do
-              http_code="$(curl --silent --show-error --max-time 120 \
-                -o /tmp/create-response.json -w '%{http_code}' \
-                -X POST -H "$auth" -H "Content-Type: application/json" \
-                --data-binary @/tmp/create-request.json \
-                "$api/deposit/depositions" || true)"
-              if [[ "$http_code" == "201" ]]; then
-                deposition_id="$(jq -er '.id' /tmp/create-response.json)"
-                break
-              fi
-              if [[ "$http_code" =~ ^5 ]]; then
-                sleep "$((attempt * 5))"
-                deposition_id="$(find_owned_deposition draft)"
-                [[ -n "$deposition_id" ]] && break
-                continue
-              fi
+          record_id="$(find_owned_draft)"
+          if [[ -z "$record_id" ]]; then
+            http_code="$(curl --silent --show-error --max-time 180 \
+              -o /tmp/create-response.json -w '%{http_code}' \
+              -X POST -H "$auth" -H "Content-Type: application/json" \
+              --data-binary @/tmp/rdm-metadata.json "$api/records" || true)"
+            if [[ "$http_code" == "200" || "$http_code" == "201" ]]; then
+              record_id="$(jq -er '.id' /tmp/create-response.json)"
+            elif [[ "$http_code" =~ ^5 ]]; then
+              sleep 10
+              record_id="$(find_owned_draft)"
+            else
               cat /tmp/create-response.json
-              echo "Zenodo create failed with HTTP $http_code" >&2
+              echo "Zenodo draft creation failed with HTTP $http_code" >&2
               exit 1
-            done
+            fi
           fi
-          test -n "$deposition_id"
-          echo "Using Zenodo deposition $deposition_id"
+          test -n "$record_id"
+          echo "Using Zenodo draft $record_id"
 
           curl --fail-with-body --silent --show-error \
             --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
             -X PUT -H "$auth" -H "Content-Type: application/json" \
-            --data-binary @"$metadata" \
-            "$api/deposit/depositions/$deposition_id" > /tmp/deposition.json
-          bucket="$(jq -er '.links.bucket' /tmp/deposition.json)"
+            --data-binary @/tmp/rdm-metadata.json \
+            "$api/records/$record_id/draft" > /tmp/draft.json
 
           for file in assets/release-assets/v0.6.0rc8/*; do
             name="$(basename "$file")"
+            expected_size="$(stat -c %s "$file")"
+            expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
+            curl --fail-with-body --silent --show-error \
+              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
+              -H "$auth" "$api/records/$record_id/draft/files" > /tmp/files.json
+            current="$(jq -c --arg name "$name" '.entries[]? | select(.key == $name)' /tmp/files.json)"
+            if [[ -n "$current" ]] &&
+               [[ "$(jq -r '.status' <<< "$current")" == "completed" ]] &&
+               [[ "$(jq -r '.size' <<< "$current")" == "$expected_size" ]] &&
+               [[ "$(jq -r '.checksum' <<< "$current")" == "$expected_md5" ]]; then
+              echo "$name: already verified"
+              continue
+            fi
+            if [[ -n "$current" ]]; then
+              curl --fail-with-body --silent --show-error \
+                -X DELETE -H "$auth" \
+                "$api/records/$record_id/draft/files/$name" > /dev/null
+            fi
+            jq -n --arg key "$name" '[{key:$key}]' > /tmp/file-init.json
+            curl --fail-with-body --silent --show-error \
+              -X POST -H "$auth" -H "Content-Type: application/json" \
+              --data-binary @/tmp/file-init.json \
+              "$api/records/$record_id/draft/files" > /tmp/file-start.json
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
               -X PUT -H "$auth" -H "Content-Type: application/octet-stream" \
-              --upload-file "$file" "$bucket/$name" > /dev/null
+              --upload-file "$file" \
+              "$api/records/$record_id/draft/files/$name/content" > /dev/null
+            curl --fail-with-body --silent --show-error \
+              -X POST -H "$auth" \
+              "$api/records/$record_id/draft/files/$name/commit" > /tmp/file-commit.json
+            jq -e --arg md5 "$expected_md5" --argjson size "$expected_size" \
+              '.status == "completed" and .checksum == $md5 and .size == $size' \
+              /tmp/file-commit.json > /dev/null
+            echo "$name: uploaded and verified"
           done
 
-          published=false
-          for attempt in 1 2 3 4 5; do
-            http_code="$(curl --silent --show-error --max-time 180 \
-              -o /tmp/published.json -w '%{http_code}' \
-              -X POST -H "$auth" \
-              "$api/deposit/depositions/$deposition_id/actions/publish" || true)"
-            if [[ "$http_code" == "200" || "$http_code" == "201" || "$http_code" == "202" ]]; then
-              published=true
-              break
+          publish_url="$api/records/$record_id/draft/actions/publish"
+          http_code="$(curl --silent --show-error --max-time 300 \
+            -o /tmp/published.json -w '%{http_code}' \
+            -X POST -H "$auth" "$publish_url" || true)"
+          if [[ "$http_code" != "200" && "$http_code" != "201" && "$http_code" != "202" ]]; then
+            published_id="$(find_public_record)"
+            if [[ -z "$published_id" ]]; then
+              cat /tmp/published.json
+              echo "Zenodo publish failed with HTTP $http_code for draft $record_id" >&2
+              exit 1
             fi
             curl --fail-with-body --silent --show-error \
-              --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              -H "$auth" "$api/deposit/depositions/$deposition_id" > /tmp/deposition-state.json
-            if jq -e '.submitted == true or .state == "done"' /tmp/deposition-state.json > /dev/null; then
-              cp /tmp/deposition-state.json /tmp/published.json
-              published=true
-              break
-            fi
-            if [[ "$http_code" =~ ^(409|5) ]]; then
-              sleep "$((attempt * 10))"
-              continue
-            fi
-            cat /tmp/published.json
-            echo "Zenodo publish failed with HTTP $http_code for deposition $deposition_id" >&2
-            exit 1
-          done
-          [[ "$published" == true ]]
-          jq -er '{id,doi,record_url:(.links.record_html // .record_url // .doi_url)}' /tmp/published.json
+              -H "$auth" "$api/records/$published_id" > /tmp/published.json
+          fi
+          jq -er '{
+            id,
+            doi:(.pids.doi.identifier // .doi),
+            record_url:(.links.self_html // .links.record_html // .record_url)
+          }' /tmp/published.json
