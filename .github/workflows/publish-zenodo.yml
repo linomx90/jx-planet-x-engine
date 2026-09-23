@@ -135,10 +135,15 @@ jobs:
             name="$(basename "$file")"
             expected_size="$(stat -c %s "$file")"
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
-            curl --fail-with-body --silent --show-error \
-              --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
+            upload_http="$(curl --silent --show-error --max-time 600 \
+              -o /tmp/file-upload.json -w '%{http_code}' \
               -X PUT -H "$auth" -H "Content-Type: application/octet-stream" \
-              --upload-file "$file" "$bucket/$name" > /tmp/file-upload.json
+              --upload-file "$file" "$bucket/$name" || true)"
+            if [[ "$upload_http" != "200" && "$upload_http" != "201" ]]; then
+              cat /tmp/file-upload.json
+              echo "Zenodo bucket upload failed with HTTP $upload_http for $name" >&2
+              exit 1
+            fi
             jq -e --arg md5 "$expected_md5" --argjson size "$expected_size" \
               '.checksum == $md5 and .size == $size' /tmp/file-upload.json > /dev/null
             echo "$name: uploaded and verified"
