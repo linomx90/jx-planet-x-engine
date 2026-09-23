@@ -42,6 +42,8 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$ZENODO_ACCESS_TOKEN"
+          ZENODO_ACCESS_TOKEN="$(printf '%s' "$ZENODO_ACCESS_TOKEN" | tr -d '\r\n')"
+          test -n "$ZENODO_ACCESS_TOKEN"
           api="https://zenodo.org/api"
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
           native="application/vnd.inveniordm.v1+json"
@@ -119,7 +121,7 @@ jobs:
               data=payload,
               method="PUT",
               headers={
-                  "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN']}",
+                  "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN'].strip()}",
                   "Accept": "application/vnd.inveniordm.v1+json",
                   "Content-Type": "application/json",
               },
@@ -163,7 +165,7 @@ jobs:
               data=payload,
               method="PUT",
               headers={
-                  "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN']}",
+                  "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN'].strip()}",
                   "Content-Type": "application/octet-stream",
               },
           )
