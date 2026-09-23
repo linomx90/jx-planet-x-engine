@@ -151,29 +151,29 @@ jobs:
             expected_size="$(stat -c %s "$file")"
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
             python3 - "$file" "$bucket/$name" > /tmp/file-upload.json <<'PY'
-            import os
-            import pathlib
-            import sys
-            import urllib.error
-            import urllib.request
-            path, url = sys.argv[1:3]
-            payload = pathlib.Path(path).read_bytes()
-            request = urllib.request.Request(
-                url,
-                data=payload,
-                method="PUT",
-                headers={
-                    "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN']}",
-                    "Content-Type": "application/octet-stream",
-                },
-            )
-            try:
-                with urllib.request.urlopen(request, timeout=600) as response:
-                    sys.stdout.buffer.write(response.read())
-            except urllib.error.HTTPError as error:
-                sys.stderr.buffer.write(error.read())
-                raise SystemExit(f"Zenodo bucket upload failed with HTTP {error.code}")
-            PY
+          import os
+          import pathlib
+          import sys
+          import urllib.error
+          import urllib.request
+          path, url = sys.argv[1:3]
+          payload = pathlib.Path(path).read_bytes()
+          request = urllib.request.Request(
+              url,
+              data=payload,
+              method="PUT",
+              headers={
+                  "Authorization": f"Bearer {os.environ['ZENODO_ACCESS_TOKEN']}",
+                  "Content-Type": "application/octet-stream",
+              },
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=600) as response:
+                  sys.stdout.buffer.write(response.read())
+          except urllib.error.HTTPError as error:
+              sys.stderr.buffer.write(error.read())
+              raise SystemExit(f"Zenodo bucket upload failed with HTTP {error.code}")
+          PY
             jq -e --arg md5 "$expected_md5" --argjson size "$expected_size" \
               '.checksum == $md5 and .size == $size' /tmp/file-upload.json > /dev/null
             echo "$name: uploaded and verified"
