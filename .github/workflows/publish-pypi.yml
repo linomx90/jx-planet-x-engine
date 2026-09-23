@@ -30,12 +30,12 @@ jobs:
         run: |
           cd assets/release-assets/v0.6.0rc8
           sha256sum --check JX_0.6.0rc8_SHA256SUMS
+          echo "c480b6c91394cac594369a8ed32bd82dcc10ae8cad4e566364bd4a9c66b6989e  jxplanetx-0.6.0rc8-cp314-cp314-manylinux_2_31_x86_64.whl" | sha256sum --check -
           mkdir -p "$GITHUB_WORKSPACE/dist"
-          cp jxplanetx-0.6.0rc8-cp314-cp314-linux_x86_64.whl "$GITHUB_WORKSPACE/dist/"
+          cp jxplanetx-0.6.0rc8-cp314-cp314-manylinux_2_31_x86_64.whl "$GITHUB_WORKSPACE/dist/"
           cp jxplanetx-0.6.0rc8.tar.gz "$GITHUB_WORKSPACE/dist/"
 
       - name: Publish exact distributions with attestations
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist
-
