@@ -152,13 +152,12 @@ jobs:
                 -X DELETE -H "$auth" -H "$accept" \
                 "$files_url/$name" > /dev/null
             fi
-            jq -n --arg key "$name" '[{key:$key}]' > /tmp/file-init.json
-            echo "Zenodo file initialization request:"
-            cat /tmp/file-init.json
+            file_init="$(jq -nc --arg key "$name" '[{key:$key}]')"
+            echo "Zenodo file initialization request: $file_init"
             file_start_http="$(curl --silent --show-error --max-time 120 \
               -o /tmp/file-start.json -w '%{http_code}' \
               -X POST -H "$auth" -H "$accept" -H "Content-Type: application/json" \
-              --data-binary @/tmp/file-init.json "$files_url" || true)"
+              --data "$file_init" "$files_url" || true)"
             if [[ "$file_start_http" != "200" && "$file_start_http" != "201" ]]; then
               cat /tmp/file-start.json
               echo "Zenodo file initialization failed with HTTP $file_start_http for $name" >&2
