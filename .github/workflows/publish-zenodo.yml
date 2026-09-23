@@ -44,6 +44,7 @@ jobs:
           test -n "$ZENODO_ACCESS_TOKEN"
           api="https://zenodo.org/api"
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
+          accept="Accept: application/vnd.inveniordm.v1+json"
           legacy="source/.zenodo/jx-0.6.0rc8.json"
 
           jq '{
@@ -73,7 +74,7 @@ jobs:
           find_public_record() {
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              --get --data-urlencode "size=100" \
+              --get -H "$accept" --data-urlencode "size=100" \
               --data-urlencode "q=$title" \
               "$api/records" > /tmp/public-records.json
             jq -r --arg title "$title" --arg version "$version" \
@@ -84,7 +85,7 @@ jobs:
           find_owned_draft() {
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              --get -H "$auth" --data-urlencode "size=100" \
+              --get -H "$auth" -H "$accept" --data-urlencode "size=100" \
               --data-urlencode "q=$title" \
               "$api/user/records" > /tmp/user-records.json
             jq -r --arg title "$title" --arg version "$version" \
@@ -105,7 +106,7 @@ jobs:
           if [[ -z "$record_id" ]]; then
             http_code="$(curl --silent --show-error --max-time 180 \
               -o /tmp/create-response.json -w '%{http_code}' \
-              -X POST -H "$auth" -H "Content-Type: application/json" \
+              -X POST -H "$auth" -H "$accept" -H "Content-Type: application/json" \
               --data-binary @/tmp/rdm-metadata.json "$api/records" || true)"
             if [[ "$http_code" == "200" || "$http_code" == "201" ]]; then
               record_id="$(jq -er '.id' /tmp/create-response.json)"
@@ -123,7 +124,7 @@ jobs:
 
           http_code="$(curl --silent --show-error --max-time 120 \
             -o /tmp/draft.json -w '%{http_code}' \
-            -X PUT -H "$auth" -H "Content-Type: application/json" \
+            -X PUT -H "$auth" -H "$accept" -H "Content-Type: application/json" \
             --data-binary @/tmp/rdm-metadata.json \
             "$api/records/$record_id/draft" || true)"
           if [[ "$http_code" != "200" ]]; then
@@ -138,7 +139,7 @@ jobs:
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 120 \
-              -H "$auth" "$api/records/$record_id/draft/files" > /tmp/files.json
+              -H "$auth" -H "$accept" "$api/records/$record_id/draft/files" > /tmp/files.json
             current="$(jq -c --arg name "$name" '.entries[]? | select(.key == $name)' /tmp/files.json)"
             if [[ -n "$current" ]] &&
                [[ "$(jq -r '.status' <<< "$current")" == "completed" ]] &&
@@ -149,21 +150,21 @@ jobs:
             fi
             if [[ -n "$current" ]]; then
               curl --fail-with-body --silent --show-error \
-                -X DELETE -H "$auth" \
+                -X DELETE -H "$auth" -H "$accept" \
                 "$api/records/$record_id/draft/files/$name" > /dev/null
             fi
             jq -n --arg key "$name" '[{key:$key}]' > /tmp/file-init.json
             curl --fail-with-body --silent --show-error \
-              -X POST -H "$auth" -H "Content-Type: application/json" \
+              -X POST -H "$auth" -H "$accept" -H "Content-Type: application/json" \
               --data-binary @/tmp/file-init.json \
               "$api/records/$record_id/draft/files" > /tmp/file-start.json
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
-              -X PUT -H "$auth" -H "Content-Type: application/octet-stream" \
+              -X PUT -H "$auth" -H "$accept" -H "Content-Type: application/octet-stream" \
               --upload-file "$file" \
               "$api/records/$record_id/draft/files/$name/content" > /dev/null
             curl --fail-with-body --silent --show-error \
-              -X POST -H "$auth" \
+              -X POST -H "$auth" -H "$accept" \
               "$api/records/$record_id/draft/files/$name/commit" > /tmp/file-commit.json
             jq -e --arg md5 "$expected_md5" --argjson size "$expected_size" \
               '.status == "completed" and .checksum == $md5 and .size == $size' \
@@ -174,7 +175,7 @@ jobs:
           publish_url="$api/records/$record_id/draft/actions/publish"
           http_code="$(curl --silent --show-error --max-time 300 \
             -o /tmp/published.json -w '%{http_code}' \
-            -X POST -H "$auth" "$publish_url" || true)"
+            -X POST -H "$auth" -H "$accept" "$publish_url" || true)"
           if [[ "$http_code" != "200" && "$http_code" != "201" && "$http_code" != "202" ]]; then
             published_id="$(find_public_record)"
             if [[ -z "$published_id" ]]; then
@@ -183,7 +184,7 @@ jobs:
               exit 1
             fi
             curl --fail-with-body --silent --show-error \
-              -H "$auth" "$api/records/$published_id" > /tmp/published.json
+              -H "$auth" -H "$accept" "$api/records/$published_id" > /tmp/published.json
           fi
           jq -er '{
             id,
