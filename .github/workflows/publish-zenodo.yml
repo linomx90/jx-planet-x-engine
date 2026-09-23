@@ -152,10 +152,15 @@ jobs:
                 "$files_url/$name" > /dev/null
             fi
             jq -n --arg key "$name" '[{key:$key}]' > /tmp/file-init.json
-            curl --fail-with-body --silent --show-error \
+            file_start_http="$(curl --silent --show-error --max-time 120 \
+              -o /tmp/file-start.json -w '%{http_code}' \
               -X POST -H "$auth" -H "$accept" -H "Content-Type: application/json" \
-              --data-binary @/tmp/file-init.json \
-              "$files_url" > /tmp/file-start.json
+              --data-binary @/tmp/file-init.json "$files_url" || true)"
+            if [[ "$file_start_http" != "200" && "$file_start_http" != "201" ]]; then
+              cat /tmp/file-start.json
+              echo "Zenodo file initialization failed with HTTP $file_start_http for $name" >&2
+              exit 1
+            fi
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
               -X PUT -H "$auth" -H "$accept" -H "Content-Type: application/octet-stream" \
