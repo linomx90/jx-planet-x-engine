@@ -95,14 +95,7 @@ jobs:
               )] | sort_by(.id) | last | .id // empty' /tmp/user-records.json
           }
 
-          published_id="$(find_public_record)"
-          if [[ -n "$published_id" ]]; then
-            jq -er --arg id "$published_id" \
-              '.hits.hits[] | select((.id | tostring) == $id) | {
-                id,doi,record_url:.links.self_html
-              }' /tmp/public-records.json
-            exit 0
-          fi
+
 
           # Recovery is pinned after ambiguous legacy API failures created hidden drafts.
           # Never create another draft automatically for this release.
@@ -127,54 +120,27 @@ jobs:
           publish_url="$(jq -er '.links.publish' /tmp/draft.json)"
           echo "Zenodo draft links accepted for $record_id: files=$files_url publish=$publish_url"
 
+          legacy_http="$(curl --silent --show-error --max-time 120 \
+            -o /tmp/legacy-draft.json -w '%{http_code}' \
+            -H "$auth" "$api/deposit/depositions/$record_id" || true)"
+          if [[ "$legacy_http" != "200" ]]; then
+            cat /tmp/legacy-draft.json
+            echo "Zenodo bucket discovery failed with HTTP $legacy_http for draft $record_id" >&2
+            exit 1
+          fi
+          bucket="$(jq -er '.links.bucket' /tmp/legacy-draft.json)"
+          echo "Zenodo bucket discovered for pinned draft $record_id"
+
           for file in assets/release-assets/v0.6.0rc8/*; do
             name="$(basename "$file")"
             expected_size="$(stat -c %s "$file")"
             expected_md5="md5:$(md5sum "$file" | cut -d ' ' -f 1)"
-            files_http="$(curl --silent --show-error --max-time 120 \
-              -o /tmp/files.json -w '%{http_code}' \
-              -H "$auth" -H "$accept" "$files_url" || true)"
-            if [[ "$files_http" != "200" ]]; then
-              cat /tmp/files.json
-              echo "Zenodo file listing failed with HTTP $files_http at $files_url" >&2
-              exit 1
-            fi
-            jq -c --arg name "$name" '{target:$name,entries:.entries}' /tmp/files.json
-            current="$(jq -c --arg name "$name" '.entries[]? | select(.key == $name)' /tmp/files.json)"
-            if [[ -n "$current" ]] &&
-               [[ "$(jq -r '.status' <<< "$current")" == "completed" ]] &&
-               [[ "$(jq -r '.size' <<< "$current")" == "$expected_size" ]] &&
-               [[ "$(jq -r '.checksum' <<< "$current")" == "$expected_md5" ]]; then
-              echo "$name: already verified"
-              continue
-            fi
-            if [[ -n "$current" ]]; then
-              curl --fail-with-body --silent --show-error \
-                -X DELETE -H "$auth" -H "$accept" \
-                "$files_url/$name" > /dev/null
-            fi
-            file_init="$(jq -nc --arg key "$name" '[{key:$key}]')"
-            echo "Zenodo file initialization request: $file_init"
-            file_start_http="$(curl --silent --show-error --max-time 120 \
-              -o /tmp/file-start.json -w '%{http_code}' \
-              -X POST -H "$auth" -H "$accept" -H "Content-Type: $native" \
-              --data "$file_init" "$files_url" || true)"
-            if [[ "$file_start_http" != "200" && "$file_start_http" != "201" ]]; then
-              cat /tmp/file-start.json
-              echo "Zenodo file initialization failed with HTTP $file_start_http for $name" >&2
-              exit 1
-            fi
             curl --fail-with-body --silent --show-error \
               --retry 5 --retry-all-errors --retry-delay 5 --max-time 600 \
-              -X PUT -H "$auth" -H "$accept" -H "Content-Type: application/octet-stream" \
-              --upload-file "$file" \
-              "$files_url/$name/content" > /dev/null
-            curl --fail-with-body --silent --show-error \
-              -X POST -H "$auth" -H "$accept" \
-              "$files_url/$name/commit" > /tmp/file-commit.json
+              -X PUT -H "$auth" -H "Content-Type: application/octet-stream" \
+              --upload-file "$file" "$bucket/$name" > /tmp/file-upload.json
             jq -e --arg md5 "$expected_md5" --argjson size "$expected_size" \
-              '.status == "completed" and .checksum == $md5 and .size == $size' \
-              /tmp/file-commit.json > /dev/null
+              '.checksum == $md5 and .size == $size' /tmp/file-upload.json > /dev/null
             echo "$name: uploaded and verified"
           done
 
@@ -182,14 +148,14 @@ jobs:
             -o /tmp/published.json -w '%{http_code}' \
             -X POST -H "$auth" -H "$accept" "$publish_url" || true)"
           if [[ "$http_code" != "200" && "$http_code" != "201" && "$http_code" != "202" ]]; then
-            published_id="$(find_public_record)"
-            if [[ -z "$published_id" ]]; then
+            verify_http="$(curl --silent --show-error --max-time 120 \
+              -o /tmp/published.json -w '%{http_code}' \
+              -H "$accept" "$api/records/$record_id" || true)"
+            if [[ "$verify_http" != "200" ]]; then
               cat /tmp/published.json
               echo "Zenodo publish failed with HTTP $http_code for draft $record_id" >&2
               exit 1
             fi
-            curl --fail-with-body --silent --show-error \
-              -H "$auth" -H "$accept" "$api/records/$published_id" > /tmp/published.json
           fi
           jq -er '{
             id,
