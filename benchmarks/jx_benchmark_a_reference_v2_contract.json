@@ -1,0 +1,29 @@
+{
+  "schema": "jx-general-dynamics-benchmark-a-reference-resolution/v2",
+  "date": "2026-09-01",
+  "classification": "NUMERICAL_ENGINEERING_ONLY",
+  "reason": "Benchmark A v1 produced a valid equal-force-budget result but the equal-timestep contest failed only its independent-reference resolution gate.",
+  "immutability": {
+    "candidate_implementation": "benchmarks/jx_benchmark_a.py at or descended unchanged from commit 847433b819836cf71cf55f2b5fac9f7c566a4243",
+    "base_contract": "benchmarks/jx_benchmark_a_contract.json",
+    "workload": "unchanged ten-body Newtonian DE441/Horizons initial state",
+    "candidate_lanes": ["kdk", "y6_cached", "bm6", "rebound_leapfrog_5.1.1"],
+    "candidate_timesteps_and_cost_budgets": "unchanged",
+    "win_rule": "unchanged"
+  },
+  "only_authorized_change": "Increase the independent DOP853 reference resolution; do not alter candidate methods, state, cost accounting, metrics, or verdict rules.",
+  "reference_pair": {
+    "loose": {"method": "SciPy DOP853 with independent math.fsum force implementation", "rtol": 2.5e-14, "atol": 2.5e-17, "max_step_days": 0.125},
+    "tight": {"method": "SciPy DOP853 with independent math.fsum force implementation", "rtol": 2.5e-14, "atol": 2.5e-17, "max_step_days": 0.0625}
+  },
+  "reference_gate": "Loose-vs-tight RMS position and velocity disagreement must each be <=1% of the best competing error in the corresponding contest, subject to absolute floors of 5e-15 AU and 5e-17 AU/day.",
+  "preserve_v1": {
+    "workflow_run_id": 33565234437,
+    "git_commit": "847433b819836cf71cf55f2b5fac9f7c566a4243",
+    "artifact_digest": "sha256:95a2064b4524f37c3ff5e8324a2961e166fe8463cab531600b806d35a25f8378",
+    "result_sha256": "063de521c66bc4671dc6fa28cffcadfd4d17cc7b0cd2ea2fbdd6946eed563786",
+    "v1_primary_verdict": "JX_BM6_WIN",
+    "v1_equal_timestep_verdict": "INVALID_REFERENCE"
+  },
+  "nonclaim": "This can validate only the named benchmark contests. It cannot establish universal superiority, a speed win, a complete Solar-System model, or any Planet-X claim."
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "jx-benchmark-a-native-replay-oracle-amendment/v2",
+  "date": "2026-09-01",
+  "classification": "NUMERICAL_ENGINEERING_ONLY",
+  "reason": "The first correctly scheduled native run passed sanitizers, deterministic native replay, the independent DOP853 reference gate, and the accuracy win rule, but failed a hard comparison against a live same-run NumPy implementation. The native trajectory was subsequently found to match the already-preserved valid Benchmark A v1 BM6 trajectory exactly in every serialized state component. The live NumPy result varied across CI processor dispatch and is therefore not a portable bit-level oracle.",
+  "preserved_failed_strict_run": {
+    "workflow_run_id": 33570374629,
+    "git_commit": "7e53a207e5f1e6416d3e445bcb4f3e8e912dc84c",
+    "artifact_id": 9824725552,
+    "artifact_zip_sha256": "3d8abfbb47bd99e75264eb1964f20954e5a962d2dc9ffaf112a823b7259feb6a",
+    "result_sha256": "52b31067e2d11b39c8dc99990dec401ecd23e4b64c4b015f66079af32d1ea788",
+    "verdict": "INVALID_NATIVE_REPLAY",
+    "observed_live_python_state_max_abs_component_delta_au": 1.5644430195749237e-12,
+    "observed_live_python_energy_series_max_abs_delta": 2.3004811217028877e-15,
+    "observed_live_python_angular_series_max_abs_delta": 4.558922335525649e-16
+  },
+  "authorized_change": "Replace only the live same-run NumPy BM6 hard replay oracle with an exact SHA-256 oracle derived from the previously validated and preserved Benchmark A v1 BM6 trajectory. Keep the live NumPy comparison as a diagnostic. Do not change C++ source, compiler flags, workload, state, GM values, BM6 coefficients, timestep, step count, force budget, DOP853 reference, REBOUND lane, accuracy metrics, timing method, or win rule.",
+  "exact_oracle": {
+    "path": "benchmarks/jx_benchmark_a_bm6_golden_state_v1.json",
+    "file_sha256": "200bcad3cd7411108595b6b236162c6189e3e3b7e770b695c54041cdfda6c40b",
+    "overall_state_sha256": "84a6f400b565ab7769329f8eb0099d74d16e02bbb277a8e1a4974417c10f06b0",
+    "state_requirement": "All eleven annual snapshot hashes and the overall canonical state hash must match exactly.",
+    "energy_series_max_abs_delta": 5e-16,
+    "angular_series_max_abs_delta": 5e-16,
+    "source_workflow_run_id": 33565234437,
+    "source_candidate_commit": "847433b819836cf71cf55f2b5fac9f7c566a4243",
+    "source_artifact_zip_sha256": "95a2064b4524f37c3ff5e8324a2961e166fe8463cab531600b806d35a25f8378",
+    "source_result_sha256": "063de521c66bc4671dc6fa28cffcadfd4d17cc7b0cd2ea2fbdd6946eed563786"
+  },
+  "live_python_diagnostic": {
+    "hard_gate": false,
+    "purpose": "Expose processor/library-dependent arithmetic divergence without allowing a hardware-dispatched NumPy reduction path to override the frozen validated oracle.",
+    "required_reporting": [
+      "maximum and RMS state-component delta",
+      "maximum energy-series delta",
+      "maximum angular-momentum-series delta",
+      "state delta relative to native error against the independent DOP853 referee"
+    ]
+  },
+  "preservation": "The failed strict run remains preserved and must not be deleted, relabeled as successful, or overwritten.",
+  "claim_ceiling": "This amendment validates replay identity only for the frozen primary BM6 trajectory. It does not broaden the benchmark claim or authorize close-encounter, arbitrary-precision, full-ephemeris, universal-REBOUND, or Planet-X conclusions."
+}
