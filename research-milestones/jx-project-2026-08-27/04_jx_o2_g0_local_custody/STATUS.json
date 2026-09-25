@@ -1,0 +1,13 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_O2_LOCAL_CUSTODY",
+  "publication_category": "INPUT_READINESS_AUDIT",
+  "canonical_publication_status": "JX_O2_G0_LOCAL_CUSTODY_VERIFIED_BLOCKED",
+  "claim_ceiling": "ACQUISITION_CHECKLIST_ONLY",
+  "result_present": false,
+  "interpretation_allowed": "BYTE_CUSTODY_AND_UNRESOLVED_REQUIREMENT_INVENTORY_ONLY",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY",
+  "superseded_by": "NONE_G0_REMAINS_BLOCKED"
+}

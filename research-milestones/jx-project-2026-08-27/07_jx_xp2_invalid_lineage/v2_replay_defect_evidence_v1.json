@@ -1,0 +1,60 @@
+{
+  "schema": "jx-xp2-v2-replay-defect-evidence/v1",
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v3",
+  "role": "IMMUTABLE_PROTOCOL_DEFECT_EVIDENCE_ONLY_NOT_A_TRAJECTORY_INPUT_OR_SCIENTIFIC_RESULT",
+  "v2_registration": {"path": "../jx_xp2_robustness_v2/registration_v1.json", "sha256": "c747da94a75aaace905486e68ada49dfcaf49277adc24f541b4d9925e8f65391", "size_bytes": 2545},
+  "v2_completed_a_result": {"path": "../jx_xp2_runs_v2/output_a/result_v1.json", "sha256": "3532399c70090758ab048f3689e27e6342a52fd32bfe8e73ba06cdf81cbb7a44", "size_bytes": 14960869, "semantic_sha256": "7e380574d1c5e43646ebeea99cc13407ea9fde0d860468f5efe71d291c18ea9a"},
+  "v2_a_verification_receipt": {"path": "../jx_xp2_verification_v2/a_verification_receipt_v1.json", "sha256": "8c725f8b4277f8aa5527ae60819f14e93a204558761944781215ec34bb2b20f3", "size_bytes": 1235},
+  "v2_a_run_manifest": {"path": "../jx_xp2_runs_v2/output_a/run_manifest.json", "sha256": "b229ac3b29b8f69f5a493ab34add722ecbd90f300dac510a2044e5868347c0e8", "size_bytes": 1518},
+  "v2_b_run_manifest": {"path": "../jx_xp2_runs_v2/output_b/run_manifest.json", "sha256": "440ba8bf4e44511ab83aa3f1cc6eb21b078e78135f06e7b6e6f432c2ad751d23", "size_bytes": 1714},
+  "v2_a_m0_segment_00": {
+    "commit": {"path": "../jx_xp2_runs_v2/output_a/arms/M0/segments/segment_00_commit.json", "sha256": "bc8293ef3c3979d6c9043b3002415822450d7af2c88a0279017986a696b87204", "size_bytes": 759},
+    "receipt": {"path": "../jx_xp2_runs_v2/output_a/arms/M0/segments/segment_00_attempt_01_receipt.json", "sha256": "63d163f13a8c381373d77c7fe9235334c4abb307384d24c437a198a3b7d0e814", "size_bytes": 48039},
+    "state": {"path": "../jx_xp2_runs_v2/output_a/arms/M0/segments/segment_00_attempt_01_state.bin", "sha256": "921313d37205caba6792050cd286924eeca71754b8fa542a9b9da9d15c56b3a2", "size_bytes": 21344}
+  },
+  "v2_b_m0_segment_00": {
+    "commit": {"path": "../jx_xp2_runs_v2/output_b/arms/M0/segments/segment_00_commit.json", "sha256": "2a9c130461560f8434dde3d86771ed984a78e5640708ef75bbc37988004c71da", "size_bytes": 759},
+    "receipt": {"path": "../jx_xp2_runs_v2/output_b/arms/M0/segments/segment_00_attempt_01_receipt.json", "sha256": "aa76858a50c9fdd91b5e2264c6ad3e0938148d3b0b80fff58bc38e43b730bbd7", "size_bytes": 48039},
+    "state": {"path": "../jx_xp2_runs_v2/output_b/arms/M0/segments/segment_00_attempt_01_state.bin", "sha256": "2149a3e7ebf74cb3067b9cb0617d0899e933dd14d64499871447251580c424b3", "size_bytes": 21344}
+  },
+  "comparison": {
+    "arm_id": "M0",
+    "segment_index": 0,
+    "attempt_index": 1,
+    "raw_checkpoint_sha256_equal": false,
+    "decoded_integrator_state_sha256_equal": true,
+    "v2_shallow_decoded_integrator_state_sha256": "2300f76480ec53bf3a6e36de7fc4fcf1a3d2de9d09cf7e8272204a6af0da3244",
+    "v3_decoded_continuation_state_sha256_equal": true,
+    "v3_decoded_continuation_state_sha256": "fb06ea21b31d9383722f9c2d9ed73d3cbdd0700b7c34ce6feea864c8901be3a0",
+    "sampled_state_stream_sha256_equal": true,
+    "sampled_state_stream_sha256": "1f895ccd07707883f869bd395fd393ea4beeed4489c8a530e44d70c5c8e1ca5d",
+    "all_v3_semantic_segment_fields_equal": true,
+    "v3_canonical_semantic_segment_payload_sha256": "21b77da5de93b6c3d06b1f631bb4f1331f729935a92b8e10aee2864d89619b04",
+    "v3_semantic_segment_chain_genesis": "e0232a2228b72e4d6d56035db80ef7ec0d2a43c547eb0d6a4b9c1693c58ad98f",
+    "v3_expected_segment_chain_head_both_runs": "5cc01d89db885889ae8dc0c8ed2cc1de2f36969d941f9da849709e40063133bf",
+    "v2_a_segment_chain_head": "2005f5242ebeff955662755203738a85fdb1a676dfc0d617dbe0aadc6231371f",
+    "v2_b_segment_chain_head": "74226fb4494b93e6173e6a941a34f9a253373cd366759bdcff24ee882c4e2ce2",
+    "v2_segment_chain_heads_equal": false
+  },
+  "diagnosis": "V2_INCORRECTLY_MADE_RAW_REBOUND_ARCHIVE_SERIALIZATION_BYTES_PART_OF_SEMANTIC_REPLAY_IDENTITY",
+  "raw_archive_pointer_diagnosis": {
+    "locked_rebound_particle_ctypes_size_bytes": 128,
+    "locked_rebound_particle_sim_pointer_offset_bytes": 120,
+    "m0_serialized_particle_array_start_offset_bytes": 1604,
+    "a_b_total_differing_raw_bytes": 417,
+    "a_b_differing_bytes_at_repeated_particle_sim_pointer_slots": 399,
+    "a_b_other_differing_raw_bytes": 18,
+    "a_first_particle_sim_pointer_word_hex": "e03a7c1300000000",
+    "b_first_particle_sim_pointer_word_hex": "e0bacb2900000000",
+    "other_differing_fields": ["walltime", "walltime_last_steps", "rand_seed"],
+    "rand_seed_exclusion_rationale": "NO_STOCHASTIC_FORCE_COLLISION_OR_OTHER_REGISTERED_DYNAMICS_PATH_CONSUMES_REBOUND_RAND_SEED",
+    "interpretation": "OBSERVED_RAW_BYTE_PATTERN_IS_CONSISTENT_WITH_PROCESS_POINTERS_WALL_TIMING_AND_UNUSED_RANDOM_SEED; THIS_PATTERN_IS_DIAGNOSTIC_CONTEXT_NOT_THE_INDEPENDENT_REPLAY_DEFECT_PROOF",
+    "independent_proof_boundary": "THE_VERIFIER_ESTABLISHES_RAW_ARCHIVE_INEQUALITY_EXACT_V2_PAYLOAD_DIFFERENCE_ONLY_AT_CHECKPOINT_SHA256_EQUAL_CANONICAL_CONTINUATION_AND_SCIENCE_AND_RECOMPUTED_V2_DIVERGENCE_V3_EQUALITY"
+  },
+  "v3_repair": "RAW_ARCHIVE_FILENAME_SIZE_AND_SHA256_REMAIN_MANDATORY_INTEGRITY_BINDINGS_BUT_ONLY_CANONICAL_DECODED_CONTINUATION_STATE_AND_SCIENTIFIC_PAYLOAD_ENTER_THE_SEMANTIC_CHAIN",
+  "v3_fresh_execution_policy": "A_B_AND_DOP853_MUST_START_FROM_REGISTERED_V1_INITIAL_STATE_BYTES_WITH_EMPTY_V3_OUTPUT_ROOTS_AFTER_V3_REGISTRATION",
+  "v2_checkpoint_result_ledger_or_verification_promotion": "FORBIDDEN",
+  "v2_result_as_v3_a_prerequisite": "FORBIDDEN",
+  "evolving_v2_b_tree_policy": "ALL_UNLISTED_V2_B_ARTIFACTS_AND_THEIR_EVENTUAL_OUTCOME_ARE_EXCLUDED_NON_AUTHORIZING_AND_NOT_CONSUMED",
+  "v2_scientific_outcomes_gates_or_classification_consumed": false
+}

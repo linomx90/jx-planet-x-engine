@@ -1,0 +1,31 @@
+{
+  "schema": "jx-o2-g0-local-acquisition-registration/v1",
+  "artifact_id": "jx-o2-g0-local-acquisition-registration-v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "registration_state": "LOCAL_HASH_LOCK_COMPLETE_G0_REMAINS_BLOCKED",
+  "recorded_at_utc": "2026-08-23T16:15:46Z",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_REGISTRATION_ONLY_NO_EXTERNAL_TIMESTAMP",
+  "externally_timestamped": false,
+  "scientific_evidence_artifact": false,
+  "outcomes_generated": false,
+  "execution_permissions": {
+    "local_hash_verification_authorized": true,
+    "network_or_github_action_authorized": false,
+    "input_activation_authorized": false,
+    "dynamics_authorized": false,
+    "synthetic_calibration_authorized": false,
+    "observed_data_access_authorized": false,
+    "observed_model_comparison_authorized": false,
+    "gpu_execution_authorized": false,
+    "g1_contract_authorized": false,
+    "planet_x_claim_authorized": false
+  },
+  "locked_files": {
+    "README.md": "fdc1578ea5eadd419cf949e653f4f6f12cb580b9fd46df7590211175c460192b",
+    "local_custody_manifest_v1.json": "defc6413a76f56f6320440412a6f663513d5e892a24caeca75611dd141ebcd73",
+    "acquisition_checklist_v1.json": "31f9dd113d291f5d8c0c573450b7d6e6384a76f8abebffe8fa205561767e2280",
+    "verify_acquisition.py": "80e5ff41247084e25394ed6f06ed193879ad38adfb52b6dc26584fe2e160f8a1",
+    "test_acquisition.py": "38fde79e4633446637a33b1e3b9d602cf7f4e08f006c061974b0c0045ba10673"
+  },
+  "mandatory_nonclaim": "This checklist and local custody package do not complete JX-O2 G0, authorize any simulation or observed-data execution, compare models, or provide evidence for or against Planet X."
+}

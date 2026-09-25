@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this exploratory review snapshot, please cite it using this metadata."
+title: "JX-XP2 Synthetic 1-Myr Robustness Screen: Frozen Exploratory Review Snapshot"
+type: software
+version: "1.0.0-review"
+date-released: 2026-08-27
+authors:
+  - family-names: Avila
+    given-names: Lino
+license: MIT
+repository-code: "https://github.com/linomx90/jx-planet-x-engine"
+abstract: >-
+  Byte-preserved protocol, exact synthetic inputs, source under review, tests,
+  and diagnostic lineage for an exploratory one-million-year distant-perturber
+  response benchmark without an authorized scientifically admissible result.
+  This snapshot contains no evidence for or against Planet Nine.
+keywords:
+  - celestial mechanics
+  - N-body integration
+  - numerical reproducibility
+  - exploratory protocol
+  - outer Solar System

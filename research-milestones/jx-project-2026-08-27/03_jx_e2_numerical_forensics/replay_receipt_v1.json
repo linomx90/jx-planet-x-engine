@@ -1,0 +1,18 @@
+{
+  "claim_ceiling": "NUMERICAL_METHOD_FORENSICS_ONLY",
+  "contract_sha256": "d4edc6e17df40c3eeb6a72c7c55ad3bb530e6c79a40017f6dffe9ec553bc3d8f",
+  "execution_a_output_manifest_sha256": "0eba12ba737ce63d4cd9ac8e46eae536184acd5c54c800b41e46c0841acebbda",
+  "execution_a_result_sha256": "102c54a849ba3e03266e648e2b3346d2a235989a34bb789c378eb3c95dccc310",
+  "execution_b_output_manifest_sha256": "3da6ac80bf8cfbec2da53197e1bb529515254795fbb1cf87170e29eb3d5041e3",
+  "execution_b_result_sha256": "eb704ade084c20c002b69c50b166d830703dca25cd748032397a250e97ef9912",
+  "experiment_id": "jx-e2-active-frame-integrator-50k-v1",
+  "mandatory_nonclaim": "This is a post-failure, active-body-only numerical-method diagnostic using an idealized synthetic benchmark. It does not rerun JX-E1 as a replacement, alter, validate, or rehabilitate JX-E1; JX-E1 remains ENGINEERING_LONG_INVALID and JX-E1-B remains forbidden. No E2 classification establishes that E1 was accurate, adequate, or scientifically usable. Execution completion or semantic replay exactness refers only to protocol integrity. E2 uses no observed survey data or recovered author inputs, does not modify or unblock JX-O2, does not test the existence, detectability, exclusion, or preferred properties of Planet X, and provides no evidence for or against Planet X. IAS15 is a numerical comparator within the same REBOUND build, not ground truth or an independent scientific implementation.",
+  "overall_numerical_classification": "MIXED_OR_INCONCLUSIVE",
+  "registration_sha256": "326f7e51dcdb51c477041b9c941b67743a0e6a92c8d04fa42bd8a0ae9eeb8486",
+  "runner_sha256": "223735e8256ae86ee00bc0105a33b88a6a225ba556414201b27cacb0a7ab7f9d",
+  "schema": "jx-e2-numerics-replay-receipt/v1",
+  "semantic_sha256": "4cf3a6cbd1cb051e8404d7242190820e1fb07ec7a26ca099d06cb4df837f2b2d",
+  "verdict": "JX_E2_SEMANTIC_REPLAY_EXACT",
+  "verification_scope": "The verifier independently checks locked identities, checkpoint containers and decoded states, structural completeness, stored classification arithmetic, and exact A/B semantic replay. Raw 10-year state samples are not retained, so sampled maxima are content-bound by A/B equality but cannot be independently reconstructed from trajectories. This is not an independent scientific implementation.",
+  "verifier_sha256": "75fff9cd167da6e12b628a8d2960024f4979d023e387cfe146a1524c30ccf444"
+}
