@@ -17,11 +17,11 @@ PROTOCOL_SHA256 = (
 
 
 class GR15RC9ArtifactAcceptanceTests(unittest.TestCase):
-    def test_unpublished_protocol_is_immutable_and_rejects_rc10_source(self) -> None:
+    def test_unpublished_protocol_is_immutable_and_rejects_current_source(self) -> None:
         self.assertEqual(
             hashlib.sha256(PROTOCOL.read_bytes()).hexdigest(), PROTOCOL_SHA256
         )
-        self.assertEqual(jxplanetx.__version__, "0.6.0rc10")
+        self.assertEqual(jxplanetx.__version__, "0.6.0rc16")
         with self.assertRaisesRegex(
             acceptance.RC9AcceptanceError, "source binding changed"
         ):

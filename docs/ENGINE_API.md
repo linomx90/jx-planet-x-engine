@@ -16,7 +16,7 @@ lanes.
 Force evaluation and RKF78 support NumPy CPU arrays and, when a compatible
 CuPy installation and GPU are present, CuPy device arrays. KDK v1 is
 NumPy/CPU-only, as are the standalone encounter segment, Wisdom--Holman map,
-and hybrid.
+hybrid, Earth J2--J5, and static lunar degree-two/degree-three figure terms.
 
 This alpha is not a top-tier-qualified celestial-dynamics system, an
 ephemeris, an orbit-determination system, or an observation model. It has not
@@ -45,11 +45,13 @@ intentionally narrow map, not a general symplectic framework.
 | Gravity | Direct, tiled, unsoftened Newtonian point masses | Distinct coincident bodies and finite-radius contact fail closed |
 | Relativity | Restricted static-central Schwarzschild 1PN correction | Central-body inertial frame, central source at coordinate zero and exactly static, massless targets, correction only |
 | Radiation | Unshadowed isotropic cannonball SRP | Massive radiation source, massless targets, no eclipse, attitude, Poynting-Robertson, or thermal model |
+| Earth figure | Axisymmetric unnormalized J2--J5 pair correction with a prepared pole policy | NumPy CPU, metre-second J2000 state, one Earth-target pair, no tesserals or tides |
+| Lunar figure | Static unnormalized degree-two and degree-three principal-axis pair corrections | NumPy CPU, metre-second J2000 state, caller-bound orientation provider, no deformation or rotation integration |
 | CPU | NumPy native arrays | CPU device only |
 | GPU | Optional CuPy native arrays on an explicitly selected CUDA device | Code path exists, but it is not locally GPU-qualified and never falls back to CPU |
 | Precision | Binary64 storage, compute, and accumulation | `float32`, mixed precision, and dtype aliases are rejected |
 | Repeatability | Same runtime, device, software stack, force order, body order, and tile size | No cross-device or cross-backend bitwise guarantee |
-| Composition | Exact built-in types in canonical order: Newtonian, restricted 1PN, SRP | Unknown types, duplicate model IDs, reversed order, and missing dependencies fail closed |
+| Composition | Exact built-in types in canonical order: Newtonian, one 1PN model, physical harmonics, SRP | Unknown types, duplicate model IDs, reversed order, unsupported backends, and missing dependencies fail closed |
 | Integration | Fehlberg's 13-stage adaptive RK7(8), advancing the hatted eighth-order solution | One global adaptive step, exact checkpoints by clipping, no interpolation or event system |
 | Scenario assembly | One RKF78 state/force/integrator request and same-state additive-force control/candidate comparisons | Model-to-model checkpoint differences only; no error, improvement, or physics claim |
 | Standalone encounter segment | Full-Cartesian adaptive RK7(8), exact signed-duration accounting, pair/centroid defect control, and exact all-pair local-IVP clearance certificates | NumPy CPU only; mutual all-active positive-GM Newtonian scope; no event, collision, global-clearance, or hybrid-switching claim |
@@ -163,6 +165,12 @@ At evaluation, units are bound exactly to the snapshot's unit strings:
 
 ### Implemented force configurations
 
+`FORCE_ABI_REGISTRY` and `list_force_abis()` expose force ABI v1. Each row
+binds an exact configuration type to its model ID, canonical accumulation
+rank, supported backend IDs, compatible integrator classes, and acceleration
+semantics. This is the evaluator's real dispatch roster, but it is not yet a
+compiled callback ABI shared by specialized GR15 and CUDA kernels.
+
 `NewtonianPointMass` requires:
 
 - nonempty, unique `source_ids` and `target_ids`;
@@ -209,16 +217,102 @@ term for that target; negative or nonfinite values are rejected. Acceleration
 is radial and away from the radiation source, with inverse-square distance
 scaling.
 
+`SolarJ2Force`, `EarthZonalJ2J5Force`, `LunarStaticDegree2Force`, and
+`LunarStaticDegree3Force` bind retained Solar-System kernels to a `ForcePlan`.
+The solar component accepts a resolved target roster and applies the
+GM-weighted reaction to the Sun; the Earth and lunar components are pair
+forces. Construct the retained physical force first, then call the
+corresponding `bind_*` function with the exact `unit_system_id`, ordered
+metadata, and an explicit pole/orientation provider ID. Reference-radius
+metadata uses the snapshot length unit; coefficient and provider metadata use
+unit `1`. The current adapters require `length_unit="M"`, `time_unit="S"`,
+`axes="J2000"`, and the NumPy backend. They are correction-only, require the
+source and target to participate in the Newtonian base plan, and never make a
+coupled-rotation, deformable-Moon, ephemeris, or qualification claim.
+
+### Coupled lunar state blocks
+
+`CoupledLunarStateSnapshot` is the public engine contract for five simultaneous
+blocks: three-body translational position and velocity, lunar mantle attitude,
+mantle angular velocity, and fluid-core angular velocity. State ABI v1 requires
+exact `SUN`, `EARTH`, `MOON` order, NumPy/CPU binary64, kilometres and seconds,
+and explicit TDB, barycentric-inertial, system-barycenter, J2000 context. The
+snapshot owns read-only copies and binds them to a `Provenance` record.
+
+`integrate_deformable_coupled_lunar_state()` calls the retained v3 simultaneous
+solver rather than duplicating its equations. It advances translation,
+quaternion attitude, mantle and core rates on one fixed RKF78 delay lattice;
+the delayed tide/spin deformation, changing mantle inertia, Earth/Sun lunar-
+figure reactions and torques, Earth J2, and CMB pressure/viscous coupling are
+evaluated together. The result retains typed checkpoints, the full native
+diagnostic result, and a domain-separated content SHA-256 over every state
+block.
+
+```python
+from jxplanetx.engine import (
+    bind_coupled_lunar_state,
+    integrate_deformable_coupled_lunar_state,
+)
+
+initial = bind_coupled_lunar_state(
+    "lunar-screen", native_initial_state, provenance
+)
+run = integrate_deformable_coupled_lunar_state(
+    initial, deformable_parameters, fixed_delay_spec, prehistory_provider
+)
+print(run.final_state.core_angular_velocity_body_s)
+```
+
+This component records
+`NATIVE_COUPLED_PHYSICS_BUNDLE_NOT_FORCE_ABI_V1`: the coupled equations are a
+real public execution path, but have not yet been decomposed through force ABI
+v1 or made available to GR15/CUDA. It includes no geodetic transport, event or
+collision system, coupled restart archive, ephemeris qualification, or claim
+of superiority. Every result remains `SCREENING_ONLY`.
+
+### Resolved-eleven coupled lunar EIH component
+
+`LunarEphemerisV1State` and `integrate_lunar_ephemeris_v1()` are the first
+public whole-system physical-model component built from the accepted lunar EIH
+equations. The state contains the exact resolved-eleven translation roster plus
+the lunar mantle quaternion, mantle angular velocity, and fluid-core angular
+velocity. Every fixed RKF78 stage evaluates mutual Newtonian and EIH 1PN
+gravity, reacting Sun/Moon and Earth/Moon static quadrupole interactions,
+reacting fixed-axis Earth J2, and mantle/core pressure and viscous coupling.
+
+```python
+from jxplanetx.engine import (
+    LunarEphemerisV1IntegrationSpec,
+    LunarEphemerisV1Parameters,
+    LunarEphemerisV1State,
+    integrate_lunar_ephemeris_v1,
+)
+
+run = integrate_lunar_ephemeris_v1(initial, parameters, integration_spec)
+print(run.final_state.positions_km)
+print(run.result_content_sha256)
+```
+
+The route owns its inputs, fixes TDB/barycentric-inertial/J2000 context,
+records its exact force roster and omitted-physics roster, accounts for all 13
+force evaluations per accepted step, and produces domain-separated state and
+step-ledger hashes. It is CPU/NumPy and screening-only. It is not named or
+qualified as a production ephemeris: solar J2, Earth J3--J5, lunar degree
+three and higher, time-variable deformation, delayed tides, minor bodies, observation
+reduction, fitted parameters, continuation archives, events, and CUDA remain
+outside this v1 component.
+
 ### Force plan and result ledger
 
 `ForcePlan` contains a plan ID, one `BackendSpec`, and an ordered tuple of
 models. It can emit only nonauthorizing `MODEL_OUTPUT`. Evaluation requires:
 
 1. exactly one Newtonian base;
-2. optional restricted 1PN next;
-3. optional cannonball SRP last;
-4. correction sources contained in Newtonian sources; and
-5. correction targets contained in Newtonian targets.
+2. optional restricted or mutual EIH 1PN next;
+3. optional Earth/lunar physical harmonics next;
+4. optional cannonball SRP last;
+5. correction sources contained in Newtonian sources; and
+6. correction targets contained in Newtonian targets.
 
 `ForceEvaluationResult` contains a backend-native total acceleration, each
 backend-native contribution, an exact ledger, the backend/device/dtype and
@@ -229,6 +323,39 @@ targets, assumptions, and accumulation order.
 
 Results containing arrays compare by identity. JX does not define content
 equality or a cross-device result hash in this alpha.
+
+### Explicit continuation and restart archives
+
+`JXSimulation.integrate()` always starts from its owned initial snapshot.
+Continuation is a separate operation: `prepare_continuation(run_index)` binds
+an exact successful NumPy/CPU endpoint to its parent result digest and returns
+a read-only `JXSimulationContinuation`; `continue_from(run_index,
+integrator_id, spec)` requires the new initial epoch to equal that endpoint and
+records the parent and continuation-state identities in the resulting run.
+No last-run or implicit continuation behavior exists.
+
+`dump_simulation_archive(simulation, run_index)` returns deterministic restart
+archive bytes. Archive v1 contains canonical JSON and fixed-order, uncompressed,
+non-pickle NPY arrays. The caller records `simulation_archive_sha256(bytes)`.
+Loading requires both that expected digest and the exact live `ForcePlan`:
+
+```python
+payload = dump_simulation_archive(simulation, run_index=0)
+digest = simulation_archive_sha256(payload)
+restart = load_simulation_archive(
+    payload,
+    expected_sha256=digest,
+    force_plan=force_plan,
+)
+run = restart.simulation.integrate(integrator_id, next_spec)
+```
+
+The loader verifies the archive/member/state/force-plan/provenance identities
+before constructing a simulation rooted at the archived endpoint. It never
+unpickles code or reconstructs executable providers. CUDA archive creation is
+refused because current device results have no host-verifiable content digest.
+The archive is a numerical restart mechanism, not ephemeris qualification or
+long-term physical validation.
 
 ## Public trajectory API
 
@@ -442,8 +569,8 @@ SHA-256 identity. Loading currently supports NumPy/CPU only and returns
 read-only arrays. The hash detects changed bytes but is not a signature or a
 scientific qualification.
 
-V1 is RKF78-only and additive-force-only. It does not expose the research J2,
-full EIH, eleven-body, or lunar-rotation paths as public engine capabilities.
+Dynamics-scenario V1 is RKF78-only and additive-force-only. That scenario
+format does not expose J2, full EIH, eleven-body, or coupled lunar state paths.
 The complete contract, example, arithmetic policy, and next qualification
 steps are in [Dynamics scenarios V1](DYNAMICS_SCENARIOS.md).
 
@@ -637,8 +764,8 @@ is an external behavior oracle for the public expectations “second order,”
 “symplectic,” and one new force evaluation per step. REBOUND itself is
 published in the [official repository](https://github.com/hannorein/rebound)
 under its [GPL license](https://github.com/hannorein/rebound/blob/main/LICENSE).
-JX's MIT-licensed KDK equations, implementation, and tests were written
-independently as a clean-room vertical slice; no REBOUND source code was
+JX's independently licensed KDK equations, implementation, and tests were
+written as a clean-room vertical slice; no REBOUND source code was
 copied. This provenance statement makes no broader license or equivalence
 claim.
 
@@ -896,7 +1023,7 @@ accuracy, production suitability, or superiority. Authority, qualification,
 production, reference-truth, and superiority flags remain false;
 `integrated=True` means only that the trajectory was materialized.
 
-The equations and tests were independently implemented for MIT-licensed JX
+The equations and tests were independently implemented for JX
 from the primary [Wisdom--Holman map paper](https://web.mit.edu/wisdom/www/nbodymap.pdf),
 the [WHFast Jacobi-coordinate analysis](https://arxiv.org/abs/1506.01084), and
 the [universal-variable formulation](https://arxiv.org/abs/1508.02699).
@@ -904,7 +1031,7 @@ Official [REBOUND WHFast documentation](https://rebound.hanno-rein.de/integrator
 is an external behavior oracle only. No REBOUND source was copied, linked, or
 vendored. REBOUND remains a separate GPL-v3-family project; its tagged
 [5.1.1 license text](https://github.com/hannorein/rebound/blob/5.1.1/LICENSE)
-does not alter JX's MIT license. This statement makes no legal conclusion or
+does not alter JX's proprietary license. This statement makes no legal conclusion or
 finite-step map-equivalence claim.
 
 ## Public whole-step Wisdom--Holman/RKF78 hybrid API
@@ -1082,21 +1209,31 @@ but they do not assert cross-backend bitwise identity.
 | `HybridContractError` | A hybrid request, fixed outer lattice, typed record, custody binding, checksum, or replay/accounting relation is inconsistent |
 | `HybridDomainError` | A fatal static or numerical domain failure prevents either a valid far commit or an admissible full-interval near replacement |
 | `HybridStepLimitError` | An outer-record, near-macrostep, retained-substep, retained-digest, or child execution ceiling is exhausted |
+| `LinearizedFitContractError` | A linearized fit request has invalid identities, units, shapes, scales, weights, provenance, limits, or prior |
+| `LinearizedFitRankError` | The scaled and whitened design matrix is not full column rank at the caller's threshold |
+| `LinearizedFitConditionError` | A full-rank fit exceeds the caller's maximum condition number |
+| `LinearizedFitNumericalError` | The NumPy linear algebra runtime fails or returns a non-finite result |
 
 JX does not soften, merge, regularize, skip, transfer, downgrade precision, or
 change backend as an error-recovery side effect.
 
 ## Capability catalog
 
-`list_capabilities()` returns a stable 46-row catalog spanning 19 families.
+`list_capabilities()` returns a stable 51-row catalog spanning 19 families.
 Catalog membership is not execution authority. Every row has maturity
-`UNQUALIFIED`. Exactly twelve rows are marked `IMPLEMENTED`: the three force
+`UNQUALIFIED`. Exactly eighteen rows are marked `IMPLEMENTED`: seven force
 models, NumPy, the optional CuPy code path, binary64, same-runtime/device
 repeatability, the adaptive Fehlberg RK7(8) trajectory integrator, the
 standalone guarded Newtonian encounter segment, and the narrow NumPy/CPU
 mutual-Newtonian KDK and ordered-Jacobi Wisdom--Holman maps, plus the one
-specific whole-step Wisdom--Holman/RKF78 hybrid.
-The remaining 34 rows are `DECLARED` and fail closed through
+specific whole-step Wisdom--Holman/RKF78 hybrid and the coupled lunar fixed-
+delay route, plus the resolved-eleven coupled lunar EIH component. The force
+roster includes the full mutual, correction-only EIH 1PN model and
+provenance-bound NumPy/CPU adapters for Earth J2--J5 and the static lunar degree-two
+and degree-three figures. The physical-harmonic adapters require metre-second J2000 states and
+remain screening-only.
+It is a finite-difference service, not general variational propagation.
+The remaining 33 rows are `DECLARED` and fail closed through
 `DeclaredModelConfig.require_executable()`.
 
 Each declared configuration requires `config_id`, `model_id`, `epoch`,
@@ -1114,8 +1251,11 @@ provenance. Validating a declaration does not make it executable.
 | Declared | `force.newtonian.softened_point_mass` | `source_ids`, `target_ids`, `gravitational_parameters`, `softening_kernel`, `softening_lengths` |
 | Declared | `force.newtonian.barnes_hut_tree` | `body_ids`, `gravitational_parameters`, `opening_angle`, `opening_criterion`, `leaf_capacity`, `multipole_order`, `singularity_policy` |
 | Declared | `force.harmonics.solar_j2_j4` | `central_source_id`, `target_ids`, `reference_radius`, `j2`, `j4`, `pole_vector`, `orientation_frame` |
+| Implemented | `solar-system.force.earth-zonal-j2-j5-axisymmetric-pair` | `source_id`, `target_id`, `unit_system_id`, `reference_radius`, `zonal_coefficients`, `earth_pole_model` |
+| Implemented | `solar-system.force.lunar-static-degree2-principal-axis-pair` | `source_id`, `target_id`, `unit_system_id`, `reference_radius`, `degree2_coefficients`, `lunar_orientation_model` |
+| Implemented | `solar-system.force.lunar-static-degree3-principal-axis-pair` | `source_id`, `target_id`, `unit_system_id`, `reference_radius`, `degree3_coefficients`, `lunar_orientation_model` |
 | Declared | `force.harmonics.planetary` | `source_ids`, `target_ids`, `reference_radii`, `coefficient_sets`, `orientation_model`, `maximum_degree`, `maximum_order` |
-| Declared | `force.relativity.eih_1pn_gr` | `body_ids`, `speed_of_light`, `gravitational_parameters`, `maximum_compactness`, `maximum_speed_fraction_squared` |
+| Implemented | `force.relativity.eih_1pn_gr` | `body_ids`, `unit_system_id`, `speed_of_light`, `maximum_compactness`, `maximum_speed_fraction_squared` |
 | Declared | `force.relativity.restricted_ppn_beta_gamma` | `central_source_id`, `target_ids`, `speed_of_light`, `beta`, `gamma`, `maximum_compactness`, `maximum_speed_fraction_squared` |
 | Declared | `force.relativity.solar_lense_thirring` | `central_source_id`, `target_ids`, `speed_of_light`, `spin_angular_momentum`, `orientation_frame` |
 | Declared | `force.tides.constant_time_lag` | `interacting_pairs`, `love_numbers`, `time_lags`, `radii`, `spin_states`, `dissipation_convention` |
@@ -1149,6 +1289,8 @@ provenance. Validating a declaration does not make it executable.
 | Implemented | `determinism.same_runtime_device` | `runtime_fingerprint`, `device_fingerprint`, `tile_size`, `fast_math` |
 | Declared | `determinism.cross_device_bitwise` | `backend_matrix`, `reduction_policy`, `compiler_policy` |
 | Implemented | `integrator.adaptive.rkf78.fehlberg_1968` | `checkpoint_epochs`, `initial_step`, `minimum_step`, `maximum_step`, `position_atol`, `position_rtol`, `velocity_atol`, `velocity_rtol`, `maximum_steps`, `maximum_rejections`, `safety_factor`, `minimum_scale_factor`, `maximum_scale_factor` |
+| Implemented | `integrator.rkf78.fixed_delay.deformable_lunar_mantle_core.v3` | exact coupled `initial_state`, deformable `parameters`, fixed-delay `integration_spec`, exact pre-start `prehistory_provider` |
+| Implemented | `jx.integrator.rkf78.fixed.coupled-lunar.v1` | resolved-eleven coupled `initial_state`, bound physical `parameters`, fixed-step `integration_spec` |
 | Implemented | `integrator.adaptive.rkf78.encounter_segment_newtonian_v1` | `body_order`, `initial_epoch`, independent `endpoint_epoch`, signed `duration`, initial/minimum/maximum step magnitudes, canonical-pair clearance floors and pair position/velocity tolerances, GM-centroid position/velocity tolerances, proposal/acceptance/rejection/consecutive-rejection/force caps, controller scale factors, exact-rational resource record |
 | Implemented | `integrator.symplectic.kdk_leapfrog_2` | `checkpoint_step_indices`, signed `fixed_step`, `maximum_steps`, `minimum_swept_pair_separation`, `maximum_pair_frequency_step` |
 | Implemented | `integrator.symplectic.wisdom_holman_jacobi_kdk_2` | `checkpoint_step_indices`, signed `fixed_step`, `maximum_steps`, `jacobi_body_order`, `minimum_encounter_pair_separation`, `minimum_jacobi_periapse`, initial barycenter position/velocity caps, optional fixed `kepler_solver` record |

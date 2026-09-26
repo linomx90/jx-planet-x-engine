@@ -6,6 +6,7 @@ from pathlib import Path
 import unittest
 
 import numpy as np
+import jxplanetx
 
 from benchmarks import jx_gr15_v3_adversarial as qualification
 
@@ -62,7 +63,7 @@ class GR15V3AdversarialQualificationTests(unittest.TestCase):
         ):
             qualification._read_protocol(PROTOCOL, ROOT)
 
-    def test_rc10_regression_portfolio_passes_without_elevating_claims(self) -> None:
+    def test_current_regression_portfolio_passes_without_elevating_claims(self) -> None:
         try:
             import rebound
         except ModuleNotFoundError:
@@ -74,7 +75,7 @@ class GR15V3AdversarialQualificationTests(unittest.TestCase):
         ):
             self.skipTest("requires the exact REBOUND 5.1.1 tagged runtime")
         protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
-        protocol["package_version"] = "0.6.0rc10"
+        protocol["package_version"] = jxplanetx.__version__
         report = qualification.run(protocol)
         self.assertEqual(report["status"], "PASS_SCREENING_ONLY")
         self.assertEqual(report["scientific_claim_state"], "SCREENING_ONLY")

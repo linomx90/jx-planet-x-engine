@@ -6,7 +6,9 @@ from types import MappingProxyType
 from jxplanetx.engine import (
     ADAPTIVE_ENCOUNTER_SEGMENT_METHOD_ID,
     CAPABILITY_CATALOG,
+    COUPLED_LUNAR_RKF78_METHOD_ID,
     HYBRID_WISDOM_HOLMAN_RKF78_METHOD_ID,
+    LUNAR_EPHEMERIS_V1_METHOD_ID,
     AccelerationSemantics,
     CapabilityUnavailableError,
     CodeStatus,
@@ -24,12 +26,18 @@ from jxplanetx.engine import (
 EXPECTED_IMPLEMENTED = {
     "force.newtonian.point_mass",
     "relativity.solar_schwarzschild_test_particle_1pn",
+    "force.relativity.eih_1pn_gr",
     "force.nongrav.srp_cannonball",
+    "solar-system.force.earth-zonal-j2-j5-axisymmetric-pair",
+    "solar-system.force.lunar-static-degree2-principal-axis-pair",
+    "solar-system.force.lunar-static-degree3-principal-axis-pair",
     "backend.numpy.cpu",
     "backend.cupy.cuda",
     "precision.float64",
     "determinism.same_runtime_device",
     "integrator.adaptive.rkf78.fehlberg_1968",
+    COUPLED_LUNAR_RKF78_METHOD_ID,
+    LUNAR_EPHEMERIS_V1_METHOD_ID,
     "integrator.adaptive.rkf78.encounter_segment_newtonian_v1",
     "integrator.symplectic.kdk_leapfrog_2",
     "integrator.symplectic.wisdom_holman_jacobi_kdk_2",
@@ -151,10 +159,10 @@ class CatalogClosureTests(unittest.TestCase):
         )
         normalized_engine_api = " ".join(engine_api_text.split())
         self.assertIn(
-            "stable 46-row catalog spanning 19 families", normalized_engine_api
+            "stable 51-row catalog spanning 19 families", normalized_engine_api
         )
         self.assertIn(
-            "Exactly twelve rows are marked `IMPLEMENTED`", normalized_engine_api
+            "Exactly eighteen rows are marked `IMPLEMENTED`", normalized_engine_api
         )
         for required in (
             HYBRID_WISDOM_HOLMAN_RKF78_METHOD_ID,
@@ -177,7 +185,7 @@ class CatalogClosureTests(unittest.TestCase):
 
         expected_release_phrases = {
             "README.md": (
-                "46-capability catalog contains exactly twelve `IMPLEMENTED`",
+                "development catalog contains exactly eighteen `IMPLEMENTED`",
                 HYBRID_WISDOM_HOLMAN_RKF78_METHOD_ID.split(".v1", 1)[0],
             ),
             "CHANGELOG.md": (
@@ -197,8 +205,8 @@ class CatalogClosureTests(unittest.TestCase):
 
     def test_catalog_has_exact_stable_scope_and_no_duplicate_identifiers(self):
         rows = list_capabilities()
-        self.assertEqual(len(rows), 46)
-        self.assertEqual(len(CAPABILITY_CATALOG), 46)
+        self.assertEqual(len(rows), 51)
+        self.assertEqual(len(CAPABILITY_CATALOG), 51)
         self.assertIsInstance(CAPABILITY_CATALOG, MappingProxyType)
         self.assertEqual(tuple(CAPABILITY_CATALOG), tuple(row.model_id for row in rows))
         self.assertEqual(len({row.model_id for row in rows}), len(rows))
@@ -212,7 +220,7 @@ class CatalogClosureTests(unittest.TestCase):
             row.model_id for row in rows if row.code_status is CodeStatus.IMPLEMENTED
         }
         self.assertEqual(implemented, EXPECTED_IMPLEMENTED)
-        self.assertEqual(sum(row.code_status is CodeStatus.DECLARED for row in rows), 34)
+        self.assertEqual(sum(row.code_status is CodeStatus.DECLARED for row in rows), 33)
         self.assertTrue(all(row.maturity is Maturity.UNQUALIFIED for row in rows))
         self.assertTrue(
             all(row.execution_available == (row.model_id in EXPECTED_IMPLEMENTED) for row in rows)
@@ -252,7 +260,7 @@ class CatalogClosureTests(unittest.TestCase):
         self.assertEqual(srp.dependencies, ("force.newtonian.point_mass",))
 
         integrators = tuple(row for row in list_capabilities() if row.family == "INTEGRATOR")
-        self.assertEqual(len(integrators), 8)
+        self.assertEqual(len(integrators), 10)
         implemented = tuple(
             row.model_id
             for row in integrators
@@ -262,6 +270,8 @@ class CatalogClosureTests(unittest.TestCase):
             implemented,
             (
                 "integrator.adaptive.rkf78.fehlberg_1968",
+                COUPLED_LUNAR_RKF78_METHOD_ID,
+                LUNAR_EPHEMERIS_V1_METHOD_ID,
                 ADAPTIVE_ENCOUNTER_SEGMENT_METHOD_ID,
                 "integrator.symplectic.kdk_leapfrog_2",
                 "integrator.symplectic.wisdom_holman_jacobi_kdk_2",
@@ -298,6 +308,50 @@ class CatalogClosureTests(unittest.TestCase):
                 "minimum_scale_factor",
                 "maximum_scale_factor",
             ),
+        )
+        coupled = get_capability(COUPLED_LUNAR_RKF78_METHOD_ID)
+        self.assertIs(coupled.semantics, AccelerationSemantics.SERVICE)
+        self.assertTrue(coupled.velocity_dependent)
+        self.assertTrue(coupled.global_snapshot_required)
+        self.assertEqual(
+            tuple(parameter.parameter_id for parameter in coupled.parameters),
+            (
+                "initial_state",
+                "parameters",
+                "integration_spec",
+                "prehistory_provider",
+            ),
+        )
+        self.assertEqual(
+            coupled.dependencies,
+            ("backend.numpy.cpu", "precision.float64"),
+        )
+        self.assertTrue(
+            any("not yet dispatched through force ABI v1" in item for item in coupled.restrictions)
+        )
+        lunar_ephemeris = get_capability(LUNAR_EPHEMERIS_V1_METHOD_ID)
+        self.assertTrue(lunar_ephemeris.velocity_dependent)
+        self.assertTrue(lunar_ephemeris.global_snapshot_required)
+        self.assertEqual(
+            tuple(
+                parameter.parameter_id
+                for parameter in lunar_ephemeris.parameters
+            ),
+            ("initial_state", "parameters", "integration_spec"),
+        )
+        self.assertEqual(
+            lunar_ephemeris.dependencies,
+            (
+                "backend.numpy.cpu",
+                "precision.float64",
+                "force.relativity.eih_1pn_gr",
+            ),
+        )
+        self.assertTrue(
+            any(
+                "not a production ephemeris" in item
+                for item in lunar_ephemeris.restrictions
+            )
         )
         encounter = get_capability(ADAPTIVE_ENCOUNTER_SEGMENT_METHOD_ID)
         self.assertIs(encounter.semantics, AccelerationSemantics.SERVICE)
@@ -456,7 +510,7 @@ class DeclaredCapabilityTests(unittest.TestCase):
         declared = tuple(
             row for row in list_capabilities() if row.code_status is CodeStatus.DECLARED
         )
-        self.assertEqual(len(declared), 34)
+        self.assertEqual(len(declared), 33)
         for row in declared:
             with self.subTest(model_id=row.model_id):
                 config = declared_config(row.model_id)

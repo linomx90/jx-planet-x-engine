@@ -9,6 +9,7 @@ from jxplanetx.engine.contracts import (
     CannonballSRP,
     ContractError,
     ForcePlan,
+    MutualEIH1PN,
     NewtonianPointMass,
     ParameterMetadata,
     Provenance,
@@ -232,6 +233,28 @@ class StateSnapshotContractTests(unittest.TestCase):
 
 
 class ForceConfigurationContractTests(unittest.TestCase):
+    def test_mutual_eih_requires_full_identity_and_explicit_domain_bounds(self):
+        model = MutualEIH1PN(
+            body_ids=("SUN", "EARTH"),
+            speed_of_light=299792.458,
+            maximum_compactness=1.0e-4,
+            maximum_speed_fraction_squared=1.0e-4,
+            unit_system_id=UNIT_SYSTEM_ID,
+            parameter_metadata=one_pn_metadata(),
+        )
+        self.assertEqual(model.model_id, "force.relativity.eih_1pn_gr")
+        for change in (
+            {"body_ids": ("SUN",)},
+            {"body_ids": ("SUN", "SUN")},
+            {"speed_of_light": 0.0},
+            {"maximum_compactness": 1.0},
+            {"maximum_speed_fraction_squared": 1.0},
+            {"unit_system_id": ""},
+            {"parameter_metadata": one_pn_metadata()[::-1]},
+        ):
+            with self.subTest(change=change), self.assertRaises(ContractError):
+                dataclasses.replace(model, **change)
+
     def test_newtonian_selection_and_parameter_metadata_are_exact(self):
         gm_metadata = metadata(
             "state.gravitational_parameters",

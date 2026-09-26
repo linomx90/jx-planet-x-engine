@@ -12,8 +12,13 @@ from jxplanetx.engine.forces import (
     ForceDomainError,
     ForceSingularityError,
     cannonball_srp_acceleration,
+    mutual_eih_1pn_acceleration,
     newtonian_point_mass_acceleration,
     restricted_static_central_1pn_acceleration,
+)
+from jxplanetx.solar_system.eih_1pn import (
+    EIH1PNParameters,
+    evaluate_eih_1pn_correction,
 )
 
 
@@ -96,6 +101,89 @@ def srp(
         singularity_policy=SINGULARITY_POLICY_ERROR,
         collision_policy=COLLISION_POLICY_ERROR,
     )
+
+
+class MutualEIH1PNTests(unittest.TestCase):
+    def test_backend_neutral_kernel_matches_independent_three_body_evaluator(self):
+        positions = np.ascontiguousarray(
+            ((-0.4, 0.2, 0.1), (0.8, -0.1, 0.3), (0.1, 1.1, -0.2)),
+            dtype=F64,
+        )
+        velocities = np.ascontiguousarray(
+            ((0.1, -0.3, 0.05), (-0.2, 0.4, 0.1), (0.3, 0.1, -0.2)),
+            dtype=F64,
+        )
+        gm = np.ascontiguousarray((1.0, 0.2, 0.05), dtype=F64)
+        selected = np.ones(3, dtype=np.bool_)
+        observed = mutual_eih_1pn_acceleration(
+            backend=BACKEND,
+            positions=positions,
+            velocities=velocities,
+            gravitational_parameters=gm,
+            radii=np.zeros(3, dtype=F64),
+            body_mask=selected,
+            tile_size=2,
+            speed_of_light=31.0,
+            maximum_compactness=1.0e-2,
+            maximum_speed_fraction_squared=1.0e-2,
+            singularity_policy=SINGULARITY_POLICY_ERROR,
+            collision_policy=COLLISION_POLICY_ERROR,
+        )
+        expected = evaluate_eih_1pn_correction(
+            positions,
+            velocities,
+            gm,
+            EIH1PNParameters(
+                speed_of_light_km_s=31.0,
+                maximum_compactness=1.0e-2,
+                maximum_speed_fraction_squared=1.0e-2,
+            ),
+        ).correction_accelerations_km_s2
+        np.testing.assert_allclose(observed, expected, rtol=3.0e-15, atol=3.0e-15)
+
+        translated = mutual_eih_1pn_acceleration(
+            backend=BACKEND,
+            positions=np.ascontiguousarray(positions + (7.0, -5.0, 2.0)),
+            velocities=velocities,
+            gravitational_parameters=gm,
+            radii=np.zeros(3, dtype=F64),
+            body_mask=selected,
+            tile_size=3,
+            speed_of_light=31.0,
+            maximum_compactness=1.0e-2,
+            maximum_speed_fraction_squared=1.0e-2,
+            singularity_policy=SINGULARITY_POLICY_ERROR,
+            collision_policy=COLLISION_POLICY_ERROR,
+        )
+        np.testing.assert_allclose(translated, observed, rtol=3.0e-14, atol=3.0e-15)
+
+    def test_incomplete_roster_and_weak_field_violation_fail_closed(self):
+        positions = np.ascontiguousarray(((0.0, 0.0, 0.0), (1.0, 0.0, 0.0)))
+        velocities = np.ascontiguousarray(((0.0, 0.0, 0.0), (0.0, 0.5, 0.0)))
+        gm = np.ascontiguousarray((1.0, 0.2))
+        common = dict(
+            backend=BACKEND,
+            positions=positions,
+            velocities=velocities,
+            gravitational_parameters=gm,
+            radii=np.zeros(2, dtype=F64),
+            tile_size=2,
+            speed_of_light=31.0,
+            maximum_compactness=1.0e-2,
+            maximum_speed_fraction_squared=1.0e-2,
+            singularity_policy=SINGULARITY_POLICY_ERROR,
+            collision_policy=COLLISION_POLICY_ERROR,
+        )
+        with self.assertRaisesRegex(ForceContractError, "every state body"):
+            mutual_eih_1pn_acceleration(
+                **common,
+                body_mask=np.array((True, False), dtype=np.bool_),
+            )
+        with self.assertRaisesRegex(ForceDomainError, "weak-field"):
+            mutual_eih_1pn_acceleration(
+                **{**common, "maximum_compactness": 1.0e-5},
+                body_mask=np.ones(2, dtype=np.bool_),
+            )
 
 
 def decimal_one_pn_oracle(

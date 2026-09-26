@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from pathlib import Path
 import unittest
 
@@ -16,14 +17,18 @@ PROTOCOL_SHA256 = (
 
 
 class GR15RC10ArtifactAcceptanceTests(unittest.TestCase):
-    def test_protocol_is_source_and_artifact_bound(self) -> None:
+    def test_protocol_is_immutable_and_rejects_current_source(self) -> None:
         self.assertEqual(
             hashlib.sha256(PROTOCOL.read_bytes()).hexdigest(), PROTOCOL_SHA256
         )
-        protocol, identity = acceptance._read_protocol(PROTOCOL, ROOT)
-        self.assertEqual(identity["sha256"], PROTOCOL_SHA256)
-        self.assertEqual(jxplanetx.__version__, "0.6.0rc10")
-        self.assertEqual(protocol["package_version"], jxplanetx.__version__)
+        self.assertEqual(jxplanetx.__version__, "0.6.0rc16")
+        with self.assertRaisesRegex(
+            acceptance.RC10AcceptanceError,
+            "source binding changed",
+        ):
+            acceptance._read_protocol(PROTOCOL, ROOT)
+        protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
+        self.assertEqual(protocol["package_version"], "0.6.0rc10")
         self.assertEqual(
             protocol["artifacts"]["wheel"]["sha256"],
             "01bff6e4f418268a0acd0954e91f201397c8e62b3ef84852d332282aed13fa7e",
@@ -34,7 +39,7 @@ class GR15RC10ArtifactAcceptanceTests(unittest.TestCase):
         )
 
     def test_claim_ceiling_and_base_protocol_custody(self) -> None:
-        protocol, _ = acceptance._read_protocol(PROTOCOL, ROOT)
+        protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
         self.assertEqual(protocol["scientific_claim_state"], "SCREENING_ONLY")
         self.assertFalse(
             protocol["claim_controls"]["general_superiority_claim_authorized"]
