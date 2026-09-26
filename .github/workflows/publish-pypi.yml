@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - .github/publish-pypi-v0.6.0rc10
+      - .github/publish-pypi-v0.6.0rc16
 
 permissions:
   contents: read
@@ -20,24 +20,41 @@ jobs:
       - name: Check out verified release assets
         uses: actions/checkout@v4
         with:
-          ref: 044035a6e72457e5477eeee2dfc224b3489a740a
+          ref: e8898f4deff78ed17014a811b08176dfab800ebb
           path: assets
-          sparse-checkout: release-assets/v0.6.0rc10
+          sparse-checkout: release-assets/v0.6.0rc16
           sparse-checkout-cone-mode: false
 
-      - name: Verify and select distributions
+      - name: Reassemble, verify, and select exact distributions
         shell: bash
         run: |
           set -euo pipefail
-          cd assets/release-assets/v0.6.0rc10
-          sha256sum --check JX_0.6.0rc10_SHA256SUMS
-          echo "5e68b4d7a5d3a656bdebdab7f0dd34ab44feb134617642211a15a15d1d9f5c5a  jxplanetx-0.6.0rc10-cp314-cp314-manylinux_2_31_x86_64.whl" | sha256sum --check -
-          echo "af390c558aa46eefa869edf2062a81869ef0d0147588467ce5af2f61c7b07e5a  jxplanetx-0.6.0rc10.tar.gz" | sha256sum --check -
-          test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc10.json)" = \
-            "4d6866fe5e9b8a64c6924325baa233ca97e0afc3"
-          mkdir -p "$GITHUB_WORKSPACE/dist"
-          cp jxplanetx-0.6.0rc10-cp314-cp314-manylinux_2_31_x86_64.whl "$GITHUB_WORKSPACE/dist/"
-          cp jxplanetx-0.6.0rc10.tar.gz "$GITHUB_WORKSPACE/dist/"
+          asset_dir="$GITHUB_WORKSPACE/assets/release-assets/v0.6.0rc16"
+          dist="$GITHUB_WORKSPACE/dist"
+          mkdir -p "$dist"
+
+          test "$(find "$asset_dir/chunks/wheel" -maxdepth 1 -type f | wc -l)" -eq 16
+          test "$(find "$asset_dir/chunks/sdist" -maxdepth 1 -type f | wc -l)" -eq 13
+          cat "$asset_dir"/chunks/wheel/part-* > \
+            "$dist/jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl"
+          cat "$asset_dir"/chunks/sdist/part-* > \
+            "$dist/jxplanetx-0.6.0rc16.tar.gz"
+          cp "$asset_dir/JX_0.6.0rc16_SHA256SUMS" "$dist/"
+          cp "$asset_dir/RELEASE_MANIFEST_v0.6.0rc16.json" "$dist/"
+          cp "$asset_dir/RELEASE_PROVENANCE_v0.6.0rc16.json" "$dist/"
+          cp "$asset_dir/ASSEMBLY.json" "$dist/"
+
+          cd "$dist"
+          sha256sum --check JX_0.6.0rc16_SHA256SUMS
+          echo "f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f  jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl" | sha256sum --check -
+          echo "8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0  jxplanetx-0.6.0rc16.tar.gz" | sha256sum --check -
+          test "$(jq -er '.source_release_commit' RELEASE_PROVENANCE_v0.6.0rc16.json)" = \
+            "256de6e24915d630b6fd69b666f4aa6f78354523"
+          test "$(jq -er '.version' ASSEMBLY.json)" = "0.6.0rc16"
+
+          find . -maxdepth 1 -type f \
+            ! -name 'jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl' \
+            ! -name 'jxplanetx-0.6.0rc16.tar.gz' -delete
 
       - name: Publish exact distributions with attestations
         uses: pypa/gh-action-pypi-publish@release/v1
