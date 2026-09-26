@@ -64,7 +64,8 @@ jobs:
           test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc16.json)" = \
             "256de6e24915d630b6fd69b666f4aa6f78354523"
           test "$(find . -maxdepth 1 -type f | wc -l)" -eq 10
-          find . -maxdepth 1 -type f -printf '%f\0' | sort -z | \
+          find . -maxdepth 1 -type f \
+            ! -name 'JX_0.6.0rc16_ZENODO_SHA256SUMS' -printf '%f\0' | sort -z | \
             xargs -0 sha256sum > JX_0.6.0rc16_ZENODO_SHA256SUMS
           sha256sum --check JX_0.6.0rc16_ZENODO_SHA256SUMS
           test "$(find . -maxdepth 1 -type f | wc -l)" -eq 11
