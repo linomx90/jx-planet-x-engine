@@ -1,0 +1,19 @@
+{
+  "schema": "jxplanetx.pypi-assembly.v1",
+  "version": "0.6.0rc16",
+  "wheel": {
+    "filename": "jxplanetx-0.6.0rc16-cp314-cp314-manylinux_2_31_x86_64.whl",
+    "chunks_dir": "pypi/chunks/wheel",
+    "chunks": 16,
+    "nominal_chunk_size_bytes": 65536,
+    "size_bytes": 1018282,
+    "sha256": "522c7cd8976e76f04fe73a012f5335136fb0b0c472298f07e494692efeb9a2b4"
+  },
+  "sdist": {
+    "filename": "jxplanetx-0.6.0rc16.tar.gz",
+    "chunks_dir": "chunks/sdist",
+    "chunks": 13,
+    "size_bytes": 811084,
+    "sha256": "8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "jxplanetx.pypi-artifacts.v1",
+  "version": "0.6.0rc16",
+  "source_release_commit": "256de6e24915d630b6fd69b666f4aa6f78354523",
+  "source_asset_commit": "e8898f4deff78ed17014a811b08176dfab800ebb",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "repair": {
+    "input_wheel": "jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl",
+    "input_wheel_sha256": "f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f",
+    "tool": "auditwheel",
+    "tool_version": "6.5.0",
+    "patchelf_version": "0.17.2.4",
+    "source_date_epoch": 1790438400,
+    "platform_tag": "manylinux_2_31_x86_64"
+  },
+  "artifacts": {
+    "wheel": {
+      "filename": "jxplanetx-0.6.0rc16-cp314-cp314-manylinux_2_31_x86_64.whl",
+      "size_bytes": 1018282,
+      "sha256": "522c7cd8976e76f04fe73a012f5335136fb0b0c472298f07e494692efeb9a2b4"
+    },
+    "sdist": {
+      "filename": "jxplanetx-0.6.0rc16.tar.gz",
+      "size_bytes": 811084,
+      "sha256": "8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0"
+    }
+  },
+  "verification": {
+    "independent_repairs": 2,
+    "wheel_byte_identical": true,
+    "auditwheel_compatible_tag": "manylinux_2_31_x86_64",
+    "clean_wheel_install_passed": true,
+    "compiled_extension_modules_imported": 9
+  }
+}
