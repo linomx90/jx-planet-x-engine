@@ -3,6 +3,281 @@
 All notable package changes are recorded here. Scientific outcomes and their
 claim boundaries remain documented in the corresponding locked run reports.
 
+## Unreleased
+
+### Added
+
+- Added the screening-only
+  `orbit_determination.multi_arc_linearized_weighted_svd_step` component with
+  shared global parameters, disjoint arc-local parameters, multiple full-
+  covariance observation blocks per arc, optional global-only Gaussian prior,
+  full-rank/condition gates, per-block diagnostics, immutable results, and
+  provenance-bound digests.
+- Added a lunar sensitivity adapter that enforces physical force parameters as
+  global and GM-reacted initial-state parameters as arc-local. No saved lunar
+  scientific outcome or release version was promoted.
+
+- Added a reacting, multi-target solar-J2 correction using the retained DE440
+  `ASUN` and `J2SUN` defaults, an explicit J2000 pole, GM-weighted reaction on
+  the resolved Sun, and a provenance-bound NumPy force-ABI adapter.
+- Added a supported, provenance-bound NumPy/CPU weighted-SVD component for one
+  linearized estimation step. It owns its inputs and outputs, supports optional
+  positive-definite Gaussian priors, reports covariance/residual/rank/condition
+  diagnostics (including separate observation and augmented ranks), binds
+  results to SHA-256 content digests, and fails closed on
+  rank deficiency or a caller-defined condition gate.
+- Added a lunar-ephemeris-v1 sensitivity component that applies GM-reacted
+  pair-relative initial position/velocity perturbations, reruns the identical
+  public force roster at two symmetric scales, rejects representation,
+  asymmetry, or derivative-agreement failures, and emits a Richardson design
+  matrix that binds directly into the weighted-SVD fit component.
+- Extended that sensitivity component with synchronized Sun, Earth, and Moon
+  GM plus Earth-J2 effective-force parameters. Added a reproducible split-mode
+  multi-epoch fit/holdout runner and its source-bound day-2718 protocol.
+
+### Screening result
+
+- A nonauthoritative matched 90-day probe found that adding solar J2 alone to
+  the rc16 coupled lunar equations worsened all four DE440 endpoint metrics;
+  the Sun--Earth position and velocity errors increased by 12.35% and 13.17%.
+  Solar J2 is therefore not promoted into the lunar ephemeris component.
+- The locked day-2718 effective-force experiment passed its fresh screening
+  holdout: all eight Earth--Moon and Sun--Earth position/velocity metrics
+  improved at 90 and 365 days, and aggregate normalized error improved by
+  25.55%. DE440 is the fitted reference, so this is not independent validation
+  or production-ephemeris qualification.
+- A subsequently locked three-epoch replication failed: only start day 3037
+  passed, the combined ratio was 1.2651, and 20 of 24 individual metrics
+  improved. A four-epoch external INPOP21a screen also failed its strict
+  all-metrics gate, although aggregate error improved by 15.44% and all 16
+  Earth--Moon metrics improved. The inconsistent Sun--Earth response rejects
+  the fitted effective-force deltas as stable global parameters.
+
+### Boundary
+
+- The solar-J2 kernel is a general screening-only engine component, not a new
+  ephemeris version. A fitted coupled model is required before another native
+  ephemeris promotion attempt.
+- The weighted-SVD step consumes a caller-supplied design matrix. It does not
+  yet supply force-consistent variational equations, measurement modeling,
+  nonlinear iteration, outlier handling, or production orbit determination.
+- The new sensitivity path is finite-difference and CPU-only. Its GM/J2 deltas
+  are effective bias absorbers, not physical-constant measurements. It does
+  not implement general analytic variational equations or authorize a fitted
+  production ephemeris.
+
+## 0.6.0rc16 — 2026-09-24
+
+### Added
+
+- Added force ABI v1: one public exact-type registry for canonical force
+  ordering, backend support, integrator-class compatibility, and acceleration
+  semantics.
+- Promoted the retained Earth J2--J5 and static lunar degree-two and
+  degree-three pair kernels into provenance-bound `ForcePlan` components used
+  by public force evaluation, adaptive RKF78, and `JXSimulation`.
+- Added explicit NumPy/CPU continuation with parent/result/endpoint state
+  digests and deterministic, non-pickle restart archives that require an exact
+  external archive SHA-256 and caller-supplied force-plan digest on load.
+- Added coupled state ABI v1 and a public engine adapter over the retained v3
+  simultaneous Sun--Earth--Moon translation, lunar mantle attitude/rate,
+  delayed deformation, and fluid-core-rate integrator. The common result owns
+  typed checkpoints and binds all five state blocks to a content SHA-256.
+- Added the public resolved-eleven lunar ephemeris v1 component. It advances
+  Newtonian translation, mutual EIH 1PN, reacting static lunar quadrupoles,
+  fixed-axis Earth J2, lunar mantle attitude/rate, and fluid-core rate through
+  one fixed-step RKF78 checkpoint contract with deterministic accounting.
+- Added an outcome-blind, create-only 90/365-day DE440 screening protocol for
+  the new public component. Its result remains screening evidence and cannot
+  authorize model promotion or production use.
+
+### Verification
+
+- The frozen 90/365-day screen passed every gate. At 365 days the public EIH
+  component measured 0.061568 km Earth--Moon and 0.029261 km Sun--Earth
+  position error, versus 3.729707 km and 56.094548 km for the matched no-EIH
+  control. The aggregate candidate/control RMS ratio was 0.012199 and the
+  worst individual ratio was 0.018686.
+- The run accepted exactly 11,680 steps and performed 151,840 RKF78 force
+  evaluations. The maximum quaternion norm error before projection was one
+  binary64 epsilon.
+
+### Boundaries
+
+- The new physical-harmonic adapters and restart archives are NumPy/CPU-only;
+  the harmonic terms require metre-second J2000
+  pair corrections. Specialized GR15 and CUDA routes reject them without
+  fallback. The coupled lunar route remains a retained native physics bundle,
+  not force ABI v1, and has no CUDA, coupled archive, geodetic transport,
+  event, ephemeris, or qualification claim. Events, fitting, independent
+  ephemeris validation, and production qualification remain open.
+
+## 0.6.0rc15 — 2026-09-24
+
+### Added
+
+- Added `integrate_verified_gr15_eih_1pn`, an operational CPU propagation
+  boundary requiring explicit J2000/TDB/unit conventions, unique body
+  identities, source-provenance hashes, distinct primary/confirmation
+  numerical contracts, and full-trajectory position/velocity agreement gates.
+- Added immutable context, gate, verified-result, named contract-error, and
+  named verification-failure types plus stable input and verification digests.
+
+### Verification
+
+- The prospective locked portfolio passed forward and backward finite-mass
+  binaries, an eccentric ten-period binary, and the DE440-derived eleven-body
+  state for ten Julian years. Every case repeated exactly and preserved the
+  existing public primary trajectory bit-for-bit.
+- The ten-year eleven-body primary/confirmation maxima were 0.002441 km and
+  6.913e-9 km/s, inside the locked 1 km and 1e-7 km/s gates.
+- Reran the external REBOUND 5.1.1/REBOUNDx 5.1.0 equation and 100-year
+  Sun--Earth tests plus the 10/25/50/100-year DE440 attribution gates.
+
+### Boundaries
+
+- Confirmation uses a second execution of the same packaged implementation;
+  it is a per-request consistency gate, not independent validation.
+- Results remain `SCREENING_ONLY`. Passing does not authorize navigation,
+  production ephemerides, DE440 equivalence, or exact-general-relativity use.
+
+## 0.6.0rc14 — 2026-09-23
+
+### Added
+
+- Added `integrate_gr15_eih_1pn_cpu_batch`, a supported NumPy batch boundary
+  that runs independent native GR15-EIH1PN systems concurrently with threads.
+  The native extension releases the GIL for each complete integration, so the
+  component requires no subprocess lifecycle or state serialization.
+- Added `integrate_gr15_eih_1pn_batch`, which returns one owned, read-only
+  NumPy result contract for CPU and CUDA execution and records its backend
+  decision, calibration identity, worker/kernel accounting, and transfer time.
+- Added an explicit dispatch-policy type and a single machine-bound crossover
+  profile for the Ryzen 5 5500 and RTX 5060 Ti ten-year, eleven-body workload.
+
+### Verification
+
+- The locked ten-year crossover passed at 1, 2, 4, 8, 16, 32, 64, and 128
+  independent systems. Eight-worker JX CPU was 2.17--2.30x faster than
+  eight-worker REBOUND IAS15 plus REBOUNDx `gr_full` at every tested count.
+- In the final supported NumPy API, CUDA was 3.8% faster than eight-thread JX
+  CPU at 96 systems and 9.9% faster at 128, while CPU was 17.5% faster at 64.
+  The automatic policy retains a conservative 128-system CUDA cutoff. All
+  accuracy, automatic-route identity, and CPU/CUDA agreement gates passed.
+- Added CPU batch parity, determinism, backward, per-system-GM, routing, claim
+  ceiling, contract, and fail-closed tests plus a real-device CUDA parity test.
+
+### Boundaries
+
+- Automatic CUDA routing is a performance policy, not a scientific claim. It
+  applies only to its exact registered hardware/workload scope. Unmatched
+  cases stay on CPU, while explicit CUDA requests remain available.
+- System counts above the largest measured 128-system point are labelled as
+  threshold extrapolations. The dispatcher never claims portable crossover
+  behavior or general superiority over REBOUND.
+- The physical model remains screening-only mutual point-mass Newtonian plus
+  EIH 1PN and is not a production ephemeris or navigation system.
+
+## 0.6.0rc13 — 2026-09-23
+
+### Added
+
+- Added the supported `integrate_gr15_eih_1pn_cuda_batch` component. One
+  persistent CUDA block per independent system now executes the complete GR15
+  predictor, eight-stage corrector, convergence gate, error estimate,
+  rejection controller, exact checkpoint schedule, and adaptive step control.
+- Added device-resident batched trajectory outputs, shared or per-system GM,
+  host-audited controller accounting, named fail-closed statuses, exact CUDA
+  source/runtime identity, and a reproducible CPU/CUDA trajectory benchmark.
+
+### Verification
+
+- Passed exact binary CPU/CUDA checkpoint and controller-accounting parity,
+  multi-system and per-system-GM parity, backward integration, bitwise CUDA
+  replay, the 32-body boundary, and input, singularity, weak-field, step-limit,
+  and rejection-limit failure gates on an RTX 5060 Ti.
+- Passed all 220 isolated live CPU, optional-CUDA, and CUDA-hardware lanes;
+  reproduced the wheel and source archive across four clean builds; and passed
+  fresh installed-artifact CPU/CUDA smoke plus Twine metadata validation.
+- In the bounded 11-body trajectory screen, one and eight systems remained
+  CPU-faster. CUDA was 3.46x the sequential CPU throughput at 64 systems and
+  6.19x at 512 systems; maximum checkpoint differences were 3.56e-15 km and
+  1.18e-17 km/s.
+
+### Boundaries
+
+- CUDA accelerates independent trajectory ensembles; it is not the preferred
+  route for one small system, and the recorded CPU comparison is sequential.
+- The EIH model still omits extended-body figures, tides, spins, frame
+  dragging, collisions, signal propagation, and observation reduction.
+- Results remain `SCREENING_ONLY`; no production-ephemeris, exact-GR,
+  navigation, portable speed, or general REBOUND-superiority claim is made.
+
+## 0.6.0rc12 — 2026-09-23
+
+### Added
+
+- Added the supported `evaluate_eih_1pn_total_acceleration_cuda` component for
+  device-resident float64 batches of 2--32 mutual finite-mass bodies.
+- Added `evaluate_gr15_eih_1pn_stages_cuda`, which evaluates all eight GR15
+  corrector-stage forces for one or more systems in a single CUDA launch.
+- Added per-lane weak-field diagnostics, exact runtime/source identity, shared
+  and lane-specific GM support, named fail-closed statuses, and a reproducible
+  finite-host CPU/CUDA crossover benchmark.
+
+### Verification
+
+- Passed strict CUDA parity against both the package-owned native C core and
+  the independent Python equation, including the 32-body boundary and a full
+  eight-stage/two-system GR15 sweep.
+- Passed bitwise repeated-launch determinism, input ownership, source-identity,
+  and input, nonfinite, singularity, and weak-field failure-domain tests on an
+  NVIDIA GeForce RTX 5060 Ti with CUDA runtime/driver 13.2 and CuPy 14.2.0.
+- In the bounded component screen, CUDA was 5.28x the current native wrapper
+  throughput at 4,096 eleven-body lanes and 19.74x at 4,096 thirty-two-body
+  lanes. It remained slower for one eight-stage eleven-body system.
+
+### Boundaries
+
+- This is a supported force/stage component, not a complete CUDA GR15
+  trajectory integrator. Prediction, corrector updates, convergence, error
+  estimation, rejection, checkpointing, and adaptive control remain CPU-only.
+- Timings exclude input transfer, output transfer, allocation, and the complete
+  GR15 controller. They are one-host engineering observations, not portable or
+  general superiority claims.
+- Results remain `SCREENING_ONLY`; no exact-GR, production-ephemeris,
+  navigation, DE440-equivalence, or general REBOUND claim is made.
+
+## 0.6.0rc11 — 2026-09-23
+
+### Added
+
+- Added the packaged `integrate_gr15_eih_1pn` CPU component for 2--32
+  finite-mass bodies under mutual Newtonian plus EIH 1PN point-mass gravity.
+- Added native source identity, reusable workspaces, replay digests,
+  weak-field fail-closed gates, and explicit screening-only claim controls.
+- Added exact-version external comparison lanes for REBOUND 5.1.1, REBOUNDx
+  5.1.0, and SpiceyPy 8.2.0.
+
+### Verification
+
+- Preserved the rc10 Newtonian GR15 V3 core byte-for-byte.
+- Passed native/Python force parity, Newtonian-limit identity, permutation,
+  replay, failure-domain, analytic periapsis, reversal, and convergence gates.
+- Passed short same-model IAS15 parity, the REBOUNDx asymptotic comparison,
+  and a physical Sun--Earth 100-year same-model IAS15 gate.
+- Passed body-resolved DE440 attribution at 10, 25, 50, and 100 Julian years;
+  the aggregate residual ratios to the Newtonian control were 0.0882, 0.1282,
+  0.0987, and 0.1545 respectively.
+
+### Boundaries
+
+- The new component is CPU-only mutual point-mass EIH 1PN. It does not include
+  figures, tides, spins, frame dragging, collisions, signal propagation, or
+  observation reduction.
+- Results remain `SCREENING_ONLY`; no exact-GR, DE440-equivalence, production,
+  navigation, or general-superiority claim is made.
+
 ## 0.6.0rc10 — 2026-09-23
 
 ### Fixed

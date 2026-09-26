@@ -8,6 +8,7 @@ public APIs permit it.
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 from .backends import ArrayBackend
@@ -17,6 +18,7 @@ NEWTONIAN_POINT_MASS_MODEL_ID = "force.newtonian.point_mass"
 RESTRICTED_STATIC_CENTRAL_1PN_MODEL_ID = (
     "relativity.solar_schwarzschild_test_particle_1pn"
 )
+MUTUAL_EIH_1PN_MODEL_ID = "force.relativity.eih_1pn_gr"
 CANNONBALL_SRP_MODEL_ID = "force.nongrav.srp_cannonball"
 
 SINGULARITY_POLICY_ERROR = "error"
@@ -369,6 +371,167 @@ def restricted_static_central_1pn_acceleration(
     return result
 
 
+def mutual_eih_1pn_acceleration(
+    *,
+    backend: ArrayBackend,
+    positions: Any,
+    velocities: Any,
+    gravitational_parameters: Any,
+    radii: Any,
+    body_mask: Any,
+    tile_size: int,
+    speed_of_light: object,
+    maximum_compactness: object,
+    maximum_speed_fraction_squared: object,
+    singularity_policy: str,
+    collision_policy: str,
+) -> Any:
+    """Evaluate the correction-only mutual point-mass EIH 1PN acceleration.
+
+    The expression is equation 27 of the JPL DE440/DE441 description with
+    beta=gamma=1. Acceleration-dependent source terms use simultaneous
+    Newtonian accelerations, which is equivalent through retained 1PN order.
+    All bodies must participate as massive mutual sources and targets.
+    """
+
+    if singularity_policy != SINGULARITY_POLICY_ERROR:
+        raise ForceContractError("the mutual EIH 1PN kernel requires singularity_policy='error'")
+    if collision_policy != COLLISION_POLICY_ERROR:
+        raise ForceContractError("the mutual EIH 1PN kernel requires collision_policy='error'")
+    body_count = _validate_common_arrays(
+        backend,
+        positions,
+        gravitational_parameters,
+        radii,
+        body_mask,
+        body_mask,
+        require_positive_source_gm=True,
+    )
+    velocities = backend.require_native_array(velocities, "velocities")
+    if velocities.dtype != backend.float64:
+        raise ForceContractError("velocities must have dtype float64")
+    if velocities.shape != (body_count, 3):
+        raise ForceContractError("velocities must have shape (body_count, 3)")
+    if _has_any(backend, ~backend.xp.isfinite(velocities), "velocity finiteness check"):
+        raise ForceDomainError("velocities must contain only finite values")
+    if body_count < 2:
+        raise ForceContractError("mutual EIH 1PN requires at least two bodies")
+    if _has_any(backend, ~body_mask, "mutual EIH body-mask completeness check"):
+        raise ForceContractError("mutual EIH 1PN requires every state body")
+
+    c = _finite_positive_scalar(speed_of_light, "speed_of_light")
+    compactness_limit = _finite_positive_scalar(
+        maximum_compactness, "maximum_compactness"
+    )
+    speed_limit = _finite_positive_scalar(
+        maximum_speed_fraction_squared, "maximum_speed_fraction_squared"
+    )
+    if compactness_limit >= 1.0:
+        raise ForceDomainError("maximum_compactness must be less than one")
+    if speed_limit >= 1.0:
+        raise ForceDomainError("maximum_speed_fraction_squared must be less than one")
+    if not math.isfinite(c * c):
+        raise ForceDomainError("speed_of_light squared must be finite")
+
+    xp = backend.xp
+    one = xp.float64(1.0)
+    zero = xp.float64(0.0)
+    c_squared = xp.float64(c) * xp.float64(c)
+    diagonal = xp.eye(body_count, dtype=xp.bool_)
+    difference = positions[:, xp.newaxis, :] - positions[xp.newaxis, :, :]
+    distance_squared = xp.sum(difference * difference, axis=2)
+    if _has_any(
+        backend,
+        (distance_squared == zero) & ~diagonal,
+        "mutual EIH singularity check",
+    ):
+        raise ForceSingularityError("distinct mutual EIH point masses coincide")
+    collision_distance = radii[:, xp.newaxis] + radii[xp.newaxis, :]
+    if _has_any(
+        backend,
+        (distance_squared <= collision_distance * collision_distance)
+        & (distance_squared > zero)
+        & ~diagonal,
+        "mutual EIH collision check",
+    ):
+        raise ForceCollisionError("mutual EIH finite-radius bodies overlap or touch")
+
+    safe_distance_squared = xp.where(diagonal, one, distance_squared)
+    distance = xp.sqrt(safe_distance_squared)
+    inverse_distance = one / distance
+    inverse_distance_cubed = inverse_distance / safe_distance_squared
+    pair_weight = xp.where(
+        diagonal,
+        zero,
+        gravitational_parameters[xp.newaxis, :] * inverse_distance,
+    )
+    potentials = xp.sum(pair_weight, axis=1)
+    speed_squared = xp.sum(velocities * velocities, axis=1)
+    if _has_any(
+        backend,
+        potentials / c_squared > xp.float64(compactness_limit),
+        "mutual EIH compactness check",
+    ):
+        raise ForceDomainError("a body exceeds the declared EIH 1PN weak-field bound")
+    if _has_any(
+        backend,
+        speed_squared / c_squared > xp.float64(speed_limit),
+        "mutual EIH slow-motion check",
+    ):
+        raise ForceDomainError("a body exceeds the declared EIH 1PN slow-motion bound")
+
+    newtonian = newtonian_point_mass_acceleration(
+        backend=backend,
+        positions=positions,
+        gravitational_parameters=gravitational_parameters,
+        radii=radii,
+        source_mask=body_mask,
+        target_mask=body_mask,
+        tile_size=tile_size,
+        singularity_policy=singularity_policy,
+        collision_policy=collision_policy,
+    )
+    velocity_body = velocities[:, xp.newaxis, :]
+    velocity_source = velocities[xp.newaxis, :, :]
+    radial_source_velocity = xp.sum(difference * velocity_source, axis=2)
+    bracket = (
+        xp.float64(4.0) * potentials[:, xp.newaxis]
+        + potentials[xp.newaxis, :]
+        - speed_squared[:, xp.newaxis]
+        - xp.float64(2.0) * speed_squared[xp.newaxis, :]
+        + xp.float64(4.0) * xp.sum(velocity_body * velocity_source, axis=2)
+        + xp.float64(1.5)
+        * radial_source_velocity
+        * radial_source_velocity
+        / safe_distance_squared
+        + xp.float64(0.5)
+        * xp.sum(difference * newtonian[xp.newaxis, :, :], axis=2)
+    ) / c_squared
+    velocity_bracket = xp.sum(
+        difference
+        * (xp.float64(4.0) * velocity_body - xp.float64(3.0) * velocity_source),
+        axis=2,
+    )
+    pair_correction = gravitational_parameters[xp.newaxis, :, xp.newaxis] * (
+        difference * (bracket * inverse_distance_cubed)[:, :, xp.newaxis]
+        + (
+            velocity_bracket[:, :, xp.newaxis]
+            * (velocity_body - velocity_source)
+            * inverse_distance_cubed[:, :, xp.newaxis]
+            + xp.float64(3.5)
+            * newtonian[xp.newaxis, :, :]
+            * inverse_distance[:, :, xp.newaxis]
+        )
+        / c_squared
+    )
+    pair_correction = xp.where(
+        diagonal[:, :, xp.newaxis],
+        zero,
+        pair_correction,
+    )
+    return xp.sum(pair_correction, axis=1)
+
+
 def cannonball_srp_acceleration(
     *,
     backend: ArrayBackend,
@@ -490,10 +653,12 @@ __all__ = [
     "ForceDomainError",
     "ForceError",
     "ForceSingularityError",
+    "MUTUAL_EIH_1PN_MODEL_ID",
     "NEWTONIAN_POINT_MASS_MODEL_ID",
     "RESTRICTED_STATIC_CENTRAL_1PN_MODEL_ID",
     "SINGULARITY_POLICY_ERROR",
     "cannonball_srp_acceleration",
     "newtonian_point_mass_acceleration",
+    "mutual_eih_1pn_acceleration",
     "restricted_static_central_1pn_acceleration",
 ]

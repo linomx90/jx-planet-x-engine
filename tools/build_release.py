@@ -21,6 +21,10 @@ import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE_DATE_EPOCH = 1_700_000_000
+RELEASE_TOOL_VERSIONS = {
+    "packaging": "26.3",
+    "wheel": "0.48.0",
+}
 STAGE_FILES = (
     "pyproject.toml",
     "README.md",
@@ -71,6 +75,13 @@ def verify_backend(source_root: Path) -> tuple[str, str]:
             "setuptools backend mismatch: "
             f"required {required_backend}, running {actual_backend}"
         )
+    for distribution, required_version in RELEASE_TOOL_VERSIONS.items():
+        actual_version = importlib.metadata.version(distribution)
+        if actual_version != required_version:
+            raise ReleaseBuildError(
+                f"release tool mismatch for {distribution}: "
+                f"required {required_version}, running {actual_version}"
+            )
     return version, required_backend
 
 

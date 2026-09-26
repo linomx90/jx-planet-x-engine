@@ -1,0 +1,162 @@
+{
+  "claim_controls": {
+    "complete_cuda_gr15_integrator_claimed": false,
+    "de440_equivalence_claimed": false,
+    "exact_general_relativity_claimed": false,
+    "general_cpu_gpu_superiority_claimed": false,
+    "general_rebound_superiority_claimed": false,
+    "navigation_or_production_authorized": false
+  },
+  "cuda_eih_1pn": {
+    "body_count": {
+      "maximum": 32,
+      "minimum": 2
+    },
+    "complete_gr15_cuda_integrator": false,
+    "coordinate_scope": "BARYCENTRIC_INERTIAL_POINT_MASS_EIH_1PN_TDB_COMPATIBLE",
+    "cuda_source_sha256": "e5177ef1faf2dfaa17dfd87ae70353eeeb16974eda8a0ceee1e2f2035d0cf4bc",
+    "force_method_id": "JX_EIH1PN_CUDA_BATCH_V1",
+    "force_model_id": "jx.eih-1pn.mutual-point-mass-total-acceleration.cuda.v1",
+    "gr15_stage_count": 8,
+    "gr15_stage_method_id": "JX_GR15_EIH1PN_CUDA_STAGE_FORCE_V1",
+    "host_audit_per_call": true,
+    "implicit_host_device_input_transfer": false,
+    "kernel_launches_per_force_or_stage_sweep": 1,
+    "public_apis": [
+      "evaluate_eih_1pn_total_acceleration_cuda",
+      "evaluate_gr15_eih_1pn_stages_cuda"
+    ],
+    "scientific_claim_state": "SCREENING_ONLY",
+    "trajectory_operations_not_implemented_on_cuda": [
+      "prediction",
+      "corrector state update",
+      "convergence decision",
+      "error estimation",
+      "rejection controller",
+      "checkpointing",
+      "adaptive step control"
+    ]
+  },
+  "general_dynamics_registry": {
+    "generation": 18,
+    "historical_package_binding": "0.6.0rc3",
+    "modified_for_rc12": false,
+    "scientific_claim_state": "SCREENING_ONLY"
+  },
+  "inherited_gr15_eih_1pn_cpu": {
+    "force_core_sha256": "de4b173ff26aab1a5d012aca79b2687c81ce8ef97db290e48b00ca3d21f40746",
+    "integrator_core_sha256": "bef3a607c4c3674d342745570c68b462a6178e789089c84419d6f23dd810fad1",
+    "method_id": "JX_GR15_EIH1PN_V1",
+    "newtonian_gr15_v3_core_sha256": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41",
+    "source_changed_for_rc12": false
+  },
+  "package_version": "0.6.0rc12",
+  "performance_screen": {
+    "benchmark_report_file_sha256": "ebe5016631367bdd1dfa9922c7bf0e0013b1dff879c8b08052f5d86220c0bfdd",
+    "benchmark_report_path": "/tmp/jx_eih_1pn_cuda_scale_rc12.json",
+    "benchmark_semantic_sha256": "2903ce718feb19854d043d9d49c71c7aaba983d1efd7a9d8c75a852bf988d7d3",
+    "cuda_faster_at_11_bodies_4096_lanes": true,
+    "cuda_faster_at_32_bodies_4096_lanes": true,
+    "cuda_slower_at_11_bodies_8_stages_one_system": true,
+    "excluded_from_timing": [
+      "host-device input transfer",
+      "device-host acceleration transfer",
+      "input and output allocation",
+      "complete GR15 predictor/corrector/controller"
+    ],
+    "finite_host_only": true,
+    "observed_cpu_over_gpu_speedup": {
+      "11_bodies_8_lanes": 0.22725170605154812,
+      "11_bodies_4096_lanes": 5.2825706471576614,
+      "32_bodies_8_lanes": 1.2430633198143888,
+      "32_bodies_4096_lanes": 19.741307943291982
+    },
+    "timed_cuda_scope_includes_host_status_audit": true
+  },
+  "release_actions": {
+    "commit_performed": false,
+    "publication_performed": false,
+    "push_performed": false,
+    "tag_created": false
+  },
+  "reproducible_packaging": {
+    "artifacts": {
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc12.tar.gz",
+        "sha256": "7abc3bb3c301267a2eb8609da5529fe14e6b7a56184407fbd79afcf3d568b7a0",
+        "size_bytes": 755417
+      },
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc12-cp314-cp314-linux_x86_64.whl",
+        "sha256": "0ae73b214cc11a2adadd405d7b359a1512ff4213fd937a238988ba681f52afe3",
+        "size_bytes": 956659
+      }
+    },
+    "build_backend": "setuptools==78.1.1",
+    "fresh_sdist_cpu_cuda_smoke_passed": true,
+    "fresh_wheel_cpu_cuda_smoke_passed": true,
+    "installed_smoke_digest": "ae35b0dd2d44cfa828b951a507cd499f21a9c0dfce512893493985b39ec533bc",
+    "outer_reproducible_build_invocations": 2,
+    "total_clean_builds": 4,
+    "sdist_byte_identical": true,
+    "twine_check": {
+      "status": "PASS",
+      "version": "6.2.0"
+    },
+    "wheel_byte_identical": true
+  },
+  "runtime": {
+    "compute_capability": "12.0",
+    "cuda_driver_api_version": 13020,
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "device_memory_mib": 16311,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "nvidia_driver_version": "595.91.07",
+    "numpy_version": "2.3.5",
+    "python_version": "3.14.4"
+  },
+  "schema": "jxplanetx.release-manifest.v0.6.0rc12.v1",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "source_bindings": {
+    "benchmark_sha256": "85c830bedef557f2dba0ccb6baa0438bec5f109ea688cee033597bc490c743ef",
+    "cuda_module_sha256": "a5bfacb6070546a3e1ee9835b6a2b8878a6cf9d8b105788f44ec8e0724473cf0",
+    "cuda_test_sha256": "cc2ea549818adb8f175d139a56c0c5595a25ea44e103074ebe2865ed027a3b4e",
+    "package_init_sha256": "5119811797dc55823a5ee81ee311cc1a0bfc41da738c141b982a0b4a69c0d322",
+    "pyproject_sha256": "4547c5604a5eed68b7c101e22f60ce53f7b649b7b8fe0429118681bc2803e148",
+    "readme_sha256": "d5b5c065746c0a523e9cdd801e62a743e049423be2b2bc9aa11edb6691c864e5",
+    "test_matrix_manifest_sha256": "359d6395508046773358175c5331f60d22d6337454df3e3449029898a0fb014c"
+  },
+  "status": "LOCAL_RELEASE_CANDIDATE_READY_NOT_PUBLISHED",
+  "verification": {
+    "cuda_hardware_profile": {
+      "isolated_file_lanes": 3,
+      "status": "PASS",
+      "test_count": 28,
+      "zero_skips": true
+    },
+    "eih_cuda_acceptance": {
+      "failure_domains_tested": [
+        "INPUT_DOMAIN",
+        "NONFINITE",
+        "FORCE_SINGULARITY",
+        "WEAK_FIELD_DOMAIN"
+      ],
+      "gr15_eight_stage_native_c_parity": "PASS",
+      "lane_specific_gm_python_equation_parity": "PASS",
+      "maximum_32_body_native_c_parity": "PASS",
+      "native_c_parity": "PASS",
+      "repeated_launch_bitwise_determinism": "PASS",
+      "test_count": 9
+    },
+    "external_gr15_eih_profile": {
+      "isolated_file_lanes": 2,
+      "status": "PASS",
+      "test_count": 6
+    },
+    "full_live_matrix": {
+      "isolated_file_lanes": 219,
+      "status": "PASS"
+    }
+  }
+}

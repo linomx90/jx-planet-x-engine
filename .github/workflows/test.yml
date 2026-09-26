@@ -1,4 +1,4 @@
-name: release-candidate
+name: JX General Dynamics release candidate
 
 on:
   push:
@@ -45,27 +45,59 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12.13"
-      - name: Install the exact release build backend
-        run: python -m pip install setuptools==78.1.1
+      - name: Install the exact release build environment
+        run: python -m pip install setuptools==78.1.1 packaging==26.3 wheel==0.48.0
+      - name: Resolve the active package version
+        run: echo "JX_PACKAGE_VERSION=$(python -c 'import pathlib,tomllib; print(tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]["version"])')" >> "$GITHUB_ENV"
+      - name: Verify reproducible-release contracts
+        run: python -m unittest -v tests.test_reproducible_release
       - name: Build twice and require byte-identical artifacts
-        run: python tools/build_release.py --output-dir "$RUNNER_TEMP/jxplanetx-0.6.0rc10"
+        run: python tools/build_release.py --output-dir "$RUNNER_TEMP/jxplanetx-release"
       - name: Smoke-test independent wheel and source installations
         run: |
           python -m venv "$RUNNER_TEMP/wheel-smoke"
           "$RUNNER_TEMP/wheel-smoke/bin/pip" install numpy==2.3.5
-          "$RUNNER_TEMP/wheel-smoke/bin/pip" install --no-deps "$RUNNER_TEMP"/jxplanetx-0.6.0rc10/*.whl
+          "$RUNNER_TEMP/wheel-smoke/bin/pip" install --no-deps "$RUNNER_TEMP"/jxplanetx-release/*.whl
           python -m venv "$RUNNER_TEMP/sdist-smoke"
           "$RUNNER_TEMP/sdist-smoke/bin/pip" install setuptools==78.1.1 numpy==2.3.5
-          "$RUNNER_TEMP/sdist-smoke/bin/pip" install --no-build-isolation --no-deps "$RUNNER_TEMP"/jxplanetx-0.6.0rc10/*.tar.gz
+          "$RUNNER_TEMP/sdist-smoke/bin/pip" install --no-build-isolation --no-deps "$RUNNER_TEMP"/jxplanetx-release/*.tar.gz
           for runtime in "$RUNNER_TEMP/wheel-smoke/bin/python" "$RUNNER_TEMP/sdist-smoke/bin/python"; do
             "$runtime" - <<'PY'
           import jxplanetx
+          import os
+          from jxplanetx import (
+              _eih_1pn_cpu,
+              _gr15_cpu,
+              _gr15_eih_1pn_cpu,
+              _gr15_v3_cpu,
+              _wisdom_holman_cpu_v2,
+              _wisdom_holman_cpu_v3,
+              _wisdom_holman_cpu_v4,
+          )
+          from jxplanetx.engine import (
+              CodeStatus,
+              LUNAR_EPHEMERIS_V1_METHOD_ID,
+              get_capability,
+              integrate_lunar_ephemeris_v1,
+          )
           from jxplanetx.general_dynamics import registry_summary
           summary = registry_summary()
           from jxplanetx.gr15 import gr15_runtime_identity
-          assert jxplanetx.__version__ == "0.6.0rc10"
+          assert jxplanetx.__version__ == os.environ["JX_PACKAGE_VERSION"]
+          assert jxplanetx.__version__ == "0.6.0rc16"
+          assert _gr15_cpu.METHOD_ID == "JX_GAUSS_RADAU15_V2"
+          assert _gr15_v3_cpu.METHOD_ID == "JX_GAUSS_RADAU15_V3"
+          assert _eih_1pn_cpu.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert _gr15_eih_1pn_cpu.METHOD_ID == "JX_GR15_EIH1PN_V1"
+          assert _wisdom_holman_cpu_v2.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert _wisdom_holman_cpu_v3.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert _wisdom_holman_cpu_v4.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
           assert gr15_runtime_identity()["method_id"] == "JX_GAUSS_RADAU15_V3"
           assert gr15_runtime_identity()["scientific_claim_state"] == "SCREENING_ONLY"
+          lunar = get_capability(LUNAR_EPHEMERIS_V1_METHOD_ID)
+          assert lunar.code_status is CodeStatus.IMPLEMENTED
+          assert lunar.execution_available is True
+          assert callable(integrate_lunar_ephemeris_v1)
           assert summary["version"] == "0.6.0rc3"
           assert summary["scientific_claim_state"] == "SCREENING_ONLY"
           assert summary["production_ready"] is False
@@ -90,6 +122,9 @@ jobs:
         run: |
           python -m unittest -v \
             tests.test_gr15 \
+            tests.test_gr15_eih_1pn \
+            tests.test_gr15_eih_1pn_batch \
+            tests.test_gr15_eih_1pn_verified \
             tests.test_jx_gr15_ias15 \
             tests.test_jx_gr15_v3_candidate \
             tests.test_jx_gr15_v3_adversarial \

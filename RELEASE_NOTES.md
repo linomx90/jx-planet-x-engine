@@ -1,3 +1,317 @@
+# JX General Dynamics 0.6.0rc16
+
+Release date: 24 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc16 turns the retained coupled lunar equations into a supported public engine
+component. `integrate_lunar_ephemeris_v1` advances the resolved eleven-body
+Solar-System roster, lunar mantle quaternion and angular velocity, and lunar
+fluid-core angular velocity through one fixed-step RKF78 checkpoint contract.
+Every stage evaluates fully mutual Newtonian gravity, mutual EIH 1PN, reacting
+Sun--Moon and Earth--Moon static lunar quadrupoles, reacting fixed-axis Earth
+J2, and mantle/core pressure plus viscous coupling. Inputs and outputs are
+owned, read-only, provenance-bound, and protected by deterministic ledgers and
+content hashes.
+
+The rc16 long-arc decision is governed by the outcome-blind 90/365-day protocol
+whose semantic SHA-256 is
+`27b1d225d4773b96763407a9acccae5a99bc57a3d7f7b6fbc72545a182ea73b2`.
+It uses the untouched day-1200 start, 2,700-second fixed steps, exact endpoint
+checkpoints, and a matched no-EIH control. The result is recorded separately
+because retained DE440 data and full research evidence are not distribution
+inputs.
+
+Every frozen long-arc gate passed. At 365 days, the public candidate's
+Earth--Moon position error was 0.061568 km versus 3.729707 km for the no-EIH
+control; Sun--Earth error was 0.029261 km versus 56.094548 km. The aggregate
+candidate/control RMS ratio was 0.012199 and the worst individual ratio was
+0.018686. Exact accounting recorded 11,680 accepted steps and 151,840 force
+evaluations, with one binary64 epsilon of maximum quaternion norm error before
+projection.
+
+Two independent release-builder invocations, each performing two clean
+package-only builds, produced byte-identical artifacts. The CPython 3.14 Linux
+wheel SHA-256 is
+`f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f`;
+the source archive SHA-256 is
+`8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0`.
+Fresh installations of both artifacts imported rc16 and exposed the lunar
+ephemeris capability as `IMPLEMENTED`. All 17 isolated engine lanes and all 16
+reproducible-packaging tests passed. Twine 6.2.0 accepted both metadata
+records, the five-lane REBOUND 5.1.1 profile passed, and the 22-test direct
+Challenger/REBOUND leapfrog suite passed after bringing its exact current-
+source roster forward to include the post-rc15 engine modules.
+
+This component remains NumPy/CPU screening code. It omits delayed tides,
+time-variable lunar deformation, lunar degree three and higher, terrestrial
+tesserals and higher zonals, minor bodies and planetary satellites, observation
+reduction, and parameter fitting. Passing a DE440 screen cannot establish an
+independent ephemeris, navigation fitness, raw-LLR validity, or general
+superiority over REBOUND.
+
+---
+
+# JX General Dynamics 0.6.0rc15
+
+Release date: 24 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc15 adds `integrate_verified_gr15_eih_1pn`, the first JX propagation boundary
+that makes operational state conventions and per-request numerical
+confirmation mandatory. Each call declares J2000, TDB seconds past J2000,
+system-barycenter origin, kilometre/second units, unique body identities, and
+SHA-256 provenance identifiers. A distinct, no-looser `GR15Spec` reruns the
+complete trajectory; disagreement at any checkpoint beyond the declared
+position or velocity gates fails closed.
+
+The prospective locked portfolio passed forward and backward finite-mass
+binaries, an eccentric ten-period binary, and the DE440-derived eleven-body
+state propagated for ten Julian years. Every non-timing field repeated exactly
+and every primary result was bit-for-bit identical to the pre-existing public
+CPU result. On the ten-year case, the primary and confirmation differed by at
+most 0.002441 km and 6.913e-9 km/s, within the locked 1 km and 1e-7 km/s gates.
+
+The existing independent REBOUND 5.1.1 IAS15/REBOUNDx 5.1.0 suite also passes,
+including the 100-year physical Sun--Earth same-equation comparison. The
+10/25/50/100-year DE440 attribution tests pass unchanged. The native GR15 and
+EIH force sources are byte-for-byte unchanged from rc14.
+
+Four clean builds across two release-builder invocations produced
+byte-identical artifacts. The CPython 3.14 Linux wheel SHA-256 is
+`7f00b4636ef07a20b46dc12c96a5ea4971743bc47909e18d4e5580bcbe5401ae`;
+the source archive SHA-256 is
+`743ea01f32a5c5d320444c3db14ced2b590845557fdaa7262de8033f3336c407`.
+Fresh wheel and source-archive installations passed the same verified-
+execution smoke digest. Twine 6.2.0 accepted both metadata records, and all
+223 isolated live lanes passed, including five CUDA-hardware lanes containing
+37 tests with zero skips.
+
+Confirmation deliberately uses the same packaged implementation, so it is a
+numerical consistency mechanism rather than an independent reference. Rc15
+remains a screening-only mutual point-mass EIH 1PN solver. It does not
+authorize navigation, production ephemerides, exact general relativity, DE440
+equivalence, or general superiority over REBOUND.
+
+---
+
+# JX General Dynamics 0.6.0rc14
+
+Release date: 23 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc14 promotes the measured CPU/GPU routing work into a supported NumPy batch
+component. `integrate_gr15_eih_1pn_cpu_batch` advances independent systems in
+native threads; the compiled GR15-EIH1PN call releases the Python GIL for its
+complete integration, avoiding subprocess startup and trajectory transport.
+Shared and per-system gravitational parameters, forward and backward
+integration, exact checkpoint ordering, controller audits, and named
+fail-closed system attribution are supported.
+
+`integrate_gr15_eih_1pn_batch` adds a backend-neutral NumPy result. Automatic
+routing is intentionally conservative: the bundled profile applies only to
+the measured AMD Ryzen 5 5500, NVIDIA GeForce RTX 5060 Ti, eleven-body,
+ten-Julian-year workload with up to eight CPU workers. It selects CPU below
+128 independent systems and CUDA from 128; values above the largest measured
+point are marked as extrapolated. Any unmatched CPU, GPU, duration, body
+count, or worker policy stays on CPU. A caller can explicitly force CPU or
+CUDA, and an explicit CUDA request never silently falls back.
+
+The locked crossover measured eight-worker JX CPU 2.17--2.30x faster than
+eight-worker REBOUND IAS15 plus REBOUNDx `gr_full` at all tested powers of two
+from one through 128 systems. CUDA first beat REBOUND at 32 systems and beat
+JX CPU at 128 systems. These are one-machine, accuracy-gated engineering
+observations, not portable or general performance claims.
+
+The final supported NumPy API was then retimed directly at 64, 96, and 128
+systems. CPU won at 64 by 17.5%; CUDA won at 96 by 3.8% and at 128 by 9.9%.
+The release keeps the conservative 128-system automatic cutoff rather than
+routing on the smaller 96-system margin. Automatic output matched the selected
+forced backend bit-for-bit, and every accuracy and agreement gate passed.
+
+Four clean builds across two release-builder invocations produced
+byte-identical artifacts. The CPython 3.14 Linux wheel SHA-256 is
+`d77400cb7901dde950ba73d9ea3cc5eddaa5a9d31255b3ae92c1b3f00ca6b3f8`;
+the source archive SHA-256 is
+`032a1185dd683012c2f9950fca1b4b1174c579596048d84dad6bab2258c5eced`.
+Fresh artifact installations imported rc14 from their isolated install
+directories and passed the same CPU/CUDA smoke digest. The smoke reused the
+project's exact CuPy 14.2.0 and CUDA-toolkit dependency set; it was not an
+independent dependency installation. Twine 6.2.0 accepted both metadata
+records. All 222 isolated live lanes passed, including five CUDA-hardware
+lanes containing 37 tests with zero skips.
+
+Rc14 remains a screening-only mutual point-mass EIH 1PN solver. It is not exact
+general relativity, a production ephemeris, navigation software, a DE440
+replacement, or evidence of general REBOUND superiority. No commit, push,
+tag, or publication is authorized by these results.
+
+---
+
+# JX General Dynamics 0.6.0rc13
+
+Release date: 23 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc13 promotes the complete batched CUDA GR15-EIH1PN trajectory path. The new
+`integrate_gr15_eih_1pn_cuda_batch` public interface accepts caller-owned CuPy
+float64 states for independent 2--32-body systems and shared or system-specific
+positive gravitational parameters. One persistent CUDA block per system runs
+the predictor, eight-stage corrector, convergence gate, terminal-force rule,
+error estimate, transactional rejection, exact checkpoint schedule, and
+adaptive step controller. It performs no implicit state transfer.
+
+Trajectory arrays stay on-device. Named status, checkpoint and controller
+accounting, numerical metrics, and weak-field diagnostics cross to the host for
+a mandatory audit. The CPU GR15-EIH1PN component remains the reference and the
+appropriate route for individual small systems.
+
+Eight focused tests pass on the project-owned NVIDIA GeForce RTX 5060 Ti with
+CUDA runtime/driver 13.2 and CuPy 14.2.0. They bind CUDA source SHA-256
+`2097f0601910739cd6b485e20b32e942f2fca8ae9c69f7265fb1741f94665922`,
+require exact binary checkpoint and accounting parity, cover four-system
+per-system-GM parity, backward integration, bitwise CUDA replay, the 32-body
+boundary, input ownership, and named input, singularity, weak-field,
+step-limit, and rejection-limit failures.
+
+In the supported 11-body trajectory benchmark on that host, one system was
+about 10.2x slower on CUDA and eight systems remained CPU-faster. CUDA measured
+3.46x the sequential CPU throughput at 64 systems and 6.19x at 512 systems.
+Across the 512-system case the maximum CPU/CUDA checkpoint differences were
+3.56e-15 km and 1.18e-17 km/s; seven systems took a different but valid
+floating-point controller path at a convergence boundary. The CPU comparison
+is sequential, device inputs are preloaded, and the CUDA timing includes result
+construction plus the host audit.
+
+Four clean builds across two release-builder invocations produced
+byte-identical artifacts. The CPython 3.14 Linux wheel SHA-256 is
+`45abc2fa6d573081c05419a5055ac87fd555996b45646f437bd342096a26ef7a`;
+the source archive SHA-256 is
+`9285a3ab7136ba76ff41d0e0b001462e626cb6e6499fac7237845a4996a1b555`.
+Fresh installations of both passed the same CPU/CUDA public-API smoke digest,
+Twine 6.2.0 accepted both metadata records, and all 220 isolated live CPU,
+optional-CUDA, and hardware lanes passed.
+
+Rc13 remains a screening-only mutual point-mass EIH 1PN solver. It is not exact
+general relativity, a production ephemeris, navigation software, a DE440
+replacement, or evidence of portable CPU/GPU or general REBOUND superiority.
+No commit, push, tag, or publication is authorized by these results.
+
+---
+
+# JX General Dynamics 0.6.0rc12
+
+Release date: 23 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc12 adds the first supported CUDA component for the exact mutual point-mass
+EIH 1PN force equation used by GR15-EIH1PN. The public interface accepts only
+caller-owned CuPy float64 device arrays, supports 2--32 bodies and shared or
+lane-specific positive gravitational parameters, performs no implicit input
+transfer, and returns device-resident total Newtonian-plus-EIH acceleration.
+Every call audits named per-lane status and weak-field diagnostics on the host.
+
+The companion `evaluate_gr15_eih_1pn_stages_cuda` interface evaluates all
+eight simultaneous force states from one GR15 corrector iteration in one CUDA
+kernel launch. It supports multiple independent systems and system-specific
+masses. It does not perform prediction, corrector state updates, convergence,
+error estimation, rejection, checkpointing, or adaptive step control; the
+complete supported GR15 trajectory remains CPU-only.
+
+Nine acceptance tests pass on the project-owned NVIDIA GeForce RTX 5060 Ti
+with CUDA runtime/driver 13.2 and CuPy 14.2.0. They bind CUDA source SHA-256
+`e5177ef1faf2dfaa17dfd87ae70353eeeb16974eda8a0ceee1e2f2035d0cf4bc`,
+compare against both the native C core and independent Python equation, cover
+lane-specific masses and the 32-body boundary, require bitwise repeated-launch
+determinism, and verify four named failure domains.
+
+The finite-host crossover screen includes the public CUDA call's fail-closed
+host audit but excludes transfers and allocation. At 4,096 eleven-body lanes,
+CUDA measured 5.28x the throughput of the current native CPU wrapper; at 4,096
+thirty-two-body lanes it measured 19.74x. CUDA was slower for one eight-stage
+eleven-body system. This is component-level engineering evidence from one
+machine, not a complete-GR15, portable, production, or general superiority
+claim.
+
+Four clean builds across two independent release-builder invocations produced
+byte-identical artifacts. The CPython 3.14 Linux wheel SHA-256 is
+`0ae73b214cc11a2adadd405d7b359a1512ff4213fd937a238988ba681f52afe3`;
+the source archive SHA-256 is
+`7abc3bb3c301267a2eb8609da5529fe14e6b7a56184407fbd79afcf3d568b7a0`.
+Fresh installations of both artifacts passed the same native-CPU/CUDA public
+API smoke digest. The 219-lane live matrix, two-lane external EIH profile, and
+three-lane/28-test hardware profile all pass. Twine 6.2.0 accepts both artifact
+metadata records without warnings.
+
+Rc12 remains screening-only EIH 1PN. It is not exact general relativity, a
+production ephemeris, navigation software, a DE440 replacement, or evidence of
+general superiority over REBOUND. No commit, push, tag, or publication is
+authorized by these results.
+
+---
+
+# JX General Dynamics 0.6.0rc11
+
+Release date: 23 September 2026
+
+Release stage: release candidate
+
+Scientific claim state: `SCREENING_ONLY`
+
+Rc11 adds the first packaged relativistic GR15 component:
+`integrate_gr15_eih_1pn`. It advances 2--32 fully mutual finite-mass point
+bodies with Newtonian gravity plus the Einstein--Infeld--Hoffmann first
+post-Newtonian correction, reevaluated at every GR15 node and corrector
+iteration. The rc10 Newtonian GR15 V3 source remains byte-for-byte unchanged.
+
+The locked scientific matrix passes equation-level native/Python parity,
+Newtonian-limit identity, analytic periapsis advance, weak-field failures,
+deterministic replay, permutation, convergence, reversal, REBOUNDx `gr_full`
+asymptotic comparison, and same-model REBOUND IAS15 parity. A physical
+Sun--Earth 100-year comparison differed from IAS15 by about 31 metres and
+6.35e-6 m/s at the endpoint, inside the locked 10 km and 0.01 m/s limits.
+
+Against DE440s at 10, 25, 50, and 100 Julian years, the EIH model's aggregate
+heliocentric position residual was 0.0882, 0.1282, 0.0987, and 0.1545 times
+the Newtonian control. At 100 years the ratio of worst-body residuals was
+0.2151, below the locked 0.25 ceiling. This is attribution evidence, not a
+claim that the reduced model reproduces DE440.
+
+GR15-EIH1PN is CPU-only and omits extended-body figures, tides, spins, frame
+dragging, collisions, signal propagation, and observation reduction. Rc11 is
+not exact general relativity, a production ephemeris, a navigation product,
+or a general REBOUND superiority claim.
+
+Two clean builds produced byte-identical local artifacts. The CPython 3.14
+Linux wheel SHA-256 is
+`7ee1a6ba36d448c71f28238f7562e2889c104b93a90b5a6a5abb4d388a7d66e9`;
+the source archive SHA-256 is
+`d5ec3e7811291c68df9bf2814965eddf99bf180f6c7322df62ee16f79a2f5b0b`.
+Fresh installations from both artifacts passed the public GR15-EIH1PN API
+smoke. These are local candidate artifacts and have not been published.
+
+## Independent ownership and license
+
+This release retains the proprietary, all-rights-reserved license held by
+Lino Avila. Earlier public releases and third-party materials retain their
+original notices. AI systems are development tools, not authors or owners.
+
+---
+
 # JX General Dynamics 0.6.0rc10
 
 Release date: 23 September 2026

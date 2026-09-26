@@ -19,8 +19,10 @@ from .contracts import (
     ContractError,
     ParameterMetadata,
 )
+from .coupled_lunar_contracts import COUPLED_LUNAR_RKF78_METHOD_ID
 from .encounter_contracts import ADAPTIVE_ENCOUNTER_SEGMENT_METHOD_ID
 from .hybrid_contracts import HYBRID_WISDOM_HOLMAN_RKF78_METHOD_ID
+from .lunar_ephemeris_contracts import LUNAR_EPHEMERIS_V1_METHOD_ID
 from .trajectory_contracts import ADAPTIVE_RKF78_METHOD_ID
 from .symplectic_contracts import FIXED_STEP_KDK_METHOD_ID
 from .wisdom_holman_contracts import FIXED_STEP_WISDOM_HOLMAN_METHOD_ID
@@ -233,8 +235,11 @@ _ROWS = (
     CapabilitySpec("force.newtonian.softened_point_mass", "GRAVITY", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.BASE, False, True, POSITION, (_p("source_ids", "identifier_tuple", "1"), _p("target_ids", "identifier_tuple", "1"), _p("gravitational_parameters", "array", "L^3/T^2"), _p("softening_kernel", "string", "1"), _p("softening_lengths", "array", "L"))),
     CapabilitySpec("force.newtonian.barnes_hut_tree", "GRAVITY", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.BASE, False, True, POSITION, (_p("body_ids", "identifier_tuple", "1"), _p("gravitational_parameters", "array", "L^3/T^2"), _p("opening_angle", "positive_scalar", "1"), _p("opening_criterion", "string", "1"), _p("leaf_capacity", "integer", "1"), _p("multipole_order", "integer", "1"), _p("singularity_policy", "string", "1"))),
     CapabilitySpec("force.harmonics.solar_j2_j4", "GRAVITY_HARMONICS", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, False, False, POSITION, (_p("central_source_id", "identifier", "1"), _p("target_ids", "identifier_tuple", "1"), _p("reference_radius", "positive_scalar", "L"), _p("j2", "scalar", "1"), _p("j4", "scalar", "1"), _p("pole_vector", "vector3", "1"), _p("orientation_frame", "string", "1"))),
+    CapabilitySpec("solar-system.force.earth-zonal-j2-j5-axisymmetric-pair", "GRAVITY_HARMONICS", CodeStatus.IMPLEMENTED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, False, False, GENERAL, (_p("source_id", "identifier", "1"), _p("target_id", "identifier", "1"), _p("unit_system_id", "identifier", "1"), _p("reference_radius", "positive_scalar", "STATE_LENGTH_UNIT"), _p("zonal_coefficients", "record", "1"), _p("earth_pole_model", "record", "1")), dependencies=("force.newtonian.point_mass",), restrictions=("NumPy CPU only", "metre-second J2000 state", "one Earth-target pair", "unnormalized J2 through J5", "correction only")),
+    CapabilitySpec("solar-system.force.lunar-static-degree2-principal-axis-pair", "GRAVITY_HARMONICS", CodeStatus.IMPLEMENTED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, False, False, GENERAL, (_p("source_id", "identifier", "1"), _p("target_id", "identifier", "1"), _p("unit_system_id", "identifier", "1"), _p("reference_radius", "positive_scalar", "STATE_LENGTH_UNIT"), _p("degree2_coefficients", "record", "1"), _p("lunar_orientation_model", "record", "1")), dependencies=("force.newtonian.point_mass",), restrictions=("NumPy CPU only", "metre-second J2000 state", "one Moon-target pair", "static unnormalized degree two", "correction only")),
+    CapabilitySpec("solar-system.force.lunar-static-degree3-principal-axis-pair", "GRAVITY_HARMONICS", CodeStatus.IMPLEMENTED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, False, False, GENERAL, (_p("source_id", "identifier", "1"), _p("target_id", "identifier", "1"), _p("unit_system_id", "identifier", "1"), _p("reference_radius", "positive_scalar", "STATE_LENGTH_UNIT"), _p("degree3_coefficients", "record", "1"), _p("lunar_orientation_model", "record", "1")), dependencies=("force.newtonian.point_mass",), restrictions=("NumPy CPU only", "metre-second J2000 state", "one Moon-target pair", "static unnormalized degree three", "correction only")),
     CapabilitySpec("force.harmonics.planetary", "GRAVITY_HARMONICS", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, False, False, POSITION, (_p("source_ids", "identifier_tuple", "1"), _p("target_ids", "identifier_tuple", "1"), _p("reference_radii", "array", "L"), _p("coefficient_sets", "record", "1"), _p("orientation_model", "record", "1"), _p("maximum_degree", "integer", "1"), _p("maximum_order", "integer", "1"))),
-    CapabilitySpec("force.relativity.eih_1pn_gr", "RELATIVITY", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, True, True, IMPLICIT, (_p("body_ids", "identifier_tuple", "1"), _p("speed_of_light", "positive_scalar", "L/T"), _p("gravitational_parameters", "array", "L^3/T^2"), _p("maximum_compactness", "positive_scalar", "1"), _p("maximum_speed_fraction_squared", "positive_scalar", "1")), dependencies=("force.newtonian.point_mass",), mutually_exclusive_with=("relativity.solar_schwarzschild_test_particle_1pn", "force.relativity.restricted_ppn_beta_gamma")),
+    CapabilitySpec("force.relativity.eih_1pn_gr", "RELATIVITY", CodeStatus.IMPLEMENTED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, True, True, IMPLICIT, (_p("body_ids", "identifier_tuple", "1"), _p("unit_system_id", "identifier", "1"), _p("speed_of_light", "positive_scalar", "STATE_LENGTH_UNIT/STATE_TIME_UNIT"), _p("maximum_compactness", "positive_scalar", "1"), _p("maximum_speed_fraction_squared", "positive_scalar", "1")), dependencies=("force.newtonian.point_mass",), mutually_exclusive_with=("relativity.solar_schwarzschild_test_particle_1pn", "force.relativity.restricted_ppn_beta_gamma"), restrictions=("TDB barycentric inertial state", "all state bodies are massive mutual sources and targets", "correction only", "beta=gamma=1")),
     CapabilitySpec("force.relativity.restricted_ppn_beta_gamma", "RELATIVITY", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, True, False, IMPLICIT, (_p("central_source_id", "identifier", "1"), _p("target_ids", "identifier_tuple", "1"), _p("speed_of_light", "positive_scalar", "L/T"), _p("beta", "scalar", "1"), _p("gamma", "scalar", "1"), _p("maximum_compactness", "positive_scalar", "1"), _p("maximum_speed_fraction_squared", "positive_scalar", "1")), dependencies=("force.newtonian.point_mass",), mutually_exclusive_with=("relativity.solar_schwarzschild_test_particle_1pn", "force.relativity.eih_1pn_gr")),
     CapabilitySpec("force.relativity.solar_lense_thirring", "RELATIVITY", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, True, False, IMPLICIT, (_p("central_source_id", "identifier", "1"), _p("target_ids", "identifier_tuple", "1"), _p("speed_of_light", "positive_scalar", "L/T"), _p("spin_angular_momentum", "vector3", "M*L^2/T"), _p("orientation_frame", "string", "1")), dependencies=("force.newtonian.point_mass",)),
     CapabilitySpec("force.tides.constant_time_lag", "TIDES", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.CORRECTION, True, True, IMPLICIT, (_p("interacting_pairs", "record", "1"), _p("love_numbers", "array", "1"), _p("time_lags", "array", "T"), _p("radii", "array", "L"), _p("spin_states", "array", "1/T"), _p("dissipation_convention", "string", "1"))),
@@ -263,6 +268,61 @@ _ROWS = (
     CapabilitySpec("determinism.same_runtime_device", "DETERMINISM", CodeStatus.IMPLEMENTED, Maturity.UNQUALIFIED, AccelerationSemantics.SERVICE, False, False, SERVICE, (_p("runtime_fingerprint", "record", "1"), _p("device_fingerprint", "record", "1"), _p("tile_size", "integer", "1"), _p("fast_math", "boolean", "1")), restrictions=("does not claim cross-device bitwise identity",)),
     CapabilitySpec("determinism.cross_device_bitwise", "DETERMINISM", CodeStatus.DECLARED, Maturity.UNQUALIFIED, AccelerationSemantics.SERVICE, False, False, SERVICE, (_p("backend_matrix", "record", "1"), _p("reduction_policy", "record", "1"), _p("compiler_policy", "record", "1"))),
     CapabilitySpec(ADAPTIVE_RKF78_METHOD_ID, "INTEGRATOR", CodeStatus.IMPLEMENTED, Maturity.UNQUALIFIED, AccelerationSemantics.SERVICE, True, True, GENERAL, (_p("checkpoint_epochs", "record", "STATE_TIME_UNIT"), _p("initial_step", "positive_scalar", "STATE_TIME_UNIT"), _p("minimum_step", "positive_scalar", "STATE_TIME_UNIT"), _p("maximum_step", "positive_scalar", "STATE_TIME_UNIT"), _p("position_atol", "array", "STATE_LENGTH_UNIT"), _p("position_rtol", "positive_scalar", "1"), _p("velocity_atol", "array", "STATE_LENGTH_UNIT/STATE_TIME_UNIT"), _p("velocity_rtol", "positive_scalar", "1"), _p("maximum_steps", "integer", "1"), _p("maximum_rejections", "integer", "1"), _p("safety_factor", "positive_scalar", "1"), _p("minimum_scale_factor", "positive_scalar", "1"), _p("maximum_scale_factor", "positive_scalar", "1")), restrictions=("explicit nonstiff Fehlberg RK7(8), 13 stages", "accept hatted order-8 solution; embedded ordinary order-7 defect", "supports velocity-dependent force plans", "normalized maximum per-component error", "exact checkpoint endpoints by step clipping; no interpolation", "float64 only")),
+    CapabilitySpec(
+        COUPLED_LUNAR_RKF78_METHOD_ID,
+        "INTEGRATOR",
+        CodeStatus.IMPLEMENTED,
+        Maturity.UNQUALIFIED,
+        AccelerationSemantics.SERVICE,
+        True,
+        True,
+        GENERAL,
+        (
+            _p("initial_state", "record", "COUPLED_STATE_UNITS"),
+            _p("parameters", "record", "1"),
+            _p("integration_spec", "record", "1"),
+            _p("prehistory_provider", "callable", "COUPLED_STATE_UNITS"),
+        ),
+        dependencies=("backend.numpy.cpu", "precision.float64"),
+        restrictions=(
+            "simultaneous Sun-Earth-Moon translation, lunar mantle attitude and angular velocity, delayed mantle deformation, and fluid-core angular velocity",
+            "fixed-step 13-stage RKF78 delay lattice with caller-supplied exact pre-start history",
+            "TDB barycentric-inertial J2000 state in kilometres and seconds with exact SUN, EARTH, MOON body order",
+            "retained native coupled physics bundle; not yet dispatched through force ABI v1",
+            "no geodetic transport, dense output, event location, collision response, continuation archive, CUDA, production ephemeris, or general superiority claim",
+            "all results remain SCREENING_ONLY unqualified model output",
+        ),
+    ),
+    CapabilitySpec(
+        LUNAR_EPHEMERIS_V1_METHOD_ID,
+        "INTEGRATOR",
+        CodeStatus.IMPLEMENTED,
+        Maturity.UNQUALIFIED,
+        AccelerationSemantics.SERVICE,
+        True,
+        True,
+        GENERAL,
+        (
+            _p("initial_state", "record", "COUPLED_STATE_UNITS"),
+            _p("parameters", "record", "1"),
+            _p("integration_spec", "record", "1"),
+        ),
+        dependencies=(
+            "backend.numpy.cpu",
+            "precision.float64",
+            "force.relativity.eih_1pn_gr",
+        ),
+        restrictions=(
+            "fixed resolved-eleven body roster in exact order",
+            "simultaneous barycentric translation, lunar mantle attitude and rate, and fluid-core rate",
+            "mutual Newtonian plus EIH 1PN, reacting Sun/Earth lunar quadrupole, fixed-axis reacting Earth J2, and mantle-core coupling",
+            "fixed-step 13-stage RKF78 with exact checkpoint clipping",
+            "kilometre-second TDB barycentric-inertial J2000 state",
+            "NumPy CPU only; no continuation archive, CUDA, dense output, event location, or collision response",
+            "omits time-variable deformation, delayed tides, Earth J3-J5, lunar degree three and higher, minor bodies, observation reduction, and parameter fitting",
+            "all results remain SCREENING_ONLY and are not a production ephemeris",
+        ),
+    ),
     CapabilitySpec(
         ADAPTIVE_ENCOUNTER_SEGMENT_METHOD_ID,
         "INTEGRATOR",

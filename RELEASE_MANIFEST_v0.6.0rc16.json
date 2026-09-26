@@ -1,0 +1,134 @@
+{
+  "schema": "jxplanetx.release-manifest.v16",
+  "package_version": "0.6.0rc16",
+  "release_date": "2026-09-24",
+  "status": "LOCAL_RELEASE_CANDIDATE_PACKAGED_NOT_PUBLISHED",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "release_scope": {
+    "public_lunar_ephemeris_v1_added": true,
+    "general_dynamics_registry_generation": 18,
+    "general_dynamics_registry_historical_binding_preserved": true,
+    "production_or_scientific_qualification_claimed": false,
+    "general_rebound_superiority_claimed": false
+  },
+  "source_bindings": {
+    "package_init_sha256": "1063f1915ca864b07cf1f9b15d15542eb9f6dc67f0b192b1372c42e736e02a63",
+    "pyproject_sha256": "d8193e41f5c72dd7cd8b7af60ca087a590341762bd5f283f2306d933a062ab9d",
+    "readme_sha256": "23f9c03ebb1b7b3d7ba537c672bc6b3eee9d9f5853b39fd9ec01080fd9f9b334",
+    "lunar_ephemeris_sha256": "efede8495675fc11a264a1b9e7ff90201892318e7e26bc7223a1a7834332f202",
+    "lunar_ephemeris_contracts_sha256": "ab03eff40ca0a0ee89d5803d74282a30a0a05b706b16369ba4d1a3a7b0b840ed",
+    "engine_api_sha256": "54bc4e3ca7224b225b3885deaaf8f86a104467376a3a8d7ac13b3c8e7cc830eb",
+    "engine_catalog_sha256": "91ef9d6a1691ecded6b98400701a7dd250fafa85d95db88afc1cdd4e1312a7a0",
+    "holdout_runner_sha256": "7f058dd7bc6a28db5b23a6be03a9f2521df190090fbb446afbbe89984926ff23",
+    "holdout_test_sha256": "b8a6cfb918c671830149c13ef2fdd97c6799322dff8e6fa736491df331c760e5",
+    "lunar_ephemeris_test_sha256": "a07cad3d4e44634df65b313fee7fed0340d611f9f30485a8f5e0e2d7d65b6cf0",
+    "reproducible_release_test_sha256": "b1151a713e54ab3a2cbd694a834a330af69b990385d09948c532171873b03101",
+    "test_matrix_manifest_sha256": "22c5b1202d8bf563c248eb8bd852a9f9f45c1ccc4cddca930ce03eee19eb4643"
+  },
+  "public_lunar_ephemeris_v1": {
+    "model_id": "solar-system.screening.resolved-eleven-eih1pn-coupled-lunar.v1",
+    "method_id": "jx.integrator.rkf78.fixed.coupled-lunar.v1",
+    "state_abi_version": "jx.lunar-ephemeris-state.v1",
+    "backend": "numpy-cpu-float64",
+    "body_count": 11,
+    "fixed_step_seconds": 2700.0,
+    "nominal_holdout_days": [
+      90,
+      365
+    ],
+    "protocol_semantic_sha256": "27b1d225d4773b96763407a9acccae5a99bc57a3d7f7b6fbc72545a182ea73b2",
+    "preregistration_file_sha256": "aafc027092d39bd442617502d276c3354d6e8502ecb4c8738746fd059328588a",
+    "holdout_report_file_sha256": "acebb17381812e3b73c0d1f3f77ba01c946f1a963b2cf59b7bdfa46ef91665bb",
+    "holdout_report_semantic_sha256": "39a2c4bb8e0b752710d8e3465d1b79b3c3feb0e981ba77520f89530934b6d279",
+    "holdout_decision": "PASS_SCREENING_ONLY",
+    "aggregate_normalized_rms_candidate_to_control": 0.012198720845768172,
+    "maximum_individual_candidate_to_control_ratio": 0.018685875377906735,
+    "earth_moon_position_error_km_at_365_days": 0.061567504875274986,
+    "sun_earth_position_error_km_at_365_days": 0.029261499021940095,
+    "accepted_steps": 11680,
+    "force_evaluations": 151840,
+    "accepted_step_ledger_sha256": "3b440e03396fa41bc3274b9373ce84f1895f34e843cba89f272ced71698f1005",
+    "result_content_sha256": "a3d00e079ddf3f507cf6fa7cbba50549a097799f9cc7ab6b45615a03a938a25f",
+    "independent_physical_validation": false,
+    "raw_llr_validated": false,
+    "production_ephemeris_qualified": false
+  },
+  "verification": {
+    "engine_profile": {
+      "isolated_file_lanes": 17,
+      "status": "PASS"
+    },
+    "test_profile_manifest": {
+      "test_files": 279,
+      "profiles": 14,
+      "exact_nonoverlapping_coverage": true
+    },
+    "public_component_focused_tests": {
+      "status": "PASS",
+      "direct_retained_equation_parity": true,
+      "deterministic_digest_replay": true,
+      "claim_controls_fail_closed": true
+    },
+    "historical_rc15_test": {
+      "obsolete_current_tree_comparison_removed": true,
+      "exact_recorded_rc15_bindings_preserved": true
+    },
+    "live_current_profile": {
+      "isolated_file_lanes": 200,
+      "initial_passed_lanes": 199,
+      "initial_failure": "CURRENT_ENGINE_SOURCE_ROSTER_OMITTED_POST_RC15_MODULES",
+      "roster_repaired": true,
+      "failed_lane_passed_on_rerun": true
+    },
+    "challenger_and_rebound_leapfrog_direct": {
+      "tests": 22,
+      "status": "PASS"
+    },
+    "rebound_5_1_1_profile": {
+      "isolated_file_lanes": 5,
+      "status": "PASS"
+    },
+    "package_metadata": {
+      "validator": "twine==6.2.0",
+      "wheel_status": "PASS",
+      "sdist_status": "PASS"
+    }
+  },
+  "reproducible_packaging": {
+    "build_backend": "setuptools==78.1.1",
+    "packaging_version": "26.3",
+    "wheel_version": "0.48.0",
+    "release_builder_invocations": 2,
+    "clean_builds_per_invocation": 2,
+    "wheel": {
+      "filename": "jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl",
+      "size_bytes": 1017647,
+      "sha256": "f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f"
+    },
+    "sdist": {
+      "filename": "jxplanetx-0.6.0rc16.tar.gz",
+      "size_bytes": 811084,
+      "sha256": "8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0"
+    },
+    "wheel_byte_identical": true,
+    "sdist_byte_identical": true,
+    "fresh_wheel_import_passed": true,
+    "fresh_sdist_import_passed": true,
+    "fresh_import_version": "0.6.0rc16",
+    "fresh_import_lunar_capability_status": "IMPLEMENTED"
+  },
+  "claim_controls": {
+    "production_authorized": false,
+    "navigation_authorized": false,
+    "independent_ephemeris_claimed": false,
+    "general_rebound_superiority_claimed": false,
+    "publication_authorized_by_manifest": false
+  },
+  "release_actions": {
+    "commit_performed": false,
+    "tag_performed": false,
+    "push_performed": false,
+    "publication_performed": false,
+    "frozen_runs_or_archives_modified": false
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "claim_controls": {
+    "de440_equivalence_claimed": false,
+    "exact_general_relativity_claimed": false,
+    "general_rebound_superiority_claimed": false,
+    "independent_confirmation_claimed": false,
+    "navigation_authorized": false,
+    "production_authorized": false,
+    "production_ephemeris_claimed": false,
+    "verified_numerical_execution_claimed": true
+  },
+  "general_dynamics_registry": {
+    "generation": 18,
+    "historical_package_binding": "0.6.0rc3",
+    "modified_for_rc15": false,
+    "scientific_claim_state": "SCREENING_ONLY"
+  },
+  "independent_validation": {
+    "de440_attribution": {
+      "checkpoint_years": [
+        10,
+        25,
+        50,
+        100
+      ],
+      "status": "PASS",
+      "test_count": 2
+    },
+    "rebound_ias15_reboundx": {
+      "rebound_version": "5.1.1",
+      "reboundx_version": "5.1.0",
+      "same_equations_trajectory_gate": "PASS",
+      "status": "PASS",
+      "sun_earth_100_year_gate": "PASS",
+      "test_count": 4
+    }
+  },
+  "package_version": "0.6.0rc15",
+  "release_actions": {
+    "commit_performed": false,
+    "publication_performed": false,
+    "push_performed": false,
+    "tag_created": false
+  },
+  "reproducible_packaging": {
+    "artifacts": {
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc15.tar.gz",
+        "sha256": "743ea01f32a5c5d320444c3db14ced2b590845557fdaa7262de8033f3336c407",
+        "size_bytes": 777840
+      },
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc15-cp314-cp314-linux_x86_64.whl",
+        "sha256": "7f00b4636ef07a20b46dc12c96a5ea4971743bc47909e18d4e5580bcbe5401ae",
+        "size_bytes": 980934
+      }
+    },
+    "build_backend": "setuptools==78.1.1",
+    "fresh_sdist_verified_smoke_passed": true,
+    "fresh_wheel_verified_smoke_passed": true,
+    "installed_smoke_digest": "8778bcd2c2461f988c59eb1bd44112811c7b9c6959a0566c5c6223c451491719",
+    "outer_reproducible_build_invocations": 2,
+    "sdist_byte_identical": true,
+    "total_clean_builds": 4,
+    "twine_check": {
+      "status": "PASS",
+      "version": "6.2.0"
+    },
+    "wheel_byte_identical": true
+  },
+  "runtime": {
+    "numpy_version": "2.3.5",
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+    "python_version": "3.14.4"
+  },
+  "schema": "jxplanetx.release-manifest.v0.6.0rc15.v1",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "source_bindings": {
+    "eih_force_core_sha256": "de4b173ff26aab1a5d012aca79b2687c81ce8ef97db290e48b00ca3d21f40746",
+    "gr15_eih_core_sha256": "bef3a607c4c3674d342745570c68b462a6178e789089c84419d6f23dd810fad1",
+    "gr15_eih_module_sha256": "aa694614e55feb827db5075c46d1489bcdca580dad7d0843957de948d2dddc85",
+    "package_init_sha256": "d340b73ae1eb207fd345e45877395bf5ae74dba584c27b2452fee63674663123",
+    "pyproject_sha256": "2f4ff1b9cddc1565f62ed24c6114c52e5eddbd8715a878a26dc864a354927463",
+    "readme_sha256": "24ff5653e5fe610574c87d6d2811f7bc258bca5a744c100c43b3bf8f80184339",
+    "reproducible_release_test_sha256": "f38cc78cd7557a4991bdf92ffc02b3a71bd9bdba31aa460db03dc89a47debb60",
+    "test_matrix_manifest_sha256": "be045e4b47ee3af13ffa86df4dd5032b095a126c89bd6892c03c4eaeddc07b34",
+    "verified_acceptance_runner_sha256": "97ef6ccf2b42275f9b5c4724d6a94bc08d47298e460c51a5d997c566f63e1209",
+    "verified_module_sha256": "4884fee9a85c0513b44c3f038217562f9f85b48155e9ab77ae1096bb505b79a8",
+    "verified_protocol_sha256": "3edd208fef7f4fbf1aae2b5dd0f1737f46f767200cb53762424d2376517c163f",
+    "verified_test_sha256": "8af3f00217b1e765e9131fc2e39623899df0f7440e9a4923d93523d6832550a1"
+  },
+  "standards_basis": {
+    "de440_documentation": "https://ssd.jpl.nasa.gov/doc/de440_de441.html",
+    "rebound_ias15_source": "https://github.com/hannorein/rebound/blob/main/src/integrator_ias15.c",
+    "spice_time_documentation": "https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/time.html"
+  },
+  "status": "LOCAL_RELEASE_CANDIDATE_PACKAGED_NOT_PUBLISHED",
+  "verification": {
+    "cuda_hardware_profile": {
+      "isolated_file_lanes": 5,
+      "status": "PASS",
+      "test_count": 37,
+      "zero_skips": true
+    },
+    "full_live_matrix": {
+      "cuda_hardware_file_lanes": 5,
+      "cuda_optional_file_lanes": 23,
+      "isolated_file_lanes": 223,
+      "live_current_file_lanes": 195,
+      "status": "PASS"
+    },
+    "profile_manifest": {
+      "exact_non_overlapping_coverage": true,
+      "profile_count": 14,
+      "test_file_inventory": 274
+    },
+    "verified_component_unit_tests": {
+      "status": "PASS",
+      "test_count": 7
+    }
+  },
+  "verified_execution_acceptance": {
+    "all_non_timing_repeats_exact": true,
+    "all_primary_results_exact": true,
+    "benchmark_report_file_sha256": "e96aacd378e1c43e99ee7df3f5a5b657092a1418e8840566bbccedf4e86b3f5d",
+    "benchmark_report_path": "/tmp/jx_gr15_verified_execution_rc15.json",
+    "benchmark_semantic_sha256": "a1355f38ca2a43ed9d682dd175eb811e7f1475ddfb410ddbb672fcc4c6d0900a",
+    "case_count": 4,
+    "cases": [
+      "finite_mass_binary_forward",
+      "eccentric_binary_ten_periods",
+      "finite_mass_binary_backward",
+      "de440_derived_eleven_body_ten_years"
+    ],
+    "deliberate_zero_gate_failed_closed": true,
+    "duplicate_body_identity_failed_closed": true,
+    "status": "PASS",
+    "ten_year_eleven_body": {
+      "maximum_position_difference_km": 0.002440939204001141,
+      "maximum_velocity_difference_km_s": 6.913048623250115e-09,
+      "position_gate_km": 1.0,
+      "velocity_gate_km_s": 1e-07
+    }
+  },
+  "verified_gr15_eih_1pn": {
+    "api_id": "JX_GR15_EIH1PN_VERIFIED_EXECUTION_V1",
+    "confirmation_must_be_distinct": true,
+    "confirmation_must_be_no_looser": true,
+    "fail_closed_disagreement": true,
+    "full_checkpoint_trajectory_comparison": true,
+    "independent_implementation_confirmation": false,
+    "mandatory_body_identity": true,
+    "mandatory_operational_conventions": {
+      "coordinate_origin": "SYSTEM_BARYCENTER",
+      "epoch_definition": "SECONDS_PAST_J2000",
+      "gravitational_parameter_unit": "km^3/s^2",
+      "length_unit": "km",
+      "reference_frame": "J2000",
+      "time_scale": "TDB",
+      "velocity_unit": "km/s"
+    },
+    "mandatory_source_provenance_identifiers": true,
+    "public_api": "integrate_verified_gr15_eih_1pn",
+    "scientific_claim_state": "SCREENING_ONLY",
+    "stable_input_and_verification_digests": true,
+    "verification_status": "PASSED_DUAL_EXECUTION_GATE"
+  }
+}

@@ -20,6 +20,7 @@ from .contracts import (
     BackendSpec,
     CannonballSRP,
     ForcePlan,
+    MutualEIH1PN,
     NewtonianPointMass,
     RestrictedStaticCentral1PN,
     StateSnapshot,
@@ -29,11 +30,18 @@ from .evaluator import (
     ForceLedgerEntry,
     _validate_dependencies,
     _validate_model_sequence,
+    _validate_mutual_eih_frame,
     _validate_parameter_contracts,
     _validate_restricted_central_position,
     _validate_restricted_frame,
     _validate_state,
     evaluate_force_plan,
+)
+from .physical_forces import (
+    EarthZonalJ2J5Force,
+    LunarStaticDegree2Force,
+    LunarStaticDegree3Force,
+    canonical_physical_force_record,
 )
 from .rkf78 import (
     RKF78_ACCEPTED_ORDER,
@@ -471,6 +479,17 @@ def _canonical_result_content(backend: ArrayBackend, value: object) -> Any:
             "shape": list(value.shape),
             "values": values,
         }
+    if type(value) in (
+        EarthZonalJ2J5Force,
+        LunarStaticDegree2Force,
+        LunarStaticDegree3Force,
+    ):
+        return {
+            "dataclass": f"{type(value).__module__}.{type(value).__qualname__}",
+            "fields": _canonical_result_content(
+                backend, canonical_physical_force_record(value)
+            ),
+        }
     if is_dataclass(value) and type(value).__module__.startswith("jxplanetx."):
         return {
             "dataclass": f"{type(value).__module__}.{type(value).__qualname__}",
@@ -634,8 +653,16 @@ def _expected_ledger_scope(model: object) -> tuple[tuple[str, ...], tuple[str, .
         return model.source_ids, model.target_ids
     if type(model) is RestrictedStaticCentral1PN:
         return (model.central_source_id,), model.target_ids
+    if type(model) is MutualEIH1PN:
+        return model.body_ids, model.body_ids
     if type(model) is CannonballSRP:
         return (model.radiation_source_id,), model.target_ids
+    if type(model) in (
+        EarthZonalJ2J5Force,
+        LunarStaticDegree2Force,
+        LunarStaticDegree3Force,
+    ):
+        return model.source_ids, model.target_ids
     raise TrajectoryContractError("force plan contains an unsupported model binding")
 
 
@@ -671,6 +698,7 @@ def _validate_result_bindings(result: TrajectoryResult) -> None:
     _validate_dependencies(result.force_plan.models)
     _validate_parameter_contracts(result.initial_snapshot, result.force_plan)
     _validate_restricted_frame(result.initial_snapshot, result.force_plan.models)
+    _validate_mutual_eih_frame(result.initial_snapshot, result.force_plan.models)
     _validate_force_compatibility(result.force_plan)
     _validate_metadata_range(
         result.force_plan,
@@ -1337,6 +1365,7 @@ def integrate_trajectory(
     _validate_dependencies(plan.models)
     _validate_parameter_contracts(snapshot, plan)
     _validate_restricted_frame(snapshot, plan.models)
+    _validate_mutual_eih_frame(snapshot, plan.models)
     _validate_force_compatibility(plan)
     lower_epoch = min(spec.checkpoint_epochs[0], spec.checkpoint_epochs[-1])
     upper_epoch = max(spec.checkpoint_epochs[0], spec.checkpoint_epochs[-1])

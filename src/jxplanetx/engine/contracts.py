@@ -293,6 +293,50 @@ class RestrictedStaticCentral1PN:
         return self.MODEL_ID
 
 
+@dataclass(frozen=True)
+class MutualEIH1PN:
+    """Correction-only mutual point-mass EIH 1PN model in barycentric coordinates."""
+
+    MODEL_ID: ClassVar[str] = "force.relativity.eih_1pn_gr"
+    body_ids: tuple[str, ...]
+    speed_of_light: float
+    maximum_compactness: float
+    maximum_speed_fraction_squared: float
+    unit_system_id: str
+    parameter_metadata: tuple[ParameterMetadata, ...]
+
+    def __post_init__(self) -> None:
+        bodies = _ids(self.body_ids, "body_ids")
+        if len(bodies) < 2:
+            raise ContractError("mutual EIH 1PN requires at least two bodies")
+        _text(self.unit_system_id, "unit_system_id")
+        _number(self.speed_of_light, "speed_of_light", positive=True)
+        compactness = _number(
+            self.maximum_compactness,
+            "maximum_compactness",
+            positive=True,
+        )
+        speed_fraction = _number(
+            self.maximum_speed_fraction_squared,
+            "maximum_speed_fraction_squared",
+            positive=True,
+        )
+        if compactness >= 1.0 or speed_fraction >= 1.0:
+            raise ContractError("EIH 1PN weak-field and speed bounds must be below one")
+        _metadata(
+            self.parameter_metadata,
+            (
+                "speed_of_light",
+                "maximum_compactness",
+                "maximum_speed_fraction_squared",
+            ),
+        )
+
+    @property
+    def model_id(self) -> str:
+        return self.MODEL_ID
+
+
 @dataclass(frozen=True, eq=False)
 class CannonballSRP:
     """Unshadowed radial cannonball solar-radiation-pressure correction.
@@ -346,7 +390,9 @@ class CannonballSRP:
         return self.MODEL_ID
 
 
-ImplementedForceConfig = NewtonianPointMass | RestrictedStaticCentral1PN | CannonballSRP
+ImplementedForceConfig = (
+    NewtonianPointMass | RestrictedStaticCentral1PN | MutualEIH1PN | CannonballSRP
+)
 
 
 @dataclass(frozen=True, eq=False)
@@ -389,6 +435,7 @@ __all__ = [
     "ContractError",
     "ForcePlan",
     "ImplementedForceConfig",
+    "MutualEIH1PN",
     "NewtonianPointMass",
     "ParameterMetadata",
     "Provenance",

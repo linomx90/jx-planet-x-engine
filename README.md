@@ -1,8 +1,8 @@
 # JX Celestial Dynamics Framework
 
-**Version:** 0.6.0rc10
+**Version:** 0.6.0rc16
 
-**Release date:** 2026-09-23
+**Release date:** 2026-09-24
 
 **License:** Proprietary — all rights reserved
 **Scientific claim state:** `SCREENING_ONLY`
@@ -25,7 +25,7 @@ the library authority catalog as the source of truth and does not promote
 workspace results.
 
 The installable distribution and command remain `jxplanetx` for backward
-compatibility. Version 0.6.0rc10 carries the immutable General Dynamics
+compatibility. Version 0.6.0rc16 carries the immutable General Dynamics
 registry v18 evidence historically bound to rc3, retains the supported
 measured small-N CPU/CUDA interfaces, and advances the supported fast
 Wisdom--Holman CPU screen to a checkpoint-synchronized native map. Its default
@@ -33,9 +33,19 @@ single execution produces a complete-map postcondition certificate; an exact
 second execution remains opt-in and is required by release qualification.
 The packaged endpoint-seeded v4 solver remains an implementation-private,
 fallback-audited research prototype. Byte-reproducible wheel and source-archive
-construction and the existing force and trajectory surface are preserved. Rc10
-carries the prospectively qualified GR15 V3 CPU component while retaining
-the exact V2 implementation as a private fallback/reference.
+construction and the existing force and trajectory surface are preserved. Rc13
+retains the qualified GR15 V3 Newtonian CPU component and adds the distinct
+screening-only GR15-EIH1PN component while preserving the exact V2
+implementation as a private fallback/reference. It also adds a supported
+batched CUDA evaluator for the exact EIH force equation and a one-launch sweep
+over all eight GR15 corrector stages. Rc13 completes that path with a
+persistent batched CUDA trajectory integrator that runs prediction, correction,
+convergence, rejection, checkpointing, and adaptive control on-device. Rc14
+adds a supported NumPy batch boundary: native CPU integrations run concurrently
+in threads because the compiled boundary releases the GIL, while an audited
+dispatcher uses the measured RTX 5060 Ti crossover only inside its exact
+registered workload and hardware scope. All other automatic cases remain on
+CPU; callers may still request either backend explicitly.
 Registry v18
 states `SCREENING_ONLY` explicitly and does not promote any capability beyond
 its exact evidence and claim ceiling. The legacy propagation core, CLI, locked
@@ -45,8 +55,8 @@ experiments, and scientific records remain unchanged.
 
 The additive `jxplanetx.engine` API evaluates ordered acceleration terms on
 caller-owned, backend-native arrays and advances explicitly requested
-checkpoints with an adaptive RKF78 method. It implements exactly three
-unqualified physics models:
+checkpoints with an adaptive RKF78 method. Its original alpha force surface
+implemented three unqualified physics models:
 
 - direct, unsoftened Newtonian point-mass gravity;
 - restricted static-central Schwarzschild test-particle 1PN, as a
@@ -65,7 +75,7 @@ error tolerances, and every controller limit. Unsupported combinations fail
 before arithmetic; backend selection never silently falls back or transfers
 arrays between host and GPU.
 
-The rc10 candidate packages the qualified V3 Gauss--Radau order-15
+The current candidate packages the qualified V3 Gauss--Radau order-15
 numerical core behind the supported `jxplanetx.gr15` CPU interface and retains
 the bitwise-validated V2 implementation as an exact private reference.
 `integrate_gr15` advances 2--32 fully mutual, positive-GM, unsoftened
@@ -75,6 +85,42 @@ not compile code at runtime or import the benchmark tree. Its scope remains
 `SCREENING_ONLY`, and no production, ephemeris, collision-handling, broad
 force-model, or general IAS15 superiority claim is authorized. See the
 [GR15 user and contract guide](docs/JX_GR15.md).
+
+Rc12 added `evaluate_eih_1pn_total_acceleration_cuda` for device-resident
+float64 batches and `evaluate_gr15_eih_1pn_stages_cuda` for simultaneous
+eight-stage force sweeps. Both paths support 2--32 bodies, accept shared or
+lane/system-specific positive gravitational parameters, report per-lane
+weak-field diagnostics, and fail closed without implicit host/device input
+transfer. Rc13 adds `integrate_gr15_eih_1pn_cuda_batch`, which executes the
+complete predictor/corrector and adaptive checkpoint controller in one
+persistent kernel per independent system. State outputs remain on-device;
+status, controller counters, metrics, and weak-field diagnostics are audited
+on the host. On the project-owned RTX 5060 Ti, the supported 11-body CUDA
+trajectory call was slower for one and eight systems, 3.46x the sequential CPU
+throughput at 64 systems, and 6.19x at 512 systems. These are one-host,
+finite-workload ensemble timings, not a portable or general superiority claim.
+
+Rc14 adds `integrate_gr15_eih_1pn_cpu_batch` and the NumPy-facing
+`integrate_gr15_eih_1pn_batch`. The CPU batch path accepts shared or
+per-system GM arrays and uses up to eight native threads by default. The
+automatic path returns the same owned, read-only NumPy result contract for
+both backends and records the backend decision, calibration identity, worker
+or kernel accounting, and transfer timing. Its only bundled performance
+profile is the measured Ryzen 5 5500/RTX 5060 Ti, 11-body, ten-Julian-year
+screen: CPU is selected below 128 systems and CUDA at 128 or more. Counts
+above the largest measured 128-system point are explicitly marked as
+extrapolated. A different CPU, GPU, body count, duration, or worker policy
+falls back to CPU in `auto` mode; `backend="cuda"` is an explicit override.
+
+Rc15 adds `integrate_verified_gr15_eih_1pn`, the first operationally checked
+propagation boundary. It requires explicit J2000/TDB/unit conventions, unique
+body identities, and SHA-256 source-provenance identifiers. It executes the
+same packaged CPU implementation under primary and no-looser confirmation
+contracts and fails closed unless every retained position and velocity agrees
+with caller-declared absolute gates. Passing establishes numerical consistency
+for that exact request and declared EIH 1PN model; it is deliberately not
+represented as independent-implementation validation or a production
+ephemeris certificate.
 
 The preregistered V3 correctness portfolio now passes analytic eccentric and
 extreme-mass-ratio binaries, a three-body close scatter, a 20-period 11-body
@@ -155,16 +201,47 @@ projection bit-for-bit. The complete hybrid is not globally symplectic,
 formally or exactly reversible, regularized, globally order-qualified, or
 scientifically qualified.
 
-The accompanying 46-capability catalog contains exactly twelve `IMPLEMENTED`
-and 34 `DECLARED` rows and covers the alpha surface and broader JX roadmap.
+The rc16 development catalog contains exactly eighteen `IMPLEMENTED`
+and 33 `DECLARED` rows and covers the alpha surface and broader JX roadmap.
 The implemented set includes the standalone guarded encounter segment, the
-two experimental unqualified fixed-step Newtonian maps, and the one specific
-whole-step hybrid. The broader roster spans
+two experimental unqualified fixed-step Newtonian maps, the one specific
+whole-step hybrid, the typed mutual EIH 1PN correction, and provenance-bound
+NumPy/CPU Earth J2--J5 and static lunar degree-two/degree-three figure forces,
+plus the typed coupled lunar fixed-delay route and resolved-eleven coupled
+lunar EIH component.
+The broader roster spans
 gravity, relativity, harmonics, tides,
 nongravitational forces, encounters, integrators, accelerator backends,
 precision modes, sensitivities, orbit determination, and measurements. Every
 entry is `UNQUALIFIED`. A `DECLARED` entry validates its known parameter roster
 and then refuses execution.
+
+Rc16 adds `JXSimulation`, a persistent coordinator over one
+owned `StateSnapshot` and typed `ForcePlan`. The same fully mutual Newtonian
+plus `MutualEIH1PN` plan can now run through generic RKF78, native CPU GR15-EIH,
+or the persistent CUDA GR15-EIH kernel without silently changing forces or
+backends. All outputs remain screening-only. See
+[`docs/JX_UNIFIED_SIMULATION.md`](docs/JX_UNIFIED_SIMULATION.md).
+The same development surface now has explicit NumPy/CPU continuation and a
+deterministic non-pickle restart archive whose load requires both the archive
+SHA-256 and an exact caller-supplied force-plan digest; CUDA restart remains
+fail-closed pending device-content hashing.
+
+The same public engine namespace now exposes state ABI v1 for the retained
+coupled lunar model. `CoupledLunarStateSnapshot` owns translation, mantle
+attitude/rate, and fluid-core rate blocks; the fixed-delay adapter advances all
+of them simultaneously and returns a content-bound `CoupledLunarRun`. This is
+NumPy/CPU screening code. Its native physics bundle is not yet force-ABI-v1,
+restart-archive, CUDA, geodetic-transport, event, or ephemeris qualified.
+
+Rc16 also exposes `integrate_lunar_ephemeris_v1`, a resolved-eleven fixed-step
+RKF78 component combining mutual Newtonian gravity and EIH 1PN with reacting
+static lunar quadrupoles, fixed-axis Earth J2, and mantle/core rotation. Its
+outcome-blind 90/365-day DE440 screen passed: the one-year Earth–Moon position
+error was 61.57 m versus 3.73 km for the matched no-EIH control, while the
+one-year Sun–Earth error was 29.26 m versus 56.09 km. This remains a fitted-
+reference, screening-only result; see
+[`docs/JX_PUBLIC_LUNAR_EPHEMERIS_90_365_HOLDOUT.md`](docs/JX_PUBLIC_LUNAR_EPHEMERIS_90_365_HOLDOUT.md).
 
 NumPy CPU and optional CuPy CUDA 12/13 code paths are available. The
 [GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md) records
@@ -417,8 +494,9 @@ Install the public CPU dynamics API with
 matching wheel extra: `.[gpu-cuda12]` for CUDA 12.x or `.[gpu-cuda13]` for
 CUDA 13.x. These extras request CuPy's `[ctk]` bundles; a compatible NVIDIA
 driver is still required. Do not install both CuPy wheel families in one
-environment. JX will not fall back to CPU if the requested GPU backend is
-unavailable.
+environment. An explicitly requested GPU backend will not silently fall back
+to CPU; conservative `auto` routing selects CPU when no matching calibration
+or usable CUDA profile is available.
 
 Without installing the package:
 
@@ -431,7 +509,7 @@ Build the release artifacts twice from the declared package-only input boundary
 and require byte identity with:
 
 ```bash
-python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc10
+python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc16
 ```
 
 The builder requires the exact backend pinned in `pyproject.toml`, normalizes
@@ -646,7 +724,7 @@ and validation command.
 ## Citation and license
 
 Citation metadata and human authorship are recorded in `CITATION.cff` and
-`AUTHORS.md`. Original JX material in version `0.6.0rc10` is proprietary and
+`AUTHORS.md`. Original JX material in version `0.6.0rc16` is proprietary and
 all rights are reserved by Lino Avila; copying, modification, distribution,
 commercial use, and derivative works require prior written authorization.
 Optional third-party packages retain their own licenses. Earlier public JX

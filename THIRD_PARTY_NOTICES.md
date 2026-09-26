@@ -11,6 +11,12 @@ its complete license text is included in both preserved distributions. The
 REBOUND source archive is provided alongside the wheel as corresponding
 source.
 
+The optional `relativity-validation` dependency group installs REBOUND 5.1.1
+and REBOUNDx 5.1.0 solely as external comparison implementations. Both retain
+their upstream GNU General Public License version 3 terms. They are not JX
+source, are not imported by the core runtime, and their source code is not
+copied into the JX implementation.
+
 The other preserved ZIP bundles under `imports/` are JX project evidence and
 benchmark inputs. They are included for reproducibility and retain their own
 embedded provenance and notices. No JX ownership claim is made over third-party

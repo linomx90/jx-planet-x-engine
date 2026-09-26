@@ -1,0 +1,37 @@
+{
+  "artifact_class": "MODEL_OUTPUT",
+  "complete_deformation_holdout": {
+    "all_registered_gates_passed": false,
+    "file_sha256": "3785330dce2e689dc4583467fd6b0b95f8cecdece6dc0858f50c15d6f1da1736",
+    "internal_report_sha256": "2be1ea3c1693d3945a4ccd9b35f873a6e4084751d4662ed301aafbea30fa40eb",
+    "nominal_horizon_days": [
+      90,
+      365
+    ],
+    "registered_decision": "JX_RETAIN_STATIC_MANTLE_CONTROL_AND_STOP_DEFORMATION_PROMOTION"
+  },
+  "geodetic_transport_confirmation": {
+    "all_registered_gates_passed": false,
+    "file_sha256": "eba398b9fcefb7e3b6f7db04261aff10892a6fadafad6d87d0278107aeac8991",
+    "internal_report_sha256": "98db6222494de631498cced8f46cc165f686773aa187cc29797081ff7acff31e",
+    "nominal_horizon_days": [
+      90,
+      365
+    ],
+    "prior_deformation_candidate_reproduced_bitwise_as_control": true,
+    "registered_decision": "JX_CLOSE_GEODETIC_TRANSPORT_PROMOTION_AND_RETAIN_PRIOR_STATIC_DEFAULT"
+  },
+  "model_id": "JX_LUNAR_COMPLETE_DEFORMATION_AND_GEODETIC_SCREEN_SUMMARY_V1",
+  "next_gate": "PREREGISTER_SIMULTANEOUS_TRANSLATION_ROTATION_WITH_COMPLETE_DELAYED_DEFORMATION_AND_COMMON_POTENTIAL_REACTIONS",
+  "result": "BOTH_PROMOTION_GATES_FAILED",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "schema": "jx.lunar-deformation-geodetic-screen-summary.v1",
+  "scope_limits": {
+    "exact_de440_generator_reproduced": false,
+    "independent_physical_validation": false,
+    "production_ready": false,
+    "raw_llr_validated": false,
+    "registry_qualification_authorized": false,
+    "simultaneous_translation_rotation_included": false
+  }
+}

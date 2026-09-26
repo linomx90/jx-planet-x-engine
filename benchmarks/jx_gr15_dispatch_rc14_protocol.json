@@ -1,0 +1,68 @@
+{
+  "benchmark_id": "jx.gr15.supported-dispatch.rc14.v1",
+  "candidate_control": 1e-06,
+  "claim_controls": {
+    "general_superiority_claimed": false,
+    "portable_crossover_claimed": false,
+    "production_ephemeris_claimed": false
+  },
+  "cpu_workers": 8,
+  "design": {
+    "accuracy": "Both supported routes must pass the inherited 1 km and 1e-7 km/s component gates against the strict JX CPU EIH reference and against one another.",
+    "automatic_route": "The public auto API must select CPU at 64 and 96 systems, CUDA at 128 systems, and reproduce the corresponding forced route exactly.",
+    "candidate": "Released NumPy-facing integrate_gr15_eih_1pn_batch API forced through CPU and CUDA, including validation, routing, transfers, host audit, result construction, and owned NumPy outputs.",
+    "crossover": "The first tested count where CUDA is faster and remains faster through every larger tested count is reported without portable extrapolation.",
+    "workload": "DE440-derived eleven-body state, ten Julian years, control 1e-6, three balanced repetitions per route and system count."
+  },
+  "horizon_days": 3652.5,
+  "package_version": "0.6.0rc14",
+  "position_gate_km": 1.0,
+  "schema": "jxplanetx.gr15-dispatch-rc14-acceptance-protocol.v1",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "source_roster": [
+    {
+      "path": "benchmarks/jx_gr15_dispatch_rc14_acceptance.py",
+      "sha256": "ed7e9a60f8b6e83f8975f05190ed61ad21b69f3f16a6c71d361f3843696eb199",
+      "size_bytes": 11458
+    },
+    {
+      "path": "src/jxplanetx/gr15_eih_1pn_batch.py",
+      "sha256": "687de69981fbe531563b3bb116170a861b744f46c56bdfe4dc420b92fbedc80a",
+      "size_bytes": 28417
+    },
+    {
+      "path": "src/jxplanetx/gr15_eih_1pn.py",
+      "sha256": "aa694614e55feb827db5075c46d1489bcdca580dad7d0843957de948d2dddc85",
+      "size_bytes": 16469
+    },
+    {
+      "path": "src/jxplanetx/gr15_eih_1pn_cuda.py",
+      "sha256": "7765a3ed6e628b63031841feab91e05e21edb190f57290eb8089d1ff1b1d3f53",
+      "size_bytes": 60448
+    },
+    {
+      "path": "src/jxplanetx/_gr15_eih_1pn_core.c",
+      "sha256": "bef3a607c4c3674d342745570c68b462a6178e789089c84419d6f23dd810fad1",
+      "size_bytes": 33204
+    },
+    {
+      "path": "src/jxplanetx/_eih_1pn_core.c",
+      "sha256": "de4b173ff26aab1a5d012aca79b2687c81ce8ef97db290e48b00ca3d21f40746",
+      "size_bytes": 8269
+    },
+    {
+      "path": "runs/jx_gpu_de440_external_epoch_validation_v1/inputs/SOURCE_ELEVEN_BODY_INPUT.json",
+      "sha256": "0718ba6c05444c720d012bc7906e3eee226664b58d7929648917f9f19003d4c5",
+      "size_bytes": 4647
+    }
+  ],
+  "status": "LOCKED_BEFORE_FIRST_TIMING",
+  "strict_control": 1e-10,
+  "system_counts": [
+    64,
+    96,
+    128
+  ],
+  "timed_repetitions": 3,
+  "velocity_gate_km_s": 1e-07
+}

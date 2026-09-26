@@ -9,6 +9,7 @@ from .backends import ArrayBackend, resolve_backend
 from .contracts import (
     CannonballSRP,
     ForcePlan,
+    MutualEIH1PN,
     NewtonianPointMass,
     RestrictedStaticCentral1PN,
     StateSnapshot,
@@ -19,8 +20,27 @@ from .forces import (
     ForceContractError,
     ForceDomainError,
     cannonball_srp_acceleration,
+    mutual_eih_1pn_acceleration,
     newtonian_point_mass_acceleration,
     restricted_static_central_1pn_acceleration,
+)
+from .force_abi import get_force_abi, list_force_abis
+from .physical_forces import (
+    EarthZonalJ2J5Force,
+    LunarStaticDegree2Force,
+    LunarStaticDegree3Force,
+)
+from jxplanetx.solar_system.earth_zonal import (
+    EarthZonalError,
+    evaluate_earth_zonal_pair_correction,
+)
+from jxplanetx.solar_system.lunar_figure import (
+    LunarFigureError,
+    evaluate_lunar_static_degree2_pair_correction,
+)
+from jxplanetx.solar_system.lunar_figure_degree3 import (
+    LunarDegree3Error,
+    evaluate_lunar_static_degree3_pair_correction,
 )
 
 
@@ -32,9 +52,7 @@ DETERMINISM_LIMITATION = (
     "force order, body order, and tile size; no cross-device bitwise guarantee"
 )
 _CANONICAL_MODEL_ORDER = {
-    NewtonianPointMass.MODEL_ID: 0,
-    RestrictedStaticCentral1PN.MODEL_ID: 1,
-    CannonballSRP.MODEL_ID: 2,
+    spec.model_id: spec.canonical_order for spec in list_force_abis()
 }
 
 
@@ -298,7 +316,7 @@ def _require_massless_targets(
 
 
 def _validate_model_sequence(models: tuple[object, ...]) -> None:
-    exact_types = (NewtonianPointMass, RestrictedStaticCentral1PN, CannonballSRP)
+    exact_types = tuple(spec.config_type for spec in list_force_abis())
     seen: set[str] = set()
     ranks: list[int] = []
     for index, model in enumerate(models):
@@ -313,7 +331,15 @@ def _validate_model_sequence(models: tuple[object, ...]) -> None:
         ranks.append(_CANONICAL_MODEL_ORDER[model_id])
     if ranks != sorted(ranks):
         raise EvaluationError(
-            "force models must follow canonical order: Newtonian, restricted 1PN, SRP"
+            "force models must follow canonical order: Newtonian, one 1PN model, "
+            "physical harmonics, SRP"
+        )
+    if (
+        RestrictedStaticCentral1PN.MODEL_ID in seen
+        and MutualEIH1PN.MODEL_ID in seen
+    ):
+        raise EvaluationError(
+            "restricted static-central 1PN and mutual EIH 1PN are mutually exclusive"
         )
     if any(rank > 0 for rank in ranks) and NewtonianPointMass.MODEL_ID not in seen:
         raise EvaluationError("correction-only force models require a Newtonian base term")
@@ -325,17 +351,43 @@ def _validate_dependencies(models: tuple[object, ...]) -> NewtonianPointMass:
         raise EvaluationError("a force plan requires one NewtonianPointMass base term")
     base_sources = set(base.source_ids)
     base_targets = set(base.target_ids)
+    has_mutual_eih = any(type(model) is MutualEIH1PN for model in models)
+    has_cannonball_srp = any(type(model) is CannonballSRP for model in models)
+    if has_mutual_eih and has_cannonball_srp:
+        raise EvaluationError(
+            "mutual EIH requires every state body to be massive, while the current "
+            "cannonball SRP model requires massless no-backreaction targets"
+        )
     for model in models:
         if type(model) is RestrictedStaticCentral1PN:
             if model.central_source_id not in base_sources:
                 raise EvaluationError("the 1PN central source must be a Newtonian source")
             if not set(model.target_ids).issubset(base_targets):
                 raise EvaluationError("all 1PN targets must also be Newtonian targets")
+        elif type(model) is MutualEIH1PN:
+            if model.body_ids != base.source_ids or model.body_ids != base.target_ids:
+                raise EvaluationError(
+                    "mutual EIH body_ids must exactly equal the Newtonian source_ids "
+                    "and target_ids in the same order"
+                )
         elif type(model) is CannonballSRP:
             if model.radiation_source_id not in base_sources:
                 raise EvaluationError("the SRP radiation source must be a Newtonian source")
             if not set(model.target_ids).issubset(base_targets):
                 raise EvaluationError("all SRP targets must also be Newtonian targets")
+        elif type(model) in (
+            EarthZonalJ2J5Force,
+            LunarStaticDegree2Force,
+            LunarStaticDegree3Force,
+        ):
+            if not set(model.source_ids).issubset(base_sources):
+                raise EvaluationError(
+                    f"{model.model_id} sources must also be Newtonian sources"
+                )
+            if not set(model.target_ids).issubset(base_targets):
+                raise EvaluationError(
+                    f"{model.model_id} targets must also be Newtonian targets"
+                )
     return base
 
 
@@ -354,12 +406,36 @@ def _expected_metadata(
             ("maximum_compactness", "1"),
             ("maximum_speed_fraction_squared", "1"),
         )
+    if type(model) is MutualEIH1PN:
+        return (
+            ("speed_of_light", f"{length}/{time}"),
+            ("maximum_compactness", "1"),
+            ("maximum_speed_fraction_squared", "1"),
+        )
     if type(model) is CannonballSRP:
         return (
             ("reference_pressure", f"{mass}/({length}*{time}^2)"),
             ("reference_distance", length),
             ("area_to_mass", f"{length}^2/{mass}"),
             ("radiation_pressure_coefficient", "1"),
+        )
+    if type(model) is EarthZonalJ2J5Force:
+        return (
+            ("reference_radius", length),
+            ("zonal_coefficients", "1"),
+            ("earth_pole_model", "1"),
+        )
+    if type(model) is LunarStaticDegree2Force:
+        return (
+            ("reference_radius", length),
+            ("degree2_coefficients", "1"),
+            ("lunar_orientation_model", "1"),
+        )
+    if type(model) is LunarStaticDegree3Force:
+        return (
+            ("reference_radius", length),
+            ("degree3_coefficients", "1"),
+            ("lunar_orientation_model", "1"),
         )
     raise UnsupportedForceError("force model has no parameter-unit contract")
 
@@ -411,6 +487,29 @@ def _validate_restricted_frame(snapshot: StateSnapshot, models: tuple[object, ..
                 )
 
 
+def _validate_mutual_eih_frame(
+    snapshot: StateSnapshot,
+    models: tuple[object, ...],
+) -> None:
+    for model in models:
+        if type(model) is not MutualEIH1PN:
+            continue
+        if model.body_ids != snapshot.body_ids:
+            raise EvaluationError(
+                "mutual EIH body_ids must exactly equal StateSnapshot.body_ids in order"
+            )
+        if snapshot.time_scale != "TDB":
+            raise EvaluationError("mutual EIH 1PN requires time_scale='TDB'")
+        if snapshot.frame != "BARYCENTRIC_INERTIAL":
+            raise EvaluationError(
+                "mutual EIH 1PN requires frame='BARYCENTRIC_INERTIAL'"
+            )
+        if snapshot.origin != "SYSTEM_BARYCENTER":
+            raise EvaluationError(
+                "mutual EIH 1PN requires origin='SYSTEM_BARYCENTER'"
+            )
+
+
 def _validate_restricted_central_position(
     backend: ArrayBackend,
     snapshot: StateSnapshot,
@@ -430,6 +529,35 @@ def _validate_restricted_central_position(
                 raise EvaluationError(
                     "restricted 1PN central_source_id must be exactly at coordinate zero"
                 )
+
+
+def _validate_force_abi_context(
+    backend: ArrayBackend,
+    snapshot: StateSnapshot,
+    models: tuple[object, ...],
+) -> None:
+    """Bind every exact force ABI entry to backend, unit, and axes contracts."""
+
+    physical_types = (
+        EarthZonalJ2J5Force,
+        LunarStaticDegree2Force,
+        LunarStaticDegree3Force,
+    )
+    for model in models:
+        abi = get_force_abi(model)
+        if backend.name not in abi.supported_backend_ids:
+            raise UnsupportedForceError(
+                f"{abi.model_id} does not implement backend {backend.name!r}; "
+                f"supported backends are {abi.supported_backend_ids!r}"
+            )
+        if type(model) not in physical_types:
+            continue
+        if snapshot.length_unit != "M" or snapshot.time_unit != "S":
+            raise EvaluationError(
+                f"{abi.model_id} currently requires length_unit='M' and time_unit='S'"
+            )
+        if snapshot.axes != "J2000":
+            raise EvaluationError(f"{abi.model_id} requires axes='J2000'")
 
 
 def _validate_target_parameter(
@@ -507,7 +635,9 @@ def evaluate_force_plan(
     _validate_dependencies(plan.models)
     _validate_parameter_contracts(snapshot, plan)
     _validate_restricted_frame(snapshot, plan.models)
+    _validate_mutual_eih_frame(snapshot, plan.models)
     backend = resolve_backend(plan.backend)
+    _validate_force_abi_context(backend, snapshot, plan.models)
     tile_size = plan.backend.tile_size
     state_metadata = StateMetadataBinding(
         snapshot_id=snapshot.snapshot_id,
@@ -610,6 +740,39 @@ def evaluate_force_plan(
                     "restricted Schwarzschild 1PN correction only",
                     DETERMINISM_LIMITATION,
                 )
+            elif type(model) is MutualEIH1PN:
+                body_indices = _indices_for_ids(
+                    snapshot, model.body_ids, "mutual EIH body_ids"
+                )
+                _require_massive_sources(
+                    backend, massive, body_indices, "mutual EIH body_ids"
+                )
+                body_mask = _mask_for_indices(backend, body_count, body_indices)
+                acceleration = mutual_eih_1pn_acceleration(
+                    backend=backend,
+                    positions=positions,
+                    velocities=velocities,
+                    gravitational_parameters=gravitational_parameters,
+                    radii=radii,
+                    body_mask=body_mask,
+                    tile_size=tile_size,
+                    speed_of_light=model.speed_of_light,
+                    maximum_compactness=model.maximum_compactness,
+                    maximum_speed_fraction_squared=(
+                        model.maximum_speed_fraction_squared
+                    ),
+                    singularity_policy=SINGULARITY_POLICY_ERROR,
+                    collision_policy=COLLISION_POLICY_ERROR,
+                )
+                role = "CORRECTION_ONLY"
+                source_ids = model.body_ids
+                target_ids = model.body_ids
+                assumptions = (
+                    "mutual massive point bodies in barycentric inertial coordinates",
+                    "general relativity with beta=gamma=1 through retained EIH 1PN order",
+                    "correction only; simultaneous Newtonian acceleration supplied separately",
+                    DETERMINISM_LIMITATION,
+                )
             elif type(model) is CannonballSRP:
                 source_index = _indices_for_ids(
                     snapshot, (model.radiation_source_id,), "SRP radiation_source_id"
@@ -656,6 +819,87 @@ def evaluate_force_plan(
                     "radiation source is required to be marked massive",
                     "isotropic cannonball targets are massless with no backreaction",
                     "unshadowed radial pressure only",
+                    DETERMINISM_LIMITATION,
+                )
+            elif type(model) is EarthZonalJ2J5Force:
+                source_indices = _indices_for_ids(
+                    snapshot, model.source_ids, "Earth-zonal source_ids"
+                )
+                _require_massive_sources(
+                    backend, massive, source_indices, "Earth-zonal source_ids"
+                )
+                elapsed_time = snapshot.epoch - model.force.pole_policy.absolute_start_et
+                try:
+                    acceleration = evaluate_earth_zonal_pair_correction(
+                        model.force,
+                        body_ids=snapshot.body_ids,
+                        positions=positions,
+                        gravitational_parameters=gravitational_parameters,
+                        elapsed_time=elapsed_time,
+                    )
+                except EarthZonalError as exc:
+                    raise ForceDomainError(f"{model.model_id}: {exc}") from exc
+                role = "CORRECTION_ONLY"
+                source_ids = model.source_ids
+                target_ids = model.target_ids
+                assumptions = (
+                    "axisymmetric unnormalized Earth J2 through J5 pair correction",
+                    "J2000 Earth-pole policy evaluated at the force epoch",
+                    "NumPy CPU execution only",
+                    DETERMINISM_LIMITATION,
+                )
+            elif type(model) is LunarStaticDegree2Force:
+                source_indices = _indices_for_ids(
+                    snapshot, model.source_ids, "lunar degree-two source_ids"
+                )
+                _require_massive_sources(
+                    backend, massive, source_indices, "lunar degree-two source_ids"
+                )
+                elapsed_time = snapshot.epoch - model.force.absolute_start_et
+                try:
+                    acceleration = evaluate_lunar_static_degree2_pair_correction(
+                        model.force,
+                        body_ids=snapshot.body_ids,
+                        positions=positions,
+                        gravitational_parameters=gravitational_parameters,
+                        elapsed_time=elapsed_time,
+                    )
+                except LunarFigureError as exc:
+                    raise ForceDomainError(f"{model.model_id}: {exc}") from exc
+                role = "CORRECTION_ONLY"
+                source_ids = model.source_ids
+                target_ids = model.target_ids
+                assumptions = (
+                    "static unnormalized lunar degree-two principal-axis figure",
+                    "caller-bound orientation provider evaluated at the force epoch",
+                    "NumPy CPU execution only",
+                    DETERMINISM_LIMITATION,
+                )
+            elif type(model) is LunarStaticDegree3Force:
+                source_indices = _indices_for_ids(
+                    snapshot, model.source_ids, "lunar degree-three source_ids"
+                )
+                _require_massive_sources(
+                    backend, massive, source_indices, "lunar degree-three source_ids"
+                )
+                elapsed_time = snapshot.epoch - model.force.absolute_start_et
+                try:
+                    acceleration = evaluate_lunar_static_degree3_pair_correction(
+                        model.force,
+                        body_ids=snapshot.body_ids,
+                        positions=positions,
+                        gravitational_parameters=gravitational_parameters,
+                        elapsed_time=elapsed_time,
+                    )
+                except LunarDegree3Error as exc:
+                    raise ForceDomainError(f"{model.model_id}: {exc}") from exc
+                role = "CORRECTION_ONLY"
+                source_ids = model.source_ids
+                target_ids = model.target_ids
+                assumptions = (
+                    "static unnormalized lunar degree-three principal-axis figure",
+                    "caller-bound orientation provider evaluated at the force epoch",
+                    "NumPy CPU execution only",
                     DETERMINISM_LIMITATION,
                 )
             else:  # The exact-type preflight makes this unreachable.

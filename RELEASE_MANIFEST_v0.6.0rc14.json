@@ -1,0 +1,163 @@
+{
+  "claim_controls": {
+    "de440_equivalence_claimed": false,
+    "exact_general_relativity_claimed": false,
+    "general_cpu_gpu_superiority_claimed": false,
+    "general_rebound_superiority_claimed": false,
+    "navigation_or_production_authorized": false,
+    "portable_crossover_claimed": false,
+    "production_authorized": false,
+    "production_ephemeris_claimed": false
+  },
+  "general_dynamics_registry": {
+    "generation": 18,
+    "historical_package_binding": "0.6.0rc3",
+    "modified_for_rc14": false,
+    "scientific_claim_state": "SCREENING_ONLY"
+  },
+  "gr15_eih_1pn_batch": {
+    "api_id": "JX_GR15_EIH1PN_BATCH_V1",
+    "automatic_cuda_minimum_system_count": 128,
+    "automatic_policy_id": "jx.gr15.dispatch.ryzen-5500.rtx-5060-ti.11-body.10-year.v1",
+    "backend_neutral_owned_numpy_output": true,
+    "body_count": {
+      "maximum": 32,
+      "minimum": 2
+    },
+    "cpu_backend_id": "JX_GR15_EIH1PN_CPU_THREADS_V1",
+    "cpu_workers_default": 8,
+    "cuda_backend_id": "JX_GR15_EIH1PN_CUDA_NUMPY_V1",
+    "explicit_cuda_never_silently_falls_back": true,
+    "fail_closed_system_attribution": true,
+    "maximum_system_count": 65535,
+    "native_cpu_call_releases_gil": true,
+    "public_auto_api": "integrate_gr15_eih_1pn_batch",
+    "public_cpu_api": "integrate_gr15_eih_1pn_cpu_batch",
+    "scientific_claim_state": "SCREENING_ONLY",
+    "shared_and_per_system_gravitational_parameters": true,
+    "thread_pool_for_independent_cpu_systems": true,
+    "unmatched_auto_route_is_cpu": true
+  },
+  "package_version": "0.6.0rc14",
+  "release_actions": {
+    "commit_performed": false,
+    "publication_performed": false,
+    "push_performed": false,
+    "tag_created": false
+  },
+  "reproducible_packaging": {
+    "artifacts": {
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc14.tar.gz",
+        "sha256": "032a1185dd683012c2f9950fca1b4b1174c579596048d84dad6bab2258c5eced",
+        "size_bytes": 773529
+      },
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc14-cp314-cp314-linux_x86_64.whl",
+        "sha256": "d77400cb7901dde950ba73d9ea3cc5eddaa5a9d31255b3ae92c1b3f00ca6b3f8",
+        "size_bytes": 975878
+      }
+    },
+    "build_backend": "setuptools==78.1.1",
+    "dependency_reuse_disclosure": {
+      "cupy_and_cuda_toolkit_source": "project .venv exact installed dependency set",
+      "cuda_path_explicitly_supplied": true,
+      "fresh_environments_installed_artifacts_with_no_deps": true,
+      "fresh_package_import_paths_verified": true
+    },
+    "fresh_sdist_cpu_cuda_smoke_passed": true,
+    "fresh_wheel_cpu_cuda_smoke_passed": true,
+    "installed_smoke_digest": "4ddaf61a7fa21ac3db9db3ee78a042cbe19edbcfadb8f50af4f723de6da3632f",
+    "outer_reproducible_build_invocations": 2,
+    "sdist_byte_identical": true,
+    "total_clean_builds": 4,
+    "twine_check": {
+      "status": "PASS",
+      "version": "6.2.0"
+    },
+    "wheel_byte_identical": true
+  },
+  "runtime": {
+    "cpu_model": "AMD Ryzen 5 5500",
+    "cuda_driver_api_version": 13020,
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "numpy_version": "2.3.5",
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+    "python_version": "3.14.4"
+  },
+  "schema": "jxplanetx.release-manifest.v0.6.0rc14.v1",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "source_bindings": {
+    "batch_cpu_test_sha256": "81f75d60a0033efe55184efb11fb437864ca97c782ae99caf18d27930d508e59",
+    "batch_cuda_test_sha256": "1a175832c3f7f772a9bb3ed3c510a72370e217e9987e0ca9d691ee8b3de76dbc",
+    "batch_module_sha256": "687de69981fbe531563b3bb116170a861b744f46c56bdfe4dc420b92fbedc80a",
+    "dispatch_benchmark_sha256": "ed7e9a60f8b6e83f8975f05190ed61ad21b69f3f16a6c71d361f3843696eb199",
+    "dispatch_protocol_sha256": "ed6b78f9be00782afd4fdfac890b49b0002293530a2e4fbf4a0a251a47dca561",
+    "package_init_sha256": "da497667bb842892f07b776e1f61bb33ebafea2ad6960efadd2d8cbce1577183",
+    "pyproject_sha256": "a17a5aa08a60d4cb46e0f4246ebcd8bcd107bdd238b995e0beb3ad68dd62bd9f",
+    "readme_sha256": "a3b9f200e002f6ab2c13ea7b1ef26715b0ecc95b1837b7ab2c049d01ab0fb24a",
+    "reproducible_release_test_sha256": "82c87329a41970c66dced02770ed86cc4b69c44d69f50b8291585370116706b2",
+    "test_matrix_manifest_sha256": "4978ff9f0cb6a3ea6b8e6175fcb81cf4fa022fb2d82cb01be666affae10ece89"
+  },
+  "status": "LOCAL_RELEASE_CANDIDATE_PACKAGED_NOT_PUBLISHED",
+  "supported_dispatch_acceptance": {
+    "automatic_cuda_cutoff": 128,
+    "benchmark_report_file_sha256": "3a06d2c330ece0f2a61df126e423f859defb66dba83eaae382975248f6f4e125",
+    "benchmark_report_path": "/tmp/jx_gr15_dispatch_rc14_acceptance.json",
+    "benchmark_semantic_sha256": "de24879b66883576e864cfd6575a12d565e8b59bcd56cabf06431a8fd5522c7c",
+    "observed_stable_cuda_crossover": 96,
+    "portable_crossover_claimed": false,
+    "rows": [
+      {
+        "automatic_backend": "cpu",
+        "cpu_median_seconds": 3.5232196300000003,
+        "cuda_median_seconds": 4.138193743,
+        "cuda_speedup_over_cpu": 0.8513906909167157,
+        "systems": 64
+      },
+      {
+        "automatic_backend": "cpu",
+        "cpu_median_seconds": 5.252761582000001,
+        "cuda_median_seconds": 5.059961058000001,
+        "cuda_speedup_over_cpu": 1.0381031635994855,
+        "systems": 96
+      },
+      {
+        "automatic_backend": "cuda",
+        "cpu_median_seconds": 7.010871865,
+        "cuda_median_seconds": 6.377053313,
+        "cuda_speedup_over_cpu": 1.0993905054404867,
+        "systems": 128
+      }
+    ],
+    "status": "PASS",
+    "system_scope": "independent eleven-body systems integrated for ten Julian years"
+  },
+  "verification": {
+    "batch_component_acceptance": {
+      "cpu_tests": 7,
+      "cuda_hardware_tests": 1,
+      "status": "PASS"
+    },
+    "cuda_hardware_profile": {
+      "isolated_file_lanes": 5,
+      "status": "PASS",
+      "test_count": 37,
+      "zero_skips": true
+    },
+    "full_live_matrix": {
+      "cuda_hardware_file_lanes": 5,
+      "cuda_optional_file_lanes": 23,
+      "isolated_file_lanes": 222,
+      "live_current_file_lanes": 194,
+      "status": "PASS"
+    },
+    "profile_manifest": {
+      "exact_non_overlapping_coverage": true,
+      "profile_count": 14,
+      "test_file_inventory": 273
+    }
+  }
+}
