@@ -1,0 +1,49 @@
+{
+  "schema": "jxplanetx.github-release-provenance.v1",
+  "version": "0.6.0rc16",
+  "source_release_commit": "256de6e24915d630b6fd69b666f4aa6f78354523",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "release_channel": "github_prerelease",
+  "distribution_scope": "github_only",
+  "build_environment": {
+    "python": "3.14.4",
+    "setuptools": "78.1.1",
+    "packaging": "26.3",
+    "wheel": "0.48.0"
+  },
+  "artifacts": {
+    "wheel": {
+      "filename": "jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl",
+      "size_bytes": 1017647,
+      "sha256": "f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f"
+    },
+    "sdist": {
+      "filename": "jxplanetx-0.6.0rc16.tar.gz",
+      "size_bytes": 811084,
+      "sha256": "8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0"
+    }
+  },
+  "verification": {
+    "independent_clean_builds": 2,
+    "wheel_byte_identical": true,
+    "sdist_byte_identical": true,
+    "fresh_wheel_import_passed": true,
+    "fresh_sdist_import_passed": true,
+    "release_contract_tests": {
+      "passed": 16,
+      "failed": 0
+    },
+    "gr15_eih_cpu_acceptance_tests": {
+      "passed": 22,
+      "failed": 0
+    }
+  },
+  "claim_controls": {
+    "production_authorized": false,
+    "navigation_authorized": false,
+    "independent_ephemeris_claimed": false,
+    "general_rebound_superiority_claimed": false,
+    "registry_v19_included": false,
+    "post_rc16_qualification_included": false
+  }
+}

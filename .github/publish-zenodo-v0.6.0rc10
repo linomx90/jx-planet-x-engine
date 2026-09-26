@@ -1,6 +1,0 @@
-Archive JX General Dynamics 0.6.0rc10 as a new version of the rc8 Zenodo record.
-Source commit: 4d6866fe5e9b8a64c6924325baa233ca97e0afc3
-Asset commit: 044035a6e72457e5477eeee2dfc224b3489a740a
-GitHub release and PyPI distributions verified before this trigger.
-Retry 1: add safe Zenodo stage diagnostics; reuse any existing new-version draft.
-Retry 2: follow the public latest-version redirect before parsing its record ID.

@@ -1,0 +1,21 @@
+{
+  "schema": "jxplanetx.release-asset-chunks.v1",
+  "version": "0.6.0rc16",
+  "chunk_size_bytes": 65536,
+  "artifacts": {
+    "wheel": {
+      "chunk_directory": "chunks/wheel",
+      "chunk_count": 16,
+      "filename": "jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl",
+      "size_bytes": 1017647,
+      "sha256": "f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f"
+    },
+    "sdist": {
+      "chunk_directory": "chunks/sdist",
+      "chunk_count": 13,
+      "filename": "jxplanetx-0.6.0rc16.tar.gz",
+      "size_bytes": 811084,
+      "sha256": "8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0"
+    }
+  }
+}
