@@ -5,13 +5,13 @@ on:
     branches:
       - main
     paths:
-      - .github/publish-zenodo-v0.6.0rc10
+      - .github/publish-zenodo-v0.6.0rc16
 
 permissions:
   contents: read
 
 concurrency:
-  group: publish-zenodo-v0.6.0rc10
+  group: publish-zenodo-v0.6.0rc16
   cancel-in-progress: false
 
 jobs:
@@ -26,22 +26,50 @@ jobs:
       - name: Check out immutable release assets
         uses: actions/checkout@v4
         with:
-          ref: 044035a6e72457e5477eeee2dfc224b3489a740a
+          ref: 5e7a6938cd00a3e4678eb707bac4870dbdfffecc
           path: assets
-          sparse-checkout: release-assets/v0.6.0rc10
+          sparse-checkout: release-assets/v0.6.0rc16
           sparse-checkout-cone-mode: false
 
-      - name: Verify every archival file
+      - name: Assemble and verify every archival file
         shell: bash
         run: |
           set -euo pipefail
-          cd assets/release-assets/v0.6.0rc10
-          sha256sum --check JX_0.6.0rc10_SHA256SUMS
-          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 12
-          test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc10.json)" = \
-            "4d6866fe5e9b8a64c6924325baa233ca97e0afc3"
+          asset_dir="$GITHUB_WORKSPACE/assets/release-assets/v0.6.0rc16"
+          archive="$GITHUB_WORKSPACE/archive"
+          mkdir -p "$archive"
 
-      - name: Create and publish the rc10 version of the Zenodo record
+          test "$(find "$asset_dir/chunks/wheel" -maxdepth 1 -type f | wc -l)" -eq 16
+          test "$(find "$asset_dir/chunks/sdist" -maxdepth 1 -type f | wc -l)" -eq 13
+          test "$(find "$asset_dir/pypi/chunks/wheel" -maxdepth 1 -type f | wc -l)" -eq 16
+          cat "$asset_dir"/chunks/wheel/part-* > \
+            "$archive/jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl"
+          cat "$asset_dir"/chunks/sdist/part-* > \
+            "$archive/jxplanetx-0.6.0rc16.tar.gz"
+          cat "$asset_dir"/pypi/chunks/wheel/part-* > \
+            "$archive/jxplanetx-0.6.0rc16-cp314-cp314-manylinux_2_31_x86_64.whl"
+          cp "$asset_dir/ASSEMBLY.json" "$archive/"
+          cp "$asset_dir/JX_0.6.0rc16_SHA256SUMS" "$archive/"
+          cp "$asset_dir/RELEASE_MANIFEST_v0.6.0rc16.json" "$archive/"
+          cp "$asset_dir/RELEASE_PROVENANCE_v0.6.0rc16.json" "$archive/"
+          cp "$asset_dir/PYPI_ASSEMBLY.json" "$archive/"
+          cp "$asset_dir/PYPI_ARTIFACTS_v0.6.0rc16.json" "$archive/"
+          cp "$GITHUB_WORKSPACE/source/RELEASE_NOTES_v0.6.0rc16.md" "$archive/"
+
+          cd "$archive"
+          sha256sum --check JX_0.6.0rc16_SHA256SUMS
+          echo "522c7cd8976e76f04fe73a012f5335136fb0b0c472298f07e494692efeb9a2b4  jxplanetx-0.6.0rc16-cp314-cp314-manylinux_2_31_x86_64.whl" | sha256sum --check -
+          test "$(jq -er '.source_release_commit' RELEASE_PROVENANCE_v0.6.0rc16.json)" = \
+            "256de6e24915d630b6fd69b666f4aa6f78354523"
+          test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc16.json)" = \
+            "256de6e24915d630b6fd69b666f4aa6f78354523"
+          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 10
+          find . -maxdepth 1 -type f -printf '%f\0' | sort -z | \
+            xargs -0 sha256sum > JX_0.6.0rc16_ZENODO_SHA256SUMS
+          sha256sum --check JX_0.6.0rc16_ZENODO_SHA256SUMS
+          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 11
+
+      - name: Create and publish the rc16 version of the Zenodo record
         shell: bash
         env:
           ZENODO_ACCESS_TOKEN: ${{ secrets.ZENODO_ACCESS_TOKEN }}
@@ -57,11 +85,11 @@ jobs:
           auth="Authorization: Bearer $ZENODO_ACCESS_TOKEN"
           native="application/vnd.inveniordm.v1+json"
           accept="Accept: $native"
-          metadata="source/.zenodo/jx-0.6.0rc10.json"
-          assets="assets/release-assets/v0.6.0rc10"
+          metadata="source/.zenodo/jx-0.6.0rc16.json"
+          assets="$GITHUB_WORKSPACE/archive"
           anchor_id="22908602"
-          expected_previous="0.6.0rc8"
-          target_version="0.6.0rc10"
+          expected_previous="0.6.0rc10"
+          target_version="0.6.0rc16"
 
           jq '{
             access:{record:"public",files:"public"},
@@ -84,7 +112,7 @@ jobs:
               subjects:[.metadata.keywords[] | {subject:.}]
             }
           }' "$metadata" > /tmp/rdm-metadata.json
-          echo "Zenodo rc10 metadata is valid"
+          echo "Zenodo rc16 metadata is valid"
 
           verify_public_files() {
             local record_json="$1"
@@ -113,7 +141,7 @@ jobs:
             verify_public_files /tmp/latest-public.json
             jq -er '{id,doi:(.pids.doi.identifier // .doi),url:(.links.self_html // .links.record_html)}' \
               /tmp/latest-public.json
-            echo "Zenodo rc10 already exists and every public file is verified."
+            echo "Zenodo rc16 already exists and every public file is verified."
             exit 0
           fi
           if [[ "$latest_version" != "$expected_previous" ]]; then
@@ -185,8 +213,8 @@ jobs:
 
           curl --fail-with-body --silent --show-error \
             --retry 8 --retry-all-errors --retry-delay 5 --max-time 120 \
-            "$api/records/$published_id" > /tmp/public-rc10.json
-          test "$(jq -er '.metadata.version' /tmp/public-rc10.json)" = "$target_version"
-          verify_public_files /tmp/public-rc10.json
+            "$api/records/$published_id" > /tmp/public-rc16.json
+          test "$(jq -er '.metadata.version' /tmp/public-rc16.json)" = "$target_version"
+          verify_public_files /tmp/public-rc16.json
           jq -er '{id,doi:(.pids.doi.identifier // .doi),url:(.links.self_html // .links.record_html)}' \
-            /tmp/public-rc10.json
+            /tmp/public-rc16.json
