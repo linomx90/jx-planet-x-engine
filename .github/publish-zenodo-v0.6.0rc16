@@ -6,3 +6,4 @@ scientific_claim_state=SCREENING_ONLY
 publication=production-zenodo
 expected_previous=0.6.0rc10
 anchor_record=22908602
+attempt=2-exclude-checksum-self
