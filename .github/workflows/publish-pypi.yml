@@ -20,7 +20,7 @@ jobs:
       - name: Check out verified release assets
         uses: actions/checkout@v4
         with:
-          ref: e8898f4deff78ed17014a811b08176dfab800ebb
+          ref: 5e7a6938cd00a3e4678eb707bac4870dbdfffecc
           path: assets
           sparse-checkout: release-assets/v0.6.0rc16
           sparse-checkout-cone-mode: false
@@ -33,27 +33,26 @@ jobs:
           dist="$GITHUB_WORKSPACE/dist"
           mkdir -p "$dist"
 
-          test "$(find "$asset_dir/chunks/wheel" -maxdepth 1 -type f | wc -l)" -eq 16
+          test "$(find "$asset_dir/pypi/chunks/wheel" -maxdepth 1 -type f | wc -l)" -eq 16
           test "$(find "$asset_dir/chunks/sdist" -maxdepth 1 -type f | wc -l)" -eq 13
-          cat "$asset_dir"/chunks/wheel/part-* > \
-            "$dist/jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl"
+          cat "$asset_dir"/pypi/chunks/wheel/part-* > \
+            "$dist/jxplanetx-0.6.0rc16-cp314-cp314-manylinux_2_31_x86_64.whl"
           cat "$asset_dir"/chunks/sdist/part-* > \
             "$dist/jxplanetx-0.6.0rc16.tar.gz"
-          cp "$asset_dir/JX_0.6.0rc16_SHA256SUMS" "$dist/"
-          cp "$asset_dir/RELEASE_MANIFEST_v0.6.0rc16.json" "$dist/"
-          cp "$asset_dir/RELEASE_PROVENANCE_v0.6.0rc16.json" "$dist/"
-          cp "$asset_dir/ASSEMBLY.json" "$dist/"
+          cp "$asset_dir/PYPI_ASSEMBLY.json" "$dist/"
+          cp "$asset_dir/PYPI_ARTIFACTS_v0.6.0rc16.json" "$dist/"
 
           cd "$dist"
-          sha256sum --check JX_0.6.0rc16_SHA256SUMS
-          echo "f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f  jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl" | sha256sum --check -
+          echo "522c7cd8976e76f04fe73a012f5335136fb0b0c472298f07e494692efeb9a2b4  jxplanetx-0.6.0rc16-cp314-cp314-manylinux_2_31_x86_64.whl" | sha256sum --check -
           echo "8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0  jxplanetx-0.6.0rc16.tar.gz" | sha256sum --check -
-          test "$(jq -er '.source_release_commit' RELEASE_PROVENANCE_v0.6.0rc16.json)" = \
+          test "$(jq -er '.source_release_commit' PYPI_ARTIFACTS_v0.6.0rc16.json)" = \
             "256de6e24915d630b6fd69b666f4aa6f78354523"
-          test "$(jq -er '.version' ASSEMBLY.json)" = "0.6.0rc16"
+          test "$(jq -er '.version' PYPI_ASSEMBLY.json)" = "0.6.0rc16"
+          test "$(jq -er '.repair.platform_tag' PYPI_ARTIFACTS_v0.6.0rc16.json)" = \
+            "manylinux_2_31_x86_64"
 
           find . -maxdepth 1 -type f \
-            ! -name 'jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl' \
+            ! -name 'jxplanetx-0.6.0rc16-cp314-cp314-manylinux_2_31_x86_64.whl' \
             ! -name 'jxplanetx-0.6.0rc16.tar.gz' -delete
 
       - name: Publish exact distributions with attestations
