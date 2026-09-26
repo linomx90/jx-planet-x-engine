@@ -1,0 +1,6 @@
+version=0.6.0rc16
+release_commit=256de6e24915d630b6fd69b666f4aa6f78354523
+pypi_wheel_sha256=f54ac18fb074b25430155dde2bcdd9fdf2d3dc2c96765ba191ed955112fd799f
+sdist_sha256=8f0a9964fca26acf0ba2cc7ab887b63c5544cc45be850fd43bdca8d41722e4b0
+platform_tag=linux_x86_64
+publication=production-pypi
