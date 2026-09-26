@@ -1,0 +1,91 @@
+name: Publish JX 0.6.0rc16
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-v0.6.0rc16.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-jx-v0.6.0rc16
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the immutable release source
+        uses: actions/checkout@v4
+        with:
+          ref: 256de6e24915d630b6fd69b666f4aa6f78354523
+          path: source
+          fetch-depth: 0
+
+      - name: Check out the immutable release assets
+        uses: actions/checkout@v4
+        with:
+          ref: e8898f4deff78ed17014a811b08176dfab800ebb
+          path: assets
+
+      - name: Reassemble and verify every release asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          asset_dir="$GITHUB_WORKSPACE/assets/release-assets/v0.6.0rc16"
+          dist="$GITHUB_WORKSPACE/dist"
+          mkdir -p "$dist"
+
+          test "$(find "$asset_dir/chunks/wheel" -maxdepth 1 -type f | wc -l)" -eq 16
+          test "$(find "$asset_dir/chunks/sdist" -maxdepth 1 -type f | wc -l)" -eq 13
+          cat "$asset_dir"/chunks/wheel/part-* > \
+            "$dist/jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl"
+          cat "$asset_dir"/chunks/sdist/part-* > \
+            "$dist/jxplanetx-0.6.0rc16.tar.gz"
+          cp "$asset_dir/ASSEMBLY.json" "$dist/"
+          cp "$asset_dir/JX_0.6.0rc16_SHA256SUMS" "$dist/"
+          cp "$asset_dir/RELEASE_MANIFEST_v0.6.0rc16.json" "$dist/"
+          cp "$asset_dir/RELEASE_PROVENANCE_v0.6.0rc16.json" "$dist/"
+
+          cd "$dist"
+          sha256sum --check JX_0.6.0rc16_SHA256SUMS
+          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 6
+          test "$(jq -er '.package_version' RELEASE_MANIFEST_v0.6.0rc16.json)" = \
+            "0.6.0rc16"
+          test "$(jq -er '.source_release_commit' RELEASE_PROVENANCE_v0.6.0rc16.json)" = \
+            "256de6e24915d630b6fd69b666f4aa6f78354523"
+          test "$(jq -er '.version' ASSEMBLY.json)" = "0.6.0rc16"
+
+      - name: Create the annotated tag and GitHub prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          expected="256de6e24915d630b6fd69b666f4aa6f78354523"
+          cd source
+          if git rev-parse --verify refs/tags/v0.6.0rc16 >/dev/null 2>&1; then
+            test "$(git rev-list -n 1 v0.6.0rc16)" = "$expected"
+          else
+            git config user.name "linomx90"
+            git config user.email "33378469+linomx90@users.noreply.github.com"
+            git tag --annotate v0.6.0rc16 "$expected" \
+              --message "JX General Dynamics 0.6.0rc16"
+            git push origin refs/tags/v0.6.0rc16
+          fi
+
+          cd "$GITHUB_WORKSPACE"
+          if gh release view v0.6.0rc16 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release v0.6.0rc16 already exists; verified tag remains unchanged."
+            exit 0
+          fi
+          gh release create v0.6.0rc16 \
+            dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --prerelease \
+            --title "JX General Dynamics 0.6.0rc16" \
+            --notes-file source/RELEASE_NOTES_v0.6.0rc16.md
