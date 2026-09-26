@@ -1,0 +1,8 @@
+version=0.6.0rc16
+release_commit=256de6e24915d630b6fd69b666f4aa6f78354523
+github_release=https://github.com/linomx90/jx-planet-x-engine/releases/tag/v0.6.0rc16
+pypi_release=https://pypi.org/project/jxplanetx/0.6.0rc16/
+scientific_claim_state=SCREENING_ONLY
+publication=production-zenodo
+expected_previous=0.6.0rc10
+anchor_record=22908602
