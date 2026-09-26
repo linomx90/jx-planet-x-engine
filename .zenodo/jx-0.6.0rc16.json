@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "title": "JX General Dynamics 0.6.0rc16",
+    "upload_type": "software",
+    "description": "<p>JX General Dynamics 0.6.0rc16 is a reproducible release candidate of the JX celestial-dynamics engine. It promotes the retained coupled lunar equations to the supported public <code>integrate_lunar_ephemeris_v1</code> component: an eleven-body Solar-System state with lunar mantle and fluid-core rotation, fully mutual Newtonian gravity, mutual EIH 1PN, reacting lunar quadrupoles, reacting fixed-axis Earth J2, and mantle/core coupling under a fixed-step RKF78 checkpoint contract.</p><p>The outcome-blind 90-day and 365-day protocol passed every frozen long-arc gate. At 365 days, the candidate Earth–Moon position error was 0.061568 km versus 3.729707 km for the no-EIH control, and the Sun–Earth error was 0.029261 km versus 56.094548 km. The aggregate candidate/control RMS ratio was 0.012199 and the worst individual ratio was 0.018686. The archive contains the exact source distribution, the original GitHub CPython 3.14 Linux wheel, the PyPI-compatible <code>manylinux_2_31_x86_64</code> wheel, release and PyPI provenance manifests, release notes, and checksum inventories.</p><p>Scientific status: <strong>SCREENING_ONLY</strong>. This release is not an independent ephemeris, is not validated for navigation or raw lunar-laser-ranging reduction, and does not establish general superiority over REBOUND. It omits delayed tides, time-variable lunar deformation, lunar degree three and higher, terrestrial tesserals and higher zonals, minor bodies and planetary satellites, observation reduction, and parameter fitting. General Dynamics Registry V18 remains immutable historical evidence bound to 0.6.0rc3.</p><p>Rights: Copyright 2026 Lino Avila. The JX source is publicly viewable but proprietary; no permission to copy, modify, redistribute, sublicense, sell, or create derivative works is granted except by prior written authorization. Third-party components retain their own licenses.</p>",
+    "creators": [
+      {
+        "name": "Avila, Lino"
+      }
+    ],
+    "publisher": "Zenodo",
+    "version": "0.6.0rc16",
+    "publication_date": "2026-09-26",
+    "access_right": "open",
+    "license": "other-closed",
+    "keywords": [
+      "celestial mechanics",
+      "N-body integration",
+      "Gauss-Radau",
+      "lunar ephemeris",
+      "relativistic dynamics",
+      "CUDA",
+      "reproducibility",
+      "scientific screening"
+    ],
+    "related_identifiers": [
+      {
+        "identifier": "https://github.com/linomx90/jx-planet-x-engine/releases/tag/v0.6.0rc16",
+        "relation": "isSupplementTo",
+        "scheme": "url"
+      },
+      {
+        "identifier": "https://pypi.org/project/jxplanetx/0.6.0rc16/",
+        "relation": "isSupplementTo",
+        "scheme": "url"
+      }
+    ]
+  }
+}
