@@ -22,7 +22,8 @@ The [experiment data index](docs/JX_EXPERIMENT_DATA_INDEX.md) provides the
 non-destructive map of the local immutable library, active runs, benchmark
 definitions, result bundles, sibling archives, and metadata gaps. It preserves
 the library authority catalog as the source of truth and does not promote
-workspace results.
+workspace results. Research packages marked "local-only" below are indexed
+there but are not included in this public repository.
 
 The installable distribution and command remain `jxplanetx` for backward
 compatibility. Version 0.6.0rc16 carries the immutable General Dynamics
@@ -244,7 +245,7 @@ reference, screening-only result; see
 [`docs/JX_PUBLIC_LUNAR_EPHEMERIS_90_365_HOLDOUT.md`](docs/JX_PUBLIC_LUNAR_EPHEMERIS_90_365_HOLDOUT.md).
 
 NumPy CPU and optional CuPy CUDA 12/13 code paths are available. The
-[GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md) records
+GPU scientific ladder V1 (local-only) records
 fixture-specific CPU/CUDA parity, the complete live-engine test scope, a
 reduced eleven-body replay, descriptive interleaved timings, and a large
 mutual-gravity CUDA scale observation on one project-owned RTX 5060 Ti. That
@@ -261,14 +262,14 @@ parity, device residency, no implicit transfer, mixed-input refusal, float32
 refusal, and CuPy trajectory custody. It is not cross-device qualification, a
 performance or speedup claim, production fitness, or scientific validation.
 
-The additive [eleven-body portable evidence V1](runs/jx_eleven_body_portable_v1/README.md)
+The additive eleven-body portable evidence V1 (local-only)
 provides the compact Ubuntu workflow: offline integrity verification, exact
 dependency records, a host-readiness doctor, a fresh bounded CPU/GPU replay,
 and the saved 100-year REBOUND comparator. It remains `SCREENING_ONLY`; the
 historical 100-year result is offline-verifiable but its fresh standalone
 rerun is explicitly blocked by incomplete archived JX source closure.
 
-The additive [R0 source-closed 100-year confirmation package](runs/jx_reph_v1_r0_source_closed_100y/README.md)
+The additive R0 source-closed 100-year confirmation package (local-only)
 resolves that archived source closure from a provenance-bound Git bundle plus
 the four accepted comparator overlays. Its bounded construction preflight
 passes, but the 100-year pair has not yet run. Any future run remains
@@ -276,13 +277,13 @@ passes, but the 100-year pair has not yet run. Any future run remains
 authorization, and must pass the separate offline execution verifier before
 its result is described as verified.
 
-The additive [cosmology particle-mesh foundation](runs/jx_cosmology_pm_foundation_v1/README.md)
+The additive cosmology particle-mesh foundation (local-only)
 extends the same project with a native NumPy/CuPy periodic collisionless-gravity
 solver in a prescribed flat expanding background. Its frozen analytic
 growing-mode benchmarks pass at 128^3 and 256^3 particles, with
 near-second-order spatial and temporal convergence, CPU/GPU parity, and an
 independently coded planar NumPy reference. The
-[256^3 validation package](runs/jx_cosmology_pm_256_independent_r2/README.md)
+256^3 validation package (local-only)
 retains the complete cross-code evidence. The first 256^3 attempt is retained
 as a stopped accumulator failure; the repaired run keeps its thresholds and
 workload unchanged. This is a qualification of one controlled
@@ -290,7 +291,7 @@ foundation workload only. It is not a realistic structure-formation run and
 does not include gas, radiation, plasma, nuclear physics, general relativity,
 an observational fit, or a production cosmology claim.
 
-The [R4 dark-matter plus baryon benchmark](runs/jx_cosmology_baryons_3d_r4/README.md)
+The R4 dark-matter plus baryon benchmark (local-only)
 adds a native 128^3 adiabatic gas mesh coupled to 2,097,152 dark-matter particles
 through the same spectral gravity field. It validates three-direction linear
 and complex phase, periodic conservation, gas positivity, sound-wave
@@ -414,7 +415,7 @@ unqualified `MODEL_OUTPUT`.
 
 ### Packaged native orbital benchmark
 
-The [portable-scenario equal-binary qualification](runs/jx_dynamics_scenario_equal_binary_v1/README.md)
+The portable-scenario equal-binary qualification (local-only)
 freezes three content-addressed public `DynamicsScenario` inputs, the complete
 engine source used to execute them, a prewritten analytic oracle and 17 gates,
 three byte-identical accepted reports, and an independent offline verifier.
@@ -423,7 +424,7 @@ conservation, symmetry, accounting, manifest, and reproducibility checks. This
 is a fixture-specific numerical qualification, not a general N-body,
 eleven-body, lunar-rotation, or production claim.
 
-The [100-period equal-binary reproducibility package](runs/jx_equal_binary_100_period_repro_v1/README.md)
+The 100-period equal-binary reproducibility package (local-only)
 turns one existing benchmark into a self-contained, offline artifact. It
 includes the exact JX source snapshot, frozen inputs and gates, the complete
 path-normalized reference result, an independent checksum/result verifier, and a
@@ -433,7 +434,7 @@ reference exactly on the recorded runtime. REBOUND is deliberately disabled,
 timings are excluded, and the result makes no general N-body, superiority, or
 production-qualification claim.
 
-The [orbital validation ladder v4](runs/jx_orbital_validation_ladder_v4/README.md)
+The orbital validation ladder v4 (local-only)
 combines that analytic foundation with a fresh one-day, DE440-initialized
 resolved-eleven-body Earth–Moon J2 fixture and an accepted broader J2 study.
 The third tier covers three start epochs, 1-, 7-, and 30-day horizons, and a
@@ -446,7 +447,7 @@ marks engineering reproducibility `PASS` while retaining scientific
 qualification as `NOT_QUALIFIED` and the project claim state as
 `SCREENING_ONLY`.
 
-The [GPU scientific ladder V1](runs/jx_gpu_scientific_ladder_v1/README.md)
+The GPU scientific ladder V1 (local-only)
 extends the engineering evidence across the live NumPy and CuPy paths. On its
 recorded runtime, all 228 engine tests pass in normal and optimized Python, and
 the frozen one-day reduced eleven-body RKF78 endpoint is bitwise identical on
