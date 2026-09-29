@@ -1,0 +1,20 @@
+{
+  "contract_sha256": "dd4527ef2b7d61bda93395d9dec7107b57c962c88aee3f1f1032af60dd055d63",
+  "execution_instance_id": "d6162c36b4af993dd50bcc0e852e1ae2",
+  "execution_label": "A",
+  "experiment_id": "jx-xp1-public-synthetic-response-v1",
+  "registration_sha256": "9b8fb748ce3850cbf908c6b1dc8d22c0ffb7f94a2223d0d3f1fbfedb1e9dca81",
+  "runner_sha256": "eaabbf56b80c6de319292073ab9404d4a57eeb3ae9b07392db5275e6342b43dd",
+  "runtime": {
+    "python_executable_sha256": "021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7",
+    "python_version": "3.12.13",
+    "rebound_binary_sha256": "fe7a23bcece1c3f1f869089e9e8d806bedb4727d893d2e551339adbb6665c28a",
+    "rebound_build": "Nov 13 2025 14:44:51",
+    "rebound_python_source_file_count": 29,
+    "rebound_python_source_sha256": "2c40b16571d57049cbf4bb8329a0c58342f3dc0f0cf49d860ca77fda5a73ae3a",
+    "rebound_version": "4.4.11"
+  },
+  "schema": "jx-xp1-run-manifest/v1",
+  "seed_manifest_sha256": "92de9fae8c32f322c58216c64355739917dddee2881e823541b7fbad791e1ac7",
+  "verifier_sha256": "30eb366b84dcf67f50d2aca1b9dcf8a357f13e0c96eec7aba85935e9b095e2d6"
+}

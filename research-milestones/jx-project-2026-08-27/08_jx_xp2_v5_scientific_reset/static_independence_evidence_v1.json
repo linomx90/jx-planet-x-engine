@@ -1,0 +1,37 @@
+{
+  "body": {
+    "allowed_shared_artifact_ids": [
+      "CONTRACT",
+      "INITIAL_STATES",
+      "SEED_MANIFEST",
+      "SELECTION_MANIFEST"
+    ],
+    "authorizes": {
+      "activation": false,
+      "compilation": false,
+      "dynamics": false,
+      "execution": false,
+      "gpu": false,
+      "materialization": false,
+      "network": false,
+      "observed_data": false,
+      "publication": false,
+      "registration": false,
+      "simulation": false
+    },
+    "forbidden_independent_dependencies": [
+      "PRIMARY_MODULE",
+      "PRIMARY_HELPER",
+      "PRIMARY_CACHE",
+      "PRIMARY_NATIVE_RUNTIME",
+      "REBOUND"
+    ],
+    "runtime_probe_complete": false,
+    "source_import_separation_observed": false,
+    "static_scan_rows": [],
+    "status": "BLOCKED_TOTAL_STATIC_AND_RUNTIME_INDEPENDENCE_EVIDENCE_NOT_MATERIALIZED"
+  },
+  "experiment_id": "JX-XP2",
+  "record_id": "A12",
+  "schema": "jx-xp2-v5-static-independence-evidence/v1"
+}

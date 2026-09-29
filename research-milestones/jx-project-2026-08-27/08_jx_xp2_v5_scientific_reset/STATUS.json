@@ -1,0 +1,13 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_XP2_V5_ENGINEERING_AND_RESET",
+  "publication_category": "NONAUTHORITY_REVIEW_AND_PRESERVATION",
+  "canonical_publication_status": "NONAUTHORITY_REVIEW_ONLY_AND_PRESERVATION_ONLY",
+  "claim_ceiling": "NONE",
+  "result_present": false,
+  "interpretation_allowed": "STATIC_INTEGRITY_AND_RECOVERY_STATUS_ONLY",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "RETROSPECTIVE_GITHUB_PUBLICATION_ONLY",
+  "superseded_by": "SCIENTIFIC_RESET_REQUIRES_NEW_RESEARCH_DESIGN"
+}

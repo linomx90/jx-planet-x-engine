@@ -1,0 +1,13 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_E1_HARDENED_SMOKE",
+  "publication_category": "ENGINEERING_RESULT",
+  "canonical_publication_status": "ENGINEERING_SMOKE_VALID",
+  "claim_ceiling": "ENGINEERING_SURROGATE_ONLY",
+  "result_present": true,
+  "interpretation_allowed": "100_YEAR_SYNTHETIC_MACHINERY_AND_REPLAY_TEST_ONLY",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY",
+  "superseded_by": "JX_E1_50K_FOR_LONGER_ENGINEERING_SCOPE_ONLY"
+}

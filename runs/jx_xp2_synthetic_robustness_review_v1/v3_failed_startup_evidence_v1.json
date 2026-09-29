@@ -1,0 +1,41 @@
+{
+  "schema": "jx-xp2-v3-failed-startup-evidence/v1",
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v4",
+  "role": "IMMUTABLE_V3_PROTOCOL_FAILURE_EVIDENCE_ONLY_NOT_A_TRAJECTORY_INPUT_OR_SCIENTIFIC_RESULT",
+  "diagnosis": "V3_PROJECTED_LIVE_REBOUND_ALLOCATOR_AND_MERCURIUS_CACHE_STATE_AS_IF_SAVE_LOAD_PRESERVED_IT_BYTE_FOR_BYTE",
+  "v3_registration": {"path": "../jx_xp2_robustness_v3/registration_v1.json", "size_bytes": 2654, "sha256": "ca9a2bad38e85d53af56133effd452c8338364265549883f881a4fb7ef1dd59b"},
+  "v3_run_manifest": {"path": "../jx_xp2_runs_v3/output_a/run_manifest.json", "size_bytes": 1518, "sha256": "ee8ded3d319700fb1a8e5135866d22c039e8c0a621e3d5b322464d64b6717c2f"},
+  "v3_attempt_ledger": {"path": "../jx_xp2_runs_v3/output_a/attempt_ledger.jsonl", "size_bytes": 9162, "sha256": "25ed38c7e416f2700f2b9d23b6c7ded1d26df2b495b664a1553ea1db51dc0458"},
+  "v3_execution_lock": {"path": "../jx_xp2_runs_v3/output_a/execution.lock", "size_bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+  "ledger_counts": {"START": 12, "PASS": 0, "FAIL": 9, "OPEN": 3},
+  "open_attempts": ["CI01-P0/segment-00/attempt-03", "CI01-P1/segment-00/attempt-03", "CI01-P2/segment-00/attempt-03"],
+  "failure_receipts": [
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_CI01-P0_segment_00_attempt_01.json", "size_bytes": 722, "sha256": "1e2cd01c67ecb4e3033e1fdbfd0d115d49f509bdaa16da5058eeb6f044fa5830"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_CI01-P0_segment_00_attempt_02.json", "size_bytes": 723, "sha256": "86df2ef495d02e6f232575c09f0d5429a49ee7950cea8959e43a845062215e6d"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_CI01-P1_segment_00_attempt_01.json", "size_bytes": 722, "sha256": "a4bedeb2dfffc490215742ea98f941af1ce1776e6bbfd532d6669dd5b7a19e24"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_CI01-P1_segment_00_attempt_02.json", "size_bytes": 723, "sha256": "972d556a64364d00c0465eece69e6f910c02e5fc602f77fa139c3cc3554de385"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_CI01-P2_segment_00_attempt_01.json", "size_bytes": 722, "sha256": "9cbf3b364d3c5b2f40551e841b9bd62e6d6c7556ffd22ec5e8b53e82697ae534"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_CI01-P2_segment_00_attempt_02.json", "size_bytes": 723, "sha256": "f6e741f715878d01227f1f00972119b27edcd0ea68e4afdc80f2b7f3addd3d6e"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_M0_segment_00_attempt_01.json", "size_bytes": 717, "sha256": "a3610400d65976da258f490f8d77990355479874c02f5073ae91a64b4c4e7ad0"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_M0_segment_00_attempt_02.json", "size_bytes": 717, "sha256": "dc1d09c6d3af97683c46694689d1991a7de8efc92fcc354a6722aa58f87104de"},
+    {"path": "../jx_xp2_runs_v3/output_a/failures/failure_M0_segment_00_attempt_03.json", "size_bytes": 718, "sha256": "2b0c5127d4c71d5d01aa697358e492eeec120b4c81fb7399b27abbc0ec2bf99c"}
+  ],
+  "tree_fingerprint": {
+    "root_path": "../jx_xp2_runs_v3/output_a",
+    "schema": "jx-xp2-v3-verifier-tree-fingerprint/v1",
+    "digest_formula": "SHA256_CANONICAL_JSON_OF_ROWS",
+    "root_entry_included": false,
+    "entry_count": 22,
+    "entry_order": "RELATIVE_POSIX_PATH_ASCENDING",
+    "directory_row": ["relative_posix_path", "D"],
+    "file_row": ["relative_posix_path", "F", "size_bytes", "sha256"],
+    "symlinks_hardlinks_and_special_files_allowed": false,
+    "sha256": "82ac3e9abc517d87daa99053f06a59d347d9eb19347fb43cf09242eee532a3eb"
+  },
+  "absence_assertions": {"segment_PASS_rows": 0, "segment_commits": 0, "checkpoints": 0, "primary_results": 0, "verification_receipts": 0},
+  "v3_output_policy": "FAILED_CLOSED_STARTUP_DIAGNOSTIC_ONLY; NO_PROMOTION_NO_RESUME_NO_SCIENTIFIC_CONSUMPTION",
+  "v3_scientific_outcomes_gates_or_classification_consumed": false,
+  "protocol_repair_only_scientific_design_unchanged": true,
+  "protected_read_only_trees": ["../jx_xp2_robustness_v3", "../jx_xp2_runs_v3"],
+  "output_receipt_or_checkpoint_tree_overlap": "FORBIDDEN"
+}

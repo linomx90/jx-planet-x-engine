@@ -1,0 +1,33 @@
+{
+  "schema": "jx-xp2-v1-invalid-protocol-diagnostic/v1",
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v1",
+  "artifact_class": "STOPPED_INVALID_PROTOCOL_DIAGNOSTIC_ONLY",
+  "recorded_at_utc": "2026-08-23T21:48:32Z",
+  "registration_sha256": "7ab012862513df6d597d58270bdd1abab33cbea25a0f63e018279f8705aaafba",
+  "output_a_relative_path": "output_a",
+  "output_a_tree_manifest_sha256": "6cda521e4132ec582755b9bd56677db4dcf230086c96ac5d9499db10f949b817",
+  "output_a_total_file_bytes": 30319375,
+  "attempt_ledger_sha256": "557a540cfbf42ed87abcd4d13cee2349922658ebe8829e6004abe75e88788751",
+  "attempt_ledger_counts_at_stop": {
+    "starts": 175,
+    "passes": 150,
+    "fails": 21,
+    "open_attempts_interrupted_by_stop": 4
+  },
+  "complete_arm_count": 4,
+  "result_v1_emitted": false,
+  "a_verification_receipt_emitted": false,
+  "execution_b_started": false,
+  "dop853_execution_started": false,
+  "protocol_violation": {
+    "registered_policy": "failure_receipts_permanent=true",
+    "observed_terminal_fail_rows": 21,
+    "observed_permanent_failure_receipts": 0,
+    "cause_classification": "COORDINATOR_CHILD_COMMIT_BEFORE_PASS_LEDGER_VISIBILITY_RACE",
+    "post_hoc_repair_forbidden": true
+  },
+  "disposition": "V1_EXECUTION_A_STOPPED_AND_FORBIDDEN_FROM_SCIENTIFIC_OR_A_B_REPLAY_USE",
+  "scientific_classification": null,
+  "authorizes_analysis": false,
+  "mandatory_nonclaim": "This stopped partial execution is an invalid-protocol diagnostic, not a numerical or scientific XP2 result. It cannot authorize execution B, DOP853 comparison, an official classification, or any claim about Planet X or JX-O2."
+}

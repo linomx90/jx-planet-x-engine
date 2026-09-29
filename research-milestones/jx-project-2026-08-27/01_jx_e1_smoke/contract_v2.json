@@ -1,0 +1,95 @@
+{
+  "schema": "jx-e1-synthetic-engineering-pilot-contract/v2",
+  "experiment_id": "jx-e1-p9-9x4-smoke-v2",
+  "artifact_class": "LOCAL_SYNTHETIC_ENGINEERING_EXECUTION_CONTRACT_CORRECTION",
+  "registration_status": "LOCKED_BEFORE_ANY_REVISION_2_NUMERICAL_OUTPUT",
+  "claim_ceiling": "ENGINEERING_SURROGATE_ONLY",
+  "preflight_history": [
+    "The first revision-2 execution attempt stopped before simulation or output creation because the wrapper validator called its monkey-patched alias recursively. Only the wrapper dispatch was corrected; no model, angle, particle, duration, endpoint, or gate changed."
+  ],
+  "permissions": {
+    "local_engineering_execution_authorized": true,
+    "jx_o2_execution_authorized": false,
+    "observed_data_access_authorized": false,
+    "scientific_claim_authorized": false,
+    "gpu_execution_authorized": false
+  },
+  "correction": {
+    "base_contract_sha256": "b14fdd688ab1345f514815ffa7fd638ec6b7037a8017f854311e6b4e2a8a5dde",
+    "base_invalid_result_sha256": "4ba21a56f459bf3d41c9ed72c34059beda536d786a2fbca2b5f241d5c25204c8",
+    "base_runner_sha256": "ce47a0a9bfe8506d7be5406aef7d55a0b5d4a0b5caaede80940ec47fceac59e8",
+    "reason": "Revision 1 re-stratified a 16-particle timestep sample instead of comparing identical primary particles.",
+    "remedy": "Audit the complete same 32-particle block at dt/2; change no physical row, angle, particle, duration, endpoint, or gate."
+  },
+  "model_grid": [
+    {"id": "CI01", "mass_Mearth": 5.0, "a_AU": 367.0, "e": 0.2, "i_deg": 20.0},
+    {"id": "CI02", "mass_Mearth": 5.0, "a_AU": 420.0, "e": 0.35, "i_deg": 20.0},
+    {"id": "CI03", "mass_Mearth": 5.0, "a_AU": 480.0, "e": 0.5, "i_deg": 20.0},
+    {"id": "CI04", "mass_Mearth": 7.07, "a_AU": 356.0, "e": 0.2, "i_deg": 20.0},
+    {"id": "CI05", "mass_Mearth": 7.07, "a_AU": 433.0, "e": 0.35, "i_deg": 20.0},
+    {"id": "CI06", "mass_Mearth": 7.07, "a_AU": 497.0, "e": 0.5, "i_deg": 20.0},
+    {"id": "CI07", "mass_Mearth": 10.0, "a_AU": 356.0, "e": 0.2, "i_deg": 20.0},
+    {"id": "CI08", "mass_Mearth": 10.0, "a_AU": 433.0, "e": 0.35, "i_deg": 20.0},
+    {"id": "CI09", "mass_Mearth": 10.0, "a_AU": 540.0, "e": 0.5, "i_deg": 20.0}
+  ],
+  "angle_grid": [
+    {"id": "A", "Omega_deg": 225.0, "varpi_deg": 280.0, "M_deg": 14.4},
+    {"id": "B", "Omega_deg": 135.0, "varpi_deg": 80.0, "M_deg": 86.4},
+    {"id": "C", "Omega_deg": 315.0, "varpi_deg": 200.0, "M_deg": 158.4},
+    {"id": "D", "Omega_deg": 22.5, "varpi_deg": 320.0, "M_deg": 230.4}
+  ],
+  "analytic_benchmark": {
+    "classification": "IDEALIZED_CIRCULAR_COPLANAR_CODE_BENCHMARK",
+    "epoch": "SYNTHETIC_T0",
+    "frame": "SYNTHETIC_HELIOCENTRIC_LIKE_INERTIAL_FRAME",
+    "origin": "SUN_AT_T0_WITHOUT_BARYCENTRIC_TRANSLATION",
+    "G_AU3_Msun_yr2": 39.47841760435743,
+    "sun_mass_Msun": 1.0,
+    "earth_to_sun_mass_ratio": 3.0034896149156e-6,
+    "giants": [
+      {"name": "Jupiter", "mass_Msun": 0.00095, "a_AU": 5.2, "initial_longitude_deg": 0.0},
+      {"name": "Saturn", "mass_Msun": 0.00028, "a_AU": 9.5, "initial_longitude_deg": 90.0},
+      {"name": "Uranus", "mass_Msun": 0.000044, "a_AU": 19.2, "initial_longitude_deg": 180.0},
+      {"name": "Neptune", "mass_Msun": 0.000052, "a_AU": 30.1, "initial_longitude_deg": 270.0}
+    ]
+  },
+  "tracer_design": {
+    "blocks": 2,
+    "tracers_per_block": 32,
+    "a_AU": [100.0, 800.0],
+    "q_AU": [35.0, 80.0],
+    "i_deg": [0.0, 40.0],
+    "hash_domain": "jx-e1-p9-9x4-synthetic-lhs/v1"
+  },
+  "dynamics": {
+    "integrator": "mercurius",
+    "testparticle_type": 0,
+    "mercurius_hillfac": 3.0,
+    "dt_years": 0.125,
+    "duration_years": 100.0,
+    "sample_cadence_years": 10.0,
+    "checkpoint_years": 50.0
+  },
+  "timestep_audit": {
+    "block": 0,
+    "tracers": 32,
+    "dt_years": 0.0625,
+    "model_ids": ["CI01", "CI09"],
+    "angle_id": "A"
+  },
+  "gates": {
+    "max_relative_active_energy_drift": 1e-6,
+    "max_relative_active_angular_momentum_vector_drift": 1e-10,
+    "max_dt_half_final_q_difference_AU": 0.1,
+    "max_dt_half_final_i_difference_deg": 0.1
+  },
+  "runtime": {
+    "python_version": "3.12.13",
+    "rebound_version": "4.4.11",
+    "rebound_build": "Nov 13 2025 14:44:51",
+    "rebound_binary_sha256": "fe7a23bcece1c3f1f869089e9e8d806bedb4727d893d2e551339adbb6665c28a",
+    "runner_sha256": "ce47a0a9bfe8506d7be5406aef7d55a0b5d4a0b5caaede80940ec47fceac59e8",
+    "wrapper_sha256": "ebcb54990cba1bd2906c8c8b71b69041f2cd5d192344f695b1b826e08e897e0d"
+  },
+  "mandatory_nonclaim": "This is an idealized local engineering surrogate with synthetic particles and arbitrary fixed angular completions. It is not a reproduction of the authors' simulations, does not use observed survey data, does not modify or unblock JX-O2, and provides no evidence for or against Planet X."
+}

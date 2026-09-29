@@ -1,0 +1,37 @@
+{
+  "artifact_class": "LOCAL_CONTENT_HASH_REGISTRATION_ONLY",
+  "execution_permissions": {
+    "dop853_sentinel_execution_authorized": true,
+    "gpu_execution_authorized": false,
+    "jx_o2_execution_or_g0_evidence_authorized": false,
+    "local_cpu_only": true,
+    "network_access_authorized": false,
+    "observed_data_access_authorized": false,
+    "planet_x_detection_exclusion_constraint_or_preference_claim_authorized": false,
+    "primary_execution_a_authorized": true,
+    "primary_execution_b_authorized_only_after_verified_a": true,
+    "survey_adapter_execution_authorized": false
+  },
+  "experiment_id": "jx-xp2-public-synthetic-robustness-v1",
+  "externally_timestamped": false,
+  "locked_files": {
+    "README.md": "5f0963bb16097bdf899583c6b2c6679cf91f638495925d8ae86209522a3e8d59",
+    "build_design.py": "3688440263182e6e76e08833b88ba2ad9e9f225de978d9c381b49cfab341225b",
+    "contract_v1.json": "a41d2f06cd6a5317dedb2bc8b5819aa397dd6d6c544c801d11fac9119b7fd26c",
+    "initial_states_v1.json": "bb11017fd1f418e46ac146839c2030b19d616b5f9a50704d3021b8c2644949dc",
+    "run_independent.py": "7feee010b3cae9b87e1a20278f19cae5ba225a176f6f01148f14c681091c136a",
+    "run_primary.py": "0182a53a0d5fe4c7dbc0e8f91a1eca9f619c13e828ceedebd3576fce78671c00",
+    "seed_manifest_v1.json": "92668bc5b562214f2bd5e2b2a366cdd70c9355cb4162533cdd7d4847d15a45c1",
+    "selection_manifest_v1.json": "c4fb5d36878f148046bb2254d07f4492352f5c3eb95134f3eec92e82710ae2b0",
+    "test_independent.py": "f361e0a61ab2b1de1405b80e4131aa11176b83b92d875e6efb9a451055fb534c",
+    "test_primary.py": "0de848ea8bc9387963f028d9aae743da41756a45cb654b78d2382536e313ff92",
+    "verify_replay.py": "f261d921bd956e26c67e065f3fc1c31b2615171cbbedb4cc6f146f8af6927d19"
+  },
+  "mandatory_nonclaim": "JX-XP2 is a locally frozen idealized one-million-year synthetic response screen with a limited DOP853 numerical sentinel. It uses no observed survey data or private author inputs, is not an author reproduction or independent physical validation, cannot detect or exclude Planet X or constrain its mass or orbit, cannot establish formation or Solar-System-age stability, and provides no evidence, permission, G0 result, or progress for JX-O2.",
+  "outcomes_generated": false,
+  "recorded_at_utc": "2026-08-23T21:31:54Z",
+  "registration_state": "LOCAL_CONTENT_HASH_LOCK_COMPLETE_BEFORE_ANY_XP2_NUMERICAL_OUTPUT",
+  "schema": "jx-xp2-local-registration/v1",
+  "scientific_evidence_artifact": false,
+  "timestamp_authority": "LOCAL_CONTENT_HASH_ONLY_NO_EXTERNAL_TIMESTAMP"
+}

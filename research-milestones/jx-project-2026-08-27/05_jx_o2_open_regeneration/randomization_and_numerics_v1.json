@@ -1,0 +1,187 @@
+{
+  "schema": "jx-o2-open-regeneration-randomization-numerics/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "protocol_id": "jx-o2-g0-open-regeneration-prereg-v1",
+  "artifact_class": "DESIGN_ONLY_RANDOMIZATION_AND_NUMERICAL_GATE_PROTOCOL",
+  "artifact_state": "POLICY_LOCKED_IMPLEMENTATION_AND_VALUES_NOT_REALIZED",
+  "execution_authorized": false,
+  "seed_values_realized": false,
+  "numerical_outputs_generated": false,
+  "claim_ceiling": "OPEN_REGENERATION_PROTOCOL_ONLY",
+  "seed_protocol_common": {
+    "hash_algorithm": "SHA256",
+    "child_formula": "SHA256(MASTER || LENGTH_PREFIXED_STREAM_LABEL || UINT64_BIG_ENDIAN_INDICES || LENGTH_PREFIXED_KEY_OR_COUNTER_TAG)",
+    "string_encoding": "STRICT_ASCII",
+    "field_encoding": "UINT32_BIG_ENDIAN_LENGTH_PREFIX_FOLLOWED_BY_EXACT_FIELD_BYTES",
+    "counter_encoding": "UINT64_BIG_ENDIAN",
+    "beacon_output_encoding": "LOWERCASE_HEX_VALIDATED_THEN_DECODED_TO_BYTES",
+    "digest_to_rng_state": "KEY_USES_FIRST_16_BYTES_OF_KEY_CHILD; COUNTER_USES_ALL_32_BYTES_OF_COUNTER_CHILD; BOTH_BIG_ENDIAN",
+    "rng_family": "PHILOX4X64_10",
+    "rng_reference_implementation": "NUMPY_PHILOX_IN_NUMPY_2_3_5_WITH_EXACT_WRAPPER_AND_NATIVE_HASHES_REQUIRED",
+    "caller_seed_override": false,
+    "system_time_pid_hostname_or_unregistered_entropy": false,
+    "seed_shopping": false
+  },
+  "input_seed_derivation": {
+    "status": "FORMULA_AND_BEACON_SELECTION_RULE_LOCKED_VALUE_NOT_YET_AVAILABLE",
+    "contract_identity_requirement": "EXACT_INPUT_GENERATION_CONTRACT_SCHEMA_ID_RAW_SHA256_AND_EXTERNAL_TIMESTAMP_REQUIRED",
+    "domain_separator_ascii": "jx-o2-open-regeneration-input-v1",
+    "beacon_source": "NIST_RANDOMNESS_BEACON_2_0",
+    "beacon_event_rule": "FIRST_VALID_PULSE_WITH_TIMESTAMP_AT_LEAST_86400_SECONDS_AFTER_THE_EXTERNAL_INPUT_GENERATION_CONTRACT_TIMESTAMP",
+    "beacon_fallback_rule": "STOP_WITHOUT_INPUT_SEEDS_IF_THE_SELECTED_SOURCE_HAS_NO_VALID_PULSE_WITHIN_7_DAYS; NO_ALTERNATE_SOURCE_OR_LATER_FAVORABLE_PULSE",
+    "master_formula": "SHA256(LENGTH_PREFIXED_INPUT_DOMAIN_SEPARATOR || RAW_32_BYTE_INPUT_GENERATION_CONTRACT_SHA256 || SHA256(EXACT_SIGNED_INPUT_BEACON_RECORD_BYTES))",
+    "may_be_realized_before_external_input_generation_contract_registration": false
+  },
+  "analysis_seed_derivation": {
+    "status": "FORMULA_AND_BEACON_SELECTION_RULE_LOCKED_VALUE_NOT_YET_AVAILABLE",
+    "contract_identity_requirement": "EXACT_G1_EXECUTION_CONTRACT_SCHEMA_ID_RAW_SHA256_AND_EXTERNAL_TIMESTAMP_REQUIRED",
+    "domain_separator_ascii": "jx-o2-open-regeneration-analysis-v1",
+    "beacon_source": "NIST_RANDOMNESS_BEACON_2_0",
+    "beacon_event_rule": "FIRST_VALID_PULSE_WITH_TIMESTAMP_AT_LEAST_86400_SECONDS_AFTER_THE_EXTERNAL_G1_EXECUTION_CONTRACT_TIMESTAMP",
+    "beacon_fallback_rule": "STOP_WITHOUT_ANALYSIS_SEEDS_IF_THE_SELECTED_SOURCE_HAS_NO_VALID_PULSE_WITHIN_7_DAYS; NO_ALTERNATE_SOURCE_OR_LATER_FAVORABLE_PULSE",
+    "master_formula": "SHA256(LENGTH_PREFIXED_ANALYSIS_DOMAIN_SEPARATOR || RAW_32_BYTE_G1_EXECUTION_CONTRACT_SHA256 || SHA256(EXACT_SIGNED_ANALYSIS_BEACON_RECORD_BYTES))",
+    "may_be_realized_before_g0_completion_and_external_g1_registration": false
+  },
+  "stream_namespace": {
+    "input_master_allowed_labels": [
+      "CLUSTER_STRUCTURE",
+      "STELLAR_MASSES",
+      "STELLAR_PHASE_SPACE",
+      "POST_CLUSTER_STELLAR_ENCOUNTERS",
+      "GIANT_PLANET_INITIAL_PHASES",
+      "DISK_PROFILE_ASSIGNMENT",
+      "DISK_PARTICLE_PHASE_SPACE",
+      "ANGLE_ASCENDING_NODE_PERMUTATION_AND_JITTER",
+      "ANGLE_LONGITUDE_OF_PERIHELION_PERMUTATION_AND_JITTER",
+      "ANGLE_MEAN_ANOMALY_PERMUTATION_AND_JITTER"
+    ],
+    "analysis_master_allowed_labels": [
+      "INTRINSIC_MAGNITUDE_COLOR_SIZE",
+      "SURVEY_NUISANCE_OSSOS",
+      "SURVEY_NUISANCE_DES",
+      "SYNTHETIC_CALIBRATION",
+      "INDEPENDENT_REPRODUCTION"
+    ],
+    "cross_master_label_reuse": "INVALID",
+    "counter_scope": "STREAM_LOCAL_UINT64_STARTING_AT_ZERO",
+    "label_reuse_with_different_semantics": "INVALID",
+    "unmapped_stream": "DENY",
+    "namespace_manifest_and_test_vectors_required_before_realization": true
+  },
+  "paired_randomness": {
+    "common_random_numbers_required_for_all_non_compact_body_streams": true,
+    "m0_m1_cluster_history_seed_equal_within_realization": true,
+    "m0_m1_disk_particle_seed_equal_within_realization": true,
+    "m0_m1_post_checkpoint_stellar_history_equal_within_realization": true,
+    "m0_m1_intrinsic_and_survey_nuisance_streams_equal_within_realization": true,
+    "compact_body_member_assignment_exists_only_for_m1_but_is_prelocked": true,
+    "failed_stream_retry": "RETRY_IDENTICAL_SEED_AND_STATE_ONLY",
+    "failure_record_retained": true,
+    "redraw_after_failure": false,
+    "outcome_dependent_restart": false
+  },
+  "history_and_member_balance": {
+    "production_history_count": 128,
+    "convergence_block_count": 4,
+    "independent_joint_history_count_per_block": 32,
+    "independent_disk_draw_count": 128,
+    "independent_cluster_and_field_star_schedule_count": 128,
+    "disk_draw_or_stellar_schedule_reuse_between_histories": false,
+    "all_nine_physical_rows_run_for_every_history": true,
+    "one_angle_latin_hypercube_point_per_history_shared_across_nine_rows": true,
+    "history_count_change_after_any_output": "INVALID",
+    "history_or_member_dropping_after_output": "INVALID",
+    "four_block_convergence_metric_and_bound": "REQUIRES_EXACT_G1_LOCK_BEFORE_CALIBRATION"
+  },
+  "locked_scientific_time_boundary": {
+    "parent_checkpoint_time_myr": 300,
+    "post_checkpoint_duration_myr": 4000,
+    "analysis_window_start_myr_after_insertion": 3000,
+    "analysis_window_end_myr_after_insertion": 4000,
+    "analysis_sample_cadence_myr": "5/2",
+    "inner_radial_loss_boundary_au": 1,
+    "outer_radial_loss_boundary_au": 100000,
+    "boundary_source": "PREVIOUSLY_INSPECTED_2024_LITERATURE_RECIPE",
+    "boundary_change_after_any_output": "INVALID"
+  },
+  "input_generation_numerics": {
+    "status": "EXACT_IMPLEMENTATION_VALUES_REQUIRE_SEPARATE_EXTERNALLY_REGISTERED_INPUT_GENERATION_CONTRACT",
+    "may_execute_under_this_artifact": false,
+    "required_exact_fields": [
+      "PRIMARY_INTEGRATOR_SOURCE_VERSION_BUILD_AND_BINARY_HASHES",
+      "MIGRATION_DAMPING_AND_NONCONSERVATIVE_FORCE_IMPLEMENTATION_HASHES",
+      "TIMESTEP_OR_ADAPTIVE_CONTROLLER_AND_ALL_TOLERANCES",
+      "COLLISION_RADIAL_LOSS_AND_EVENT_ORDERING",
+      "COORDINATE_SYNCHRONIZATION_AND_CHECKPOINT_SEMANTICS",
+      "OUTPUT_AND_ONLINE_DIAGNOSTIC_CADENCE",
+      "COMPILER_FLAGS_MATH_LIBRARIES_HARDWARE_AND_REDUCTION_ORDER",
+      "RESOURCE_LIMITS_ABORT_AND_RESUME_RULES"
+    ],
+    "candidate_selection_rule": "NUMERICAL_ADEQUACY_AND_REPRODUCIBILITY_ONLY_WITH_NO_SURVEY_OR_MODEL_PREFERENCE_STATISTIC",
+    "post_output_tolerance_or_method_selection": "INVALID"
+  },
+  "post_checkpoint_numerics": {
+    "status": "PROPOSED_PRIMARY_AND_COMPARATORS_LOCKED_QUALIFICATION_AND_BUILD_ARTIFACTS_UNRESOLVED",
+    "primary_method": "REBOUND_4_4_11_IAS15",
+    "primary_epsilon": "1/100000000000",
+    "primary_initial_step_days": 100,
+    "precision_repeat_method": "SAME_REBOUND_IAS15_BUILD",
+    "precision_repeat_epsilon": "1/1000000000000",
+    "materially_independent_repeat": "CONSERVATIVE_BULIRSCH_STOER_WITH_SEPARATE_SOURCE_BUILD_AND_FORCE_IMPLEMENTATION",
+    "primary_and_independent_methods_required": true,
+    "independent_method_may_share_same_native_library_and_count_as_independent_scientific_implementation": false,
+    "required_qualification_matrix": {
+      "minimum_timestep_or_tolerance_levels_for_qualification": 3,
+      "all_nine_physical_rows_represented": true,
+      "all_128_history_angle_realizations_required_for_full_production_but_not_every_qualification_cell": true,
+      "lowest_pericenter_and_highest_mass_stress_members_required": true,
+      "close_encounter_sentinel_required": true,
+      "direct_vs_checkpoint_continuation_required": true,
+      "two_clean_execution_semantic_replay_required": true
+    },
+    "required_diagnostics": [
+      "FINITE_COMPLETE_PARTICLE_STATES",
+      "ACTIVE_BODY_ENERGY_CHANGE_ACCOUNTED_AGAINST_REGISTERED_EXTERNAL_WORK_AND_DISCRETE_STELLAR_IMPULSES",
+      "INTERNAL_ANGULAR_MOMENTUM_CHANGE_ACCOUNTED_AGAINST_REGISTERED_EXTERNAL_TORQUE_AND_DISCRETE_STELLAR_IMPULSES",
+      "FORCE_FREE_CONTROL_SEGMENT_CONSERVATION_SENTINELS",
+      "CHARACTERISTIC_SCALED_LINEAR_MOMENTUM_AND_CENTER_OF_MASS",
+      "TIMESTEP_OR_TOLERANCE_REFINEMENT",
+      "SURVIVAL_AND_EVENT_IDENTITY",
+      "SUN_RELATIVE_STATE_DISCREPANCIES",
+      "CHECKPOINT_DECODED_STATE_AND_RESTART_EQUIVALENCE",
+      "CROSS_IMPLEMENTATION_PREDICTIVE_DISTRIBUTION_AGREEMENT"
+    ],
+    "distribution_agreement_upper_bounds": {
+      "survival_fraction_absolute_difference": "1/1000",
+      "injection_fraction_absolute_difference": "1/1000",
+      "wasserstein1_q_au": "1/20",
+      "wasserstein1_minimum_q_au": "1/20",
+      "wasserstein1_inclination_deg": "1/20"
+    },
+    "calibrated_primary_statistic_and_critical_quantile_convergence_bound": "REQUIRES_EXACT_G1_LOCK_BEFORE_CALIBRATION",
+    "external_work_torque_and_impulse_accounting_implementation": "REQUIRES_HASHED_ALGORITHM_AND_TEST_FIXTURES_BEFORE_G1",
+    "threshold_status": "LOCKED_AS_CONSERVATIVE_UPPER_BOUNDS_REQUIRES_INDEPENDENT_SCIENTIFIC_REVIEW_BEFORE_G1",
+    "threshold_widening_after_failure": "FORBIDDEN"
+  },
+  "classification_and_censoring": {
+    "status": "PRIMARY_BOUNDARY_RULES_LOCKED_DETAILED_RESONANCE_ALGORITHM_UNRESOLVED",
+    "nonfinite_state": "INVALID_REALIZATION_RETAIN_FAILURE_RECORD_NO_REDRAW",
+    "radial_boundary_crossing": "REMOVED_AT_FIRST_DETERMINISTIC_EVENT_ORDERED_CROSSING",
+    "final_bound_rule": "FINITE_BARYCENTRIC_SPECIFIC_ORBITAL_ENERGY_STRICTLY_LESS_THAN_ZERO_USING_LOCKED_ACTIVE_MASS_SET",
+    "orbit_conversion_failure": "INVALID_DISTINCT_FROM_PHYSICALLY_UNBOUND",
+    "resonance_classification_affects_primary_verdict": false,
+    "any_secondary_resonance_classifier_requires_SEPARATE_HASHED_ALGORITHM_AND_TEST_FIXTURES": true,
+    "silent_row_particle_or_failed_realization_dropping": false
+  },
+  "hardware_and_replay": {
+    "status": "REQUIRED_NOT_YET_FROZEN",
+    "source_build_container_sbom_and_native_binary_hashes_required": true,
+    "cpu_gpu_model_driver_compiler_math_library_and_flags_required": true,
+    "worker_topology_scheduling_and_reduction_order_required": true,
+    "decoded_semantic_state_hashes_required": true,
+    "raw_container_byte_identity_required_only_if_format_is_declared_canonical": true,
+    "independent_replay_receipt_required": true,
+    "cross_hardware_difference_policy_must_be_predeclared": true
+  },
+  "mandatory_nonclaim": "This protocol fixes randomization and numerical requirements but realizes no seed and selects no executable solver configuration. It authorizes no dynamics and cannot establish numerical adequacy or evidence for or against Planet X."
+}

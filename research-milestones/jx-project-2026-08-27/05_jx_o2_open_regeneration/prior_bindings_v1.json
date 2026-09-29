@@ -1,0 +1,125 @@
+{
+  "schema": "jx-o2-open-regeneration-prior-bindings/v1",
+  "experiment_id": "jx-o2-characterized-survey-model-comparison-design-v1",
+  "protocol_id": "jx-o2-g0-open-regeneration-prereg-v1",
+  "artifact_class": "DESIGN_ONLY_GOVERNING_PROVENANCE_BINDINGS",
+  "artifact_state": "LOCAL_BINDINGS_HASH_VERIFIED_NO_EXTERNAL_TIMESTAMP",
+  "execution_authorized": false,
+  "outcomes_generated": false,
+  "claim_ceiling": "OPEN_REGENERATION_PROTOCOL_ONLY",
+  "binding_root": "WORKSPACE_ROOT",
+  "governing_precedence": [
+    "CANDIDATE_RETIREMENT_POLICY_IS_PERMANENT_FOR_THIS_EXPERIMENT_AND_OVERRIDES_ANY_EARLIER_CONDITIONAL_ELIGIBILITY_TEXT",
+    "G0_REQUIREMENTS_AND_STAGE_ORDER_REMAIN_BINDING",
+    "THIS_PACKAGE_MAY_DEFINE_A_RESOLUTION_RECIPE_BUT_CANNOT SEMANTICALLY_ACCEPT_ANY_G0_REQUIREMENT",
+    "LOCAL_CUSTODY_BYTES_REMAIN_QUARANTINED_UNTIL_SEPARATE_ACCEPTANCE_RECEIPTS",
+    "E2_IS_ENGINEERING_CONTEXT_ONLY_AND_CANNOT_BECOME_A_MODEL_INPUT_OR_SCIENTIFIC_RESULT"
+  ],
+  "bindings": [
+    {
+      "binding_id": "JX_O2_DESIGN_CONTRACT",
+      "path": "work/jx-public-reconstruction-design/runs/planet_x_survey_model_comparison_v1/design_contract_v1.json",
+      "sha256": "ccd9631097a403d374ca1d6954ef32751027b1b3b755d5de7065ccce8017c971",
+      "role": "GOVERNING_EXPERIMENT_AND_STAGE_CONTRACT"
+    },
+    {
+      "binding_id": "JX_O2_SOURCE_MODEL_MANIFEST",
+      "path": "work/jx-public-reconstruction-design/runs/planet_x_survey_model_comparison_v1/source_models_manifest_v1.json",
+      "sha256": "d723c2dede9dee4bd490751ca4b5ad334397ecf8e913094039ddb8d624b6ac73",
+      "role": "GOVERNING_MODEL_INPUT_REQUIREMENTS"
+    },
+    {
+      "binding_id": "JX_O2_SURVEY_INPUT_MANIFEST",
+      "path": "work/jx-public-reconstruction-design/runs/planet_x_survey_model_comparison_v1/survey_inputs_manifest_v1.json",
+      "sha256": "d446ac5049add3409a6b5c0d0f3cd76ab1a1d7c9f1676f98069c1d9f5e42e3c4",
+      "role": "GOVERNING_SURVEY_INPUT_REQUIREMENTS"
+    },
+    {
+      "binding_id": "JX_O2_DESIGN_REGISTRATION",
+      "path": "work/jx-public-reconstruction-design/runs/planet_x_survey_model_comparison_v1/registration_design_v1.json",
+      "sha256": "d2978c56c492285d7e9f5cef6c9a8e4bdb927dca7c7a08699b4b45d1e8b2aa01",
+      "role": "GOVERNING_DESIGN_REGISTRATION"
+    },
+    {
+      "binding_id": "JX_O2_G0_AUDIT",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/g0_audit_v1.json",
+      "sha256": "5f7a5f9cef4f6bd73f7c36235e610d96c8475bd646bf5807aa591c58fbf002b0",
+      "role": "GOVERNING_31_REQUIREMENT_G0_BASELINE"
+    },
+    {
+      "binding_id": "JX_O2_G0_REGISTRATION",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/registration_g0_v1.json",
+      "sha256": "21634c974ffdff0f59b1f7b33c80bdabdfe9fc337f3476bf6f20be3ede00bd03",
+      "role": "GOVERNING_G0_REGISTRATION"
+    },
+    {
+      "binding_id": "JX_O2_G0_SOURCE_INVENTORY",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_input_audit_v1/source_model_inventory_v1.json",
+      "sha256": "0ac5ef9bc1fbf84313a9ee5a8650a3685cba3d2d06eea1d29a547c7eda59da9f",
+      "role": "SOURCE_AVAILABILITY_AND_PROVENANCE_BOUNDARY"
+    },
+    {
+      "binding_id": "PUBLIC_RECONSTRUCTION_DESIGN",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_public_reconstruction_design_v1/reconstruction_design_v1.json",
+      "sha256": "bf0035fe7595536b5c1fd96b447298654d2892be11426e6ea9774b2585aa9ac6",
+      "role": "PUBLIC_RECONSTRUCTION_BOUNDARY_AND_RESOLUTION_LANES"
+    },
+    {
+      "binding_id": "PUBLIC_LITERATURE_GRID",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_public_reconstruction_design_v1/literature_prior_grid_v1.json",
+      "sha256": "b6fe87043937764976b26473b49004eecfefb2882178f5f41ccb98424534068c",
+      "role": "AUDITED_LITERATURE_INPUT_GRID_AND_EXPOSURE_RECORD"
+    },
+    {
+      "binding_id": "PUBLIC_RECONSTRUCTION_REGISTRATION",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_public_reconstruction_design_v1/registration_reconstruction_design_v1.json",
+      "sha256": "de8295e0070745f251acc669d225e79fca7ae9f61e17af65c924eb24e02d9503",
+      "role": "PUBLIC_RECONSTRUCTION_REGISTRATION"
+    },
+    {
+      "binding_id": "CANDIDATE_9118_RETIREMENT_RECEIPT",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_candidate_9118_retirement_v1/candidate_9118_retirement_v1.json",
+      "sha256": "01a041382aa716293db9f61ae8917d44bd80c62347cc2aaa7c03d0442f6009cd",
+      "role": "HISTORICAL_REFERENCE_ONLY_PERMANENT_NONUSE_POLICY"
+    },
+    {
+      "binding_id": "CANDIDATE_9118_RETIREMENT_REGISTRATION",
+      "path": "work/jx-public-reconstruction-design/audits/jx_o2_g0_candidate_9118_retirement_v1/registration_retirement_v1.json",
+      "sha256": "037c22ea0d1a9cb4c86eadc9056b8e1e605a7a5790cba60871daaa75aad1bbc5",
+      "role": "HIGHEST_PRECEDENCE_RETIREMENT_REGISTRATION"
+    },
+    {
+      "binding_id": "LOCAL_G0_ACQUISITION_CHECKLIST",
+      "path": "work/jx_o2_g0_local_acquisition_v1/acquisition_checklist_v1.json",
+      "sha256": "31f9dd113d291f5d8c0c573450b7d6e6384a76f8abebffe8fa205561767e2280",
+      "role": "CURRENT_31_REQUIREMENT_LOCAL_STATUS"
+    },
+    {
+      "binding_id": "LOCAL_G0_CUSTODY_MANIFEST",
+      "path": "work/jx_o2_g0_local_acquisition_v1/local_custody_manifest_v1.json",
+      "sha256": "defc6413a76f56f6320440412a6f663513d5e892a24caeca75611dd141ebcd73",
+      "role": "QUARANTINED_LOCAL_PUBLIC_BYTE_CUSTODY"
+    },
+    {
+      "binding_id": "LOCAL_G0_ACQUISITION_REGISTRATION",
+      "path": "work/jx_o2_g0_local_acquisition_v1/registration_v1.json",
+      "sha256": "ad94637de5b2062213b8d86726b15f256ae3a14522382ad0194e95b28ae337d7",
+      "role": "LOCAL_CUSTODY_CONTENT_HASH_ANCHOR"
+    },
+    {
+      "binding_id": "JX_E2_LOCAL_CLOSURE",
+      "path": "work/jx_e2_numerics/closure_v1.json",
+      "sha256": "4cec842a5f5b6f22a97f0b1b5dfaaf4bcddfe7efbe5c6836bf3772ef7724d901",
+      "role": "EXCLUDED_ENGINEERING_CONTEXT_NOT_MODEL_INPUT"
+    }
+  ],
+  "binding_assertions": {
+    "all_paths_are_workspace_relative_regular_files": true,
+    "all_hashes_verified_before_design_acceptance": true,
+    "same_experiment_identity_preserves_retirement_scope": true,
+    "retired_candidate_or_derivative_may_influence_generator_grid_angles_weights_or_seeds": false,
+    "e2_may_influence_scientific_model_or_thresholds": false,
+    "local_custody_implies_semantic_input_acceptance": false
+  },
+  "mandatory_nonclaim": "These bindings preserve governing provenance and restrictions only. They do not activate any quarantined input, recover private author artifacts, complete G0, authorize execution, or provide evidence for or against Planet X."
+}

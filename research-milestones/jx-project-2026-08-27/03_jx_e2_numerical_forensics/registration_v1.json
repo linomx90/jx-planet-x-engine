@@ -1,0 +1,28 @@
+{
+  "schema": "jx-e2-numerics-local-registration/v1",
+  "experiment_id": "jx-e2-active-frame-integrator-50k-v1",
+  "artifact_class": "LOCAL_CONTENT_HASH_REGISTRATION_ONLY",
+  "registration_state": "LOCAL_CONTENT_HASH_LOCK_COMPLETE_BEFORE_ANY_E2_50KYR_OUTPUT",
+  "recorded_at_utc": "2026-08-23T15:04:17Z",
+  "timestamp_authority": "LOCAL_CONTENT_HASH_REGISTRATION_ONLY_NO_EXTERNAL_TIMESTAMP",
+  "externally_timestamped": false,
+  "scientific_evidence_artifact": false,
+  "outcomes_generated": false,
+  "execution_permissions": {
+    "execution_a_authorized": true,
+    "execution_b_authorized_only_after_verified_a": true,
+    "gpu_execution_authorized": false,
+    "network_access_authorized": false,
+    "observed_data_access_authorized": false,
+    "jx_o2_execution_authorized": false,
+    "scientific_planet_x_claim_authorized": false
+  },
+  "locked_files": {
+    "README.md": "d4d097841adf09ce1f57636a8129185602d5ddd1f8c0148e07376de463888f8f",
+    "contract_v1.json": "d4edc6e17df40c3eeb6a72c7c55ad3bb530e6c79a40017f6dffe9ec553bc3d8f",
+    "run_numerics.py": "223735e8256ae86ee00bc0105a33b88a6a225ba556414201b27cacb0a7ab7f9d",
+    "verify_replay.py": "75fff9cd167da6e12b628a8d2960024f4979d023e387cfe146a1524c30ccf444",
+    "test_jx_e2.py": "e6e72957dfdef8f08de7a780c1a43ead047d45fd57b76b6cdfb2943a25b21320"
+  },
+  "mandatory_nonclaim": "This is a post-failure, active-body-only numerical-method diagnostic using an idealized synthetic benchmark. It does not rerun JX-E1 as a replacement, alter, validate, or rehabilitate JX-E1; JX-E1 remains ENGINEERING_LONG_INVALID and JX-E1-B remains forbidden. No E2 classification establishes that E1 was accurate, adequate, or scientifically usable. Execution completion or semantic replay exactness refers only to protocol integrity. E2 uses no observed survey data or recovered author inputs, does not modify or unblock JX-O2, does not test the existence, detectability, exclusion, or preferred properties of Planet X, and provides no evidence for or against Planet X. IAS15 is a numerical comparator within the same REBOUND build, not ground truth or an independent scientific implementation."
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "jx-project-publication-disposition/v1",
+  "as_of_date": "2026-08-27",
+  "policy": "PUBLISH_MILESTONES_AND_INVENTORY_RETAINED_RAW_TREES",
+  "entries": [
+    {
+      "artifact_group": "E1_SMOKE_FULL_TREE",
+      "files": 403,
+      "bytes": 4456641,
+      "disposition": "COMPACT_RECORD_PUBLISHED_RAW_TREE_INVENTORIED",
+      "inventory": "inventories/E1_SMOKE_FULL_TREE_SHA256SUMS",
+      "inventory_sha256": "20c8c947f0dfeb0dc697eafc392837ebbb1bb864c4a4d0bdf2706762a8856e1f"
+    },
+    {
+      "artifact_group": "E1_LONG_FULL_TREE",
+      "files": 998,
+      "bytes": 13108831,
+      "disposition": "REPORT_AND_AUDIT_PUBLISHED_RAW_TREE_INVENTORIED",
+      "inventory": "inventories/E1_LONG_FULL_TREE_SHA256SUMS",
+      "inventory_sha256": "57f782c972e9932c1960fde57feb37b32817a2b1dc2ac76369beea0d04207447"
+    },
+    {
+      "artifact_group": "E2_FULL_TREE",
+      "files": 1949,
+      "bytes": 17268418,
+      "disposition": "COMPACT_CLOSURE_PUBLISHED_RAW_TREE_INVENTORIED",
+      "inventory": "inventories/E2_FULL_TREE_SHA256SUMS",
+      "inventory_sha256": "993ed20efa578e3a32de5eff698dd744b851b6f4687309c691fbc3338c9ad1bd"
+    },
+    {
+      "artifact_group": "JX_O2_THIRD_PARTY_CUSTODY_BYTES",
+      "files": 25,
+      "bytes": 680533216,
+      "disposition": "NOT_REDISTRIBUTED_METADATA_ONLY",
+      "reason": "THIRD_PARTY_LOCAL_QUARANTINE_UNRESOLVED_LICENSES_AND_GITHUB_FILE_LIMITS",
+      "metadata": "04_jx_o2_g0_local_custody/local_custody_manifest_v1.json"
+    },
+    {
+      "artifact_group": "XP2_V1_RUN_TREE",
+      "files": 518,
+      "bytes": 32086376,
+      "disposition": "INVALID_DIAGNOSTIC_COMPACT_LINEAGE_PUBLISHED_RAW_TREE_INVENTORIED",
+      "inventory": "inventories/XP2_V1_RUN_FULL_TREE_SHA256SUMS",
+      "inventory_sha256": "e076ee4efa7e162cf41b0174e6bbab2f808638956e1b9b04f1fd2a816d21881b"
+    },
+    {
+      "artifact_group": "XP2_V2_RUN_TREE",
+      "files": 6022,
+      "bytes": 420305056,
+      "disposition": "UNCLASSIFIED_REPLAY_DEFECT_DIAGNOSTIC_INVENTORIED",
+      "inventory": "inventories/XP2_V2_RUN_FULL_TREE_SHA256SUMS",
+      "inventory_sha256": "0a0193461072eb1b3ea394d74623e708d314cb8d8e5a5a143dd1170bab74235b"
+    },
+    {
+      "artifact_group": "XP2_V3_RUN_TREE",
+      "files": 12,
+      "bytes": 17167,
+      "disposition": "FAILED_STARTUP_COMPACT_LINEAGE_PUBLISHED_RAW_TREE_INVENTORIED",
+      "inventory": "inventories/XP2_V3_RUN_FULL_TREE_SHA256SUMS",
+      "inventory_sha256": "9a5379db397fe3bd774a304f4508b8bc51e7d786a736d4ca097a8df583b5836d"
+    },
+    {
+      "artifact_group": "XP2_PROTOCOL_ENGINEERING_CHECKPOINT",
+      "files": 771,
+      "bytes": 14351952,
+      "disposition": "SELECTED_PRIMARY_STATUS_RECORDS_PUBLISHED_RAW_TREE_INVENTORIED",
+      "inventory": "inventories/XP2_PROTOCOL_ENGINEERING_FULL_TREE_SHA256SUMS",
+      "inventory_sha256": "8a3caf009e8e098e2b72c297189efc89ceb462da1175c677a463ad76cd094f13"
+    },
+    {
+      "artifact_group": "XP2_SCIENTIFIC_RESET_TAR",
+      "files": 1,
+      "bytes": 23336960,
+      "sha256": "6fba35697f5d60c8a5035d0e1f1ff93f3b0e5374f19313489861be3009315fe3",
+      "disposition": "NOT_DUPLICATED_PRESERVATION_ARCHIVE_ONLY"
+    },
+    {
+      "artifact_group": "XP2_V5_OPERATIONAL_ADAPTER_REVIEW",
+      "files": 31,
+      "bytes": 70384,
+      "leaf_list_sha256": "4c6b7ebf71ce16d96669a693f19d495f338b9f2a4cc9355426558972a5d22fcd",
+      "disposition": "NONAUTHORITY_REVIEW_ONLY_PRIMARY_README_PUBLISHED_REMAINDER_INVENTORIED"
+    },
+    {
+      "artifact_group": "XP2_V5_SOURCE_SUCCESSOR_REVIEW",
+      "files": 40,
+      "bytes": 2344285,
+      "leaf_list_sha256": "e5082c2ea14122ba87ef80b6236b462956d7daea45a072a2983ea9ec20fed871",
+      "disposition": "DUAL_REVIEW_GO_BUT_NOT_OPERATIONAL_PRIMARY_README_AND_BLOCKED_INDEPENDENCE_EVIDENCE_PUBLISHED_REMAINDER_INVENTORIED"
+    },
+    {
+      "artifact_group": "XP2_V5_OFFLINE_CEREMONY_REVIEW",
+      "files": 49,
+      "bytes": 1456776,
+      "leaf_list_sha256": "116d482f5ca79d889518c31cedf37e6b5cf289435c4feac1de54cc7cd8aa6426",
+      "disposition": "MOVING_INVALID_NO_GO_PRIMARY_README_PUBLISHED_REMAINDER_INVENTORIED"
+    },
+    {
+      "artifact_group": "XP2_V5_UBUNTU_HOST_DISCOVERY_REVIEW",
+      "files": 3,
+      "bytes": 44159,
+      "leaf_list_sha256": "c42bfc61748825122884562da8e4f11f1ff60e2be063efd98b48860e2cf9da07",
+      "disposition": "INCOMPLETE_3_OF_8_PRIMARY_README_PUBLISHED_REMAINDER_INVENTORIED"
+    },
+    {
+      "artifact_group": "XP2_PUBLICATION_CANDIDATE_V1",
+      "files": 12,
+      "bytes": 1073799,
+      "disposition": "REJECTED_AND_SUPERSEDED_BY_ACCEPTED_V2"
+    },
+    {
+      "artifact_group": "INTERNAL_B92_REGENERATOR",
+      "files": 1,
+      "bytes": 209105,
+      "disposition": "INTERNAL_MOVING_GENERATOR_NOT_A_MILESTONE"
+    },
+    {
+      "artifact_group": "DUPLICATE_REPOSITORY_WORKTREES",
+      "disposition": "NOT_DUPLICATED_REFERENCE_REPOSITORY_HISTORY",
+      "reason": "GIT_HISTORY_AND_SUBSTANTIVE_FILES_ALREADY_PUBLIC"
+    },
+    {
+      "artifact_group": "CACHES_BINARIES_WHEEL_LOCKS_AND_LOGS",
+      "disposition": "EXCLUDED",
+      "reason": "GENERATED_HOST_SPECIFIC_OR_THIRD_PARTY_RUNTIME_MATERIAL"
+    }
+  ]
+}

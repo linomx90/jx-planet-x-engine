@@ -1,0 +1,14 @@
+{
+  "schema": "jx-project-milestone-status/v1",
+  "milestone_id": "JX_XP1_SYNTHETIC_RESPONSE",
+  "publication_category": "EXPLORATORY_SYNTHETIC_RESULT",
+  "canonical_publication_status": "COMPLETE_AT_BOTH_RESOLUTIONS_REPLAY_EXACT",
+  "classification": "PRACTICALLY_SMALL",
+  "claim_ceiling": "SYNTHETIC_250KYR_RESPONSE_ONLY",
+  "result_present": true,
+  "interpretation_allowed": "ZERO_LOCKED_SAMPLED_Q30_COUNT_CONTRAST_WITH_FLOOR_LIMIT_AND_NONZERO_DISTRIBUTION_RESPONSE",
+  "observed_data_used": false,
+  "planet_nine_evidence": "NONE",
+  "timestamp_authority": "RETROSPECTIVE_GITHUB_PUBLICATION_ONLY",
+  "superseded_by": "XP2_WAS_OUTCOME_INFORMED_BUT_NEVER_PRODUCED_AN_ADMISSIBLE_RESULT"
+}

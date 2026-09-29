@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this milestone archive, cite it using this metadata."
+title: "JX Planet X Project: Full-Transparency Work-in-Progress Milestone Checkpoint"
+type: dataset
+version: "2026-08-27-checkpoint"
+date-released: 2026-08-27
+authors:
+  - family-names: Avila
+    given-names: Lino
+license: MIT
+repository-code: "https://github.com/linomx90/jx-planet-x-engine"
+abstract: >-
+  Dated work-in-progress milestone checkpoint containing engineering tests, numerical
+  diagnostics, blocked observational-design work, one exploratory synthetic
+  XP1 result, invalid XP2 lineage, and preservation metadata. It contains no
+  observational Planet Nine result and no scientifically admissible XP2 result.
+  Publication of this checkpoint does not close the continuing JX project.
+keywords:
+  - celestial mechanics
+  - numerical reproducibility
+  - research provenance
+  - failure reporting
+  - outer Solar System
