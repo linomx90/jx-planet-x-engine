@@ -1,0 +1,69 @@
+name: JX Benchmark A Reference v2
+
+on:
+  push:
+    branches:
+      - experiment/bm6-rebound-5.1.1
+    paths:
+      - benchmarks/jx_benchmark_a_reference_v2.py
+      - benchmarks/jx_benchmark_a_reference_v2_contract.json
+      - .github/workflows/jx-benchmark-a-reference-v2.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark-reference-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out immutable benchmark branch with history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.3.5 scipy==1.17.0 rebound==5.1.1
+          python - <<'PY'
+          import numpy, scipy, rebound
+          assert rebound.__version__ == "5.1.1", rebound.__version__
+          print("numpy", numpy.__version__)
+          print("scipy", scipy.__version__)
+          print("rebound", rebound.__version__)
+          PY
+
+      - name: Compile immutable and v2 runners
+        run: |
+          python -m py_compile benchmarks/jx_benchmark_a.py
+          python -m py_compile benchmarks/jx_benchmark_a_reference_v2.py
+
+      - name: Run reference-resolution v2
+        run: |
+          mkdir -p runs/jx_benchmark_a_reference_v2
+          python -m pip freeze --all > runs/jx_benchmark_a_reference_v2/pip-freeze.txt
+          python benchmarks/jx_benchmark_a_reference_v2.py
+
+      - name: Verify artifact hashes
+        if: always()
+        run: |
+          if [ -f runs/jx_benchmark_a_reference_v2/SHA256SUMS.txt ]; then
+            cd runs/jx_benchmark_a_reference_v2
+            sha256sum -c SHA256SUMS.txt
+          fi
+
+      - name: Upload complete v2 artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jx-benchmark-a-reference-v2-${{ github.sha }}
+          path: runs/jx_benchmark_a_reference_v2/
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,57 @@
+{
+  "schema": "jx-general-dynamics-benchmark-a-contract/v1",
+  "date": "2026-09-01",
+  "branch": "experiment/bm6-rebound-5.1.1",
+  "classification": "NUMERICAL_ENGINEERING_ONLY",
+  "claim_ceiling": "Scoped comparison on one frozen ten-body Newtonian workload; not a universal engine ranking, full DE441 reconstruction, or Planet-X claim.",
+  "workload": {
+    "initial_state": "runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv at its first JD_TDB epoch",
+    "gm_table": "runs/de441_horizons_10yr/gm_de440_major_barycenters.csv",
+    "body_ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "force_model": "Newtonian point masses",
+    "units": "AU, day, GM as AU^3/day^2, G=1",
+    "duration_years": 10,
+    "output_interval_days": 365.25,
+    "comparison_coordinates": "heliocentric differences formed independently at every output"
+  },
+  "lanes": {
+    "kdk": "JX cached-acceleration kick-drift-kick baseline",
+    "y6_cached": "JX seven-map sixth-order Yoshida with boundary-force reuse",
+    "bm6": "experimental Blanes-Moan optimized sixth-order S10/BM6 binary64 lane",
+    "rebound": "REBOUND 5.1.1 Leapfrog",
+    "referee": "independent SciPy DOP853 force implementation, loose/tight pair"
+  },
+  "contests": {
+    "equal_timestep": {
+      "steps_per_year_all_lanes": 2922,
+      "dt_days": 0.125
+    },
+    "equal_force_budget": {
+      "propagation_force_evaluations_per_year": 2940,
+      "kdk_steps_per_year": 2940,
+      "rebound_steps_per_year": 2940,
+      "y6_steps_per_year": 420,
+      "bm6_steps_per_year": 294
+    }
+  },
+  "required_metrics": [
+    "max and RMS heliocentric position error against DOP853",
+    "max and RMS heliocentric velocity error against DOP853",
+    "maximum and final relative energy error",
+    "maximum relative angular-momentum-vector error",
+    "wall time",
+    "steps and force-evaluation accounting",
+    "input, output, and environment hashes"
+  ],
+  "reference_gate": "DOP853 loose-vs-tight RMS position and velocity disagreement must each be <=1% of the best competing error.",
+  "win_rule": "A JX lane wins only when all four all-body trajectory metrics are smaller than REBOUND and its energy and angular-momentum gates do not worsen. Equal-force-budget is primary; equal-timestep must not contradict it.",
+  "verdicts": [
+    "JX_BM6_WIN",
+    "JX_Y6_WIN",
+    "REBOUND_WIN",
+    "NO_CLEAR_WINNER",
+    "INVALID_REFERENCE",
+    "BLOCKED"
+  ],
+  "preservation": "Do not modify existing KDK/Yoshida baselines, DE441 inputs, or historical results. Add only isolated benchmark code and generated artifacts."
+}

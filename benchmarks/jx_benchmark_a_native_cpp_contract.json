@@ -1,0 +1,87 @@
+{
+  "schema": "jx-benchmark-a-native-cpp-contract/v1",
+  "date": "2026-09-01",
+  "branch": "experiment/bm6-rebound-5.1.1",
+  "classification": "NUMERICAL_ENGINEERING_ONLY",
+  "purpose": "Replace Python execution overhead with a native C++20 implementation of the already-tested BM6 numerical map, then replay the frozen primary Benchmark A contest.",
+  "base_contract": {
+    "path": "benchmarks/jx_benchmark_a_contract.json",
+    "sha256": "d847a9ed39daf343e13825d0a94a617cbc006c1485624bf608fdae17b2551b63"
+  },
+  "immutable_inputs": {
+    "state_path": "runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv",
+    "state_sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e",
+    "gm_path": "runs/de441_horizons_10yr/gm_de440_major_barycenters.csv",
+    "gm_sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217",
+    "normalized_initial_state_sha256": "43e6f0655447286e74a146b3b07ae24c9daeed77a0aa14bfc98f76dbd29704c4"
+  },
+  "native_lane": {
+    "language": "C++20",
+    "arithmetic": "IEEE-754 binary64",
+    "source_files": [
+      "native/jx_bm6_types.hpp",
+      "native/jx_bm6_integrator.hpp",
+      "native/jx_bm6_io.hpp",
+      "native/jx_bm6_native.cpp"
+    ],
+    "compiler_flags": [
+      "-O3",
+      "-DNDEBUG",
+      "-fno-fast-math",
+      "-ffp-contract=off",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror"
+    ],
+    "force_model": "direct mutual unsoftened Newtonian point masses",
+    "integrator": "Blanes-Moan optimized symmetric sixth-order S10/BM6",
+    "force_evaluations_per_macro_step": 10,
+    "coefficient_precision": "published decimal coefficients at approximately binary64 precision"
+  },
+  "primary_contest": {
+    "name": "equal_force_budget",
+    "duration_days": 3652.5,
+    "dt_days": 1.2423469387755102,
+    "macro_steps": 2940,
+    "output_every_steps": 294,
+    "propagation_force_evaluations": 29400,
+    "rebound_version": "5.1.1",
+    "rebound_integrator": "leapfrog order 2",
+    "reference_loose": {
+      "method": "SciPy DOP853 with independent math.fsum force implementation",
+      "rtol": 2.5e-13,
+      "atol": 2.5e-16,
+      "max_step_days": 0.5
+    },
+    "reference_tight": {
+      "method": "SciPy DOP853 with independent math.fsum force implementation",
+      "rtol": 2.5e-14,
+      "atol": 2.5e-17,
+      "max_step_days": 0.25
+    }
+  },
+  "gates": {
+    "sanitizers": ["AddressSanitizer", "UndefinedBehaviorSanitizer"],
+    "forward_backward_self_test_max_component_error": 5e-12,
+    "deterministic_replay": "two native trajectory files must be byte-identical",
+    "native_vs_python_bm6_state_max_abs_component_delta": 2e-15,
+    "native_vs_python_bm6_energy_series_max_abs_delta": 5e-16,
+    "native_vs_python_bm6_angular_series_max_abs_delta": 5e-16,
+    "reference_gate": "DOP853 loose-vs-tight RMS position and velocity disagreement must each be <=1% of the best competing error, using the existing absolute floors.",
+    "accuracy_win_rule": "All four all-body trajectory metrics must be lower than REBOUND and energy/angular-momentum gates must not worsen.",
+    "timing_repeats": 31,
+    "timing_semantics": "median integration-only timing; setup, diagnostics, trajectory output, and file I/O excluded"
+  },
+  "verdicts": [
+    "JX_NATIVE_BM6_WIN",
+    "NO_NATIVE_WIN",
+    "INVALID_NATIVE_SELF_TEST",
+    "INVALID_NATIVE_NONDETERMINISTIC",
+    "INVALID_NATIVE_REPLAY",
+    "INVALID_REFERENCE",
+    "BLOCKED"
+  ],
+  "preservation": "Do not modify the Python KDK, cached Yoshida-6, Python BM6, DE441 inputs, prior Benchmark A results, or equal-timestep verdict.",
+  "claim_ceiling": "A scoped native replay and accuracy/speed comparison on the frozen smooth ten-body workload; not universal superiority over REBOUND, close-encounter validation, arbitrary-precision qualification, full ephemeris reconstruction, or a Planet-X claim."
+}
