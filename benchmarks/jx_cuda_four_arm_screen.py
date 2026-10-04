@@ -86,12 +86,16 @@ TRANSFORM_SCHEMA = "jxplanetx.cuda-four-arm-population-transform.v1"
 ARM_RESULT_SCHEMA = "jxplanetx.cuda-four-arm-result.v1"
 SUMMARY_SCHEMA = "jxplanetx.cuda-four-arm-summary.v1"
 FAILURE_SCHEMA = "jxplanetx.cuda-four-arm-failure.v1"
+RUNTIME_RECEIPT_SCHEMA = "jxplanetx.cuda-four-arm-runtime-receipt.v1"
 
 PROTOCOL_DOMAIN = b"jxplanetx.cuda-four-arm-mechanism-screen-protocol.v1\x00"
 TRANSFORM_DOMAIN = b"jxplanetx.cuda-four-arm-population-transform.v1\x00"
 ARRAY_DOMAIN = b"jxplanetx.cuda-four-arm-array-set.v1\x00"
 PROVENANCE_DOMAIN = b"jxplanetx.cuda-four-arm-provenance.v1\x00"
 REPORT_DOMAIN = b"jxplanetx.cuda-four-arm-report.v1\x00"
+RUNTIME_RECEIPT_DOMAIN = b"jxplanetx.cuda-four-arm-runtime-receipt.v1\x00"
+EXECUTION_EVIDENCE_DOMAIN = b"jxplanetx.cuda-four-arm-execution-evidence.v1\x00"
+EXECUTION_EVIDENCE_SCHEMA = "jxplanetx.cuda-four-arm-execution-evidence.v1"
 
 ACCEPTANCE_INITIAL_STATE_SHA256 = (
     "ebb4d6b8952e78a6eb91e9591c2ddff36831f3f92b98952a9f50da802e82f048"
@@ -267,6 +271,114 @@ def _verify_content_hash(
     expected = _content_hash(domain, payload)
     if observed != expected:
         raise RuntimeError(f"{label} content SHA-256 failed")
+
+
+def _require_runtime_identity(
+    observed: object,
+    expected: Mapping[str, Any],
+    *,
+    label: str,
+) -> None:
+    if type(observed) is not dict or observed != dict(expected):
+        raise RuntimeError(f"{label} differs from the frozen stage runtime identity")
+
+
+def _current_runtime_identity(
+    backend: BackendSpec,
+    *,
+    expected: Mapping[str, Any] | None = None,
+    label: str = "current CUDA/CPU runtime identity",
+) -> dict[str, Any]:
+    runtime = dict(cuda_massless_tracer_runtime_identity(backend))
+    if (
+        runtime.get("method_id") != METHOD_ID
+        or runtime.get("kernel_source_sha256") != KERNEL_SOURCE_SHA256
+        or runtime.get("implementation_source_sha256")
+        != IMPLEMENTATION_SOURCE_SHA256
+        or runtime.get("event_locator_source_sha256")
+        != EVENT_LOCATOR_SOURCE_SHA256
+    ):
+        raise RuntimeError("CUDA runtime implementation identity differs from the runner")
+    if expected is not None:
+        _require_runtime_identity(runtime, expected, label=label)
+    return runtime
+
+
+def _freeze_stage_runtime_identity(
+    stage_directory: Path,
+    *,
+    protocol_sha256: str,
+    current_runtime: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Freeze one runtime for the stage and reject heterogeneous cached evidence."""
+
+    receipt_path = stage_directory / "RUNTIME_IDENTITY.json"
+    if receipt_path.is_file():
+        receipt = _load_json(receipt_path)
+        _verify_content_hash(
+            receipt,
+            RUNTIME_RECEIPT_DOMAIN,
+            schema=RUNTIME_RECEIPT_SCHEMA,
+            label="stage runtime receipt",
+        )
+        if receipt.get("protocol_sha256") != protocol_sha256:
+            raise RuntimeError("stage runtime receipt binds a different protocol")
+        _require_runtime_identity(
+            receipt.get("runtime_identity"),
+            current_runtime,
+            label="stage runtime receipt",
+        )
+    elif receipt_path.exists():
+        raise RuntimeError("stage runtime receipt path is not a regular file")
+    else:
+        receipt = {
+            "schema": RUNTIME_RECEIPT_SCHEMA,
+            "protocol_sha256": protocol_sha256,
+            "runtime_identity": dict(current_runtime),
+            "semantics": (
+                "EXACT_STAGE_WIDE_CUDA_GPU_CPU_PYTHON_NUMPY_SCIPY_RUNTIME; "
+                "ANY_CHANGE_REQUIRES_A_NEW_STAGE"
+            ),
+        }
+        receipt["content_sha256"] = _content_hash(RUNTIME_RECEIPT_DOMAIN, receipt)
+
+    # A pre-receipt partial stage may exist from an earlier runner.  Validate
+    # every durable runtime-bearing artifact before publishing or accepting the
+    # receipt, so a resumed invocation cannot mix environments and fail late.
+    cached_documents = (
+        (
+            "arms/*/SOURCE_PATH_AUDIT.json",
+            "jxplanetx.cuda-four-arm-source-path-audit.v1",
+            "cached source-path audit",
+        ),
+        ("arms/*/ARM_RESULT.json", ARM_RESULT_SCHEMA, "cached arm result"),
+        ("SUMMARY.json", SUMMARY_SCHEMA, "cached stage summary"),
+    )
+    for pattern, schema, label in cached_documents:
+        for path in sorted(stage_directory.glob(pattern)):
+            document = _load_json(path)
+            _verify_content_hash(
+                document,
+                REPORT_DOMAIN,
+                schema=schema,
+                label=f"{label} {path.relative_to(stage_directory)}",
+            )
+            _require_runtime_identity(
+                document.get("runtime_identity"),
+                current_runtime,
+                label=f"{label} {path.relative_to(stage_directory)}",
+            )
+            if (
+                document.get("runtime_identity_receipt_sha256")
+                != receipt["content_sha256"]
+            ):
+                raise RuntimeError(
+                    f"{label} {path.relative_to(stage_directory)} binds a "
+                    "different stage runtime receipt"
+                )
+
+    _publish_json_exact(receipt_path, receipt)
+    return receipt
 
 
 def _verify_artifact_records(
@@ -646,6 +758,8 @@ def _source_path_audit(
     arm: MechanismArm,
     arm_directory: Path,
     protocol_sha256: str,
+    runtime_identity: Mapping[str, Any],
+    runtime_receipt_sha256: str,
 ) -> tuple[dict[str, Any], dict[str, np.ndarray]]:
     """Audit the exact massive-source KDK path independently of tracers.
 
@@ -656,6 +770,11 @@ def _source_path_audit(
     65,536-step chunk policy so checkpoint endpoint hashes can be compared.
     """
 
+    _current_runtime_identity(
+        backend,
+        expected=runtime_identity,
+        label=f"current runtime before {arm.schedule.arm_kind} source-path audit",
+    )
     audit_path = arm_directory / "SOURCE_PATH_AUDIT.json"
     endpoint_path = arm_directory / "SOURCE_PATH_AUDIT_ENDPOINT.npz"
     if audit_path.exists() or endpoint_path.exists():
@@ -677,12 +796,17 @@ def _source_path_audit(
             or document.get("kernel_source_sha256") != KERNEL_SOURCE_SHA256
             or document.get("implementation_source_sha256")
             != IMPLEMENTATION_SOURCE_SHA256
-            or document.get("runtime_identity")
-            != dict(cuda_massless_tracer_runtime_identity(backend))
+            or document.get("runtime_identity_receipt_sha256")
+            != runtime_receipt_sha256
             or document.get("step_years") != STEP_YEARS
             or document.get("total_steps") != stage.total_steps
         ):
             raise RuntimeError("source-path audit identity differs from this run")
+        _require_runtime_identity(
+            document.get("runtime_identity"),
+            runtime_identity,
+            label=f"cached {arm.schedule.arm_kind} source-path audit",
+        )
         with np.load(endpoint_path, allow_pickle=False) as archive:
             if set(archive.files) != {
                 "source_positions",
@@ -884,6 +1008,11 @@ def _source_path_audit(
             "source_velocities": cp.asnumpy(current_velocity),
         }
 
+    _current_runtime_identity(
+        backend,
+        expected=runtime_identity,
+        label=f"current runtime after {arm.schedule.arm_kind} source-path audit",
+    )
     pair_records = []
     primary_records = []
     for (left, right), (minimum, global_step) in sorted(pair_minima.items()):
@@ -909,7 +1038,8 @@ def _source_path_audit(
         "method_id": METHOD_ID,
         "kernel_source_sha256": KERNEL_SOURCE_SHA256,
         "implementation_source_sha256": IMPLEMENTATION_SOURCE_SHA256,
-        "runtime_identity": dict(cuda_massless_tracer_runtime_identity(backend)),
+        "runtime_identity": dict(runtime_identity),
+        "runtime_identity_receipt_sha256": runtime_receipt_sha256,
         "step_years": STEP_YEARS,
         "total_steps": stage.total_steps,
         "all_lattice_nodes_scanned_for_minima": True,
@@ -1409,6 +1539,8 @@ def _build_protocol(
             "source_endpoint_matches_all_horizon_source_path_audit": True,
             "every_route_source_segment_matches_exact_source_path": True,
             "every_routed_tracer_exact_full_stage_replay_passed": True,
+            "committed_checkpoint_segment_roster_hashes_and_chain_verified": True,
+            "uncommitted_checkpoint_array_orphans_preserved_separately": True,
             "matched_initial_tracer_bytes": True,
             "matched_base_source_prefix_bytes": True,
         },
@@ -1699,6 +1831,331 @@ def _segment_report(
     }
 
 
+def _expected_checkpoint_indices(
+    total_steps: int,
+    checkpoint_steps: int,
+) -> tuple[int, ...]:
+    if type(total_steps) is not int or total_steps <= 0:
+        raise RuntimeError("execution evidence total_steps is invalid")
+    if type(checkpoint_steps) is not int or not 0 < checkpoint_steps <= total_steps:
+        raise RuntimeError("execution evidence checkpoint_steps is invalid")
+    indices: list[int] = []
+    cursor = 0
+    while cursor < total_steps:
+        cursor = min(total_steps, cursor + checkpoint_steps)
+        indices.append(cursor)
+    return tuple(indices)
+
+
+def _is_sha256_text(value: object) -> bool:
+    return (
+        type(value) is str
+        and len(value) == 64
+        and all(character in "0123456789abcdef" for character in value)
+    )
+
+
+def _execution_artifact_map(
+    paths: Iterable[Path],
+    *,
+    stage_directory: Path,
+) -> dict[str, dict[str, Any]]:
+    records: dict[str, dict[str, Any]] = {}
+    for path in sorted(paths):
+        if path.is_symlink() or not path.is_file():
+            raise RuntimeError("execution evidence artifact is not a regular file")
+        try:
+            path.resolve().relative_to(stage_directory.resolve())
+        except ValueError as exc:
+            raise RuntimeError("execution evidence artifact escapes the stage") from exc
+        relative = path.relative_to(stage_directory).as_posix()
+        if relative in records:
+            raise RuntimeError("execution evidence contains a duplicate artifact path")
+        record = _artifact(path, stage_directory)
+        if record["path"] != relative:
+            raise RuntimeError("execution evidence artifact path is noncanonical")
+        records[relative] = record
+    return records
+
+
+def _collect_execution_evidence(
+    *,
+    stage_directory: Path,
+    arm_directory: Path,
+    run_id: str,
+    protocol_sha256: str,
+    total_steps: int,
+    checkpoint_steps: int,
+) -> dict[str, Any]:
+    """Bind the exact committed checkpoint chain and its segment reports.
+
+    A content-addressed NPZ may survive a process interruption before its JSON
+    record is atomically installed.  Such files are retained as explicit
+    negative evidence, but they are never counted as committed checkpoints.
+    """
+
+    expected_indices = _expected_checkpoint_indices(total_steps, checkpoint_steps)
+    checkpoint_root = arm_directory / "checkpoints"
+    segment_root = arm_directory / "segments"
+    if not checkpoint_root.is_dir() or not segment_root.is_dir():
+        raise RuntimeError("completed arm lacks checkpoint or segment evidence")
+
+    namespace_directories = sorted(
+        path for path in checkpoint_root.iterdir() if path.is_dir()
+    )
+    root_files = sorted(path for path in checkpoint_root.iterdir() if path.is_file())
+    if root_files or len(namespace_directories) != 1:
+        raise RuntimeError("checkpoint evidence has a noncanonical namespace roster")
+    namespace = namespace_directories[0]
+    namespace_name = namespace.name
+    if (
+        not namespace_name.startswith("run-")
+        or not _is_sha256_text(namespace_name.removeprefix("run-"))
+    ):
+        raise RuntimeError("checkpoint evidence namespace is invalid")
+
+    committed_paths: list[Path] = []
+    committed_set: set[Path] = set()
+    latest_record: dict[str, Any] | None = None
+    for index in expected_indices:
+        record_path = namespace / f"checkpoint_{index:020d}.json"
+        if not record_path.is_file():
+            raise RuntimeError(f"checkpoint evidence is missing index {index}")
+        record = _load_json(record_path)
+        if (
+            record.get("run_id") != run_id
+            or record.get("protocol_sha256") != protocol_sha256
+            or record.get("checkpoint_namespace") != namespace_name
+            or record.get("checkpoint_index") != index
+            or not _is_sha256_text(record.get("checkpoint_content_sha256"))
+            or not _is_sha256_text(record.get("state_sha256"))
+        ):
+            raise RuntimeError(f"checkpoint evidence identity failed at index {index}")
+        array_digest = record.get("array_file_sha256")
+        array_name = record.get("array_file")
+        expected_array_name = f"checkpoint_{index:020d}.array-{array_digest}.npz"
+        if (
+            not _is_sha256_text(array_digest)
+            or type(array_name) is not str
+            or array_name != expected_array_name
+            or Path(array_name).name != array_name
+        ):
+            raise RuntimeError(
+                f"checkpoint array path identity failed at index {index}"
+            )
+        array_path = namespace / array_name
+        if (
+            not array_path.is_file()
+            or array_path.stat().st_size != record.get("array_file_size_bytes")
+            or _sha256_file(array_path) != array_digest
+        ):
+            raise RuntimeError(f"checkpoint array failed at index {index}")
+
+        segment_path = segment_root / f"segment-{index:020d}.json"
+        if not segment_path.is_file():
+            raise RuntimeError(f"segment evidence is missing index {index}")
+        segment = _load_json(segment_path)
+        if (
+            segment.get("schema") != "jxplanetx.cuda-four-arm-segment.v1"
+            or segment.get("global_step") != index
+            or segment.get("checkpoint_content_sha256")
+            != record.get("checkpoint_content_sha256")
+            or segment.get("state_sha256") != record.get("state_sha256")
+        ):
+            raise RuntimeError(f"segment/checkpoint binding failed at index {index}")
+
+        for path in (record_path, array_path, segment_path):
+            if path in committed_set:
+                raise RuntimeError("execution evidence reuses an artifact path")
+            committed_set.add(path)
+            committed_paths.append(path)
+        latest_record = record
+
+    observed_segments = {
+        path for path in segment_root.rglob("*") if path.is_file()
+    }
+    expected_segments = {
+        segment_root / f"segment-{index:020d}.json" for index in expected_indices
+    }
+    if observed_segments != expected_segments:
+        raise RuntimeError("segment artifact roster differs from the checkpoint cadence")
+
+    observed_checkpoint_files = {
+        path for path in checkpoint_root.rglob("*") if path.is_file()
+    }
+    committed_checkpoint_files = {
+        path for path in committed_set if checkpoint_root in path.parents
+    }
+    orphan_paths: list[Path] = []
+    for path in sorted(observed_checkpoint_files - committed_checkpoint_files):
+        if path.parent != namespace:
+            raise RuntimeError("checkpoint evidence contains a file outside its namespace")
+        name = path.name
+        stem, separator, digest_suffix = name.partition(".array-")
+        digest, extension = (
+            digest_suffix.rsplit(".", 1)
+            if "." in digest_suffix
+            else ("", "")
+        )
+        index_text = stem.removeprefix("checkpoint_")
+        if (
+            separator != ".array-"
+            or not stem.startswith("checkpoint_")
+            or len(index_text) != 20
+            or not index_text.isdigit()
+            or int(index_text) not in expected_indices
+            or extension != "npz"
+            or not _is_sha256_text(digest)
+            or _sha256_file(path) != digest
+        ):
+            raise RuntimeError(
+                "checkpoint evidence contains an unknown or malformed extra file"
+            )
+        orphan_paths.append(path)
+
+    if latest_record is None:
+        raise RuntimeError("execution evidence did not yield a terminal checkpoint")
+    committed_artifacts = _execution_artifact_map(
+        committed_paths,
+        stage_directory=stage_directory,
+    )
+    orphan_artifacts = _execution_artifact_map(
+        orphan_paths,
+        stage_directory=stage_directory,
+    )
+    evidence: dict[str, Any] = {
+        "schema": EXECUTION_EVIDENCE_SCHEMA,
+        "run_id": run_id,
+        "protocol_sha256": protocol_sha256,
+        "total_steps": total_steps,
+        "checkpoint_steps": checkpoint_steps,
+        "checkpoint_indices": list(expected_indices),
+        "checkpoint_namespace": namespace_name,
+        "latest_checkpoint_content_sha256": latest_record[
+            "checkpoint_content_sha256"
+        ],
+        "latest_state_sha256": latest_record["state_sha256"],
+        "committed_artifact_count": len(committed_artifacts),
+        "committed_artifacts": committed_artifacts,
+        "uncommitted_orphan_artifact_count": len(orphan_artifacts),
+        "uncommitted_orphan_artifacts": orphan_artifacts,
+        "uncommitted_orphan_semantics": (
+            "CONTENT_ADDRESSED_NPZ_PRESERVED_AFTER_INTERRUPTED_PRE_RECORD_COMMIT; "
+            "NOT_A_COMMITTED_CHECKPOINT_AND_NOT_IN_THE_HASH_CHAIN"
+        ),
+    }
+    evidence["content_sha256"] = _content_hash(
+        EXECUTION_EVIDENCE_DOMAIN, evidence
+    )
+    return evidence
+
+
+def _verify_loaded_execution_endpoint(
+    *,
+    backend: BackendSpec,
+    stage: Stage,
+    arm_directory: Path,
+    report: Mapping[str, Any],
+    evidence: Mapping[str, Any],
+    endpoint: Mapping[str, np.ndarray],
+    route_records: list[dict[str, Any]],
+    removal_records: list[dict[str, Any]],
+) -> None:
+    checkpoint_root = arm_directory / "checkpoints"
+    loaded = load_latest_cuda_massless_tracer_checkpoint(
+        checkpoint_root,
+        run_id=str(report["run_id"]),
+        protocol_sha256=str(report["protocol_sha256"]),
+        backend=backend,
+    )
+    if loaded is None:
+        raise RuntimeError("committed checkpoint evidence did not reload")
+    latest = _latest_checkpoint_digest(
+        checkpoint_root,
+        str(report["run_id"]),
+        str(report["protocol_sha256"]),
+    )
+    if latest != (
+        stage.total_steps,
+        evidence.get("latest_checkpoint_content_sha256"),
+    ):
+        raise RuntimeError("reloaded checkpoint terminal digest differs")
+    if (
+        loaded.state.global_step != stage.total_steps
+        or loaded.state.epoch != stage.duration_years
+        or report.get("endpoint_global_step") != stage.total_steps
+        or report.get("endpoint_epoch_years") != stage.duration_years
+    ):
+        raise RuntimeError("reloaded checkpoint did not reach the exact stage endpoint")
+    _require_runtime_identity(
+        dict(loaded.runtime_identity),
+        report.get("runtime_identity", {}),
+        label="reloaded checkpoint/arm result runtime",
+    )
+    resolved = cuda_tracer_module.resolve_backend(backend)
+    with resolved.activate():
+        loaded_endpoint = _endpoint_arrays(resolved.xp, loaded)
+    if set(loaded_endpoint) != set(endpoint) or any(
+        not np.array_equal(loaded_endpoint[key], endpoint[key])
+        for key in loaded_endpoint
+    ):
+        raise RuntimeError("reloaded checkpoint endpoint differs from ENDPOINT_STATE")
+    if _canonical([asdict(row) for row in loaded.encounter_routes]) != _canonical(
+        route_records
+    ):
+        raise RuntimeError("reloaded checkpoint route ledger differs")
+    if _canonical([asdict(row) for row in loaded.removal_events]) != _canonical(
+        removal_records
+    ):
+        raise RuntimeError("reloaded checkpoint removal ledger differs")
+
+
+def _verify_execution_evidence(
+    *,
+    stage_directory: Path,
+    arm_directory: Path,
+    stage: Stage,
+    checkpoint_years: float,
+    report: Mapping[str, Any],
+    endpoint: Mapping[str, np.ndarray],
+    route_records: list[dict[str, Any]],
+    removal_records: list[dict[str, Any]],
+    backend: BackendSpec | None,
+) -> dict[str, Any]:
+    checkpoint_steps = _years_to_steps(checkpoint_years, "checkpoint_years")
+    observed = report.get("execution_evidence")
+    if type(observed) is not dict:
+        raise RuntimeError("arm result lacks execution evidence")
+    _verify_content_hash(
+        observed,
+        EXECUTION_EVIDENCE_DOMAIN,
+        schema=EXECUTION_EVIDENCE_SCHEMA,
+        label="arm execution evidence",
+    )
+    recomputed = _collect_execution_evidence(
+        stage_directory=stage_directory,
+        arm_directory=arm_directory,
+        run_id=str(report.get("run_id")),
+        protocol_sha256=str(report.get("protocol_sha256")),
+        total_steps=stage.total_steps,
+        checkpoint_steps=checkpoint_steps,
+    )
+    if observed != recomputed:
+        raise RuntimeError("arm execution evidence differs from its exact artifact roster")
+    if backend is not None:
+        _verify_loaded_execution_endpoint(
+            backend=backend,
+            stage=stage,
+            arm_directory=arm_directory,
+            report=report,
+            evidence=recomputed,
+            endpoint=endpoint,
+            route_records=route_records,
+            removal_records=removal_records,
+        )
+    return recomputed
+
+
 def _arm_run_id(stage: Stage, arm: MechanismArm) -> str:
     return f"jx-m2-{stage.stage_id}-{ARM_DIRECTORY_NAMES[arm.schedule.arm_kind]}-v1"
 
@@ -1710,11 +2167,16 @@ def _arm_result_path(stage_directory: Path, arm: MechanismArm) -> Path:
 def _load_verified_arm_result(
     path: Path,
     *,
+    backend: BackendSpec,
+    stage: Stage,
+    checkpoint_years: float,
     stage_directory: Path,
     arm: MechanismArm,
     schedule_set: MatchedMechanismScheduleSet,
     protocol_sha256: str,
     receipt_sha256: str,
+    runtime_identity: Mapping[str, Any],
+    runtime_receipt_sha256: str,
 ) -> dict[str, Any]:
     report = _load_json(path)
     _verify_content_hash(
@@ -1731,10 +2193,17 @@ def _load_verified_arm_result(
         or report.get("matched_schedule_set_sha256")
         != schedule_set.matched_set_sha256
         or report.get("population_transform_receipt_sha256") != receipt_sha256
+        or report.get("runtime_identity_receipt_sha256")
+        != runtime_receipt_sha256
         or report.get("claims") != dict(RESULT_CLAIMS)
         or report.get("classification") != "MODEL_OUTPUT / SCREENING_ONLY"
     ):
         raise RuntimeError("cached arm result identity or claim ceiling differs")
+    _require_runtime_identity(
+        report.get("runtime_identity"),
+        runtime_identity,
+        label=f"cached {arm.schedule.arm_kind} arm result",
+    )
     arm_relative = Path("arms") / ARM_DIRECTORY_NAMES[arm.schedule.arm_kind]
     artifact_records = report.get("artifacts")
     if (
@@ -1796,8 +2265,26 @@ def _load_verified_arm_result(
         or source_audit.get("kernel_source_sha256") != KERNEL_SOURCE_SHA256
         or source_audit.get("implementation_source_sha256")
         != IMPLEMENTATION_SOURCE_SHA256
+        or source_audit.get("runtime_identity_receipt_sha256")
+        != runtime_receipt_sha256
     ):
         raise RuntimeError("cached source-path audit binding differs")
+    _require_runtime_identity(
+        source_audit.get("runtime_identity"),
+        runtime_identity,
+        label=f"cached {arm.schedule.arm_kind} source-path audit",
+    )
+    _verify_execution_evidence(
+        stage_directory=stage_directory,
+        arm_directory=arm_directory,
+        stage=stage,
+        checkpoint_years=checkpoint_years,
+        report=report,
+        endpoint=endpoint,
+        route_records=route_document["records"],
+        removal_records=removal_document["records"],
+        backend=backend,
+    )
     return report
 
 
@@ -1836,6 +2323,8 @@ def _load_verified_stage_summary(
     path: Path,
     *,
     expected_status: str,
+    expected_runtime_identity: Mapping[str, Any] | None = None,
+    backend: BackendSpec | None = None,
 ) -> dict[str, Any]:
     summary = _load_json(path)
     _verify_content_hash(
@@ -1856,10 +2345,72 @@ def _load_verified_stage_summary(
         }
     ):
         raise RuntimeError("completed stage summary status/claim gates are invalid")
+    stage_id = summary.get("stage_id")
+    stage = STAGES.get(stage_id) if type(stage_id) is str else None
+    checkpoint_years = summary.get("checkpoint_years")
+    if (
+        stage is None
+        or summary.get("duration_years") != stage.duration_years
+        or summary.get("step_years") != STEP_YEARS
+        or summary.get("total_steps") != stage.total_steps
+        or summary.get("tracer_count") != stage.tracer_count
+        or isinstance(checkpoint_years, bool)
+        or not isinstance(checkpoint_years, (int, float))
+    ):
+        raise RuntimeError("completed stage summary does not name a canonical stage")
+    checkpoint_years = float(checkpoint_years)
+    checkpoint_steps = _years_to_steps(
+        checkpoint_years, "completed checkpoint_years"
+    )
+    stage_directory = path.parent
+    protocol = _load_json(stage_directory / "PROTOCOL.json")
+    _verify_content_hash(
+        protocol,
+        PROTOCOL_DOMAIN,
+        schema=PROTOCOL_SCHEMA,
+        label="completed stage protocol",
+    )
+    protocol_stage = protocol.get("stage")
+    if (
+        protocol.get("content_sha256") != summary.get("protocol_sha256")
+        or type(protocol_stage) is not dict
+        or protocol_stage.get("stage_id") != stage.stage_id
+        or protocol_stage.get("total_steps") != stage.total_steps
+        or protocol_stage.get("tracer_count") != stage.tracer_count
+        or protocol_stage.get("checkpoint_steps") != checkpoint_steps
+        or protocol_stage.get("checkpoint_years_hex") != checkpoint_years.hex()
+    ):
+        raise RuntimeError("completed stage protocol/cadence binding differs")
+    runtime_receipt = _load_json(stage_directory / "RUNTIME_IDENTITY.json")
+    _verify_content_hash(
+        runtime_receipt,
+        RUNTIME_RECEIPT_DOMAIN,
+        schema=RUNTIME_RECEIPT_SCHEMA,
+        label="completed stage runtime receipt",
+    )
+    if (
+        runtime_receipt.get("protocol_sha256") != summary.get("protocol_sha256")
+        or summary.get("runtime_identity_receipt_sha256")
+        != runtime_receipt.get("content_sha256")
+    ):
+        raise RuntimeError("completed stage runtime receipt binding differs")
+    frozen_runtime = runtime_receipt.get("runtime_identity")
+    if type(frozen_runtime) is not dict:
+        raise RuntimeError("completed stage runtime receipt identity is invalid")
+    _require_runtime_identity(
+        summary.get("runtime_identity"),
+        frozen_runtime,
+        label="completed stage summary",
+    )
+    if expected_runtime_identity is not None:
+        _require_runtime_identity(
+            frozen_runtime,
+            expected_runtime_identity,
+            label="completed stage runtime receipt/current runtime",
+        )
     result_hashes = summary.get("arm_result_sha256")
     if type(result_hashes) is not dict or set(result_hashes) != set(ARM_KINDS):
         raise RuntimeError("completed stage summary arm-result roster is invalid")
-    stage_directory = path.parent
     for arm_kind in ARM_KINDS:
         result_path = (
             stage_directory
@@ -1876,12 +2427,23 @@ def _load_verified_stage_summary(
         )
         if (
             report.get("arm_kind") != arm_kind
+            or report.get("stage_id") != stage.stage_id
+            or report.get("protocol_sha256") != summary.get("protocol_sha256")
+            or report.get("endpoint_global_step") != stage.total_steps
+            or report.get("endpoint_epoch_years") != stage.duration_years
             or report.get("content_sha256") != result_hashes[arm_kind]
             or report.get("claims") != dict(RESULT_CLAIMS)
             or report.get("classification") != "MODEL_OUTPUT / SCREENING_ONLY"
             or report.get("gates", {}).get("all_pass") is not True
+            or report.get("runtime_identity_receipt_sha256")
+            != runtime_receipt.get("content_sha256")
         ):
             raise RuntimeError("completed stage arm result binding is invalid")
+        _require_runtime_identity(
+            report.get("runtime_identity"),
+            frozen_runtime,
+            label=f"completed stage arm result {arm_kind}",
+        )
         artifact_records = report.get("artifacts")
         if (
             type(artifact_records) is not dict
@@ -1899,6 +2461,48 @@ def _load_verified_stage_summary(
             artifact_records,
             stage_directory=stage_directory,
             label=f"stage arm result {arm_kind}",
+        )
+        source_audit = _load_json(result_path.parent / "SOURCE_PATH_AUDIT.json")
+        _verify_content_hash(
+            source_audit,
+            REPORT_DOMAIN,
+            schema="jxplanetx.cuda-four-arm-source-path-audit.v1",
+            label=f"completed stage source-path audit {arm_kind}",
+        )
+        if (
+            source_audit.get("runtime_identity_receipt_sha256")
+            != runtime_receipt.get("content_sha256")
+        ):
+            raise RuntimeError(
+                "completed stage source-path audit runtime receipt binding differs"
+            )
+        _require_runtime_identity(
+            source_audit.get("runtime_identity"),
+            frozen_runtime,
+            label=f"completed stage source-path audit {arm_kind}",
+        )
+        endpoint_path = result_path.parent / "ENDPOINT_STATE.npz"
+        with np.load(endpoint_path, allow_pickle=False) as archive:
+            endpoint = {
+                name: np.ascontiguousarray(archive[name]) for name in archive.files
+            }
+        route_document = _load_json(result_path.parent / "ENCOUNTER_ROUTES.json")
+        removal_document = _load_json(result_path.parent / "REMOVAL_EVENTS.json")
+        if (
+            type(route_document.get("records")) is not list
+            or type(removal_document.get("records")) is not list
+        ):
+            raise RuntimeError("completed stage arm ledgers are invalid")
+        _verify_execution_evidence(
+            stage_directory=stage_directory,
+            arm_directory=result_path.parent,
+            stage=stage,
+            checkpoint_years=checkpoint_years,
+            report=report,
+            endpoint=endpoint,
+            route_records=route_document["records"],
+            removal_records=removal_document["records"],
+            backend=backend,
         )
     _verify_stage_sha256sums(stage_directory)
     return summary
@@ -1932,6 +2536,8 @@ def _run_arm(
     population: Mapping[str, np.ndarray],
     receipt: Mapping[str, Any],
     protocol: Mapping[str, Any],
+    runtime_identity: Mapping[str, Any],
+    runtime_receipt_sha256: str,
     stop_after_checkpoints: int | None,
 ) -> dict[str, Any] | None:
     arm_directory = stage_directory / "arms" / ARM_DIRECTORY_NAMES[arm.schedule.arm_kind]
@@ -1940,11 +2546,16 @@ def _run_arm(
     if result_path.exists():
         return _load_verified_arm_result(
             result_path,
+            backend=backend,
+            stage=stage,
+            checkpoint_years=checkpoint_years,
             stage_directory=stage_directory,
             arm=arm,
             schedule_set=schedule_set,
             protocol_sha256=protocol_sha256,
             receipt_sha256=str(receipt["content_sha256"]),
+            runtime_identity=runtime_identity,
+            runtime_receipt_sha256=runtime_receipt_sha256,
         )
     arm_directory.mkdir(parents=True, exist_ok=True)
     checkpoint_root = arm_directory / "checkpoints"
@@ -1968,6 +2579,8 @@ def _run_arm(
         arm=arm,
         arm_directory=arm_directory,
         protocol_sha256=protocol_sha256,
+        runtime_identity=runtime_identity,
+        runtime_receipt_sha256=runtime_receipt_sha256,
     )
 
     result = load_latest_cuda_massless_tracer_checkpoint(
@@ -2103,6 +2716,31 @@ def _run_arm(
             "semantics": "OPERATIONAL_REMOVALS_NOT_PHYSICAL_EVENT_CLASSIFICATION",
         },
     )
+    checkpoint_steps = _years_to_steps(checkpoint_years, "checkpoint_years")
+    execution_evidence = _collect_execution_evidence(
+        stage_directory=stage_directory,
+        arm_directory=arm_directory,
+        run_id=run_id,
+        protocol_sha256=protocol_sha256,
+        total_steps=stage.total_steps,
+        checkpoint_steps=checkpoint_steps,
+    )
+    _verify_loaded_execution_endpoint(
+        backend=backend,
+        stage=stage,
+        arm_directory=arm_directory,
+        report={
+            "run_id": run_id,
+            "protocol_sha256": protocol_sha256,
+            "runtime_identity": dict(result.runtime_identity),
+            "endpoint_global_step": result.state.global_step,
+            "endpoint_epoch_years": result.state.epoch,
+        },
+        evidence=execution_evidence,
+        endpoint=endpoint,
+        route_records=route_rows,
+        removal_records=removal_rows,
+    )
     route_count = int(np.sum(endpoint["encounter_route_counts"]))
     terminal_count = int(np.count_nonzero(endpoint["tracer_lifecycle"] != LIFECYCLE_ACTIVE))
     source_endpoint_matches_audit = np.array_equal(
@@ -2111,6 +2749,11 @@ def _run_arm(
         endpoint["source_velocities"], source_audit_endpoint["source_velocities"]
     )
     runtime = dict(result.runtime_identity)
+    _require_runtime_identity(
+        runtime,
+        runtime_identity,
+        label=f"fresh {arm.schedule.arm_kind} arm result",
+    )
     gates = {
         "reached_exact_endpoint": result.state.global_step == stage.total_steps,
         "all_endpoint_arrays_finite": _finite_endpoint(endpoint),
@@ -2146,6 +2789,8 @@ def _run_arm(
             and runtime.get("event_locator_source_sha256")
             == EVENT_LOCATOR_SOURCE_SHA256
         ),
+        "committed_checkpoint_segment_roster_hashes_and_chain_verified": True,
+        "uncommitted_checkpoint_array_orphans_preserved_separately": True,
     }
     artifact_paths = (
         arm_directory / "FORCE_SCHEDULE.json",
@@ -2172,6 +2817,7 @@ def _run_arm(
         "source_state_sha256": arm.initial_state.state_sha256,
         "matched_schedule_set_sha256": schedule_set.matched_set_sha256,
         "population_transform_receipt_sha256": receipt["content_sha256"],
+        "runtime_identity_receipt_sha256": runtime_receipt_sha256,
         "endpoint_global_step": result.state.global_step,
         "endpoint_epoch_years": result.state.epoch,
         "endpoint_semantic_array_sha256": _array_set_sha256(endpoint),
@@ -2214,6 +2860,7 @@ def _run_arm(
                 "exact_replay_passed"
             ],
         },
+        "execution_evidence": execution_evidence,
         "runtime_identity": runtime,
         "gates": {**gates, "all_pass": all(gates.values())},
         "artifacts": {
@@ -2283,6 +2930,8 @@ def _qualification_prerequisite(
     output_root: Path,
     receipt_sha256: str,
     protocol: Mapping[str, Any],
+    runtime_identity: Mapping[str, Any] | None,
+    backend: BackendSpec | None,
 ) -> None:
     path = output_root / "qualification/SUMMARY.json"
     if not path.is_file():
@@ -2292,6 +2941,8 @@ def _qualification_prerequisite(
     summary = _load_verified_stage_summary(
         path,
         expected_status=STAGES["qualification"].completion_status,
+        expected_runtime_identity=runtime_identity,
+        backend=backend,
     )
     if summary.get("population_transform_receipt_sha256") != receipt_sha256:
         raise RuntimeError("qualification used a different transformed population")
@@ -2329,8 +2980,18 @@ def _summarize(
     schedule_set: MatchedMechanismScheduleSet,
     receipt: Mapping[str, Any],
     protocol: Mapping[str, Any],
+    runtime_identity: Mapping[str, Any],
+    runtime_receipt_sha256: str,
     reports: Mapping[str, Mapping[str, Any]],
 ) -> dict[str, Any]:
+    for arm_kind, report in reports.items():
+        if report.get("runtime_identity_receipt_sha256") != runtime_receipt_sha256:
+            raise RuntimeError(f"{arm_kind} arm result binds a different runtime receipt")
+        _require_runtime_identity(
+            report.get("runtime_identity"),
+            runtime_identity,
+            label=f"{arm_kind} arm result",
+        )
     expected_arms = set(ARM_KINDS)
     complete = set(reports) == expected_arms
     all_arm_gates = complete and all(
@@ -2400,6 +3061,8 @@ def _summarize(
         "protocol_sha256": protocol["content_sha256"],
         "matched_schedule_set_sha256": schedule_set.matched_set_sha256,
         "population_transform_receipt_sha256": receipt["content_sha256"],
+        "runtime_identity": dict(runtime_identity),
+        "runtime_identity_receipt_sha256": runtime_receipt_sha256,
         "arm_status": {
             arm_kind: reports.get(arm_kind, {}).get("status", "NOT_RUN")
             for arm_kind in ARM_KINDS
@@ -2491,13 +3154,15 @@ def run(
             document,
         )
 
-    if stage.stage_id == "one_myr":
-        _qualification_prerequisite(
-            output_root,
-            str(receipt["content_sha256"]),
-            protocol,
-        )
     if prepare_only:
+        if stage.stage_id == "one_myr":
+            _qualification_prerequisite(
+                output_root,
+                str(receipt["content_sha256"]),
+                protocol,
+                None,
+                None,
+            )
         return {
             "status": "PREPARED_NOT_EXECUTED",
             "stage_id": stage.stage_id,
@@ -2506,11 +3171,29 @@ def run(
             "matched_schedule_set_sha256": schedule_set.matched_set_sha256,
             "population_transform_receipt_sha256": receipt["content_sha256"],
         }
+    backend = BackendSpec("cupy", device, 128)
+    runtime = _current_runtime_identity(backend)
+    runtime_receipt = _freeze_stage_runtime_identity(
+        stage_directory,
+        protocol_sha256=str(protocol["content_sha256"]),
+        current_runtime=runtime,
+    )
+    runtime_receipt_sha256 = str(runtime_receipt["content_sha256"])
+    if stage.stage_id == "one_myr":
+        _qualification_prerequisite(
+            output_root,
+            str(receipt["content_sha256"]),
+            protocol,
+            runtime,
+            backend,
+        )
     completed_summary_path = stage_directory / "SUMMARY.json"
     if completed_summary_path.is_file():
         completed_summary = _load_verified_stage_summary(
             completed_summary_path,
             expected_status=stage.completion_status,
+            expected_runtime_identity=runtime,
+            backend=None,
         )
         if (
             completed_summary.get("protocol_sha256")
@@ -2525,11 +3208,16 @@ def run(
         for arm in schedule_set.arms:
             report = _load_verified_arm_result(
                 _arm_result_path(stage_directory, arm),
+                backend=backend,
+                stage=stage,
+                checkpoint_years=checkpoint_years,
                 stage_directory=stage_directory,
                 arm=arm,
                 schedule_set=schedule_set,
                 protocol_sha256=str(protocol["content_sha256"]),
                 receipt_sha256=str(receipt["content_sha256"]),
+                runtime_identity=runtime,
+                runtime_receipt_sha256=runtime_receipt_sha256,
             )
             if (
                 completed_summary["arm_result_sha256"].get(
@@ -2542,10 +3230,6 @@ def run(
                 )
         return completed_summary
 
-    backend = BackendSpec("cupy", device, 128)
-    runtime = dict(cuda_massless_tracer_runtime_identity(backend))
-    if runtime.get("method_id") != METHOD_ID:
-        raise RuntimeError("CUDA runtime method identity differs from the runner")
     import cupy as cp
 
     cp.cuda.Device(int(runtime["device_index"])).use()
@@ -2553,6 +3237,11 @@ def run(
     arm_by_kind = {arm.schedule.arm_kind: arm for arm in schedule_set.arms}
     reports: dict[str, Mapping[str, Any]] = {}
     for arm_kind in selected_arm_kinds:
+        _current_runtime_identity(
+            backend,
+            expected=runtime,
+            label=f"current runtime before {arm_kind} arm",
+        )
         arm = arm_by_kind[arm_kind]
         try:
             report = _run_arm(
@@ -2566,6 +3255,8 @@ def run(
                 population=population,
                 receipt=receipt,
                 protocol=protocol,
+                runtime_identity=runtime,
+                runtime_receipt_sha256=runtime_receipt_sha256,
                 stop_after_checkpoints=stop_after_checkpoints,
             )
         except BaseException as exc:
@@ -2581,12 +3272,22 @@ def run(
         if path.is_file():
             reports[arm.schedule.arm_kind] = _load_verified_arm_result(
                 path,
+                backend=backend,
+                stage=stage,
+                checkpoint_years=checkpoint_years,
                 stage_directory=stage_directory,
                 arm=arm,
                 schedule_set=schedule_set,
                 protocol_sha256=str(protocol["content_sha256"]),
                 receipt_sha256=str(receipt["content_sha256"]),
+                runtime_identity=runtime,
+                runtime_receipt_sha256=runtime_receipt_sha256,
             )
+    _current_runtime_identity(
+        backend,
+        expected=runtime,
+        label="current runtime before stage summary",
+    )
     return _summarize(
         stage=stage,
         checkpoint_years=checkpoint_years,
@@ -2595,6 +3296,8 @@ def run(
         schedule_set=schedule_set,
         receipt=receipt,
         protocol=protocol,
+        runtime_identity=runtime,
+        runtime_receipt_sha256=runtime_receipt_sha256,
         reports=reports,
     )
 
