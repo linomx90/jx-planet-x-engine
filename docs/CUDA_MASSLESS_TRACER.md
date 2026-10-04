@@ -16,8 +16,13 @@ for the proposed outer-Solar-System experiments; it is not yet a qualified
 The current M2 contract adds continuous operational removal surfaces,
 fixed-lane lifecycle state, a central-periapse phase guard, scale-aware event
 tolerances, closed force-schedule identities, and checkpoint-v4 event lineage.
-These additions have focused CPU/GPU coverage, but the four-arm mechanism
-screen still requires its qualification rung before any 1-Myr execution.
+These additions have focused CPU/GPU coverage.  The four-arm runner now keeps
+the 1,000-year mechanics qualification separate from a required 100,000-year,
+16,800-tracer route-capacity pilot.  Only a passing pilot receipt with the same
+physical initial bytes, 50,000-year passage geometry, runtime, implementation,
+and frozen population can authorize a 1-Myr attempt.  The 1-Myr run starts
+separately and repeats the first 100,000 years; pilot checkpoints are not
+relabelled or reused.
 
 The final v3 RTX acceptance used the Sun and four giant planets with 16,800
 deterministic synthetic tracers for 5,000 years at a 0.5-year step.  The source
@@ -57,6 +62,13 @@ The route is intentionally called an `encounter_route`, not a backend fallback.
 The configured CuPy backend remains the integration backend.  A guard switch
 means only that the quiet CUDA step was not certified; it is not evidence of a
 physical encounter, contact, collision, or ejection.
+
+Route evidence is also resource-bounded.  The current engine contract permits
+at most 16,384 cumulative routes for one tracer and 100,000 cumulative route
+records for one arm.  The four-arm runner additionally requires at least
+16 GiB of free host storage before every segment and checkpoint write.  These
+are fail-closed engineering limits that protect recoverable evidence; they are
+not physical encounter limits or completion guarantees.
 
 ## Guard contract
 

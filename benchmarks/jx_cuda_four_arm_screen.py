@@ -16,11 +16,12 @@ domain-separated receipt binds the input bytes, transform, output arrays, and
 selection rule.  It is not an observed, Rubin-selected, debiased, or primordial
 population.
 
-The two supported stages are a short qualification rung and a 1-Myr screening
-rung.  Every integration segment is committed through the engine's immutable
-checkpoint chain, so an interrupted arm resumes from its latest verified
-endpoint.  Results remain ``MODEL_OUTPUT / SCREENING_ONLY`` and make no claim
-that any candidate is detected, excluded, preferred, or historically real.
+The supported stages are a short mechanics qualification, a full-population
+100-kyr route-capacity pilot, and a 1-Myr screening rung.  Every integration
+segment is committed through the engine's immutable checkpoint chain, so an
+interrupted arm resumes from its latest verified endpoint.  Results remain
+``MODEL_OUTPUT / SCREENING_ONLY`` and make no claim that any candidate is
+detected, excluded, preferred, or historically real.
 """
 
 from __future__ import annotations
@@ -34,6 +35,7 @@ import json
 import math
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -54,6 +56,7 @@ from jxplanetx.cuda_massless_tracer import (  # noqa: E402
     LIFECYCLE_ACTIVE,
     LIFECYCLE_NAMES,
     MAXIMUM_EVENT_LOCATOR_ACCEPTED_STEPS,
+    MAXIMUM_TOTAL_ENCOUNTER_ROUTES,
     METHOD_ID,
     OUTWARD_EVENT_RADIAL_VELOCITY_TOLERANCE_AU_PER_YEAR,
     CUDAMasslessTracerResult,
@@ -87,6 +90,7 @@ ARM_RESULT_SCHEMA = "jxplanetx.cuda-four-arm-result.v1"
 SUMMARY_SCHEMA = "jxplanetx.cuda-four-arm-summary.v1"
 FAILURE_SCHEMA = "jxplanetx.cuda-four-arm-failure.v1"
 RUNTIME_RECEIPT_SCHEMA = "jxplanetx.cuda-four-arm-runtime-receipt.v1"
+CAPACITY_ADMISSION_SCHEMA = "jxplanetx.cuda-four-arm-capacity-admission.v1"
 
 PROTOCOL_DOMAIN = b"jxplanetx.cuda-four-arm-mechanism-screen-protocol.v1\x00"
 TRANSFORM_DOMAIN = b"jxplanetx.cuda-four-arm-population-transform.v1\x00"
@@ -96,6 +100,10 @@ REPORT_DOMAIN = b"jxplanetx.cuda-four-arm-report.v1\x00"
 RUNTIME_RECEIPT_DOMAIN = b"jxplanetx.cuda-four-arm-runtime-receipt.v1\x00"
 EXECUTION_EVIDENCE_DOMAIN = b"jxplanetx.cuda-four-arm-execution-evidence.v1\x00"
 EXECUTION_EVIDENCE_SCHEMA = "jxplanetx.cuda-four-arm-execution-evidence.v1"
+CAPACITY_ADMISSION_DOMAIN = b"jxplanetx.cuda-four-arm-capacity-admission.v1\x00"
+CAPACITY_PREFIX_PHYSICS_DOMAIN = (
+    b"jxplanetx.cuda-four-arm-capacity-prefix-physics.v1\x00"
+)
 
 ACCEPTANCE_INITIAL_STATE_SHA256 = (
     "ebb4d6b8952e78a6eb91e9591c2ddff36831f3f92b98952a9f50da802e82f048"
@@ -124,8 +132,32 @@ RELATIVE_ACCELERATION_BOUND_AU_PER_YEAR2 = 10.0
 MAXIMUM_PRIMARY_DYNAMICAL_PHASE = 0.05
 EVENT_TIME_TOLERANCE_FRACTION = 1.0e-12
 MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER = 16_384
+MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM = MAXIMUM_TOTAL_ENCOUNTER_ROUTES
+MAXIMUM_TOTAL_ROUTE_RECORDS_PER_STAGE = (
+    len(ARM_KINDS) * MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM
+)
+MINIMUM_FREE_STORAGE_BYTES = 16 * 1024**3
 SOURCE_DIAGNOSTIC_YEARS = 1_000.0
 FULL_SCREEN_PASSAGE_YEARS = 50_000.0
+
+# Route episodes are maximal runs of routed macrosteps for one tracer.  Source
+# or reason changes do not split a run, and even one quiet macrostep closes it.
+# This definition deliberately counts exact route records rather than a
+# physically interpreted encounter duration.
+ROUTE_EPISODE_RESERVED_RECORDS = 512
+
+# The admission ceiling leaves a fixed 25% of the unchanged hard engine cap
+# unused.  It is a fail-closed engineering resource margin, not a prediction
+# that the target integration will complete.
+ROUTE_CAPACITY_REQUIRED_HEADROOM = 4_096
+ROUTE_CAPACITY_ADMISSION_LIMIT = (
+    MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER - ROUTE_CAPACITY_REQUIRED_HEADROOM
+)
+
+# Only a full-population 100-kyr prefix of the exact one-Myr physical initial
+# bytes may authorize the one-Myr rung.  The pure analyzer can still describe
+# shorter mechanics tests, but they fail this identity gate.
+ROUTE_CAPACITY_PILOT_STEPS = 800_000
 
 INTERPRETATION_LIMITS = (
     "This is a current-epoch intervention screen, not a primordial reconstruction.",
@@ -164,6 +196,13 @@ STAGES = {
         tracer_count=2_048,
         checkpoint_years=250.0,
         completion_status="PASSED_QUALIFICATION_SCREEN_NOT_SCIENCE",
+    ),
+    "capacity_pilot": Stage(
+        stage_id="capacity_pilot",
+        duration_years=100_000.0,
+        tracer_count=16_800,
+        checkpoint_years=25_000.0,
+        completion_status="PASSED_CAPACITY_PILOT_NOT_SCIENCE",
     ),
     "one_myr": Stage(
         stage_id="one_myr",
@@ -417,6 +456,39 @@ def _years_to_steps(years: float, label: str) -> int:
     if not math.isclose(quotient, rounded, rel_tol=0.0, abs_tol=1.0e-10):
         raise ValueError(f"{label} must be an exact multiple of {STEP_YEARS}")
     return int(rounded)
+
+
+def _route_storage_guard(
+    path: Path,
+    *,
+    phase: str,
+    cumulative_route_records: int,
+) -> dict[str, Any]:
+    """Fail closed before route-ledger work can consume the recovery reserve."""
+
+    if type(cumulative_route_records) is not int or cumulative_route_records < 0:
+        raise RuntimeError("cumulative route-record count is invalid")
+    if cumulative_route_records > MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM:
+        raise RuntimeError(
+            "arm cumulative route-record budget was exceeded before checkpoint commit"
+        )
+    usage = shutil.disk_usage(path)
+    free_bytes = int(usage.free)
+    if free_bytes < MINIMUM_FREE_STORAGE_BYTES:
+        raise RuntimeError(
+            f"insufficient free storage before {phase}: {free_bytes} bytes available; "
+            f"{MINIMUM_FREE_STORAGE_BYTES} required"
+        )
+    return {
+        "phase": phase,
+        "cumulative_route_records": cumulative_route_records,
+        "maximum_total_route_records_per_arm": (
+            MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM
+        ),
+        "observed_free_storage_bytes": free_bytes,
+        "required_minimum_free_storage_bytes": MINIMUM_FREE_STORAGE_BYTES,
+        "passed": True,
+    }
 
 
 def _commit_create_only(temporary: Path, destination: Path) -> None:
@@ -1323,6 +1395,9 @@ def _routed_tracer_replay_audit(
             maximum_encounter_routes_per_tracer=(
                 MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER
             ),
+            maximum_total_encounter_routes=(
+                MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM
+            ),
             encounter_route_method=(
                 "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2"
             ),
@@ -1336,15 +1411,16 @@ def _routed_tracer_replay_audit(
         )
         replay = advance_cuda_massless_tracers(replay_state, replay_spec)
         replay_endpoint = _endpoint_arrays(cp, replay)
+        routed_id_set = set(routed_ids)
         main_routes = tuple(
             row
             for row in main_result.encounter_routes
-            if row.tracer_index in set(routed_ids)
+            if row.tracer_index in routed_id_set
         )
         main_removals = tuple(
             row
             for row in main_result.removal_events
-            if row.tracer_index in set(routed_ids)
+            if row.tracer_index in routed_id_set
         )
         if replay.encounter_routes != main_routes or replay.removal_events != main_removals:
             raise RuntimeError(
@@ -1412,12 +1488,252 @@ def _schedule_documents(schedule_set: MatchedMechanismScheduleSet) -> dict[str, 
     }
 
 
+def _stage_nominal_passage_years(stage: Stage) -> float:
+    if stage.stage_id in {"capacity_pilot", "one_myr"}:
+        return FULL_SCREEN_PASSAGE_YEARS
+    return 0.5 * stage.duration_years
+
+
+def _build_stage_schedule_set(
+    stage: Stage,
+    de441_control: Path,
+) -> MatchedMechanismScheduleSet:
+    nominal_passage_step = _years_to_steps(
+        _stage_nominal_passage_years(stage), "nominal_passage_years"
+    )
+    return build_de441_four_arm_schedule_set(
+        de441_control,
+        step_years=STEP_YEARS,
+        total_steps=stage.total_steps,
+        matched_set_id=(
+            f"jx-de441-current-epoch-four-mechanism-{stage.stage_id}-v1"
+        ),
+        nominal_passage_global_step=nominal_passage_step,
+        diagnostic_half_window_steps=_years_to_steps(
+            min(10_000.0, 0.1 * stage.duration_years),
+            "diagnostic_half_window_years",
+        ),
+    )
+
+
+def _schedule_prefix_physics_binding(
+    schedule_set: MatchedMechanismScheduleSet,
+) -> dict[str, Any]:
+    """Normalize only nonphysical stage identifiers and horizon endpoints."""
+
+    arms: dict[str, Any] = {}
+    observed_order: list[str] = []
+    for arm in schedule_set.arms:
+        schedule = arm.schedule
+        observed_order.append(schedule.arm_kind)
+        record = dict(schedule.canonical_record())
+        clock = record.pop("clock")
+        if (
+            type(clock) is not dict
+            or clock.get("start_global_step") != 0
+            or clock.get("end_global_step_exclusive") != schedule.total_steps
+        ):
+            raise RuntimeError("capacity schedule clock is not a full-stage interval")
+        activity = record.pop("source_activity")
+        expected_activity = [
+            {
+                "source_id": source_id,
+                "start_global_step": 0,
+                "end_global_step_exclusive": schedule.total_steps,
+            }
+            for source_id in schedule.source_ids
+        ]
+        if activity != expected_activity:
+            raise RuntimeError("capacity schedule source activity is not full-stage")
+        if record.pop("schedule_id", None) != schedule.schedule_id:
+            raise RuntimeError("capacity schedule identifier canonicalization failed")
+        if record.pop("matched_set_id", None) != schedule.matched_set_id:
+            raise RuntimeError("capacity matched-set identifier canonicalization failed")
+        record["clock"] = {
+            "start_global_step": 0,
+            "step_years_hex": clock.get("step_years_hex"),
+            "direction": clock.get("direction"),
+            "end_semantics": "STAGE_END_EXCLUSIVE",
+        }
+        record["source_activity"] = [
+            {
+                "source_id": source_id,
+                "activity_semantics": "ACTIVE_FROM_STEP_ZERO_TO_STAGE_END_EXCLUSIVE",
+            }
+            for source_id in schedule.source_ids
+        ]
+        arms[schedule.arm_kind] = record
+    if tuple(observed_order) != ARM_KINDS:
+        raise RuntimeError("capacity prefix-physics arm order is not canonical")
+    document: dict[str, Any] = {
+        "schema": "jxplanetx.cuda-four-arm-capacity-prefix-physics.v1",
+        "arm_order": list(ARM_KINDS),
+        "arms": arms,
+    }
+    document["content_sha256"] = _content_hash(
+        CAPACITY_PREFIX_PHYSICS_DOMAIN, document
+    )
+    return document
+
+
+def _initial_state_semantic_hashes(
+    schedule_set: MatchedMechanismScheduleSet,
+    population: Mapping[str, np.ndarray],
+    tracer_count: int,
+) -> dict[str, str]:
+    return {
+        arm.schedule.arm_kind: _array_set_sha256(
+            _initial_artifact_arrays(arm, population, tracer_count)
+        )
+        for arm in schedule_set.arms
+    }
+
+
+def _source_activity_is_exact_prefix(
+    pilot: MatchedMechanismScheduleSet,
+    target: MatchedMechanismScheduleSet,
+) -> bool:
+    if tuple(arm.schedule.arm_kind for arm in pilot.arms) != ARM_KINDS:
+        return False
+    if tuple(arm.schedule.arm_kind for arm in target.arms) != ARM_KINDS:
+        return False
+    if pilot.control.schedule.total_steps >= target.control.schedule.total_steps:
+        return False
+    for pilot_arm, target_arm in zip(pilot.arms, target.arms, strict=True):
+        if pilot_arm.schedule.source_ids != target_arm.schedule.source_ids:
+            return False
+        expected_pilot = tuple(
+            (source_id, 0, pilot_arm.schedule.total_steps)
+            for source_id in pilot_arm.schedule.source_ids
+        )
+        expected_target = tuple(
+            (source_id, 0, target_arm.schedule.total_steps)
+            for source_id in target_arm.schedule.source_ids
+        )
+        observed_pilot = tuple(
+            (
+                row.source_id,
+                row.start_global_step,
+                row.end_global_step_exclusive,
+            )
+            for row in pilot_arm.schedule.source_activity
+        )
+        observed_target = tuple(
+            (
+                row.source_id,
+                row.start_global_step,
+                row.end_global_step_exclusive,
+            )
+            for row in target_arm.schedule.source_activity
+        )
+        if observed_pilot != expected_pilot or observed_target != expected_target:
+            return False
+    return True
+
+
+def _capacity_target_context(
+    *,
+    pilot_stage: Stage,
+    pilot_schedule_set: MatchedMechanismScheduleSet,
+    pilot_population: Mapping[str, np.ndarray],
+    pilot_receipt: Mapping[str, Any],
+    de441_control: Path,
+    acceptance_state: Path,
+) -> dict[str, Any]:
+    if pilot_stage.stage_id != "capacity_pilot":
+        raise ValueError("capacity target context requires the capacity_pilot stage")
+    target_stage = STAGES["one_myr"]
+    target_schedule_set = _build_stage_schedule_set(target_stage, de441_control)
+    target_population, target_receipt = _derive_population(
+        acceptance_state, target_schedule_set
+    )
+    pilot_population_keys = tuple(sorted(pilot_population))
+    target_population_keys = tuple(sorted(target_population))
+    population_arrays_equal = (
+        pilot_population_keys == target_population_keys
+        and all(
+            np.array_equal(pilot_population[name], target_population[name])
+            for name in pilot_population_keys
+        )
+    )
+    pilot_physics = _schedule_prefix_physics_binding(pilot_schedule_set)
+    target_physics = _schedule_prefix_physics_binding(target_schedule_set)
+    pilot_initial_hashes = _initial_state_semantic_hashes(
+        pilot_schedule_set, pilot_population, pilot_stage.tracer_count
+    )
+    target_initial_hashes = _initial_state_semantic_hashes(
+        target_schedule_set, target_population, target_stage.tracer_count
+    )
+    pilot_source_hashes = {
+        arm.schedule.arm_kind: arm.initial_state.state_sha256
+        for arm in pilot_schedule_set.arms
+    }
+    target_source_hashes = {
+        arm.schedule.arm_kind: arm.initial_state.state_sha256
+        for arm in target_schedule_set.arms
+    }
+    gates = {
+        "exact_stage_pair": (
+            pilot_stage.total_steps == ROUTE_CAPACITY_PILOT_STEPS
+            and target_stage.total_steps == 8_000_000
+            and pilot_stage.tracer_count == target_stage.tracer_count == 16_800
+        ),
+        "exact_arm_rosters": (
+            tuple(arm.schedule.arm_kind for arm in pilot_schedule_set.arms)
+            == ARM_KINDS
+            and tuple(arm.schedule.arm_kind for arm in target_schedule_set.arms)
+            == ARM_KINDS
+        ),
+        "exact_source_activity_prefix": _source_activity_is_exact_prefix(
+            pilot_schedule_set, target_schedule_set
+        ),
+        "exact_prefix_physics": pilot_physics == target_physics,
+        "exact_source_initial_states": pilot_source_hashes == target_source_hashes,
+        "exact_population_receipt": (
+            pilot_receipt.get("content_sha256")
+            == target_receipt.get("content_sha256")
+        ),
+        "exact_population_semantic_arrays": (
+            population_arrays_equal
+            and pilot_receipt.get("output", {}).get("semantic_array_sha256")
+            == target_receipt.get("output", {}).get("semantic_array_sha256")
+        ),
+        "exact_full_initial_states": pilot_initial_hashes == target_initial_hashes,
+    }
+    return {
+        "pilot_stage_id": pilot_stage.stage_id,
+        "pilot_total_steps": pilot_stage.total_steps,
+        "target_stage_id": target_stage.stage_id,
+        "target_total_steps": target_stage.total_steps,
+        "tracer_count_per_arm": target_stage.tracer_count,
+        "pilot_population_array_names": list(pilot_population_keys),
+        "target_population_array_names": list(target_population_keys),
+        "pilot_population_transform_receipt_sha256": pilot_receipt.get(
+            "content_sha256"
+        ),
+        "target_population_transform_receipt_sha256": target_receipt.get(
+            "content_sha256"
+        ),
+        "population_semantic_array_sha256": target_receipt.get("output", {}).get(
+            "semantic_array_sha256"
+        ),
+        "pilot_schedule_prefix_physics": pilot_physics,
+        "target_schedule_prefix_physics": target_physics,
+        "pilot_source_initial_state_sha256": pilot_source_hashes,
+        "target_source_initial_state_sha256": target_source_hashes,
+        "pilot_full_initial_state_semantic_sha256": pilot_initial_hashes,
+        "target_full_initial_state_semantic_sha256": target_initial_hashes,
+        "gates": {**gates, "all_pass": all(gates.values())},
+    }
+
+
 def _build_protocol(
     stage: Stage,
     checkpoint_years: float,
     schedule_set: MatchedMechanismScheduleSet,
     receipt: Mapping[str, Any],
     device: str,
+    capacity_target_context: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     checkpoint_steps = _years_to_steps(checkpoint_years, "checkpoint_years")
     if checkpoint_steps > stage.total_steps:
@@ -1454,6 +1770,7 @@ def _build_protocol(
             "method_id": METHOD_ID,
             "step_years_hex": STEP_YEARS.hex(),
             "maximum_encounter_routes_per_tracer": MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER,
+            "maximum_total_encounter_routes": MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM,
             "encounter_route_method": "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2",
             "encounter_route_rtol_hex": (1.0e-12).hex(),
             "encounter_route_atol_hex": (1.0e-14).hex(),
@@ -1500,6 +1817,11 @@ def _build_protocol(
                 "environment are omitted"
             ),
         },
+        "capacity_target_binding": (
+            None
+            if capacity_target_context is None
+            else dict(capacity_target_context)
+        ),
         "source_path_audit": {
             "all_lattice_nodes_used_for_pairwise_minima": True,
             "diagnostic_cadence_years_hex": SOURCE_DIAGNOSTIC_YEARS.hex(),
@@ -1546,9 +1868,53 @@ def _build_protocol(
         },
         "route_ledger_budget": {
             "maximum_routes_per_tracer": MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER,
-            "maximum_total_route_records": (
-                stage.tracer_count * MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER
+            "maximum_total_route_records_per_arm": (
+                MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM
             ),
+            "maximum_total_route_records_across_four_arms": (
+                MAXIMUM_TOTAL_ROUTE_RECORDS_PER_STAGE
+            ),
+            "minimum_free_storage_bytes_before_every_segment": (
+                MINIMUM_FREE_STORAGE_BYTES
+            ),
+            "minimum_free_storage_bytes_before_every_checkpoint": (
+                MINIMUM_FREE_STORAGE_BYTES
+            ),
+            "storage_guard_semantics": (
+                "HARD_ENGINE_CUMULATIVE_ARM_ROUTE_CAP_AND_HOST_FREE_SPACE_"
+                "PREFLIGHT; FAILS_BEFORE_EACH_SEGMENT_AND_CHECKPOINT_COMMIT; "
+                "THE_PRE_WRITE_THRESHOLD_IS_INTENDED_TO_LEAVE_RECOVERY_MARGIN"
+            ),
+            "capacity_admission_policy": {
+                "episode_definition": (
+                    "MAXIMAL_CONSECUTIVE_ROUTED_MACROSTEPS_PER_TRACER; "
+                    "SOURCE_AND_REASON_CHANGES_DO_NOT_SPLIT; ONE_QUIET_STEP_SPLITS"
+                ),
+                "reserved_route_records_per_future_episode": (
+                    ROUTE_EPISODE_RESERVED_RECORDS
+                ),
+                "required_runtime_headroom_per_tracer": (
+                    ROUTE_CAPACITY_REQUIRED_HEADROOM
+                ),
+                "admission_limit_per_tracer": ROUTE_CAPACITY_ADMISSION_LIMIT,
+                "capacity_pilot_stage_id": "capacity_pilot",
+                "required_capacity_pilot_steps": ROUTE_CAPACITY_PILOT_STEPS,
+                "required_capacity_pilot_tracer_count_per_arm": 16_800,
+                "required_target_stage_id": "one_myr",
+                "required_target_steps": STAGES["one_myr"].total_steps,
+                "required_arm_order": list(ARM_KINDS),
+                "future_episode_slot_formula": (
+                    "ACTIVE: CEIL((COMPLETED_EPISODES+1)*"
+                    "(TARGET_STEPS-OBSERVED_STEPS)/OBSERVED_STEPS); TERMINAL: 0"
+                ),
+                "right_frontier_policy": (
+                    "ACTIVE_REJOINED_EPISODE_AT_FINAL_OBSERVED_STEP_FAILS_CLOSED"
+                ),
+                "claim_limit": (
+                    "ENGINEERING_RESOURCE_ADMISSION_NOT_COMPLETION_OR_DYNAMICAL_"
+                    "RECURRENCE_PREDICTION"
+                ),
+            },
             "semantics": (
                 "fail-closed capacity ceiling, not an expected count; observed maximum "
                 "and remaining per-tracer headroom are reported at every checkpoint"
@@ -1816,6 +2182,7 @@ def _segment_report(
     arrays: Mapping[str, np.ndarray],
     elapsed: float,
     checkpoint: Mapping[str, Any],
+    route_storage_guard: Mapping[str, Any],
 ) -> dict[str, Any]:
     return {
         "schema": "jxplanetx.cuda-four-arm-segment.v1",
@@ -1827,6 +2194,7 @@ def _segment_report(
         "state_sha256": checkpoint["state_sha256"],
         "input_state_sha256": result.input_state_sha256,
         "measurements": _endpoint_measurements(arrays),
+        "route_storage_guard": dict(route_storage_guard),
         "classification": "MODEL_OUTPUT / SCREENING_ONLY",
     }
 
@@ -1917,6 +2285,7 @@ def _collect_execution_evidence(
     committed_paths: list[Path] = []
     committed_set: set[Path] = set()
     latest_record: dict[str, Any] | None = None
+    previous_route_record_count = 0
     for index in expected_indices:
         record_path = namespace / f"checkpoint_{index:020d}.json"
         if not record_path.is_file():
@@ -1963,6 +2332,40 @@ def _collect_execution_evidence(
             or segment.get("state_sha256") != record.get("state_sha256")
         ):
             raise RuntimeError(f"segment/checkpoint binding failed at index {index}")
+        storage_guard = segment.get("route_storage_guard")
+        measurements = segment.get("measurements")
+        current_route_record_count = (
+            measurements.get("encounter_route_count")
+            if type(measurements) is dict
+            else None
+        )
+        if (
+            type(storage_guard) is not dict
+            or type(current_route_record_count) is not int
+            or current_route_record_count < previous_route_record_count
+        ):
+            raise RuntimeError(f"segment storage guard is invalid at index {index}")
+        for guard_name, expected_count in (
+            ("pre_segment", previous_route_record_count),
+            ("pre_checkpoint", current_route_record_count),
+        ):
+            guard = storage_guard.get(guard_name)
+            if (
+                type(guard) is not dict
+                or guard.get("cumulative_route_records") != expected_count
+                or guard.get("maximum_total_route_records_per_arm")
+                != MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM
+                or guard.get("required_minimum_free_storage_bytes")
+                != MINIMUM_FREE_STORAGE_BYTES
+                or type(guard.get("observed_free_storage_bytes")) is not int
+                or guard["observed_free_storage_bytes"]
+                < MINIMUM_FREE_STORAGE_BYTES
+                or guard.get("passed") is not True
+            ):
+                raise RuntimeError(
+                    f"segment {guard_name} storage guard failed at index {index}"
+                )
+        previous_route_record_count = current_route_record_count
 
         for path in (record_path, array_path, segment_path):
             if path in committed_set:
@@ -2245,6 +2648,22 @@ def _load_verified_arm_result(
         or removal_document.get("count") != len(removal_document["records"])
     ):
         raise RuntimeError("cached arm route/removal ledger is invalid")
+    final_storage_guards = report.get("route_storage_guards")
+    if type(final_storage_guards) is not list or len(final_storage_guards) != 4:
+        raise RuntimeError("cached arm final storage-guard roster is invalid")
+    for guard in final_storage_guards:
+        if (
+            type(guard) is not dict
+            or guard.get("cumulative_route_records") != route_document["count"]
+            or guard.get("maximum_total_route_records_per_arm")
+            != MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM
+            or guard.get("required_minimum_free_storage_bytes")
+            != MINIMUM_FREE_STORAGE_BYTES
+            or type(guard.get("observed_free_storage_bytes")) is not int
+            or guard["observed_free_storage_bytes"] < MINIMUM_FREE_STORAGE_BYTES
+            or guard.get("passed") is not True
+        ):
+            raise RuntimeError("cached arm final storage guard is invalid")
     if route_document["count"] != int(np.sum(endpoint["encounter_route_counts"])):
         raise RuntimeError("cached arm route ledger disagrees with endpoint counts")
     if removal_document["count"] != int(
@@ -2319,10 +2738,51 @@ def _verify_stage_sha256sums(stage_directory: Path) -> None:
             raise RuntimeError(f"completed stage checksum failed: {relative}")
 
 
+def _finalized_summary_gates(stage: Stage, status: str) -> dict[str, bool]:
+    gates = {
+        "all_four_arms_complete": True,
+        "all_arm_gates_pass": True,
+    }
+    if stage.stage_id == "capacity_pilot":
+        gates.update(
+            {
+                "route_episode_capacity_gate_required": True,
+                "route_episode_capacity_gate_passed": (
+                    status == stage.completion_status
+                ),
+            }
+        )
+    if status == stage.completion_status:
+        gates["all_pass"] = True
+        return gates
+    if stage.stage_id == "capacity_pilot" and status == "FAILED_ROUTE_CAPACITY_GATE":
+        gates["all_pass"] = False
+        return gates
+    raise RuntimeError("stage summary does not have a supported finalized status")
+
+
+def _load_partial_summary_commit(path: Path) -> dict[str, Any]:
+    """Load a create-only summary left just before its SHA256SUMS commit."""
+
+    if not path.is_file() or (path.parent / "SHA256SUMS").exists():
+        raise RuntimeError("stage is not in the recoverable summary-only state")
+    summary = _load_json(path)
+    _verify_content_hash(
+        summary,
+        REPORT_DOMAIN,
+        schema=SUMMARY_SCHEMA,
+        label="partial stage summary",
+    )
+    completed_utc = summary.get("completed_utc")
+    if type(completed_utc) is not str or not completed_utc:
+        raise RuntimeError("partial stage summary has an invalid completion time")
+    return summary
+
+
 def _load_verified_stage_summary(
     path: Path,
     *,
-    expected_status: str,
+    allowed_statuses: tuple[str, ...],
     expected_runtime_identity: Mapping[str, Any] | None = None,
     backend: BackendSpec | None = None,
 ) -> dict[str, Any]:
@@ -2334,15 +2794,9 @@ def _load_verified_stage_summary(
         label="stage summary",
     )
     if (
-        summary.get("status") != expected_status
+        summary.get("status") not in allowed_statuses
         or summary.get("claims") != dict(RESULT_CLAIMS)
         or summary.get("classification") != "MODEL_OUTPUT / SCREENING_ONLY"
-        or summary.get("gates")
-        != {
-            "all_four_arms_complete": True,
-            "all_arm_gates_pass": True,
-            "all_pass": True,
-        }
     ):
         raise RuntimeError("completed stage summary status/claim gates are invalid")
     stage_id = summary.get("stage_id")
@@ -2358,6 +2812,9 @@ def _load_verified_stage_summary(
         or not isinstance(checkpoint_years, (int, float))
     ):
         raise RuntimeError("completed stage summary does not name a canonical stage")
+    expected_gates = _finalized_summary_gates(stage, str(summary["status"]))
+    if summary.get("gates") != expected_gates:
+        raise RuntimeError("completed stage summary gates are invalid")
     checkpoint_years = float(checkpoint_years)
     checkpoint_steps = _years_to_steps(
         checkpoint_years, "completed checkpoint_years"
@@ -2505,6 +2962,28 @@ def _load_verified_stage_summary(
             backend=backend,
         )
     _verify_stage_sha256sums(stage_directory)
+    if stage.stage_id == "capacity_pilot":
+        admission = _load_verified_capacity_admission(
+            stage_directory / "CAPACITY_ADMISSION.json",
+            expected_authorized=(
+                summary.get("status") == stage.completion_status
+            ),
+        )
+        if (
+            summary.get("capacity_admission_sha256")
+            != admission.get("content_sha256")
+            or admission.get("source_protocol_sha256")
+            != summary.get("protocol_sha256")
+            or admission.get("source_runtime_identity_receipt_sha256")
+            != summary.get("runtime_identity_receipt_sha256")
+            or admission.get("episode_capacity_screen")
+            != summary.get("route_episode_capacity_screen")
+            or admission.get("arm_result_sha256")
+            != summary.get("arm_result_sha256")
+        ):
+            raise RuntimeError(
+                "capacity pilot summary/admission receipt binding differs"
+            )
     return summary
 
 
@@ -2522,6 +3001,20 @@ def _write_failure(stage_directory: Path, arm_kind: str, exception: BaseExceptio
         "classification": "NEGATIVE_OR_FAILURE_RESULT_PRESERVED",
     }
     _atomic_bytes_create(failure_directory / f"failure-{identity}.json", _json_payload(document))
+
+
+def _has_finalized_stage_manifest(stage_directory: Path) -> bool:
+    return (
+        (stage_directory / "SUMMARY.json").is_file()
+        and (stage_directory / "SHA256SUMS").is_file()
+    )
+
+
+def _has_stage_finalization_artifact(stage_directory: Path) -> bool:
+    return (
+        (stage_directory / "SUMMARY.json").is_file()
+        or (stage_directory / "SHA256SUMS").is_file()
+    )
 
 
 def _run_arm(
@@ -2611,12 +3104,18 @@ def _run_arm(
     checkpoint_steps = _years_to_steps(checkpoint_years, "checkpoint_years")
     completed_this_invocation = 0
     while state.global_step < stage.total_steps:
+        pre_segment_storage = _route_storage_guard(
+            arm_directory,
+            phase=f"segment starting at global step {state.global_step}",
+            cumulative_route_records=len(state.prior_encounter_routes),
+        )
         segment_steps = min(checkpoint_steps, stage.total_steps - state.global_step)
         spec = FixedStepCUDAMasslessTracerSpec(
             step_years=STEP_YEARS,
             step_count=segment_steps,
             backend=backend,
             maximum_encounter_routes_per_tracer=MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER,
+            maximum_total_encounter_routes=MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM,
             encounter_route_method=(
                 "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2"
             ),
@@ -2633,6 +3132,11 @@ def _run_arm(
         result = advance_cuda_massless_tracers(state, spec)
         cp.cuda.runtime.deviceSynchronize()
         elapsed = time.perf_counter() - started
+        pre_checkpoint_storage = _route_storage_guard(
+            arm_directory,
+            phase=f"checkpoint at global step {result.state.global_step}",
+            cumulative_route_records=len(result.encounter_routes),
+        )
         checkpoint = dump_cuda_massless_tracer_checkpoint(
             checkpoint_root,
             run_id=run_id,
@@ -2658,7 +3162,16 @@ def _run_arm(
         segment_path = arm_directory / "segments" / f"segment-{result.state.global_step:020d}.json"
         _publish_json_exact(
             segment_path,
-            _segment_report(result, arrays, elapsed, checkpoint),
+            _segment_report(
+                result,
+                arrays,
+                elapsed,
+                checkpoint,
+                {
+                    "pre_segment": pre_segment_storage,
+                    "pre_checkpoint": pre_checkpoint_storage,
+                },
+            ),
         )
         state = result.state
         completed_this_invocation += 1
@@ -2672,9 +3185,23 @@ def _run_arm(
     if result is None:
         raise RuntimeError("completed checkpoint chain did not yield a result")
     endpoint = _endpoint_arrays(cp, result)
+    final_storage_guards = [
+        _route_storage_guard(
+            arm_directory,
+            phase="final endpoint artifact",
+            cumulative_route_records=len(result.encounter_routes),
+        )
+    ]
     _publish_npz_exact(arm_directory / "ENDPOINT_STATE.npz", endpoint)
     route_rows = [asdict(row) for row in result.encounter_routes]
     removal_rows = [asdict(row) for row in result.removal_events]
+    final_storage_guards.append(
+        _route_storage_guard(
+            arm_directory,
+            phase="route-source membership audit",
+            cumulative_route_records=len(route_rows),
+        )
+    )
     route_source_membership = _route_source_membership_audit(
         cp=cp,
         backend=backend,
@@ -2683,6 +3210,13 @@ def _run_arm(
         arm_directory=arm_directory,
         protocol_sha256=protocol_sha256,
         routes=result.encounter_routes,
+    )
+    final_storage_guards.append(
+        _route_storage_guard(
+            arm_directory,
+            phase="routed-tracer replay audit",
+            cumulative_route_records=len(route_rows),
+        )
     )
     routed_tracer_replay = _routed_tracer_replay_audit(
         cp=cp,
@@ -2696,6 +3230,13 @@ def _run_arm(
         protocol_sha256=protocol_sha256,
         main_result=result,
         main_endpoint=endpoint,
+    )
+    final_storage_guards.append(
+        _route_storage_guard(
+            arm_directory,
+            phase="final route and removal ledgers",
+            cumulative_route_records=len(route_rows),
+        )
     )
     _publish_json_exact(
         arm_directory / "ENCOUNTER_ROUTES.json",
@@ -2762,6 +3303,9 @@ def _run_arm(
         "per_tracer_route_capacity_not_exhausted": int(
             np.max(endpoint["encounter_route_counts"])
         ) < MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER,
+        "total_route_ledger_capacity_not_exhausted": (
+            len(route_rows) < MAXIMUM_TOTAL_ROUTE_RECORDS_PER_ARM
+        ),
         "source_endpoint_matches_all_horizon_source_path_audit": (
             source_endpoint_matches_audit
         ),
@@ -2822,6 +3366,7 @@ def _run_arm(
         "endpoint_epoch_years": result.state.epoch,
         "endpoint_semantic_array_sha256": _array_set_sha256(endpoint),
         "measurements": _endpoint_measurements(endpoint),
+        "route_storage_guards": final_storage_guards,
         "route_reason_counts": dict(sorted(Counter(row.reason for row in result.encounter_routes).items())),
         "removal_event_counts": dict(sorted(Counter(row.event_type for row in result.removal_events).items())),
         "source_path_audit": {
@@ -2926,37 +3471,727 @@ def _comparison(
     }
 
 
-def _qualification_prerequisite(
+def _ceil_div(numerator: int, denominator: int) -> int:
+    if type(numerator) is not int or numerator < 0:
+        raise ValueError("ceil-div numerator must be a nonnegative integer")
+    if type(denominator) is not int or denominator <= 0:
+        raise ValueError("ceil-div denominator must be a positive integer")
+    return (numerator + denominator - 1) // denominator
+
+
+def _route_episode_capacity_screen(
+    *,
+    route_records_by_arm: Mapping[str, Iterable[Mapping[str, Any]]],
+    tracer_ids_by_arm: Mapping[str, Iterable[int]],
+    terminal_tracer_ids_by_arm: Mapping[str, Iterable[int]],
+    observed_steps: int,
+    target_steps: int,
+    expected_arm_kinds: tuple[str, ...],
+    required_pilot_steps: int = ROUTE_CAPACITY_PILOT_STEPS,
+    required_tracer_count: int | None = None,
+) -> dict[str, Any]:
+    """Audit routed-step episodes and compute the long-run admission budget.
+
+    An episode is a maximal run of consecutive routed macrosteps for one
+    tracer.  Trigger-source or trigger-reason changes do not split it.  Thus
+    ``route_record_count`` is both the episode length and the exact amount
+    consumed from the engine's hard cumulative per-tracer route counter.
+
+    For an active lane with ``e`` completed episodes and ``r`` observed route
+    records after ``s`` pilot steps, the remaining target exposure reserves::
+
+        future_slots = ceil((e + 1) * (S - s) / s)
+        planned_routes = r + 512 * future_slots
+
+    The add-one term protects lanes with no observed episode.  Admission
+    requires every active observed episode to fit the 512-record reservation,
+    no active REJOINED episode to end at the pilot frontier, and every lane's
+    planned total to remain at or below 12,288.  The unchanged engine ceiling
+    is 16,384, so 4,096 records remain as runtime headroom.  This is an
+    engineering capacity screen, not a stochastic confidence interval, a
+    dynamical recurrence model, or a guarantee that the target run completes.
+    """
+
+    if type(observed_steps) is not int or observed_steps <= 0:
+        raise ValueError("observed_steps must be a positive integer")
+    if type(target_steps) is not int or target_steps < observed_steps:
+        raise ValueError("target_steps must be an integer no smaller than observed_steps")
+    if type(required_pilot_steps) is not int or required_pilot_steps <= 0:
+        raise ValueError("required_pilot_steps must be a positive integer")
+    if (
+        required_tracer_count is not None
+        and (type(required_tracer_count) is not int or required_tracer_count <= 0)
+    ):
+        raise ValueError("required_tracer_count must be a positive integer or None")
+    if (
+        type(expected_arm_kinds) is not tuple
+        or not expected_arm_kinds
+        or any(type(value) is not str or not value for value in expected_arm_kinds)
+        or len(set(expected_arm_kinds)) != len(expected_arm_kinds)
+    ):
+        raise ValueError("expected_arm_kinds must be a unique nonempty string tuple")
+    expected_arm_set = set(expected_arm_kinds)
+    for label, value in (
+        ("route_records_by_arm", route_records_by_arm),
+        ("tracer_ids_by_arm", tracer_ids_by_arm),
+        ("terminal_tracer_ids_by_arm", terminal_tracer_ids_by_arm),
+    ):
+        if not isinstance(value, Mapping) or set(value) != expected_arm_set:
+            raise ValueError(f"{label} must have the exact expected arm roster")
+
+    terminal_outcomes = {
+        "REMOVED_SOURCE_RADIUS",
+        "REMOVED_OUTER_BOUNDARY",
+    }
+    allowed_outcomes = terminal_outcomes | {"REJOINED"}
+    remaining_steps = target_steps - observed_steps
+    all_episode_descriptors: list[dict[str, Any]] = []
+    arm_diagnostics: dict[str, Any] = {}
+    total_route_records = 0
+    total_episodes = 0
+    total_completed_episodes = 0
+    right_censored_rejoined_episodes = 0
+    longest_episode_records = 0
+    maximum_observed_routes_for_one_tracer = 0
+    maximum_planned_routes_for_one_tracer = 0
+    minimum_planned_headroom = MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER
+    active_episode_reservation_bound_passed = True
+    planned_budget_passed = True
+    worst_lane: dict[str, Any] | None = None
+    required_tracer_count_passed = required_tracer_count is not None
+    reference_tracer_ids: tuple[int, ...] | None = None
+
+    for arm_kind in expected_arm_kinds:
+        raw_tracer_ids = tuple(tracer_ids_by_arm[arm_kind])
+        if any(type(value) is not int or value < 0 for value in raw_tracer_ids):
+            raise ValueError(f"{arm_kind} tracer ids must be nonnegative integers")
+        if len(set(raw_tracer_ids)) != len(raw_tracer_ids):
+            raise ValueError(f"{arm_kind} tracer ids must be unique")
+        tracer_ids = tuple(sorted(raw_tracer_ids))
+        if reference_tracer_ids is None:
+            reference_tracer_ids = tracer_ids
+        elif tracer_ids != reference_tracer_ids:
+            raise ValueError("tracer rosters must be identical across arms")
+        tracer_id_set = set(tracer_ids)
+        raw_terminal_ids = tuple(terminal_tracer_ids_by_arm[arm_kind])
+        if any(type(value) is not int or value < 0 for value in raw_terminal_ids):
+            raise ValueError(
+                f"{arm_kind} terminal tracer ids must be nonnegative integers"
+            )
+        terminal_ids = set(raw_terminal_ids)
+        if len(terminal_ids) != len(raw_terminal_ids):
+            raise ValueError(f"{arm_kind} terminal tracer ids must be unique")
+        if not terminal_ids <= tracer_id_set:
+            raise ValueError(f"{arm_kind} terminal tracer ids are outside the roster")
+        if required_tracer_count is not None:
+            required_tracer_count_passed = (
+                required_tracer_count_passed
+                and len(tracer_ids) == required_tracer_count
+            )
+
+        normalized: list[dict[str, Any]] = []
+        seen_lane_steps: set[tuple[int, int]] = set()
+        for record_index, record in enumerate(route_records_by_arm[arm_kind]):
+            if not isinstance(record, Mapping):
+                raise ValueError(
+                    f"{arm_kind} route record {record_index} is not a mapping"
+                )
+            tracer_index = record.get("tracer_index")
+            global_step = record.get("global_step")
+            source_id = record.get("source_id")
+            reason = record.get("reason")
+            outcome = record.get("outcome")
+            if type(tracer_index) is not int or tracer_index not in tracer_id_set:
+                raise ValueError(
+                    f"{arm_kind} route record {record_index} has an invalid tracer"
+                )
+            if (
+                type(global_step) is not int
+                or not 0 <= global_step < observed_steps
+            ):
+                raise ValueError(
+                    f"{arm_kind} route record {record_index} has an invalid step"
+                )
+            if type(source_id) is not str or not source_id:
+                raise ValueError(
+                    f"{arm_kind} route record {record_index} has an invalid source"
+                )
+            if type(reason) is not str or not reason:
+                raise ValueError(
+                    f"{arm_kind} route record {record_index} has an invalid reason"
+                )
+            if type(outcome) is not str or outcome not in allowed_outcomes:
+                raise ValueError(
+                    f"{arm_kind} route record {record_index} has an invalid outcome"
+                )
+            lane_step = (tracer_index, global_step)
+            if lane_step in seen_lane_steps:
+                raise ValueError(
+                    f"{arm_kind} has duplicate routes for tracer-step {lane_step}"
+                )
+            seen_lane_steps.add(lane_step)
+            normalized.append(
+                {
+                    "tracer_index": tracer_index,
+                    "global_step": global_step,
+                    "source_id": source_id,
+                    "reason": reason,
+                    "outcome": outcome,
+                }
+            )
+        normalized.sort(
+            key=lambda row: (
+                row["tracer_index"],
+                row["global_step"],
+                row["source_id"],
+                row["reason"],
+                row["outcome"],
+            )
+        )
+        records_by_tracer: dict[int, list[dict[str, Any]]] = {
+            tracer_index: [] for tracer_index in tracer_ids
+        }
+        for record in normalized:
+            records_by_tracer[record["tracer_index"]].append(record)
+
+        arm_route_records = len(normalized)
+        arm_episode_count = 0
+        arm_completed_episode_count = 0
+        arm_right_censored_count = 0
+        arm_longest_episode = 0
+        arm_maximum_observed_routes = 0
+        arm_maximum_planned_routes = 0
+        arm_minimum_planned_headroom = MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER
+        arm_episode_source_counts: Counter[str] = Counter()
+        arm_future_slot_counts: Counter[int] = Counter()
+
+        for tracer_index in tracer_ids:
+            lane_records = records_by_tracer[tracer_index]
+            is_terminal = tracer_index in terminal_ids
+            terminal_positions = tuple(
+                index
+                for index, record in enumerate(lane_records)
+                if record["outcome"] in terminal_outcomes
+            )
+            if is_terminal:
+                if not lane_records or terminal_positions != (len(lane_records) - 1,):
+                    raise ValueError(
+                        f"{arm_kind} terminal tracer {tracer_index} lacks one final "
+                        "terminal route outcome"
+                    )
+            elif terminal_positions:
+                raise ValueError(
+                    f"{arm_kind} active tracer {tracer_index} has a terminal route outcome"
+                )
+
+            lane_episodes: list[list[dict[str, Any]]] = []
+            current_episode: list[dict[str, Any]] = []
+            for record in lane_records:
+                if (
+                    current_episode
+                    and record["global_step"]
+                    != current_episode[-1]["global_step"] + 1
+                ):
+                    lane_episodes.append(current_episode)
+                    current_episode = []
+                current_episode.append(record)
+            if current_episode:
+                lane_episodes.append(current_episode)
+
+            completed_episode_count = 0
+            lane_right_censored_count = 0
+            lane_longest_episode = 0
+            for episode_index, episode in enumerate(lane_episodes):
+                start_step = episode[0]["global_step"]
+                end_step = episode[-1]["global_step"]
+                route_record_count = len(episode)
+                right_censored = (
+                    not is_terminal
+                    and end_step == observed_steps - 1
+                    and episode[-1]["outcome"] == "REJOINED"
+                )
+                if not right_censored:
+                    completed_episode_count += 1
+                else:
+                    lane_right_censored_count += 1
+                lane_longest_episode = max(
+                    lane_longest_episode, route_record_count
+                )
+                sources = tuple(sorted({row["source_id"] for row in episode}))
+                reasons = tuple(sorted({row["reason"] for row in episode}))
+                for source_id in sources:
+                    arm_episode_source_counts[source_id] += 1
+                all_episode_descriptors.append(
+                    {
+                        "arm_kind": arm_kind,
+                        "tracer_index": tracer_index,
+                        "episode_index_for_tracer": episode_index,
+                        "start_global_step": start_step,
+                        "end_global_step": end_step,
+                        "route_record_count": route_record_count,
+                        "source_ids": list(sources),
+                        "reasons": list(reasons),
+                        "terminal_tracer": is_terminal,
+                        "right_censored_rejoined": right_censored,
+                        "last_outcome": episode[-1]["outcome"],
+                    }
+                )
+
+            route_count = len(lane_records)
+            future_episode_slots = (
+                0
+                if is_terminal
+                else _ceil_div(
+                    (completed_episode_count + 1) * remaining_steps,
+                    observed_steps,
+                )
+            )
+            planned_routes = (
+                route_count
+                + ROUTE_EPISODE_RESERVED_RECORDS * future_episode_slots
+            )
+            planned_headroom = (
+                MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER - planned_routes
+            )
+            lane_reservation_passed = (
+                is_terminal
+                or lane_longest_episode <= ROUTE_EPISODE_RESERVED_RECORDS
+            )
+            lane_budget_passed = planned_routes <= ROUTE_CAPACITY_ADMISSION_LIMIT
+            active_episode_reservation_bound_passed = (
+                active_episode_reservation_bound_passed
+                and lane_reservation_passed
+            )
+            planned_budget_passed = planned_budget_passed and lane_budget_passed
+            arm_future_slot_counts[future_episode_slots] += 1
+            arm_episode_count += len(lane_episodes)
+            arm_completed_episode_count += completed_episode_count
+            arm_right_censored_count += lane_right_censored_count
+            arm_longest_episode = max(arm_longest_episode, lane_longest_episode)
+            arm_maximum_observed_routes = max(
+                arm_maximum_observed_routes, route_count
+            )
+            arm_maximum_planned_routes = max(
+                arm_maximum_planned_routes, planned_routes
+            )
+            arm_minimum_planned_headroom = min(
+                arm_minimum_planned_headroom, planned_headroom
+            )
+            lane_summary = {
+                "arm_kind": arm_kind,
+                "tracer_index": tracer_index,
+                "terminal_tracer": is_terminal,
+                "observed_route_records": route_count,
+                "completed_episode_count": completed_episode_count,
+                "right_censored_rejoined_episode_count": (
+                    lane_right_censored_count
+                ),
+                "longest_episode_route_records": lane_longest_episode,
+                "reserved_future_episode_slots": future_episode_slots,
+                "planned_route_records": planned_routes,
+                "planned_headroom_to_hard_cap": planned_headroom,
+            }
+            if (
+                worst_lane is None
+                or planned_routes > worst_lane["planned_route_records"]
+            ):
+                worst_lane = lane_summary
+
+        total_route_records += arm_route_records
+        total_episodes += arm_episode_count
+        total_completed_episodes += arm_completed_episode_count
+        right_censored_rejoined_episodes += arm_right_censored_count
+        longest_episode_records = max(
+            longest_episode_records, arm_longest_episode
+        )
+        maximum_observed_routes_for_one_tracer = max(
+            maximum_observed_routes_for_one_tracer,
+            arm_maximum_observed_routes,
+        )
+        maximum_planned_routes_for_one_tracer = max(
+            maximum_planned_routes_for_one_tracer,
+            arm_maximum_planned_routes,
+        )
+        minimum_planned_headroom = min(
+            minimum_planned_headroom,
+            arm_minimum_planned_headroom,
+        )
+        arm_diagnostics[arm_kind] = {
+            "tracer_count": len(tracer_ids),
+            "active_tracer_count": len(tracer_ids) - len(terminal_ids),
+            "terminal_tracer_count": len(terminal_ids),
+            "route_record_count": arm_route_records,
+            "episode_count": arm_episode_count,
+            "completed_episode_count": arm_completed_episode_count,
+            "right_censored_rejoined_episode_count": arm_right_censored_count,
+            "longest_episode_route_records": arm_longest_episode,
+            "maximum_observed_routes_for_one_tracer": (
+                arm_maximum_observed_routes
+            ),
+            "maximum_planned_routes_for_one_tracer": (
+                arm_maximum_planned_routes
+            ),
+            "minimum_planned_headroom_to_hard_cap": (
+                arm_minimum_planned_headroom
+            ),
+            "episode_source_membership_counts": dict(
+                sorted(arm_episode_source_counts.items())
+            ),
+            "future_episode_slot_distribution": {
+                str(slot_count): lane_count
+                for slot_count, lane_count in sorted(
+                    arm_future_slot_counts.items()
+                )
+            },
+        }
+
+    required_pilot_step_count_passed = observed_steps == required_pilot_steps
+    right_censoring_gate_passed = right_censored_rejoined_episodes == 0
+    capacity_screen_passed = (
+        required_pilot_step_count_passed
+        and required_tracer_count_passed
+        and right_censoring_gate_passed
+        and active_episode_reservation_bound_passed
+        and planned_budget_passed
+    )
+    episode_descriptor_sha256 = hashlib.sha256(
+        b"jxplanetx.cuda-route-episode-descriptors.v1\x00"
+        + _canonical(all_episode_descriptors)
+    ).hexdigest()
+    return {
+        "schema": "jxplanetx.cuda-route-episode-capacity-screen.v1",
+        "semantics": (
+            "ADD_ONE_EXPOSURE_SCALED_EPISODE_RESOURCE_RESERVATION; "
+            "FAIL_CLOSED_ADMISSION_SCREEN_NOT_A_COMPLETION_OR_DYNAMICAL_PREDICTION"
+        ),
+        "episode_definition": (
+            "MAXIMAL_CONSECUTIVE_ROUTED_MACROSTEPS_PER_TRACER; "
+            "SOURCE_AND_REASON_CHANGES_DO_NOT_SPLIT; ONE_QUIET_STEP_SPLITS"
+        ),
+        "observed_steps": observed_steps,
+        "target_steps": target_steps,
+        "remaining_target_steps": remaining_steps,
+        "required_pilot_steps": required_pilot_steps,
+        "required_tracer_count_per_arm": required_tracer_count,
+        "future_episode_slot_formula": (
+            "ACTIVE: CEIL((COMPLETED_EPISODES+1)*(TARGET_STEPS-OBSERVED_STEPS)"
+            "/OBSERVED_STEPS); TERMINAL: 0"
+        ),
+        "reserved_route_records_per_future_episode": (
+            ROUTE_EPISODE_RESERVED_RECORDS
+        ),
+        "engine_hard_capacity_per_tracer": (
+            MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER
+        ),
+        "required_runtime_headroom_per_tracer": (
+            ROUTE_CAPACITY_REQUIRED_HEADROOM
+        ),
+        "admission_limit_per_tracer": ROUTE_CAPACITY_ADMISSION_LIMIT,
+        "total_route_record_count": total_route_records,
+        "total_episode_count": total_episodes,
+        "total_completed_episode_count": total_completed_episodes,
+        "right_censored_rejoined_episode_count": (
+            right_censored_rejoined_episodes
+        ),
+        "longest_episode_route_records": longest_episode_records,
+        "maximum_observed_routes_for_one_tracer": (
+            maximum_observed_routes_for_one_tracer
+        ),
+        "maximum_planned_routes_for_one_tracer": (
+            maximum_planned_routes_for_one_tracer
+        ),
+        "minimum_planned_headroom_to_hard_cap": minimum_planned_headroom,
+        "worst_lane": worst_lane,
+        "episode_descriptor_sha256": episode_descriptor_sha256,
+        "episode_descriptor_count": len(all_episode_descriptors),
+        "arm_diagnostics": arm_diagnostics,
+        "gates": {
+            "required_capacity_pilot_step_count": (
+                required_pilot_step_count_passed
+            ),
+            "required_tracer_count_in_every_arm": (
+                required_tracer_count_passed
+            ),
+            "no_right_censored_rejoined_episode": right_censoring_gate_passed,
+            "active_observed_episodes_fit_future_reservation": (
+                active_episode_reservation_bound_passed
+            ),
+            "every_lane_planned_routes_at_or_below_admission_limit": (
+                planned_budget_passed
+            ),
+            "one_myr_capacity_screen_passed": capacity_screen_passed,
+        },
+        "one_myr_capacity_screen_passed": capacity_screen_passed,
+        "claim_limit": (
+            "This finite pilot-based resource budget does not estimate physical "
+            "encounter probabilities, bound the number or length of future "
+            "encounters, or guarantee one-Myr completion. The unchanged engine "
+            "hard cap remains authoritative and fails closed at runtime."
+        ),
+    }
+
+
+def _artifact_initial_state_hashes(stage_directory: Path) -> dict[str, str]:
+    hashes: dict[str, str] = {}
+    for arm_kind in ARM_KINDS:
+        path = (
+            stage_directory
+            / "arms"
+            / ARM_DIRECTORY_NAMES[arm_kind]
+            / "INITIAL_STATE.npz"
+        )
+        with np.load(path, allow_pickle=False) as archive:
+            arrays = {
+                name: np.ascontiguousarray(archive[name]) for name in archive.files
+            }
+        hashes[arm_kind] = _array_set_sha256(arrays)
+    return hashes
+
+
+def _capacity_admission_document(
+    *,
+    stage: Stage,
+    checkpoint_years: float,
+    stage_directory: Path,
+    schedule_set: MatchedMechanismScheduleSet,
+    receipt: Mapping[str, Any],
+    protocol: Mapping[str, Any],
+    runtime_identity: Mapping[str, Any],
+    runtime_receipt_sha256: str,
+    reports: Mapping[str, Mapping[str, Any]],
+    route_episode_capacity_screen: Mapping[str, Any],
+    target_context: Mapping[str, Any],
+) -> dict[str, Any]:
+    if stage.stage_id != "capacity_pilot":
+        raise ValueError("capacity admission requires the capacity_pilot stage")
+    initial_artifact_hashes = _artifact_initial_state_hashes(stage_directory)
+    target_gates = target_context.get("gates")
+    target_context_passed = (
+        type(target_gates) is dict and target_gates.get("all_pass") is True
+    )
+    schedule_physics = _schedule_prefix_physics_binding(schedule_set)
+    exact_passage = (
+        protocol.get("schedule_set", {}).get(
+            "nominal_passing_source_event_years"
+        )
+        == FULL_SCREEN_PASSAGE_YEARS
+    )
+    gates = {
+        "exact_capacity_pilot_stage": (
+            stage.total_steps == ROUTE_CAPACITY_PILOT_STEPS
+            and stage.tracer_count == STAGES["one_myr"].tracer_count == 16_800
+        ),
+        "exact_25k_year_checkpoint_cadence": (
+            checkpoint_years == STAGES["capacity_pilot"].checkpoint_years
+            and _years_to_steps(checkpoint_years, "checkpoint_years") == 200_000
+        ),
+        "exact_50k_year_nominal_passage": exact_passage,
+        "all_four_arm_results_passed": (
+            set(reports) == set(ARM_KINDS)
+            and all(
+                report.get("gates", {}).get("all_pass") is True
+                for report in reports.values()
+            )
+        ),
+        "episode_capacity_screen_passed": (
+            route_episode_capacity_screen.get("one_myr_capacity_screen_passed")
+            is True
+            and route_episode_capacity_screen.get("observed_steps")
+            == ROUTE_CAPACITY_PILOT_STEPS
+            and route_episode_capacity_screen.get("target_steps")
+            == STAGES["one_myr"].total_steps
+            and route_episode_capacity_screen.get("required_tracer_count_per_arm")
+            == STAGES["one_myr"].tracer_count
+            and type(route_episode_capacity_screen.get("arm_diagnostics")) is dict
+            and set(route_episode_capacity_screen["arm_diagnostics"])
+            == set(ARM_KINDS)
+        ),
+        "exact_target_prefix_physics_population_and_roster": (
+            target_context_passed
+            and target_context.get("target_stage_id") == "one_myr"
+            and target_context.get("target_total_steps")
+            == STAGES["one_myr"].total_steps
+            and target_context.get("tracer_count_per_arm")
+            == STAGES["one_myr"].tracer_count
+            and target_context.get("pilot_schedule_prefix_physics")
+            == schedule_physics
+            and protocol.get("capacity_target_binding") == dict(target_context)
+        ),
+        "persisted_initial_states_match_bound_target_context": (
+            initial_artifact_hashes
+            == target_context.get("pilot_full_initial_state_semantic_sha256")
+            == target_context.get("target_full_initial_state_semantic_sha256")
+        ),
+        "exact_population_receipt_and_semantic_arrays": (
+            receipt.get("content_sha256")
+            == target_context.get("pilot_population_transform_receipt_sha256")
+            == target_context.get("target_population_transform_receipt_sha256")
+            and receipt.get("output", {}).get("semantic_array_sha256")
+            == target_context.get("population_semantic_array_sha256")
+        ),
+    }
+    document: dict[str, Any] = {
+        "schema": CAPACITY_ADMISSION_SCHEMA,
+        "source_stage_id": stage.stage_id,
+        "target_stage_id": "one_myr",
+        "source_protocol_sha256": protocol.get("content_sha256"),
+        "source_runtime_identity_receipt_sha256": runtime_receipt_sha256,
+        "runtime_identity": dict(runtime_identity),
+        "population_transform_receipt_sha256": receipt.get("content_sha256"),
+        "population_semantic_array_sha256": receipt.get("output", {}).get(
+            "semantic_array_sha256"
+        ),
+        "schedule_prefix_physics": schedule_physics,
+        "full_initial_state_semantic_sha256": initial_artifact_hashes,
+        "capacity_target_context": dict(target_context),
+        "episode_capacity_screen": dict(route_episode_capacity_screen),
+        "arm_result_sha256": {
+            arm_kind: reports[arm_kind].get("content_sha256")
+            for arm_kind in ARM_KINDS
+        },
+        "route_ledger_sha256": {
+            arm_kind: _sha256_file(
+                stage_directory
+                / "arms"
+                / ARM_DIRECTORY_NAMES[arm_kind]
+                / "ENCOUNTER_ROUTES.json"
+            )
+            for arm_kind in ARM_KINDS
+        },
+        "execution_policy": {
+            "backend": protocol.get("backend"),
+            "integrator": protocol.get("integrator"),
+            "safety": protocol.get("safety"),
+            "route_ledger_budget": protocol.get("route_ledger_budget"),
+        },
+        "code_and_frozen_input_bindings": protocol.get("bindings"),
+        "gates": {**gates, "all_pass": all(gates.values())},
+        "one_myr_authorized": all(gates.values()),
+        "checkpoint_reuse": False,
+        "checkpoint_reuse_semantics": (
+            "SEPARATE_PROTOCOL_AND_RUN_IDS; ONE_MYR_RESTARTS_FROM_IDENTICAL_INITIAL_"
+            "BYTES_AND_RERUNS_THE_FIRST_100_KYR"
+        ),
+        "classification": "MODEL_OUTPUT / RESOURCE_ADMISSION_ONLY_NOT_SCIENCE",
+        "claim_limit": (
+            "A pass authorizes only an attempt at the one-Myr engineering screen. "
+            "It is not a completion guarantee, an accuracy or stability result, a "
+            "dynamical recurrence bound, a model preference, or a 4.5-Gyr authorization."
+        ),
+    }
+    document["content_sha256"] = _content_hash(
+        CAPACITY_ADMISSION_DOMAIN, document
+    )
+    return document
+
+
+def _load_verified_capacity_admission(
+    path: Path,
+    *,
+    expected_authorized: bool = True,
+) -> dict[str, Any]:
+    document = _load_json(path)
+    _verify_content_hash(
+        document,
+        CAPACITY_ADMISSION_DOMAIN,
+        schema=CAPACITY_ADMISSION_SCHEMA,
+        label="capacity admission receipt",
+    )
+    gates = document.get("gates")
+    gate_values = (
+        [value for key, value in gates.items() if key != "all_pass"]
+        if type(gates) is dict
+        else []
+    )
+    calculated_authorized = bool(gate_values) and all(
+        value is True for value in gate_values
+    )
+    if (
+        type(gates) is not dict
+        or any(type(value) is not bool for value in gates.values())
+        or gates.get("all_pass") is not calculated_authorized
+        or document.get("one_myr_authorized") is not calculated_authorized
+        or calculated_authorized is not expected_authorized
+        or document.get("source_stage_id") != "capacity_pilot"
+        or document.get("target_stage_id") != "one_myr"
+        or document.get("checkpoint_reuse") is not False
+    ):
+        raise RuntimeError("capacity admission receipt has an invalid terminal decision")
+    return document
+
+
+def _capacity_pilot_prerequisite(
     output_root: Path,
-    receipt_sha256: str,
+    population: Mapping[str, np.ndarray],
+    receipt: Mapping[str, Any],
+    schedule_set: MatchedMechanismScheduleSet,
     protocol: Mapping[str, Any],
     runtime_identity: Mapping[str, Any] | None,
     backend: BackendSpec | None,
 ) -> None:
-    path = output_root / "qualification/SUMMARY.json"
+    path = output_root / "capacity_pilot/SUMMARY.json"
     if not path.is_file():
         raise RuntimeError(
-            "the exact qualification rung must complete before the one_myr rung"
+            "the exact full-population capacity_pilot must pass before one_myr"
         )
     summary = _load_verified_stage_summary(
         path,
-        expected_status=STAGES["qualification"].completion_status,
+        allowed_statuses=(STAGES["capacity_pilot"].completion_status,),
         expected_runtime_identity=runtime_identity,
         backend=backend,
     )
-    if summary.get("population_transform_receipt_sha256") != receipt_sha256:
-        raise RuntimeError("qualification used a different transformed population")
+    admission_path = output_root / "capacity_pilot/CAPACITY_ADMISSION.json"
+    admission = _load_verified_capacity_admission(admission_path)
+    if summary.get("capacity_admission_sha256") != admission.get("content_sha256"):
+        raise RuntimeError("capacity pilot summary binds a different admission receipt")
+    if admission.get("source_protocol_sha256") != summary.get("protocol_sha256"):
+        raise RuntimeError("capacity admission binds a different pilot protocol")
+
+    current_physics = _schedule_prefix_physics_binding(schedule_set)
+    current_initial_hashes = _initial_state_semantic_hashes(
+        schedule_set, population, STAGES["one_myr"].tracer_count
+    )
+    context = admission.get("capacity_target_context")
+    if type(context) is not dict:
+        raise RuntimeError("capacity admission target context is invalid")
     if (
-        summary.get("route_capacity_projection", {}).get(
-            "one_myr_capacity_screen_passed"
-        )
-        is not True
+        context.get("target_stage_id") != "one_myr"
+        or context.get("target_total_steps") != STAGES["one_myr"].total_steps
+        or context.get("tracer_count_per_arm") != STAGES["one_myr"].tracer_count
+        or context.get("target_schedule_prefix_physics") != current_physics
+        or context.get("target_source_initial_state_sha256")
+        != {
+            arm.schedule.arm_kind: arm.initial_state.state_sha256
+            for arm in schedule_set.arms
+        }
+        or context.get("target_full_initial_state_semantic_sha256")
+        != current_initial_hashes
     ):
         raise RuntimeError(
-            "qualification route exposure projects beyond the one-Myr engine "
-            "capacity; redesign the population/route policy before the long run"
+            "current one_myr schedule physics or exact initial state differs "
+            "from the capacity pilot target"
         )
-    qualification_bindings = summary.get("bindings", {})
+    if (
+        admission.get("population_transform_receipt_sha256")
+        != receipt.get("content_sha256")
+        or admission.get("population_semantic_array_sha256")
+        != receipt.get("output", {}).get("semantic_array_sha256")
+        or context.get("target_population_transform_receipt_sha256")
+        != receipt.get("content_sha256")
+    ):
+        raise RuntimeError("capacity pilot used a different transformed population")
+    execution_policy = admission.get("execution_policy")
+    if execution_policy != {
+        "backend": protocol.get("backend"),
+        "integrator": protocol.get("integrator"),
+        "safety": protocol.get("safety"),
+        "route_ledger_budget": protocol.get("route_ledger_budget"),
+    }:
+        raise RuntimeError("capacity pilot execution policy differs from one_myr")
+
+    pilot_bindings = admission.get("code_and_frozen_input_bindings")
+    if type(pilot_bindings) is not dict:
+        raise RuntimeError("capacity admission code/input bindings are invalid")
     current_bindings = protocol["bindings"]
     for key in (
         "runner_sha256",
@@ -2964,11 +4199,20 @@ def _qualification_prerequisite(
         "kernel_source_sha256",
         "event_locator_source_sha256",
         "mechanism_schedule_source_sha256",
+        "acceptance_state_sha256",
+        "acceptance_protocol_sha256",
+        "de441_control_sha256",
     ):
-        if qualification_bindings.get(key) != current_bindings.get(key):
+        if pilot_bindings.get(key) != current_bindings.get(key):
             raise RuntimeError(
-                f"qualification binding {key} differs; rerun qualification"
+                f"capacity pilot binding {key} differs; rerun capacity_pilot"
             )
+    if runtime_identity is not None:
+        _require_runtime_identity(
+            admission.get("runtime_identity"),
+            runtime_identity,
+            label="capacity pilot admission/current runtime",
+        )
 
 
 def _summarize(
@@ -2983,6 +4227,7 @@ def _summarize(
     runtime_identity: Mapping[str, Any],
     runtime_receipt_sha256: str,
     reports: Mapping[str, Mapping[str, Any]],
+    capacity_target_context: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
     for arm_kind, report in reports.items():
         if report.get("runtime_identity_receipt_sha256") != runtime_receipt_sha256:
@@ -2997,6 +4242,10 @@ def _summarize(
     all_arm_gates = complete and all(
         bool(report.get("gates", {}).get("all_pass")) for report in reports.values()
     )
+    partial_summary_commit: dict[str, Any] | None = None
+    summary_path = stage_directory / "SUMMARY.json"
+    if complete and summary_path.is_file():
+        partial_summary_commit = _load_partial_summary_commit(summary_path)
     comparisons: dict[str, Any] = {}
     if all_arm_gates:
         control_endpoint = (
@@ -3010,47 +4259,131 @@ def _summarize(
                 / "ENDPOINT_STATE.npz"
             )
             comparisons[arm_kind] = _comparison(control_endpoint, candidate_endpoint)
+    if complete:
+        route_records_by_arm: dict[str, Iterable[Mapping[str, Any]]] = {}
+        tracer_ids_by_arm: dict[str, Iterable[int]] = {}
+        terminal_tracer_ids_by_arm: dict[str, Iterable[int]] = {}
+        for arm_kind in ARM_KINDS:
+            arm_directory = (
+                stage_directory / "arms" / ARM_DIRECTORY_NAMES[arm_kind]
+            )
+            route_document = _load_json(arm_directory / "ENCOUNTER_ROUTES.json")
+            if (
+                route_document.get("schema")
+                != "jxplanetx.cuda-four-arm-route-ledger.v1"
+                or route_document.get("arm_kind") != arm_kind
+                or type(route_document.get("records")) is not list
+                or route_document.get("count") != len(route_document["records"])
+            ):
+                raise RuntimeError(
+                    f"{arm_kind} route ledger is invalid for episode screening"
+                )
+            route_records_by_arm[arm_kind] = route_document["records"]
+            with np.load(
+                arm_directory / "ENDPOINT_STATE.npz", allow_pickle=False
+            ) as archive:
+                tracer_indices = np.asarray(archive["tracer_indices"])
+                tracer_lifecycle = np.asarray(archive["tracer_lifecycle"])
+            if (
+                tracer_indices.ndim != 1
+                or tracer_lifecycle.shape != tracer_indices.shape
+            ):
+                raise RuntimeError(
+                    f"{arm_kind} endpoint tracer roster is invalid for episode screening"
+                )
+            tracer_ids = tuple(int(value) for value in tracer_indices)
+            terminal_ids = tuple(
+                int(tracer_indices[index])
+                for index in np.flatnonzero(
+                    tracer_lifecycle != LIFECYCLE_ACTIVE
+                )
+            )
+            tracer_ids_by_arm[arm_kind] = tracer_ids
+            terminal_tracer_ids_by_arm[arm_kind] = terminal_ids
+            measured_maximum = int(
+                reports[arm_kind]
+                .get("measurements", {})
+                .get("maximum_route_count_for_one_tracer", -1)
+            )
+            ledger_counts = Counter(
+                int(record["tracer_index"])
+                for record in route_document["records"]
+            )
+            ledger_maximum = max(ledger_counts.values(), default=0)
+            if measured_maximum != ledger_maximum:
+                raise RuntimeError(
+                    f"{arm_kind} episode ledger maximum disagrees with endpoint"
+                )
+        route_episode_capacity_screen = _route_episode_capacity_screen(
+            route_records_by_arm=route_records_by_arm,
+            tracer_ids_by_arm=tracer_ids_by_arm,
+            terminal_tracer_ids_by_arm=terminal_tracer_ids_by_arm,
+            observed_steps=stage.total_steps,
+            target_steps=STAGES["one_myr"].total_steps,
+            expected_arm_kinds=ARM_KINDS,
+            required_pilot_steps=ROUTE_CAPACITY_PILOT_STEPS,
+            required_tracer_count=STAGES["one_myr"].tracer_count,
+        )
+    else:
+        route_episode_capacity_screen = {
+            "schema": "jxplanetx.cuda-route-episode-capacity-screen.v1",
+            "semantics": "NOT_EVALUATED_UNTIL_ALL_FOUR_ARMS_COMPLETE",
+            "one_myr_capacity_screen_passed": False,
+        }
+    capacity_admission: dict[str, Any] | None = None
+    capacity_gate_required = stage.stage_id == "capacity_pilot"
+    capacity_gate_passed = not capacity_gate_required
+    if complete and capacity_gate_required:
+        if capacity_target_context is None:
+            raise RuntimeError("capacity pilot lacks its exact one_myr target context")
+        capacity_admission = _capacity_admission_document(
+            stage=stage,
+            checkpoint_years=checkpoint_years,
+            stage_directory=stage_directory,
+            schedule_set=schedule_set,
+            receipt=receipt,
+            protocol=protocol,
+            runtime_identity=runtime_identity,
+            runtime_receipt_sha256=runtime_receipt_sha256,
+            reports=reports,
+            route_episode_capacity_screen=route_episode_capacity_screen,
+            target_context=capacity_target_context,
+        )
+        _publish_json_exact(
+            stage_directory / "CAPACITY_ADMISSION.json", capacity_admission
+        )
+        capacity_gate_passed = (
+            capacity_admission.get("one_myr_authorized") is True
+        )
+    stage_all_pass = all_arm_gates and capacity_gate_passed
     status = (
-        stage.completion_status
-        if all_arm_gates
-        else "PARTIAL_RESUMABLE_SCREEN"
+        "PARTIAL_RESUMABLE_SCREEN"
         if not complete
         else "FAILED_SCREEN_GATE"
+        if not all_arm_gates
+        else "FAILED_ROUTE_CAPACITY_GATE"
+        if capacity_gate_required and not capacity_gate_passed
+        else stage.completion_status
     )
-    maximum_observed_route_count = max(
-        (
-            int(report.get("measurements", {}).get(
-                "maximum_route_count_for_one_tracer", 0
-            ))
-            for report in reports.values()
-        ),
-        default=0,
-    )
-    projected_one_myr_route_count = math.ceil(
-        maximum_observed_route_count
-        * STAGES["one_myr"].duration_years
-        / stage.duration_years
-    )
-    route_capacity_projection = {
-        "semantics": (
-            "CONSERVATIVE_LINEAR_EXPOSURE_PROJECTION_FROM_MAXIMUM_OBSERVED_LANE; "
-            "AUTHORIZATION_SCREEN_NOT_A_DYNAMICAL_PREDICTION"
-        ),
-        "maximum_observed_route_count_for_one_tracer": (
-            maximum_observed_route_count
-        ),
-        "projected_one_myr_route_count_for_one_tracer": (
-            projected_one_myr_route_count
-        ),
-        "engine_capacity_per_tracer": MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER,
-        "one_myr_capacity_screen_passed": (
-            projected_one_myr_route_count
-            < MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER
-        ),
+    gates = {
+        "all_four_arms_complete": complete,
+        "all_arm_gates_pass": all_arm_gates,
     }
+    if capacity_gate_required:
+        gates.update(
+            {
+                "route_episode_capacity_gate_required": True,
+                "route_episode_capacity_gate_passed": capacity_gate_passed,
+            }
+        )
+    gates["all_pass"] = stage_all_pass
     summary: dict[str, Any] = {
         "schema": SUMMARY_SCHEMA,
-        "completed_utc": _utc_now(),
+        "completed_utc": (
+            _utc_now()
+            if partial_summary_commit is None
+            else partial_summary_commit["completed_utc"]
+        ),
         "status": status,
         "stage_id": stage.stage_id,
         "duration_years": stage.duration_years,
@@ -3072,12 +4405,13 @@ def _summarize(
             for arm_kind in reports
         },
         "paired_endpoint_comparisons": comparisons,
-        "route_capacity_projection": route_capacity_projection,
-        "gates": {
-            "all_four_arms_complete": complete,
-            "all_arm_gates_pass": all_arm_gates,
-            "all_pass": all_arm_gates,
-        },
+        "route_episode_capacity_screen": route_episode_capacity_screen,
+        "capacity_admission_sha256": (
+            None
+            if capacity_admission is None
+            else capacity_admission["content_sha256"]
+        ),
+        "gates": gates,
         "bindings": protocol["bindings"],
         "classification": "MODEL_OUTPUT / SCREENING_ONLY",
         "interpretation_limits": list(INTERPRETATION_LIMITS),
@@ -3085,7 +4419,11 @@ def _summarize(
     }
     summary["content_sha256"] = _content_hash(REPORT_DOMAIN, summary)
     if complete:
-        _publish_json_exact(stage_directory / "SUMMARY.json", summary)
+        if partial_summary_commit is not None and summary != partial_summary_commit:
+            raise RuntimeError(
+                "partial stage summary differs from the recovered terminal result"
+            )
+        _publish_json_exact(summary_path, summary)
         files = sorted(
             path
             for path in stage_directory.rglob("*")
@@ -3118,80 +4456,81 @@ def run(
     prepare_only: bool,
 ) -> dict[str, Any]:
     _verify_frozen_inputs(acceptance_state, acceptance_protocol, de441_control)
-    nominal_passage_years = (
-        FULL_SCREEN_PASSAGE_YEARS
-        if stage.stage_id == "one_myr"
-        else 0.5 * stage.duration_years
-    )
-    nominal_passage_step = _years_to_steps(
-        nominal_passage_years, "nominal_passage_years"
-    )
-    schedule_set = build_de441_four_arm_schedule_set(
-        de441_control,
-        step_years=STEP_YEARS,
-        total_steps=stage.total_steps,
-        matched_set_id=f"jx-de441-current-epoch-four-mechanism-{stage.stage_id}-v1",
-        nominal_passage_global_step=nominal_passage_step,
-        diagnostic_half_window_steps=_years_to_steps(
-            min(10_000.0, 0.1 * stage.duration_years),
-            "diagnostic_half_window_years",
-        ),
-    )
+    schedule_set = _build_stage_schedule_set(stage, de441_control)
     population, receipt = _derive_population(acceptance_state, schedule_set)
     if population["tracer_indices"].size < stage.tracer_count:
         raise RuntimeError("the frozen population is smaller than the stage requirement")
-    protocol = _build_protocol(stage, checkpoint_years, schedule_set, receipt, device)
+    capacity_target_context = (
+        _capacity_target_context(
+            pilot_stage=stage,
+            pilot_schedule_set=schedule_set,
+            pilot_population=population,
+            pilot_receipt=receipt,
+            de441_control=de441_control,
+            acceptance_state=acceptance_state,
+        )
+        if stage.stage_id == "capacity_pilot"
+        else None
+    )
+    if (
+        capacity_target_context is not None
+        and capacity_target_context.get("gates", {}).get("all_pass") is not True
+    ):
+        raise RuntimeError(
+            "capacity_pilot does not have an exact one_myr physical-prefix target"
+        )
+    protocol = _build_protocol(
+        stage,
+        checkpoint_years,
+        schedule_set,
+        receipt,
+        device,
+        capacity_target_context=capacity_target_context,
+    )
     stage_directory = output_root / stage.stage_id
-    stage_directory.mkdir(parents=True, exist_ok=True)
-    _publish_json_exact(stage_directory / "POPULATION_TRANSFORM_RECEIPT.json", receipt)
-    _publish_npz_exact(stage_directory / "TRANSFORMED_TRACERS.npz", population)
-    _publish_json_exact(stage_directory / "PROTOCOL.json", protocol)
-    schedules = _schedule_documents(schedule_set)
-    _publish_json_exact(stage_directory / "MATCHED_SCHEDULE_SET.json", schedules["matched_set"])
-    for arm_kind, document in schedules["arms"].items():
-        _publish_json_exact(
-            stage_directory / "schedules" / f"{ARM_DIRECTORY_NAMES[arm_kind]}.json",
-            document,
+    if stage.stage_id == "one_myr":
+        _capacity_pilot_prerequisite(
+            output_root,
+            population,
+            receipt,
+            schedule_set,
+            protocol,
+            None,
+            None,
         )
 
-    if prepare_only:
+    backend: BackendSpec | None = None
+    runtime: Mapping[str, Any] | None = None
+    if not prepare_only:
+        backend = BackendSpec("cupy", device, 128)
+        runtime = _current_runtime_identity(backend)
         if stage.stage_id == "one_myr":
-            _qualification_prerequisite(
+            _capacity_pilot_prerequisite(
                 output_root,
-                str(receipt["content_sha256"]),
+                population,
+                receipt,
+                schedule_set,
                 protocol,
-                None,
-                None,
+                runtime,
+                backend,
             )
-        return {
-            "status": "PREPARED_NOT_EXECUTED",
-            "stage_id": stage.stage_id,
-            "output_directory": str(stage_directory),
-            "protocol_sha256": protocol["content_sha256"],
-            "matched_schedule_set_sha256": schedule_set.matched_set_sha256,
-            "population_transform_receipt_sha256": receipt["content_sha256"],
-        }
-    backend = BackendSpec("cupy", device, 128)
-    runtime = _current_runtime_identity(backend)
-    runtime_receipt = _freeze_stage_runtime_identity(
-        stage_directory,
-        protocol_sha256=str(protocol["content_sha256"]),
-        current_runtime=runtime,
-    )
-    runtime_receipt_sha256 = str(runtime_receipt["content_sha256"])
-    if stage.stage_id == "one_myr":
-        _qualification_prerequisite(
-            output_root,
-            str(receipt["content_sha256"]),
-            protocol,
-            runtime,
-            backend,
-        )
+
     completed_summary_path = stage_directory / "SUMMARY.json"
-    if completed_summary_path.is_file():
+    completed_checksum_path = stage_directory / "SHA256SUMS"
+    if completed_checksum_path.is_file() and not completed_summary_path.is_file():
+        raise RuntimeError("stage has SHA256SUMS without SUMMARY.json")
+    if (
+        not prepare_only
+        and completed_summary_path.is_file()
+        and completed_checksum_path.is_file()
+    ):
+        assert backend is not None and runtime is not None
+        allowed_statuses = (stage.completion_status,)
+        if stage.stage_id == "capacity_pilot":
+            allowed_statuses += ("FAILED_ROUTE_CAPACITY_GATE",)
         completed_summary = _load_verified_stage_summary(
             completed_summary_path,
-            expected_status=stage.completion_status,
+            allowed_statuses=allowed_statuses,
             expected_runtime_identity=runtime,
             backend=None,
         )
@@ -3217,7 +4556,9 @@ def run(
                 protocol_sha256=str(protocol["content_sha256"]),
                 receipt_sha256=str(receipt["content_sha256"]),
                 runtime_identity=runtime,
-                runtime_receipt_sha256=runtime_receipt_sha256,
+                runtime_receipt_sha256=str(
+                    completed_summary["runtime_identity_receipt_sha256"]
+                ),
             )
             if (
                 completed_summary["arm_result_sha256"].get(
@@ -3229,6 +4570,37 @@ def run(
                     "completed stage summary arm digest differs from ARM_RESULT"
                 )
         return completed_summary
+
+    stage_directory.mkdir(parents=True, exist_ok=True)
+    _publish_json_exact(stage_directory / "POPULATION_TRANSFORM_RECEIPT.json", receipt)
+    _publish_npz_exact(stage_directory / "TRANSFORMED_TRACERS.npz", population)
+    _publish_json_exact(stage_directory / "PROTOCOL.json", protocol)
+    schedules = _schedule_documents(schedule_set)
+    _publish_json_exact(
+        stage_directory / "MATCHED_SCHEDULE_SET.json", schedules["matched_set"]
+    )
+    for arm_kind, document in schedules["arms"].items():
+        _publish_json_exact(
+            stage_directory / "schedules" / f"{ARM_DIRECTORY_NAMES[arm_kind]}.json",
+            document,
+        )
+
+    if prepare_only:
+        return {
+            "status": "PREPARED_NOT_EXECUTED",
+            "stage_id": stage.stage_id,
+            "output_directory": str(stage_directory),
+            "protocol_sha256": protocol["content_sha256"],
+            "matched_schedule_set_sha256": schedule_set.matched_set_sha256,
+            "population_transform_receipt_sha256": receipt["content_sha256"],
+        }
+    assert backend is not None and runtime is not None
+    runtime_receipt = _freeze_stage_runtime_identity(
+        stage_directory,
+        protocol_sha256=str(protocol["content_sha256"]),
+        current_runtime=runtime,
+    )
+    runtime_receipt_sha256 = str(runtime_receipt["content_sha256"])
 
     import cupy as cp
 
@@ -3269,7 +4641,7 @@ def run(
     # close the matched summary without rerunning its predecessors.
     for arm in schedule_set.arms:
         path = _arm_result_path(stage_directory, arm)
-        if path.is_file():
+        if path.is_file() and arm.schedule.arm_kind not in reports:
             reports[arm.schedule.arm_kind] = _load_verified_arm_result(
                 path,
                 backend=backend,
@@ -3299,6 +4671,7 @@ def run(
         runtime_identity=runtime,
         runtime_receipt_sha256=runtime_receipt_sha256,
         reports=reports,
+        capacity_target_context=capacity_target_context,
     )
 
 
@@ -3376,11 +4749,24 @@ def main() -> int:
         )
     except BaseException as exc:
         try:
-            _write_failure(
-                arguments.output_root.resolve() / stage.stage_id,
-                "RUN_LEVEL",
-                exc,
+            failure_stage_directory = (
+                arguments.output_root.resolve() / stage.stage_id
             )
+            target_preflight_failed_before_publish = (
+                stage.stage_id == "one_myr"
+                and not failure_stage_directory.exists()
+            )
+            if (
+                not target_preflight_failed_before_publish
+                and not _has_stage_finalization_artifact(
+                    failure_stage_directory
+                )
+            ):
+                _write_failure(
+                    failure_stage_directory,
+                    "RUN_LEVEL",
+                    exc,
+                )
         except BaseException:
             # Preserve the original failure on stderr even if the requested
             # evidence location itself is unavailable or unwritable.
@@ -3398,7 +4784,8 @@ def main() -> int:
         )
         return 1
     print(json.dumps(result, sort_keys=True))
-    return 0 if result.get("status") not in {"FAILED_SCREEN_GATE", "FAILED"} else 1
+    status = result.get("status")
+    return 1 if type(status) is str and status.startswith("FAILED") else 0
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ from jxplanetx.cuda_massless_tracer import (
     FixedStepCUDAMasslessTracerSpec,
     LIFECYCLE_REMOVED_OUTER_BOUNDARY,
     LIFECYCLE_REMOVED_SOURCE_RADIUS,
+    MAXIMUM_TOTAL_ENCOUNTER_ROUTES,
     advance_cuda_massless_tracers,
     dump_cuda_massless_tracer_checkpoint,
     load_latest_cuda_massless_tracer_checkpoint,
@@ -141,6 +142,15 @@ class CUDAMasslessTracerContractTests(unittest.TestCase):
                 _backend(),
                 maximum_encounter_routes_per_tracer=16_385,
             )
+        for invalid_total in (-1, MAXIMUM_TOTAL_ENCOUNTER_ROUTES + 1, True):
+            with self.subTest(invalid_total=invalid_total):
+                with self.assertRaises(CUDAMasslessTracerContractError):
+                    FixedStepCUDAMasslessTracerSpec(
+                        0.5,
+                        1,
+                        _backend(),
+                        maximum_total_encounter_routes=invalid_total,
+                    )
         with self.assertRaises(CUDAMasslessTracerContractError):
             FixedStepCUDAMasslessTracerSpec(
                 0.5, 1, _backend(), encounter_route_rtol=1.0
@@ -336,6 +346,21 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
         )
         observed = CP.asnumpy(result.state.tracer_positions[0])
         self.assertLess(float(np.max(np.abs(observed - expected))), 2.0e-12)
+
+    def test_total_route_budget_fails_before_first_ledger_append(self):
+        with self.assertRaisesRegex(
+            EncounterRouteError, "cumulative total encounter-route budget"
+        ):
+            advance_cuda_massless_tracers(
+                _state(1, encounter_radius=1.1),
+                FixedStepCUDAMasslessTracerSpec(
+                    0.001,
+                    1,
+                    _backend(),
+                    maximum_encounter_routes_per_tracer=2,
+                    maximum_total_encounter_routes=0,
+                ),
+            )
 
     def test_more_than_python_recursion_limit_routes_iteratively(self):
         state = _state(
@@ -558,6 +583,18 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
                     1,
                     _backend(),
                     maximum_encounter_routes_per_tracer=0,
+                ),
+            )
+        with self.assertRaisesRegex(
+            CUDAMasslessTracerContractError, "total budget"
+        ):
+            advance_cuda_massless_tracers(
+                routed.state,
+                FixedStepCUDAMasslessTracerSpec(
+                    0.001,
+                    1,
+                    _backend(),
+                    maximum_total_encounter_routes=0,
                 ),
             )
         with self.assertRaises(CUDAMasslessTracerContractError):

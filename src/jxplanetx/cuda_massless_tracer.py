@@ -119,6 +119,7 @@ CUDA_OPTIONS = (
 MAXIMUM_SOURCE_COUNT = 32
 MAXIMUM_THREADS_PER_BLOCK = 128
 MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER = 16_384
+MAXIMUM_TOTAL_ENCOUNTER_ROUTES = 100_000
 MAXIMUM_EVENT_LOCATOR_ACCEPTED_STEPS = 100_000
 MAXIMUM_METHOD_PRIMARY_DYNAMICAL_PHASE = 0.25
 OUTWARD_EVENT_RADIAL_VELOCITY_TOLERANCE_AU_PER_YEAR = 1.0e-13
@@ -358,6 +359,7 @@ class FixedStepCUDAMasslessTracerSpec:
     step_count: int
     backend: BackendSpec
     maximum_encounter_routes_per_tracer: int = 256
+    maximum_total_encounter_routes: int = MAXIMUM_TOTAL_ENCOUNTER_ROUTES
     encounter_route_method: str = "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2"
     encounter_route_rtol: float = 1.0e-12
     encounter_route_atol: float = 1.0e-14
@@ -390,6 +392,16 @@ class FixedStepCUDAMasslessTracerSpec:
             raise CUDAMasslessTracerContractError(
                 "maximum_encounter_routes_per_tracer must be in "
                 f"[0, {MAXIMUM_ENCOUNTER_ROUTES_PER_TRACER}]"
+            )
+        if (
+            type(self.maximum_total_encounter_routes) is not int
+            or self.maximum_total_encounter_routes < 0
+            or self.maximum_total_encounter_routes
+            > MAXIMUM_TOTAL_ENCOUNTER_ROUTES
+        ):
+            raise CUDAMasslessTracerContractError(
+                "maximum_total_encounter_routes must be in "
+                f"[0, {MAXIMUM_TOTAL_ENCOUNTER_ROUTES}]"
             )
         if (
             self.encounter_route_method
@@ -3833,6 +3845,10 @@ def advance_cuda_massless_tracers(
             raise CUDAMasslessTracerContractError(
                 "a cumulative encounter-route count exceeds the declared budget"
             )
+        if len(records) > spec.maximum_total_encounter_routes:
+            raise CUDAMasslessTracerContractError(
+                "the cumulative encounter-route ledger exceeds the declared total budget"
+            )
 
         current_source_position = validated.source_positions.copy()
         current_source_velocity = validated.source_velocities.copy()
@@ -3924,6 +3940,10 @@ def advance_cuda_massless_tracers(
                 for local_value in guarded_local_host:
                     local = int(local_value)
                     slot = int(cp.asnumpy(lane_slots[local]))
+                    if len(records) >= spec.maximum_total_encounter_routes:
+                        raise EncounterRouteError(
+                            "integration exceeded the cumulative total encounter-route budget"
+                        )
                     route_counts_host[slot] += 1
                     if (
                         route_counts_host[slot]
@@ -5403,6 +5423,7 @@ __all__ = [
     "LIFECYCLE_NAMES",
     "LIFECYCLE_REMOVED_OUTER_BOUNDARY",
     "LIFECYCLE_REMOVED_SOURCE_RADIUS",
+    "MAXIMUM_TOTAL_ENCOUNTER_ROUTES",
     "METHOD_ID",
     "PROJECT_SCOPE",
     "SCIENTIFIC_CLASSIFICATION",
