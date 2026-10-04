@@ -1,0 +1,124 @@
+{
+  "bindings": {
+    "focused_test_sha256": "8b3c68ff8729cfbf178f25e0c4ed49eb347b904f93a31afdcd95e9a6b8c1e068",
+    "module_sha256": "2532f74ded25fe98a84ba698994d865d279d4d02418304749a1e5c73efffdc4f",
+    "runner_sha256": "e8512364cfc1f53e086ef6a75acf633b605294ce31ce78e34f3054d8cc5a2912"
+  },
+  "claims": {
+    "flyby_or_rogue_inferred": false,
+    "four_point_five_gyr_accuracy_qualified": false,
+    "independently_reproduced": false,
+    "planet_nine_detected_or_excluded": false,
+    "real_tno_population_modeled": false
+  },
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "content_sha256": "b89c6b94dd06c5d3eaadbd6638b8335298649fdec87d8eecd63335b82aaa0818",
+  "cuda_options": [
+    "--std=c++11",
+    "--fmad=false",
+    "--ftz=false",
+    "--prec-div=true",
+    "--prec-sqrt=true"
+  ],
+  "fixture": {
+    "population": "deterministic synthetic a=100..1000 AU, q=31..80 AU; not observed, primordial, Rubin-selected, or survey-debiased",
+    "seed": 5357110188502766674,
+    "source_specs": [
+      [
+        "Sun",
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        "Jupiter",
+        317.828,
+        5.2038,
+        0.1
+      ],
+      [
+        "Saturn",
+        95.159,
+        9.5826,
+        1.7
+      ],
+      [
+        "Uranus",
+        14.536,
+        19.2184,
+        3.0
+      ],
+      [
+        "Neptune",
+        17.147,
+        30.1104,
+        4.4
+      ]
+    ],
+    "tracer_count": 16800
+  },
+  "focused_test_command": [
+    "/tmp/jx-gr15-audit.WNPe22/venv/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_cuda_massless_tracer",
+    "-v"
+  ],
+  "gates": {
+    "all_endpoint_states_finite": true,
+    "all_guarded_steps_transactionally_resolved": true,
+    "cuda_runtime_observed": true,
+    "focused_tests_pass": true,
+    "minimum_tracer_steps_per_second": 1000000.0,
+    "runtime_kernel_and_implementation_bound": true
+  },
+  "git": {
+    "branch": "research/cuda-massless-tracer-20261004",
+    "head": "2cb655f04df3a8057c53d3d64575813e2680c500",
+    "main": "aa36f8f1cb5852b8b5bb34c7ac476a8e35025e84",
+    "status_short_before_run": ""
+  },
+  "input_state_semantic_sha256": "9a0aa51dd5e617ec23f012f7416433d9fd8b656706c023b2da2c4e8cefaf1728",
+  "integration": {
+    "backend": {
+      "backend_id": "cupy",
+      "device": "cuda:0",
+      "tile_size": 128
+    },
+    "duration_years": 5000.0,
+    "encounter_route_atol": 1e-14,
+    "encounter_route_maximum_substep_fraction": 0.125,
+    "encounter_route_method": "SCIPY_DOP853_FULL_OUTER_STEP_V1",
+    "encounter_route_rtol": 1e-12,
+    "maximum_encounter_routes_per_tracer": 256,
+    "source_path_steps_per_chunk": 65536,
+    "step_count": 10000,
+    "step_years": 0.5,
+    "threads_per_block": 128
+  },
+  "kernel_source_sha256": "430632b2d13d0340b879eb44897b68b8efa15b57c0e51d9225bbf7825fd7601f",
+  "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V1",
+  "registered_utc": "2026-10-04T18:55:02.954531Z",
+  "run_id": "jx-cuda-massless-tracer-rtx-acceptance-v3",
+  "schema": "jxplanetx.cuda-massless-tracer-acceptance-protocol.v1",
+  "state_metadata": {
+    "axes": "SYNTHETIC_FIXED_AXES",
+    "epoch": 0.0,
+    "frame": "SYNTHETIC_BARYCENTRIC_INERTIAL",
+    "global_step": 0,
+    "length_unit": "AU",
+    "origin": "ACTIVE_SOURCE_BARYCENTER",
+    "primary_source_id": "Sun",
+    "snapshot_id": "cuda-massless-tracer-acceptance-t0",
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune"
+    ],
+    "time_scale": "SYNTHETIC_YEAR",
+    "time_unit": "year",
+    "unit_system_id": "AU-YEAR"
+  }
+}

@@ -13,16 +13,17 @@ The implementation is `MODEL_OUTPUT / SCREENING_ONLY`.  It is software needed
 for the proposed outer-Solar-System experiments; it is not yet a qualified
 4.5-Gyr science result.
 
-The preliminary retained RTX measurements used the Sun and four giant planets with
-16,800 deterministic synthetic tracers for 5,000 years at a 0.5-year step.  It
-completed 168,000,000 tracer-steps in 5.425 seconds (30.97 million
-tracer-steps/second) on the RTX 5060 Ti.  All endpoint states were finite and
-all 522 guarded steps were transactionally resolved.  Those numbers are an
-engineering measurement for superseded pre-audit bytes, not current-code
-acceptance, a portable speed guarantee, or scientific validation.  The final
-v3 evidence bundle is generated only after source freeze and includes the exact
-protocol, test transcript, raw input and endpoint states, route ledger,
-environment, result, and run-wide checksums.
+The final v3 RTX acceptance used the Sun and four giant planets with 16,800
+deterministic synthetic tracers for 5,000 years at a 0.5-year step.  The source
+was first frozen at commit `2cb655f04df3a8057c53d3d64575813e2680c500`.
+It then completed 168,000,000 tracer-steps in 5.223346 seconds (32.163291
+million tracer-steps/second) on the RTX 5060 Ti.  All endpoint arrays were
+finite, all 522 guarded steps were transactionally resolved, the embedded
+focused suite passed 21/21 tests, and every evidence checksum verified.  The
+result status is `PASSED_ENGINEERING_ACCEPTANCE_NOT_SCIENCE`.  The preserved v1
+and v2 measurements remain historical pre-audit evidence and do not qualify the
+current source.  V3 includes the exact protocol, test transcript, raw input and
+endpoint states, route ledger, environment, result, and run-wide checksums.
 
 ## Numerical architecture
 
@@ -168,7 +169,7 @@ The following work remains before authorizing the intended mechanism study:
    4.5 Gyr.  No rung may be inferred from throughput alone.
 
 At the measured 16,800-tracer rate, a simple 4.5-Gyr, 0.5-year-step arithmetic
-projection is about 56.5 GPU-days per arm before checkpoint, output, route,
+projection is about 54.4 GPU-days per arm before checkpoint, output, route,
 force-schedule, and qualification costs.  Four such arms would therefore be a
 months-long local campaign.  This projection is planning information only;
 small populations and encounter-rich histories do not scale linearly.

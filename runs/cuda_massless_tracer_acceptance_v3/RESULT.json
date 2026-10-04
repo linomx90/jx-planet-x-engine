@@ -1,0 +1,179 @@
+{
+  "artifacts": {
+    "ENDPOINT_STATE.npz": {
+      "path": "ENDPOINT_STATE.npz",
+      "sha256": "1159bb9a15c15a87fa7345b1bffef716c9545e116e6491ea479031de29694920",
+      "size_bytes": 1229732
+    },
+    "ENVIRONMENT.json": {
+      "path": "ENVIRONMENT.json",
+      "sha256": "7e81701807d2eb5ddd7062d1df774fb44f36d16c31e4b0ddce193a161c6a729d",
+      "size_bytes": 4406
+    },
+    "INITIAL_STATE.npz": {
+      "path": "INITIAL_STATE.npz",
+      "sha256": "ebb4d6b8952e78a6eb91e9591c2ddff36831f3f92b98952a9f50da802e82f048",
+      "size_bytes": 943316
+    },
+    "PROTOCOL.json": {
+      "path": "PROTOCOL.json",
+      "sha256": "0beda4fdfb98394dd7d0fc505b46da94b01ea8adcbaac9769251294ca1b3e75b",
+      "size_bytes": 3541
+    },
+    "ROUTES.json": {
+      "path": "ROUTES.json",
+      "sha256": "6b35f6703a78c85b05dc030cd17990f8fc0ef74be0e5ee1467a70f467c85c2da",
+      "size_bytes": 215837
+    },
+    "TESTS.log": {
+      "path": "TESTS.log",
+      "sha256": "950e3eeb828b0fae738bfd5d69e81dcb79da5ac798d376b7f368b0570f231219",
+      "size_bytes": 4264
+    }
+  },
+  "bindings": {
+    "focused_test_sha256": "8b3c68ff8729cfbf178f25e0c4ed49eb347b904f93a31afdcd95e9a6b8c1e068",
+    "module_sha256": "2532f74ded25fe98a84ba698994d865d279d4d02418304749a1e5c73efffdc4f",
+    "runner_sha256": "e8512364cfc1f53e086ef6a75acf633b605294ce31ce78e34f3054d8cc5a2912"
+  },
+  "claims": {
+    "flyby_or_rogue_inferred": false,
+    "four_point_five_gyr_accuracy_qualified": false,
+    "independently_reproduced": false,
+    "planet_nine_detected_or_excluded": false,
+    "real_tno_population_modeled": false
+  },
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "completed_utc": "2026-10-04T18:55:10.657889Z",
+  "content_sha256": "b36b929dfe0cdb6affb6b0bb6c5b1e2a2a558492be59e3034f0b4904aa1f739f",
+  "design": {
+    "duration_years": 5000.0,
+    "fixture_seed": 5357110188502766674,
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune"
+    ],
+    "step_count": 10000,
+    "step_years": 0.5,
+    "tracer_count": 16800
+  },
+  "gates": {
+    "all_endpoint_arrays_finite": true,
+    "all_guarded_steps_transactionally_resolved": true,
+    "all_pass": true,
+    "all_required_pre_result_artifacts_present": true,
+    "cuda_runtime_observed": true,
+    "focused_tests_passed": true,
+    "minimum_one_million_tracer_steps_per_second": true,
+    "runtime_kernel_and_implementation_bound": true
+  },
+  "git": {
+    "branch": "research/cuda-massless-tracer-20261004",
+    "head": "2cb655f04df3a8057c53d3d64575813e2680c500",
+    "main": "aa36f8f1cb5852b8b5bb34c7ac476a8e35025e84",
+    "status_short_before_run": ""
+  },
+  "input_state_semantic_sha256": "9a0aa51dd5e617ec23f012f7416433d9fd8b656706c023b2da2c4e8cefaf1728",
+  "interpretation_limits": [
+    "Engineering throughput and replay evidence only.",
+    "No 4.5-Gyr accuracy or stability qualification.",
+    "Synthetic fixtures are not a real or survey-selected TNO population.",
+    "Guard routes are not confirmed encounters, collisions, or events.",
+    "Unbound is a primary-relative two-body diagnostic sampled at lattice nodes.",
+    "CPU route minima are evaluated-stage samples, not continuous minima."
+  ],
+  "measurements": {
+    "elapsed_seconds": 5.223346049024258,
+    "encounter_route_reason_counts": {
+      "SWEPT_FLOOR": 522
+    },
+    "encounter_route_source_counts": {
+      "Neptune": 522
+    },
+    "encounter_route_steps": 522,
+    "endpoint_state_semantic_sha256": "569cd0e4b9be897b8a73e7576257b811d48c638fd5b7114e3ca06d46e948a6f5",
+    "engine_segment_input_state_sha256": "9f24d7c9490a015867c7c1199742efcf1a5c91b523451aa0f9117acfdced5222",
+    "ever_unbound_at_lattice_node_count": 0,
+    "minimum_evaluated_source_distance_AU": 1.374934680994404,
+    "tracer_steps": 168000000,
+    "tracer_steps_per_second": 32163291.197485007
+  },
+  "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V1",
+  "protocol_content_sha256": "b89c6b94dd06c5d3eaadbd6638b8335298649fdec87d8eecd63335b82aaa0818",
+  "run_id": "jx-cuda-massless-tracer-rtx-acceptance-v3",
+  "runtime": {
+    "array_backend_device": "cuda:0",
+    "array_backend_id": "cupy",
+    "cpu_fingerprint": {
+      "fields": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "sha256": "fb9f92dbf8d64f9d37bbc5b06001f3f3dc46a2431f28f92774f000275ca0ba2e"
+    },
+    "cpu_machine": "x86_64",
+    "cpu_processor": "",
+    "cpu_release": "7.0.0-34-generic",
+    "cpu_system": "Linux",
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_options": [
+      "--std=c++11",
+      "--fmad=false",
+      "--ftz=false",
+      "--prec-div=true",
+      "--prec-sqrt=true"
+    ],
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_AND_CUDA_RUNTIME_DEVICE",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_multiprocessor_count": 36,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_total_global_memory_bytes": 16616521728,
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "encounter_route_method": "SCIPY_DOP853_FULL_OUTER_STEP_V1",
+    "implementation_source_sha256": "2532f74ded25fe98a84ba698994d865d279d4d02418304749a1e5c73efffdc4f",
+    "kernel_id": "jx.cuda.massless-tracer.restricted-kdk.v1",
+    "kernel_source_sha256": "430632b2d13d0340b879eb44897b68b8efa15b57c0e51d9225bbf7825fd7601f",
+    "libc": [
+      "glibc",
+      "2.43"
+    ],
+    "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V1",
+    "numpy_build_configuration_sha256": "0783bfc9b478a6155574783e6133a27979667d89e3ad5b86385d921e68a6de67",
+    "numpy_version": "2.3.5",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "runtime_binary_sha256": {
+      "cupy_cuda_compiler": "09226d26ab41bf6e7b5b6e57b59187b4c3a5637690747af9a83d288a87d0fb6e",
+      "cupy_cuda_runtime_extension": "bedb6d887526a7726ee3b07d5f8d85b8385a66203261c30511851882bdc1c1a9",
+      "cupy_nvrtc_extension": "e38ebdee2e7f2cb1bdaf97d19a5ca43b1baa485ee462f5340bd385b848830c0f",
+      "numpy_multiarray_umath": "ed49278029e17db9fc349d4181a2ee5a064a86bbb1241141592b8653824fd102",
+      "python_executable": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+      "scipy_dop853_coefficients": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001",
+      "scipy_ivp_base": "4e70402b4c092e0a502dba07e33f91784e1e6d3645710cc8a916fd6e3ead7548",
+      "scipy_ivp_common": "195293731f903bb58faf67a33408bde1a11d32fd37cc554eaf6e10d70dab6762",
+      "scipy_ivp_rk": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+    },
+    "scipy_build_configuration_sha256": "19205762e564754132e90ded8bd1703ecac4d61e208cf5dfa7021eec31a83429",
+    "scipy_version": "1.17.0"
+  },
+  "schema": "jxplanetx.cuda-massless-tracer-acceptance.v3",
+  "status": "PASSED_ENGINEERING_ACCEPTANCE_NOT_SCIENCE"
+}
