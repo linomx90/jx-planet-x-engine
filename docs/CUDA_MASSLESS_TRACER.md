@@ -13,6 +13,12 @@ The implementation is `MODEL_OUTPUT / SCREENING_ONLY`.  It is software needed
 for the proposed outer-Solar-System experiments; it is not yet a qualified
 4.5-Gyr science result.
 
+The current M2 contract adds continuous operational removal surfaces,
+fixed-lane lifecycle state, a central-periapse phase guard, scale-aware event
+tolerances, closed force-schedule identities, and checkpoint-v4 event lineage.
+These additions have focused CPU/GPU coverage, but the four-arm mechanism
+screen still requires its qualification rung before any 1-Myr execution.
+
 The final v3 RTX acceptance used the Sun and four giant planets with 16,800
 deterministic synthetic tracers for 5,000 years at a 0.5-year step.  The source
 was first frozen at commit `2cb655f04df3a8057c53d3d64575813e2680c500`.
@@ -34,11 +40,13 @@ For each bounded chunk, the backend:
 2. Retains immutable source position, velocity, and acceleration nodes for the
    chunk.
 3. Advances independent CUDA tracer lanes against that one shared source path.
-4. Stops a lane before committing any step whose swept-distance certificate is
-   unavailable.
+4. Stops a lane before committing any step whose swept-distance, operational
+   surface, acceleration, or central-periapse certificate is unavailable.
 5. Redoes the complete untouched outer step with SciPy DOP853 against the same
-   cubic-Hermite source segment, then rejoins the CUDA path at the exact next
-   lattice node.
+   cubic-Hermite source segment and continuously searches that accepted dense
+   solution for source-radius or outward model-boundary events.
+6. Either rejoins the CUDA path at the exact next lattice node or freezes the
+   fixed tracer lane at the first located operational removal event.
 
 Tracers never accelerate one another and never affect a source.  Source bytes
 therefore do not depend on tracer count, lane order, CUDA block partitioning,
@@ -52,11 +60,21 @@ physical encounter, contact, collision, or ejection.
 
 ## Guard contract
 
-Each source has two caller-bound device arrays:
+Each source has three caller-bound device arrays:
 
 - an encounter radius in AU;
+- a nonnegative operational source-removal radius in AU, no larger than its
+  encounter radius;
 - a positive upper bound on relative acceleration in AU/year² over one outer
   step.
+
+The state may also declare one primary-relative outer model-domain boundary.
+The quiet route conservatively routes any possible source-surface crossing,
+outer-boundary crossing, or primary-periapse interval whose maximum declared
+dynamical phase cannot be certified below the fixed ceiling.  Equality routes.
+The CPU route uses exhaustive stationary-point analysis of the degree-seven
+dense relative trajectory, including grazing contacts, and fails closed when a
+root or tolerance is numerically ambiguous.
 
 The quiet route requires a positive full-step separation lower bound after the
 relative-speed and acceleration envelopes, and also checks the minimum of the
@@ -64,11 +82,10 @@ linear swept segment.  Equality routes.  If the instantaneous relative
 acceleration already exceeds the declared bound, the lane routes rather than
 committing.
 
-The acceleration envelope is a caller assertion.  It must be derived and
-audited for each scientific protocol.  V1 does not yet prove a global bound
-from the force model, perform continuous collision root finding, or impose the
-planned central-periapse resolution guard.  These are authorization blockers
-for the 4.5-Gyr science run, not hidden assumptions.
+The acceleration envelope remains a caller assertion and must be derived and
+audited for each protocol.  Source-radius and outer-boundary events are
+operational model exits, not claims of collision or definitive ejection.  The
+current route is not a regularized close-encounter integrator.
 
 ## State and units
 
@@ -82,15 +99,41 @@ for the 4.5-Gyr science run, not hidden assumptions.
   bounds;
 - stable unique uint64 tracer identities.
 
+Tracer arrays never compact.  Each lane has an immutable identity and a
+lifecycle code: active, removed at a source-radius surface, or removed at the
+primary outer boundary.  A removed lane retains its continuously located event
+position/velocity and is skipped forever.  Its ledger stores the exact source
+segment preimage, event state, effective tolerance, and primary-relative
+diagnostics; reload recomputes the source-segment hash, Hermite event state,
+surface geometry, and frozen lane identity.
+
+Every CPU-route row likewise retains its source and tracer pre/post numerical
+preimage plus the locator policy.  Continuation and checkpoint validation
+recompute the CUDA guard decision and deterministically replay the DOP853 event
+locator.  The four-arm runner adds two stronger, experiment-level gates: every
+routed source segment must occur byte-for-byte in a regenerated all-horizon
+source path, and every routed tracer is rerun from its frozen initial state over
+the complete stage.  These are same-code lineage audits, not independent
+reproduction.
+
+The generic checkpoint API alone verifies each route row's internal preimage,
+guard decision, and locator output; it does not prove that an otherwise valid
+row belongs to the named tracer's quiet-path history.  A scientific runner must
+therefore supply the full-stage routed-tracer lineage gate used here (or an
+equivalent predecessor/genesis replay).  A bare engine checkpoint is not a
+standalone scientific evidence package.
+
 Finite positive-energy tracer states remain valid and are recorded by the
 `ever_unbound` diagnostic.  This flag is a primary-relative two-body energy
 check at committed lattice nodes, including CPU-route endpoints.  It is not a
 multi-source total-energy test and can miss a within-step sign change.  Such
 states are not numerical failures and are not removed automatically.
 
-The cumulative minimum distance combines GPU lattice-node evaluations with
-CPU DOP853 derivative-evaluation stages.  It is an evaluated-point diagnostic,
-not a continuously located periapse, encounter distance, or collision event.
+For a rejoined route, the cumulative minimum combines GPU lattice nodes with
+all DOP853 stages.  For a terminal route it includes only the committed prefix
+through the located event; discarded post-event solver work is retained only
+as audit telemetry.  It is not a continuously located periapse except at an
+explicitly located terminal surface.
 
 ## Checkpoint and restart
 
@@ -100,7 +143,8 @@ immutable NPZ/JSON pair with:
 - full source and tracer endpoint state;
 - stable tracer identities;
 - cumulative minimum-distance, unbound, and encounter-route diagnostics;
-- the complete encounter-route ledger;
+- fixed tracer lifecycle plus complete encounter-route and removal-event
+  ledgers;
 - state, file, protocol, CUDA-kernel, Python implementation, NumPy/SciPy,
   CPU-platform, CUDA runtime, local toolkit, NVRTC compiler, driver,
   physical-GPU UUID, and device identities;
@@ -140,7 +184,7 @@ from jxplanetx.cuda_massless_tracer import (
 from jxplanetx.engine import BackendSpec
 
 spec = FixedStepCUDAMasslessTracerSpec(
-    step_years=0.5,
+    step_years=0.125,
     step_count=20_000,
     backend=BackendSpec("cupy", "cuda:0", 128),
 )
@@ -154,17 +198,20 @@ or old H1 workspace is silently selected by this API.
 
 ## Path to the 4.5-Gyr experiment
 
-The following work remains before authorizing the intended mechanism study:
+The following work remains before authorizing the intended 4.5-Gyr study:
 
-1. Add and test the central-periapse step guard and removal/event surfaces.
-2. Freeze one self-consistent primordial source state and tracer population.
-3. Implement closed, hashed force schedules rather than arbitrary callbacks:
-   persistent Planet Nine, a whole-system stellar-flyby window, and an active
-   temporary-rogue lifecycle.
-4. Add Galactic tide and stellar-history terms where the interpretation needs
-   them.
-5. Qualify 0.5-year versus 0.25-year population observables and an
-   encounter-rich REBOUND/MERCURIUS subset.
+1. Replace the synthetic current-epoch engineering population with a
+   self-consistent, content-addressed initial population appropriate to the
+   scientific question.
+2. Qualify the 0.125-year direct-KDK screen against a 0.0625-year subset or
+   replace the source map; the present method is not a long-horizon Wisdom--
+   Holman map.
+3. Add Galactic tide and stellar-history terms where flyby or very distant
+   trajectories require them.
+4. Replace the circular distant-planet sensitivity point with a predeclared
+   eccentric six-element family before testing canonical angular confinement.
+5. Add the required population/angular observables and an independent
+   REBOUND/MERCURIUS comparison subset.
 6. Advance through 1-Myr, 10-Myr, 100-Myr, and 1-Gyr authorization rungs before
    4.5 Gyr.  No rung may be inferred from throughput alone.
 
@@ -181,7 +228,7 @@ The current backend and acceptance result do not establish:
 - accuracy or stability over 4.5 Gyr;
 - a real, primordial, Rubin-selected, or survey-debiased TNO population;
 - Planet Nine detection, exclusion, orbit, mass, or model preference;
-- a stellar flyby or temporary rogue;
-- a collision, ejection, or continuously resolved encounter;
+- a stellar flyby or rogue-planet history;
+- a physical collision, definitive ejection, or complete encounter history;
 - a globally symplectic hybrid method;
 - independent reproduction or cross-device bitwise reproducibility.

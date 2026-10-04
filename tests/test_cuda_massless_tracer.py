@@ -16,7 +16,10 @@ from jxplanetx.cuda_massless_tracer import (
     CUDAMasslessTracerContractError,
     CUDAMasslessTracerIntegrationError,
     CUDAMasslessTracerState,
+    EncounterRouteError,
     FixedStepCUDAMasslessTracerSpec,
+    LIFECYCLE_REMOVED_OUTER_BOUNDARY,
+    LIFECYCLE_REMOVED_SOURCE_RADIUS,
     advance_cuda_massless_tracers,
     dump_cuda_massless_tracer_checkpoint,
     load_latest_cuda_massless_tracer_checkpoint,
@@ -38,6 +41,12 @@ def _cupy_or_none():
 CP = _cupy_or_none()
 GPU_REQUIRED = unittest.skipIf(CP is None, "CUDA/CuPy device is unavailable")
 SOLAR_GM = 4.0 * math.pi * math.pi
+TEST_FORCE_SCHEDULE_SHA256 = hashlib.sha256(
+    b"cuda-massless-tracer-test-force-schedule-v1"
+).hexdigest()
+TEST_MATCHED_SET_SHA256 = hashlib.sha256(
+    b"cuda-massless-tracer-test-matched-set-v1"
+).hexdigest()
 
 
 def _backend(tile_size: int = 128, *, device: str = "cuda:0") -> BackendSpec:
@@ -61,7 +70,10 @@ def _state(
     count: int,
     *,
     encounter_radius: float = 0.001,
+    collision_radius: float = 0.0,
     acceleration_bound: float = 100.0,
+    outer_boundary: float = 100_000.0,
+    source_gm: float = SOLAR_GM,
     indices=None,
 ) -> CUDAMasslessTracerState:
     cp = CP
@@ -70,7 +82,7 @@ def _state(
     velocity = cp.zeros((count, 3), dtype=cp.float64)
     if count:
         position[:, 0] = radii
-        velocity[:, 1] = cp.sqrt(SOLAR_GM / radii)
+        velocity[:, 1] = cp.sqrt(source_gm / radii)
     if indices is None:
         indices = cp.arange(count, dtype=cp.uint64)
     return CUDAMasslessTracerState(
@@ -88,9 +100,12 @@ def _state(
         primary_source_id="Sun",
         source_positions=cp.zeros((1, 3), dtype=cp.float64),
         source_velocities=cp.zeros((1, 3), dtype=cp.float64),
-        source_gm=cp.asarray([SOLAR_GM], dtype=cp.float64),
+        source_gm=cp.asarray([source_gm], dtype=cp.float64),
         source_encounter_radii=cp.asarray(
             [encounter_radius], dtype=cp.float64
+        ),
+        source_collision_radii=cp.asarray(
+            [collision_radius], dtype=cp.float64
         ),
         relative_acceleration_bounds=cp.asarray(
             [acceleration_bound], dtype=cp.float64
@@ -99,6 +114,9 @@ def _state(
         tracer_velocities=velocity,
         tracer_indices=indices,
         provenance=_provenance(),
+        force_schedule_sha256=TEST_FORCE_SCHEDULE_SHA256,
+        matched_schedule_set_sha256=TEST_MATCHED_SET_SHA256,
+        primary_outer_boundary_AU=outer_boundary,
     )
 
 
@@ -121,7 +139,15 @@ class CUDAMasslessTracerContractTests(unittest.TestCase):
                 0.5,
                 1,
                 _backend(),
-                maximum_encounter_routes_per_tracer=257,
+                maximum_encounter_routes_per_tracer=16_385,
+            )
+        with self.assertRaises(CUDAMasslessTracerContractError):
+            FixedStepCUDAMasslessTracerSpec(
+                0.5, 1, _backend(), encounter_route_rtol=1.0
+            )
+        with self.assertRaises(CUDAMasslessTracerContractError):
+            FixedStepCUDAMasslessTracerSpec(
+                0.5, 1, _backend(), event_time_tolerance_fraction=1.0e-20
             )
 
     def test_state_rejects_ambiguous_metadata_before_device_access(self):
@@ -143,11 +169,15 @@ class CUDAMasslessTracerContractTests(unittest.TestCase):
                 source_velocities=object(),
                 source_gm=object(),
                 source_encounter_radii=object(),
+                source_collision_radii=object(),
                 relative_acceleration_bounds=object(),
                 tracer_positions=object(),
                 tracer_velocities=object(),
                 tracer_indices=object(),
                 provenance=_provenance(),
+                force_schedule_sha256=TEST_FORCE_SCHEDULE_SHA256,
+                matched_schedule_set_sha256=TEST_MATCHED_SET_SHA256,
+                primary_outer_boundary_AU=100_000.0,
             )
 
     def test_state_rejects_unit_or_primary_slot_ambiguity(self):
@@ -168,11 +198,15 @@ class CUDAMasslessTracerContractTests(unittest.TestCase):
             "source_velocities": object(),
             "source_gm": object(),
             "source_encounter_radii": object(),
+            "source_collision_radii": object(),
             "relative_acceleration_bounds": object(),
             "tracer_positions": object(),
             "tracer_velocities": object(),
             "tracer_indices": object(),
             "provenance": _provenance(),
+            "force_schedule_sha256": TEST_FORCE_SCHEDULE_SHA256,
+            "matched_schedule_set_sha256": TEST_MATCHED_SET_SHA256,
+            "primary_outer_boundary_AU": 100_000.0,
         }
         with self.assertRaises(CUDAMasslessTracerContractError):
             CUDAMasslessTracerState(**{**base, "length_unit": "km"})
@@ -303,6 +337,28 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
         observed = CP.asnumpy(result.state.tracer_positions[0])
         self.assertLess(float(np.max(np.abs(observed - expected))), 2.0e-12)
 
+    def test_more_than_python_recursion_limit_routes_iteratively(self):
+        state = _state(
+            1,
+            encounter_radius=2.0,
+            source_gm=1.0e-30,
+        )
+        state.tracer_velocities[0] = 0.0
+        result = advance_cuda_massless_tracers(
+            state,
+            FixedStepCUDAMasslessTracerSpec(
+                1.0e-6,
+                1_100,
+                _backend(),
+                maximum_encounter_routes_per_tracer=2_000,
+                source_path_steps_per_chunk=1_100,
+            ),
+        )
+        self.assertEqual(len(result.encounter_routes), 1_100)
+        self.assertEqual(
+            int(CP.asnumpy(result.encounter_route_counts[0])), 1_100
+        )
+
     def test_acceleration_bound_excess_routes_instead_of_committing(self):
         result = advance_cuda_massless_tracers(
             _state(1, encounter_radius=0.0, acceleration_bound=1.0),
@@ -310,6 +366,131 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
         )
         self.assertEqual(len(result.encounter_routes), 1)
         self.assertEqual(result.encounter_routes[0].reason, "ACCELERATION_BOUND")
+
+    def test_source_surface_event_is_located_and_lane_freezes(self):
+        state = _state(
+            1,
+            encounter_radius=1.1,
+            collision_radius=1.0,
+            source_gm=1.0e-30,
+        )
+        state.tracer_positions[0] = CP.asarray(
+            [-2.0, 0.0, 0.0], dtype=CP.float64
+        )
+        state.tracer_velocities[0] = CP.asarray(
+            [4.0, 0.0, 0.0], dtype=CP.float64
+        )
+        result = advance_cuda_massless_tracers(
+            state,
+            FixedStepCUDAMasslessTracerSpec(1.0, 1, _backend()),
+        )
+        self.assertEqual(len(result.encounter_routes), 1)
+        self.assertEqual(len(result.removal_events), 1)
+        self.assertEqual(
+            int(CP.asnumpy(result.tracer_lifecycle[0])),
+            LIFECYCLE_REMOVED_SOURCE_RADIUS,
+        )
+        event = result.removal_events[0]
+        self.assertEqual(event.event_type, "SOURCE_RADIUS")
+        self.assertAlmostEqual(event.step_fraction, 0.25, places=9)
+        self.assertAlmostEqual(event.located_distance_AU, 1.0, places=10)
+        self.assertAlmostEqual(
+            float(CP.asnumpy(result.minimum_source_distance_AU[0])),
+            1.0,
+            places=10,
+        )
+        self.assertLess(
+            result.encounter_routes[0].minimum_evaluated_stage_distance_AU,
+            1.0,
+        )
+        frozen_position = result.state.tracer_positions.copy()
+        frozen_velocity = result.state.tracer_velocities.copy()
+        continued = advance_cuda_massless_tracers(
+            result.state,
+            FixedStepCUDAMasslessTracerSpec(1.0, 2, _backend()),
+        )
+        self.assertTrue(
+            bool(CP.array_equal(continued.state.tracer_positions, frozen_position))
+        )
+        self.assertTrue(
+            bool(CP.array_equal(continued.state.tracer_velocities, frozen_velocity))
+        )
+        self.assertEqual(continued.removal_events, result.removal_events)
+        self.assertEqual(continued.encounter_routes, result.encounter_routes)
+
+    def test_outward_boundary_event_is_located_and_classified_operationally(self):
+        state = _state(
+            1,
+            encounter_radius=0.0,
+            source_gm=1.0e-30,
+            outer_boundary=1.0,
+        )
+        state.tracer_positions[0] = CP.asarray(
+            [0.5, 0.0, 0.0], dtype=CP.float64
+        )
+        state.tracer_velocities[0] = CP.asarray(
+            [1.0, 0.0, 0.0], dtype=CP.float64
+        )
+        result = advance_cuda_massless_tracers(
+            state,
+            FixedStepCUDAMasslessTracerSpec(1.0, 1, _backend()),
+        )
+        self.assertEqual(len(result.removal_events), 1)
+        event = result.removal_events[0]
+        self.assertEqual(event.event_type, "OUTER_BOUNDARY")
+        self.assertAlmostEqual(event.step_fraction, 0.5, places=9)
+        self.assertGreater(event.primary_relative_radial_velocity_AU_per_year, 0.0)
+        self.assertGreaterEqual(
+            event.primary_relative_specific_energy_AU2_per_year2, 0.0
+        )
+        self.assertEqual(
+            int(CP.asnumpy(result.tracer_lifecycle[0])),
+            LIFECYCLE_REMOVED_OUTER_BOUNDARY,
+        )
+
+    def test_initial_tolerance_contact_records_zero_step_event(self):
+        state = _state(
+            1,
+            encounter_radius=1.1,
+            collision_radius=1.0,
+            source_gm=1.0e-30,
+        )
+        state.tracer_positions[0] = CP.asarray(
+            [1.0 + 5.0e-12, 0.0, 0.0], dtype=CP.float64
+        )
+        state.tracer_velocities[0] = CP.asarray(
+            [-1.0, 0.0, 0.0], dtype=CP.float64
+        )
+        result = advance_cuda_massless_tracers(
+            state,
+            FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+        )
+        self.assertEqual(result.removal_events[0].step_fraction, 0.0)
+        self.assertEqual(result.encounter_routes[0].cpu_accepted_steps, 0)
+        self.assertEqual(
+            result.encounter_routes[0].committed_step_fraction, 0.0
+        )
+
+    def test_active_input_on_terminal_surface_or_outside_boundary_rejects(self):
+        collision = _state(
+            1,
+            encounter_radius=1.0,
+            collision_radius=1.0,
+        )
+        collision.tracer_positions[0] = CP.asarray(
+            [1.0, 0.0, 0.0], dtype=CP.float64
+        )
+        with self.assertRaises(CUDAMasslessTracerContractError):
+            advance_cuda_massless_tracers(
+                collision,
+                FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+            )
+        outside = _state(1, outer_boundary=1.0)
+        with self.assertRaises(CUDAMasslessTracerContractError):
+            advance_cuda_massless_tracers(
+                outside,
+                FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+            )
 
     def test_finite_hyperbolic_state_is_a_diagnostic_not_an_error(self):
         state = _state(1)
@@ -321,26 +502,24 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
         self.assertTrue(bool(CP.asnumpy(result.ever_unbound[0])))
         self.assertEqual(result.encounter_routes, ())
 
-    def test_terminal_cpu_route_updates_node_sampled_unbound_diagnostic(self):
+    def test_cpu_route_fails_closed_when_primary_phase_is_unresolved(self):
         state = _state(1, encounter_radius=2.0, acceleration_bound=100.0)
         state.tracer_velocities[0] = CP.asarray(
             [0.0, math.sqrt(2.0 * SOLAR_GM) * 0.99999, 0.0],
             dtype=CP.float64,
         )
-        result = advance_cuda_massless_tracers(
-            state,
-            FixedStepCUDAMasslessTracerSpec(
-                1.0,
-                1,
-                _backend(),
-                encounter_route_rtol=1.0,
-                encounter_route_atol=1.0,
-                encounter_route_maximum_substep_fraction=1.0,
-            ),
-        )
-        self.assertTrue(bool(CP.asnumpy(result.ever_unbound[0])))
-        self.assertEqual(len(result.encounter_routes), 1)
-        self.assertTrue(result.encounter_routes[0].endpoint_unbound)
+        with self.assertRaises(EncounterRouteError):
+            advance_cuda_massless_tracers(
+                state,
+                FixedStepCUDAMasslessTracerSpec(
+                    1.0,
+                    1,
+                    _backend(),
+                    encounter_route_rtol=0.5,
+                    encounter_route_atol=0.5,
+                    encounter_route_maximum_substep_fraction=1.0,
+                ),
+            )
 
     def test_partial_continuation_or_lowered_route_budget_fails_closed(self):
         initial = _state(1)
@@ -381,6 +560,11 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
                     maximum_encounter_routes_per_tracer=0,
                 ),
             )
+        with self.assertRaises(CUDAMasslessTracerContractError):
+            advance_cuda_massless_tracers(
+                routed.state,
+                FixedStepCUDAMasslessTracerSpec(0.002, 1, _backend()),
+            )
 
     def test_route_ledger_cannot_contradict_cumulative_diagnostics(self):
         routed = advance_cuda_massless_tracers(
@@ -391,6 +575,7 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
             routed.encounter_routes[0],
             endpoint_unbound=True,
             minimum_evaluated_stage_distance_AU=0.1,
+            minimum_committed_stage_distance_AU=0.1,
         )
         contradictory = CUDAMasslessTracerState(
             **{
@@ -407,6 +592,140 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
                 contradictory,
                 FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
             )
+
+    def test_checkpoint_rejects_reset_endpoint_diagnostics(self):
+        quiet = advance_cuda_massless_tracers(
+            _state(1),
+            FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+        )
+        bad_minimum = CP.asarray([CP.inf], dtype=CP.float64)
+        bad_minimum_state = replace(
+            quiet.state,
+            minimum_source_distance_AU=bad_minimum,
+        )
+        bad_minimum_result = replace(
+            quiet,
+            state=bad_minimum_state,
+            minimum_source_distance_AU=bad_minimum,
+        )
+        protocol = hashlib.sha256(b"reset-diagnostic-protocol").hexdigest()
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(CUDAMasslessTracerContractError):
+                dump_cuda_massless_tracer_checkpoint(
+                    temporary,
+                    run_id="bad-minimum",
+                    protocol_sha256=protocol,
+                    checkpoint_index=0,
+                    result=bad_minimum_result,
+                )
+
+        hyperbolic_state = _state(1)
+        hyperbolic_state.tracer_velocities[0] = CP.asarray(
+            [0.0, math.sqrt(2.0 * SOLAR_GM) * 1.01, 0.0],
+            dtype=CP.float64,
+        )
+        hyperbolic = advance_cuda_massless_tracers(
+            hyperbolic_state,
+            FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+        )
+        self.assertTrue(bool(hyperbolic.ever_unbound[0]))
+        cleared = CP.asarray([False], dtype=CP.bool_)
+        cleared_state = replace(hyperbolic.state, ever_unbound=cleared)
+        cleared_result = replace(
+            hyperbolic,
+            state=cleared_state,
+            ever_unbound=cleared,
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(CUDAMasslessTracerContractError):
+                dump_cuda_massless_tracer_checkpoint(
+                    temporary,
+                    run_id="cleared-unbound",
+                    protocol_sha256=protocol,
+                    checkpoint_index=0,
+                    result=cleared_result,
+                )
+
+    def test_checkpoint_rejects_uncommitted_route_segment_hash(self):
+        routed = advance_cuda_massless_tracers(
+            _state(1, encounter_radius=1.1),
+            FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+        )
+        forged_route = replace(
+            routed.encounter_routes[0], source_segment_sha256="1" * 64
+        )
+        forged_state = replace(
+            routed.state, prior_encounter_routes=(forged_route,)
+        )
+        forged_result = replace(
+            routed,
+            state=forged_state,
+            encounter_routes=(forged_route,),
+        )
+        protocol = hashlib.sha256(b"forged-route-protocol").hexdigest()
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(CUDAMasslessTracerContractError):
+                dump_cuda_massless_tracer_checkpoint(
+                    temporary,
+                    run_id="forged-route",
+                    protocol_sha256=protocol,
+                    checkpoint_index=0,
+                    result=forged_result,
+                )
+
+    def test_route_after_terminal_removal_is_rejected(self):
+        removal_state = _state(
+            1,
+            encounter_radius=1.1,
+            collision_radius=1.0,
+            source_gm=1.0e-30,
+        )
+        removal_state.tracer_positions[0] = CP.asarray(
+            [-1.0005, 0.0, 0.0], dtype=CP.float64
+        )
+        removal_state.tracer_velocities[0] = CP.asarray(
+            [1.0, 0.0, 0.0], dtype=CP.float64
+        )
+        removed = advance_cuda_massless_tracers(
+            removal_state,
+            FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+        )
+        continued = advance_cuda_massless_tracers(
+            removed.state,
+            FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+        )
+        legitimate_rejoin = advance_cuda_massless_tracers(
+            _state(1, encounter_radius=1.1, source_gm=1.0e-30),
+            FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+        ).encounter_routes[0]
+        post_terminal = replace(
+            legitimate_rejoin,
+            global_step=1,
+            source_segment_epoch_0=0.001,
+        )
+        forged_routes = (*continued.encounter_routes, post_terminal)
+        forged_counts = CP.asarray([2], dtype=CP.int64)
+        forged_state = replace(
+            continued.state,
+            encounter_route_counts=forged_counts,
+            prior_encounter_routes=forged_routes,
+        )
+        forged_result = replace(
+            continued,
+            state=forged_state,
+            encounter_route_counts=forged_counts,
+            encounter_routes=forged_routes,
+        )
+        protocol = hashlib.sha256(b"post-terminal-route-protocol").hexdigest()
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(CUDAMasslessTracerContractError):
+                dump_cuda_massless_tracer_checkpoint(
+                    temporary,
+                    run_id="post-terminal-route",
+                    protocol_sha256=protocol,
+                    checkpoint_index=0,
+                    result=forged_result,
+                )
 
     def test_split_segment_dynamical_buffers_are_bitwise_identical(self):
         initial = _state(8)
@@ -617,6 +936,103 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
                     )
                 )
             )
+
+    def test_checkpoint_preserves_terminal_event_and_frozen_lane(self):
+        state = _state(
+            1,
+            encounter_radius=1.1,
+            collision_radius=1.0,
+            source_gm=1.0e-30,
+        )
+        state.tracer_positions[0] = CP.asarray(
+            [-2.0, 0.0, 0.0], dtype=CP.float64
+        )
+        state.tracer_velocities[0] = CP.asarray(
+            [4.0, 0.0, 0.0], dtype=CP.float64
+        )
+        removed = advance_cuda_massless_tracers(
+            state,
+            FixedStepCUDAMasslessTracerSpec(1.0, 1, _backend()),
+        )
+        protocol = hashlib.sha256(b"terminal-event-protocol").hexdigest()
+        with tempfile.TemporaryDirectory() as temporary:
+            first = dump_cuda_massless_tracer_checkpoint(
+                temporary,
+                run_id="terminal-event-run",
+                protocol_sha256=protocol,
+                checkpoint_index=0,
+                result=removed,
+            )
+            loaded = load_latest_cuda_massless_tracer_checkpoint(
+                temporary,
+                run_id="terminal-event-run",
+                protocol_sha256=protocol,
+                backend=_backend(),
+            )
+            self.assertEqual(loaded.removal_events, removed.removal_events)
+            self.assertTrue(
+                bool(CP.array_equal(loaded.tracer_lifecycle, removed.tracer_lifecycle))
+            )
+            continued = advance_cuda_massless_tracers(
+                loaded.state,
+                FixedStepCUDAMasslessTracerSpec(1.0, 1, _backend()),
+            )
+            second = dump_cuda_massless_tracer_checkpoint(
+                temporary,
+                run_id="terminal-event-run",
+                protocol_sha256=protocol,
+                checkpoint_index=1,
+                result=continued,
+                previous_checkpoint_content_sha256=first[
+                    "checkpoint_content_sha256"
+                ],
+            )
+            self.assertEqual(
+                second["removal_events"], first["removal_events"]
+            )
+
+    def test_checkpoint_rejects_forged_terminal_surface_and_event_state(self):
+        state = _state(
+            1,
+            encounter_radius=1.1,
+            collision_radius=1.0,
+            source_gm=1.0e-30,
+        )
+        state.tracer_positions[0] = CP.asarray(
+            [-2.0, 0.0, 0.0], dtype=CP.float64
+        )
+        state.tracer_velocities[0] = CP.asarray(
+            [4.0, 0.0, 0.0], dtype=CP.float64
+        )
+        removed = advance_cuda_massless_tracers(
+            state,
+            FixedStepCUDAMasslessTracerSpec(1.0, 1, _backend()),
+        )
+        forged_event = replace(
+            removed.removal_events[0],
+            located_distance_AU=5.0,
+            root_residual_AU=4.0,
+            surface_tolerance_AU=4.0,
+        )
+        forged_state = replace(
+            removed.state,
+            prior_removal_events=(forged_event,),
+        )
+        forged_result = replace(
+            removed,
+            state=forged_state,
+            removal_events=(forged_event,),
+        )
+        protocol = hashlib.sha256(b"forged-terminal-event-protocol").hexdigest()
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(CUDAMasslessTracerContractError):
+                dump_cuda_massless_tracer_checkpoint(
+                    temporary,
+                    run_id="forged-terminal-event-run",
+                    protocol_sha256=protocol,
+                    checkpoint_index=0,
+                    result=forged_result,
+                )
 
     def test_checkpoint_retry_survives_uncommitted_array_orphan(self):
         result = advance_cuda_massless_tracers(
