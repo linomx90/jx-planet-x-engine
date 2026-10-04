@@ -1,0 +1,80 @@
+{
+  "bindings": {
+    "focused_test_sha256": "4e649c7e6b594342a91f011e57ca4fbf11d75c2e59adc962e3f5f5dc4fb9e962",
+    "module_sha256": "ef399794a84c00f6fb089a67f98aedaea093d89b81f94769a0e62edfac84999b",
+    "runner_sha256": "d0fa9c3e43f8f2d6af7776486cbd07a793507a9a21242d41a39365c40bf5559c"
+  },
+  "claims": {
+    "flyby_or_rogue_inferred": false,
+    "four_point_five_gyr_accuracy_qualified": false,
+    "independently_reproduced": false,
+    "planet_nine_detected_or_excluded": false,
+    "real_tno_population_modeled": false
+  },
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "content_sha256": "bbb8526a59d073e253f684daf56d7de85cd1b75ef6b75def3863c5050bf62349",
+  "cuda_options": [
+    "--std=c++11",
+    "--fmad=false",
+    "--ftz=false",
+    "--prec-div=true",
+    "--prec-sqrt=true"
+  ],
+  "design": {
+    "duration_years": 5000.0,
+    "population": "deterministic synthetic a=100..1000 AU, q=31..80 AU fixture",
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune"
+    ],
+    "step_count": 10000,
+    "step_years": 0.5,
+    "tracer_count": 16800
+  },
+  "gates": {
+    "all_endpoint_states_finite": true,
+    "all_guarded_steps_transactionally_resolved": true,
+    "all_pass": true,
+    "cuda_required_and_used": true,
+    "kernel_source_bound": true,
+    "minimum_one_million_tracer_steps_per_second": true
+  },
+  "input_state_sha256": "4137ea0d1f4d3da3d34d17404a029dd2fb84935b0f060e0906b9e4866bb44f38",
+  "kernel_source_sha256": "430632b2d13d0340b879eb44897b68b8efa15b57c0e51d9225bbf7825fd7601f",
+  "measurements": {
+    "elapsed_seconds": 5.4196709640091285,
+    "encounter_route_steps": 522,
+    "endpoint_state_sha256": "2d1d4dded5ae0a70beefb2686e9ad19c71ea4476ddf029ee43e45633f667d352",
+    "ever_unbound_count": 0,
+    "minimum_sampled_source_distance_AU": 1.374934680994404,
+    "tracer_steps": 168000000,
+    "tracer_steps_per_second": 30998191.79349668
+  },
+  "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V1",
+  "run_id": "jx-cuda-massless-tracer-rtx-acceptance-v2",
+  "runtime": {
+    "cuda_driver_version": 13020,
+    "cuda_options": [
+      "--std=c++11",
+      "--fmad=false",
+      "--ftz=false",
+      "--prec-div=true",
+      "--prec-sqrt=true"
+    ],
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_RUNTIME_DEVICE",
+    "device_index": 0,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "kernel_id": "jx.cuda.massless-tracer.restricted-kdk.v1",
+    "kernel_source_sha256": "430632b2d13d0340b879eb44897b68b8efa15b57c0e51d9225bbf7825fd7601f",
+    "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V1",
+    "numpy": "2.3.5",
+    "python": "3.14.4"
+  },
+  "schema": "jxplanetx.cuda-massless-tracer-acceptance.v2",
+  "status": "PASSED_ENGINEERING_ACCEPTANCE_NOT_SCIENCE"
+}
