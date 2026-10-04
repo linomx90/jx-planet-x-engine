@@ -1,0 +1,17 @@
+{
+  "all_route_source_segments_exactly_matched": true,
+  "arm_kind": "UNBOUND_ROGUE_FLYBY",
+  "content_sha256": "ce5f1cfc1ef839744c1131ac814b9f56e1efb52c8b697d194a317b8b2faed4da",
+  "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+  "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+  "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+  "protocol_sha256": "22af4801593c145787191f26d1a1797464eb9edde21fce3e427e3aaf349e803f",
+  "regenerated_source_endpoint_sha256": "c042348eae65ee581ec6e375961488d258547d3e0d6ee22f21dfb094a60e58fe",
+  "route_count": 1028,
+  "schedule_sha256": "1640352c16252bfab61a3c45be2f6687ba0dd2e36211a88ca8b15554f1f6e989",
+  "schema": "jxplanetx.cuda-four-arm-route-source-membership.v1",
+  "scope": "exact membership of persisted route source segments in the same-code KDK source path; not independent reproduction",
+  "step_years": 0.125,
+  "total_steps": 8000,
+  "unique_routed_source_steps": 1017
+}

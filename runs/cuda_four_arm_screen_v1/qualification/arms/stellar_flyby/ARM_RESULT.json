@@ -1,0 +1,398 @@
+{
+  "arm_kind": "STELLAR_FLYBY",
+  "artifacts": {
+    "ENCOUNTER_ROUTES.json": {
+      "path": "arms/stellar_flyby/ENCOUNTER_ROUTES.json",
+      "sha256": "4b0a896189aa30392c9bc66a5c4971be14bada2767f3260b95eb58914c5f12e7",
+      "size_bytes": 257178
+    },
+    "ENDPOINT_STATE.npz": {
+      "path": "arms/stellar_flyby/ENDPOINT_STATE.npz",
+      "sha256": "73573fafdcf2b6343d5de62c14ff367f0b5a6a230bc6a1fbd033032dd3cd3271",
+      "size_bytes": 161768
+    },
+    "FORCE_SCHEDULE.json": {
+      "path": "arms/stellar_flyby/FORCE_SCHEDULE.json",
+      "sha256": "92ac755bcff7003d33a934efc7b78899b5f3e5e697eeceae656c7d688e021074",
+      "size_bytes": 4476
+    },
+    "INITIAL_STATE.npz": {
+      "path": "arms/stellar_flyby/INITIAL_STATE.npz",
+      "sha256": "9850310581698fccb4d0f867a162c166d2e4c28a00e4dd818aa8410818aaca72",
+      "size_bytes": 117680
+    },
+    "REMOVAL_EVENTS.json": {
+      "path": "arms/stellar_flyby/REMOVAL_EVENTS.json",
+      "sha256": "4b167337ee4b6abe91b2f03bda8f2a3b05fc7d3535d5e08b1efe2ff95edcdc66",
+      "size_bytes": 195
+    },
+    "ROUTED_TRACER_REPLAY_AUDIT.json": {
+      "path": "arms/stellar_flyby/ROUTED_TRACER_REPLAY_AUDIT.json",
+      "sha256": "f26fb2570c1ec4789200eb61a2a6201527c23ab4b58a67f7299deb4f6a003099",
+      "size_bytes": 1074
+    },
+    "ROUTE_SOURCE_MEMBERSHIP_AUDIT.json": {
+      "path": "arms/stellar_flyby/ROUTE_SOURCE_MEMBERSHIP_AUDIT.json",
+      "sha256": "bbe4ca7fb0013d7b9c9a1ca745487d5c1fabf53f09c1ba73ed858fa0635dbc1a",
+      "size_bytes": 1015
+    },
+    "SOURCE_PATH_AUDIT.json": {
+      "path": "arms/stellar_flyby/SOURCE_PATH_AUDIT.json",
+      "sha256": "da3cc498dfac9e10536ed6b4fcf7704e13aeda215333c58e8b521d51b001fafa",
+      "size_bytes": 16638
+    },
+    "SOURCE_PATH_AUDIT_ENDPOINT.npz": {
+      "path": "arms/stellar_flyby/SOURCE_PATH_AUDIT_ENDPOINT.npz",
+      "sha256": "f89380a8d1e646a8fdeddc838992c574c98b0b66e395ee902f5d1c4e2d7f90d9",
+      "size_bytes": 888
+    },
+    "SOURCE_STATE.json": {
+      "path": "arms/stellar_flyby/SOURCE_STATE.json",
+      "sha256": "709cd156fb8bfbcf226f94c3ec539211125d6c70dba4e00c35e4481a87113052",
+      "size_bytes": 1972
+    },
+    "SOURCE_STATE.npz": {
+      "path": "arms/stellar_flyby/SOURCE_STATE.npz",
+      "sha256": "50df96ae65358f0920c22cd2449685ae2a147bd093ac8db5bc0860bb32d7d413",
+      "size_bytes": 1194
+    }
+  },
+  "claims": {
+    "four_point_five_gyr_accuracy_qualified": false,
+    "planet_nine_detected": false,
+    "planet_nine_excluded": false,
+    "primordial_history_reconstructed": false,
+    "rubin_data_fitted": false,
+    "stellar_flyby_inferred": false,
+    "unbound_rogue_flyby_inferred": false
+  },
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "completed_utc": "2026-10-04T21:04:45.274393Z",
+  "content_sha256": "0d6e40d2471827d3a53365fc6dab3d9959d5ea970293082dc119cc427581e9ba",
+  "endpoint_epoch_years": 1000.0,
+  "endpoint_global_step": 8000,
+  "endpoint_semantic_array_sha256": "3f385c3b4933395da5f0cfd9832fa8230ef8a47bf3584232b7e522ee791ac381",
+  "execution_evidence": {
+    "checkpoint_indices": [
+      2000,
+      4000,
+      6000,
+      8000
+    ],
+    "checkpoint_namespace": "run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969",
+    "checkpoint_steps": 2000,
+    "committed_artifact_count": 12,
+    "committed_artifacts": {
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000002000.array-c33263aac7547ca4d83195acdb4ffba42cae0fdf246aa2616675f74e04a9c48b.npz": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000002000.array-c33263aac7547ca4d83195acdb4ffba42cae0fdf246aa2616675f74e04a9c48b.npz",
+        "sha256": "c33263aac7547ca4d83195acdb4ffba42cae0fdf246aa2616675f74e04a9c48b",
+        "size_bytes": 161768
+      },
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000002000.json": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000002000.json",
+        "sha256": "24c27ba088d462823857b7183ec4a053230bdf0246a0e50a3b0f2f3123179299",
+        "size_bytes": 264010
+      },
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000004000.array-26051b4525cd8a481ce3f926b2124dd725dc2c53e048de6d77f4db7f49f5ac5d.npz": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000004000.array-26051b4525cd8a481ce3f926b2124dd725dc2c53e048de6d77f4db7f49f5ac5d.npz",
+        "sha256": "26051b4525cd8a481ce3f926b2124dd725dc2c53e048de6d77f4db7f49f5ac5d",
+        "size_bytes": 161768
+      },
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000004000.json": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000004000.json",
+        "sha256": "490d37582679da0acb3399e8a0ced4bf515fc408925b87929f1e00f6061163e5",
+        "size_bytes": 264072
+      },
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000006000.array-69038ca0a336aab3b37599e2e1dd2e521920052af5c4be979f58e4914f5bada3.npz": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000006000.array-69038ca0a336aab3b37599e2e1dd2e521920052af5c4be979f58e4914f5bada3.npz",
+        "sha256": "69038ca0a336aab3b37599e2e1dd2e521920052af5c4be979f58e4914f5bada3",
+        "size_bytes": 161768
+      },
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000006000.json": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000006000.json",
+        "sha256": "f5fac1cea91e3a4291d72e89dc8f494c2d2a2174190c6ab7035d181f5e04df05",
+        "size_bytes": 264072
+      },
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000008000.array-73573fafdcf2b6343d5de62c14ff367f0b5a6a230bc6a1fbd033032dd3cd3271.npz": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000008000.array-73573fafdcf2b6343d5de62c14ff367f0b5a6a230bc6a1fbd033032dd3cd3271.npz",
+        "sha256": "73573fafdcf2b6343d5de62c14ff367f0b5a6a230bc6a1fbd033032dd3cd3271",
+        "size_bytes": 161768
+      },
+      "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000008000.json": {
+        "path": "arms/stellar_flyby/checkpoints/run-daba53f9cf8779544dd2bcd9d89bfad9168cc7d7c14042e0023359e7e7045969/checkpoint_00000000000000008000.json",
+        "sha256": "37ddabe29bacaad769b00b074003969d218923359ad4ac7c41d4f87064c05ae1",
+        "size_bytes": 264073
+      },
+      "arms/stellar_flyby/segments/segment-00000000000000002000.json": {
+        "path": "arms/stellar_flyby/segments/segment-00000000000000002000.json",
+        "sha256": "c3a4c3b9b35e85c8896e92941934ae1bb29e964193a79982cc69cd7f8b9a3460",
+        "size_bytes": 2328
+      },
+      "arms/stellar_flyby/segments/segment-00000000000000004000.json": {
+        "path": "arms/stellar_flyby/segments/segment-00000000000000004000.json",
+        "sha256": "8480862da4d548811b9b94a09cc1288773bf4b0872d4280428a1cffac5dca679",
+        "size_bytes": 2328
+      },
+      "arms/stellar_flyby/segments/segment-00000000000000006000.json": {
+        "path": "arms/stellar_flyby/segments/segment-00000000000000006000.json",
+        "sha256": "0ec17c2e2e313917d3714953f7304be46cd316c6fd4e24c0c1ae3c0b1f3160a4",
+        "size_bytes": 2330
+      },
+      "arms/stellar_flyby/segments/segment-00000000000000008000.json": {
+        "path": "arms/stellar_flyby/segments/segment-00000000000000008000.json",
+        "sha256": "9b282563d716baaa74261c3d1154d7aba85bec602d3408d6cc00051c2d83315b",
+        "size_bytes": 2331
+      }
+    },
+    "content_sha256": "e11f535a659ab2e3b527bb8d19fc0dc6c79f03cb7a8970db7ab9120bde54862b",
+    "latest_checkpoint_content_sha256": "9479f85debe198ee46316943a454a0ba723c06a619906f82ce643df173e3f9d8",
+    "latest_state_sha256": "6f08425dccb49b1115274de0961202b8d0b1fe7a8ed20b3157da396db9af2ed9",
+    "protocol_sha256": "b469195deb7dd67d9b6bc5131bab6a44632ebb43ee5b6cc000fe8a7969c3c729",
+    "run_id": "jx-m2-qualification-stellar_flyby-v1",
+    "schema": "jxplanetx.cuda-four-arm-execution-evidence.v1",
+    "total_steps": 8000,
+    "uncommitted_orphan_artifact_count": 0,
+    "uncommitted_orphan_artifacts": {},
+    "uncommitted_orphan_semantics": "CONTENT_ADDRESSED_NPZ_PRESERVED_AFTER_INTERRUPTED_PRE_RECORD_COMMIT; NOT_A_COMMITTED_CHECKPOINT_AND_NOT_IN_THE_HASH_CHAIN"
+  },
+  "gates": {
+    "all_endpoint_arrays_finite": true,
+    "all_pass": true,
+    "committed_checkpoint_segment_roster_hashes_and_chain_verified": true,
+    "every_route_source_segment_matches_exact_source_path": true,
+    "every_routed_tracer_exact_full_stage_replay_passed": true,
+    "per_tracer_route_capacity_not_exhausted": true,
+    "reached_exact_endpoint": true,
+    "removal_ledger_matches_terminal_lifecycle": true,
+    "route_ledger_matches_route_counts": true,
+    "runtime_method_kernel_and_implementation_bound": true,
+    "source_endpoint_matches_all_horizon_source_path_audit": true,
+    "uncommitted_checkpoint_array_orphans_preserved_separately": true
+  },
+  "interpretation_limits": [
+    "This is a current-epoch intervention screen, not a primordial reconstruction.",
+    "The tracer population is a deterministic synthetic engineering fixture, not observed, Rubin-selected, survey-debiased, or fitted.",
+    "Each non-control arm is one synthetic point assumption, not a prior distribution or population model.",
+    "A passing source is active and mutually gravitating for the complete finite integration; the nominal passage window is diagnostic only.",
+    "The fixed 0.125-year lattice has not established timestep convergence for 1-Myr candidate contrasts.",
+    "The finite passing-source fixtures omit the Galactic tide and the Galactic/stellar environment before and after the modeled interval.",
+    "Removal surfaces are operational numerical boundaries, not physical impact or definitive ejection classifications.",
+    "The screen cannot detect, exclude, or prefer Planet Nine, a stellar flyby, or a rogue planet.",
+    "No result from this runner qualifies a 4.5-Gyr history or accuracy claim."
+  ],
+  "matched_schedule_set_sha256": "db611e85ca64b486f4558f04d01dfadc1dfbd53cd6ec7a3774bb4f07a978b6fc",
+  "measurements": {
+    "active_bound_count": 2046,
+    "active_eccentricity": {
+      "maximum": 1.059786247104584,
+      "median": 0.8302544915743262,
+      "minimum": 0.22262137427931808,
+      "q05": 0.4526282000187876,
+      "q95": 0.9479318021700825
+    },
+    "active_inclination_rad": {
+      "maximum": 2.662163229340956,
+      "median": 0.34735412545831384,
+      "minimum": 0.00020034581112715082,
+      "q05": 0.03613066242881737,
+      "q95": 0.6694910653870594
+    },
+    "active_perihelion_AU": {
+      "maximum": 306.84675118598216,
+      "median": 55.394007050899646,
+      "minimum": 13.598049707845782,
+      "q05": 33.08094843912755,
+      "q95": 79.95117846067564
+    },
+    "active_semimajor_axis_AU": {
+      "maximum": 2731.9100481507185,
+      "median": 318.6655611054245,
+      "minimum": 99.46708214238373,
+      "q05": 112.61668481160511,
+      "q95": 898.4830910373714
+    },
+    "active_tracer_count": 2048,
+    "encounter_route_count": 50,
+    "endpoint_minimum_massive_source_pair_distance_AU": 5.4524462685914585,
+    "ever_unbound_count": 2,
+    "exploratory_tail_counts": {
+      "active_a_ge_250_AU_q_ge_40_AU": 1014,
+      "active_q_ge_40_AU": 1667,
+      "active_q_ge_50_AU": 1242
+    },
+    "lifecycle_counts": {
+      "ACTIVE": 2048
+    },
+    "maximum_route_capacity_fraction_used": 0.0030517578125,
+    "maximum_route_count_for_one_tracer": 50,
+    "minimum_evaluated_source_distance_AU": 2.1876413076463646,
+    "minimum_remaining_route_capacity_for_any_tracer": 16334,
+    "orbital_element_semantics": "INSTANTANEOUS_PRIMARY_RELATIVE_TWO_BODY_OSCULATING_PROXIES; OTHER_MASSIVE_SOURCES_OMITTED_FROM_ELEMENT_CONVERSION; SEMIMAJOR_AXIS_REPORTED_ONLY_FOR_BOUND_STATES",
+    "route_capacity_per_tracer": 16384,
+    "routed_tracer_count": 1,
+    "tracer_count": 2048
+  },
+  "population_transform_receipt_sha256": "b360a00ccbc9f09ec34376e673c9855fcd523bea0f3a82ceda1b8b794d5fffb6",
+  "protocol_sha256": "b469195deb7dd67d9b6bc5131bab6a44632ebb43ee5b6cc000fe8a7969c3c729",
+  "removal_event_counts": {},
+  "route_reason_counts": {
+    "SWEPT_FLOOR": 50
+  },
+  "route_source_membership_audit": {
+    "all_route_source_segments_exactly_matched": true,
+    "content_sha256": "f4c0d3737be696d892b6ee1a9671d1f376438e48043317046d24ce87a341ad8c",
+    "route_count": 50,
+    "unique_routed_source_steps": 50
+  },
+  "routed_tracer_replay_audit": {
+    "content_sha256": "82fa2688e5371e199ce16180d1694f4fed491e600446c797371ebb736099d30f",
+    "exact_replay_passed": true,
+    "routed_tracer_count": 1
+  },
+  "run_id": "jx-m2-qualification-stellar_flyby-v1",
+  "runtime_identity": {
+    "array_backend_device": "cuda:0",
+    "array_backend_id": "cupy",
+    "cpu_fingerprint": {
+      "fields": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "sha256": "fb9f92dbf8d64f9d37bbc5b06001f3f3dc46a2431f28f92774f000275ca0ba2e"
+    },
+    "cpu_machine": "x86_64",
+    "cpu_processor": "",
+    "cpu_release": "7.0.0-34-generic",
+    "cpu_system": "Linux",
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_options": [
+      "--std=c++11",
+      "--fmad=false",
+      "--ftz=false",
+      "--prec-div=true",
+      "--prec-sqrt=true"
+    ],
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_AND_CUDA_RUNTIME_DEVICE",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_multiprocessor_count": 36,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_total_global_memory_bytes": 16616521728,
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "encounter_route_method": "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2",
+    "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+    "kernel_id": "jx.cuda.massless-tracer.restricted-kdk.v2",
+    "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+    "libc": [
+      "glibc",
+      "2.43"
+    ],
+    "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+    "numpy_build_configuration_sha256": "0783bfc9b478a6155574783e6133a27979667d89e3ad5b86385d921e68a6de67",
+    "numpy_version": "2.3.5",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "runtime_binary_sha256": {
+      "cupy_cuda_compiler": "09226d26ab41bf6e7b5b6e57b59187b4c3a5637690747af9a83d288a87d0fb6e",
+      "cupy_cuda_runtime_extension": "bedb6d887526a7726ee3b07d5f8d85b8385a66203261c30511851882bdc1c1a9",
+      "cupy_nvrtc_extension": "e38ebdee2e7f2cb1bdaf97d19a5ca43b1baa485ee462f5340bd385b848830c0f",
+      "numpy_multiarray_umath": "ed49278029e17db9fc349d4181a2ee5a064a86bbb1241141592b8653824fd102",
+      "python_executable": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+      "scipy_dop853_coefficients": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001",
+      "scipy_ivp_base": "4e70402b4c092e0a502dba07e33f91784e1e6d3645710cc8a916fd6e3ead7548",
+      "scipy_ivp_common": "195293731f903bb58faf67a33408bde1a11d32fd37cc554eaf6e10d70dab6762",
+      "scipy_ivp_rk": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+    },
+    "scipy_build_configuration_sha256": "19205762e564754132e90ded8bd1703ecac4d61e208cf5dfa7021eec31a83429",
+    "scipy_version": "1.17.0"
+  },
+  "runtime_identity_receipt_sha256": "6187423604cb4af0caef96b02d833427a01af5f15d390ceae4e1c244fad3acfb",
+  "schedule_sha256": "3b77e7528c4029cbb82ef5eb3408c5e6573beadc4cd750e40c2388248a2bc5aa",
+  "schema": "jxplanetx.cuda-four-arm-result.v1",
+  "source_path_audit": {
+    "content_sha256": "0a7557b7a68d3d1b99398fe0f474b776f2110c658f4c1dff87d1b7008470f08a",
+    "maximum_absolute_relative_energy_drift": 1.2940104805886786e-07,
+    "maximum_linear_momentum_delta_norm": 3.813223380494208e-13,
+    "maximum_relative_angular_momentum_vector_drift": 5.872340062778266e-15,
+    "primary_relative_source_minima": [
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 969.75,
+        "minimum_global_step": 7758,
+        "minimum_lattice_distance_AU": 4.946516789432448,
+        "right_source_id": "Jupiter",
+        "right_source_index": 1,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 183.25,
+        "minimum_global_step": 1466,
+        "minimum_lattice_distance_AU": 9.012844393257755,
+        "right_source_id": "Saturn",
+        "right_source_index": 2,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 529.25,
+        "minimum_global_step": 4234,
+        "minimum_lattice_distance_AU": 18.25350991453205,
+        "right_source_id": "Uranus",
+        "right_source_index": 3,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 846.25,
+        "minimum_global_step": 6770,
+        "minimum_lattice_distance_AU": 29.782834395609783,
+        "right_source_id": "Neptune",
+        "right_source_index": 4,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 211.25,
+        "minimum_global_step": 1690,
+        "minimum_lattice_distance_AU": 29.645804500919535,
+        "right_source_id": "Pluto",
+        "right_source_index": 5,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 500.125,
+        "minimum_global_step": 4001,
+        "minimum_lattice_distance_AU": 999.3069180389108,
+        "right_source_id": "FLYBY_STAR_SYNTHETIC",
+        "right_source_index": 6,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      }
+    ]
+  },
+  "source_state_sha256": "053e38f66fd435e1a410a11a4e88bf7665de7e1d7db619cad3a03349b502dae8",
+  "stage_id": "qualification",
+  "status": "COMPLETED_ARM_SCREEN_NOT_INFERENCE"
+}

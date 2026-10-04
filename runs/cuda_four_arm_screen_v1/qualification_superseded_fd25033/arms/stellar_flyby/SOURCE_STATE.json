@@ -1,0 +1,63 @@
+{
+  "arrays": {
+    "gm_AU3_per_year2": {
+      "dtype": "<f8",
+      "sha256": "90e5bef9c248b53fe1413a72b904432e176a4da99ec08e469672999ca7707d86",
+      "shape": [
+        7
+      ]
+    },
+    "positions_AU": {
+      "dtype": "<f8",
+      "sha256": "18502debdcbe7457bc3d165d3e0178e9534b8c2a6bbc1d7475c07e7e7bd24234",
+      "shape": [
+        7,
+        3
+      ]
+    },
+    "velocities_AU_per_year": {
+      "dtype": "<f8",
+      "sha256": "900193ad54228ae1d955ea8d7b648bb58c0105adaa6635d1e75c197201fdb711",
+      "shape": [
+        7,
+        3
+      ]
+    }
+  },
+  "base_artifact_id": "jx.de441-population.outer-control-state.v1",
+  "base_artifact_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+  "base_prefix_sha256": "07e487837b1e7f78b260ae95cb5197c8c9a0d067c88b2788a2f0b6ebd62d969d",
+  "base_source_count": 6,
+  "epoch_jd_tdb_hex": "0x1.2c70840000000p+21",
+  "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+  "initial_condition_scope": "CURRENT_EPOCH_INTERVENTION_SCREEN_NOT_PRIMORDIAL",
+  "origin": "INNER_SYSTEM_MONOPOLE_CENTER_AT_T0",
+  "primary_source_id": "Sun",
+  "primordial_initial_conditions": false,
+  "project_scope": "SCREENING_ONLY",
+  "schema": "jxplanetx.cuda-mechanism-source-state.v1",
+  "scientific_classification": "MODEL_OUTPUT",
+  "snapshot_id": "de441-current-epoch-outer-control-jd2461200.5:stellar_flyby",
+  "source_ids": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto",
+    "FLYBY_STAR_SYNTHETIC"
+  ],
+  "source_roles": [
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "SYNTHETIC_FLYBY_STAR"
+  ],
+  "state_classification": "RECONSTRUCTED_DE441_BACKBONE_PLUS_ASSUMED_INNER_SYSTEM_MONOPOLE_PLUS_SYNTHETIC_FLYBY_STAR",
+  "state_sha256": "053e38f66fd435e1a410a11a4e88bf7665de7e1d7db619cad3a03349b502dae8",
+  "time_scale": "TDB",
+  "unit_system_id": "AU-YEAR"
+}

@@ -1,0 +1,63 @@
+{
+  "arrays": {
+    "gm_AU3_per_year2": {
+      "dtype": "<f8",
+      "sha256": "e6b07a6fee643a60fb21f0e46722f2d18ee50587bbf2d1471b1696efdf8f9647",
+      "shape": [
+        7
+      ]
+    },
+    "positions_AU": {
+      "dtype": "<f8",
+      "sha256": "d2c5e9047bf237549eed77f4276b79ea482b3451fbb1d48b49b0ad16642c669e",
+      "shape": [
+        7,
+        3
+      ]
+    },
+    "velocities_AU_per_year": {
+      "dtype": "<f8",
+      "sha256": "5c6904b96393a2a096ef2b5dd3033010671bc09ae2bed6a442f94adddb2027b1",
+      "shape": [
+        7,
+        3
+      ]
+    }
+  },
+  "base_artifact_id": "jx.de441-population.outer-control-state.v1",
+  "base_artifact_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+  "base_prefix_sha256": "07e487837b1e7f78b260ae95cb5197c8c9a0d067c88b2788a2f0b6ebd62d969d",
+  "base_source_count": 6,
+  "epoch_jd_tdb_hex": "0x1.2c70840000000p+21",
+  "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+  "initial_condition_scope": "CURRENT_EPOCH_INTERVENTION_SCREEN_NOT_PRIMORDIAL",
+  "origin": "INNER_SYSTEM_MONOPOLE_CENTER_AT_T0",
+  "primary_source_id": "Sun",
+  "primordial_initial_conditions": false,
+  "project_scope": "SCREENING_ONLY",
+  "schema": "jxplanetx.cuda-mechanism-source-state.v1",
+  "scientific_classification": "MODEL_OUTPUT",
+  "snapshot_id": "de441-current-epoch-outer-control-jd2461200.5:circular_distant_planet_sensitivity",
+  "source_ids": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto",
+    "P9_SYNTHETIC"
+  ],
+  "source_roles": [
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "SYNTHETIC_DISTANT_PLANET"
+  ],
+  "state_classification": "RECONSTRUCTED_DE441_BACKBONE_PLUS_ASSUMED_INNER_SYSTEM_MONOPOLE_PLUS_SYNTHETIC_DISTANT_PLANET",
+  "state_sha256": "7d7160204fbd0a0903b88fd51bb3bfb6f861f0823421e75209c8194c5571777b",
+  "time_scale": "TDB",
+  "unit_system_id": "AU-YEAR"
+}

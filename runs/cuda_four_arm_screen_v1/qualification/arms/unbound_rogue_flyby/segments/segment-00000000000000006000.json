@@ -1,0 +1,62 @@
+{
+  "checkpoint_content_sha256": "4fa19610580f4fc42fe30ebb29ba967127ae5359e852d2c8d4f0aea363be4e4d",
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "completed_utc": "2026-10-04T21:12:18.923449Z",
+  "elapsed_seconds": 124.32555023301393,
+  "epoch_years": 750.0,
+  "global_step": 6000,
+  "input_state_sha256": "23b3ca58a94bdaffaf690d714a056e3652cb5773f72f261b0599de83796b58cd",
+  "measurements": {
+    "active_bound_count": 2048,
+    "active_eccentricity": {
+      "maximum": 0.973545745133461,
+      "median": 0.8329266391188738,
+      "minimum": 0.22677570263726288,
+      "q05": 0.45349378111106825,
+      "q95": 0.9461515207910882
+    },
+    "active_inclination_rad": {
+      "maximum": 0.7108758655303933,
+      "median": 0.33767053184931806,
+      "minimum": 0.0013195170962810175,
+      "q05": 0.0319815483800092,
+      "q95": 0.6607098415296762
+    },
+    "active_perihelion_AU": {
+      "maximum": 87.50321527275518,
+      "median": 55.16760893208351,
+      "minimum": 26.208720426980996,
+      "q05": 33.3358942049394,
+      "q95": 77.87342725303832
+    },
+    "active_semimajor_axis_AU": {
+      "maximum": 1001.5836973390167,
+      "median": 319.1526474968517,
+      "minimum": 98.66103547671258,
+      "q05": 112.08981877129662,
+      "q95": 897.3244235731403
+    },
+    "active_tracer_count": 2048,
+    "encounter_route_count": 912,
+    "endpoint_minimum_massive_source_pair_distance_AU": 4.598223693512163,
+    "ever_unbound_count": 0,
+    "exploratory_tail_counts": {
+      "active_a_ge_250_AU_q_ge_40_AU": 1027,
+      "active_q_ge_40_AU": 1677,
+      "active_q_ge_50_AU": 1237
+    },
+    "lifecycle_counts": {
+      "ACTIVE": 2048
+    },
+    "maximum_route_capacity_fraction_used": 0.011962890625,
+    "maximum_route_count_for_one_tracer": 196,
+    "minimum_evaluated_source_distance_AU": 2.1838364432307,
+    "minimum_remaining_route_capacity_for_any_tracer": 16188,
+    "orbital_element_semantics": "INSTANTANEOUS_PRIMARY_RELATIVE_TWO_BODY_OSCULATING_PROXIES; OTHER_MASSIVE_SOURCES_OMITTED_FROM_ELEMENT_CONVERSION; SEMIMAJOR_AXIS_REPORTED_ONLY_FOR_BOUND_STATES",
+    "route_capacity_per_tracer": 16384,
+    "routed_tracer_count": 8,
+    "tracer_count": 2048
+  },
+  "schema": "jxplanetx.cuda-four-arm-segment.v1",
+  "state_sha256": "fdcd99d1717475128754440fedd6761e05a9a8025b065807687e61addfd1b1ef"
+}

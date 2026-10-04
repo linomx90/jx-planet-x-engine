@@ -1,0 +1,18 @@
+{
+  "arm_kind": "STELLAR_FLYBY",
+  "content_sha256": "01a97be7e445c42fd6c5895d6bdba8c5e9b457d17c8a147dd5f74647052f2b64",
+  "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+  "exact_replay_passed": true,
+  "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+  "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+  "main_route_ledger_sha256": "a51ded84e1b5163621e0b17cc831d5967c0bbce7fb57f1a5b2ecedef667364ff",
+  "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+  "protocol_sha256": "22af4801593c145787191f26d1a1797464eb9edde21fce3e427e3aaf349e803f",
+  "routed_tracer_count": 1,
+  "routed_tracer_ids": [
+    1655
+  ],
+  "schedule_sha256": "3b77e7528c4029cbb82ef5eb3408c5e6573beadc4cd750e40c2388248a2bc5aa",
+  "schema": "jxplanetx.cuda-four-arm-routed-tracer-replay.v1",
+  "scope": "same-code full-stage replay of every routed tracer from its frozen initial state; tracer-count independence check, not independent reproduction"
+}

@@ -1,0 +1,409 @@
+{
+  "all_lattice_nodes_scanned_for_minima": true,
+  "arm_kind": "UNBOUND_ROGUE_FLYBY",
+  "checkpoint_source_state_sha256": {
+    "2000": "81d7dd948e7e622d49c870847d3a5e0f02b7cb6ca1d0b7458acae384645c114d",
+    "4000": "e7f99fb065e52d6819ad613e1c64c3efbc03a4189c6eb836995e70370f197101",
+    "6000": "ffe8bf342bdeb8b71fe9b0e58e404aa6baf6683d77484f75585c898570d5d7f4",
+    "8000": "c042348eae65ee581ec6e375961488d258547d3e0d6ee22f21dfb094a60e58fe"
+  },
+  "conservation_diagnostics": [
+    {
+      "elapsed_years": 0.0,
+      "global_step": 0,
+      "gm_weighted_angular_momentum": [
+        0.02300574296180887,
+        -0.023372557368049354,
+        0.9902609302038278
+      ],
+      "gm_weighted_linear_momentum": [
+        -0.09576029124873744,
+        -0.02286862421548297,
+        0.002266906692407626
+      ],
+      "linear_momentum_delta_norm": 0.0,
+      "relative_angular_momentum_vector_drift": 0.0,
+      "relative_energy_drift": 0.0,
+      "scaled_source_energy": -0.1688553074419431
+    },
+    {
+      "elapsed_years": 1000.0,
+      "global_step": 8000,
+      "gm_weighted_angular_momentum": [
+        0.023005742961807855,
+        -0.02337255736804876,
+        0.9902609302038295
+      ],
+      "gm_weighted_linear_momentum": [
+        -0.09576029124873706,
+        -0.022868624215484412,
+        0.0022669066924076286
+      ],
+      "linear_momentum_delta_norm": 1.4946857550457401e-15,
+      "relative_angular_momentum_vector_drift": 2.1506908354067944e-15,
+      "relative_energy_drift": 5.245957478304935e-05,
+      "scaled_source_energy": -0.16884644936431484
+    }
+  ],
+  "conservation_maximum_semantics": "ALL_FIXED_STEP_LATTICE_NODES",
+  "content_sha256": "1e445da59dcb880dceea84bf0f6fc5b5dbca336d8f5c9a6fc26f71200d31e407",
+  "endpoint_semantic_array_sha256": "c042348eae65ee581ec6e375961488d258547d3e0d6ee22f21dfb094a60e58fe",
+  "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+  "interpretation": "massive-source numerical audit for this finite closed schedule; not an observed passage reconstruction",
+  "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+  "maximum_absolute_relative_energy_drift": 0.00013424197042875006,
+  "maximum_linear_momentum_delta_norm": 1.693151486615178e-15,
+  "maximum_relative_angular_momentum_vector_drift": 4.32493870905322e-15,
+  "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+  "primary_relative_source_minima": [
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 969.75,
+      "minimum_global_step": 7758,
+      "minimum_lattice_distance_AU": 4.946516601165312,
+      "right_source_id": "Jupiter",
+      "right_source_index": 1,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 183.25,
+      "minimum_global_step": 1466,
+      "minimum_lattice_distance_AU": 9.012841439004884,
+      "right_source_id": "Saturn",
+      "right_source_index": 2,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 529.25,
+      "minimum_global_step": 4234,
+      "minimum_lattice_distance_AU": 18.253714763450912,
+      "right_source_id": "Uranus",
+      "right_source_index": 3,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 846.25,
+      "minimum_global_step": 6770,
+      "minimum_lattice_distance_AU": 29.782797324143395,
+      "right_source_id": "Neptune",
+      "right_source_index": 4,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 211.25,
+      "minimum_global_step": 1690,
+      "minimum_lattice_distance_AU": 29.645348642941332,
+      "right_source_id": "Pluto",
+      "right_source_index": 5,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 478.25,
+      "minimum_global_step": 3826,
+      "minimum_lattice_distance_AU": 72.87105061468786,
+      "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+      "right_source_index": 6,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    }
+  ],
+  "protocol_sha256": "22af4801593c145787191f26d1a1797464eb9edde21fce3e427e3aaf349e803f",
+  "runtime_identity": {
+    "array_backend_device": "cuda:0",
+    "array_backend_id": "cupy",
+    "cpu_fingerprint": {
+      "fields": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "sha256": "fb9f92dbf8d64f9d37bbc5b06001f3f3dc46a2431f28f92774f000275ca0ba2e"
+    },
+    "cpu_machine": "x86_64",
+    "cpu_processor": "",
+    "cpu_release": "7.0.0-34-generic",
+    "cpu_system": "Linux",
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_options": [
+      "--std=c++11",
+      "--fmad=false",
+      "--ftz=false",
+      "--prec-div=true",
+      "--prec-sqrt=true"
+    ],
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_AND_CUDA_RUNTIME_DEVICE",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_multiprocessor_count": 36,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_total_global_memory_bytes": 16616521728,
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "encounter_route_method": "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2",
+    "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+    "kernel_id": "jx.cuda.massless-tracer.restricted-kdk.v2",
+    "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+    "libc": [
+      "glibc",
+      "2.43"
+    ],
+    "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+    "numpy_build_configuration_sha256": "0783bfc9b478a6155574783e6133a27979667d89e3ad5b86385d921e68a6de67",
+    "numpy_version": "2.3.5",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "runtime_binary_sha256": {
+      "cupy_cuda_compiler": "09226d26ab41bf6e7b5b6e57b59187b4c3a5637690747af9a83d288a87d0fb6e",
+      "cupy_cuda_runtime_extension": "bedb6d887526a7726ee3b07d5f8d85b8385a66203261c30511851882bdc1c1a9",
+      "cupy_nvrtc_extension": "e38ebdee2e7f2cb1bdaf97d19a5ca43b1baa485ee462f5340bd385b848830c0f",
+      "numpy_multiarray_umath": "ed49278029e17db9fc349d4181a2ee5a064a86bbb1241141592b8653824fd102",
+      "python_executable": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+      "scipy_dop853_coefficients": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001",
+      "scipy_ivp_base": "4e70402b4c092e0a502dba07e33f91784e1e6d3645710cc8a916fd6e3ead7548",
+      "scipy_ivp_common": "195293731f903bb58faf67a33408bde1a11d32fd37cc554eaf6e10d70dab6762",
+      "scipy_ivp_rk": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+    },
+    "scipy_build_configuration_sha256": "19205762e564754132e90ded8bd1703ecac4d61e208cf5dfa7021eec31a83429",
+    "scipy_version": "1.17.0"
+  },
+  "schedule_sha256": "1640352c16252bfab61a3c45be2f6687ba0dd2e36211a88ca8b15554f1f6e989",
+  "schema": "jxplanetx.cuda-four-arm-source-path-audit.v1",
+  "source_diagnostic_cadence_years": 1000.0,
+  "source_pair_minima": [
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 969.75,
+      "minimum_global_step": 7758,
+      "minimum_lattice_distance_AU": 4.946516601165312,
+      "right_source_id": "Jupiter",
+      "right_source_index": 1,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 183.25,
+      "minimum_global_step": 1466,
+      "minimum_lattice_distance_AU": 9.012841439004884,
+      "right_source_id": "Saturn",
+      "right_source_index": 2,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 529.25,
+      "minimum_global_step": 4234,
+      "minimum_lattice_distance_AU": 18.253714763450912,
+      "right_source_id": "Uranus",
+      "right_source_index": 3,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 846.25,
+      "minimum_global_step": 6770,
+      "minimum_lattice_distance_AU": 29.782797324143395,
+      "right_source_id": "Neptune",
+      "right_source_index": 4,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 211.25,
+      "minimum_global_step": 1690,
+      "minimum_lattice_distance_AU": 29.645348642941332,
+      "right_source_id": "Pluto",
+      "right_source_index": 5,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Sun",
+      "left_source_index": 0,
+      "minimum_elapsed_years": 478.25,
+      "minimum_global_step": 3826,
+      "minimum_lattice_distance_AU": 72.87105061468786,
+      "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+      "right_source_index": 6,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Jupiter",
+      "left_source_index": 1,
+      "minimum_elapsed_years": 949.625,
+      "minimum_global_step": 7597,
+      "minimum_lattice_distance_AU": 3.7558606769614733,
+      "right_source_id": "Saturn",
+      "right_source_index": 2,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Jupiter",
+      "left_source_index": 1,
+      "minimum_elapsed_years": 108.75,
+      "minimum_global_step": 870,
+      "minimum_lattice_distance_AU": 12.841390350712878,
+      "right_source_id": "Uranus",
+      "right_source_index": 3,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Jupiter",
+      "left_source_index": 1,
+      "minimum_elapsed_years": 866.375,
+      "minimum_global_step": 6931,
+      "minimum_lattice_distance_AU": 24.61760961877389,
+      "right_source_id": "Neptune",
+      "right_source_index": 4,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Jupiter",
+      "left_source_index": 1,
+      "minimum_elapsed_years": 704.25,
+      "minimum_global_step": 5634,
+      "minimum_lattice_distance_AU": 24.559358002918447,
+      "right_source_id": "Pluto",
+      "right_source_index": 5,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Jupiter",
+      "left_source_index": 1,
+      "minimum_elapsed_years": 484.0,
+      "minimum_global_step": 3872,
+      "minimum_lattice_distance_AU": 68.2690619796839,
+      "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+      "right_source_index": 6,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Saturn",
+      "left_source_index": 2,
+      "minimum_elapsed_years": 369.625,
+      "minimum_global_step": 2957,
+      "minimum_lattice_distance_AU": 8.710299722021839,
+      "right_source_id": "Uranus",
+      "right_source_index": 3,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Saturn",
+      "left_source_index": 2,
+      "minimum_elapsed_years": 465.375,
+      "minimum_global_step": 3723,
+      "minimum_lattice_distance_AU": 20.13424204474662,
+      "right_source_id": "Neptune",
+      "right_source_index": 4,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Saturn",
+      "left_source_index": 2,
+      "minimum_elapsed_years": 960.75,
+      "minimum_global_step": 7686,
+      "minimum_lattice_distance_AU": 20.173855495243433,
+      "right_source_id": "Pluto",
+      "right_source_index": 5,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Saturn",
+      "left_source_index": 2,
+      "minimum_elapsed_years": 472.125,
+      "minimum_global_step": 3777,
+      "minimum_lattice_distance_AU": 63.862428181029685,
+      "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+      "right_source_index": 6,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Uranus",
+      "left_source_index": 3,
+      "minimum_elapsed_years": 826.25,
+      "minimum_global_step": 6610,
+      "minimum_lattice_distance_AU": 9.76499975942435,
+      "right_source_id": "Neptune",
+      "right_source_index": 4,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Uranus",
+      "left_source_index": 3,
+      "minimum_elapsed_years": 965.75,
+      "minimum_global_step": 7726,
+      "minimum_lattice_distance_AU": 12.229026943180827,
+      "right_source_id": "Pluto",
+      "right_source_index": 5,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Uranus",
+      "left_source_index": 3,
+      "minimum_elapsed_years": 494.75,
+      "minimum_global_step": 3958,
+      "minimum_lattice_distance_AU": 56.770634492716084,
+      "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+      "right_source_index": 6,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Neptune",
+      "left_source_index": 4,
+      "minimum_elapsed_years": 363.0,
+      "minimum_global_step": 2904,
+      "minimum_lattice_distance_AU": 19.376293673728117,
+      "right_source_id": "Pluto",
+      "right_source_index": 5,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Neptune",
+      "left_source_index": 4,
+      "minimum_elapsed_years": 501.75,
+      "minimum_global_step": 4014,
+      "minimum_lattice_distance_AU": 54.31481441616421,
+      "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+      "right_source_index": 6,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    },
+    {
+      "left_source_id": "Pluto",
+      "left_source_index": 5,
+      "minimum_elapsed_years": 490.125,
+      "minimum_global_step": 3921,
+      "minimum_lattice_distance_AU": 87.32454352050482,
+      "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+      "right_source_index": 6,
+      "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+    }
+  ],
+  "step_years": 0.125,
+  "total_steps": 8000
+}

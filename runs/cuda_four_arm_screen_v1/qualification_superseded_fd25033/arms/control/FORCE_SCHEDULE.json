@@ -1,0 +1,98 @@
+{
+  "arm_kind": "KNOWN_PLANETS_ONLY",
+  "base_source_ids": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto"
+  ],
+  "base_source_prefix_sha256": "07e487837b1e7f78b260ae95cb5197c8c9a0d067c88b2788a2f0b6ebd62d969d",
+  "claims": {
+    "four_point_five_gyr_accuracy_qualified": false,
+    "planet_nine_detected": false,
+    "planet_nine_excluded": false,
+    "primordial_history_reconstructed": false,
+    "rubin_data_fitted": false,
+    "stellar_flyby_inferred": false,
+    "unbound_rogue_flyby_inferred": false
+  },
+  "clock": {
+    "direction": "FORWARD",
+    "end_global_step_exclusive": 8000,
+    "start_global_step": 0,
+    "step_years_hex": "0x1.0000000000000p-3"
+  },
+  "diagnostic_window": null,
+  "force_semantics": {
+    "massive_sources": "FULL_MUTUAL_NEWTONIAN_ALL_ACTIVE_SOURCES",
+    "source_activity": "FIXED_ROSTER_FULL_HORIZON_NO_FORCE_SWITCHES",
+    "source_integration": "FIXED_STEP_INERTIAL_KICK_DRIFT_KICK",
+    "tracer_backreaction": "EXACTLY_MASSLESS_NO_BACKREACTION",
+    "tracers": "DIRECT_NEWTONIAN_FROM_ALL_ACTIVE_SOURCES"
+  },
+  "force_transition_steps": [],
+  "initial_condition_scope": "CURRENT_EPOCH_INTERVENTION_SCREEN_NOT_PRIMORDIAL",
+  "matched_set_id": "jx-de441-current-epoch-four-mechanism-qualification-v1",
+  "perturber": null,
+  "primary_source_id": "Sun",
+  "primordial_initial_conditions": false,
+  "project_scope": "SCREENING_ONLY",
+  "schedule_id": "jx-de441-current-epoch-four-mechanism-qualification-v1:known_planets_only",
+  "schedule_sha256": "26ceae200239f006b194cd5581312d3c552c7755b7e9145b24cc17e066f6ec0f",
+  "schema": "jxplanetx.cuda-closed-force-schedule.v1",
+  "scientific_classification": "MODEL_OUTPUT",
+  "source_activity": [
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Sun",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Jupiter",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Saturn",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Uranus",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Neptune",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Pluto",
+      "start_global_step": 0
+    }
+  ],
+  "source_ids": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto"
+  ],
+  "source_state_sha256": "a52812117c6f8d9153ae64c480314e51551add6bd72b18594a1f58938a612889",
+  "unsupported_capabilities": [
+    "ARBITRARY_FORCE_CALLBACKS",
+    "SOURCE_ACTIVATION_DEACTIVATION_OR_GM_RAMP",
+    "PRESCRIBED_PERTURBER_EPHEMERIS",
+    "MASSIVE_SOURCE_COLLISION_MERGER_OR_REMOVAL",
+    "MASSIVE_SOURCE_ADAPTIVE_ENCOUNTER_ROUTING",
+    "BINARY_OR_MULTIPLE_SIMULTANEOUS_PERTURBERS",
+    "GENERAL_RELATIVITY",
+    "GALACTIC_TIDE_OR_STELLAR_HISTORY_ENSEMBLE",
+    "PRIMORDIAL_HISTORY_OR_4P5_GYR_QUALIFICATION"
+  ]
+}

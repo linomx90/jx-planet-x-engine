@@ -1,0 +1,49 @@
+{
+  "claims": {
+    "coordinate_transform_adds_information": false,
+    "observed_population": false,
+    "primordial_population": false,
+    "rubin_selected": false,
+    "survey_debiased": false
+  },
+  "classification": "MODEL_OUTPUT / SYNTHETIC_POPULATION_REFRAME_ONLY",
+  "content_sha256": "b360a00ccbc9f09ec34376e673c9855fcd523bea0f3a82ceda1b8b794d5fffb6",
+  "input_artifact": {
+    "artifact_id": "cuda-massless-tracer-acceptance-v3-initial-state",
+    "population_description": "deterministic synthetic a=100..1000 AU, q=31..80 AU; not observed, primordial, Rubin-selected, or survey-debiased",
+    "semantic_array_sha256": "63649ce3af1661c8369a896ae98240ef5f7cd3e64f38eaabfeba64d52af62c4a",
+    "sha256": "ebb4d6b8952e78a6eb91e9591c2ddff36831f3f92b98952a9f50da802e82f048"
+  },
+  "output": {
+    "semantic_array_sha256": "17c356561f46456abe061a9f08b03579ded33d8dc3a9980297faad0fcb079e3f",
+    "sun_relative_phase_space_preserved": true,
+    "tracer_count": 16800
+  },
+  "schema": "jxplanetx.cuda-four-arm-population-transform.v1",
+  "target_source_state": {
+    "artifact_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+    "epoch_jd_tdb_hex": "0x1.2c70840000000p+21",
+    "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+    "origin": "INNER_SYSTEM_MONOPOLE_CENTER_AT_T0",
+    "source_state_sha256": "a52812117c6f8d9153ae64c480314e51551add6bd72b18594a1f58938a612889",
+    "sun_position_AU_hex": [
+      "0x0.0p+0",
+      "0x0.0p+0",
+      "0x0.0p+0"
+    ],
+    "sun_velocity_AU_per_year_hex": [
+      "0x0.0p+0",
+      "0x0.0p+0",
+      "0x0.0p+0"
+    ]
+  },
+  "transform": {
+    "identity_preservation": "TRACER_UINT64_IDS_UNCHANGED",
+    "orientation_assumption": "the synthetic fixture reference plane is identified with the DE441 ecliptic axes; this arbitrary engineering convention carries no observational orientation information",
+    "position": "r_out=(r_in-r_acceptance_sun)+r_de441_sun",
+    "resampling": "NONE",
+    "rotation": "NONE",
+    "selection": "IMMUTABLE_PREFIX_BY_ACCEPTANCE_ARRAY_ORDER",
+    "velocity": "v_out=(v_in-v_acceptance_sun)+v_de441_sun"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "all_route_source_segments_exactly_matched": true,
+  "arm_kind": "CIRCULAR_DISTANT_PLANET_SENSITIVITY",
+  "content_sha256": "d34b70ce194989b591aea5b6b7148366e30de0da96334a733383acb92d08ba5d",
+  "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+  "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+  "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+  "protocol_sha256": "b469195deb7dd67d9b6bc5131bab6a44632ebb43ee5b6cc000fe8a7969c3c729",
+  "regenerated_source_endpoint_sha256": "eb2f390bd29838171c64def751e1670f270d34f213bcb5e02da9ec20fc4ae284",
+  "route_count": 50,
+  "schedule_sha256": "55f1278da2afd73972c97fbd4a6bc475738f43992c2e5ac33327fb1a9a9141fb",
+  "schema": "jxplanetx.cuda-four-arm-route-source-membership.v1",
+  "scope": "exact membership of persisted route source segments in the same-code KDK source path; not independent reproduction",
+  "step_years": 0.125,
+  "total_steps": 8000,
+  "unique_routed_source_steps": 50
+}

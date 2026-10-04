@@ -1,0 +1,146 @@
+{
+  "backend": {
+    "backend_id": "cupy",
+    "device": "cuda:0",
+    "source_path_steps_per_chunk": 65536,
+    "threads_per_block": 128
+  },
+  "bindings": {
+    "acceptance_protocol_sha256": "0beda4fdfb98394dd7d0fc505b46da94b01ea8adcbaac9769251294ca1b3e75b",
+    "acceptance_state_sha256": "ebb4d6b8952e78a6eb91e9591c2ddff36831f3f92b98952a9f50da802e82f048",
+    "de441_control_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+    "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "git": {
+      "branch": "research/cuda-massless-tracer-20261004",
+      "clean_worktree_claimed": false,
+      "head": "6bc31dbbdc2238f1a672942151f0f7e8dfc1dce6",
+      "main": "aa36f8f1cb5852b8b5bb34c7ac476a8e35025e84"
+    },
+    "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+    "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+    "mechanism_schedule_source_sha256": "3465feef5b9e8fb7422a95fa4ad41acb4ae511be0289fdfb6d50ffa51edbfcaf",
+    "runner_sha256": "444c973c4b34cdffb8389399538610bd12921bb427b9d85c87df581b6098be32"
+  },
+  "claims": {
+    "four_point_five_gyr_accuracy_qualified": false,
+    "planet_nine_detected": false,
+    "planet_nine_excluded": false,
+    "primordial_history_reconstructed": false,
+    "rubin_data_fitted": false,
+    "stellar_flyby_inferred": false,
+    "unbound_rogue_flyby_inferred": false
+  },
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "content_sha256": "b469195deb7dd67d9b6bc5131bab6a44632ebb43ee5b6cc000fe8a7969c3c729",
+  "integrator": {
+    "encounter_route_atol_hex": "0x1.6849b86a12b9bp-47",
+    "encounter_route_maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+    "encounter_route_method": "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2",
+    "encounter_route_rtol_hex": "0x1.19799812dea11p-40",
+    "event_distance_absolute_tolerance_floor_AU_hex": "0x1.5fd7fe1796495p-37",
+    "event_distance_effective_tolerance_semantics": "MAX(ABSOLUTE_FLOOR,256*BINARY64_EPS*MAX_COORDINATE_SCALE)",
+    "event_time_tolerance_fraction_hex": "0x1.19799812dea11p-40",
+    "maximum_encounter_routes_per_tracer": 16384,
+    "maximum_event_locator_accepted_steps": 100000,
+    "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+    "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+    "outward_event_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+    "step_years_hex": "0x1.0000000000000p-3"
+  },
+  "interpretation_limits": [
+    "This is a current-epoch intervention screen, not a primordial reconstruction.",
+    "The tracer population is a deterministic synthetic engineering fixture, not observed, Rubin-selected, survey-debiased, or fitted.",
+    "Each non-control arm is one synthetic point assumption, not a prior distribution or population model.",
+    "A passing source is active and mutually gravitating for the complete finite integration; the nominal passage window is diagnostic only.",
+    "The fixed 0.125-year lattice has not established timestep convergence for 1-Myr candidate contrasts.",
+    "The finite passing-source fixtures omit the Galactic tide and the Galactic/stellar environment before and after the modeled interval.",
+    "Removal surfaces are operational numerical boundaries, not physical impact or definitive ejection classifications.",
+    "The screen cannot detect, exclude, or prefer Planet Nine, a stellar flyby, or a rogue planet.",
+    "No result from this runner qualifies a 4.5-Gyr history or accuracy claim."
+  ],
+  "numerical_scope": {
+    "promotion_rule": "Before interpreting any selected contrast, replay a frozen shared subset of the control and selected arm at 0.0625 year with identical physical initial bytes and compare predeclared endpoint/tail metrics.",
+    "this_run_is_a_single_timestep_screen": true,
+    "timestep_convergence_claimed": false
+  },
+  "population": {
+    "selection": "prefix [0:2048] in immutable acceptance order",
+    "transform_receipt_sha256": "b360a00ccbc9f09ec34376e673c9855fcd523bea0f3a82ceda1b8b794d5fffb6",
+    "transformed_population_sha256": "17c356561f46456abe061a9f08b03579ded33d8dc3a9980297faad0fcb079e3f"
+  },
+  "qualification_gates": {
+    "all_endpoint_arrays_finite": true,
+    "all_requested_arms_reach_exact_endpoint": true,
+    "committed_checkpoint_segment_roster_hashes_and_chain_verified": true,
+    "every_route_source_segment_matches_exact_source_path": true,
+    "every_routed_tracer_exact_full_stage_replay_passed": true,
+    "matched_base_source_prefix_bytes": true,
+    "matched_initial_tracer_bytes": true,
+    "removal_ledger_matches_terminal_lifecycle": true,
+    "route_ledger_matches_route_counts": true,
+    "runtime_method_kernel_and_implementation_bound": true,
+    "source_endpoint_matches_all_horizon_source_path_audit": true,
+    "uncommitted_checkpoint_array_orphans_preserved_separately": true
+  },
+  "route_ledger_budget": {
+    "maximum_routes_per_tracer": 16384,
+    "maximum_total_route_records": 33554432,
+    "semantics": "fail-closed capacity ceiling, not an expected count; observed maximum and remaining per-tracer headroom are reported at every checkpoint"
+  },
+  "run_family": "jxplanetx.cuda-four-arm-mechanism-screen.v1",
+  "safety": {
+    "other_source_radius_semantics": "OPERATIONAL_REMOVAL_NOT_IMPACT_PHYSICS",
+    "outer_surface_semantics": "10000_AU_MODEL_DOMAIN_EXIT_NOT_DEFINITIVE_EJECTION",
+    "primary_outer_boundary_AU_hex": "0x1.3880000000000p+13",
+    "primary_source_radius_semantics": "16_AU_INNER_MODEL_DOMAIN_EXIT_NEVER_COLLISION",
+    "relative_acceleration_bound_AU_per_year2_hex": "0x1.4000000000000p+3",
+    "removed_lane_semantics": "FROZEN_AT_CONTINUOUSLY_LOCATED_EVENT_STATE"
+  },
+  "schedule_set": {
+    "arm_initial_state_sha256": {
+      "CIRCULAR_DISTANT_PLANET_SENSITIVITY": "7d7160204fbd0a0903b88fd51bb3bfb6f861f0823421e75209c8194c5571777b",
+      "KNOWN_PLANETS_ONLY": "a52812117c6f8d9153ae64c480314e51551add6bd72b18594a1f58938a612889",
+      "STELLAR_FLYBY": "053e38f66fd435e1a410a11a4e88bf7665de7e1d7db619cad3a03349b502dae8",
+      "UNBOUND_ROGUE_FLYBY": "9f56e2b8fdf4a56f72a45a60d89384d7d898fca8ff413c0126b36ac010c6b067"
+    },
+    "arm_schedule_sha256": {
+      "CIRCULAR_DISTANT_PLANET_SENSITIVITY": "55f1278da2afd73972c97fbd4a6bc475738f43992c2e5ac33327fb1a9a9141fb",
+      "KNOWN_PLANETS_ONLY": "26ceae200239f006b194cd5581312d3c552c7755b7e9145b24cc17e066f6ec0f",
+      "STELLAR_FLYBY": "3b77e7528c4029cbb82ef5eb3408c5e6573beadc4cd750e40c2388248a2bc5aa",
+      "UNBOUND_ROGUE_FLYBY": "1640352c16252bfab61a3c45be2f6687ba0dd2e36211a88ca8b15554f1f6e989"
+    },
+    "matched_set_id": "jx-de441-current-epoch-four-mechanism-qualification-v1",
+    "matched_set_sha256": "db611e85ca64b486f4558f04d01dfadc1dfbd53cd6ec7a3774bb4f07a978b6fc",
+    "nominal_passing_source_event_years": 500.0,
+    "passing_source_environment_limit": "finite-start engineering fixture; Galactic tide and Galactic/stellar environment are omitted"
+  },
+  "schema": "jxplanetx.cuda-four-arm-mechanism-screen-protocol.v1",
+  "source_path_audit": {
+    "all_lattice_nodes_used_for_pairwise_minima": true,
+    "diagnostic_cadence_steps": 8000,
+    "diagnostic_cadence_years_hex": "0x1.f400000000000p+9",
+    "quantities": [
+      "all_source_pair_minimum_distance_and_lattice_time",
+      "primary_relative_minimum_distance_and_lattice_time_per_source",
+      "scaled_newtonian_source_energy_drift",
+      "gm_weighted_angular_momentum_drift",
+      "gm_weighted_linear_momentum_drift",
+      "source_endpoint_bitwise_identity_against_tracer_run",
+      "exact_route_source_segment_membership",
+      "full_stage_same_code_replay_of_every_routed_tracer"
+    ]
+  },
+  "stage": {
+    "absolute_initial_epoch_jd_tdb_hex": "0x1.2c70840000000p+21",
+    "checkpoint_policy": "EVERY_ENGINE_SEGMENT_IMMUTABLE_HASH_CHAIN; final short segment allowed",
+    "checkpoint_steps": 2000,
+    "checkpoint_years_hex": "0x1.f400000000000p+7",
+    "clock_semantics": "engine epoch is modeled elapsed years since the separately recorded absolute JD_TDB; JD is never inserted into the year-valued engine clock",
+    "duration_years_hex": "0x1.f400000000000p+9",
+    "engine_epoch_at_global_step_zero_years_hex": "0x0.0p+0",
+    "stage_id": "qualification",
+    "step_years_hex": "0x1.0000000000000p-3",
+    "total_steps": 8000,
+    "tracer_count": 2048
+  }
+}

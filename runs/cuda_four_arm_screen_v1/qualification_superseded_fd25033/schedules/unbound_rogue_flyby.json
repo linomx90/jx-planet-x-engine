@@ -1,0 +1,153 @@
+{
+  "arm_kind": "UNBOUND_ROGUE_FLYBY",
+  "base_source_ids": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto"
+  ],
+  "base_source_prefix_sha256": "07e487837b1e7f78b260ae95cb5197c8c9a0d067c88b2788a2f0b6ebd62d969d",
+  "claims": {
+    "four_point_five_gyr_accuracy_qualified": false,
+    "planet_nine_detected": false,
+    "planet_nine_excluded": false,
+    "primordial_history_reconstructed": false,
+    "rubin_data_fitted": false,
+    "stellar_flyby_inferred": false,
+    "unbound_rogue_flyby_inferred": false
+  },
+  "clock": {
+    "direction": "FORWARD",
+    "end_global_step_exclusive": 8000,
+    "start_global_step": 0,
+    "step_years_hex": "0x1.0000000000000p-3"
+  },
+  "diagnostic_window": {
+    "dynamics_effect": "NONE",
+    "end_global_step_exclusive": 4801,
+    "event_kind": "NOMINAL_LINEAR_ROGUE_PASSAGE_EPOCH",
+    "nominal_event_global_step": 4000,
+    "start_global_step": 3200
+  },
+  "force_semantics": {
+    "massive_sources": "FULL_MUTUAL_NEWTONIAN_ALL_ACTIVE_SOURCES",
+    "source_activity": "FIXED_ROSTER_FULL_HORIZON_NO_FORCE_SWITCHES",
+    "source_integration": "FIXED_STEP_INERTIAL_KICK_DRIFT_KICK",
+    "tracer_backreaction": "EXACTLY_MASSLESS_NO_BACKREACTION",
+    "tracers": "DIRECT_NEWTONIAN_FROM_ALL_ACTIVE_SOURCES"
+  },
+  "force_transition_steps": [],
+  "initial_condition_scope": "CURRENT_EPOCH_INTERVENTION_SCREEN_NOT_PRIMORDIAL",
+  "matched_set_id": "jx-de441-current-epoch-four-mechanism-qualification-v1",
+  "perturber": {
+    "gm_AU3_per_year2_hex": "0x1.36d50141f1f43p-10",
+    "initial_position_AU_hex": [
+      "0x1.9000000000000p+6",
+      "-0x1.e2f68179d0a9bp+8",
+      "-0x1.02d1acf099469p+7"
+    ],
+    "initial_velocity_AU_per_year_hex": [
+      "0x0.0p+0",
+      "0x1.ee8dd4748bf15p-1",
+      "0x1.0907dc1930690p-2"
+    ],
+    "parameter_record": [
+      [
+        "asymptotic_linear_impact_parameter_AU",
+        "0x1.9000000000000p+6"
+      ],
+      [
+        "mass_earth",
+        "0x1.4000000000000p+3"
+      ],
+      [
+        "nominal_event_global_step",
+        "4000"
+      ],
+      [
+        "speed_AU_per_year",
+        "0x1.0000000000000p+0"
+      ],
+      [
+        "step_years",
+        "0x1.0000000000000p-3"
+      ],
+      [
+        "trajectory_inclination_deg",
+        "0x1.e000000000000p+3"
+      ]
+    ],
+    "provenance_classification": "SYNTHETIC_ASSUMPTION_NOT_OBSERVATIONAL_FIT",
+    "role": "SYNTHETIC_UNBOUND_ROGUE_FLYBY",
+    "source_id": "ROGUE_PLANET_SYNTHETIC",
+    "synthetic_model_id": "jx.synthetic-unbound-rogue-flyby.finite-start-cartesian.v1",
+    "trajectory_semantics": "DYNAMIC_MUTUAL_SOURCE_NOT_PRESCRIBED"
+  },
+  "primary_source_id": "Sun",
+  "primordial_initial_conditions": false,
+  "project_scope": "SCREENING_ONLY",
+  "schedule_id": "jx-de441-current-epoch-four-mechanism-qualification-v1:unbound_rogue_flyby",
+  "schedule_sha256": "1640352c16252bfab61a3c45be2f6687ba0dd2e36211a88ca8b15554f1f6e989",
+  "schema": "jxplanetx.cuda-closed-force-schedule.v1",
+  "scientific_classification": "MODEL_OUTPUT",
+  "source_activity": [
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Sun",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Jupiter",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Saturn",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Uranus",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Neptune",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "Pluto",
+      "start_global_step": 0
+    },
+    {
+      "end_global_step_exclusive": 8000,
+      "source_id": "ROGUE_PLANET_SYNTHETIC",
+      "start_global_step": 0
+    }
+  ],
+  "source_ids": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto",
+    "ROGUE_PLANET_SYNTHETIC"
+  ],
+  "source_state_sha256": "9f56e2b8fdf4a56f72a45a60d89384d7d898fca8ff413c0126b36ac010c6b067",
+  "unsupported_capabilities": [
+    "ARBITRARY_FORCE_CALLBACKS",
+    "SOURCE_ACTIVATION_DEACTIVATION_OR_GM_RAMP",
+    "PRESCRIBED_PERTURBER_EPHEMERIS",
+    "MASSIVE_SOURCE_COLLISION_MERGER_OR_REMOVAL",
+    "MASSIVE_SOURCE_ADAPTIVE_ENCOUNTER_ROUTING",
+    "BINARY_OR_MULTIPLE_SIMULTANEOUS_PERTURBERS",
+    "GENERAL_RELATIVITY",
+    "GALACTIC_TIDE_OR_STELLAR_HISTORY_ENSEMBLE",
+    "PRIMORDIAL_HISTORY_OR_4P5_GYR_QUALIFICATION"
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "arm_kind": "UNBOUND_ROGUE_FLYBY",
+  "artifacts": {
+    "ENCOUNTER_ROUTES.json": {
+      "path": "arms/unbound_rogue_flyby/ENCOUNTER_ROUTES.json",
+      "sha256": "00fd11a2da14bea4552828928baeefe5e89ea5a7e4aa15940d58204d9db3f1a2",
+      "size_bytes": 5292703
+    },
+    "ENDPOINT_STATE.npz": {
+      "path": "arms/unbound_rogue_flyby/ENDPOINT_STATE.npz",
+      "sha256": "456d53d99c713bec49389e1edf2c136898e4300a50c0db870304587a2b700744",
+      "size_bytes": 161768
+    },
+    "FORCE_SCHEDULE.json": {
+      "path": "arms/unbound_rogue_flyby/FORCE_SCHEDULE.json",
+      "sha256": "b31eddbdfc9318a4d30ede96451348d770e785efde0f7ea3893774e3a44e2aef",
+      "size_bytes": 4506
+    },
+    "INITIAL_STATE.npz": {
+      "path": "arms/unbound_rogue_flyby/INITIAL_STATE.npz",
+      "sha256": "607f443168a70ca3c7bed0dd75613347bcacbe6b39a733d3444ded730e072a15",
+      "size_bytes": 117680
+    },
+    "REMOVAL_EVENTS.json": {
+      "path": "arms/unbound_rogue_flyby/REMOVAL_EVENTS.json",
+      "sha256": "1fc725cf456d50dc67584b6bc1bc6fe828cd40982cecbcf741facd3124a4b827",
+      "size_bytes": 201
+    },
+    "ROUTED_TRACER_REPLAY_AUDIT.json": {
+      "path": "arms/unbound_rogue_flyby/ROUTED_TRACER_REPLAY_AUDIT.json",
+      "sha256": "390ef9006997bba60b4122d1e5474481ded8b95267677130d98346865afb9952",
+      "size_bytes": 1155
+    },
+    "ROUTE_SOURCE_MEMBERSHIP_AUDIT.json": {
+      "path": "arms/unbound_rogue_flyby/ROUTE_SOURCE_MEMBERSHIP_AUDIT.json",
+      "sha256": "c66ede4c6d83cc9c68ef42d631e34f88ba8583796ce8fbe5dfa31e3a54a5ff3b",
+      "size_bytes": 1025
+    },
+    "SOURCE_PATH_AUDIT.json": {
+      "path": "arms/unbound_rogue_flyby/SOURCE_PATH_AUDIT.json",
+      "sha256": "f284d1ee37c91c55aae9892d1563aa0e889ed0314b3ca001f8f3ae83e6ac34f5",
+      "size_bytes": 16680
+    },
+    "SOURCE_PATH_AUDIT_ENDPOINT.npz": {
+      "path": "arms/unbound_rogue_flyby/SOURCE_PATH_AUDIT_ENDPOINT.npz",
+      "sha256": "adf303573cdd76331a66c7da82d1c291bfae87e441075508f5a0a3ab888de5c9",
+      "size_bytes": 888
+    },
+    "SOURCE_STATE.json": {
+      "path": "arms/unbound_rogue_flyby/SOURCE_STATE.json",
+      "sha256": "709a400d59a834bed12492c03e9d4ee0a86f7088979a43cf366f7ef2b48fa012",
+      "size_bytes": 1998
+    },
+    "SOURCE_STATE.npz": {
+      "path": "arms/unbound_rogue_flyby/SOURCE_STATE.npz",
+      "sha256": "d22cbdddd5f05e6bc4c0e85e12c0d25721a11c008d8f850b28c9196426f99987",
+      "size_bytes": 1194
+    }
+  },
+  "claims": {
+    "four_point_five_gyr_accuracy_qualified": false,
+    "planet_nine_detected": false,
+    "planet_nine_excluded": false,
+    "primordial_history_reconstructed": false,
+    "rubin_data_fitted": false,
+    "stellar_flyby_inferred": false,
+    "unbound_rogue_flyby_inferred": false
+  },
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "completed_utc": "2026-10-04T21:21:41.416627Z",
+  "content_sha256": "3dcf2d4f5065c1486e47d1224aaf6a4fe794b5a0be2e0a827091b0c71ffa314c",
+  "endpoint_epoch_years": 1000.0,
+  "endpoint_global_step": 8000,
+  "endpoint_semantic_array_sha256": "a5095040d3d788368676220b3a2d288d1f3aac6b117886ef479374004c0387af",
+  "execution_evidence": {
+    "checkpoint_indices": [
+      2000,
+      4000,
+      6000,
+      8000
+    ],
+    "checkpoint_namespace": "run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126",
+    "checkpoint_steps": 2000,
+    "committed_artifact_count": 12,
+    "committed_artifacts": {
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000002000.array-3519520aea46edd1089e5b46f3b8624a137cff89b71e79482ecda2ba98e416a0.npz": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000002000.array-3519520aea46edd1089e5b46f3b8624a137cff89b71e79482ecda2ba98e416a0.npz",
+        "sha256": "3519520aea46edd1089e5b46f3b8624a137cff89b71e79482ecda2ba98e416a0",
+        "size_bytes": 161768
+      },
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000002000.json": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000002000.json",
+        "sha256": "fa8bbab8625c6368d63da15922b1348a0c7a488a9f5c301eccc1d5c1f1801c96",
+        "size_bytes": 263960
+      },
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000004000.array-ca33f441357fe33fecee35739f9d1b5512581be0ced0eff2d979a775e067f32b.npz": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000004000.array-ca33f441357fe33fecee35739f9d1b5512581be0ced0eff2d979a775e067f32b.npz",
+        "sha256": "ca33f441357fe33fecee35739f9d1b5512581be0ced0eff2d979a775e067f32b",
+        "size_bytes": 161768
+      },
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000004000.json": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000004000.json",
+        "sha256": "bc89be4ed59492e3d6910d0e6f5ad71819a490eeaa32682b626e47300878d50a",
+        "size_bytes": 3604323
+      },
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000006000.array-fdba2dededca35e43d4b203f564f43de0201b3e5d8916459c8533c1d03d13bd3.npz": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000006000.array-fdba2dededca35e43d4b203f564f43de0201b3e5d8916459c8533c1d03d13bd3.npz",
+        "sha256": "fdba2dededca35e43d4b203f564f43de0201b3e5d8916459c8533c1d03d13bd3",
+        "size_bytes": 161768
+      },
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000006000.json": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000006000.json",
+        "sha256": "860b58e67d8a125e8ae511cd858f7ac7d3e88e63e5f43430455a83fbc32db2cc",
+        "size_bytes": 4701339
+      },
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000008000.array-456d53d99c713bec49389e1edf2c136898e4300a50c0db870304587a2b700744.npz": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000008000.array-456d53d99c713bec49389e1edf2c136898e4300a50c0db870304587a2b700744.npz",
+        "sha256": "456d53d99c713bec49389e1edf2c136898e4300a50c0db870304587a2b700744",
+        "size_bytes": 161768
+      },
+      "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000008000.json": {
+        "path": "arms/unbound_rogue_flyby/checkpoints/run-9a6524013752128a3721c958557150a880ec3e7588e3fdd96849db7d5fb95126/checkpoint_00000000000000008000.json",
+        "sha256": "21d3416f341777bd0280edbe61148d5601999533f33fa0997902298e74e220a9",
+        "size_bytes": 5299604
+      },
+      "arms/unbound_rogue_flyby/segments/segment-00000000000000002000.json": {
+        "path": "arms/unbound_rogue_flyby/segments/segment-00000000000000002000.json",
+        "sha256": "714c57e11d20239aace8eb48a582d5c6b4b14b4bd182e155b2f9b578bed2a840",
+        "size_bytes": 2327
+      },
+      "arms/unbound_rogue_flyby/segments/segment-00000000000000004000.json": {
+        "path": "arms/unbound_rogue_flyby/segments/segment-00000000000000004000.json",
+        "sha256": "e4b943131392aa1a0120bee4fc2f2c1b0481a2e1e918b7a318f957afab85afce",
+        "size_bytes": 2327
+      },
+      "arms/unbound_rogue_flyby/segments/segment-00000000000000006000.json": {
+        "path": "arms/unbound_rogue_flyby/segments/segment-00000000000000006000.json",
+        "sha256": "4efe103af4448269decc4cc133fe11638acd650596f2c40a20fe5f8bb1aadbac",
+        "size_bytes": 2325
+      },
+      "arms/unbound_rogue_flyby/segments/segment-00000000000000008000.json": {
+        "path": "arms/unbound_rogue_flyby/segments/segment-00000000000000008000.json",
+        "sha256": "52be94510f99a9e5eaa94790d4624414a80411b3c5d899c55596e60ca91e3c0d",
+        "size_bytes": 2326
+      }
+    },
+    "content_sha256": "9677dbf1c191e29569863d4a9a143a5d92cecd3e0bd4d0d9383285bfc5377aee",
+    "latest_checkpoint_content_sha256": "8fb9433cb2150637091398d0384ac19daa51fbb883296a9eaaa7e7fc65950b86",
+    "latest_state_sha256": "0ea256ebb21115d17dd5619d3d2201bf6d1e40c093cce423df2e841264ab5968",
+    "protocol_sha256": "b469195deb7dd67d9b6bc5131bab6a44632ebb43ee5b6cc000fe8a7969c3c729",
+    "run_id": "jx-m2-qualification-unbound_rogue_flyby-v1",
+    "schema": "jxplanetx.cuda-four-arm-execution-evidence.v1",
+    "total_steps": 8000,
+    "uncommitted_orphan_artifact_count": 0,
+    "uncommitted_orphan_artifacts": {},
+    "uncommitted_orphan_semantics": "CONTENT_ADDRESSED_NPZ_PRESERVED_AFTER_INTERRUPTED_PRE_RECORD_COMMIT; NOT_A_COMMITTED_CHECKPOINT_AND_NOT_IN_THE_HASH_CHAIN"
+  },
+  "gates": {
+    "all_endpoint_arrays_finite": true,
+    "all_pass": true,
+    "committed_checkpoint_segment_roster_hashes_and_chain_verified": true,
+    "every_route_source_segment_matches_exact_source_path": true,
+    "every_routed_tracer_exact_full_stage_replay_passed": true,
+    "per_tracer_route_capacity_not_exhausted": true,
+    "reached_exact_endpoint": true,
+    "removal_ledger_matches_terminal_lifecycle": true,
+    "route_ledger_matches_route_counts": true,
+    "runtime_method_kernel_and_implementation_bound": true,
+    "source_endpoint_matches_all_horizon_source_path_audit": true,
+    "uncommitted_checkpoint_array_orphans_preserved_separately": true
+  },
+  "interpretation_limits": [
+    "This is a current-epoch intervention screen, not a primordial reconstruction.",
+    "The tracer population is a deterministic synthetic engineering fixture, not observed, Rubin-selected, survey-debiased, or fitted.",
+    "Each non-control arm is one synthetic point assumption, not a prior distribution or population model.",
+    "A passing source is active and mutually gravitating for the complete finite integration; the nominal passage window is diagnostic only.",
+    "The fixed 0.125-year lattice has not established timestep convergence for 1-Myr candidate contrasts.",
+    "The finite passing-source fixtures omit the Galactic tide and the Galactic/stellar environment before and after the modeled interval.",
+    "Removal surfaces are operational numerical boundaries, not physical impact or definitive ejection classifications.",
+    "The screen cannot detect, exclude, or prefer Planet Nine, a stellar flyby, or a rogue planet.",
+    "No result from this runner qualifies a 4.5-Gyr history or accuracy claim."
+  ],
+  "matched_schedule_set_sha256": "db611e85ca64b486f4558f04d01dfadc1dfbd53cd6ec7a3774bb4f07a978b6fc",
+  "measurements": {
+    "active_bound_count": 2048,
+    "active_eccentricity": {
+      "maximum": 0.9721957218708179,
+      "median": 0.8335732848580665,
+      "minimum": 0.2204281883102037,
+      "q05": 0.45318470703880165,
+      "q95": 0.9463476204456334
+    },
+    "active_inclination_rad": {
+      "maximum": 0.7173906287184172,
+      "median": 0.33728351413826385,
+      "minimum": 0.0013405311392736784,
+      "q05": 0.03166620657256744,
+      "q95": 0.6603899383082593
+    },
+    "active_perihelion_AU": {
+      "maximum": 85.96743542710354,
+      "median": 54.981643125629816,
+      "minimum": 26.262072975819937,
+      "q05": 33.52012408147909,
+      "q95": 77.76630905841341
+    },
+    "active_semimajor_axis_AU": {
+      "maximum": 1024.9957592526807,
+      "median": 319.635630640229,
+      "minimum": 99.7177485925261,
+      "q05": 112.58969801929574,
+      "q95": 892.53615089677
+    },
+    "active_tracer_count": 2048,
+    "encounter_route_count": 1028,
+    "endpoint_minimum_massive_source_pair_distance_AU": 5.452444354175068,
+    "ever_unbound_count": 0,
+    "exploratory_tail_counts": {
+      "active_a_ge_250_AU_q_ge_40_AU": 1031,
+      "active_q_ge_40_AU": 1678,
+      "active_q_ge_50_AU": 1230
+    },
+    "lifecycle_counts": {
+      "ACTIVE": 2048
+    },
+    "maximum_route_capacity_fraction_used": 0.011962890625,
+    "maximum_route_count_for_one_tracer": 196,
+    "minimum_evaluated_source_distance_AU": 2.1838364432307,
+    "minimum_remaining_route_capacity_for_any_tracer": 16188,
+    "orbital_element_semantics": "INSTANTANEOUS_PRIMARY_RELATIVE_TWO_BODY_OSCULATING_PROXIES; OTHER_MASSIVE_SOURCES_OMITTED_FROM_ELEMENT_CONVERSION; SEMIMAJOR_AXIS_REPORTED_ONLY_FOR_BOUND_STATES",
+    "route_capacity_per_tracer": 16384,
+    "routed_tracer_count": 9,
+    "tracer_count": 2048
+  },
+  "population_transform_receipt_sha256": "b360a00ccbc9f09ec34376e673c9855fcd523bea0f3a82ceda1b8b794d5fffb6",
+  "protocol_sha256": "b469195deb7dd67d9b6bc5131bab6a44632ebb43ee5b6cc000fe8a7969c3c729",
+  "removal_event_counts": {},
+  "route_reason_counts": {
+    "SWEPT_FLOOR": 1028
+  },
+  "route_source_membership_audit": {
+    "all_route_source_segments_exactly_matched": true,
+    "content_sha256": "c4fceadc96c670bf05a7859af58e013fb3775cdcbf0c989e72d9511a78dc2508",
+    "route_count": 1028,
+    "unique_routed_source_steps": 1017
+  },
+  "routed_tracer_replay_audit": {
+    "content_sha256": "d27fdf3e14c5701661805279513a4aa9b4838b125e78a160195f710e62683601",
+    "exact_replay_passed": true,
+    "routed_tracer_count": 9
+  },
+  "run_id": "jx-m2-qualification-unbound_rogue_flyby-v1",
+  "runtime_identity": {
+    "array_backend_device": "cuda:0",
+    "array_backend_id": "cupy",
+    "cpu_fingerprint": {
+      "fields": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "sha256": "fb9f92dbf8d64f9d37bbc5b06001f3f3dc46a2431f28f92774f000275ca0ba2e"
+    },
+    "cpu_machine": "x86_64",
+    "cpu_processor": "",
+    "cpu_release": "7.0.0-34-generic",
+    "cpu_system": "Linux",
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_options": [
+      "--std=c++11",
+      "--fmad=false",
+      "--ftz=false",
+      "--prec-div=true",
+      "--prec-sqrt=true"
+    ],
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_AND_CUDA_RUNTIME_DEVICE",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_multiprocessor_count": 36,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_total_global_memory_bytes": 16616521728,
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "encounter_route_method": "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2",
+    "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+    "kernel_id": "jx.cuda.massless-tracer.restricted-kdk.v2",
+    "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+    "libc": [
+      "glibc",
+      "2.43"
+    ],
+    "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+    "numpy_build_configuration_sha256": "0783bfc9b478a6155574783e6133a27979667d89e3ad5b86385d921e68a6de67",
+    "numpy_version": "2.3.5",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "runtime_binary_sha256": {
+      "cupy_cuda_compiler": "09226d26ab41bf6e7b5b6e57b59187b4c3a5637690747af9a83d288a87d0fb6e",
+      "cupy_cuda_runtime_extension": "bedb6d887526a7726ee3b07d5f8d85b8385a66203261c30511851882bdc1c1a9",
+      "cupy_nvrtc_extension": "e38ebdee2e7f2cb1bdaf97d19a5ca43b1baa485ee462f5340bd385b848830c0f",
+      "numpy_multiarray_umath": "ed49278029e17db9fc349d4181a2ee5a064a86bbb1241141592b8653824fd102",
+      "python_executable": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+      "scipy_dop853_coefficients": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001",
+      "scipy_ivp_base": "4e70402b4c092e0a502dba07e33f91784e1e6d3645710cc8a916fd6e3ead7548",
+      "scipy_ivp_common": "195293731f903bb58faf67a33408bde1a11d32fd37cc554eaf6e10d70dab6762",
+      "scipy_ivp_rk": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+    },
+    "scipy_build_configuration_sha256": "19205762e564754132e90ded8bd1703ecac4d61e208cf5dfa7021eec31a83429",
+    "scipy_version": "1.17.0"
+  },
+  "runtime_identity_receipt_sha256": "6187423604cb4af0caef96b02d833427a01af5f15d390ceae4e1c244fad3acfb",
+  "schedule_sha256": "1640352c16252bfab61a3c45be2f6687ba0dd2e36211a88ca8b15554f1f6e989",
+  "schema": "jxplanetx.cuda-four-arm-result.v1",
+  "source_path_audit": {
+    "content_sha256": "da1b8249014a3703b978a803a8d755a87f16c9824a6a14106593b035ec3c607e",
+    "maximum_absolute_relative_energy_drift": 0.00013424197042875006,
+    "maximum_linear_momentum_delta_norm": 1.693151486615178e-15,
+    "maximum_relative_angular_momentum_vector_drift": 4.32493870905322e-15,
+    "primary_relative_source_minima": [
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 969.75,
+        "minimum_global_step": 7758,
+        "minimum_lattice_distance_AU": 4.946516601165312,
+        "right_source_id": "Jupiter",
+        "right_source_index": 1,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 183.25,
+        "minimum_global_step": 1466,
+        "minimum_lattice_distance_AU": 9.012841439004884,
+        "right_source_id": "Saturn",
+        "right_source_index": 2,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 529.25,
+        "minimum_global_step": 4234,
+        "minimum_lattice_distance_AU": 18.253714763450912,
+        "right_source_id": "Uranus",
+        "right_source_index": 3,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 846.25,
+        "minimum_global_step": 6770,
+        "minimum_lattice_distance_AU": 29.782797324143395,
+        "right_source_id": "Neptune",
+        "right_source_index": 4,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 211.25,
+        "minimum_global_step": 1690,
+        "minimum_lattice_distance_AU": 29.645348642941332,
+        "right_source_id": "Pluto",
+        "right_source_index": 5,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      },
+      {
+        "left_source_id": "Sun",
+        "left_source_index": 0,
+        "minimum_elapsed_years": 478.25,
+        "minimum_global_step": 3826,
+        "minimum_lattice_distance_AU": 72.87105061468786,
+        "right_source_id": "ROGUE_PLANET_SYNTHETIC",
+        "right_source_index": 6,
+        "sampling_semantics": "ALL_FIXED_STEP_LATTICE_NODES_NOT_CONTINUOUS_ROOT"
+      }
+    ]
+  },
+  "source_state_sha256": "9f56e2b8fdf4a56f72a45a60d89384d7d898fca8ff413c0126b36ac010c6b067",
+  "stage_id": "qualification",
+  "status": "COMPLETED_ARM_SCREEN_NOT_INFERENCE"
+}

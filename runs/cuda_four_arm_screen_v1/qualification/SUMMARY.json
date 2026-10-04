@@ -1,0 +1,303 @@
+{
+  "arm_result_sha256": {
+    "CIRCULAR_DISTANT_PLANET_SENSITIVITY": "52a3c23c5d4cb58dd63483cc1df662d8b9203d309dc569ce0abb90082a6925ae",
+    "KNOWN_PLANETS_ONLY": "4638ff2845c98ae6c102d89cccdbf50e70081b4a013797ea2519972b2ce9975e",
+    "STELLAR_FLYBY": "0d6e40d2471827d3a53365fc6dab3d9959d5ea970293082dc119cc427581e9ba",
+    "UNBOUND_ROGUE_FLYBY": "3dcf2d4f5065c1486e47d1224aaf6a4fe794b5a0be2e0a827091b0c71ffa314c"
+  },
+  "arm_status": {
+    "CIRCULAR_DISTANT_PLANET_SENSITIVITY": "COMPLETED_ARM_SCREEN_NOT_INFERENCE",
+    "KNOWN_PLANETS_ONLY": "COMPLETED_ARM_SCREEN_NOT_INFERENCE",
+    "STELLAR_FLYBY": "COMPLETED_ARM_SCREEN_NOT_INFERENCE",
+    "UNBOUND_ROGUE_FLYBY": "COMPLETED_ARM_SCREEN_NOT_INFERENCE"
+  },
+  "bindings": {
+    "acceptance_protocol_sha256": "0beda4fdfb98394dd7d0fc505b46da94b01ea8adcbaac9769251294ca1b3e75b",
+    "acceptance_state_sha256": "ebb4d6b8952e78a6eb91e9591c2ddff36831f3f92b98952a9f50da802e82f048",
+    "de441_control_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+    "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "git": {
+      "branch": "research/cuda-massless-tracer-20261004",
+      "clean_worktree_claimed": false,
+      "head": "6bc31dbbdc2238f1a672942151f0f7e8dfc1dce6",
+      "main": "aa36f8f1cb5852b8b5bb34c7ac476a8e35025e84"
+    },
+    "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+    "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+    "mechanism_schedule_source_sha256": "3465feef5b9e8fb7422a95fa4ad41acb4ae511be0289fdfb6d50ffa51edbfcaf",
+    "runner_sha256": "444c973c4b34cdffb8389399538610bd12921bb427b9d85c87df581b6098be32"
+  },
+  "checkpoint_years": 250.0,
+  "claims": {
+    "four_point_five_gyr_accuracy_qualified": false,
+    "planet_nine_detected": false,
+    "planet_nine_excluded": false,
+    "primordial_history_reconstructed": false,
+    "rubin_data_fitted": false,
+    "stellar_flyby_inferred": false,
+    "unbound_rogue_flyby_inferred": false
+  },
+  "classification": "MODEL_OUTPUT / SCREENING_ONLY",
+  "completed_utc": "2026-10-04T21:24:21.652564Z",
+  "content_sha256": "f41614c621f3918b03386ba13db7767477d913d501f67948ecb612c2e400c0ce",
+  "duration_years": 1000.0,
+  "gates": {
+    "all_arm_gates_pass": true,
+    "all_four_arms_complete": true,
+    "all_pass": true
+  },
+  "interpretation_limits": [
+    "This is a current-epoch intervention screen, not a primordial reconstruction.",
+    "The tracer population is a deterministic synthetic engineering fixture, not observed, Rubin-selected, survey-debiased, or fitted.",
+    "Each non-control arm is one synthetic point assumption, not a prior distribution or population model.",
+    "A passing source is active and mutually gravitating for the complete finite integration; the nominal passage window is diagnostic only.",
+    "The fixed 0.125-year lattice has not established timestep convergence for 1-Myr candidate contrasts.",
+    "The finite passing-source fixtures omit the Galactic tide and the Galactic/stellar environment before and after the modeled interval.",
+    "Removal surfaces are operational numerical boundaries, not physical impact or definitive ejection classifications.",
+    "The screen cannot detect, exclude, or prefer Planet Nine, a stellar flyby, or a rogue planet.",
+    "No result from this runner qualifies a 4.5-Gyr history or accuracy claim."
+  ],
+  "matched_schedule_set_sha256": "db611e85ca64b486f4558f04d01dfadc1dfbd53cd6ec7a3774bb4f07a978b6fc",
+  "paired_endpoint_comparisons": {
+    "CIRCULAR_DISTANT_PLANET_SENSITIVITY": {
+      "absolute_delta_inclination_rad": {
+        "maximum": 0.00043902443687551806,
+        "median": 9.302198243910098e-07,
+        "minimum": 2.642625007709398e-10,
+        "q05": 3.347024623776007e-08,
+        "q95": 1.560750786671061e-05
+      },
+      "absolute_delta_perihelion_AU": {
+        "maximum": 0.03375081607001107,
+        "median": 0.0006628589166695065,
+        "minimum": 3.0801768957644526e-07,
+        "q05": 3.51200681581787e-05,
+        "q95": 0.004975953997844582
+      },
+      "absolute_delta_semimajor_axis_AU_common_bound": {
+        "maximum": 0.12161467412920501,
+        "median": 0.0009874421611897333,
+        "minimum": 1.7972018895306974e-07,
+        "q05": 2.6453605349274768e-05,
+        "q95": 0.012528571336190451
+      },
+      "candidate_only_terminal_count": 0,
+      "common_active_bound_count": 2048,
+      "common_active_count": 2048,
+      "comparison_semantics": "PAIRED_ENDPOINT_DIFFERENCE_CANDIDATE_MINUS_CONTROL",
+      "control_only_terminal_count": 0,
+      "delta_eccentricity": {
+        "maximum": 4.848872072005239e-05,
+        "median": -5.12134307184553e-08,
+        "minimum": -0.00010881834543818858,
+        "q05": -6.186687757275821e-06,
+        "q95": 5.8597727325526695e-06
+      },
+      "delta_perihelion_AU": {
+        "maximum": 0.03375081607001107,
+        "median": 1.914650908929616e-06,
+        "minimum": -0.015250445250011069,
+        "q05": -0.0036219032819808203,
+        "q95": 0.003865536047744555
+      },
+      "delta_semimajor_axis_AU_common_bound": {
+        "maximum": 0.12161467412920501,
+        "median": -9.290334851641546e-06,
+        "minimum": -0.062122544950625525,
+        "q05": -0.008256286097474684,
+        "q95": 0.008022596477400156
+      },
+      "interpretation": "DESCRIPTIVE_SCREEN_METRICS_ONLY_NOT_A_LIKELIHOOD_OR_MODEL_PREFERENCE",
+      "orbital_element_semantics": "INSTANTANEOUS_PRIMARY_RELATIVE_TWO_BODY_OSCULATING_PROXY_DIFFERENCES; NOT_FITTED_OR_FULL_SYSTEM_INVARIANTS; SEMIMAJOR_AXIS_COMMON_BOUND_ONLY"
+    },
+    "STELLAR_FLYBY": {
+      "absolute_delta_inclination_rad": {
+        "maximum": 2.1311152349852995,
+        "median": 0.002387512889727675,
+        "minimum": 4.500585059075135e-07,
+        "q05": 0.00011970422186614871,
+        "q95": 0.09193661607903662
+      },
+      "absolute_delta_perihelion_AU": {
+        "maximum": 256.83478623033255,
+        "median": 1.1121670555043224,
+        "minimum": 2.5134777885682524e-05,
+        "q05": 0.07496931347504657,
+        "q95": 14.3912898263743
+      },
+      "absolute_delta_semimajor_axis_AU_common_bound": {
+        "maximum": 2100.4088052869574,
+        "median": 1.8017369463473472,
+        "minimum": 0.0005008728513899996,
+        "q05": 0.09603984280300537,
+        "q95": 31.72482709758239
+      },
+      "candidate_only_terminal_count": 0,
+      "common_active_bound_count": 2046,
+      "common_active_count": 2048,
+      "comparison_semantics": "PAIRED_ENDPOINT_DIFFERENCE_CANDIDATE_MINUS_CONTROL",
+      "control_only_terminal_count": 0,
+      "delta_eccentricity": {
+        "maximum": 0.10215316543298203,
+        "median": -0.00012042372772536059,
+        "minimum": -0.36371543598796974,
+        "q05": -0.014958807245859001,
+        "q95": 0.0132197596092411
+      },
+      "delta_perihelion_AU": {
+        "maximum": 256.83478623033255,
+        "median": 0.025214733950495116,
+        "minimum": -54.48100480897453,
+        "q05": -8.044713621253411,
+        "q95": 11.267275815184618
+      },
+      "delta_semimajor_axis_AU_common_bound": {
+        "maximum": 2100.4088052869574,
+        "median": 0.011108918324673311,
+        "minimum": -116.82970623368192,
+        "q05": -15.7198653798809,
+        "q95": 21.937768933938287
+      },
+      "interpretation": "DESCRIPTIVE_SCREEN_METRICS_ONLY_NOT_A_LIKELIHOOD_OR_MODEL_PREFERENCE",
+      "orbital_element_semantics": "INSTANTANEOUS_PRIMARY_RELATIVE_TWO_BODY_OSCULATING_PROXY_DIFFERENCES; NOT_FITTED_OR_FULL_SYSTEM_INVARIANTS; SEMIMAJOR_AXIS_COMMON_BOUND_ONLY"
+    },
+    "UNBOUND_ROGUE_FLYBY": {
+      "absolute_delta_inclination_rad": {
+        "maximum": 0.0008517728339819675,
+        "median": 1.7758661300680545e-05,
+        "minimum": 1.1523814680280964e-08,
+        "q05": 9.890422530600163e-07,
+        "q95": 0.0001416928124384486
+      },
+      "absolute_delta_perihelion_AU": {
+        "maximum": 0.48057778155655484,
+        "median": 0.009469117668700733,
+        "minimum": 2.352417268980389e-05,
+        "q05": 0.0006867283326936758,
+        "q95": 0.04486267632391469
+      },
+      "absolute_delta_semimajor_axis_AU_common_bound": {
+        "maximum": 3.991260848841648,
+        "median": 0.015548243195866007,
+        "minimum": 8.401460775075975e-06,
+        "q05": 0.001540813606945335,
+        "q95": 0.1312216955350947
+      },
+      "candidate_only_terminal_count": 0,
+      "common_active_bound_count": 2048,
+      "common_active_count": 2048,
+      "comparison_semantics": "PAIRED_ENDPOINT_DIFFERENCE_CANDIDATE_MINUS_CONTROL",
+      "control_only_terminal_count": 0,
+      "delta_eccentricity": {
+        "maximum": 0.0014045214457706345,
+        "median": 8.455455800526757e-07,
+        "minimum": -0.0006146358799554719,
+        "q05": -6.998214579018447e-05,
+        "q95": 6.852763741021505e-05
+      },
+      "delta_perihelion_AU": {
+        "maximum": 0.10546252212638763,
+        "median": -0.0004099924957152723,
+        "minimum": -0.48057778155655484,
+        "q05": -0.035864760407386245,
+        "q95": 0.03565668969124438
+      },
+      "delta_semimajor_axis_AU_common_bound": {
+        "maximum": 0.7630272622851635,
+        "median": -0.0009716822378891266,
+        "minimum": -3.991260848841648,
+        "q05": -0.09549068805970932,
+        "q95": 0.08467666485519763
+      },
+      "interpretation": "DESCRIPTIVE_SCREEN_METRICS_ONLY_NOT_A_LIKELIHOOD_OR_MODEL_PREFERENCE",
+      "orbital_element_semantics": "INSTANTANEOUS_PRIMARY_RELATIVE_TWO_BODY_OSCULATING_PROXY_DIFFERENCES; NOT_FITTED_OR_FULL_SYSTEM_INVARIANTS; SEMIMAJOR_AXIS_COMMON_BOUND_ONLY"
+    }
+  },
+  "population_transform_receipt_sha256": "b360a00ccbc9f09ec34376e673c9855fcd523bea0f3a82ceda1b8b794d5fffb6",
+  "protocol_sha256": "b469195deb7dd67d9b6bc5131bab6a44632ebb43ee5b6cc000fe8a7969c3c729",
+  "route_capacity_projection": {
+    "engine_capacity_per_tracer": 16384,
+    "maximum_observed_route_count_for_one_tracer": 196,
+    "one_myr_capacity_screen_passed": false,
+    "projected_one_myr_route_count_for_one_tracer": 196000,
+    "semantics": "CONSERVATIVE_LINEAR_EXPOSURE_PROJECTION_FROM_MAXIMUM_OBSERVED_LANE; AUTHORIZATION_SCREEN_NOT_A_DYNAMICAL_PREDICTION"
+  },
+  "runtime_identity": {
+    "array_backend_device": "cuda:0",
+    "array_backend_id": "cupy",
+    "cpu_fingerprint": {
+      "fields": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "sha256": "fb9f92dbf8d64f9d37bbc5b06001f3f3dc46a2431f28f92774f000275ca0ba2e"
+    },
+    "cpu_machine": "x86_64",
+    "cpu_processor": "",
+    "cpu_release": "7.0.0-34-generic",
+    "cpu_system": "Linux",
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_options": [
+      "--std=c++11",
+      "--fmad=false",
+      "--ftz=false",
+      "--prec-div=true",
+      "--prec-sqrt=true"
+    ],
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_AND_CUDA_RUNTIME_DEVICE",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_multiprocessor_count": 36,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_total_global_memory_bytes": 16616521728,
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "encounter_route_method": "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2",
+    "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "implementation_source_sha256": "f8b4c0943325b151fc4c91b530c89f05a4cf772bd572d0a264dfd7ef607c5779",
+    "kernel_id": "jx.cuda.massless-tracer.restricted-kdk.v2",
+    "kernel_source_sha256": "65476a660420886438676ca38ea20573545f97cf4ad4086bdab218d1300eeb61",
+    "libc": [
+      "glibc",
+      "2.43"
+    ],
+    "method_id": "JX_CUDA_MASSLESS_TRACER_RESTRICTED_KDK_V2",
+    "numpy_build_configuration_sha256": "0783bfc9b478a6155574783e6133a27979667d89e3ad5b86385d921e68a6de67",
+    "numpy_version": "2.3.5",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "runtime_binary_sha256": {
+      "cupy_cuda_compiler": "09226d26ab41bf6e7b5b6e57b59187b4c3a5637690747af9a83d288a87d0fb6e",
+      "cupy_cuda_runtime_extension": "bedb6d887526a7726ee3b07d5f8d85b8385a66203261c30511851882bdc1c1a9",
+      "cupy_nvrtc_extension": "e38ebdee2e7f2cb1bdaf97d19a5ca43b1baa485ee462f5340bd385b848830c0f",
+      "numpy_multiarray_umath": "ed49278029e17db9fc349d4181a2ee5a064a86bbb1241141592b8653824fd102",
+      "python_executable": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+      "scipy_dop853_coefficients": "3ab62f5b41eee97eec3a1dfb154e7c80d9200bbeca56961c95ec2ffc04463001",
+      "scipy_ivp_base": "4e70402b4c092e0a502dba07e33f91784e1e6d3645710cc8a916fd6e3ead7548",
+      "scipy_ivp_common": "195293731f903bb58faf67a33408bde1a11d32fd37cc554eaf6e10d70dab6762",
+      "scipy_ivp_rk": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056"
+    },
+    "scipy_build_configuration_sha256": "19205762e564754132e90ded8bd1703ecac4d61e208cf5dfa7021eec31a83429",
+    "scipy_version": "1.17.0"
+  },
+  "runtime_identity_receipt_sha256": "6187423604cb4af0caef96b02d833427a01af5f15d390ceae4e1c244fad3acfb",
+  "schema": "jxplanetx.cuda-four-arm-summary.v1",
+  "stage_id": "qualification",
+  "status": "PASSED_QUALIFICATION_SCREEN_NOT_SCIENCE",
+  "step_years": 0.125,
+  "total_steps": 8000,
+  "tracer_count": 2048
+}

@@ -1,0 +1,61 @@
+{
+  "arrays": {
+    "gm_AU3_per_year2": {
+      "dtype": "<f8",
+      "sha256": "8d33cd80cebdfb476e48ba0742a6ac07026967ae72d7210e002b2c7f9ae5a630",
+      "shape": [
+        6
+      ]
+    },
+    "positions_AU": {
+      "dtype": "<f8",
+      "sha256": "dfb281fd0d9dbf686005d3c058fc9dfbfc41989081afe3527f0fb94574467cc2",
+      "shape": [
+        6,
+        3
+      ]
+    },
+    "velocities_AU_per_year": {
+      "dtype": "<f8",
+      "sha256": "26c84d11cb63274817f9e2fdf8f91741809e5790d8a0ee605dcfcdc78b95072d",
+      "shape": [
+        6,
+        3
+      ]
+    }
+  },
+  "base_artifact_id": "jx.de441-population.outer-control-state.v1",
+  "base_artifact_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+  "base_prefix_sha256": "07e487837b1e7f78b260ae95cb5197c8c9a0d067c88b2788a2f0b6ebd62d969d",
+  "base_source_count": 6,
+  "epoch_jd_tdb_hex": "0x1.2c70840000000p+21",
+  "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+  "initial_condition_scope": "CURRENT_EPOCH_INTERVENTION_SCREEN_NOT_PRIMORDIAL",
+  "origin": "INNER_SYSTEM_MONOPOLE_CENTER_AT_T0",
+  "primary_source_id": "Sun",
+  "primordial_initial_conditions": false,
+  "project_scope": "SCREENING_ONLY",
+  "schema": "jxplanetx.cuda-mechanism-source-state.v1",
+  "scientific_classification": "MODEL_OUTPUT",
+  "snapshot_id": "de441-current-epoch-outer-control-jd2461200.5",
+  "source_ids": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto"
+  ],
+  "source_roles": [
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM",
+    "KNOWN_OUTER_SYSTEM"
+  ],
+  "state_classification": "RECONSTRUCTED_DE441_BACKBONE_PLUS_ASSUMED_INNER_SYSTEM_MONOPOLE",
+  "state_sha256": "a52812117c6f8d9153ae64c480314e51551add6bd72b18594a1f58938a612889",
+  "time_scale": "TDB",
+  "unit_system_id": "AU-YEAR"
+}

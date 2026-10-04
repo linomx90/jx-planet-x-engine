@@ -1,0 +1,33 @@
+{
+  "arm_initial_state_sha256": {
+    "CIRCULAR_DISTANT_PLANET_SENSITIVITY": "7d7160204fbd0a0903b88fd51bb3bfb6f861f0823421e75209c8194c5571777b",
+    "KNOWN_PLANETS_ONLY": "a52812117c6f8d9153ae64c480314e51551add6bd72b18594a1f58938a612889",
+    "STELLAR_FLYBY": "053e38f66fd435e1a410a11a4e88bf7665de7e1d7db619cad3a03349b502dae8",
+    "UNBOUND_ROGUE_FLYBY": "9f56e2b8fdf4a56f72a45a60d89384d7d898fca8ff413c0126b36ac010c6b067"
+  },
+  "arm_schedule_sha256": {
+    "CIRCULAR_DISTANT_PLANET_SENSITIVITY": "55f1278da2afd73972c97fbd4a6bc475738f43992c2e5ac33327fb1a9a9141fb",
+    "KNOWN_PLANETS_ONLY": "26ceae200239f006b194cd5581312d3c552c7755b7e9145b24cc17e066f6ec0f",
+    "STELLAR_FLYBY": "3b77e7528c4029cbb82ef5eb3408c5e6573beadc4cd750e40c2388248a2bc5aa",
+    "UNBOUND_ROGUE_FLYBY": "1640352c16252bfab61a3c45be2f6687ba0dd2e36211a88ca8b15554f1f6e989"
+  },
+  "base_artifact_id": "jx.de441-population.outer-control-state.v1",
+  "base_artifact_sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14",
+  "base_source_prefix_sha256": "07e487837b1e7f78b260ae95cb5197c8c9a0d067c88b2788a2f0b6ebd62d969d",
+  "claims": {
+    "four_point_five_gyr_accuracy_qualified": false,
+    "planet_nine_detected": false,
+    "planet_nine_excluded": false,
+    "primordial_history_reconstructed": false,
+    "rubin_data_fitted": false,
+    "stellar_flyby_inferred": false,
+    "unbound_rogue_flyby_inferred": false
+  },
+  "initial_condition_scope": "CURRENT_EPOCH_INTERVENTION_SCREEN_NOT_PRIMORDIAL",
+  "matched_set_id": "jx-de441-current-epoch-four-mechanism-qualification-v1",
+  "matched_set_sha256": "db611e85ca64b486f4558f04d01dfadc1dfbd53cd6ec7a3774bb4f07a978b6fc",
+  "primordial_initial_conditions": false,
+  "project_scope": "SCREENING_ONLY",
+  "schema": "jxplanetx.cuda-matched-mechanism-schedules.v1",
+  "scientific_classification": "MODEL_OUTPUT"
+}

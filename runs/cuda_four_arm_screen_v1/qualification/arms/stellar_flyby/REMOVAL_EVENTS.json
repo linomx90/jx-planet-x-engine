@@ -1,0 +1,7 @@
+{
+  "arm_kind": "STELLAR_FLYBY",
+  "count": 0,
+  "records": [],
+  "schema": "jxplanetx.cuda-four-arm-removal-ledger.v1",
+  "semantics": "OPERATIONAL_REMOVALS_NOT_PHYSICAL_EVENT_CLASSIFICATION"
+}
