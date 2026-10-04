@@ -15,6 +15,8 @@ runs/de441_population_100k/qualification_execution_v1/
 runs/independent_dop853_10k/population_qualification_execution_v1/
 runs/independent_dop853_10k/final_execution_v1/
 runs/independent_dop853_10k/final_execution_v2/
+runs/cuda_four_arm_screen_v1/capacity_pilot/
+runs/cuda_four_arm_screen_v1/one_myr/
 .local-apt/
 .local-gfortran/
 runs/survey_selection_o1/__pycache__/
