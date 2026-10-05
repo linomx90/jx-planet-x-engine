@@ -1,0 +1,2854 @@
+{
+  "array_file": "checkpoint_00000000000000000001.array-446f8bfc7aa5692ed73a335acf69741883872e5c0fc4622072f65989aabbd06c.npz",
+  "array_file_sha256": "446f8bfc7aa5692ed73a335acf69741883872e5c0fc4622072f65989aabbd06c",
+  "array_file_size_bytes": 2308018,
+  "checkpoint_content_sha256": "55ddc567e9f4591356c2d073b74c9b8bf218a0d478db95b7b79ce2b1508da641",
+  "checkpoint_index": 1,
+  "checkpoint_namespace": "owned-episode-delta-9a748e688a1a928e2c558eb87b3b44fa04335e2f262d60dadd2e5b8d8d635f41",
+  "checkpoint_runtime_identity": {
+    "checkpoint_method_id": "JX_RESTRICTED_WH_OWNED_EPISODE_DELTA_CHECKPOINT_V1",
+    "cpu_runtime": {
+      "cpuinfo": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "libc": [
+        "glibc",
+        "2.43"
+      ],
+      "logical_cpu_count": 12,
+      "machine": "x86_64",
+      "numerical_thread_environment": {
+        "BLIS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+      "process_cpu_affinity": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "processor": "",
+      "release": "7.0.0-34-generic",
+      "system": "Linux"
+    },
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_CUPY_CUDA_RUNTIME_AND_DEVICE",
+    "device": "cuda:0",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "numpy_build": {
+      "Build Dependencies": {
+        "blas": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "include directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/include",
+          "lib directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/.openblas",
+          "version": "0.3.34.106.0"
+        },
+        "lapack": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "include directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/include",
+          "lib directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/.openblas",
+          "version": "0.3.34.106.0"
+        }
+      },
+      "Compilers": {
+        "c": {
+          "commands": "cc",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "c++": {
+          "commands": "c++",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "cython": {
+          "commands": "cython",
+          "linker": "cython",
+          "name": "cython",
+          "version": "3.3.0"
+        }
+      },
+      "Machine Information": {
+        "build": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        },
+        "host": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        }
+      },
+      "Python Information": {
+        "path": "/tmp/build-env-1yb2qye7/bin/python",
+        "version": "3.14"
+      },
+      "SIMD Extensions": {
+        "baseline": [
+          "X86_V2"
+        ],
+        "found": [
+          "X86_V3"
+        ],
+        "not found": [
+          "X86_V4",
+          "AVX512_ICL",
+          "AVX512_SPR"
+        ]
+      }
+    },
+    "numpy_version": "2.5.3",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_build": [
+      "main",
+      "Aug 20 2026 10:41:58"
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_executable": "/usr/bin/python3.14",
+    "python_executable_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "scipy_build": {
+      "Build Dependencies": {
+        "blas": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "has ilp64": false,
+          "include directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/include",
+          "lib directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/",
+          "version": "0.3.30"
+        },
+        "lapack": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "has ilp64": false,
+          "include directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/include",
+          "lib directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/",
+          "version": "0.3.30"
+        },
+        "pybind11": {
+          "detection method": "config-tool",
+          "include directory": "unknown",
+          "name": "pybind11",
+          "version": "3.0.1"
+        }
+      },
+      "Compilers": {
+        "c": {
+          "commands": "cc",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "c++": {
+          "commands": "c++",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "cython": {
+          "commands": "cython",
+          "linker": "cython",
+          "name": "cython",
+          "version": "3.2.4"
+        },
+        "fortran": {
+          "commands": "gfortran",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "pythran": {
+          "include directory": "../../tmp/build-env-s8vrer29/lib/python3.14/site-packages/pythran",
+          "version": "0.18.1"
+        }
+      },
+      "Machine Information": {
+        "build": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        },
+        "cross-compiled": false,
+        "host": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        }
+      },
+      "Python Information": {
+        "path": "/tmp/build-env-s8vrer29/bin/python",
+        "version": "3.14"
+      }
+    },
+    "scipy_version": "1.17.0"
+  },
+  "claim_ceiling": {
+    "claims": {
+      "checkpoint_boundary_owner_persistence_qualified": false,
+      "completion_guaranteed": false,
+      "cross_runtime_bitwise_reproducible": false,
+      "four_point_five_gyr_accuracy_qualified": false,
+      "physical_collision_inferred": false,
+      "physical_ejection_inferred": false,
+      "production_qualified": false,
+      "science_result": false,
+      "whole_encounter_episode_qualified": false
+    },
+    "project_scope": "SCREENING_ONLY",
+    "scientific_classification": "MODEL_OUTPUT"
+  },
+  "genesis_state_sha256": "611047399d6eef83608cc716d049f8500ef918384e8c1d070a17b7cab4b0a1c1",
+  "implementation_identity": {
+    "checkpoint_codec_dependency_identity": {
+      "all_conic_device_source_sha256": "c91c72dbd7b3481ff116e82c9b8e911129291e60dcd2024dae6023ac36c00925",
+      "all_conic_implementation_source_sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+      "backend_implementation_source_sha256": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba",
+      "checkpoint_implementation_source_sha256": "f58e6a62e7c044f1e67bc0b0834859d5eec63c4053e2e425d265e3e10b892d2f",
+      "checkpoint_method_id": "JX_RESTRICTED_WH_REPLAY_VERIFIED_CHECKPOINT_V1",
+      "contracts_implementation_source_sha256": "11c834620deedacd219a35bda46772f9be9f0d6243c644dee4fb02eb6c0c144d",
+      "cuda_options": [
+        "--std=c++11",
+        "--fmad=false"
+      ],
+      "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+      "hybrid_implementation_source_sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+      "hybrid_method_id": "JX_CUDA_RESTRICTED_WH_GUARDED_DOP853_V2",
+      "lifecycle_implementation_source_sha256": "b0211778fcf51dbfef78049e74bafd05d5daee4db7dd18f743f4a5b5a14af346",
+      "lifecycle_method_id": "JX_CUDA_RESTRICTED_WH_FIXED_LANE_LIFECYCLE_V1",
+      "restricted_wh_fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+      "restricted_wh_implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+      "restricted_wh_kick_cuda_source_sha256": "55a86d6a1f15a974a410d38b89d63274990f75eae25f272eddb844c8a3f9cbc5",
+      "restricted_wh_method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1",
+      "route_implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+      "route_method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+      "wisdom_holman_contracts_source_sha256": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+    },
+    "checkpoint_codec_implementation_source_sha256": "f58e6a62e7c044f1e67bc0b0834859d5eec63c4053e2e425d265e3e10b892d2f",
+    "checkpoint_implementation_source_sha256": "aa5b2d4defbdcd2b10e245fcf4d756fff49dc7006cf971bc591850a5652a247a",
+    "checkpoint_method_id": "JX_RESTRICTED_WH_OWNED_EPISODE_DELTA_CHECKPOINT_V1",
+    "episode_implementation_source_sha256": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+    "episode_method_id": "JX_CUDA_RESTRICTED_WH_EPISODE_WAVE_V1",
+    "owned_episode_implementation_source_sha256": "218e514b0a9c46bedb9bbc986a2e7049ce896e5d0799e34b1ffaa7984bbac82c",
+    "owned_episode_method_id": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1",
+    "restricted_wh_fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+    "restricted_wh_implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+    "restricted_wh_method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1"
+  },
+  "input_state_metadata": {
+    "axes": "J2000_ECLIPTIC",
+    "coordinate_system": "PRIMARY_RELATIVE_NONROTATING",
+    "epoch_origin_years_hex": "0x0.0p+0",
+    "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+    "global_source_step": 1000,
+    "length_unit": "AU",
+    "primary_source_id": "Sun",
+    "provenance": {
+      "citation": "Tracked DE441-derived control and frozen synthetic population",
+      "sha256": "92c5f14b04027d4d72d62402a4bf3279ef74117b0f716a13e97a276d98510aec",
+      "source_id": "jx.real-episode-checkpoint-benchmark",
+      "version": "v1"
+    },
+    "snapshot_id": "de441-control-real-episode-checkpoint-v1",
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "source_schedule_sha256": "091ecda15b13a2c9fb1bbe1a94004255a51b0848532fb6749ebfee85cbb80f50",
+    "source_step_years_hex": "0x1.0000000000000p-4",
+    "time_scale": "TDB",
+    "time_unit": "year",
+    "unit_system_id": "AU-YEAR"
+  },
+  "input_state_sha256": "464b104de268e464cfd9b79b04c93e756affda90b2e720050c19038d62a7968c",
+  "lineage_sha256": "3846ff405e4841929cd49db8c7021d7b4b26ce4b6cfcd74722b9eeb86b176a3e",
+  "method_id": "JX_RESTRICTED_WH_OWNED_EPISODE_DELTA_CHECKPOINT_V1",
+  "previous_checkpoint_content_sha256": "47e43f9fb714da55feefda0833df56536efff777ad44cd88ce97a1c705de8dcc",
+  "previous_route_chain_sha256": "fd300b124fdbb7a3df3b16ec10c3b0564fd33bfaea057bad190218ad237eb5f4",
+  "protocol_sha256": "685352b419ab12a3f91ad27896713592c375682e65dbc2f576eabf1b2ade1e5e",
+  "result": {
+    "claims": {
+      "close_encounter_qualified": false,
+      "collision_response_qualified": false,
+      "disk_checkpoint_restart_qualified": false,
+      "long_horizon_accuracy_qualified": false,
+      "production_qualified": false,
+      "science_result": false,
+      "speculative_route_lookahead_qualified": false,
+      "whole_encounter_episode_qualified": false
+    },
+    "maximum_kepler_iterations": 34,
+    "method_id": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1",
+    "minimum_source_distance_array_sha256": "6b76b40c956f229f167bfe823fd42c5df864bdbf518c15cbd2afbca79a1911e7",
+    "project_scope": "SCREENING_ONLY",
+    "route_records": [
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 425,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.f29e9e56ec8a4p+4",
+            "-0x1.2b945c69e7873p+3",
+            "0x1.52719ec62375ep+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.52678eed70a32p-1",
+            "-0x1.01c247006c5dfp+0",
+            "0x1.947977792dc7fp-1"
+          ],
+          "events": [],
+          "global_source_step": 1425,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.14f4591803651p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.14f4591803651p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2ee0403b0b896p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2ee0403b0b896p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "0de78567738e2d4bc0abab712c1409e0ac6216daaa5f9b6d597f55f6ec3f9b85",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 426,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.f1f522578dee7p+4",
+            "-0x1.2d97afdc82eedp+3",
+            "0x1.5f15365237f2bp+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.538864f89b391p-1",
+            "-0x1.01911f26ad7c2p+0",
+            "0x1.946c5446a361dp-1"
+          ],
+          "events": [],
+          "global_source_step": 1426,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.1533b6c158285p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.1533b6c158285p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2daaffa359fa5p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2daaffa359fa5p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "7c32a7c20dd7189173301a5ec62d05601a62a7e5208e767b60b2abe055cfbb49",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 427,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.f14b15fba4912p+4",
+            "-0x1.2f9aa0b53c33fp+3",
+            "0x1.6bb862957e61ap+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.54a900e1b4523p-1",
+            "-0x1.015fad63c0b40p+0",
+            "0x1.945ea52eee41ap-1"
+          ],
+          "events": [],
+          "global_source_step": 1427,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.1572df58743f2p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.1572df58743f2p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2c9ba8db15331p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2c9ba8db15331p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "be4992219fd03c87f4861cc8be8d4886e8dd916d97a37ac97d851c11ab6c6831",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 428,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.f0a07960916d9p+4",
+            "-0x1.319d2e61e254fp+3",
+            "0x1.785b1f2ec5890p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.55c9616d6b20ep-1",
+            "-0x1.012df3593f146p+0",
+            "0x1.945069b354422p-1"
+          ],
+          "events": [],
+          "global_source_step": 1428,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.15b1d23bb0cbep-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.15b1d23bb0cbep-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2bb29b5979a03p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2bb29b5979a03p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "9fbb3c6c5e9912ae4e9400186300497b76aaf71ee441c63a3ae0890a3bffad8a",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 429,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.eff54ca44c34cp+4",
+            "-0x1.339f585388b21p+3",
+            "0x1.84fd67b9354a1p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.56e9857cb386cp-1",
+            "-0x1.00fbf2a9cc6c8p+0",
+            "0x1.9441a168f5699p-1"
+          ],
+          "events": [],
+          "global_source_step": 1429,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.15f08ec89cdcap-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.15f08ec89cdcap-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2af02907ea370p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2af02907ea370p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "4e5b20834aaa2536b9bfe0099a5870ef83cf339521341227361fd2d1cbf85f03",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 430,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.ef498fe554726p+4",
+            "-0x1.35a11dfe8841dp+3",
+            "0x1.919f37ccf0104p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.58096c0fac1d8p-1",
+            "-0x1.00c9acf8346d0p+0",
+            "0x1.94324bf9696e7p-1"
+          ],
+          "events": [],
+          "global_source_step": 1430,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.162f145c07762p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.162f145c07762p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2a5495a33a5bcp+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2a5495a33a5bcp+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "fe999416fddfbcba190268f138e597737512035e810e50ef42caf6142a4a2907",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 431,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.ee9d4342a13b3p+4",
+            "-0x1.37a27eda7ef54p+3",
+            "0x1.9e408affb8358p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.592914488f80ap-1",
+            "-0x1.009723e67e32cp+0",
+            "0x1.942269231eaa5p-1"
+          ],
+          "events": [],
+          "global_source_step": 1431,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.166d62520af0dp-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.166d62520af0dp-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.29e016351cc59p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.29e016351cc59p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "cf966a10016025c1be623a8f9d29a94d315b414f6b558ff8746aa378f0b9795b",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 432,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.edf066db8f629p+4",
+            "-0x1.39a37a624d3bfp+3",
+            "0x1.aae15ce597570p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.5a487d6ea555ep-1",
+            "-0x1.00645914f7026p+0",
+            "0x1.9411f8b9769d3p-1"
+          ],
+          "events": [],
+          "global_source_step": 1432,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.16ab780619b00p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.16ab780619b00p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2992d0a807cbcp+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2992d0a807cbcp+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "7c7d2387d300092a86a9f1a6d20578e478e1a96b8086481e475c098edca76c4c",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 433,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.ed42facfce3a4p+4",
+            "-0x1.3ba4101411937p+3",
+            "0x1.b781a911857bcp+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.5b67a6f126c2cp-1",
+            "-0x1.00314e21350eap+0",
+            "0x1.9400faa49db50p-1"
+          ],
+          "events": [],
+          "global_source_step": 1433,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.16e954d30c370p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.16e954d30c370p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.296cdb7775ca1p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.296cdb7775ca1p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "716d728d829256a416327e0369011b96b2c873b8cf067f357ad61fb5a313bf1a",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 434,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.ec94ff3f4ae55p+4",
+            "-0x1.3da43f7122165p+3",
+            "0x1.c4216b160de36p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.5c86906a09880p-1",
+            "-0x1.fffc094a265cep-1",
+            "0x1.93ef6ee11dbb3p-1"
+          ],
+          "events": [],
+          "global_source_step": 1434,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.1726f813309dep-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.1726f813309dep-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.29689bcda28dcp+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.29689bcda28dcp+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "ad5df2f5b0f2d02df971c3490d25cdca9ec42df7bfb76d319fdcabaeb37288c0",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 435,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.ebe6744a1a4ecp+4",
+            "-0x1.3fa407fe03fbbp+3",
+            "0x1.d0c09e85ef571p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.5da539a0a4dabp-1",
+            "-0x1.ff94fc6b4ce59p-1",
+            "0x1.93dd557f2c0d5p-1"
+          ],
+          "events": [],
+          "global_source_step": 1435,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.176461205b5e9p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.176461205b5e9p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.296e3d7def685p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.296e3d7def685p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "eadc1190e188f962ba5894e7a8f2223d5bb647fc5c3b16236afa847f5f7f4dfb",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 436,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.eb375a1061da1p+4",
+            "-0x1.41a3694260fd9p+3",
+            "0x1.dd5f3ef4b5e3cp+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.5ec3a28c23556p-1",
+            "-0x1.ff2d78c45d25ep-1",
+            "0x1.93caaea1b6817p-1"
+          ],
+          "events": [],
+          "global_source_step": 1436,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.17a18f53f972cp-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.17a18f53f972cp-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2996ede1c919ep+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2996ede1c919ep+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "e6b8d0febff5dbf1c19c28f8687a545fb19db23dfb1f3fdb88e9f2b272d9db5c",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 437,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.ea87b0b23eea0p+4",
+            "-0x1.43a262c8fa9a2p+3",
+            "0x1.e9fd47f74c04ep+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.5fe1cb55b5fd4p-1",
+            "-0x1.fec58166045abp-1",
+            "0x1.93b77a7d33823p-1"
+          ],
+          "events": [],
+          "global_source_step": 1437,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.17de820723b19p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.17de820723b19p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.29e6d420f10c5p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.29e6d420f10c5p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "122bb0c07c29cb56ab24014668cf2ae861d91b1a8595c40c7192993f11bc90e9",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 438,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.e9d7784fad5f2p+4",
+            "-0x1.45a0f41f9b2bcp+3",
+            "0x1.f69ab52481715p+0"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.60ffb45a7d4c0p-1",
+            "-0x1.fe5d1950efbbbp-1",
+            "0x1.93a3b9563b728p-1"
+          ],
+          "events": [],
+          "global_source_step": 1438,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.181b3892b35c2p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.181b3892b35c2p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2a5dc83b9bba5p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2a5dc83b9bba5p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "9c6324179150164cf6d6fd2c1badd0090ac531539712e8d90a5046ca6a2aa1b6",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 439,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.e926b1086d381p+4",
+            "-0x1.479f1cd704cfbp+3",
+            "0x1.019bc10ac2f7ap+1"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.621d5e2d1e7a9p-1",
+            "-0x1.fdf443739a5c3p-1",
+            "0x1.938f6b7ff2b3fp-1"
+          ],
+          "events": [],
+          "global_source_step": 1439,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.1857b24f57bf4p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.1857b24f57bf4p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2afb92fd0fa8ep+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2afb92fd0fa8ep+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "988f3f3c8a3fc9c25f6058133e43b035c9dba53438d87b491af9ff082776cdc8",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 440,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.e8755afbe77c2p+4",
+            "-0x1.499cdc82de1a4p+3",
+            "0x1.07e9d5332b6c3p+1"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.633ac996fccf7p-1",
+            "-0x1.fd8b02a818d41p-1",
+            "0x1.937a915a4cb7dp-1"
+          ],
+          "events": [],
+          "global_source_step": 1440,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.1893ee95acd02p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.1893ee95acd02p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2bbfee614989ap+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2bbfee614989ap+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "18fb2fd522f53a7049af7bcf65d800a0bb7b8d67c3c6be407b280cd187232442",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 441,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.e7c3764912a2bp+4",
+            "-0x1.4b9a32b99c95dp+3",
+            "0x1.0e3794db0f1bap+1"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.6457f799106e6p-1",
+            "-0x1.fd2159b1e4c6ep-1",
+            "0x1.93652b50313ecp-1"
+          ],
+          "events": [],
+          "global_source_step": 1441,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.18cfecbe52a55p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.18cfecbe52a55p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2caa8615b4936p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2caa8615b4936p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "3f55c53eec47189dc3073e2394a87b389f488ec80d6b1b60ecbab17dd692c713",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 442,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.e711030e56a88p+4",
+            "-0x1.4d971f146d0e5p+3",
+            "0x1.1484fdd3c15c1p+1"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.6574e96c5601bp-1",
+            "-0x1.fcb74b3baa6c0p-1",
+            "0x1.934f39d58d5a7p-1"
+          ],
+          "events": [],
+          "global_source_step": 1442,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.190bac2205a94p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.190bac2205a94p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2dbaf812c4025p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2dbaf812c4025p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "a35c5ae9b0e3d36f536e3fd059bc2cdfa4fb6be8cc2d283c9575f349339473ec",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 443,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.e65e016971071p+4",
+            "-0x1.4f93a12f19ac8p+3",
+            "0x1.1ad20df073f90p+1"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.6691a081d47d2p-1",
+            "-0x1.fc4cd9d51a43ep-1",
+            "0x1.9338bd6559ddbp-1"
+          ],
+          "events": [],
+          "global_source_step": 1443,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.19472c19b7656p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.19472c19b7656p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.2ef0d54bdc86ap+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.2ef0d54bdc86ap+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "d7377a47b23d0668afcf679085092e8a0b1dd515f3267236a55419fc176343ed",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      },
+      {
+        "guard_phase": "PRE_KICK_GUARD",
+        "guard_reason": "SWEPT_SOURCE_RADIUS_GUARD",
+        "guard_source_index": 4,
+        "lane_index": 9948,
+        "map_step_index": 444,
+        "route_result": {
+          "accepted_step_count": 8,
+          "claims": {
+            "close_encounter_qualified": false,
+            "collision_response_qualified": false,
+            "disk_checkpoint_restart_qualified": false,
+            "long_horizon_accuracy_qualified": false,
+            "production_qualified": false,
+            "science_result": false
+          },
+          "completed_map_fraction_hex": "0x1.0000000000000p+0",
+          "derivative_evaluation_count": 122,
+          "endpoint_relative_position_AU_hex": [
+            "-0x1.e5aa717758c52p+4",
+            "-0x1.518fb8a7ede57p+3",
+            "0x1.211ec3064f6b8p+1"
+          ],
+          "endpoint_relative_velocity_AU_per_year_hex": [
+            "0x1.67ae1e82381c8p-1",
+            "-0x1.fbe207f0c1351p-1",
+            "0x1.9321b67fa0b64p-1"
+          ],
+          "events": [],
+          "global_source_step": 1444,
+          "maximum_accepted_primary_dynamical_phase_radians_hex": "0x1.19826bfea7be5p-12",
+          "maximum_committed_primary_dynamical_phase_radians_hex": "0x1.19826bfea7be5p-12",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "minimum_committed_stage_distance_AU_hex": "0x1.304ba272b1d30p+1",
+          "minimum_evaluated_stage_distance_AU_hex": "0x1.304ba272b1d30p+1",
+          "project_scope": "SCREENING_ONLY",
+          "runtime_identity": {
+            "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+            "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+            "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+            "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+            "numpy_version": "2.5.3",
+            "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+            "python_version": "3.14.4",
+            "route_policy": {
+              "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+              "event_locator": {
+                "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+                "dense_polynomial_validation_points": 17,
+                "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+                "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+                "maximum_accepted_steps": 100000,
+                "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+                "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+                "relative_tolerance_hex": "0x1.19799812dea11p-40"
+              },
+              "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+              "primary_outer_boundary_AU_hex": null,
+              "schema": "jx.restricted-wh.route-policy.v2",
+              "terminal_source_radii_AU_hex": [
+                "0x1.0000000000000p+4",
+                "0x1.f51bf655b2392p-12",
+                "0x1.a66f84b6f83e0p-12",
+                "0x1.664ceea3bfc0dp-13",
+                "0x1.5b28000a780f4p-13",
+                "0x1.0a6c14a62a4bbp-17"
+              ]
+            },
+            "scipy_version": "1.17.0",
+            "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+          },
+          "scientific_classification": "MODEL_OUTPUT",
+          "source_segment_sha256": "730eb745be67b27dc0b5217cc5597d430034b73cba851986f1a1b8b901efeeab",
+          "source_steps_per_map_step": 1,
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+          "tracer_index": 9948
+        },
+        "tracer_index": 9948
+      }
+    ],
+    "route_worker_indices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "runtime_identity": {
+      "committed_cached_route_step_count": 18,
+      "continuation_route_count": 19,
+      "cuda_options": [
+        "--std=c++11",
+        "--fmad=false"
+      ],
+      "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CUPY_CUDA_RUNTIME_AND_DEVICE",
+      "discarded_speculative_route_step_count": 45,
+      "episode_count": 1,
+      "episode_source_sha256": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+      "fused_batch_kernel_sha256": "837604152dfff4a31a78235ce92914fcec594094477e429a70e94a5dbf14cfd1",
+      "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+      "fused_kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+      "implementation_source_sha256": "218e514b0a9c46bedb9bbc986a2e7049ce896e5d0799e34b1ffaa7984bbac82c",
+      "longest_episode_route_count": 20,
+      "method_id": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1",
+      "new_episode_assignment_count": 1,
+      "partitioned_gpu_step_count": 21,
+      "quiet_cuda_runtime_identity": {
+        "all_conic_device_source_sha256": "c91c72dbd7b3481ff116e82c9b8e911129291e60dcd2024dae6023ac36c00925",
+        "all_conic_implementation_source_sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+        "backend": "cupy",
+        "cuda_driver_version": 13020,
+        "cuda_local_runtime_version": 13040,
+        "cuda_options": [
+          "--std=c++11",
+          "--fmad=false"
+        ],
+        "cuda_runtime_version": 13020,
+        "cupy_version": "14.2.0",
+        "determinism_scope": "SAME_CUPY_CUDA_RUNTIME_AND_DEVICE",
+        "device": "cuda:0",
+        "device_compute_capability": "12.0",
+        "device_index": 0,
+        "device_name": "NVIDIA GeForce RTX 5060 Ti",
+        "device_pci_domain_bus_device": "0000:10:00",
+        "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+        "execution_kernel_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+        "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+        "implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+        "kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+        "kick_cuda_source_sha256": "55a86d6a1f15a974a410d38b89d63274990f75eae25f272eddb844c8a3f9cbc5",
+        "method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1",
+        "nvrtc_version": [
+          13,
+          4
+        ]
+      },
+      "quiet_fused_attempt_count": 2,
+      "reference_hybrid_source_sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+      "route_chain_submission_count": 2,
+      "route_dispatch_policy": "DEDICATED_PROCESS_PER_OWNER_BOUNDED_LOOKAHEAD",
+      "route_lookahead_steps": 64,
+      "route_policy": {
+        "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+        "event_locator": {
+          "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+          "dense_polynomial_validation_points": 17,
+          "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+          "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+          "maximum_accepted_steps": 100000,
+          "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+          "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+          "relative_tolerance_hex": "0x1.19799812dea11p-40"
+        },
+        "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+        "primary_outer_boundary_AU_hex": null,
+        "schema": "jx.restricted-wh.route-policy.v2",
+        "terminal_source_radii_AU_hex": [
+          "0x1.0000000000000p+4",
+          "0x1.f51bf655b2392p-12",
+          "0x1.a66f84b6f83e0p-12",
+          "0x1.664ceea3bfc0dp-13",
+          "0x1.5b28000a780f4p-13",
+          "0x1.0a6c14a62a4bbp-17"
+        ]
+      },
+      "route_runtime_identities": [
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        },
+        {
+          "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_RUNTIME",
+          "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+          "implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+          "method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "python_version": "3.14.4",
+          "route_policy": {
+            "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+            "event_locator": {
+              "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+              "dense_polynomial_validation_points": 17,
+              "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+              "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+              "maximum_accepted_steps": 100000,
+              "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+              "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+              "relative_tolerance_hex": "0x1.19799812dea11p-40"
+            },
+            "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+            "primary_outer_boundary_AU_hex": null,
+            "schema": "jx.restricted-wh.route-policy.v2",
+            "terminal_source_radii_AU_hex": [
+              "0x1.0000000000000p+4",
+              "0x1.f51bf655b2392p-12",
+              "0x1.a66f84b6f83e0p-12",
+              "0x1.664ceea3bfc0dp-13",
+              "0x1.5b28000a780f4p-13",
+              "0x1.0a6c14a62a4bbp-17"
+            ]
+          },
+          "scipy_version": "1.17.0",
+          "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+        }
+      ],
+      "route_worker_assignment_sha256": "8baa4f319c8b5373b23be97f7437a9e39b2b6a8901e1db1c4701fa2962edf313",
+      "route_worker_count": 6,
+      "route_worker_start_method": "spawn",
+      "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+      "speculative_route_step_count": 65
+    },
+    "scientific_classification": "MODEL_OUTPUT",
+    "segment_episode_summaries": [
+      {
+        "ends_at_segment_boundary": false,
+        "first_global_source_step": 1425,
+        "first_map_step_index": 425,
+        "lane_index": 9948,
+        "route_count": 20,
+        "starts_at_segment_boundary": false,
+        "stop_global_source_step": 1445,
+        "stop_map_step_index": 445,
+        "tracer_index": 9948,
+        "worker_index": 0
+      }
+    ],
+    "source_tile_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a"
+  },
+  "route_chain_sha256": "3c70f3737a176bfe984d2a5befe33b1c3874809d728ef7253ce962e1da87389e",
+  "route_delta_sha256": "cd9f7560bc9ce57313c37e3fae910892cb3a2314fb4b5d0a489f36d0e67613e1",
+  "route_lookahead_steps": 64,
+  "route_policy": {
+    "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+    "event_locator": {
+      "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+      "dense_polynomial_validation_points": 17,
+      "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+      "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+      "maximum_accepted_steps": 100000,
+      "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+      "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+      "relative_tolerance_hex": "0x1.19799812dea11p-40"
+    },
+    "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+    "primary_outer_boundary_AU_hex": null,
+    "schema": "jx.restricted-wh.route-policy.v2",
+    "terminal_source_radii_AU_hex": [
+      "0x1.0000000000000p+4",
+      "0x1.f51bf655b2392p-12",
+      "0x1.a66f84b6f83e0p-12",
+      "0x1.664ceea3bfc0dp-13",
+      "0x1.5b28000a780f4p-13",
+      "0x1.0a6c14a62a4bbp-17"
+    ]
+  },
+  "route_record_count_cumulative": 20,
+  "route_record_count_delta": 20,
+  "route_worker_count": 6,
+  "run_id": "restricted-wh-real-episode-checkpoint-benchmark-v2",
+  "schema": "jxplanetx.restricted-wh-owned-episode-delta-checkpoint.v1",
+  "segment_episode_count_cumulative": 1,
+  "segment_episode_count_delta": 1,
+  "segment_sha256": "fc2837bc90ff872c6ef8ae1506371751bd36bbeb1d7fe33b0a1d8025775a2a5e",
+  "source_final_node_sha256": "6d7981149e8de3d6b1b2fb872a805379e91b42fb36dbf230c17191e6651c17d5",
+  "source_initial_node_sha256": "53b7b623af620df171bcd64dbc39254311992d5a81f8e626539ae29c28b1a65b",
+  "source_lineage_sha256": "647dada2d9c2818e440f47bf0629a9ad977c8b17c7b93d46b7583e4ffc8d9f55",
+  "source_tile_metadata": {
+    "axes": "J2000_ECLIPTIC",
+    "content_sha256": "de884a2509ad0744b7e003e748958866fce0777095e6db38413a3adb803d678a",
+    "coordinate_system": "PRIMARY_RELATIVE_NONROTATING",
+    "epoch_origin_years_hex": "0x0.0p+0",
+    "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+    "global_source_step": 1000,
+    "length_unit": "AU",
+    "primary_source_id": "Sun",
+    "provenance": {
+      "citation": "Tracked DE441-derived control and frozen synthetic population",
+      "sha256": "92c5f14b04027d4d72d62402a4bf3279ef74117b0f716a13e97a276d98510aec",
+      "source_id": "jx.real-episode-checkpoint-benchmark",
+      "version": "v1"
+    },
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "source_schedule_sha256": "091ecda15b13a2c9fb1bbe1a94004255a51b0848532fb6749ebfee85cbb80f50",
+    "source_step_years_hex": "0x1.0000000000000p-4",
+    "tile_id": "de441-control-real-episode-checkpoint-v1.hybrid.1000.1000",
+    "time_scale": "TDB",
+    "time_unit": "year",
+    "unit_system_id": "AU-YEAR"
+  },
+  "spec": {
+    "backend": {
+      "allow_fallback": false,
+      "backend_id": "cupy",
+      "determinism_scope": "SAME_RUNTIME_DEVICE",
+      "deterministic_reductions": true,
+      "device": "cuda:0",
+      "dtype": "float64",
+      "fast_math": false,
+      "tile_size": 128
+    },
+    "map_step_count": 1000,
+    "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+    "primary_outer_boundary_AU_hex": null,
+    "source_steps_per_map_step": 1,
+    "threads_per_block": 128
+  },
+  "state_metadata": {
+    "axes": "J2000_ECLIPTIC",
+    "coordinate_system": "PRIMARY_RELATIVE_NONROTATING",
+    "epoch_origin_years_hex": "0x0.0p+0",
+    "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+    "global_source_step": 2000,
+    "length_unit": "AU",
+    "primary_source_id": "Sun",
+    "provenance": {
+      "citation": "Tracked DE441-derived control and frozen synthetic population",
+      "sha256": "92c5f14b04027d4d72d62402a4bf3279ef74117b0f716a13e97a276d98510aec",
+      "source_id": "jx.real-episode-checkpoint-benchmark",
+      "version": "v1"
+    },
+    "snapshot_id": "de441-control-real-episode-checkpoint-v1",
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "source_schedule_sha256": "091ecda15b13a2c9fb1bbe1a94004255a51b0848532fb6749ebfee85cbb80f50",
+    "source_step_years_hex": "0x1.0000000000000p-4",
+    "time_scale": "TDB",
+    "time_unit": "year",
+    "unit_system_id": "AU-YEAR"
+  },
+  "state_sha256": "83d0c87ed954d56cdc0e2d112f8129a5da82c56ea0893730deb152b5d67ce4ca"
+}

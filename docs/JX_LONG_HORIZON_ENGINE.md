@@ -620,6 +620,46 @@ control false.  The fixture covers only two synthetic segments on one exact
 runtime.  It does not qualify owner persistence across a checkpoint, physical
 encounter rates, long-duration replay cost, production use, or science.
 
+### Representative real-input checkpoint benchmark
+
+The locked append session subsequently passed a create-only benchmark using
+the tracked six-source DE441-derived control state and the complete frozen
+16,800-tracer synthetic population.  It advanced 250 years at a 0.0625-year
+source/map step in four 1,000-step segments.  The route deltas were exactly
+`(0, 20, 82, 0)`: 102 Neptune-routed steps in two operational episodes.  This
+is a representative engineering fixture, not an observed population and not
+an encounter-rate inference.  The two episodes do not overlap, so this screen
+does not claim six-core route parallelism.
+
+The standalone full-predecessor-replay API and the locked session emitted the
+same four checkpoint-content hashes, the same rolling route-chain SHA-256
+`193394346652bab6cbe1567693c16f26bf0eade58496a6aed882720871b32b23`,
+and the same final state SHA-256
+`5e37562402f5053b4303fb809c89714046f544ab773b12d4e332d247ce705469`.
+Fresh externally anchored full-chain loads also returned that state in both
+modes.  All source, runtime, code, route-profile, endpoint, and all-false claim
+gates passed.
+
+Across the four appends, standalone cumulative numerical replay took 59.497
+seconds and the locked session took 25.517 seconds, a 2.332-times speedup.  The
+final segment contained no new route and exposed the avoided historical work
+most clearly: append time fell from 25.190 seconds to 0.759 seconds, a
+33.20-times speedup.  The final fresh full-history audit intentionally remained
+about 25 seconds in both modes.  Artifact rehashing also remains cumulative;
+only repeated numerical predecessor replay was removed.
+
+The retained evidence is under
+`runs/restricted_wh_real_episode_checkpoint_benchmark_v2/`.  Its protocol
+SHA-256 is
+`685352b419ab12a3f91ad27896713592c375682e65dbc2f576eabf1b2ade1e5e`;
+its result content SHA-256 is
+`5385cf5b17a34b233ae160bd00fdc41799a8f8544e29b4a091b6a11d7b73dff4`.
+The status is `PASSED_ENGINEERING_BENCHMARK_NOT_SCIENCE`.  An earlier v1 run
+was preserved after failing only its predeclared semantic endpoint hash: the
+numerical endpoint matched between modes, but the expected hash came from a
+probe with a different snapshot/provenance label.  The gate was corrected in
+a new committed v2 protocol and rerun; it was not waived retroactively.
+
 ## Explicitly false claims
 
 For M1, all result claim controls are fixed to false.  In particular, this
@@ -668,9 +708,11 @@ Work should advance only through evidence-backed rungs:
    prospective caching now pass exact-parity gates.  The delta checkpoint
    schema now binds per-segment worker/episode evidence without duplicating the
    historical route ledger, and its bounded split/restart qualification passes.
-   The next rung is representative non-synthetic episode-duration, cumulative
-   replay-time, memory, and disk-resource testing, followed by a linear-time
-   verifier receipt or equivalent if repeated full-chain replay becomes the
+   A complete-population, tracked-input 250-year benchmark now proves exact
+   checkpoint parity and removes repeated predecessor dynamics from in-session
+   appends.  The next rung is longer representative episode-duration, memory,
+   disk, and cumulative artifact-hash testing, followed by a linear-time final
+   verifier receipt or equivalent if fresh full-history audit becomes the
    limiting cost.  Exact endpoint/route parity and transactional first-event
    behavior remain mandatory.  A guard hit must never be silently interpreted
    as a collision or flyby.
