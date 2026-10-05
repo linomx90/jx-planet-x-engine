@@ -58,6 +58,7 @@ from jxplanetx.restricted_wh_episode_checkpoint import (
     owned_episode_state_sha256,
 )
 import jxplanetx.restricted_wh_episode_checkpoint as checkpoint_module
+import jxplanetx.restricted_wh_source as source_provider_module
 from jxplanetx.restricted_wh_route import (
     RestrictedWHRouteSpec,
     restricted_wh_route_policy_identity,
@@ -68,10 +69,10 @@ from jxplanetx.restricted_wh_source import (
 )
 
 
-SCHEMA = "jx.restricted-wh.real-episode-checkpoint-benchmark.v2"
-PROTOCOL_DOMAIN = b"jx.restricted-wh.real-episode.protocol.v2\0"
-RESULT_DOMAIN = b"jx.restricted-wh.real-episode.result.v2\0"
-RUN_ID = "restricted-wh-real-episode-checkpoint-benchmark-v2"
+SCHEMA = "jx.restricted-wh.real-episode-checkpoint-benchmark.v3"
+PROTOCOL_DOMAIN = b"jx.restricted-wh.real-episode.protocol.v3\0"
+RESULT_DOMAIN = b"jx.restricted-wh.real-episode.result.v3\0"
+RUN_ID = "restricted-wh-real-episode-checkpoint-benchmark-v3"
 PHYSICAL_CPU_AFFINITY = (0, 1, 2, 3, 4, 5)
 ROUTE_WORKER_COUNT = 6
 ROUTE_LOOKAHEAD_STEPS = 64
@@ -89,7 +90,7 @@ EXPECTED_FINAL_STATE_SHA256 = (
 MINIMUM_FINAL_QUIET_APPEND_SPEEDUP = 5.0
 MINIMUM_TOTAL_APPEND_SPEEDUP = 1.20
 DEFAULT_OUTPUT_ROOT = Path(
-    "runs/restricted_wh_real_episode_checkpoint_benchmark_v2"
+    "runs/restricted_wh_real_episode_checkpoint_benchmark_v3"
 )
 COLLISION_STATE_PATH = Path(
     "runs/cuda_four_arm_screen_v1/qualification/arms/control/INITIAL_STATE.npz"
@@ -102,11 +103,17 @@ SOURCE_PATHS = {
     "owned_episode": "src/jxplanetx/cuda_restricted_wh_episode_owner.py",
     "route": "src/jxplanetx/restricted_wh_route.py",
     "event_locator": "src/jxplanetx/cuda_tracer_events.py",
+    "lifecycle": "src/jxplanetx/restricted_wh_lifecycle.py",
     "checkpoint_codec": "src/jxplanetx/restricted_wh_checkpoint.py",
     "delta_checkpoint": (
         "src/jxplanetx/restricted_wh_episode_checkpoint.py"
     ),
     "source_provider": "src/jxplanetx/restricted_wh_source.py",
+    "engine_backends": "src/jxplanetx/engine/backends.py",
+    "engine_contracts": "src/jxplanetx/engine/contracts.py",
+    "wisdom_holman_contracts": (
+        "src/jxplanetx/engine/wisdom_holman_contracts.py"
+    ),
     "frozen_input_adapter": (
         "benchmarks/jx_cuda_restricted_wh_refinement.py"
     ),
@@ -163,6 +170,51 @@ def _source_hashes() -> dict[str, str]:
     return {
         label: _sha256_file(Path(path)) for label, path in SOURCE_PATHS.items()
     }
+
+
+def _in_memory_source_hashes(
+    implementation_identity: Mapping[str, Any],
+) -> dict[str, str]:
+    codec = implementation_identity["checkpoint_codec_dependency_identity"]
+    return {
+        "all_conic": codec["all_conic_implementation_source_sha256"],
+        "restricted_wh": implementation_identity[
+            "restricted_wh_implementation_source_sha256"
+        ],
+        "hybrid": codec["hybrid_implementation_source_sha256"],
+        "episode": implementation_identity[
+            "episode_implementation_source_sha256"
+        ],
+        "owned_episode": implementation_identity[
+            "owned_episode_implementation_source_sha256"
+        ],
+        "route": codec["route_implementation_source_sha256"],
+        "event_locator": codec["event_locator_source_sha256"],
+        "lifecycle": codec["lifecycle_implementation_source_sha256"],
+        "checkpoint_codec": implementation_identity[
+            "checkpoint_codec_implementation_source_sha256"
+        ],
+        "delta_checkpoint": implementation_identity[
+            "checkpoint_implementation_source_sha256"
+        ],
+        "source_provider": source_provider_module.IMPLEMENTATION_SOURCE_SHA256,
+        "engine_backends": codec["backend_implementation_source_sha256"],
+        "engine_contracts": codec["contracts_implementation_source_sha256"],
+        "wisdom_holman_contracts": codec[
+            "wisdom_holman_contracts_source_sha256"
+        ],
+    }
+
+
+def _source_identity_matches_disk(
+    in_memory: Mapping[str, str], on_disk: Mapping[str, str]
+) -> bool:
+    return all(
+        type(label) is str
+        and type(digest) is str
+        and on_disk.get(label) == digest
+        for label, digest in in_memory.items()
+    )
 
 
 def _git_head() -> str:
@@ -368,6 +420,15 @@ def main() -> int:
     implementation_identity = _plain(
         owned_episode_checkpoint_implementation_identity()
     )
+    in_memory_source_hashes = _in_memory_source_hashes(
+        implementation_identity
+    )
+    if not _source_identity_matches_disk(
+        in_memory_source_hashes, start_source_hashes
+    ):
+        raise RuntimeError(
+            "imported numerical implementation differs from source bytes"
+        )
     (
         tracer_position,
         tracer_velocity,
@@ -435,6 +496,8 @@ def main() -> int:
             "created_utc": datetime.now(timezone.utc).isoformat(),
             "git_head": start_git_head,
             "source_hashes": start_source_hashes,
+            "in_memory_source_hashes": in_memory_source_hashes,
+            "in_memory_source_identity_matches_disk": True,
             "implementation_identity": implementation_identity,
             "runtime_identity": runtime_identity,
             "numerical_thread_environment": NUMERICAL_THREAD_ENVIRONMENT,
@@ -512,9 +575,24 @@ def main() -> int:
     end_runtime_identity = _plain(
         owned_episode_checkpoint_runtime_identity(backend)
     )
+    end_implementation_identity = _plain(
+        owned_episode_checkpoint_implementation_identity()
+    )
+    end_in_memory_source_hashes = _in_memory_source_hashes(
+        end_implementation_identity
+    )
     gates = {
         "source_bytes_unchanged": end_source_hashes == start_source_hashes,
         "git_head_unchanged": end_git_head == start_git_head,
+        "implementation_identity_unchanged": (
+            end_implementation_identity == implementation_identity
+        ),
+        "in_memory_source_identity_matches_disk": (
+            end_in_memory_source_hashes == in_memory_source_hashes
+            and _source_identity_matches_disk(
+                end_in_memory_source_hashes, end_source_hashes
+            )
+        ),
         "runtime_identity_unchanged": (
             end_runtime_identity == runtime_identity
         ),

@@ -881,6 +881,22 @@ def owned_episode_checkpoint_runtime_identity(
     return _checkpoint_codec._freeze_tree(base)
 
 
+def _current_checkpoint_identities(
+    backend: BackendSpec,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    implementation = dict(
+        _checkpoint_codec._plain_tree(
+            owned_episode_checkpoint_implementation_identity()
+        )
+    )
+    runtime = dict(
+        _checkpoint_codec._plain_tree(
+            owned_episode_checkpoint_runtime_identity(backend)
+        )
+    )
+    return implementation, runtime
+
+
 def owned_episode_state_sha256(
     state: CUDARestrictedWHState, backend: BackendSpec
 ) -> str:
@@ -1357,7 +1373,26 @@ def _dump_locked(
     route_lookahead_steps: int,
     previous_checkpoint_content_sha256: str | None,
     verified_head: _VerifiedAppendHead | None = None,
+    bound_implementation_identity: Mapping[str, Any] | None = None,
+    bound_runtime_identity: Mapping[str, Any] | None = None,
 ) -> Mapping[str, Any]:
+    if (bound_implementation_identity is None) != (
+        bound_runtime_identity is None
+    ):
+        raise OwnedEpisodeCheckpointContractError(
+            "append implementation and runtime identities must be bound together"
+        )
+    if bound_implementation_identity is None:
+        implementation_identity, runtime_identity = (
+            _current_checkpoint_identities(spec.backend)
+        )
+    else:
+        implementation_identity = dict(
+            _checkpoint_codec._plain_tree(bound_implementation_identity)
+        )
+        runtime_identity = dict(
+            _checkpoint_codec._plain_tree(bound_runtime_identity)
+        )
     records = _scan_records(root, run_id, protocol_sha256)
     if checkpoint_index != len(records):
         raise OwnedEpisodeCheckpointContractError(
@@ -1610,16 +1645,8 @@ def _dump_locked(
             prior_episode_count + episode_count_delta
         ),
         "result": result_record,
-        "implementation_identity": dict(
-            _checkpoint_codec._plain_tree(
-                owned_episode_checkpoint_implementation_identity()
-            )
-        ),
-        "checkpoint_runtime_identity": dict(
-            _checkpoint_codec._plain_tree(
-                owned_episode_checkpoint_runtime_identity(spec.backend)
-            )
-        ),
+        "implementation_identity": implementation_identity,
+        "checkpoint_runtime_identity": runtime_identity,
         "claim_ceiling": {
             "scientific_classification": SCIENTIFIC_CLASSIFICATION,
             "project_scope": PROJECT_SCOPE,
@@ -1629,6 +1656,21 @@ def _dump_locked(
     record["checkpoint_content_sha256"] = hashlib.sha256(
         CHECKPOINT_DOMAIN + _checkpoint_codec._canonical_json(record)
     ).hexdigest()
+    current_implementation, current_runtime = _current_checkpoint_identities(
+        spec.backend
+    )
+    if not _checkpoint_codec._canonical_tree_equal(
+        current_implementation, implementation_identity
+    ):
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "append implementation identity changed before publication"
+        )
+    if not _checkpoint_codec._canonical_tree_equal(
+        current_runtime, runtime_identity
+    ):
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "append host/CUDA runtime identity changed before publication"
+        )
     _checkpoint_codec._atomic_json_create(record_path, record)
     return _checkpoint_codec._freeze_tree(record)
 
@@ -2154,15 +2196,8 @@ class OwnedEpisodeDeltaAppendSession:
                 route_worker_count,
                 route_lookahead_steps,
             )
-            current_implementation = dict(
-                _checkpoint_codec._plain_tree(
-                    owned_episode_checkpoint_implementation_identity()
-                )
-            )
-            current_runtime = dict(
-                _checkpoint_codec._plain_tree(
-                    owned_episode_checkpoint_runtime_identity(self._backend)
-                )
+            current_implementation, current_runtime = (
+                _current_checkpoint_identities(self._backend)
             )
             if not _checkpoint_codec._canonical_tree_equal(
                 current_implementation, self._implementation_identity
@@ -2201,6 +2236,10 @@ class OwnedEpisodeDeltaAppendSession:
                 route_lookahead_steps=route_lookahead_steps,
                 previous_checkpoint_content_sha256=predecessor,
                 verified_head=self._verified_head,
+                bound_implementation_identity=(
+                    self._implementation_identity
+                ),
+                bound_runtime_identity=self._runtime_identity,
             )
             loaded, verified_head = _read_published_append_head(
                 self._root,
@@ -2294,16 +2333,26 @@ def open_owned_episode_delta_append_session(
                 )
             loaded = None
             verified_head = None
-        implementation = dict(
-            _checkpoint_codec._plain_tree(
-                owned_episode_checkpoint_implementation_identity()
-            )
-        )
-        runtime = dict(
-            _checkpoint_codec._plain_tree(
-                owned_episode_checkpoint_runtime_identity(backend)
-            )
-        )
+        implementation, runtime = _current_checkpoint_identities(backend)
+        if loaded is not None:
+            if not _checkpoint_codec._canonical_tree_equal(
+                implementation,
+                _checkpoint_codec._plain_tree(
+                    loaded.record.get("implementation_identity")
+                ),
+            ):
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "append implementation identity changed after head replay"
+                )
+            if not _checkpoint_codec._canonical_tree_equal(
+                runtime,
+                _checkpoint_codec._plain_tree(
+                    loaded.record.get("checkpoint_runtime_identity")
+                ),
+            ):
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "append host/CUDA runtime identity changed after head replay"
+                )
         return OwnedEpisodeDeltaAppendSession(
             seal=_APPEND_SESSION_SEAL,
             root=root,

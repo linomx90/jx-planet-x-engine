@@ -652,6 +652,95 @@ class OwnedEpisodeDeltaCheckpointTests(unittest.TestCase):
             self.assertTrue(session._closed)
             self.assertFalse(_record_path(root, 0).exists())
 
+    def test_append_session_rechecks_bound_identity_before_json_publish(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile, spec, result = _segment(initial)
+            session = open_owned_episode_delta_append_session(
+                root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            )
+            original_runtime = dict(
+                checkpoint_module._checkpoint_codec._plain_tree(
+                    checkpoint_module.owned_episode_checkpoint_runtime_identity(
+                        _backend()
+                    )
+                )
+            )
+            changed_runtime = dict(original_runtime)
+            changed_runtime["checkpoint_method_id"] = "changed-at-publish"
+            with mock.patch.object(
+                checkpoint_module,
+                "owned_episode_checkpoint_runtime_identity",
+                side_effect=(original_runtime, changed_runtime),
+            ):
+                with self.assertRaisesRegex(
+                    OwnedEpisodeCheckpointIntegrityError,
+                    "changed before publication",
+                ):
+                    session.append(
+                        input_state=initial,
+                        result=result,
+                        source_tile=tile,
+                        spec=spec,
+                        route_worker_count=1,
+                        route_lookahead_steps=4,
+                    )
+            self.assertTrue(session._closed)
+            self.assertFalse(_record_path(root, 0).exists())
+
+    def test_append_session_rechecks_identity_after_head_replay(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile, spec, result = _segment(initial)
+            row = _dump(
+                root,
+                index=0,
+                genesis=genesis,
+                input_state=initial,
+                tile=tile,
+                spec=spec,
+                result=result,
+                predecessor=None,
+            )
+            original_runtime = dict(
+                checkpoint_module._checkpoint_codec._plain_tree(
+                    checkpoint_module.owned_episode_checkpoint_runtime_identity(
+                        _backend()
+                    )
+                )
+            )
+            changed_runtime = dict(original_runtime)
+            changed_runtime["checkpoint_method_id"] = "changed-after-replay"
+            with mock.patch.object(
+                checkpoint_module,
+                "owned_episode_checkpoint_runtime_identity",
+                side_effect=(original_runtime, changed_runtime),
+            ):
+                with self.assertRaisesRegex(
+                    OwnedEpisodeCheckpointIntegrityError,
+                    "changed after head replay",
+                ):
+                    open_owned_episode_delta_append_session(
+                        root,
+                        run_id=RUN_ID,
+                        protocol_sha256=PROTOCOL_SHA256,
+                        genesis_state_sha256=genesis,
+                        backend=_backend(),
+                        expected_checkpoint_index=0,
+                        expected_checkpoint_content_sha256=row[
+                            "checkpoint_content_sha256"
+                        ],
+                    )
+            self.assertFalse(_record_path(root, 1).exists())
+
     def test_external_head_anchor_detects_tail_deletion(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
