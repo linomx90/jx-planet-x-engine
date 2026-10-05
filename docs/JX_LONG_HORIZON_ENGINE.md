@@ -407,8 +407,8 @@ The two JSON records occupied about 2.69 MB each, or about 5.13 KiB per
 route row.  Full-chain replay took about 19 seconds on this exact runtime.
 
 A separate three-repeat scaling screen used 12 guarded tracers for eight
-steps.  One worker had a median time of 8.70 seconds and six workers had a
-median time of 2.29 seconds: a 3.80-times speedup.  Endpoint and complete
+steps.  One worker had a median time of 8.68 seconds and six workers had a
+median time of 2.26 seconds: a 3.83-times speedup.  Endpoint and complete
 route-ledger hashes were identical between worker counts and across repeats.
 This selects six physical-core workers for the current deterministic CPU route
 path; it is not a cross-machine performance claim.
