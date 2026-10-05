@@ -1,0 +1,439 @@
+{
+  "artifacts": [
+    {
+      "path": "PROTOCOL.json",
+      "sha256": "0e2f91f9a6134e3318958d2ab8e3a1ca60fc01da086997414e27c7a9b289985f",
+      "size_bytes": 12136
+    },
+    {
+      "path": "checkpoints/run-b8de04797e6cfddcc1a25fea648f971d046d4c14e4ec0c489b553bfb33aecfa4/.append.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "checkpoints/run-b8de04797e6cfddcc1a25fea648f971d046d4c14e4ec0c489b553bfb33aecfa4/checkpoint_00000000000000000000.array-2f0b87f07e09016f7f4672ae06f73c6ad9abd1cf977fb8d7e3ce8b848f4a543e.npz",
+      "sha256": "2f0b87f07e09016f7f4672ae06f73c6ad9abd1cf977fb8d7e3ce8b848f4a543e",
+      "size_bytes": 35540
+    },
+    {
+      "path": "checkpoints/run-b8de04797e6cfddcc1a25fea648f971d046d4c14e4ec0c489b553bfb33aecfa4/checkpoint_00000000000000000000.json",
+      "sha256": "8f463b204fa791a9c4bb31673ce81a0304e83f80c0de65e500bfd979e42d5182",
+      "size_bytes": 2692071
+    },
+    {
+      "path": "checkpoints/run-b8de04797e6cfddcc1a25fea648f971d046d4c14e4ec0c489b553bfb33aecfa4/checkpoint_00000000000000000001.array-bdf61a944939ff5b707225cbcddd65b7b74203f52a23b11d3599ae977286b01b.npz",
+      "sha256": "bdf61a944939ff5b707225cbcddd65b7b74203f52a23b11d3599ae977286b01b",
+      "size_bytes": 35540
+    },
+    {
+      "path": "checkpoints/run-b8de04797e6cfddcc1a25fea648f971d046d4c14e4ec0c489b553bfb33aecfa4/checkpoint_00000000000000000001.json",
+      "sha256": "7ae64b70161fd19854e9fb74abd995dedcbf5f53266ef472b9c0ce35e9a2c16d",
+      "size_bytes": 2692135
+    }
+  ],
+  "checkpoint_heads": [
+    {
+      "array_file_sha256": "2f0b87f07e09016f7f4672ae06f73c6ad9abd1cf977fb8d7e3ce8b848f4a543e",
+      "checkpoint_content_sha256": "5d7447bdcaf943e1ce8cba1c0d8bd40a58c4a4a011af742bfeca3fd886cc7172",
+      "checkpoint_index": 0,
+      "segment_sha256": "08b262c8b53f25b9926c1ee30e01dcda2aa84dc7097ca6c2835c684ab7158777"
+    },
+    {
+      "array_file_sha256": "bdf61a944939ff5b707225cbcddd65b7b74203f52a23b11d3599ae977286b01b",
+      "checkpoint_content_sha256": "6ae403e6f6e11f413f85c2f3871a1b2634417a94c2d43828eff5a5119d63e0ad",
+      "checkpoint_index": 1,
+      "segment_sha256": "d8256c7d64093b57749987f43375df6c141fefc285213c93f8664f2a76885c3b"
+    }
+  ],
+  "checkpoint_storage": {
+    "bytes_per_route_json_max": 5258.076171875,
+    "json_sizes_bytes": [
+      2692071,
+      2692135
+    ],
+    "namespace_size_bytes": 5455286,
+    "npz_sizes_bytes": [
+      35540,
+      35540
+    ]
+  },
+  "claims": {
+    "cross_runtime_determinism_validated": false,
+    "long_horizon_accuracy_validated": false,
+    "long_horizon_completion_projected": false,
+    "power_loss_durability_validated": false,
+    "production_qualified": false,
+    "science_result": false
+  },
+  "classification": "ENGINEERING_QUALIFICATION_ONLY",
+  "completed_utc": "2026-10-05T08:04:08.327343+00:00",
+  "content_sha256": "08e19165b1fa0f19539172e5af3ffc3b01f4a73daa8e7dff6d89e0e051a15a8c",
+  "final_state_sha256": "ec81b6a18159b829aa6103d824cea9ff521086580842ff94b4dc3dac831b92f6",
+  "gates": {
+    "all_claims_false": true,
+    "all_lanes_active": true,
+    "all_routes_rejoined": true,
+    "bitwise_segmented_equals_uninterrupted": true,
+    "checkpoint_artifact_size_bounded": true,
+    "checkpoint_chain_full_replay": true,
+    "checkpoint_external_head_exact": true,
+    "exact_route_count": true,
+    "implementation_identity_stable": true,
+    "loaded_endpoint_bitwise_exact": true,
+    "normalized_route_ledger_exact": true,
+    "numerical_thread_environment_exact": true,
+    "operation_watchdogs_passed": true,
+    "repeat_load_bitwise_exact": true,
+    "replay_time_bounds_passed": true,
+    "runtime_identity_stable": true,
+    "six_physical_cpu_affinity_exact": true,
+    "six_worker_bitwise_and_speedup": true,
+    "source_boundary_chain_exact": true
+  },
+  "implementation_identity": {
+    "all_conic_device_source_sha256": "c91c72dbd7b3481ff116e82c9b8e911129291e60dcd2024dae6023ac36c00925",
+    "all_conic_implementation_source_sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+    "backend_implementation_source_sha256": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba",
+    "checkpoint_implementation_source_sha256": "fe3e5a3aedb3eb25812f70cac084fbcd115fa9917edbf1ace0fc55b0f2317fce",
+    "checkpoint_method_id": "JX_RESTRICTED_WH_REPLAY_VERIFIED_CHECKPOINT_V1",
+    "contracts_implementation_source_sha256": "11c834620deedacd219a35bda46772f9be9f0d6243c644dee4fb02eb6c0c144d",
+    "cuda_options": [
+      "--std=c++11",
+      "--fmad=false"
+    ],
+    "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "hybrid_implementation_source_sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+    "hybrid_method_id": "JX_CUDA_RESTRICTED_WH_GUARDED_DOP853_V2",
+    "lifecycle_implementation_source_sha256": "b0211778fcf51dbfef78049e74bafd05d5daee4db7dd18f743f4a5b5a14af346",
+    "lifecycle_method_id": "JX_CUDA_RESTRICTED_WH_FIXED_LANE_LIFECYCLE_V1",
+    "restricted_wh_fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+    "restricted_wh_implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+    "restricted_wh_kick_cuda_source_sha256": "55a86d6a1f15a974a410d38b89d63274990f75eae25f272eddb844c8a3f9cbc5",
+    "restricted_wh_method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1",
+    "route_implementation_source_sha256": "be2d1b8481ad04974c6bcca1a3d553d02e23f10c4e0c513b9df8c2b7f3d13a46",
+    "route_method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V2",
+    "wisdom_holman_contracts_source_sha256": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+  },
+  "limitations": [
+    "synthetic one-source route-heavy fixture",
+    "same-runtime deterministic replay only",
+    "process-crash recovery tested separately; power-loss durability not claimed",
+    "no long-horizon accuracy, completion, or science inference"
+  ],
+  "loaded_state_sha256": "ec81b6a18159b829aa6103d824cea9ff521086580842ff94b4dc3dac831b92f6",
+  "profile": {
+    "expected_route_count": 1024,
+    "expected_routes_per_segment": 512,
+    "minimum_six_worker_speedup_hex": "0x1.0000000000000p+1",
+    "numerical_thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "physical_cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "route_worker_count": 6,
+    "routed_lanes": 256,
+    "scaling_lanes": 12,
+    "scaling_repeats": 3,
+    "scaling_steps": 8,
+    "segment_count": 2,
+    "segment_steps": 2,
+    "step_years_hex": "0x1.0624dd2f1a9fcp-10",
+    "total_steps": 4
+  },
+  "protocol_sha256": "abb465bdf5609205976b2a8f59d02d9e9171a641f06ddcace39969cb1d6b2fec",
+  "route_count_total": 1024,
+  "route_counts_per_segment": [
+    512,
+    512
+  ],
+  "route_ledger_sha256": "6e1ca67cbf5fbf7b6eabee6ab2fec074853e13022b774093aad4ffcc11b866d4",
+  "run_id": "restricted-wh-checkpoint-qualification-v1",
+  "runtime_identity": {
+    "cpu_runtime": {
+      "cpuinfo": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "libc": [
+        "glibc",
+        "2.43"
+      ],
+      "logical_cpu_count": 12,
+      "machine": "x86_64",
+      "numerical_thread_environment": {
+        "BLIS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+      "process_cpu_affinity": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "processor": "",
+      "release": "7.0.0-34-generic",
+      "system": "Linux"
+    },
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_CUPY_CUDA_RUNTIME_AND_DEVICE",
+    "device": "cuda:0",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "numpy_build": {
+      "Build Dependencies": {
+        "blas": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "include directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/include",
+          "lib directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/.openblas",
+          "version": "0.3.34.106.0"
+        },
+        "lapack": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "include directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/include",
+          "lib directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/.openblas",
+          "version": "0.3.34.106.0"
+        }
+      },
+      "Compilers": {
+        "c": {
+          "commands": "cc",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "c++": {
+          "commands": "c++",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "cython": {
+          "commands": "cython",
+          "linker": "cython",
+          "name": "cython",
+          "version": "3.3.0"
+        }
+      },
+      "Machine Information": {
+        "build": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        },
+        "host": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        }
+      },
+      "Python Information": {
+        "path": "/tmp/build-env-1yb2qye7/bin/python",
+        "version": "3.14"
+      },
+      "SIMD Extensions": {
+        "baseline": [
+          "X86_V2"
+        ],
+        "found": [
+          "X86_V3"
+        ],
+        "not found": [
+          "X86_V4",
+          "AVX512_ICL",
+          "AVX512_SPR"
+        ]
+      }
+    },
+    "numpy_version": "2.5.3",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_build": [
+      "main",
+      "Aug 20 2026 10:41:58"
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_executable": "/usr/bin/python3.14",
+    "python_executable_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "scipy_build": {
+      "Build Dependencies": {
+        "blas": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "has ilp64": false,
+          "include directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/include",
+          "lib directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/",
+          "version": "0.3.30"
+        },
+        "lapack": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "has ilp64": false,
+          "include directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/include",
+          "lib directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/",
+          "version": "0.3.30"
+        },
+        "pybind11": {
+          "detection method": "config-tool",
+          "include directory": "unknown",
+          "name": "pybind11",
+          "version": "3.0.1"
+        }
+      },
+      "Compilers": {
+        "c": {
+          "commands": "cc",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "c++": {
+          "commands": "c++",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "cython": {
+          "commands": "cython",
+          "linker": "cython",
+          "name": "cython",
+          "version": "3.2.4"
+        },
+        "fortran": {
+          "commands": "gfortran",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "pythran": {
+          "include directory": "../../tmp/build-env-s8vrer29/lib/python3.14/site-packages/pythran",
+          "version": "0.18.1"
+        }
+      },
+      "Machine Information": {
+        "build": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        },
+        "cross-compiled": false,
+        "host": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        }
+      },
+      "Python Information": {
+        "path": "/tmp/build-env-s8vrer29/bin/python",
+        "version": "3.14"
+      }
+    },
+    "scipy_version": "1.17.0"
+  },
+  "schema": "jx.restricted-wh.checkpoint-qualification.v1",
+  "second_loaded_state_sha256": "ec81b6a18159b829aa6103d824cea9ff521086580842ff94b4dc3dac831b92f6",
+  "status": "PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE",
+  "timings": {
+    "final_full_chain_load_and_replay_seconds": 19.04534419195261,
+    "second_full_chain_load_and_replay_seconds": 19.100953552988358,
+    "segments": [
+      {
+        "advance_seconds": 9.571131912060082,
+        "checkpoint_index": 0,
+        "dump_and_replay_seconds": 9.781039226916619
+      },
+      {
+        "advance_seconds": 9.24704330903478,
+        "checkpoint_index": 1,
+        "dump_and_replay_seconds": 19.087711911997758
+      }
+    ],
+    "uninterrupted_advance_seconds": 18.411571162054315
+  },
+  "uninterrupted_route_ledger_sha256": "6e1ca67cbf5fbf7b6eabee6ab2fec074853e13022b774093aad4ffcc11b866d4",
+  "uninterrupted_state_sha256": "ec81b6a18159b829aa6103d824cea9ff521086580842ff94b4dc3dac831b92f6",
+  "worker_scaling": {
+    "lanes": 12,
+    "precision_gate_passed": true,
+    "repeats": 3,
+    "rows": {
+      "1": {
+        "mad_seconds": 0.10091523197479546,
+        "median_seconds": 8.678320519975387,
+        "route_count": 96,
+        "route_ledger_sha256": "116cd38886c7cb5ed65a7e9f6d76506abc88afc6f9fddca23ce60b160e20ca07",
+        "samples_seconds": [
+          8.911939803976566,
+          8.577405288000591,
+          8.678320519975387
+        ],
+        "state_sha256": "6395530a70a50c569dd8378ffac9e46ee09725645481ae05a5e15996b8afb756"
+      },
+      "6": {
+        "mad_seconds": 0.001436174032278359,
+        "median_seconds": 2.2636935350019485,
+        "route_count": 96,
+        "route_ledger_sha256": "116cd38886c7cb5ed65a7e9f6d76506abc88afc6f9fddca23ce60b160e20ca07",
+        "samples_seconds": [
+          2.2777900770306587,
+          2.26225736096967,
+          2.2636935350019485
+        ],
+        "state_sha256": "6395530a70a50c569dd8378ffac9e46ee09725645481ae05a5e15996b8afb756"
+      }
+    },
+    "six_worker_speedup": 3.8336993880966825,
+    "speedup_gate_passed": true,
+    "steps": 8
+  }
+}
