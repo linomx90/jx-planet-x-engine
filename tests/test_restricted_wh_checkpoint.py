@@ -2,9 +2,13 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
+import fcntl
 import hashlib
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import threading
 import unittest
@@ -40,6 +44,67 @@ from jxplanetx.cuda_restricted_wh import FixedStepCUDARestrictedWHSpec
 PROTOCOL_SHA256 = hashlib.sha256(
     b"restricted-wh-checkpoint-test-protocol-v1"
 ).hexdigest()
+
+
+_CRASH_WORKER_MODULE = "tests.restricted_wh_checkpoint_crash_worker"
+
+
+def _kill_writer_at_publication_boundary(root: Path, phase: str) -> None:
+    environment = dict(os.environ)
+    source_root = str(Path(__file__).resolve().parents[1] / "src")
+    repository_root = str(Path(__file__).resolve().parents[1])
+    existing = environment.get("PYTHONPATH")
+    environment["PYTHONPATH"] = os.pathsep.join(
+        value
+        for value in (source_root, repository_root, existing)
+        if value
+    )
+    completed = subprocess.run(
+        [sys.executable, "-m", _CRASH_WORKER_MODULE, phase, str(root)],
+        cwd=repository_root,
+        env=environment,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        timeout=60.0,
+    )
+    expected = {
+        "before_array_link": 91,
+        "after_array_link": 92,
+        "before_record_link": 93,
+        "after_record_link": 94,
+    }[phase]
+    if completed.returncode != expected:
+        raise AssertionError(
+            f"crash worker exited {completed.returncode}, expected {expected}; "
+            f"stdout={completed.stdout!r}; stderr={completed.stderr!r}"
+        )
+
+
+def _seed_successor_fixture(root: Path):
+    initial = initialize_restricted_wh_lifecycle(_state(1))
+    first, tile0, spec0 = _run_segment(initial, start=0, steps=1)
+    row0 = _dump(
+        root,
+        index=0,
+        genesis_state=initial,
+        input_state=initial,
+        result=first,
+        tile=tile0,
+        spec=spec0,
+    )
+    second, tile1, spec1 = _run_segment(first.state, start=1, steps=1)
+    return initial, first, second, tile1, spec1, row0
+
+
+def _assert_append_lock_released(testcase: unittest.TestCase, root: Path) -> None:
+    lock_path = _namespace(root) / ".append.lock"
+    testcase.assertTrue(lock_path.is_file())
+    testcase.assertEqual(lock_path.stat().st_size, 0)
+    with lock_path.open("rb") as stream:
+        fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
 
 
 def _run_segment(
@@ -201,6 +266,128 @@ def _replace_minimum_with_float32(namespace: Path, record_path: Path) -> dict:
 
 @GPU_REQUIRED
 class RestrictedWHCheckpointTests(unittest.TestCase):
+    def test_process_death_before_array_link_leaves_temporary_and_retries(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial, first, result, tile, spec, row0 = _seed_successor_fixture(root)
+            namespace = _namespace(root)
+            row0_path = namespace / "checkpoint_00000000000000000000.json"
+            row0_sha256 = hashlib.sha256(row0_path.read_bytes()).hexdigest()
+            _kill_writer_at_publication_boundary(root, "before_array_link")
+            _assert_append_lock_released(self, root)
+            self.assertEqual(len(list(namespace.glob("checkpoint_*.json"))), 1)
+            self.assertEqual(len(list(namespace.glob("checkpoint_*.npz"))), 1)
+            self.assertEqual(len(list(namespace.glob(".checkpoint_*.npz"))), 1)
+            self.assertEqual(_load(root, initial, row0).checkpoint_index, 0)
+            row = _dump(
+                root,
+                index=1,
+                genesis_state=initial,
+                input_state=first.state,
+                result=result,
+                tile=tile,
+                spec=spec,
+                predecessor=row0["checkpoint_content_sha256"],
+            )
+            self.assertEqual(hashlib.sha256(row0_path.read_bytes()).hexdigest(), row0_sha256)
+            self.assertEqual(_load(root, initial, row).checkpoint_index, 1)
+
+    def test_process_death_after_array_link_preserves_orphan_and_retries(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial, first, result, tile, spec, row0 = _seed_successor_fixture(root)
+            _kill_writer_at_publication_boundary(root, "after_array_link")
+            namespace = _namespace(root)
+            arrays = list(namespace.glob("checkpoint_*.npz"))
+            hidden = list(namespace.glob(".checkpoint_*.npz"))
+            self.assertEqual(len(arrays), 2)
+            self.assertEqual(len(list(namespace.glob("checkpoint_*.json"))), 1)
+            self.assertEqual(len(hidden), 1)
+            canonical = next(
+                path
+                for path in arrays
+                if path.stat().st_ino == hidden[0].stat().st_ino
+            )
+            self.assertEqual(canonical.stat().st_nlink, 2)
+            self.assertEqual(hidden[0].stat().st_nlink, 2)
+            _assert_append_lock_released(self, root)
+            self.assertEqual(_load(root, initial, row0).checkpoint_index, 0)
+            row = _dump(
+                root,
+                index=1,
+                genesis_state=initial,
+                input_state=first.state,
+                result=result,
+                tile=tile,
+                spec=spec,
+                predecessor=row0["checkpoint_content_sha256"],
+            )
+            self.assertEqual(len(list(namespace.glob("checkpoint_*.npz"))), 2)
+            self.assertEqual(_load(root, initial, row).checkpoint_index, 1)
+
+    def test_process_death_before_record_link_keeps_old_head_and_retries(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial, first, result, tile, spec, row0 = _seed_successor_fixture(root)
+            _kill_writer_at_publication_boundary(root, "before_record_link")
+            namespace = _namespace(root)
+            self.assertEqual(len(list(namespace.glob("checkpoint_*.npz"))), 2)
+            self.assertEqual(len(list(namespace.glob("checkpoint_*.json"))), 1)
+            self.assertEqual(
+                len(list(namespace.glob(".checkpoint_*.json.*.tmp"))), 1
+            )
+            _assert_append_lock_released(self, root)
+            self.assertEqual(_load(root, initial, row0).checkpoint_index, 0)
+            row1 = _dump(
+                root,
+                index=1,
+                genesis_state=initial,
+                input_state=first.state,
+                result=result,
+                tile=tile,
+                spec=spec,
+                predecessor=row0["checkpoint_content_sha256"],
+            )
+            self.assertEqual(_load(root, initial, row1).checkpoint_index, 1)
+
+    def test_process_death_after_record_link_requires_explicit_head_recovery(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial, first, result, tile, spec, row0 = _seed_successor_fixture(root)
+            _kill_writer_at_publication_boundary(root, "after_record_link")
+            record_path = (
+                _namespace(root) / "checkpoint_00000000000000000001.json"
+            )
+            self.assertTrue(record_path.is_file())
+            hidden = list(_namespace(root).glob(".checkpoint_*.json.*.tmp"))
+            self.assertEqual(len(hidden), 1)
+            self.assertEqual(record_path.stat().st_ino, hidden[0].stat().st_ino)
+            self.assertEqual(record_path.stat().st_nlink, 2)
+            _assert_append_lock_released(self, root)
+            with self.assertRaises(RestrictedWHCheckpointIntegrityError):
+                _load(root, initial, row0)
+            recovered_head = json.loads(record_path.read_text(encoding="utf-8"))
+            with self.assertRaisesRegex(
+                RestrictedWHCheckpointContractError,
+                "checkpoint indices must increase monotonically",
+            ):
+                _dump(
+                    root,
+                    index=1,
+                    genesis_state=initial,
+                    input_state=first.state,
+                    result=result,
+                    tile=tile,
+                    spec=spec,
+                    predecessor=row0["checkpoint_content_sha256"],
+                )
+            loaded = _load(root, initial, recovered_head)
+            self.assertEqual(loaded.checkpoint_index, 1)
+            self.assertEqual(
+                loaded.checkpoint_content_sha256,
+                recovered_head["checkpoint_content_sha256"],
+            )
+
     def test_quiet_roundtrip_is_replay_verified_and_immutable(self):
         initial = initialize_restricted_wh_lifecycle(_state(3))
         result, tile, spec = _run_segment(initial, start=0, steps=2)

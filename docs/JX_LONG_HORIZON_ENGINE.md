@@ -387,6 +387,46 @@ and neither whole close-encounter episodes nor long-duration restart
 qualification has been established.  The new checkpoint component establishes
 exact bounded same-runtime segment restart behavior only.
 
+### Bounded checkpoint and six-worker qualification
+
+The replay-verified checkpoint component has now passed a deliberately bounded
+route-heavy engineering qualification on the RTX 5060 Ti and Ryzen 5 5500.
+The fixed fixture used 256 guarded tracers for four map steps, split into two
+two-step checkpoints.  It produced 1,024 nonterminal route records.  Six
+spawned route workers were restricted to physical CPUs 0--5, and the numerical
+thread environment was fixed to one thread per worker.
+
+All 1,024 normalized route rows, the final state, and both loaded endpoints
+were bitwise identical to the uninterrupted four-step result.  Two independent
+full-chain loads returned the same state and checkpoint head.  The canonical
+route-ledger SHA-256 is
+`6e1ca67cbf5fbf7b6eabee6ab2fec074853e13022b774093aad4ffcc11b866d4`;
+the final lifecycle-state SHA-256 is
+`ec81b6a18159b829aa6103d824cea9ff521086580842ff94b4dc3dac831b92f6`.
+The two JSON records occupied about 2.69 MB each, or about 5.13 KiB per
+route row.  Full-chain replay took about 19 seconds on this exact runtime.
+
+A separate three-repeat scaling screen used 12 guarded tracers for eight
+steps.  One worker had a median time of 8.70 seconds and six workers had a
+median time of 2.29 seconds: a 3.80-times speedup.  Endpoint and complete
+route-ledger hashes were identical between worker counts and across repeats.
+This selects six physical-core workers for the current deterministic CPU route
+path; it is not a cross-machine performance claim.
+
+Process-interruption tests kill a separate writer with `os._exit` while
+appending a successor checkpoint at all four publication boundaries: before
+and after the content-addressed NPZ hard link, and before and after the JSON
+hard link.  They verify kernel-released namespace locking, exact predecessor
+preservation, stale temporary/orphan handling, retry behavior, old-head
+rejection when a new JSON head is visible, and explicit replay-verified head
+adoption.  These tests cover process death on the local filesystem.  They do
+not establish controller, kernel, filesystem, or power-loss durability.
+
+The retained evidence is under
+`runs/restricted_wh_checkpoint_qualification_v1/`.  Its result status is
+`PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE`, and every production,
+long-horizon, cross-runtime, power-loss, and scientific claim remains false.
+
 ## Explicitly false claims
 
 For M1, all result claim controls are fixed to false.  In particular, this
@@ -423,13 +463,13 @@ Work should advance only through evidence-backed rungs:
    implementation, while retaining 0.03125 year as the refinement lane.
    Define bounded distribution-level error budgets before selecting a
    production timestep or increasing duration.
-3. **Qualify persistent evidence at scale.** The content-addressed checkpoint
-   format now binds complete source-schedule identity, tracer genesis,
-   predecessor linkage, runtime identity, and deterministic replay.  Extend
-   the bounded unit matrix to long route-heavy segments, every operational
-   split point, crash injection during both publication phases, disk-capacity
-   budgets, and independent archival verification before promoting restart to
-   a production-qualified interface.
+3. **Qualify persistent evidence at larger scale.** The content-addressed
+   checkpoint format now binds complete source-schedule identity, tracer
+   genesis, predecessor linkage, runtime identity, and deterministic replay.
+   The bounded 1,024-route chain and all four process-publication crash points
+   pass.  Extend this to representative long segments, every operational split
+   point, cumulative-ledger and disk-capacity budgets, and independent archive
+   reconstruction before promoting restart to a production interface.
 4. **Complete encounter episodes deliberately.** Extend the now-tested
    guarded-step handoff/rejoin and fixed-lane terminal lifecycle with
    persistent route/removal ledgers.  Replace iterative guarded-lane discovery
