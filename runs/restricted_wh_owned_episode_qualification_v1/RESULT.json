@@ -1,0 +1,280 @@
+{
+  "claims": {
+    "cross_runtime_bitwise_reproducible": false,
+    "disk_checkpoint_restart_qualified": false,
+    "long_horizon_accuracy_qualified": false,
+    "long_horizon_completion_projected": false,
+    "physical_encounter_rate_represented": false,
+    "production_qualified": false,
+    "science_result": false
+  },
+  "classification": "ENGINEERING_QUALIFICATION_ONLY",
+  "completed_utc": "2026-10-05T12:59:17.996217+00:00",
+  "content_sha256": "200ccf5d1906756c5053cc84120c4641c3980564f804bcd97f73eff731c6c95b",
+  "gates": {
+    "all_claims_false": true,
+    "bitwise_state_equal_all_modes_repeats": true,
+    "bounded_lookahead_accounting_exact": true,
+    "child_claim_ceilings_false": true,
+    "episode_grouping_exact": true,
+    "exact_route_count": true,
+    "exact_route_ledger_equal_all_modes_repeats": true,
+    "numerical_thread_environment_exact": true,
+    "owned_episode_speedup_passed": true,
+    "persistent_worker_ownership_exact": true,
+    "runtime_identity_stable_within_each_mode": true,
+    "sample_variation_bounded": true,
+    "six_physical_cpu_affinity_exact": true
+  },
+  "limitations": [
+    "synthetic primary-only route-heavy fixture",
+    "episode means consecutive guarded macrosteps, not a physical encounter",
+    "prospective routes commit only after the exact CUDA guard and start-state match",
+    "same-runtime deterministic comparison only",
+    "in-memory execution only; no owned-episode checkpoint contract",
+    "no long-horizon accuracy or completion inference"
+  ],
+  "methods": {
+    "episode": "JX_CUDA_RESTRICTED_WH_EPISODE_WAVE_V1",
+    "owned_episode": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1"
+  },
+  "owned_episode_speedup_over_episode_scheduler": 1.050897478773997,
+  "protocol_sha256": "4706f07ca061de03186e0baff0b44967afb67f3dfbf0b1c0c3e8e1f3e02d544a",
+  "rows": {
+    "episode_six_workers": {
+      "episode_count": 6,
+      "longest_episode_route_count": 196,
+      "mad_seconds": 0.22844555950723588,
+      "median_seconds": 19.873249301454052,
+      "persistent_owner_per_episode": null,
+      "route_count": 1176,
+      "route_ledger_sha256": "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+      "route_ledger_sha256_samples": [
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d"
+      ],
+      "route_runtime_identity_count": 1176,
+      "route_runtime_identity_unique_sha256": [
+        "2a16cffd5f92231392382fa57a66bbaa2e2f8cce589fe29eeb25b9069c692e30"
+      ],
+      "route_worker_assignment_evidence_sha256": null,
+      "route_worker_indices_used": null,
+      "runtime_identity": {
+        "cuda_options": [
+          "--std=c++11",
+          "--fmad=false"
+        ],
+        "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CUPY_CUDA_RUNTIME_AND_DEVICE",
+        "episode_count": 6,
+        "fused_batch_kernel_sha256": "837604152dfff4a31a78235ce92914fcec594094477e429a70e94a5dbf14cfd1",
+        "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+        "fused_kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+        "implementation_source_sha256": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+        "longest_episode_route_count": 196,
+        "method_id": "JX_CUDA_RESTRICTED_WH_EPISODE_WAVE_V1",
+        "partitioned_gpu_step_count": 196,
+        "quiet_cuda_runtime_identity": {
+          "all_conic_device_source_sha256": "c91c72dbd7b3481ff116e82c9b8e911129291e60dcd2024dae6023ac36c00925",
+          "all_conic_implementation_source_sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+          "backend": "cupy",
+          "cuda_driver_version": 13020,
+          "cuda_local_runtime_version": 13040,
+          "cuda_options": [
+            "--std=c++11",
+            "--fmad=false"
+          ],
+          "cuda_runtime_version": 13020,
+          "cupy_version": "14.2.0",
+          "determinism_scope": "SAME_CUPY_CUDA_RUNTIME_AND_DEVICE",
+          "device": "cuda:0",
+          "device_compute_capability": "12.0",
+          "device_index": 0,
+          "device_name": "NVIDIA GeForce RTX 5060 Ti",
+          "device_pci_domain_bus_device": "0000:10:00",
+          "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+          "execution_kernel_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+          "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+          "implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+          "kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+          "kick_cuda_source_sha256": "55a86d6a1f15a974a410d38b89d63274990f75eae25f272eddb844c8a3f9cbc5",
+          "method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1",
+          "nvrtc_version": [
+            13,
+            4
+          ]
+        },
+        "quiet_fused_attempt_count": 1,
+        "reference_hybrid_source_sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+        "route_dispatch_policy": "REFERENCE_ONE_FUTURE_PER_ROUTE",
+        "route_policy": {
+          "content_sha256": "40ac2f92f03adf7b4f3a982f6a22fc10c23009d44ceceabc21296505506a2134",
+          "event_locator": {
+            "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+            "dense_polynomial_validation_points": 17,
+            "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+            "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+            "maximum_accepted_steps": 100000,
+            "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+            "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+            "relative_tolerance_hex": "0x1.19799812dea11p-40"
+          },
+          "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+          "primary_outer_boundary_AU_hex": null,
+          "schema": "jx.restricted-wh.route-policy.v1"
+        },
+        "route_worker_count": 6,
+        "route_worker_start_method": "spawn",
+        "source_tile_sha256": "c5ff43af9b3ff09cfe5fab5a2897e76c28715e6b20d911c7ac0f3c76b535a749"
+      },
+      "runtime_identity_sha256_samples": [
+        "9907d6996668fa19d3f0739243d265ca8046482fe9a67c18bbb5f5ba37546857",
+        "9907d6996668fa19d3f0739243d265ca8046482fe9a67c18bbb5f5ba37546857",
+        "9907d6996668fa19d3f0739243d265ca8046482fe9a67c18bbb5f5ba37546857",
+        "9907d6996668fa19d3f0739243d265ca8046482fe9a67c18bbb5f5ba37546857"
+      ],
+      "sample_cv": 0.016744301264592625,
+      "samples_seconds": [
+        19.451411050045863,
+        19.792193269939162,
+        19.954305332968943,
+        20.249084388953634
+      ],
+      "state_sha256": "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+      "state_sha256_samples": [
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72"
+      ]
+    },
+    "owned_episode_six_workers": {
+      "episode_count": 6,
+      "longest_episode_route_count": 196,
+      "mad_seconds": 0.057341114967130125,
+      "median_seconds": 18.910740298510063,
+      "persistent_owner_per_episode": true,
+      "route_count": 1176,
+      "route_ledger_sha256": "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+      "route_ledger_sha256_samples": [
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d",
+        "491a02956247d14a09d36409512b43ee05e461ffc5be5a6351de6338c977910d"
+      ],
+      "route_runtime_identity_count": 1176,
+      "route_runtime_identity_unique_sha256": [
+        "2a16cffd5f92231392382fa57a66bbaa2e2f8cce589fe29eeb25b9069c692e30"
+      ],
+      "route_worker_assignment_evidence_sha256": "7c045b780343f6cd88868cd756dd0a0b525c25f87a840d17c73b7cdbf12f78f6",
+      "route_worker_indices_used": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "runtime_identity": {
+        "committed_cached_route_step_count": 1146,
+        "continuation_route_count": 1170,
+        "cuda_options": [
+          "--std=c++11",
+          "--fmad=false"
+        ],
+        "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CUPY_CUDA_RUNTIME_AND_DEVICE",
+        "discarded_speculative_route_step_count": 0,
+        "episode_count": 6,
+        "episode_source_sha256": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+        "fused_batch_kernel_sha256": "837604152dfff4a31a78235ce92914fcec594094477e429a70e94a5dbf14cfd1",
+        "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+        "fused_kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+        "implementation_source_sha256": "218e514b0a9c46bedb9bbc986a2e7049ce896e5d0799e34b1ffaa7984bbac82c",
+        "longest_episode_route_count": 196,
+        "method_id": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1",
+        "new_episode_assignment_count": 6,
+        "partitioned_gpu_step_count": 196,
+        "quiet_cuda_runtime_identity": {
+          "all_conic_device_source_sha256": "c91c72dbd7b3481ff116e82c9b8e911129291e60dcd2024dae6023ac36c00925",
+          "all_conic_implementation_source_sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+          "backend": "cupy",
+          "cuda_driver_version": 13020,
+          "cuda_local_runtime_version": 13040,
+          "cuda_options": [
+            "--std=c++11",
+            "--fmad=false"
+          ],
+          "cuda_runtime_version": 13020,
+          "cupy_version": "14.2.0",
+          "determinism_scope": "SAME_CUPY_CUDA_RUNTIME_AND_DEVICE",
+          "device": "cuda:0",
+          "device_compute_capability": "12.0",
+          "device_index": 0,
+          "device_name": "NVIDIA GeForce RTX 5060 Ti",
+          "device_pci_domain_bus_device": "0000:10:00",
+          "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+          "execution_kernel_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+          "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+          "implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+          "kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+          "kick_cuda_source_sha256": "55a86d6a1f15a974a410d38b89d63274990f75eae25f272eddb844c8a3f9cbc5",
+          "method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1",
+          "nvrtc_version": [
+            13,
+            4
+          ]
+        },
+        "quiet_fused_attempt_count": 1,
+        "reference_hybrid_source_sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+        "route_chain_submission_count": 30,
+        "route_dispatch_policy": "DEDICATED_PROCESS_PER_OWNER_BOUNDED_LOOKAHEAD",
+        "route_lookahead_steps": 64,
+        "route_policy": {
+          "content_sha256": "40ac2f92f03adf7b4f3a982f6a22fc10c23009d44ceceabc21296505506a2134",
+          "event_locator": {
+            "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+            "dense_polynomial_validation_points": 17,
+            "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+            "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+            "maximum_accepted_steps": 100000,
+            "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+            "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+            "relative_tolerance_hex": "0x1.19799812dea11p-40"
+          },
+          "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+          "primary_outer_boundary_AU_hex": null,
+          "schema": "jx.restricted-wh.route-policy.v1"
+        },
+        "route_worker_assignment_sha256": "457c1d53695f476c482943e8d237eb38ef75c43457dec7048429901d9caf85a3",
+        "route_worker_count": 6,
+        "route_worker_start_method": "spawn",
+        "source_tile_sha256": "c5ff43af9b3ff09cfe5fab5a2897e76c28715e6b20d911c7ac0f3c76b535a749",
+        "speculative_route_step_count": 1176
+      },
+      "runtime_identity_sha256_samples": [
+        "b2a514032403409b61fc62a3978e571200da4cb11395daefea5978e3db6cb9bd",
+        "b2a514032403409b61fc62a3978e571200da4cb11395daefea5978e3db6cb9bd",
+        "b2a514032403409b61fc62a3978e571200da4cb11395daefea5978e3db6cb9bd",
+        "b2a514032403409b61fc62a3978e571200da4cb11395daefea5978e3db6cb9bd"
+      ],
+      "sample_cv": 0.0036431767097394284,
+      "samples_seconds": [
+        18.866618523024954,
+        18.840179844060913,
+        18.984022421063855,
+        18.954862073995173
+      ],
+      "state_sha256": "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+      "state_sha256_samples": [
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72",
+        "a85db82fbdcc59fb900a538a29abb91ae1ee2ad19d1ab7f706b1663105666d72"
+      ]
+    }
+  },
+  "run_id": "restricted-wh-owned-episode-qualification-v1",
+  "schema": "jx.cuda-restricted-wh.owned-episode-qualification.v1",
+  "status": "PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE"
+}
