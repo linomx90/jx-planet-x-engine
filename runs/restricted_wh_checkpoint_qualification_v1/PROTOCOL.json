@@ -33,11 +33,11 @@
       "route_method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V2",
       "wisdom_holman_contracts_source_sha256": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
     },
-    "git_head": "abbf6c40dfe746ff6a5f7ed86709c89c459e1b38",
-    "runner_sha256": "bf9c2be3d7aae4d7d4f37690d02b9a125e5c1d9a0ce9fdd1ce67006eb9aee8e7"
+    "git_head": "942ecaa6f9a0084c07012cac60e560b78ff31139",
+    "runner_sha256": "0adbeb9dd7b0e3986c385eb91e233a1024d71869bd61422f8ab4842418df2e27"
   },
-  "content_sha256": "abb465bdf5609205976b2a8f59d02d9e9171a641f06ddcace39969cb1d6b2fec",
-  "created_utc": "2026-10-05T08:01:50.990423+00:00",
+  "content_sha256": "630496c458f73286174bcc85eebc3b7adfbdaa84fbef799bb0235683f13e0fcc",
+  "created_utc": "2026-10-05T08:11:25.670630+00:00",
   "full_source_tile_sha256": "28e14b7cbc4781058abb5059aa7d15233a46ab93c9bbadb532dc7f7aef880335",
   "genesis_state_sha256": "860822bbe145b78b4639ede77050a548d9eb58fc3c3f9bd8e69ae890df8d4ad6",
   "profile": {
@@ -79,7 +79,9 @@
     "checkpoint_external_head_exact",
     "runtime_identity_stable",
     "six_worker_bitwise_and_speedup",
-    "resource_bounds",
+    "checkpoint_artifact_size_bounded",
+    "operation_time_bounds_passed",
+    "replay_time_bounds_passed",
     "all_claims_false"
   ],
   "run_id": "restricted-wh-checkpoint-qualification-v1",
