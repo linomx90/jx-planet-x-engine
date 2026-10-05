@@ -435,7 +435,7 @@ def run(output_root: Path) -> dict[str, Any]:
                 "runtime_identity_stable",
                 "six_worker_bitwise_and_speedup",
                 "checkpoint_artifact_size_bounded",
-                "operation_watchdogs_passed",
+                "operation_time_bounds_passed",
                 "replay_time_bounds_passed",
                 "all_claims_false",
             ],
@@ -697,7 +697,7 @@ def run(output_root: Path) -> dict[str, Any]:
             and max(npz_sizes) <= 4 * 1024 * 1024
             and checkpoint_bytes <= 32 * 1024 * 1024
         ),
-        "operation_watchdogs_passed": (
+        "operation_time_bounds_passed": (
             max(operation_times) <= 120.0
             and sum(operation_times) <= 15.0 * 60.0
         ),
