@@ -1,0 +1,66 @@
+{
+  "acceptance": {
+    "all_claims_false_required": true,
+    "bitwise_state_and_route_equality_required": true,
+    "maximum_sample_cv": 0.1,
+    "minimum_episode_vs_reference_speedup": 1.03,
+    "minimum_reference_six_worker_speedup": 2.0
+  },
+  "claims": {
+    "cross_runtime_bitwise_reproducible": false,
+    "disk_checkpoint_restart_qualified": false,
+    "long_horizon_accuracy_qualified": false,
+    "long_horizon_completion_projected": false,
+    "physical_encounter_rate_represented": false,
+    "production_qualified": false,
+    "science_result": false
+  },
+  "classification": "ENGINEERING_QUALIFICATION_ONLY",
+  "content_sha256": "5d0fdd54614aabb3c2fdf40962fca7b6544b8b36c14b3924c1e6c5b26e356179",
+  "execution": {
+    "modes": [
+      "reference_one_worker",
+      "reference_six_workers",
+      "episode_six_workers"
+    ],
+    "numerical_thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "physical_cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "repeats": 3,
+    "route_worker_count": 6
+  },
+  "fixture": {
+    "expected_episode_count": 48,
+    "expected_route_count": 384,
+    "quiet_lanes": 16,
+    "routed_lanes": 48,
+    "source_tile_sha256": "188b9a3c56bdc24116c6caae45f33fa113c9422ebf846c5a89348110db566073",
+    "step_count": 8,
+    "step_years_hex": "0x1.0624dd2f1a9fcp-10"
+  },
+  "git_head_at_start": "a9302751ece2f041083ee0f8669e04cc9753a776",
+  "run_id": "restricted-wh-episode-qualification-v1",
+  "schema": "jx.cuda-restricted-wh.episode-qualification.v1",
+  "source_sha256": {
+    "all_conic": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+    "benchmark": "8a711d10b70128dc8fffce63cdd7160749f72e29bcdeb7592f9049fd0fc80847",
+    "episode": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+    "event_locator": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "hybrid": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+    "restricted_wh": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+    "route": "be2d1b8481ad04974c6bcca1a3d553d02e23f10c4e0c513b9df8c2b7f3d13a46"
+  }
+}

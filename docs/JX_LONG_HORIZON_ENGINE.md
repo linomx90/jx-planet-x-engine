@@ -17,6 +17,9 @@ The prototype is available only by direct import from:
   DOP853 guarded-step redo and first-event location;
 - `jxplanetx.cuda_restricted_wh_hybrid`, a transactional reference scheduler
   that keeps quiet lanes on CUDA and redoes guarded lanes on the CPU;
+- `jxplanetx.cuda_restricted_wh_episode`, an experimental episode-aware
+  scheduler that classifies a complete guarded wave in one CUDA launch and
+  groups consecutive routed macrosteps without changing the route solution;
 - `jxplanetx.restricted_wh_lifecycle`, a fixed-lane terminal lifecycle with an
   immutable in-memory removal ledger;
 - `jxplanetx.restricted_wh_checkpoint`, a create-only, content-addressed,
@@ -140,8 +143,19 @@ are collected into a canonical wave, evaluated by spawned CPU processes, and
 merged in exact input-lane order.  Six workers are the frozen default on the
 target Ryzen 5 5500 because that processor has six physical cores.  The worker
 count and spawn policy are recorded in every result runtime identity.  This is
-the correctness reference for guarded-step work; it is not yet the production
-encounter-episode path.
+the correctness reference for guarded-step work.
+
+The additive episode-aware variant keeps that reference mathematics and route
+solver unchanged.  At the first guard, one fused CUDA classification launch
+exposes every lane's first failure for the current map step.  Quiet lanes use
+their exact fused endpoint; guarded lanes are redone by the same DOP853 worker
+function and merged in the same canonical lane order.  The scheduler remains
+in episode mode until one full map step has no routes, and it groups each
+tracer's maximal sequence of consecutive routed macrosteps into an immutable
+operational episode.  “Episode” here means consecutive guard activity, not a
+physical encounter classification.  CPU route jobs are still one macrostep at
+a time, and this direct-module component has no checkpoint or production
+contract.
 
 The lifecycle variant
 `advance_cuda_restricted_wh_lifecycle_with_wisdom_holman_source` adds stable
@@ -185,8 +199,9 @@ the quiet CUDA path, and an append-only in-memory removal ledger are now
 implemented by the lifecycle wrapper.  Removal at the outer surface is only an
 operational domain exit; it is not called an ejection.  Replay-verified disk
 persistence is implemented by the separate checkpoint layer; a whole-episode
-worker remains intentionally unimplemented.  The current parallel wavefront
-routes one guarded map step at a time.
+worker remains intentionally unimplemented.  The episode-aware wavefront now
+removes iterative per-lane GPU discovery, but still routes one guarded map
+step at a time on the CPU.
 
 Execution is transactional.  Numerical work occurs in private device buffers.
 On a guard, Kepler-solver, or CUDA failure, the raised handoff refers to the
@@ -427,6 +442,44 @@ The retained evidence is under
 `PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE`, and every production,
 long-horizon, cross-runtime, power-loss, and scientific claim remains false.
 
+### Episode-wave engineering qualification
+
+The episode-aware scheduler has passed a separate bounded exact-parity and
+throughput screen on the same RTX 5060 Ti and six physical Ryzen 5 5500 cores.
+The synthetic fixture contained 48 routed lanes and 16 quiet lanes for eight
+map steps: 384 DOP853 route records grouped into 48 eight-step operational
+episodes.  It is deliberately route-heavy and primary-only; it is not a model
+of a physical encounter-rate distribution.
+
+Three modes were each repeated three times.  Every repeat produced the same
+state SHA-256
+`e39ce956d8864a5a20b6d874911f8ea75352de01ca18598d26a172a1d1bf1f5a`
+and the same complete route-ledger SHA-256
+`144bb5373071319665f02b82c6cedf78619b6238f6f98f4ff0d9048bd180c9ca`.
+Median wall times were:
+
+| Mode | Median seconds | Speedup versus one-worker reference |
+|---|---:|---:|
+| Reference scheduler, one CPU worker | 34.266 | 1.00× |
+| Reference scheduler, six CPU workers | 7.118 | 4.81× |
+| Episode-aware scheduler, six CPU workers | 6.504 | 5.27× |
+
+The episode-aware classification is 1.094 times faster than the already
+parallel six-worker reference on this bounded fixture.  Sample coefficients
+of variation were below 0.51 percent, the process was pinned to physical CPUs
+0--5, and each numerical library was limited to one thread per worker.  This
+selects the all-lane CUDA classification wave as the next experimental route
+path.  It does not qualify long-horizon accuracy, completion, collision
+response, physical encounter interpretation, disk restart, or production use.
+
+The retained create-only evidence is under
+`runs/restricted_wh_episode_qualification_v1/`.  Its protocol SHA-256 is
+`5d0fdd54614aabb3c2fdf40962fca7b6544b8b36c14b3924c1e6c5b26e356179`;
+its result content SHA-256 is
+`8a508bab7ee11b728bdcac341402c57aafcf73a8c0eb33af65eeb4647823dce8`.
+The status is `PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE`, with every claim
+control false.
+
 ## Explicitly false claims
 
 For M1, all result claim controls are fixed to false.  In particular, this
@@ -470,13 +523,14 @@ Work should advance only through evidence-backed rungs:
    pass.  Extend this to representative long segments, every operational split
    point, cumulative-ledger and disk-capacity budgets, and independent archive
    reconstruction before promoting restart to a production interface.
-4. **Complete encounter episodes deliberately.** Extend the now-tested
-   guarded-step handoff/rejoin and fixed-lane terminal lifecycle with
-   persistent route/removal ledgers.  Replace iterative guarded-lane discovery
-   and one-step CPU jobs with GPU compaction plus whole-episode worker
-   ownership, while requiring exact agreement with the deterministic
-   six-worker reference wavefront.  A guard hit must never be silently
-   interpreted as a collision or flyby.
+4. **Complete encounter episodes deliberately.** All-lane CUDA classification
+   now replaces iterative guarded-lane discovery and exact episode grouping is
+   qualified against the deterministic six-worker reference.  The next rung
+   is persistent worker ownership across a routed episode, followed by a
+   checkpoint schema that binds episode evidence without duplicating the
+   ledger.  Exact endpoint/route parity and transactional first-event behavior
+   remain mandatory.  A guard hit must never be silently interpreted as a
+   collision or flyby.
 5. **Add multirate execution without changing the mathematics.** The fixed
    integer-ratio fused path now has exact parity with the stepwise reference.
    A future adaptive hierarchy still requires a reversible transition policy,
