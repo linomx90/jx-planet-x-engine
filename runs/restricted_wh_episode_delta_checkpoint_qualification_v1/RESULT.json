@@ -1,0 +1,126 @@
+{
+  "checkpoint_artifacts": [
+    {
+      "path": "PROTOCOL.json",
+      "sha256": "fdb4f653c3da1bef07023d4cd438e22b56850b8392749a2ed91244ba54725fe3",
+      "size_bytes": 3021
+    },
+    {
+      "path": "checkpoints/owned-episode-delta-141f8dd9def857c3941b7ab243ecdcb20bf9a09bb86d0551acc06e8e7b4c8617/.append.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "checkpoints/owned-episode-delta-141f8dd9def857c3941b7ab243ecdcb20bf9a09bb86d0551acc06e8e7b4c8617/checkpoint_00000000000000000000.array-dd1c61eeb87409ea5636acdeadb214f8fd009defc9e729d62f0b3f186bfd14e2.npz",
+      "sha256": "dd1c61eeb87409ea5636acdeadb214f8fd009defc9e729d62f0b3f186bfd14e2",
+      "size_bytes": 5146
+    },
+    {
+      "path": "checkpoints/owned-episode-delta-141f8dd9def857c3941b7ab243ecdcb20bf9a09bb86d0551acc06e8e7b4c8617/checkpoint_00000000000000000000.json",
+      "sha256": "e78e6a03076cda806c01375e660db6eeb6f1cfde0c48fb5972d895e2a78d3ecf",
+      "size_bytes": 515569
+    },
+    {
+      "path": "checkpoints/owned-episode-delta-141f8dd9def857c3941b7ab243ecdcb20bf9a09bb86d0551acc06e8e7b4c8617/checkpoint_00000000000000000001.array-19fc2841e559d3570686ed5381d0af156f6008e0e79322586dca2845904ca152.npz",
+      "sha256": "19fc2841e559d3570686ed5381d0af156f6008e0e79322586dca2845904ca152",
+      "size_bytes": 5146
+    },
+    {
+      "path": "checkpoints/owned-episode-delta-141f8dd9def857c3941b7ab243ecdcb20bf9a09bb86d0551acc06e8e7b4c8617/checkpoint_00000000000000000001.json",
+      "sha256": "e1e788eb6d4016b34c7a6fad5bf396ea1f587495aae11713dcf6ede5c3ddf7f5",
+      "size_bytes": 515764
+    }
+  ],
+  "checkpoint_heads": [
+    {
+      "checkpoint_content_sha256": "ba462bb51e11aa46194577f39e775733a467b80a2accac17c12d8e31c08540af",
+      "checkpoint_index": 0,
+      "route_chain_sha256": "baa53cd977cdf8518f59e6437899c99d9525dc8e35fdb4b5a416f5ed29c6470d",
+      "route_delta_sha256": "693b60ee52d45fe19622915cec483583196f4c82f36aa1b6adfd066354c20a5d",
+      "route_record_count_cumulative": 96,
+      "route_record_count_delta": 96,
+      "segment_episode_count_delta": 6
+    },
+    {
+      "checkpoint_content_sha256": "638da7b2e474255bb7618220cc7a55bdd6820781303d6bee49665e451bcbf2ec",
+      "checkpoint_index": 1,
+      "route_chain_sha256": "827a49f742c80011a3f9bd303a7f957ffdfe39859e9e98660ef37f590832b4da",
+      "route_delta_sha256": "e9cd456c72c1c0d582410a6c814a842fa5262146d89f778dd66339e4b231c35b",
+      "route_record_count_cumulative": 192,
+      "route_record_count_delta": 96,
+      "segment_episode_count_delta": 6
+    }
+  ],
+  "checkpoint_json_maximum_size_ratio": 1.0003782228954805,
+  "checkpoint_json_sizes_bytes": [
+    515569,
+    515764
+  ],
+  "claims": {
+    "checkpoint_boundary_owner_persistence_qualified": false,
+    "cross_runtime_bitwise_reproducible": false,
+    "long_horizon_accuracy_qualified": false,
+    "long_horizon_completion_projected": false,
+    "physical_encounter_rate_represented": false,
+    "production_qualified": false,
+    "science_result": false
+  },
+  "classification": "ENGINEERING_QUALIFICATION_ONLY",
+  "completed_utc": "2026-10-05T21:09:59.295866+00:00",
+  "content_sha256": "38501887afc9b4b03ce5e0d2e3a941f911b2b3db5dfa8ea59c1a1682f96e981b",
+  "direct_result_evidence_sha256": "fe45c9f9b3b1c936895a587563f6bf78946f1ce98ced9e3e36dc367200f0d1af",
+  "direct_state_sha256": "18451651ab50d8a0ecf60908a7adb2a1a08cc782780287f2c5a53dad6c181e24",
+  "gates": {
+    "all_claims_false": true,
+    "checkpoint_artifact_roster_exact": true,
+    "delta_only_route_storage": true,
+    "exact_segment_result_evidence": true,
+    "exact_six_worker_ownership": true,
+    "exact_split_restart_state": true,
+    "full_chain_replay": true,
+    "git_head_unchanged_through_completion": true,
+    "imported_source_identity_matches_protocol": true,
+    "numerical_thread_environment_exact": true,
+    "physical_cpu_affinity_exact": true,
+    "route_chain_and_counters": true,
+    "source_chain_join_exact": true,
+    "source_identity_unchanged_through_completion": true
+  },
+  "genesis_state_sha256": "918af7a14458b32fd071a13d05c67193f37b050378ba79deb1fa75c31c6fb186",
+  "git_head_at_completion": "48ba661766ceb4db5670dd0de5dd871231c12cca",
+  "limitations": [
+    "synthetic primary-only route-heavy fixture",
+    "two checkpoint segments only",
+    "episode means consecutive guarded macrosteps, not a physical encounter",
+    "checkpoint boundary intentionally discards speculative cache and process ownership",
+    "same-runtime deterministic replay only",
+    "no long-horizon accuracy, completion, collision, ejection, or science inference"
+  ],
+  "loaded_state_sha256": "18451651ab50d8a0ecf60908a7adb2a1a08cc782780287f2c5a53dad6c181e24",
+  "methods": {
+    "delta_checkpoint": "JX_RESTRICTED_WH_OWNED_EPISODE_DELTA_CHECKPOINT_V1",
+    "owned_episode": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1"
+  },
+  "protocol_sha256": "9b75d14ca48e0b4348309033c562481a0bee3b0819c51a01e9aa0a6c9bf85860",
+  "restart_result_evidence_sha256": "fe45c9f9b3b1c936895a587563f6bf78946f1ce98ced9e3e36dc367200f0d1af",
+  "restart_state_sha256": "18451651ab50d8a0ecf60908a7adb2a1a08cc782780287f2c5a53dad6c181e24",
+  "run_id": "restricted-wh-owned-episode-delta-qualification-v1",
+  "schema": "jx.restricted-wh.owned-episode-delta-qualification.v1",
+  "source_sha256_at_completion": {
+    "all_conic": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+    "benchmark": "0bd9cc5fd0bca0be834b4442187189c84de5282719c3c8b67adabf79afe691b6",
+    "checkpoint_codec": "fe3e5a3aedb3eb25812f70cac084fbcd115fa9917edbf1ace0fc55b0f2317fce",
+    "delta_checkpoint": "38ad51659d03250a6b95f77da7f8714ee2fb7378eebc38212c6ba0c6a4d4ba57",
+    "engine_backends": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba",
+    "engine_contracts": "11c834620deedacd219a35bda46772f9be9f0d6243c644dee4fb02eb6c0c144d",
+    "episode": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+    "event_locator": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "hybrid": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+    "lifecycle": "b0211778fcf51dbfef78049e74bafd05d5daee4db7dd18f743f4a5b5a14af346",
+    "owned_episode": "218e514b0a9c46bedb9bbc986a2e7049ce896e5d0799e34b1ffaa7984bbac82c",
+    "restricted_wh": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+    "route": "be2d1b8481ad04974c6bcca1a3d553d02e23f10c4e0c513b9df8c2b7f3d13a46",
+    "wisdom_holman_contracts": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+  },
+  "status": "PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE"
+}

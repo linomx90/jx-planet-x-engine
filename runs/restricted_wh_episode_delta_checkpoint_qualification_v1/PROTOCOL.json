@@ -1,0 +1,71 @@
+{
+  "claims": {
+    "checkpoint_boundary_owner_persistence_qualified": false,
+    "cross_runtime_bitwise_reproducible": false,
+    "long_horizon_accuracy_qualified": false,
+    "long_horizon_completion_projected": false,
+    "physical_encounter_rate_represented": false,
+    "production_qualified": false,
+    "science_result": false
+  },
+  "classification": "ENGINEERING_QUALIFICATION_ONLY",
+  "content_sha256": "9b75d14ca48e0b4348309033c562481a0bee3b0819c51a01e9aa0a6c9bf85860",
+  "execution": {
+    "numerical_thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "physical_cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "route_lookahead_steps": 16,
+    "route_worker_count": 6
+  },
+  "fixture": {
+    "expected_route_delta_per_segment": 96,
+    "expected_route_total": 192,
+    "lane_count": 6,
+    "segment_count": 2,
+    "segment_step_count": 16,
+    "source_schedule_sha256": "0efb3f6c5f080d50aa3167a31e2e0ff0a6e76aa6c02ba39d0cef02c03b7e0d8f",
+    "source_step_years_hex": "0x1.0624dd2f1a9fcp-10"
+  },
+  "git_head_at_start": "48ba661766ceb4db5670dd0de5dd871231c12cca",
+  "required_gates": {
+    "all_claims_false": true,
+    "delta_only_route_storage": true,
+    "exact_segment_result_evidence": true,
+    "exact_six_worker_ownership": true,
+    "exact_split_restart_state": true,
+    "executed_source_identity_exact_and_stable": true,
+    "full_chain_replay": true,
+    "route_chain_and_counters": true
+  },
+  "run_id": "restricted-wh-owned-episode-delta-qualification-v1",
+  "schema": "jx.restricted-wh.owned-episode-delta-qualification.v1",
+  "source_sha256": {
+    "all_conic": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+    "benchmark": "0bd9cc5fd0bca0be834b4442187189c84de5282719c3c8b67adabf79afe691b6",
+    "checkpoint_codec": "fe3e5a3aedb3eb25812f70cac084fbcd115fa9917edbf1ace0fc55b0f2317fce",
+    "delta_checkpoint": "38ad51659d03250a6b95f77da7f8714ee2fb7378eebc38212c6ba0c6a4d4ba57",
+    "engine_backends": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba",
+    "engine_contracts": "11c834620deedacd219a35bda46772f9be9f0d6243c644dee4fb02eb6c0c144d",
+    "episode": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+    "event_locator": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+    "hybrid": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+    "lifecycle": "b0211778fcf51dbfef78049e74bafd05d5daee4db7dd18f743f4a5b5a14af346",
+    "owned_episode": "218e514b0a9c46bedb9bbc986a2e7049ce896e5d0799e34b1ffaa7984bbac82c",
+    "restricted_wh": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+    "route": "be2d1b8481ad04974c6bcca1a3d553d02e23f10c4e0c513b9df8c2b7f3d13a46",
+    "wisdom_holman_contracts": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+  }
+}

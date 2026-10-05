@@ -23,6 +23,10 @@ The prototype is available only by direct import from:
 - `jxplanetx.cuda_restricted_wh_episode_owner`, an experimental scheduler that
   assigns each consecutive routed episode to one dedicated CPU worker and
   caches only CUDA-certified, bitwise-start-matched prospective routes;
+- `jxplanetx.restricted_wh_episode_checkpoint`, an experimental delta
+  checkpoint chain for persistent-owner segments that stores only each
+  segment's new route and episode evidence while replay-verifying the complete
+  predecessor chain;
 - `jxplanetx.restricted_wh_lifecycle`, a fixed-lane terminal lifecycle with an
   immutable in-memory removal ledger;
 - `jxplanetx.restricted_wh_checkpoint`, a create-only, content-addressed,
@@ -172,6 +176,20 @@ steps are routed or altering any committed endpoint.  The default lookahead is
 32 map steps, the hard limit is 64, and both values are recorded.  This
 direct-module component remains in-memory, experimental, and non-production.
 
+The additive persistent-owner checkpoint layer deliberately restarts at an
+episode-segment boundary rather than attempting to serialize live worker
+processes or speculative cache entries.  Each record stores only the current
+segment's canonical route rows, worker assignments, and derived episode
+summaries.  A rolling route-chain digest and exact cumulative counters bind
+those deltas across records without copying all earlier route rows into every
+checkpoint.  Before a successor is published, the existing head is loaded and
+the complete chain is replayed under the recorded runtime while holding the
+namespace append lock.  Loading requires an external head index and digest and
+again replays every segment from the genesis commitment.  This reduces
+checkpoint storage growth, but replay work is still cumulative and can become
+quadratic across many appends; the current component is therefore bounded
+engineering evidence, not a production persistence design.
+
 The lifecycle variant
 `advance_cuda_restricted_wh_lifecycle_with_wisdom_holman_source` adds stable
 per-lane lifecycle codes.  A continuously located source-radius contact or
@@ -213,10 +231,11 @@ with a route witness.  Terminal lifecycle/removal, an outer-boundary guard on
 the quiet CUDA path, and an append-only in-memory removal ledger are now
 implemented by the lifecycle wrapper.  Removal at the outer surface is only an
 operational domain exit; it is not called an ejection.  Replay-verified disk
-persistence is implemented by the separate checkpoint layer; a whole-episode
-checkpoint remains intentionally unimplemented.  The persistent-owner variant
-can precompute a bounded chain on one dedicated worker, but the GPU guard and
-bitwise route-start comparison must still authorize every committed map step.
+persistence is implemented by the separate lifecycle checkpoint layer and the
+persistent-owner delta checkpoint layer.  A checkpoint boundary intentionally
+discards live ownership and unused speculative results; after restart the GPU
+guard and bitwise route-start comparison must again authorize every committed
+map step.
 
 Execution is transactional.  Numerical work occurs in private device buffers.
 On a guard, Kepler-solver, or CUDA failure, the raised handoff refers to the
@@ -297,6 +316,15 @@ criterion until these gates remain satisfied.
     explicit tail-rollback rejection, predecessor corruption before append,
     exact source-boundary/GM continuity, canonical index bounds, exact
     binary64 diagnostic arrays, and rehashed claim/runtime tampering.
+12. **Delta episode lineage.** Persistent-owner checkpoints retain only the
+    current segment's route rows and episode summaries, bind them with a
+    rolling route-chain digest and exact cumulative counts, and reset live
+    worker ownership at the boundary.  Append authorization fully reloads and
+    replays the predecessor under the namespace lock.  Tests require exact
+    direct-versus-restart state and result evidence, six-worker episode
+    ownership, source-node continuity, externally anchored heads, strict
+    binary64 arrays, and rejection of rehashed worker, source, claim, runtime,
+    implementation, genesis, index, and predecessor forgeries.
 
 Successful results bind the numerical implementation sources, all-conic
 source, CUDA kick source and compiler options, CuPy/CUDA/NVRTC versions, and
@@ -536,6 +564,45 @@ The status is `PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE`.  This bounded
 speed result does not qualify checkpoint/restart, physical encounter rates,
 long-horizon accuracy or completion, collision response, or science use.
 
+### Persistent-owner delta-checkpoint qualification
+
+The additive delta-checkpoint layer passed a separate create-only engineering
+qualification on the RTX 5060 Ti and physical Ryzen 5 5500 CPUs 0--5.  The
+synthetic primary-only fixture used six continuously routed lanes for two
+16-step segments.  Each segment retained exactly 96 new route records and six
+new operational episode summaries; the complete replayed chain contained 192
+routes and 12 segment-local episodes.
+
+The uninterrupted second segment, the segment resumed from the first loaded
+checkpoint, and a fresh load of the final chain produced the same exact state
+SHA-256:
+`18451651ab50d8a0ecf60908a7adb2a1a08cc782780287f2c5a53dad6c181e24`.
+The direct and resumed second-segment result evidence also matched exactly at
+`fe45c9f9b3b1c936895a587563f6bf78946f1ce98ced9e3e36dc367200f0d1af`.
+The two checkpoint JSON records were 515,569 and 515,764 bytes, a size ratio of
+1.00038 despite the cumulative route count doubling.  This is the intended
+delta-storage property; it is not a claim that replay cost is constant.
+
+The final externally anchored checkpoint head is
+`638da7b2e474255bb7618220cc7a55bdd6820781303d6bee49665e451bcbf2ec`,
+and the final rolling route-chain SHA-256 is
+`827a49f742c80011a3f9bd303a7f957ffdfe39859e9e98660ef37f590832b4da`.
+A separate fresh process, using the exact recorded six-core affinity and
+runtime, reloaded and replayed the official chain to the same head, state, 192
+routes, and 12 episode summaries.  Starting that verifier with a different
+runtime identity failed closed before releasing state.
+
+The retained evidence is under
+`runs/restricted_wh_episode_delta_checkpoint_qualification_v1/`.  Its protocol
+SHA-256 is
+`9b75d14ca48e0b4348309033c562481a0bee3b0819c51a01e9aa0a6c9bf85860`;
+its result content SHA-256 is
+`38501887afc9b4b03ce5e0d2e3a941f911b2b3db5dfa8ea59c1a1682f96e981b`.
+The status is `PASSED_ENGINEERING_QUALIFICATION_NOT_SCIENCE`, with every claim
+control false.  The fixture covers only two synthetic segments on one exact
+runtime.  It does not qualify owner persistence across a checkpoint, physical
+encounter rates, long-duration replay cost, production use, or science.
+
 ## Explicitly false claims
 
 For M1, all result claim controls are fixed to false.  In particular, this
@@ -581,10 +648,13 @@ Work should advance only through evidence-backed rungs:
    reconstruction before promoting restart to a production interface.
 4. **Persist episode evidence deliberately.** All-lane CUDA classification,
    exact episode grouping, and persistent six-worker ownership with bounded
-   prospective caching now pass exact-parity gates.  The next rung is a delta
-   checkpoint schema that binds owner/episode evidence without duplicating the
-   route ledger, plus representative non-synthetic episode-duration and
-   resource tests.  Exact endpoint/route parity and transactional first-event
+   prospective caching now pass exact-parity gates.  The delta checkpoint
+   schema now binds per-segment worker/episode evidence without duplicating the
+   historical route ledger, and its bounded split/restart qualification passes.
+   The next rung is representative non-synthetic episode-duration, cumulative
+   replay-time, memory, and disk-resource testing, followed by a linear-time
+   verifier receipt or equivalent if repeated full-chain replay becomes the
+   limiting cost.  Exact endpoint/route parity and transactional first-event
    behavior remain mandatory.  A guard hit must never be silently interpreted
    as a collision or flyby.
 5. **Add multirate execution without changing the mathematics.** The fixed
