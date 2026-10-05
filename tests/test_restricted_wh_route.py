@@ -173,6 +173,70 @@ class RestrictedWHRouteTests(unittest.TestCase):
         self.assertGreater(result.completed_map_fraction, 0.0)
         self.assertLess(result.completed_map_fraction, 1.0)
 
+    def test_terminal_surface_is_distinct_from_encounter_surface(self):
+        tile = _tile(step=0.75, primary_gm=1.0e-12, primary_radius=1.5)
+        position = np.asarray([2.0, 0.0, 0.0], dtype=np.float64)
+        velocity = np.asarray([-1.0, 0.0, 0.0], dtype=np.float64)
+        legacy = route_restricted_wh_map_step(
+            position,
+            velocity,
+            tracer_index=16,
+            source_tile=tile,
+            source_node_index=0,
+            source_steps_per_map_step=1,
+        )
+        separated = route_restricted_wh_map_step(
+            position,
+            velocity,
+            tracer_index=16,
+            source_tile=tile,
+            source_node_index=0,
+            source_steps_per_map_step=1,
+            spec=RestrictedWHRouteSpec(
+                terminal_source_radii_AU=(0.5,)
+            ),
+        )
+        self.assertTrue(legacy.terminated_at_event)
+        self.assertFalse(separated.terminated_at_event)
+        self.assertEqual(separated.completed_map_fraction, 1.0)
+        self.assertLess(
+            float(np.linalg.norm(separated.endpoint_relative_position_AU)),
+            1.5,
+        )
+        self.assertGreater(
+            float(np.linalg.norm(separated.endpoint_relative_position_AU)),
+            0.5,
+        )
+
+        with self.assertRaisesRegex(
+            RestrictedWHRouteContractError, "exactly cover"
+        ):
+            route_restricted_wh_map_step(
+                position,
+                velocity,
+                tracer_index=16,
+                source_tile=tile,
+                source_node_index=0,
+                source_steps_per_map_step=1,
+                spec=RestrictedWHRouteSpec(
+                    terminal_source_radii_AU=(0.5, 0.5)
+                ),
+            )
+        with self.assertRaisesRegex(
+            RestrictedWHRouteContractError, "cannot exceed"
+        ):
+            route_restricted_wh_map_step(
+                position,
+                velocity,
+                tracer_index=16,
+                source_tile=tile,
+                source_node_index=0,
+                source_steps_per_map_step=1,
+                spec=RestrictedWHRouteSpec(
+                    terminal_source_radii_AU=(1.75,)
+                ),
+            )
+
     def test_outer_boundary_requires_outward_crossing(self):
         tile = _tile(step=2.0, primary_gm=1.0e-12, primary_radius=0.1)
         result = route_restricted_wh_map_step(
@@ -310,6 +374,10 @@ class RestrictedWHRouteTests(unittest.TestCase):
             )
         with self.assertRaises(RestrictedWHRouteContractError):
             replace(RestrictedWHRouteSpec(), maximum_primary_dynamical_phase=0.3)
+        with self.assertRaises(RestrictedWHRouteContractError):
+            RestrictedWHRouteSpec(terminal_source_radii_AU=(-0.1,))
+        with self.assertRaises(RestrictedWHRouteContractError):
+            RestrictedWHRouteSpec(terminal_source_radii_AU=[0.1])
 
     def test_route_policy_identity_is_stable_sensitive_and_immutable(self):
         baseline = restricted_wh_route_policy_identity(
@@ -330,6 +398,16 @@ class RestrictedWHRouteTests(unittest.TestCase):
         )
         self.assertNotEqual(
             baseline["content_sha256"], changed["content_sha256"]
+        )
+        terminal_changed = restricted_wh_route_policy_identity(
+            RestrictedWHRouteSpec(terminal_source_radii_AU=(0.1, 0.2))
+        )
+        self.assertNotEqual(
+            baseline["content_sha256"], terminal_changed["content_sha256"]
+        )
+        self.assertEqual(
+            terminal_changed["terminal_source_radii_AU_hex"],
+            (0.1.hex(), 0.2.hex()),
         )
         with self.assertRaises(TypeError):
             baseline["content_sha256"] = "forged"

@@ -14,6 +14,15 @@ released.  Checkpoint boundaries terminate in-memory speculative caches;
 worker ownership is therefore proved per persisted segment, not claimed to
 survive a process restart.
 
+A locked append session may amortize predecessor verification inside one
+process.  It fully replays an externally anchored existing chain once, rehashes
+every committed JSON and NPZ before every append, deterministically replays
+only the new segment, and derives its next private authorization capability
+from the bytes read back after create-only publication.  The capability is
+bound to one process, thread, implementation, runtime, and namespace lock.
+Closing or poisoning the session discards it; reopening and every public load
+again require full replay from genesis.
+
 Publication is create-only.  The content-addressed NumPy archive is committed
 before its canonical JSON record, so a process crash may leave an unreferenced
 archive but cannot expose a record whose arrays are absent.  An external head
@@ -34,6 +43,7 @@ import os
 from pathlib import Path
 import re
 import tempfile
+import threading
 from types import MappingProxyType
 from typing import Any, Mapping
 
@@ -75,6 +85,9 @@ LINEAGE_DOMAIN = b"jxplanetx.restricted-wh.owned-episode-delta.lineage.v1\0"
 SEGMENT_DOMAIN = b"jxplanetx.restricted-wh.owned-episode-delta.segment.v1\0"
 ROUTE_DELTA_DOMAIN = b"jxplanetx.restricted-wh.owned-episode.route-delta.v1\0"
 ROUTE_CHAIN_DOMAIN = b"jxplanetx.restricted-wh.owned-episode.route-chain.v1\0"
+APPEND_INVENTORY_DOMAIN = (
+    b"jxplanetx.restricted-wh.owned-episode.append-inventory.v1\0"
+)
 MAXIMUM_CHECKPOINT_INDEX = 10**20 - 1
 
 IMPLEMENTATION_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
@@ -257,6 +270,243 @@ class LoadedOwnedEpisodeCheckpoint:
             )
         object.__setattr__(self, "claims", MappingProxyType(dict(CHECKPOINT_CLAIMS)))
         object.__setattr__(self, "record", _checkpoint_codec._freeze_tree(self.record))
+
+
+_APPEND_SESSION_SEAL = object()
+
+
+@dataclass(frozen=True, eq=False)
+class _VerifiedAppendHead:
+    """Private authorization capability for one locked append frontier."""
+
+    seal: object
+    process_id: int
+    thread_id: int
+    run_id: str
+    protocol_sha256: str
+    genesis_state_sha256: str
+    checkpoint_index: int
+    checkpoint_content_sha256: str
+    state_sha256: str
+    route_chain_sha256: str
+    route_record_count_cumulative: int
+    segment_episode_count_cumulative: int
+    artifact_inventory_sha256: str
+    record: Mapping[str, Any]
+
+
+def _append_artifact_inventory(
+    records: tuple[tuple[int, Path, dict[str, Any]], ...],
+) -> str:
+    """Rehash every committed artifact without replaying old dynamics."""
+
+    entries: list[dict[str, Any]] = []
+    for index, path, record in records:
+        arrays = _load_arrays(path, index, record)
+        _validate_loaded_arrays(arrays)
+        entries.append(
+            {
+                "checkpoint_index": index,
+                "checkpoint_content_sha256": record[
+                    "checkpoint_content_sha256"
+                ],
+                "array_file": record["array_file"],
+                "array_file_size_bytes": record["array_file_size_bytes"],
+                "array_file_sha256": record["array_file_sha256"],
+            }
+        )
+    return hashlib.sha256(
+        APPEND_INVENTORY_DOMAIN + _checkpoint_codec._canonical_json(entries)
+    ).hexdigest()
+
+
+def _verified_append_head(
+    loaded: LoadedOwnedEpisodeCheckpoint,
+    records: tuple[tuple[int, Path, dict[str, Any]], ...],
+    *,
+    run_id: str,
+    protocol_sha256: str,
+    genesis_state_sha256: str,
+    artifact_inventory_sha256: str | None = None,
+) -> _VerifiedAppendHead:
+    if not records:
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "cannot authorize an append head for an empty chain"
+        )
+    latest = records[-1][2]
+    if (
+        type(loaded) is not LoadedOwnedEpisodeCheckpoint
+        or loaded.run_id != run_id
+        or loaded.protocol_sha256 != protocol_sha256
+        or loaded.checkpoint_index != latest["checkpoint_index"]
+        or loaded.checkpoint_content_sha256
+        != latest["checkpoint_content_sha256"]
+        or loaded.state_sha256 != latest["state_sha256"]
+        or loaded.route_chain_sha256 != latest["route_chain_sha256"]
+        or loaded.route_record_count_cumulative
+        != latest["route_record_count_cumulative"]
+        or loaded.segment_episode_count_cumulative
+        != latest["segment_episode_count_cumulative"]
+        or not _checkpoint_codec._canonical_tree_equal(
+            _checkpoint_codec._plain_tree(loaded.record), latest
+        )
+    ):
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "replayed append head differs from committed evidence"
+        )
+    inventory = (
+        _append_artifact_inventory(records)
+        if artifact_inventory_sha256 is None
+        else _sha256(
+            artifact_inventory_sha256, "artifact_inventory_sha256"
+        )
+    )
+    return _VerifiedAppendHead(
+        seal=_APPEND_SESSION_SEAL,
+        process_id=os.getpid(),
+        thread_id=threading.get_ident(),
+        run_id=run_id,
+        protocol_sha256=protocol_sha256,
+        genesis_state_sha256=genesis_state_sha256,
+        checkpoint_index=latest["checkpoint_index"],
+        checkpoint_content_sha256=latest["checkpoint_content_sha256"],
+        state_sha256=latest["state_sha256"],
+        route_chain_sha256=latest["route_chain_sha256"],
+        route_record_count_cumulative=latest[
+            "route_record_count_cumulative"
+        ],
+        segment_episode_count_cumulative=latest[
+            "segment_episode_count_cumulative"
+        ],
+        artifact_inventory_sha256=inventory,
+        record=_checkpoint_codec._freeze_tree(latest),
+    )
+
+
+def _validate_verified_append_head(
+    head: _VerifiedAppendHead,
+    records: tuple[tuple[int, Path, dict[str, Any]], ...],
+    *,
+    run_id: str,
+    protocol_sha256: str,
+    genesis_state_sha256: str,
+) -> None:
+    if (
+        type(head) is not _VerifiedAppendHead
+        or head.seal is not _APPEND_SESSION_SEAL
+        or head.process_id != os.getpid()
+        or head.thread_id != threading.get_ident()
+    ):
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "append authorization belongs to another process or thread"
+        )
+    if not records:
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "verified append head requires a nonempty chain"
+        )
+    latest = records[-1][2]
+    inventory = _append_artifact_inventory(records)
+    if (
+        head.run_id != run_id
+        or head.protocol_sha256 != protocol_sha256
+        or head.genesis_state_sha256 != genesis_state_sha256
+        or head.checkpoint_index != latest["checkpoint_index"]
+        or head.checkpoint_content_sha256
+        != latest["checkpoint_content_sha256"]
+        or head.state_sha256 != latest["state_sha256"]
+        or head.route_chain_sha256 != latest["route_chain_sha256"]
+        or head.route_record_count_cumulative
+        != latest["route_record_count_cumulative"]
+        or head.segment_episode_count_cumulative
+        != latest["segment_episode_count_cumulative"]
+        or head.artifact_inventory_sha256 != inventory
+        or not _checkpoint_codec._canonical_tree_equal(
+            _checkpoint_codec._plain_tree(head.record), latest
+        )
+    ):
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "verified append head or committed artifact inventory changed"
+        )
+
+
+def _read_published_append_head(
+    root: Path,
+    *,
+    run_id: str,
+    protocol_sha256: str,
+    genesis_state_sha256: str,
+    backend: BackendSpec,
+    expected_record: Mapping[str, Any],
+    implementation_identity: Mapping[str, Any],
+    runtime_identity: Mapping[str, Any],
+) -> tuple[LoadedOwnedEpisodeCheckpoint, _VerifiedAppendHead]:
+    """Read back new bytes and derive the next capability from those bytes."""
+
+    records = _scan_records(root, run_id, protocol_sha256)
+    if not records:
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "published append did not produce a checkpoint record"
+        )
+    index, path, record = records[-1]
+    if not _checkpoint_codec._canonical_tree_equal(
+        record, _checkpoint_codec._plain_tree(expected_record)
+    ):
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "published checkpoint record differs from verified replay output"
+        )
+    _verify_record_static(
+        record,
+        implementation_identity,
+        runtime_identity,
+        genesis_state_sha256,
+    )
+    inventory = _append_artifact_inventory(records)
+    arrays = _load_arrays(path, index, record)
+    _validate_loaded_arrays(arrays)
+    input_metadata = record.get("input_state_metadata")
+    output_metadata = record.get("state_metadata")
+    if type(input_metadata) is not dict or type(output_metadata) is not dict:
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "published checkpoint state metadata is invalid"
+        )
+    input_hash = _state_sha256(input_metadata, arrays, prefix="input")
+    output_hash = _state_sha256(output_metadata, arrays, prefix="output")
+    if (
+        input_hash != record.get("input_state_sha256")
+        or output_hash != record.get("state_sha256")
+    ):
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "published checkpoint state hash failed read-back"
+        )
+    state = _state_from_storage(
+        output_metadata, arrays, prefix="output", backend=backend
+    )
+    loaded = LoadedOwnedEpisodeCheckpoint(
+        state=state,
+        checkpoint_index=index,
+        checkpoint_content_sha256=record["checkpoint_content_sha256"],
+        input_state_sha256=record["input_state_sha256"],
+        state_sha256=record["state_sha256"],
+        route_chain_sha256=record["route_chain_sha256"],
+        route_record_count_cumulative=record[
+            "route_record_count_cumulative"
+        ],
+        segment_episode_count_cumulative=record[
+            "segment_episode_count_cumulative"
+        ],
+        run_id=run_id,
+        protocol_sha256=protocol_sha256,
+        record=record,
+    )
+    head = _verified_append_head(
+        loaded,
+        records,
+        run_id=run_id,
+        protocol_sha256=protocol_sha256,
+        genesis_state_sha256=genesis_state_sha256,
+        artifact_inventory_sha256=inventory,
+    )
+    return loaded, head
 
 
 def _text(value: object, label: str) -> str:
@@ -962,7 +1212,7 @@ def _verify_result_against_replay(
     route_spec: RestrictedWHRouteSpec,
     route_worker_count: int,
     route_lookahead_steps: int,
-) -> None:
+) -> CUDARestrictedWHOwnedEpisodeResult:
     replay = advance_cuda_restricted_wh_owned_episodes(
         input_state,
         source_tile,
@@ -999,6 +1249,7 @@ def _verify_result_against_replay(
                 "checkpoint result diagnostics or route delta differ from replay"
             )
         cp.cuda.get_current_stream().synchronize()
+    return replay
 
 
 def _core_error(exc: Exception, *, integrity: bool) -> OwnedEpisodeCheckpointError:
@@ -1105,6 +1356,7 @@ def _dump_locked(
     route_worker_count: int,
     route_lookahead_steps: int,
     previous_checkpoint_content_sha256: str | None,
+    verified_head: _VerifiedAppendHead | None = None,
 ) -> Mapping[str, Any]:
     records = _scan_records(root, run_id, protocol_sha256)
     if checkpoint_index != len(records):
@@ -1116,7 +1368,12 @@ def _dump_locked(
         None if latest is None else latest["checkpoint_content_sha256"]
     )
     if previous_checkpoint_content_sha256 != expected_predecessor:
-        raise OwnedEpisodeCheckpointContractError(
+        error_type = (
+            OwnedEpisodeCheckpointIntegrityError
+            if verified_head is not None
+            else OwnedEpisodeCheckpointContractError
+        )
+        raise error_type(
             "previous checkpoint digest does not name the current chain head"
         )
     # Appending is an authorization decision, not only a hash-link operation.
@@ -1124,22 +1381,52 @@ def _dump_locked(
     # the namespace lock is held.  This prevents a rehashed predecessor or a
     # code/runtime transition from being sealed into an irreversible mixed
     # chain that no runtime can subsequently load.
-    verified_latest: LoadedOwnedEpisodeCheckpoint | None = None
     if latest is not None:
-        verified_latest = load_latest_owned_episode_delta_checkpoint(
-            root,
+        if verified_head is None:
+            verified_latest = load_latest_owned_episode_delta_checkpoint(
+                root,
+                run_id=run_id,
+                protocol_sha256=protocol_sha256,
+                genesis_state_sha256=genesis_state_sha256,
+                expected_checkpoint_index=latest["checkpoint_index"],
+                expected_checkpoint_content_sha256=latest[
+                    "checkpoint_content_sha256"
+                ],
+                backend=spec.backend,
+            )
+            verified_head = _verified_append_head(
+                verified_latest,
+                records,
+                run_id=run_id,
+                protocol_sha256=protocol_sha256,
+                genesis_state_sha256=genesis_state_sha256,
+            )
+        _validate_verified_append_head(
+            verified_head,
+            records,
             run_id=run_id,
             protocol_sha256=protocol_sha256,
             genesis_state_sha256=genesis_state_sha256,
-            expected_checkpoint_index=latest["checkpoint_index"],
-            expected_checkpoint_content_sha256=latest[
-                "checkpoint_content_sha256"
-            ],
-            backend=spec.backend,
+        )
+    elif verified_head is not None:
+        raise OwnedEpisodeCheckpointIntegrityError(
+            "verified append head was supplied for an empty chain"
         )
 
-    _verify_result_against_replay(
-        input_state,
+    resolved = resolve_backend(spec.backend)
+    cp = resolved.xp
+    input_metadata = _state_metadata(input_state)
+    with resolved.activate():
+        input_arrays = _state_arrays(input_state, cp, prefix="input")
+        cp.cuda.get_current_stream().synchronize()
+    verified_input_state = _state_from_storage(
+        input_metadata,
+        input_arrays,
+        prefix="input",
+        backend=spec.backend,
+    )
+    verified_result = _verify_result_against_replay(
+        verified_input_state,
         result,
         source_tile,
         spec,
@@ -1147,12 +1434,13 @@ def _dump_locked(
         route_worker_count,
         route_lookahead_steps,
     )
-    resolved = resolve_backend(spec.backend)
-    cp = resolved.xp
     with resolved.activate():
-        input_arrays = _state_arrays(input_state, cp, prefix="input")
-        output_arrays = _state_arrays(result.state, cp, prefix="output")
-        minimum = np.ascontiguousarray(cp.asnumpy(result.minimum_source_distance_AU))
+        output_arrays = _state_arrays(
+            verified_result.state, cp, prefix="output"
+        )
+        minimum = np.ascontiguousarray(
+            cp.asnumpy(verified_result.minimum_source_distance_AU)
+        )
         cp.cuda.get_current_stream().synchronize()
     arrays = {
         **input_arrays,
@@ -1161,8 +1449,7 @@ def _dump_locked(
         "minimum_source_distance_AU": minimum,
     }
     _validate_loaded_arrays(arrays)
-    input_metadata = _state_metadata(input_state)
-    output_metadata = _state_metadata(result.state)
+    output_metadata = _state_metadata(verified_result.state)
     input_hash = _state_sha256(input_metadata, arrays, prefix="input")
     output_hash = _state_sha256(output_metadata, arrays, prefix="output")
     lineage_hash = _lineage_sha256(input_metadata, arrays, prefix="input")
@@ -1181,14 +1468,14 @@ def _dump_locked(
                 "first checkpoint input differs from protocol genesis"
             )
     else:
-        assert verified_latest is not None
+        assert verified_head is not None
         if latest.get("genesis_state_sha256") != genesis_state_sha256:
             raise OwnedEpisodeCheckpointContractError(
                 "successor changed the protocol genesis commitment"
             )
         if (
             input_hash != latest.get("state_sha256")
-            or input_hash != verified_latest.state_sha256
+            or input_hash != verified_head.state_sha256
         ):
             raise OwnedEpisodeCheckpointContractError(
                 "successor input differs from predecessor output"
@@ -1207,7 +1494,7 @@ def _dump_locked(
             )
 
     result_record = _result_semantics(
-        result, cp, segment_map_step_count=spec.map_step_count
+        verified_result, cp, segment_map_step_count=spec.map_step_count
     )
     route_delta = _route_delta_sha256(result_record)
     previous_route_chain = (
@@ -1216,12 +1503,12 @@ def _dump_locked(
     route_chain = _route_chain_sha256(
         previous_route_chain_sha256=previous_route_chain,
         checkpoint_index=checkpoint_index,
-        input_global_source_step=input_state.global_source_step,
-        output_global_source_step=result.state.global_source_step,
+        input_global_source_step=verified_input_state.global_source_step,
+        output_global_source_step=verified_result.state.global_source_step,
         route_delta_sha256=route_delta,
     )
-    route_count_delta = len(result.route_records)
-    episode_count_delta = len(result.episodes)
+    route_count_delta = len(verified_result.route_records)
+    episode_count_delta = len(verified_result.episodes)
     prior_route_count = (
         0 if latest is None else latest["route_record_count_cumulative"]
     )
@@ -1749,17 +2036,305 @@ def load_latest_owned_episode_delta_checkpoint(
         raise _core_error(exc, integrity=False) from exc
 
 
+class OwnedEpisodeDeltaAppendSession:
+    """One locked writer that replay-verifies its predecessor chain once.
+
+    The session holds the namespace append lock for its complete lifetime.
+    Opening an existing chain performs the ordinary full replay.  Each append
+    then verifies only the new deterministic segment, compares the exact
+    locked head with the session's verified head, and advances that in-memory
+    verification frontier.  Closing and reopening always requires another
+    full replay from genesis.
+    """
+
+    def __init__(
+        self,
+        *,
+        seal: object,
+        root: Path,
+        run_id: str,
+        protocol_sha256: str,
+        genesis_state_sha256: str,
+        backend: BackendSpec,
+        lock_context: Any,
+        loaded_head: LoadedOwnedEpisodeCheckpoint | None,
+        verified_head: _VerifiedAppendHead | None,
+        implementation_identity: Mapping[str, Any],
+        runtime_identity: Mapping[str, Any],
+    ) -> None:
+        if seal is not _APPEND_SESSION_SEAL:
+            raise OwnedEpisodeCheckpointContractError(
+                "append sessions must be created by the checkpoint factory"
+            )
+        self._root = root
+        self._run_id = run_id
+        self._protocol_sha256 = protocol_sha256
+        self._genesis_state_sha256 = genesis_state_sha256
+        self._backend = backend
+        self._lock_context = lock_context
+        self._loaded_head = loaded_head
+        self._verified_head = verified_head
+        self._implementation_identity = implementation_identity
+        self._runtime_identity = runtime_identity
+        self._process_id = os.getpid()
+        self._thread_id = threading.get_ident()
+        self._closed = False
+
+    def __enter__(self) -> OwnedEpisodeDeltaAppendSession:
+        if self._closed:
+            raise OwnedEpisodeCheckpointContractError(
+                "append session is already closed"
+            )
+        return self
+
+    def __exit__(self, exc_type: Any, exc: Any, traceback: Any) -> None:
+        self.close()
+
+    @property
+    def loaded_head(self) -> LoadedOwnedEpisodeCheckpoint | None:
+        return self._loaded_head
+
+    def _require_owner(self) -> None:
+        if self._closed:
+            raise OwnedEpisodeCheckpointContractError(
+                "append session is already closed"
+            )
+        if os.getpid() != self._process_id:
+            raise OwnedEpisodeCheckpointIntegrityError(
+                "append session cannot be used after process fork"
+            )
+        if threading.get_ident() != self._thread_id:
+            raise OwnedEpisodeCheckpointIntegrityError(
+                "append session cannot move between threads"
+            )
+
+    def close(self) -> None:
+        if self._closed:
+            return
+        self._require_owner()
+        self._closed = True
+        self._lock_context.__exit__(None, None, None)
+
+    def append(
+        self,
+        *,
+        input_state: CUDARestrictedWHState,
+        result: CUDARestrictedWHOwnedEpisodeResult,
+        source_tile: FrozenSourcePathTile,
+        spec: FixedStepCUDARestrictedWHSpec,
+        route_spec: RestrictedWHRouteSpec | None = None,
+        route_worker_count: int = 6,
+        route_lookahead_steps: int = 32,
+    ) -> LoadedOwnedEpisodeCheckpoint:
+        """Replay and append exactly one new segment at the locked frontier."""
+
+        self._require_owner()
+        try:
+            if type(spec) is not FixedStepCUDARestrictedWHSpec:
+                raise OwnedEpisodeCheckpointContractError(
+                    "spec must be an exact FixedStepCUDARestrictedWHSpec"
+                )
+            if spec.backend != self._backend:
+                raise OwnedEpisodeCheckpointContractError(
+                    "append session backend cannot change"
+                )
+            if route_spec is None:
+                route_spec = RestrictedWHRouteSpec(
+                    maximum_primary_dynamical_phase=(
+                        spec.maximum_primary_dynamical_phase
+                    ),
+                    primary_outer_boundary_AU=spec.primary_outer_boundary_AU,
+                )
+            _validate_segment_shape(
+                input_state,
+                result,
+                source_tile,
+                spec,
+                route_spec,
+                route_worker_count,
+                route_lookahead_steps,
+            )
+            current_implementation = dict(
+                _checkpoint_codec._plain_tree(
+                    owned_episode_checkpoint_implementation_identity()
+                )
+            )
+            current_runtime = dict(
+                _checkpoint_codec._plain_tree(
+                    owned_episode_checkpoint_runtime_identity(self._backend)
+                )
+            )
+            if not _checkpoint_codec._canonical_tree_equal(
+                current_implementation, self._implementation_identity
+            ):
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "append session implementation identity changed"
+                )
+            if not _checkpoint_codec._canonical_tree_equal(
+                current_runtime, self._runtime_identity
+            ):
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "append session host/CUDA runtime identity changed"
+                )
+            checkpoint_index = (
+                0
+                if self._verified_head is None
+                else self._verified_head.checkpoint_index + 1
+            )
+            predecessor = (
+                None
+                if self._verified_head is None
+                else self._verified_head.checkpoint_content_sha256
+            )
+            record = _dump_locked(
+                self._root,
+                run_id=self._run_id,
+                protocol_sha256=self._protocol_sha256,
+                genesis_state_sha256=self._genesis_state_sha256,
+                checkpoint_index=checkpoint_index,
+                input_state=input_state,
+                result=result,
+                source_tile=source_tile,
+                spec=spec,
+                route_spec=route_spec,
+                route_worker_count=route_worker_count,
+                route_lookahead_steps=route_lookahead_steps,
+                previous_checkpoint_content_sha256=predecessor,
+                verified_head=self._verified_head,
+            )
+            loaded, verified_head = _read_published_append_head(
+                self._root,
+                run_id=self._run_id,
+                protocol_sha256=self._protocol_sha256,
+                genesis_state_sha256=self._genesis_state_sha256,
+                backend=self._backend,
+                expected_record=record,
+                implementation_identity=self._implementation_identity,
+                runtime_identity=self._runtime_identity,
+            )
+        except BaseException:
+            self.close()
+            raise
+        self._loaded_head = loaded
+        self._verified_head = verified_head
+        return loaded
+
+
+def open_owned_episode_delta_append_session(
+    directory: str | Path,
+    *,
+    run_id: str,
+    protocol_sha256: str,
+    genesis_state_sha256: str,
+    backend: BackendSpec,
+    expected_checkpoint_index: int | None = None,
+    expected_checkpoint_content_sha256: str | None = None,
+) -> OwnedEpisodeDeltaAppendSession:
+    """Lock one namespace and establish a replay-verified append frontier."""
+
+    root = Path(directory)
+    _text(run_id, "run_id")
+    _sha256(protocol_sha256, "protocol_sha256")
+    _sha256(genesis_state_sha256, "genesis_state_sha256")
+    if type(backend) is not BackendSpec or backend.backend_id != "cupy":
+        raise OwnedEpisodeCheckpointContractError(
+            "append sessions require an exact CuPy BackendSpec"
+        )
+    if (expected_checkpoint_index is None) != (
+        expected_checkpoint_content_sha256 is None
+    ):
+        raise OwnedEpisodeCheckpointContractError(
+            "expected checkpoint index and digest must be supplied together"
+        )
+    if expected_checkpoint_index is not None:
+        if (
+            type(expected_checkpoint_index) is not int
+            or not 0 <= expected_checkpoint_index <= MAXIMUM_CHECKPOINT_INDEX
+        ):
+            raise OwnedEpisodeCheckpointContractError(
+                "expected_checkpoint_index must be an integer in [0, 10**20)"
+            )
+        _sha256(
+            expected_checkpoint_content_sha256,
+            "expected_checkpoint_content_sha256",
+        )
+    namespace = _checkpoint_namespace(root, run_id, protocol_sha256)
+    _checkpoint_codec._ensure_namespace(root, namespace)
+    lock_context = _checkpoint_codec._checkpoint_append_lock(namespace)
+    lock_context.__enter__()
+    try:
+        records = _scan_records(root, run_id, protocol_sha256)
+        if records:
+            if expected_checkpoint_index is None:
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "existing append session requires an external head anchor"
+                )
+            loaded = load_latest_owned_episode_delta_checkpoint(
+                root,
+                run_id=run_id,
+                protocol_sha256=protocol_sha256,
+                genesis_state_sha256=genesis_state_sha256,
+                expected_checkpoint_index=expected_checkpoint_index,
+                expected_checkpoint_content_sha256=(
+                    expected_checkpoint_content_sha256
+                ),
+                backend=backend,
+            )
+            verified_head = _verified_append_head(
+                loaded,
+                records,
+                run_id=run_id,
+                protocol_sha256=protocol_sha256,
+                genesis_state_sha256=genesis_state_sha256,
+            )
+        else:
+            if expected_checkpoint_index is not None:
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "external append head was supplied for an empty chain"
+                )
+            loaded = None
+            verified_head = None
+        implementation = dict(
+            _checkpoint_codec._plain_tree(
+                owned_episode_checkpoint_implementation_identity()
+            )
+        )
+        runtime = dict(
+            _checkpoint_codec._plain_tree(
+                owned_episode_checkpoint_runtime_identity(backend)
+            )
+        )
+        return OwnedEpisodeDeltaAppendSession(
+            seal=_APPEND_SESSION_SEAL,
+            root=root,
+            run_id=run_id,
+            protocol_sha256=protocol_sha256,
+            genesis_state_sha256=genesis_state_sha256,
+            backend=backend,
+            lock_context=lock_context,
+            loaded_head=loaded,
+            verified_head=verified_head,
+            implementation_identity=implementation,
+            runtime_identity=runtime,
+        )
+    except BaseException:
+        lock_context.__exit__(None, None, None)
+        raise
+
+
 __all__ = [
     "CHECKPOINT_CLAIMS",
     "CHECKPOINT_METHOD_ID",
     "CHECKPOINT_SCHEMA",
     "IMPLEMENTATION_SOURCE_SHA256",
     "LoadedOwnedEpisodeCheckpoint",
+    "OwnedEpisodeDeltaAppendSession",
     "OwnedEpisodeCheckpointContractError",
     "OwnedEpisodeCheckpointError",
     "OwnedEpisodeCheckpointIntegrityError",
     "dump_owned_episode_delta_checkpoint",
     "load_latest_owned_episode_delta_checkpoint",
+    "open_owned_episode_delta_append_session",
     "owned_episode_checkpoint_implementation_identity",
     "owned_episode_checkpoint_runtime_identity",
     "owned_episode_state_sha256",

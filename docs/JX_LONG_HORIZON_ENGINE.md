@@ -182,13 +182,25 @@ processes or speculative cache entries.  Each record stores only the current
 segment's canonical route rows, worker assignments, and derived episode
 summaries.  A rolling route-chain digest and exact cumulative counters bind
 those deltas across records without copying all earlier route rows into every
-checkpoint.  Before a successor is published, the existing head is loaded and
-the complete chain is replayed under the recorded runtime while holding the
-namespace append lock.  Loading requires an external head index and digest and
-again replays every segment from the genesis commitment.  This reduces
-checkpoint storage growth, but replay work is still cumulative and can become
-quadratic across many appends; the current component is therefore bounded
+checkpoint.  The standalone append API loads and completely replays the
+existing head before publishing a successor.  The locked append-session API
+instead performs that full replay once, retains a private process-and-thread
+bound authorization capability, rehashes every committed JSON and NPZ before
+each append, and replays only the new segment.  It advances the capability only
+from newly published bytes that were read back and checked.  Any error closes
+the session.  Loading, reopening, and the final evidence gate still require an
+externally anchored complete replay from the genesis commitment.  This makes
+numerical append replay linear in the number of segments inside one session;
+artifact hashing remains cumulative and the current component remains bounded
 engineering evidence, not a production persistence design.
+
+The GPU encounter surface and terminal source surface are separate policies.
+The larger encounter radius decides when the quiet CUDA map must be discarded
+and rerouted.  An optional smaller terminal-radius roster decides whether the
+continuous DOP853 route freezes the lane; if omitted, legacy behavior uses the
+encounter radii for both.  Every explicit terminal radius must cover the exact
+source roster and cannot exceed its encounter radius.  This distinction lets a
+real close pass rejoin without being mislabeled as a physical contact.
 
 The lifecycle variant
 `advance_cuda_restricted_wh_lifecycle_with_wisdom_holman_source` adds stable
@@ -319,12 +331,17 @@ criterion until these gates remain satisfied.
 12. **Delta episode lineage.** Persistent-owner checkpoints retain only the
     current segment's route rows and episode summaries, bind them with a
     rolling route-chain digest and exact cumulative counts, and reset live
-    worker ownership at the boundary.  Append authorization fully reloads and
-    replays the predecessor under the namespace lock.  Tests require exact
-    direct-versus-restart state and result evidence, six-worker episode
-    ownership, source-node continuity, externally anchored heads, strict
-    binary64 arrays, and rejection of rehashed worker, source, claim, runtime,
-    implementation, genesis, index, and predecessor forgeries.
+    worker ownership at the boundary.  Standalone append authorization fully
+    reloads and replays the predecessor under the namespace lock.  A locked
+    session may replay the predecessor once, but must rehash all committed
+    artifacts on every append, use a private PID/thread/runtime-bound head,
+    serialize the independently replayed endpoint, read it back, and poison
+    itself after any failure.  Tests require exact direct-versus-restart state
+    and result evidence, six-worker episode ownership, source-node continuity,
+    externally anchored heads, strict binary64 arrays, caller-buffer isolation,
+    and rejection of modified NPZs, cross-thread/process use, runtime drift,
+    and rehashed worker, source, claim, implementation, genesis, index, and
+    predecessor forgeries.
 
 Successful results bind the numerical implementation sources, all-conic
 source, CUDA kick source and compiler options, CuPy/CUDA/NVRTC versions, and

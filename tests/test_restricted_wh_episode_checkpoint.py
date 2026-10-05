@@ -5,7 +5,9 @@ import hashlib
 import json
 from pathlib import Path
 import tempfile
+import threading
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -20,8 +22,10 @@ from jxplanetx.restricted_wh_episode_checkpoint import (
     OwnedEpisodeCheckpointIntegrityError,
     dump_owned_episode_delta_checkpoint,
     load_latest_owned_episode_delta_checkpoint,
+    open_owned_episode_delta_append_session,
     owned_episode_state_sha256,
 )
+from jxplanetx.restricted_wh_route import RestrictedWHRouteSpec
 
 from tests.test_cuda_restricted_wh import (
     CP,
@@ -57,6 +61,7 @@ def _segment(
     worker_count: int = 1,
     lookahead: int = 4,
     encounter_radius: float = 0.997,
+    route_spec: RestrictedWHRouteSpec | None = None,
 ):
     tile = _tile(
         start=state.global_source_step,
@@ -69,6 +74,7 @@ def _segment(
         state,
         tile,
         spec,
+        route_spec=route_spec,
         route_worker_count=worker_count,
         route_lookahead_steps=lookahead,
     )
@@ -87,6 +93,7 @@ def _dump(
     predecessor: str | None,
     worker_count: int = 1,
     lookahead: int = 4,
+    route_spec: RestrictedWHRouteSpec | None = None,
 ):
     return dump_owned_episode_delta_checkpoint(
         root,
@@ -98,6 +105,7 @@ def _dump(
         result=result,
         source_tile=tile,
         spec=spec,
+        route_spec=route_spec,
         route_worker_count=worker_count,
         route_lookahead_steps=lookahead,
         previous_checkpoint_content_sha256=predecessor,
@@ -122,6 +130,11 @@ def _namespace(root: Path) -> Path:
 
 def _record_path(root: Path, index: int) -> Path:
     return _namespace(root) / f"checkpoint_{index:020d}.json"
+
+
+def _array_path(root: Path, index: int) -> Path:
+    record = json.loads(_record_path(root, index).read_text(encoding="utf-8"))
+    return _record_path(root, index).parent / record["array_file"]
 
 
 def _rehash_record(path: Path, record: dict) -> None:
@@ -260,6 +273,38 @@ class OwnedEpisodeDeltaCheckpointTests(unittest.TestCase):
             self.assertEqual(row["result"]["route_records"], ())
             self.assertStateEqual(_load(root, genesis, row).state, result.state)
 
+    def test_distinct_terminal_surface_policy_round_trips_exactly(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state(lane_count=1)
+            genesis = owned_episode_state_sha256(initial, _backend())
+            route_spec = RestrictedWHRouteSpec(
+                terminal_source_radii_AU=(0.5,)
+            )
+            tile, spec, result = _segment(
+                initial,
+                step_count=2,
+                route_spec=route_spec,
+            )
+            row = _dump(
+                root,
+                index=0,
+                genesis=genesis,
+                input_state=initial,
+                tile=tile,
+                spec=spec,
+                result=result,
+                predecessor=None,
+                route_spec=route_spec,
+            )
+            self.assertEqual(
+                row["route_policy"]["terminal_source_radii_AU_hex"],
+                (0.5.hex(),),
+            )
+            loaded = _load(root, genesis, row)
+            self.assertStateEqual(loaded.state, result.state)
+            self.assertEqual(loaded.route_record_count_cumulative, 2)
+
     def test_loaded_head_can_continue_with_exact_state_and_source_join(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -291,6 +336,321 @@ class OwnedEpisodeDeltaCheckpointTests(unittest.TestCase):
             )
             loaded1 = _load(root, genesis, row1)
             self.assertStateEqual(loaded1.state, result1.state)
+
+    def test_locked_append_session_matches_standalone_records_exactly(self):
+        initial = _dense_state()
+        genesis = owned_episode_state_sha256(initial, _backend())
+        tile0, spec0, result0 = _segment(initial, worker_count=2)
+        tile1, spec1, result1 = _segment(result0.state, worker_count=2)
+        with (
+            tempfile.TemporaryDirectory() as standalone_temporary,
+            tempfile.TemporaryDirectory() as session_temporary,
+        ):
+            standalone_root = Path(standalone_temporary)
+            session_root = Path(session_temporary)
+            row0 = _dump(
+                standalone_root,
+                index=0,
+                genesis=genesis,
+                input_state=initial,
+                tile=tile0,
+                spec=spec0,
+                result=result0,
+                predecessor=None,
+                worker_count=2,
+            )
+            row1 = _dump(
+                standalone_root,
+                index=1,
+                genesis=genesis,
+                input_state=result0.state,
+                tile=tile1,
+                spec=spec1,
+                result=result1,
+                predecessor=row0["checkpoint_content_sha256"],
+                worker_count=2,
+            )
+            with open_owned_episode_delta_append_session(
+                session_root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            ) as session:
+                head0 = session.append(
+                    input_state=initial,
+                    result=result0,
+                    source_tile=tile0,
+                    spec=spec0,
+                    route_worker_count=2,
+                    route_lookahead_steps=4,
+                )
+                head1 = session.append(
+                    input_state=result0.state,
+                    result=result1,
+                    source_tile=tile1,
+                    spec=spec1,
+                    route_worker_count=2,
+                    route_lookahead_steps=4,
+                )
+                self.assertIs(session.loaded_head, head1)
+            self.assertEqual(
+                head0.checkpoint_content_sha256,
+                row0["checkpoint_content_sha256"],
+            )
+            self.assertEqual(
+                head1.checkpoint_content_sha256,
+                row1["checkpoint_content_sha256"],
+            )
+            loaded = _load(session_root, genesis, row1)
+            self.assertStateEqual(loaded.state, result1.state)
+
+    def test_append_session_resumes_once_from_external_head(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile0, spec0, result0 = _segment(initial)
+            row0 = _dump(
+                root,
+                index=0,
+                genesis=genesis,
+                input_state=initial,
+                tile=tile0,
+                spec=spec0,
+                result=result0,
+                predecessor=None,
+            )
+            tile1, spec1, result1 = _segment(result0.state)
+            with open_owned_episode_delta_append_session(
+                root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+                expected_checkpoint_index=0,
+                expected_checkpoint_content_sha256=row0[
+                    "checkpoint_content_sha256"
+                ],
+            ) as session:
+                self.assertEqual(
+                    session.loaded_head.checkpoint_content_sha256,
+                    row0["checkpoint_content_sha256"],
+                )
+                head1 = session.append(
+                    input_state=result0.state,
+                    result=result1,
+                    source_tile=tile1,
+                    spec=spec1,
+                    route_worker_count=1,
+                    route_lookahead_steps=4,
+                )
+            self.assertEqual(head1.checkpoint_index, 1)
+            self.assertStateEqual(_load(root, genesis, head1.record).state, result1.state)
+
+    def test_append_session_rejects_changed_locked_head(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile0, spec0, result0 = _segment(initial)
+            with open_owned_episode_delta_append_session(
+                root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            ) as session:
+                head0 = session.append(
+                    input_state=initial,
+                    result=result0,
+                    source_tile=tile0,
+                    spec=spec0,
+                    route_worker_count=1,
+                    route_lookahead_steps=4,
+                )
+                path = _record_path(root, 0)
+                record = json.loads(path.read_text(encoding="utf-8"))
+                record["route_record_count_cumulative"] += 1
+                _rehash_record(path, record)
+                tile1, spec1, result1 = _segment(result0.state)
+                with self.assertRaisesRegex(
+                    OwnedEpisodeCheckpointIntegrityError,
+                    "previous checkpoint digest|artifact inventory changed",
+                ):
+                    session.append(
+                        input_state=result0.state,
+                        result=result1,
+                        source_tile=tile1,
+                        spec=spec1,
+                        route_worker_count=1,
+                        route_lookahead_steps=4,
+                    )
+            self.assertFalse(_record_path(root, 1).exists())
+            self.assertNotEqual(
+                json.loads(_record_path(root, 0).read_text(encoding="utf-8"))[
+                    "checkpoint_content_sha256"
+                ],
+                head0.checkpoint_content_sha256,
+            )
+
+    def test_append_session_rehashes_old_arrays_before_every_append(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile0, spec0, result0 = _segment(initial)
+            tile1, spec1, result1 = _segment(result0.state)
+            with open_owned_episode_delta_append_session(
+                root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            ) as session:
+                session.append(
+                    input_state=initial,
+                    result=result0,
+                    source_tile=tile0,
+                    spec=spec0,
+                    route_worker_count=1,
+                    route_lookahead_steps=4,
+                )
+                path = _array_path(root, 0)
+                payload = bytearray(path.read_bytes())
+                payload[len(payload) // 2] ^= 0x01
+                path.write_bytes(payload)
+                with self.assertRaisesRegex(
+                    OwnedEpisodeCheckpointIntegrityError, "array SHA-256"
+                ):
+                    session.append(
+                        input_state=result0.state,
+                        result=result1,
+                        source_tile=tile1,
+                        spec=spec1,
+                        route_worker_count=1,
+                        route_lookahead_steps=4,
+                    )
+            self.assertFalse(_record_path(root, 1).exists())
+
+    def test_append_session_head_comes_from_published_replay_bytes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile, spec, result = _segment(initial)
+            expected_positions = CP.asnumpy(
+                result.state.tracer_relative_positions_AU
+            ).copy()
+            with open_owned_episode_delta_append_session(
+                root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            ) as session:
+                head = session.append(
+                    input_state=initial,
+                    result=result,
+                    source_tile=tile,
+                    spec=spec,
+                    route_worker_count=1,
+                    route_lookahead_steps=4,
+                )
+                result.state.tracer_relative_positions_AU[0, 0] += 1.0
+                CP.cuda.get_current_stream().synchronize()
+                self.assertTrue(
+                    np.array_equal(
+                        CP.asnumpy(head.state.tracer_relative_positions_AU),
+                        expected_positions,
+                    )
+                )
+            loaded = _load(root, genesis, head.record)
+            self.assertTrue(
+                np.array_equal(
+                    CP.asnumpy(loaded.state.tracer_relative_positions_AU),
+                    expected_positions,
+                )
+            )
+
+    def test_append_session_rejects_process_thread_and_runtime_drift(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile, spec, result = _segment(initial)
+            session = open_owned_episode_delta_append_session(
+                root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            )
+            errors: list[BaseException] = []
+
+            def use_from_other_thread() -> None:
+                try:
+                    session.append(
+                        input_state=initial,
+                        result=result,
+                        source_tile=tile,
+                        spec=spec,
+                        route_worker_count=1,
+                        route_lookahead_steps=4,
+                    )
+                except BaseException as exc:
+                    errors.append(exc)
+
+            worker = threading.Thread(target=use_from_other_thread)
+            worker.start()
+            worker.join()
+            self.assertEqual(len(errors), 1)
+            self.assertIsInstance(
+                errors[0], OwnedEpisodeCheckpointIntegrityError
+            )
+            with mock.patch.object(
+                checkpoint_module.os,
+                "getpid",
+                return_value=session._process_id + 1,
+            ):
+                with self.assertRaisesRegex(
+                    OwnedEpisodeCheckpointIntegrityError, "process fork"
+                ):
+                    session.append(
+                        input_state=initial,
+                        result=result,
+                        source_tile=tile,
+                        spec=spec,
+                        route_worker_count=1,
+                        route_lookahead_steps=4,
+                    )
+
+            runtime = dict(
+                checkpoint_module._checkpoint_codec._plain_tree(
+                    checkpoint_module.owned_episode_checkpoint_runtime_identity(
+                        _backend()
+                    )
+                )
+            )
+            runtime["checkpoint_method_id"] = "changed"
+            with mock.patch.object(
+                checkpoint_module,
+                "owned_episode_checkpoint_runtime_identity",
+                return_value=runtime,
+            ):
+                with self.assertRaisesRegex(
+                    OwnedEpisodeCheckpointIntegrityError, "runtime identity"
+                ):
+                    session.append(
+                        input_state=initial,
+                        result=result,
+                        source_tile=tile,
+                        spec=spec,
+                        route_worker_count=1,
+                        route_lookahead_steps=4,
+                    )
+            self.assertTrue(session._closed)
+            self.assertFalse(_record_path(root, 0).exists())
 
     def test_external_head_anchor_detects_tail_deletion(self):
         with tempfile.TemporaryDirectory() as temporary:

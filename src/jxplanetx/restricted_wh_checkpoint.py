@@ -931,6 +931,14 @@ def _route_spec_from_record(value: object) -> RestrictedWHRouteSpec:
                     "primary_outer_boundary_AU",
                 )
             ),
+            terminal_source_radii_AU=(
+                None
+                if value["terminal_source_radii_AU_hex"] is None
+                else tuple(
+                    _from_hex(item, "terminal_source_radius_AU")
+                    for item in value["terminal_source_radii_AU_hex"]
+                )
+            ),
         )
     except (KeyError, TypeError, ValueError) as exc:
         raise RestrictedWHCheckpointIntegrityError(

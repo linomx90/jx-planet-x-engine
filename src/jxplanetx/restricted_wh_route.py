@@ -42,7 +42,7 @@ from .cuda_tracer_events import (
 )
 
 
-ROUTE_METHOD_ID = "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V2"
+ROUTE_METHOD_ID = "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3"
 SCIENTIFIC_CLASSIFICATION = "MODEL_OUTPUT"
 PROJECT_SCOPE = "SCREENING_ONLY"
 IMPLEMENTATION_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
@@ -213,7 +213,7 @@ def restricted_wh_route_policy_identity(
         )
     event = spec.event_locator
     record = {
-        "schema": "jx.restricted-wh.route-policy.v1",
+        "schema": "jx.restricted-wh.route-policy.v2",
         "maximum_primary_dynamical_phase_hex": (
             spec.maximum_primary_dynamical_phase.hex()
         ),
@@ -221,6 +221,11 @@ def restricted_wh_route_policy_identity(
             None
             if spec.primary_outer_boundary_AU is None
             else spec.primary_outer_boundary_AU.hex()
+        ),
+        "terminal_source_radii_AU_hex": (
+            None
+            if spec.terminal_source_radii_AU is None
+            else [value.hex() for value in spec.terminal_source_radii_AU]
         ),
         "event_locator": {
             "relative_tolerance_hex": event.relative_tolerance.hex(),
@@ -252,7 +257,7 @@ def restricted_wh_route_policy_identity(
     ).encode("ascii")
     identity = dict(record)
     identity["content_sha256"] = hashlib.sha256(
-        b"jx.restricted-wh.route-policy.v1\0" + payload
+        b"jx.restricted-wh.route-policy.v2\0" + payload
     ).hexdigest()
     return _freeze_tree(identity)
 
@@ -264,6 +269,7 @@ class RestrictedWHRouteSpec:
     event_locator: DOP853EventLocatorSpec = DOP853EventLocatorSpec()
     maximum_primary_dynamical_phase: float = 0.05
     primary_outer_boundary_AU: float | None = None
+    terminal_source_radii_AU: tuple[float, ...] | None = None
 
     def __post_init__(self) -> None:
         if type(self.event_locator) is not DOP853EventLocatorSpec:
@@ -287,6 +293,22 @@ class RestrictedWHRouteSpec:
                 raise RestrictedWHRouteContractError(
                     "primary_outer_boundary_AU must be positive"
                 )
+        if self.terminal_source_radii_AU is not None:
+            if (
+                type(self.terminal_source_radii_AU) is not tuple
+                or not self.terminal_source_radii_AU
+            ):
+                raise RestrictedWHRouteContractError(
+                    "terminal_source_radii_AU must be a nonempty exact tuple or None"
+                )
+            for index, radius in enumerate(self.terminal_source_radii_AU):
+                checked = _finite_float(
+                    radius, f"terminal_source_radii_AU[{index}]"
+                )
+                if checked < 0.0:
+                    raise RestrictedWHRouteContractError(
+                        "terminal source radii cannot be negative"
+                    )
 
 
 @dataclass(frozen=True, eq=False)
@@ -642,7 +664,21 @@ def route_restricted_wh_map_step(
     maximum_accepted_phase = 0.0
     maximum_committed_phase = 0.0
     source_gm = source_tile.source_gm_AU3_per_year2
-    source_radii = source_tile.source_encounter_radii_AU
+    encounter_radii = source_tile.source_encounter_radii_AU
+    if spec.terminal_source_radii_AU is None:
+        terminal_radii = encounter_radii
+    else:
+        if len(spec.terminal_source_radii_AU) != len(encounter_radii):
+            raise RestrictedWHRouteContractError(
+                "terminal source radii must exactly cover the source roster"
+            )
+        terminal_radii = np.asarray(
+            spec.terminal_source_radii_AU, dtype=np.float64
+        )
+        if bool(np.any(terminal_radii > encounter_radii)):
+            raise RestrictedWHRouteContractError(
+                "terminal source radii cannot exceed encounter radii"
+            )
 
     try:
         for offset in range(source_steps_per_map_step):
@@ -672,7 +708,7 @@ def route_restricted_wh_map_step(
                 positions_1,
                 velocities_1,
                 source_gm,
-                source_radii,
+                terminal_radii,
                 step_years=source_tile.source_step_years,
                 primary_source_index=0,
                 primary_boundary_radius_AU=spec.primary_outer_boundary_AU,
