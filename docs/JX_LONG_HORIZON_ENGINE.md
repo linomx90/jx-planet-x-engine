@@ -19,14 +19,18 @@ The prototype is available only by direct import from:
   that keeps quiet lanes on CUDA and redoes guarded lanes on the CPU;
 - `jxplanetx.restricted_wh_lifecycle`, a fixed-lane terminal lifecycle with an
   immutable in-memory removal ledger;
+- `jxplanetx.restricted_wh_checkpoint`, a create-only, content-addressed,
+  predecessor-linked lifecycle checkpoint chain whose segments are replayed
+  before publication and again before restart;
 - `jxplanetx.restricted_wh_source`, an experimental replay-verified massive
   source-path provider using JX's compiled ordered-Jacobi Wisdom--Holman map.
 
 M1 uses binary64 throughout its numerical state and CUDA arithmetic.  Its
 declared result classification is `MODEL_OUTPUT / SCREENING_ONLY`.  The goal of
 this milestone is to make precision failures visible and transactional before
-adding production interfaces, disk restart, a complete encounter lifecycle,
-or accepting performance optimizations as qualified behavior.
+adding production interfaces, a complete encounter lifecycle, or accepting
+performance optimizations as qualified behavior.  Disk restart now exists as
+an experimental replay-verified component, but it is not production-qualified.
 
 ## Numerical map
 
@@ -84,8 +88,32 @@ floating epoch is never the authoritative clock.  A coarse map step consumes
 an exact positive integer number of fine source intervals.  This permits an
 in-memory result to feed a following segment on the same source lattice.
 
-That continuation is only an in-memory split.  M1 has no checkpoint writer,
-checkpoint reader, predecessor chain, or disk-restart qualification.
+The direct numerical result remains an in-memory segment.  The additive
+checkpoint module can now persist complete lifecycle segments without changing
+that result contract.  Every checkpoint stores the exact segment input and
+output state, the immutable source tile, integer lattice endpoints, route
+policy, route/removal deltas, runtime identity, code/kernel identity, and a
+required externally supplied genesis-state commitment.  Records are namespaced
+by run and protocol digest, arrays are content-addressed, JSON publication is
+create-only, and every successor names the latest predecessor digest.  A
+namespace-scoped operating-system lock serializes the complete verify-and-
+publish transaction so concurrent writers cannot create a fork.  Loading also
+requires an external expected head index and content digest; a deleted or
+rolled-back tail is therefore an integrity failure rather than a valid older
+restart.  The first segment's reconstructed input bytes must hash to the
+external genesis commitment; retaining only a rewritten genesis label cannot
+substitute a different starting state.
+
+Checkpoint loading verifies every artifact and predecessor, reconstructs every
+input and tile, then deterministically replays the complete chain on the exact
+recorded Python/NumPy/SciPy/CuPy/CUDA/GPU/CPU runtime before releasing the
+latest device state.  Appending first performs the same full predecessor
+verification.  Only per-segment route and removal evidence is repeated; the
+chain does not copy an ever-growing cumulative route ledger into each record.
+An array orphaned before its JSON record is tolerated, while a committed JSON
+record with missing, changed, or incompatible bytes fails closed.  This proves
+same-runtime restart integrity for the recorded chain; it is not a production
+or cross-runtime reproducibility claim.
 
 The source provider converts a primary-relative initial massive state to its
 GM-weighted barycentric representation, runs the complete compiled
@@ -123,7 +151,9 @@ neighbors continue.  Lanes are never compacted.  Each terminal transition
 adds one canonical removal record whose source-segment hash depends on the
 exact global lattice interval and source-node bytes, not on arbitrary outer
 tile chunking.  This makes the removal record identical across an in-memory
-split, but it is still not a disk-checkpoint chain.
+split.  The removal record alone is not a disk-checkpoint chain; the separate
+checkpoint module binds it to the exact state, source tile, segment, and
+predecessor replay.
 
 ## Guards and fail-closed behavior
 
@@ -153,9 +183,10 @@ aborts the whole public transaction and exposes the unchanged input state
 with a route witness.  Terminal lifecycle/removal, an outer-boundary guard on
 the quiet CUDA path, and an append-only in-memory removal ledger are now
 implemented by the lifecycle wrapper.  Removal at the outer surface is only an
-operational domain exit; it is not called an ejection.  Disk persistence and a
-whole-episode worker remain intentionally unimplemented.  The current parallel
-wavefront routes one guarded map step at a time.
+operational domain exit; it is not called an ejection.  Replay-verified disk
+persistence is implemented by the separate checkpoint layer; a whole-episode
+worker remains intentionally unimplemented.  The current parallel wavefront
+routes one guarded map step at a time.
 
 Execution is transactional.  Numerical work occurs in private device buffers.
 On a guard, Kepler-solver, or CUDA failure, the raised handoff refers to the
@@ -224,11 +255,26 @@ criterion until these gates remain satisfied.
     calls, and reject any attempted frozen-state mutation.  Split and
     uninterrupted runs must have bitwise-identical state/lifecycle arrays and
     the same canonical removal-record digest.
+11. **Replay-verified persistent lineage.** A checkpoint can be published only
+    after a fresh deterministic segment replay matches the supplied endpoint,
+    diagnostics, routes, removals, and runtime evidence.  Loading rehashes the
+    exact NPZ roster, verifies the genesis and predecessor chain, reconstructs
+    the source tile and both endpoint states, and replays every segment before
+    returning a synchronized CUDA state.  Tests cover quiet and terminal
+    round trips, a two-segment chain whose numeric latest index is 1,000,
+    wrong input/predecessor rejection, serialized concurrent appenders,
+    create-only behavior, namespace type failures, crash-orphan tolerance,
+    explicit tail-rollback rejection, predecessor corruption before append,
+    exact source-boundary/GM continuity, canonical index bounds, exact
+    binary64 diagnostic arrays, and rehashed claim/runtime tampering.
 
-Successful results bind the implementation source, all-conic source, CUDA
-kick source and compiler options, CuPy/CUDA/NVRTC versions, and the physical
-GPU UUID/compute capability in their runtime identity.  This is evidence for
-the recorded run; it is not yet a persistent checkpoint lineage.
+Successful results bind the numerical implementation sources, all-conic
+source, CUDA kick source and compiler options, CuPy/CUDA/NVRTC versions, and
+the physical GPU UUID/compute capability in their runtime identity.  The
+checkpoint layer additionally binds its local backend, contract, and
+Wisdom--Holman contract modules, the host runtime/build evidence, the
+protocol/genesis commitment, and hash-linked persistent lineage, while
+retaining the same conservative claim ceiling.
 
 Passing these focused gates establishes only the behavior they test.  It does
 not extrapolate accuracy or stability to astronomical durations.
@@ -337,7 +383,9 @@ This finite-reference ladder selects 0.0625 year as the precision-first
 candidate for the next bounded validation rung.  It does **not** select a
 production timestep: the reference retains the same restricted tracer map,
 the population excludes encounter-prone initial conditions by construction,
-and neither close encounters nor persistent restart are implemented here.
+and neither whole close-encounter episodes nor long-duration restart
+qualification has been established.  The new checkpoint component establishes
+exact bounded same-runtime segment restart behavior only.
 
 ## Explicitly false claims
 
@@ -346,7 +394,8 @@ prototype does not establish or provide:
 
 - production qualification;
 - 4.5-billion-year accuracy, stability, or completion;
-- disk checkpoint or restart qualification;
+- production-qualified or cross-runtime disk checkpoint/restart behavior (an
+  experimental same-runtime replay-verified chain is implemented and tested);
 - production-qualified close-encounter episodes, collision response,
   physical collision/ejection inference, or regularization (M1 contains the
   bounded guarded-step redo, operational terminal lifecycle, and first-event
@@ -374,10 +423,13 @@ Work should advance only through evidence-backed rungs:
    implementation, while retaining 0.03125 year as the refinement lane.
    Define bounded distribution-level error budgets before selecting a
    production timestep or increasing duration.
-3. **Specify persistent evidence.** Design content-addressed checkpoints with
-   complete source-schedule identity, tracer genesis, predecessor linkage,
-   runtime identity, and replay validation.  Only then add disk restart and
-   test every split point against uninterrupted execution.
+3. **Qualify persistent evidence at scale.** The content-addressed checkpoint
+   format now binds complete source-schedule identity, tracer genesis,
+   predecessor linkage, runtime identity, and deterministic replay.  Extend
+   the bounded unit matrix to long route-heavy segments, every operational
+   split point, crash injection during both publication phases, disk-capacity
+   budgets, and independent archival verification before promoting restart to
+   a production-qualified interface.
 4. **Complete encounter episodes deliberately.** Extend the now-tested
    guarded-step handoff/rejoin and fixed-lane terminal lifecycle with
    persistent route/removal ledgers.  Replace iterative guarded-lane discovery
