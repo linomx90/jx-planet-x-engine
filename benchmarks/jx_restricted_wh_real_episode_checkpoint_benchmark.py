@@ -68,10 +68,10 @@ from jxplanetx.restricted_wh_source import (
 )
 
 
-SCHEMA = "jx.restricted-wh.real-episode-checkpoint-benchmark.v1"
-PROTOCOL_DOMAIN = b"jx.restricted-wh.real-episode.protocol.v1\0"
-RESULT_DOMAIN = b"jx.restricted-wh.real-episode.result.v1\0"
-RUN_ID = "restricted-wh-real-episode-checkpoint-benchmark-v1"
+SCHEMA = "jx.restricted-wh.real-episode-checkpoint-benchmark.v2"
+PROTOCOL_DOMAIN = b"jx.restricted-wh.real-episode.protocol.v2\0"
+RESULT_DOMAIN = b"jx.restricted-wh.real-episode.result.v2\0"
+RUN_ID = "restricted-wh-real-episode-checkpoint-benchmark-v2"
 PHYSICAL_CPU_AFFINITY = (0, 1, 2, 3, 4, 5)
 ROUTE_WORKER_COUNT = 6
 ROUTE_LOOKAHEAD_STEPS = 64
@@ -84,12 +84,12 @@ EXPECTED_ROUTE_DELTAS = (0, 20, 82, 0)
 EXPECTED_ROUTE_TOTAL = 102
 EXPECTED_EPISODE_TOTAL = 2
 EXPECTED_FINAL_STATE_SHA256 = (
-    "6f48cc8cb487b4023f96197252d48eda99815885264592248cddd66f17848cde"
+    "5e37562402f5053b4303fb809c89714046f544ab773b12d4e332d247ce705469"
 )
 MINIMUM_FINAL_QUIET_APPEND_SPEEDUP = 5.0
 MINIMUM_TOTAL_APPEND_SPEEDUP = 1.20
 DEFAULT_OUTPUT_ROOT = Path(
-    "runs/restricted_wh_real_episode_checkpoint_benchmark_v1"
+    "runs/restricted_wh_real_episode_checkpoint_benchmark_v2"
 )
 COLLISION_STATE_PATH = Path(
     "runs/cuda_four_arm_screen_v1/qualification/arms/control/INITIAL_STATE.npz"
