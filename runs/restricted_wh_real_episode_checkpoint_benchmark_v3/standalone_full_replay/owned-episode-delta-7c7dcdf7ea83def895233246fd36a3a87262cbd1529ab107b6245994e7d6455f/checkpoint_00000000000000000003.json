@@ -1,0 +1,538 @@
+{
+  "array_file": "checkpoint_00000000000000000003.array-f3e89bfcfc74aeade6a9195f14e5aa25081ef084f0802112067c3ec37ed744e0.npz",
+  "array_file_sha256": "f3e89bfcfc74aeade6a9195f14e5aa25081ef084f0802112067c3ec37ed744e0",
+  "array_file_size_bytes": 2308018,
+  "checkpoint_content_sha256": "cc448decad932c6add8d66b35e29e5830853d1326805209f64af3c2f9ee9599c",
+  "checkpoint_index": 3,
+  "checkpoint_namespace": "owned-episode-delta-7c7dcdf7ea83def895233246fd36a3a87262cbd1529ab107b6245994e7d6455f",
+  "checkpoint_runtime_identity": {
+    "checkpoint_method_id": "JX_RESTRICTED_WH_OWNED_EPISODE_DELTA_CHECKPOINT_V1",
+    "cpu_runtime": {
+      "cpuinfo": {
+        "cpu family": "25",
+        "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap",
+        "microcode": "0xa500014",
+        "model": "80",
+        "model name": "AMD Ryzen 5 5500",
+        "stepping": "0",
+        "vendor_id": "AuthenticAMD"
+      },
+      "libc": [
+        "glibc",
+        "2.43"
+      ],
+      "logical_cpu_count": 12,
+      "machine": "x86_64",
+      "numerical_thread_environment": {
+        "BLIS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+      "process_cpu_affinity": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "processor": "",
+      "release": "7.0.0-34-generic",
+      "system": "Linux"
+    },
+    "cuda_driver_version": 13020,
+    "cuda_local_runtime_version": 13040,
+    "cuda_runtime_version": 13020,
+    "cupy_version": "14.2.0",
+    "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CPU_CUPY_CUDA_RUNTIME_AND_DEVICE",
+    "device": "cuda:0",
+    "device_compute_capability": "12.0",
+    "device_index": 0,
+    "device_name": "NVIDIA GeForce RTX 5060 Ti",
+    "device_pci_domain_bus_device": "0000:10:00",
+    "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+    "numpy_build": {
+      "Build Dependencies": {
+        "blas": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "include directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/include",
+          "lib directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/.openblas",
+          "version": "0.3.34.106.0"
+        },
+        "lapack": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "include directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/include",
+          "lib directory": "/opt/_internal/cpython-3.14.6/lib/python3.14/site-packages/scipy_openblas64/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/.openblas",
+          "version": "0.3.34.106.0"
+        }
+      },
+      "Compilers": {
+        "c": {
+          "commands": "cc",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "c++": {
+          "commands": "c++",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "cython": {
+          "commands": "cython",
+          "linker": "cython",
+          "name": "cython",
+          "version": "3.3.0"
+        }
+      },
+      "Machine Information": {
+        "build": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        },
+        "host": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        }
+      },
+      "Python Information": {
+        "path": "/tmp/build-env-1yb2qye7/bin/python",
+        "version": "3.14"
+      },
+      "SIMD Extensions": {
+        "baseline": [
+          "X86_V2"
+        ],
+        "found": [
+          "X86_V3"
+        ],
+        "not found": [
+          "X86_V4",
+          "AVX512_ICL",
+          "AVX512_SPR"
+        ]
+      }
+    },
+    "numpy_version": "2.5.3",
+    "nvrtc_version": [
+      13,
+      4
+    ],
+    "python_build": [
+      "main",
+      "Aug 20 2026 10:41:58"
+    ],
+    "python_compiler": "GCC 15.2.0",
+    "python_executable": "/usr/bin/python3.14",
+    "python_executable_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+    "python_implementation": "CPython",
+    "python_version": "3.14.4",
+    "scipy_build": {
+      "Build Dependencies": {
+        "blas": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "has ilp64": false,
+          "include directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/include",
+          "lib directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/",
+          "version": "0.3.30"
+        },
+        "lapack": {
+          "detection method": "pkgconfig",
+          "found": true,
+          "has ilp64": false,
+          "include directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/include",
+          "lib directory": "/opt/_internal/cpython-3.14.0rc1/lib/python3.14/site-packages/scipy_openblas32/lib",
+          "name": "scipy-openblas",
+          "openblas configuration": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+          "pc file directory": "/project/",
+          "version": "0.3.30"
+        },
+        "pybind11": {
+          "detection method": "config-tool",
+          "include directory": "unknown",
+          "name": "pybind11",
+          "version": "3.0.1"
+        }
+      },
+      "Compilers": {
+        "c": {
+          "commands": "cc",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "c++": {
+          "commands": "c++",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "cython": {
+          "commands": "cython",
+          "linker": "cython",
+          "name": "cython",
+          "version": "3.2.4"
+        },
+        "fortran": {
+          "commands": "gfortran",
+          "linker": "ld.bfd",
+          "name": "gcc",
+          "version": "14.2.1"
+        },
+        "pythran": {
+          "include directory": "../../tmp/build-env-s8vrer29/lib/python3.14/site-packages/pythran",
+          "version": "0.18.1"
+        }
+      },
+      "Machine Information": {
+        "build": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        },
+        "cross-compiled": false,
+        "host": {
+          "cpu": "x86_64",
+          "endian": "little",
+          "family": "x86_64",
+          "system": "linux"
+        }
+      },
+      "Python Information": {
+        "path": "/tmp/build-env-s8vrer29/bin/python",
+        "version": "3.14"
+      }
+    },
+    "scipy_version": "1.17.0"
+  },
+  "claim_ceiling": {
+    "claims": {
+      "checkpoint_boundary_owner_persistence_qualified": false,
+      "completion_guaranteed": false,
+      "cross_runtime_bitwise_reproducible": false,
+      "four_point_five_gyr_accuracy_qualified": false,
+      "physical_collision_inferred": false,
+      "physical_ejection_inferred": false,
+      "production_qualified": false,
+      "science_result": false,
+      "whole_encounter_episode_qualified": false
+    },
+    "project_scope": "SCREENING_ONLY",
+    "scientific_classification": "MODEL_OUTPUT"
+  },
+  "genesis_state_sha256": "611047399d6eef83608cc716d049f8500ef918384e8c1d070a17b7cab4b0a1c1",
+  "implementation_identity": {
+    "checkpoint_codec_dependency_identity": {
+      "all_conic_device_source_sha256": "c91c72dbd7b3481ff116e82c9b8e911129291e60dcd2024dae6023ac36c00925",
+      "all_conic_implementation_source_sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+      "backend_implementation_source_sha256": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba",
+      "checkpoint_implementation_source_sha256": "f58e6a62e7c044f1e67bc0b0834859d5eec63c4053e2e425d265e3e10b892d2f",
+      "checkpoint_method_id": "JX_RESTRICTED_WH_REPLAY_VERIFIED_CHECKPOINT_V1",
+      "contracts_implementation_source_sha256": "11c834620deedacd219a35bda46772f9be9f0d6243c644dee4fb02eb6c0c144d",
+      "cuda_options": [
+        "--std=c++11",
+        "--fmad=false"
+      ],
+      "event_locator_source_sha256": "cf437288273975b0614c5cd5e46e8c6f7c20e4a2d6003abd49b42482a6e05a87",
+      "hybrid_implementation_source_sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+      "hybrid_method_id": "JX_CUDA_RESTRICTED_WH_GUARDED_DOP853_V2",
+      "lifecycle_implementation_source_sha256": "b0211778fcf51dbfef78049e74bafd05d5daee4db7dd18f743f4a5b5a14af346",
+      "lifecycle_method_id": "JX_CUDA_RESTRICTED_WH_FIXED_LANE_LIFECYCLE_V1",
+      "restricted_wh_fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+      "restricted_wh_implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+      "restricted_wh_kick_cuda_source_sha256": "55a86d6a1f15a974a410d38b89d63274990f75eae25f272eddb844c8a3f9cbc5",
+      "restricted_wh_method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1",
+      "route_implementation_source_sha256": "1abda1832506ed576f73799fc3f1f297f7af8e5a2d262407e4d8fe38736e4fc6",
+      "route_method_id": "JX_RESTRICTED_WH_DOP853_FINE_SOURCE_ROUTE_V3",
+      "wisdom_holman_contracts_source_sha256": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+    },
+    "checkpoint_codec_implementation_source_sha256": "f58e6a62e7c044f1e67bc0b0834859d5eec63c4053e2e425d265e3e10b892d2f",
+    "checkpoint_implementation_source_sha256": "a315d79a8cdb6281e4d0fbb24524357f0e4d28b8601b0a5e5af78035240f3cd4",
+    "checkpoint_method_id": "JX_RESTRICTED_WH_OWNED_EPISODE_DELTA_CHECKPOINT_V1",
+    "episode_implementation_source_sha256": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+    "episode_method_id": "JX_CUDA_RESTRICTED_WH_EPISODE_WAVE_V1",
+    "owned_episode_implementation_source_sha256": "218e514b0a9c46bedb9bbc986a2e7049ce896e5d0799e34b1ffaa7984bbac82c",
+    "owned_episode_method_id": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1",
+    "restricted_wh_fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+    "restricted_wh_implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+    "restricted_wh_method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1"
+  },
+  "input_state_metadata": {
+    "axes": "J2000_ECLIPTIC",
+    "coordinate_system": "PRIMARY_RELATIVE_NONROTATING",
+    "epoch_origin_years_hex": "0x0.0p+0",
+    "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+    "global_source_step": 3000,
+    "length_unit": "AU",
+    "primary_source_id": "Sun",
+    "provenance": {
+      "citation": "Tracked DE441-derived control and frozen synthetic population",
+      "sha256": "92c5f14b04027d4d72d62402a4bf3279ef74117b0f716a13e97a276d98510aec",
+      "source_id": "jx.real-episode-checkpoint-benchmark",
+      "version": "v1"
+    },
+    "snapshot_id": "de441-control-real-episode-checkpoint-v1",
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "source_schedule_sha256": "091ecda15b13a2c9fb1bbe1a94004255a51b0848532fb6749ebfee85cbb80f50",
+    "source_step_years_hex": "0x1.0000000000000p-4",
+    "time_scale": "TDB",
+    "time_unit": "year",
+    "unit_system_id": "AU-YEAR"
+  },
+  "input_state_sha256": "5c196521fff85064dba3ec4b0f55902a441788983fd6abbaa8c41a332ad8a505",
+  "lineage_sha256": "3846ff405e4841929cd49db8c7021d7b4b26ce4b6cfcd74722b9eeb86b176a3e",
+  "method_id": "JX_RESTRICTED_WH_OWNED_EPISODE_DELTA_CHECKPOINT_V1",
+  "previous_checkpoint_content_sha256": "145bff1a34cd6e87682267d52105fa2ab7323191d6e12d050ad638de3ff3b723",
+  "previous_route_chain_sha256": "c1a950024687846dfa3e08af8d0aec9f10027b18139b9d73b0763c2b2e88495b",
+  "protocol_sha256": "3d0ca408d0033c2937bbe7fc526fc2b4be0289c57586eb589827f3379e7f375a",
+  "result": {
+    "claims": {
+      "close_encounter_qualified": false,
+      "collision_response_qualified": false,
+      "disk_checkpoint_restart_qualified": false,
+      "long_horizon_accuracy_qualified": false,
+      "production_qualified": false,
+      "science_result": false,
+      "speculative_route_lookahead_qualified": false,
+      "whole_encounter_episode_qualified": false
+    },
+    "maximum_kepler_iterations": 33,
+    "method_id": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1",
+    "minimum_source_distance_array_sha256": "edb2ff073a99391a0660c70d8a2875e65318446db1822b32f3c8e70fcb4ad2c4",
+    "project_scope": "SCREENING_ONLY",
+    "route_records": [],
+    "route_worker_indices": [],
+    "runtime_identity": {
+      "committed_cached_route_step_count": 0,
+      "continuation_route_count": 0,
+      "cuda_options": [
+        "--std=c++11",
+        "--fmad=false"
+      ],
+      "determinism_scope": "SAME_PYTHON_NUMPY_SCIPY_CUPY_CUDA_RUNTIME_AND_DEVICE",
+      "discarded_speculative_route_step_count": 0,
+      "episode_count": 0,
+      "episode_source_sha256": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+      "fused_batch_kernel_sha256": "837604152dfff4a31a78235ce92914fcec594094477e429a70e94a5dbf14cfd1",
+      "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+      "fused_kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+      "implementation_source_sha256": "218e514b0a9c46bedb9bbc986a2e7049ce896e5d0799e34b1ffaa7984bbac82c",
+      "longest_episode_route_count": 0,
+      "method_id": "JX_CUDA_RESTRICTED_WH_OWNED_EPISODE_V1",
+      "new_episode_assignment_count": 0,
+      "partitioned_gpu_step_count": 0,
+      "quiet_cuda_runtime_identity": {
+        "all_conic_device_source_sha256": "c91c72dbd7b3481ff116e82c9b8e911129291e60dcd2024dae6023ac36c00925",
+        "all_conic_implementation_source_sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+        "backend": "cupy",
+        "cuda_driver_version": 13020,
+        "cuda_local_runtime_version": 13040,
+        "cuda_options": [
+          "--std=c++11",
+          "--fmad=false"
+        ],
+        "cuda_runtime_version": 13020,
+        "cupy_version": "14.2.0",
+        "determinism_scope": "SAME_CUPY_CUDA_RUNTIME_AND_DEVICE",
+        "device": "cuda:0",
+        "device_compute_capability": "12.0",
+        "device_index": 0,
+        "device_name": "NVIDIA GeForce RTX 5060 Ti",
+        "device_pci_domain_bus_device": "0000:10:00",
+        "device_uuid": "66041ce7445ea391aadd703ae6ebc672",
+        "execution_kernel_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+        "fused_cuda_source_sha256": "05947aed03f88b56d5c2ad45c0c85fe5f35812b32b3d409c1313948def339103",
+        "implementation_source_sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+        "kernel_id": "jx.cuda.restricted-wh.primary-relative.fused.v1",
+        "kick_cuda_source_sha256": "55a86d6a1f15a974a410d38b89d63274990f75eae25f272eddb844c8a3f9cbc5",
+        "method_id": "JX_CUDA_RESTRICTED_WH_PRIMARY_RELATIVE_V1",
+        "nvrtc_version": [
+          13,
+          4
+        ]
+      },
+      "quiet_fused_attempt_count": 1,
+      "reference_hybrid_source_sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+      "route_chain_submission_count": 0,
+      "route_dispatch_policy": "DEDICATED_PROCESS_PER_OWNER_BOUNDED_LOOKAHEAD",
+      "route_lookahead_steps": 64,
+      "route_policy": {
+        "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+        "event_locator": {
+          "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+          "dense_polynomial_validation_points": 17,
+          "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+          "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+          "maximum_accepted_steps": 100000,
+          "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+          "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+          "relative_tolerance_hex": "0x1.19799812dea11p-40"
+        },
+        "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+        "primary_outer_boundary_AU_hex": null,
+        "schema": "jx.restricted-wh.route-policy.v2",
+        "terminal_source_radii_AU_hex": [
+          "0x1.0000000000000p+4",
+          "0x1.f51bf655b2392p-12",
+          "0x1.a66f84b6f83e0p-12",
+          "0x1.664ceea3bfc0dp-13",
+          "0x1.5b28000a780f4p-13",
+          "0x1.0a6c14a62a4bbp-17"
+        ]
+      },
+      "route_runtime_identities": [],
+      "route_worker_assignment_sha256": "d4ade0678767a74e6ab5002753dbc526e1b04e10a6841e8480009bf9d952503d",
+      "route_worker_count": 6,
+      "route_worker_start_method": "spawn",
+      "source_tile_sha256": "336ee4e19a93e1f0c0ff8cbc458f7d8a7352473c813c69c22d16e817003ea634",
+      "speculative_route_step_count": 0
+    },
+    "scientific_classification": "MODEL_OUTPUT",
+    "segment_episode_summaries": [],
+    "source_tile_sha256": "336ee4e19a93e1f0c0ff8cbc458f7d8a7352473c813c69c22d16e817003ea634"
+  },
+  "route_chain_sha256": "193394346652bab6cbe1567693c16f26bf0eade58496a6aed882720871b32b23",
+  "route_delta_sha256": "9fc3d4abb4d683b79fc43a59306c74d19b43effbb721ee9b9a630bded4e5ab53",
+  "route_lookahead_steps": 64,
+  "route_policy": {
+    "content_sha256": "82d5a5b779b3b8ac565e430272301b80ed663f2911ae2ab7f558f41b14a1c7e1",
+    "event_locator": {
+      "absolute_tolerance_hex": "0x1.6849b86a12b9bp-47",
+      "dense_polynomial_validation_points": 17,
+      "event_distance_tolerance_AU_hex": "0x1.5fd7fe1796495p-37",
+      "event_fraction_tolerance_hex": "0x1.19799812dea11p-40",
+      "maximum_accepted_steps": 100000,
+      "maximum_substep_fraction_hex": "0x1.0000000000000p-3",
+      "outward_radial_velocity_tolerance_AU_per_year_hex": "0x1.c25c268497682p-44",
+      "relative_tolerance_hex": "0x1.19799812dea11p-40"
+    },
+    "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+    "primary_outer_boundary_AU_hex": null,
+    "schema": "jx.restricted-wh.route-policy.v2",
+    "terminal_source_radii_AU_hex": [
+      "0x1.0000000000000p+4",
+      "0x1.f51bf655b2392p-12",
+      "0x1.a66f84b6f83e0p-12",
+      "0x1.664ceea3bfc0dp-13",
+      "0x1.5b28000a780f4p-13",
+      "0x1.0a6c14a62a4bbp-17"
+    ]
+  },
+  "route_record_count_cumulative": 102,
+  "route_record_count_delta": 0,
+  "route_worker_count": 6,
+  "run_id": "restricted-wh-real-episode-checkpoint-benchmark-v3",
+  "schema": "jxplanetx.restricted-wh-owned-episode-delta-checkpoint.v1",
+  "segment_episode_count_cumulative": 2,
+  "segment_episode_count_delta": 0,
+  "segment_sha256": "2dc90e01027c82bf64acb28dc4b4037a53d5fab76fafa58b785fbfd5e58794e2",
+  "source_final_node_sha256": "7ce93acee650fbea089e1654118d6e79d85653f70cdb6bc615eb3fd1df7145bf",
+  "source_initial_node_sha256": "7cf508317e9c64269765361d93eeb8f14b91ffdd0a4ce5b0c29a9699d02255ff",
+  "source_lineage_sha256": "647dada2d9c2818e440f47bf0629a9ad977c8b17c7b93d46b7583e4ffc8d9f55",
+  "source_tile_metadata": {
+    "axes": "J2000_ECLIPTIC",
+    "content_sha256": "336ee4e19a93e1f0c0ff8cbc458f7d8a7352473c813c69c22d16e817003ea634",
+    "coordinate_system": "PRIMARY_RELATIVE_NONROTATING",
+    "epoch_origin_years_hex": "0x0.0p+0",
+    "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+    "global_source_step": 3000,
+    "length_unit": "AU",
+    "primary_source_id": "Sun",
+    "provenance": {
+      "citation": "Tracked DE441-derived control and frozen synthetic population",
+      "sha256": "92c5f14b04027d4d72d62402a4bf3279ef74117b0f716a13e97a276d98510aec",
+      "source_id": "jx.real-episode-checkpoint-benchmark",
+      "version": "v1"
+    },
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "source_schedule_sha256": "091ecda15b13a2c9fb1bbe1a94004255a51b0848532fb6749ebfee85cbb80f50",
+    "source_step_years_hex": "0x1.0000000000000p-4",
+    "tile_id": "de441-control-real-episode-checkpoint-v1.hybrid.3000.1000",
+    "time_scale": "TDB",
+    "time_unit": "year",
+    "unit_system_id": "AU-YEAR"
+  },
+  "spec": {
+    "backend": {
+      "allow_fallback": false,
+      "backend_id": "cupy",
+      "determinism_scope": "SAME_RUNTIME_DEVICE",
+      "deterministic_reductions": true,
+      "device": "cuda:0",
+      "dtype": "float64",
+      "fast_math": false,
+      "tile_size": 128
+    },
+    "map_step_count": 1000,
+    "maximum_primary_dynamical_phase_hex": "0x1.999999999999ap-5",
+    "primary_outer_boundary_AU_hex": null,
+    "source_steps_per_map_step": 1,
+    "threads_per_block": 128
+  },
+  "state_metadata": {
+    "axes": "J2000_ECLIPTIC",
+    "coordinate_system": "PRIMARY_RELATIVE_NONROTATING",
+    "epoch_origin_years_hex": "0x0.0p+0",
+    "frame": "J2000_ECLIPTIC_ROTATED_FROM_HORIZONS_ICRF",
+    "global_source_step": 4000,
+    "length_unit": "AU",
+    "primary_source_id": "Sun",
+    "provenance": {
+      "citation": "Tracked DE441-derived control and frozen synthetic population",
+      "sha256": "92c5f14b04027d4d72d62402a4bf3279ef74117b0f716a13e97a276d98510aec",
+      "source_id": "jx.real-episode-checkpoint-benchmark",
+      "version": "v1"
+    },
+    "snapshot_id": "de441-control-real-episode-checkpoint-v1",
+    "source_ids": [
+      "Sun",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "source_schedule_sha256": "091ecda15b13a2c9fb1bbe1a94004255a51b0848532fb6749ebfee85cbb80f50",
+    "source_step_years_hex": "0x1.0000000000000p-4",
+    "time_scale": "TDB",
+    "time_unit": "year",
+    "unit_system_id": "AU-YEAR"
+  },
+  "state_sha256": "5e37562402f5053b4303fb809c89714046f544ab773b12d4e332d247ce705469"
+}

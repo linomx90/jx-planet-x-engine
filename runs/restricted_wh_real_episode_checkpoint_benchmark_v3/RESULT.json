@@ -1,0 +1,156 @@
+{
+  "claims": {
+    "cross_runtime_bitwise_reproducible": false,
+    "long_horizon_accuracy_qualified": false,
+    "long_horizon_completion_projected": false,
+    "physical_encounter_rate_represented": false,
+    "production_qualified": false,
+    "science_result": false
+  },
+  "completed_utc": "2026-10-05T22:18:56.249909+00:00",
+  "content_sha256": "c7fdd755e0e8024ddab6902742a200de440d98f91d0b5e186042bacdb37eba64",
+  "final_quiet_append_speedup": 33.0334497775627,
+  "gates": {
+    "checkpoint_records_exact": true,
+    "claim_ceiling_all_false": true,
+    "episode_total_exact": true,
+    "expected_final_state_exact": true,
+    "final_quiet_append_speedup_passed": true,
+    "final_state_exact_between_modes": true,
+    "git_head_unchanged": true,
+    "implementation_identity_unchanged": true,
+    "in_memory_source_identity_matches_disk": true,
+    "route_chain_exact": true,
+    "route_profile_exact": true,
+    "route_total_exact": true,
+    "runtime_identity_unchanged": true,
+    "source_bytes_unchanged": true,
+    "total_append_speedup_passed": true
+  },
+  "modes": [
+    {
+      "final_checkpoint_content_sha256": "cc448decad932c6add8d66b35e29e5830853d1326805209f64af3c2f9ee9599c",
+      "final_route_chain_sha256": "193394346652bab6cbe1567693c16f26bf0eade58496a6aed882720871b32b23",
+      "final_state_sha256": "5e37562402f5053b4303fb809c89714046f544ab773b12d4e332d247ce705469",
+      "full_chain_load_seconds": 25.213097234023735,
+      "mode": "standalone_full_replay",
+      "route_record_count_cumulative": 102,
+      "segment_episode_count_cumulative": 2,
+      "segments": [
+        {
+          "advance_seconds": 0.7702629460254684,
+          "append_seconds": 0.686285360949114,
+          "checkpoint_content_sha256": "fb6f7e102e7cc3085bdc8d757abb86956e5e91f44d98d2c7c8c0f621f45bcc89",
+          "checkpoint_index": 0,
+          "episode_delta": 0,
+          "json_size_bytes": 23255,
+          "route_cumulative": 0,
+          "route_delta": 0,
+          "state_sha256": "464b104de268e464cfd9b79b04c93e756affda90b2e720050c19038d62a7968c"
+        },
+        {
+          "advance_seconds": 8.488009401015006,
+          "append_seconds": 9.29908659402281,
+          "checkpoint_content_sha256": "3830094cecf2f0b9fe581726871796202ba03fc59884fe767f79d8957216db87",
+          "checkpoint_index": 1,
+          "episode_delta": 1,
+          "json_size_bytes": 138926,
+          "route_cumulative": 20,
+          "route_delta": 20,
+          "state_sha256": "83d0c87ed954d56cdc0e2d112f8129a5da82c56ea0893730deb152b5d67ce4ca"
+        },
+        {
+          "advance_seconds": 15.323842955986038,
+          "append_seconds": 24.63938425492961,
+          "checkpoint_content_sha256": "145bff1a34cd6e87682267d52105fa2ab7323191d6e12d050ad638de3ff3b723",
+          "checkpoint_index": 2,
+          "episode_delta": 1,
+          "json_size_bytes": 495436,
+          "route_cumulative": 102,
+          "route_delta": 82,
+          "state_sha256": "5c196521fff85064dba3ec4b0f55902a441788983fd6abbaa8c41a332ad8a505"
+        },
+        {
+          "advance_seconds": 0.6469323550118133,
+          "append_seconds": 25.19554051803425,
+          "checkpoint_content_sha256": "cc448decad932c6add8d66b35e29e5830853d1326805209f64af3c2f9ee9599c",
+          "checkpoint_index": 3,
+          "episode_delta": 0,
+          "json_size_bytes": 23390,
+          "route_cumulative": 102,
+          "route_delta": 0,
+          "state_sha256": "5e37562402f5053b4303fb809c89714046f544ab773b12d4e332d247ce705469"
+        }
+      ],
+      "total_advance_seconds": 25.229047658038326,
+      "total_append_seconds": 59.820296727935784
+    },
+    {
+      "final_checkpoint_content_sha256": "cc448decad932c6add8d66b35e29e5830853d1326805209f64af3c2f9ee9599c",
+      "final_route_chain_sha256": "193394346652bab6cbe1567693c16f26bf0eade58496a6aed882720871b32b23",
+      "final_state_sha256": "5e37562402f5053b4303fb809c89714046f544ab773b12d4e332d247ce705469",
+      "full_chain_load_seconds": 25.069203941966407,
+      "mode": "locked_session",
+      "route_record_count_cumulative": 102,
+      "segment_episode_count_cumulative": 2,
+      "segments": [
+        {
+          "advance_seconds": 0.6385508209932595,
+          "append_seconds": 0.6985921430168673,
+          "checkpoint_content_sha256": "fb6f7e102e7cc3085bdc8d757abb86956e5e91f44d98d2c7c8c0f621f45bcc89",
+          "checkpoint_index": 0,
+          "episode_delta": 0,
+          "json_size_bytes": 23255,
+          "route_cumulative": 0,
+          "route_delta": 0,
+          "state_sha256": "464b104de268e464cfd9b79b04c93e756affda90b2e720050c19038d62a7968c"
+        },
+        {
+          "advance_seconds": 8.612307071918622,
+          "append_seconds": 8.507091086008586,
+          "checkpoint_content_sha256": "3830094cecf2f0b9fe581726871796202ba03fc59884fe767f79d8957216db87",
+          "checkpoint_index": 1,
+          "episode_delta": 1,
+          "json_size_bytes": 138926,
+          "route_cumulative": 20,
+          "route_delta": 20,
+          "state_sha256": "83d0c87ed954d56cdc0e2d112f8129a5da82c56ea0893730deb152b5d67ce4ca"
+        },
+        {
+          "advance_seconds": 15.293922106968239,
+          "append_seconds": 15.36450624698773,
+          "checkpoint_content_sha256": "145bff1a34cd6e87682267d52105fa2ab7323191d6e12d050ad638de3ff3b723",
+          "checkpoint_index": 2,
+          "episode_delta": 1,
+          "json_size_bytes": 495436,
+          "route_cumulative": 102,
+          "route_delta": 82,
+          "state_sha256": "5c196521fff85064dba3ec4b0f55902a441788983fd6abbaa8c41a332ad8a505"
+        },
+        {
+          "advance_seconds": 0.6456962000811473,
+          "append_seconds": 0.7627281040186062,
+          "checkpoint_content_sha256": "cc448decad932c6add8d66b35e29e5830853d1326805209f64af3c2f9ee9599c",
+          "checkpoint_index": 3,
+          "episode_delta": 0,
+          "json_size_bytes": 23390,
+          "route_cumulative": 102,
+          "route_delta": 0,
+          "state_sha256": "5e37562402f5053b4303fb809c89714046f544ab773b12d4e332d247ce705469"
+        }
+      ],
+      "total_advance_seconds": 25.190476199961267,
+      "total_append_seconds": 25.33291758003179
+    }
+  ],
+  "notes": [
+    "The complete tracer population is a synthetic engineering fixture.",
+    "Route episodes are consecutive guarded map steps, not inferred physical encounters.",
+    "Timing is same-machine monotonic wall time and is not a completion projection.",
+    "Every public final load still replays the complete chain from genesis."
+  ],
+  "protocol_sha256": "3d0ca408d0033c2937bbe7fc526fc2b4be0289c57586eb589827f3379e7f375a",
+  "schema": "jx.restricted-wh.real-episode-checkpoint-benchmark.v3",
+  "status": "PASSED_ENGINEERING_BENCHMARK_NOT_SCIENCE",
+  "total_append_speedup": 2.361366255542869
+}

@@ -336,12 +336,15 @@ criterion until these gates remain satisfied.
     session may replay the predecessor once, but must rehash all committed
     artifacts on every append, use a private PID/thread/runtime-bound head,
     serialize the independently replayed endpoint, read it back, and poison
-    itself after any failure.  Tests require exact direct-versus-restart state
+    itself after any failure.  Its frozen implementation/runtime identity is
+    compared before replay, serialized without recomputation, checked again
+    immediately before irreversible JSON publication, and recaptured after an
+    existing head is replayed.  Tests require exact direct-versus-restart state
     and result evidence, six-worker episode ownership, source-node continuity,
     externally anchored heads, strict binary64 arrays, caller-buffer isolation,
-    and rejection of modified NPZs, cross-thread/process use, runtime drift,
-    and rehashed worker, source, claim, implementation, genesis, index, and
-    predecessor forgeries.
+    and rejection of modified NPZs, cross-thread/process use, identity drift at
+    both publication boundaries, and rehashed worker, source, claim,
+    implementation, genesis, index, and predecessor forgeries.
 
 Successful results bind the numerical implementation sources, all-conic
 source, CUDA kick source and compiler options, CuPy/CUDA/NVRTC versions, and
@@ -640,25 +643,29 @@ Fresh externally anchored full-chain loads also returned that state in both
 modes.  All source, runtime, code, route-profile, endpoint, and all-false claim
 gates passed.
 
-Across the four appends, standalone cumulative numerical replay took 59.497
-seconds and the locked session took 25.517 seconds, a 2.332-times speedup.  The
+Across the four appends, standalone cumulative numerical replay took 59.820
+seconds and the locked session took 25.333 seconds, a 2.361-times speedup.  The
 final segment contained no new route and exposed the avoided historical work
-most clearly: append time fell from 25.190 seconds to 0.759 seconds, a
-33.20-times speedup.  The final fresh full-history audit intentionally remained
+most clearly: append time fell from 25.196 seconds to 0.763 seconds, a
+33.03-times speedup.  The final fresh full-history audit intentionally remained
 about 25 seconds in both modes.  Artifact rehashing also remains cumulative;
 only repeated numerical predecessor replay was removed.
 
 The retained evidence is under
-`runs/restricted_wh_real_episode_checkpoint_benchmark_v2/`.  Its protocol
+`runs/restricted_wh_real_episode_checkpoint_benchmark_v3/`.  Its protocol
 SHA-256 is
-`685352b419ab12a3f91ad27896713592c375682e65dbc2f576eabf1b2ade1e5e`;
+`3d0ca408d0033c2937bbe7fc526fc2b4be0289c57586eb589827f3379e7f375a`;
 its result content SHA-256 is
-`5385cf5b17a34b233ae160bd00fdc41799a8f8544e29b4a091b6a11d7b73dff4`.
-The status is `PASSED_ENGINEERING_BENCHMARK_NOT_SCIENCE`.  An earlier v1 run
-was preserved after failing only its predeclared semantic endpoint hash: the
-numerical endpoint matched between modes, but the expected hash came from a
-probe with a different snapshot/provenance label.  The gate was corrected in
-a new committed v2 protocol and rerun; it was not waived retroactively.
+`c7fdd755e0e8024ddab6902742a200de440d98f91d0b5e186042bacdb37eba64`.
+The status is `PASSED_ENGINEERING_BENCHMARK_NOT_SCIENCE`.  Version 3 adds an
+exact start/end comparison between every imported numerical module identity
+and its on-disk source SHA-256, and binds the last-moment checkpoint identity
+publication checks.  Version 2 remains valid retained evidence for the prior
+implementation.  An earlier v1 run was preserved after failing only its
+predeclared semantic endpoint hash: the numerical endpoint matched between
+modes, but the expected hash came from a probe with a different
+snapshot/provenance label.  That gate was corrected in a new committed
+protocol and rerun; it was not waived retroactively.
 
 ## Explicitly false claims
 
