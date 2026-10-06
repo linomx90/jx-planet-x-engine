@@ -61,6 +61,9 @@ _PATH_DOMAIN = b"jxplanetx.long-horizon.m2-retained-path.v1\0"
 _SLICE_DOMAIN = b"jxplanetx.long-horizon.m2-retained-slice.v1\0"
 _OVERLAY_DOMAIN = b"jxplanetx.long-horizon.m2-guard-overlay.v1\0"
 _TILE_LINEAGE_DOMAIN = b"jxplanetx.long-horizon.m2-frozen-tile-lineage.v1\0"
+_TILE_SOURCE_LINEAGE_DOMAIN = (
+    b"jxplanetx.long-horizon.m2-frozen-tile-source-lineage.v1\0"
+)
 _TILE_BINDING_DOMAIN = b"jxplanetx.long-horizon.m2-frozen-tile-binding.v1\0"
 
 PROTOCOL_FILE_SHA256 = (
@@ -1596,6 +1599,24 @@ def _tile_lineage_sha256(
     )
 
 
+def _tile_source_lineage_sha256(
+    source_slice: VerifiedM2SourcePathSlice,
+    overlay: M2GuardOverlay,
+) -> str:
+    """Bind the invariant full parent and guard policy across all its slices."""
+
+    return _record_sha256(
+        _TILE_SOURCE_LINEAGE_DOMAIN,
+        {
+            "schema": (
+                "jxplanetx.long-horizon.m2-frozen-tile-source-lineage.v1"
+            ),
+            "parent_path_content_sha256": source_slice.parent.content_sha256,
+            "guard_overlay_sha256": overlay.content_sha256,
+        },
+    )
+
+
 _TILE_PROVENANCE_SOURCE_ID = "jx.m2.retained-fine-source-path.v2"
 _TILE_PROVENANCE_CITATION = (
     "JX retained M2 v2 ten-Julian-year Newtonian known-source path; "
@@ -1634,6 +1655,9 @@ class M2FrozenSourcePathTileBinding:
         ):
             _require_sha256(value, label)
         expected_lineage = _tile_lineage_sha256(
+            self.source_slice, self.guard_overlay
+        )
+        expected_source_lineage = _tile_source_lineage_sha256(
             self.source_slice, self.guard_overlay
         )
         expected_tile_id = (
@@ -1697,10 +1721,10 @@ class M2FrozenSourcePathTileBinding:
             provenance.source_id != _TILE_PROVENANCE_SOURCE_ID
             or provenance.citation != _TILE_PROVENANCE_CITATION
             or provenance.version != "v2"
-            or provenance.sha256 != expected_lineage
+            or provenance.sha256 != expected_source_lineage
         ):
             raise M2SourcePathVerificationError(
-                "binding tile provenance differs from its verified lineage"
+                "binding tile provenance differs from its verified source lineage"
             )
         if (
             self.dynamic_node_sha256 != self.source_slice.dynamic_node_sha256
@@ -1756,6 +1780,7 @@ def build_m2_frozen_source_path_tile(
     if overlay.gm_array_content_sha256 != source_slice.gm_array_content_sha256:
         raise M2SourcePathVerificationError("guard overlay GM lineage differs from the slice")
     lineage = _tile_lineage_sha256(source_slice, overlay)
+    source_lineage = _tile_source_lineage_sha256(source_slice, overlay)
     tile = FrozenSourcePathTile(
         tile_id=(
             f"m2-v2-{source_slice.global_source_step}-{source_slice.final_global_source_step}-"
@@ -1785,7 +1810,7 @@ def build_m2_frozen_source_path_tile(
             source_id=_TILE_PROVENANCE_SOURCE_ID,
             citation=_TILE_PROVENANCE_CITATION,
             version="v2",
-            sha256=lineage,
+            sha256=source_lineage,
         ),
     )
     tile_digest = verify_source_path_tile(tile)

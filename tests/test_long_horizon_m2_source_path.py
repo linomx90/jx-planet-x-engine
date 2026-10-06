@@ -14,7 +14,9 @@ import numpy as np
 
 import jxplanetx.long_horizon.m2_source_path as retained
 import jxplanetx.long_horizon as facade
+import jxplanetx.restricted_wh_checkpoint as checkpoint
 from jxplanetx.cuda_restricted_wh import FrozenSourcePathTile, verify_source_path_tile
+from tests.test_cuda_restricted_wh import GPU_REQUIRED
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -156,6 +158,162 @@ class RetainedM2SourcePathTests(unittest.TestCase):
             joined_velocity, self.source.source_relative_velocities_AU_per_year
         )
 
+    def test_adjacent_annual_tiles_share_checkpoint_source_lineage(self) -> None:
+        minimum = retained.derive_m2_uniform_relative_acceleration_bound(
+            self.source
+        )
+        overlay = retained.seal_m2_guard_overlay(
+            self.source,
+            source_encounter_radii_AU=np.full(10, 0.1, dtype=np.float64),
+            certified_relative_acceleration_bounds_AU_per_year2=np.full(
+                10, minimum, dtype=np.float64
+            ),
+        )
+        first = retained.build_m2_frozen_source_path_tile(
+            self.source.slice_years(0, 1), overlay
+        )
+        second = retained.build_m2_frozen_source_path_tile(
+            self.source.slice_years(1, 2), overlay
+        )
+
+        # Exact slice custody remains distinct even though both slices belong
+        # to one immutable parent-plus-guard source lineage.
+        self.assertNotEqual(
+            first.lineage_content_sha256, second.lineage_content_sha256
+        )
+        self.assertNotEqual(first.content_sha256, second.content_sha256)
+        self.assertNotEqual(first.tile_content_sha256, second.tile_content_sha256)
+        self.assertEqual(first.tile.provenance, second.tile.provenance)
+        self.assertEqual(
+            first.tile.provenance.sha256,
+            retained._tile_source_lineage_sha256(first.source_slice, overlay),
+        )
+
+        # The generic checkpoint codec keeps its strict full-provenance
+        # invariant and now sees the adjacent retained-M2 tiles as one source.
+        self.assertEqual(
+            checkpoint._source_lineage_sha256(first.tile),
+            checkpoint._source_lineage_sha256(second.tile),
+        )
+        self.assertEqual(
+            checkpoint._source_boundary_sha256(
+                first.tile, first.tile.node_count - 1
+            ),
+            checkpoint._source_boundary_sha256(second.tile, 0),
+        )
+
+    @GPU_REQUIRED
+    def test_adjacent_annual_tiles_append_and_replay_real_checkpoint(self) -> None:
+        from jxplanetx.long_horizon import (
+            KnownSystemRunProfile,
+            build_known_system_observed_fixed_run_inputs,
+        )
+        from jxplanetx.restricted_wh_lifecycle import (
+            advance_cuda_restricted_wh_lifecycle,
+        )
+
+        inputs = build_known_system_observed_fixed_run_inputs(
+            profile_id=(
+                KnownSystemRunProfile.M2_FINE_CANDIDATE_10Y_ANNUAL
+            )
+        )
+        config = inputs.contract.config
+        spec = config.tracer_spec
+        self.assertEqual(
+            spec.map_step_count * spec.source_steps_per_map_step,
+            retained.FINE_SOURCE_STEPS_PER_YEAR,
+        )
+        minimum = retained.derive_m2_uniform_relative_acceleration_bound(
+            self.source
+        )
+        overlay = retained.seal_m2_guard_overlay(
+            self.source,
+            source_encounter_radii_AU=np.full(10, 0.1, dtype=np.float64),
+            certified_relative_acceleration_bounds_AU_per_year2=np.full(
+                10, minimum, dtype=np.float64
+            ),
+        )
+        bindings = tuple(
+            retained.build_m2_frozen_source_path_tile(
+                self.source.slice_years(year, year + 1), overlay
+            )
+            for year in range(2)
+        )
+        genesis = inputs.lifecycle_state
+        genesis_sha256 = checkpoint.restricted_wh_lifecycle_state_sha256(
+            genesis, spec.backend
+        )
+        protocol_sha256 = hashlib.sha256(
+            b"verified-m2-two-annual-slice-checkpoint-regression-v1"
+        ).hexdigest()
+
+        first = advance_cuda_restricted_wh_lifecycle(
+            genesis,
+            bindings[0].tile,
+            spec,
+            route_spec=config.route_spec,
+            route_worker_count=config.route_worker_count,
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            row0 = checkpoint.dump_restricted_wh_lifecycle_checkpoint(
+                root,
+                run_id="verified-m2-two-annual-slice-regression",
+                protocol_sha256=protocol_sha256,
+                genesis_state_sha256=genesis_sha256,
+                checkpoint_index=0,
+                input_state=genesis,
+                result=first,
+                source_tile=bindings[0].tile,
+                spec=spec,
+                route_spec=config.route_spec,
+                route_worker_count=config.route_worker_count,
+            )
+            second = advance_cuda_restricted_wh_lifecycle(
+                first.state,
+                bindings[1].tile,
+                spec,
+                route_spec=config.route_spec,
+                route_worker_count=config.route_worker_count,
+            )
+            row1 = checkpoint.dump_restricted_wh_lifecycle_checkpoint(
+                root,
+                run_id="verified-m2-two-annual-slice-regression",
+                protocol_sha256=protocol_sha256,
+                genesis_state_sha256=genesis_sha256,
+                checkpoint_index=1,
+                input_state=first.state,
+                result=second,
+                source_tile=bindings[1].tile,
+                spec=spec,
+                route_spec=config.route_spec,
+                route_worker_count=config.route_worker_count,
+                previous_checkpoint_content_sha256=row0[
+                    "checkpoint_content_sha256"
+                ],
+            )
+            loaded = checkpoint.load_latest_restricted_wh_lifecycle_checkpoint(
+                root,
+                run_id="verified-m2-two-annual-slice-regression",
+                protocol_sha256=protocol_sha256,
+                genesis_state_sha256=genesis_sha256,
+                expected_checkpoint_index=1,
+                expected_checkpoint_content_sha256=row1[
+                    "checkpoint_content_sha256"
+                ],
+                backend=spec.backend,
+            )
+
+        self.assertEqual(
+            row0["source_lineage_sha256"], row1["source_lineage_sha256"]
+        )
+        self.assertEqual(
+            loaded.state_sha256,
+            checkpoint.restricted_wh_lifecycle_state_sha256(
+                second.state, spec.backend
+            ),
+        )
+
     def test_guard_overlay_and_engine_tile_keep_dynamic_identity_separate(self) -> None:
         source_slice = self.source.slice_years(0, 1)
         minimum = retained.derive_m2_uniform_relative_acceleration_bound(source_slice)
@@ -193,7 +351,14 @@ class RetainedM2SourcePathTests(unittest.TestCase):
             exact_binding.tile.source_schedule_sha256,
             retained.FINE_SOURCE_SCHEDULE_SHA256,
         )
-        self.assertEqual(exact_binding.tile.provenance.sha256, exact_binding.lineage_content_sha256)
+        self.assertNotEqual(
+            exact_binding.tile.provenance.sha256,
+            exact_binding.lineage_content_sha256,
+        )
+        self.assertNotEqual(
+            exact_binding.tile.provenance.sha256,
+            wider_binding.tile.provenance.sha256,
+        )
         np.testing.assert_array_equal(
             exact_binding.tile.source_relative_positions_AU,
             source_slice.source_relative_positions_AU,
