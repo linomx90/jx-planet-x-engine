@@ -79,8 +79,16 @@ DE441 outer-planet states. The exact executed local source tree is archived
 with the run, every JX source node is retained for independent recomputation,
 external numerical distributions are byte-bound, and a final create-only
 completion marker distinguishes complete attempts from interrupted evidence.
-The v2 protocol is prepared and tested, but no retained completed v2 attempt
-exists yet; the older 30-gate v1 screen is superseded and cannot authorize v2.
+The immutable v2 attempt executed from Git commit
+`4768ac01b33665fec4f6067d5209a92e6e27812a` and passed all 50 gates. Its
+[completion marker](runs/long_horizon_m2_source_preflight_v2/COMPLETED.json)
+binds the [full result](runs/long_horizon_m2_source_preflight_v2/RESULT.json),
+retained all-node state, executed-source archive, and artifact manifest. The
+completion file/content SHA-256 values are respectively
+`081ac54da1a7915ea8d1d506ba6a312b716fb77fcdfd79bfcdc81c10b98f9c5a`
+and `c582877a2c314950ea543a57cc2155f0b5f5627a1128b454af20cc59badaf8ab`.
+The
+older 30-gate v1 screen is superseded and cannot authorize v2.
 This is
 numerical engineering evidence only: the model still
 omits relativity, resolved moons, asteroids, and solar oblateness, and it does

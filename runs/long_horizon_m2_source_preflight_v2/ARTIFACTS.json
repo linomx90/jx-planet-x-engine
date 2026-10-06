@@ -1,0 +1,43 @@
+{
+  "claims": {
+    "complete_de441_force_model": false,
+    "detection_claim": false,
+    "ephemeris_reconstruction": false,
+    "exclusion_claim": false,
+    "four_point_five_gyr_accuracy_qualified": false,
+    "inference_authorized": false,
+    "long_duration_accuracy_qualified": false,
+    "observationally_fitted": false,
+    "planet_nine_modeled": false,
+    "production_qualified": false,
+    "science_result": false,
+    "tracer_dynamics_qualified": false,
+    "uncertainty_calibrated": false
+  },
+  "content_sha256": "38779d56fe688a9f39bbf9e0fb942071b42a748a4cf8a90c8212cfa4412cf120",
+  "file_count": 4,
+  "files": [
+    {
+      "path": "EXECUTED_SOURCES.zip",
+      "sha256": "9e1d49c641170a935b641d4606aa8381b2085b2d013685f232065411e126e413",
+      "size_bytes": 5387779
+    },
+    {
+      "path": "PROTOCOL.json",
+      "sha256": "8b1b152181e177653b86ac50ca698c05671d47b1590f8fca3b8d0e1b78d54b76",
+      "size_bytes": 45279
+    },
+    {
+      "path": "RESULT.json",
+      "sha256": "ee9b7d5e727ae12d48757f3919fdf7d1acba49807caea730c4b6fd0c1a73b461",
+      "size_bytes": 162223
+    },
+    {
+      "path": "STATES.npz",
+      "sha256": "49382bb15d99add32e83b30554154c5fd1f1ac32e94479ffb9c2851845388717",
+      "size_bytes": 48335826
+    }
+  ],
+  "run_id": "jx-long-horizon-m2-known-source-10y-v2",
+  "schema": "jx.long-horizon.m2-known-source-artifacts.v2"
+}

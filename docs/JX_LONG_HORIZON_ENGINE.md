@@ -68,17 +68,29 @@ The superseded bounded v1 M2 screen used source steps of 1/4096 Julian year and
 independently written Cartesian SciPy DOP853 integration, exact REBOUND 5.1.1
 IAS15, the retained DE441 annual grid, and a ten-part one-year JX execution.
 Its 30-gate evidence did not retain the complete all-node state or executed
-source archive and cannot authorize the hardened v2 protocol. The prepared v2
-protocol uses 50 predeclared gates. It evaluates conservation at
+source archive and cannot authorize the hardened v2 protocol. The immutable
+[v2 attempt](../runs/long_horizon_m2_source_preflight_v2/COMPLETED.json),
+executed from Git commit `4768ac01b33665fec4f6067d5209a92e6e27812a`,
+passed all 50 predeclared gates; its
+[full result](../runs/long_horizon_m2_source_preflight_v2/RESULT.json) retains
+the detailed measurements. It evaluates conservation at
 all 40,961 coarse and 81,921 fine nodes, retains the native encounter/timestep
 guard metrics, and applies an independent all-node first-crossing separation
 proof plus primary-relative periapse and phase limits. The exact executed local
 source tree is archived, and the NumPy, SciPy, and REBOUND distribution bytes
 are bound before and after execution. Every JX source node is retained for
 artifact-only recomputation, and only a final create-only completion marker
-identifies a finished attempt. All gates must pass before v2 is described as a
-completed qualification. For context only, the superseded v1 fine JX lane
-differed from DOP853 by at
+identifies a finished attempt. The protocol, result, artifact-manifest, and
+completion content hashes are respectively
+`ac499179478892a173e169d9dec818125c0f0e51f3e58c4b439f4e8a809930cc`,
+`81674069f9f538007b9db07eded745886c6963f6671b7919fe273069edcfff31`,
+`38779d56fe688a9f39bbf9e0fb942071b42a748a4cf8a90c8212cfa4412cf120`,
+and `c582877a2c314950ea543a57cc2155f0b5f5627a1128b454af20cc59badaf8ab`.
+The retained all-node NPZ has SHA-256
+`49382bb15d99add32e83b30554154c5fd1f1ac32e94479ffb9c2851845388717`,
+and the 163-file executed-source archive has SHA-256
+`9e1d49c641170a935b641d4606aa8381b2085b2d013685f232065411e126e413`.
+The v2 fine JX lane differed from DOP853 by at
 most `2.2101e-10 AU` and `5.6008e-9 AU/year` across all bodies, and by
 `4.2941e-12 AU` and `2.2396e-12 AU/year` for the five outer barycenters. The
 coarse-to-fine error ratios were 4.028 in position and 4.052 in velocity. The
@@ -87,10 +99,9 @@ fine outer-state discrepancy from the retained DE441 grid was at most
 force model as well as numerical error. Full-vs-partition maxima were
 `5.2878e-12 AU` and `1.3457e-10 AU/year`.
 
-These v1 measurements do not authorize v2. Even after a completed v2 pass, its
-claim ceiling will authorize only the ten-year massive-source numerical
-preflight. It will not authorize the 108 tracer inputs, encounter behavior,
-compact-planet arms, 1,000-year execution, or any longer scientific run.
+This pass authorizes only the ten-year massive-source numerical preflight. It
+does not authorize the 108 tracer inputs, encounter behavior, compact-planet
+arms, 1,000-year execution, or any longer scientific run.
 
 ## Canonical experimental façade and operational boundary
 

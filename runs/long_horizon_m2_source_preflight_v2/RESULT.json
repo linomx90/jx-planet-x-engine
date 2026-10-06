@@ -1,0 +1,3044 @@
+{
+  "all_gates_passed": true,
+  "claims": {
+    "complete_de441_force_model": false,
+    "detection_claim": false,
+    "ephemeris_reconstruction": false,
+    "exclusion_claim": false,
+    "four_point_five_gyr_accuracy_qualified": false,
+    "inference_authorized": false,
+    "long_duration_accuracy_qualified": false,
+    "observationally_fitted": false,
+    "planet_nine_modeled": false,
+    "production_qualified": false,
+    "science_result": false,
+    "tracer_dynamics_qualified": false,
+    "uncertainty_calibrated": false
+  },
+  "classification": "BOUNDED_NUMERICAL_ENGINEERING_QUALIFICATION_ONLY",
+  "code_identity_end": {
+    "file_count": 163,
+    "files": {
+      "benchmarks/jx_long_horizon_m2_source_preflight.py": "6b9a0861155407b8dbf74f04315f17516ff0707ecb74e35fb11f61545cca6740",
+      "runs/de441_horizons_10yr/contract_v1.json": "5112c90e71317a5cae54d17ea82296296af68812f18c663429dc773ac161053f",
+      "runs/de441_horizons_10yr/gm_de440_major_barycenters.csv": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217",
+      "runs/de441_horizons_10yr/reference/horizons_de441_vectors.csv": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e",
+      "runs/de441_horizons_10yr/reference/horizons_reference_manifest.json": "87bf405df5d333dde237b8a6f63ba57a67baff60e74f752b5d1e77cc094d4565",
+      "src/jxplanetx/__init__.py": "86bd065b9c16a448b217d960c6dd8d79a7d7ccc79209e7708ff79bc07ce681e0",
+      "src/jxplanetx/_all_conic_kepler.py": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691",
+      "src/jxplanetx/_eih_1pn_core.c": "de4b173ff26aab1a5d012aca79b2687c81ce8ef97db290e48b00ca3d21f40746",
+      "src/jxplanetx/_eih_1pn_core.h": "9a5de1b1efca712781afd9fcfe674d24919a9b95118e48b22f75508c511cab0e",
+      "src/jxplanetx/_eih_1pn_cpu_module.c": "d3dfcce2285757b8c2b1936d4838ed06da02235ffd5b6ef803f17c809bd74795",
+      "src/jxplanetx/_ephemeris_worker.py": "6f146ac1b4bd17f4f9a0d2ba7a26744e1f7a0a28acd94fab46e26e909710f5c2",
+      "src/jxplanetx/_gr15_core.c": "9a6cb532e88c732f6653c2763d9510036432d9930d930c19a5d259a03b3b514c",
+      "src/jxplanetx/_gr15_core.h": "e5304f35a93508e6156ef77ec8c7af783eb12f86b327c4a874528ee69d90c5c8",
+      "src/jxplanetx/_gr15_cpu_module.c": "ab96f7f54110db91d1a6f499eb59d088cae70d2b4d6f2afdf59f4875d5f7f7fa",
+      "src/jxplanetx/_gr15_eih_1pn_core.c": "bef3a607c4c3674d342745570c68b462a6178e789089c84419d6f23dd810fad1",
+      "src/jxplanetx/_gr15_eih_1pn_core.h": "83fda72f020d96c76e13f4556efb9d8bef7b29e9a9a3aeb9a888a4d47c688002",
+      "src/jxplanetx/_gr15_eih_1pn_cpu_module.c": "fb45c2ba274278f080b03dbd9700bcc41542ea7dc1d6b662d543a4c6e593d771",
+      "src/jxplanetx/_gr15_v2_reference.py": "704d311c00474234074090388bd51ea457fe164e22a26b0a24fd46ea5539874c",
+      "src/jxplanetx/_gr15_v3_candidate.py": "da05e5551cd4a29c88edd5895a94afbdaa470129b4163a760511755333df2e81",
+      "src/jxplanetx/_gr15_v3_core.c": "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41",
+      "src/jxplanetx/_gr15_v3_core.h": "65efaa1b16ff5e7fe2b9e8afe26f90e11f6e6ad8b75711e4fc2b1e3e3b3967f5",
+      "src/jxplanetx/_gr15_v3_cpu_module.c": "ec46ae8610574ab7fa12e6ebae669f038b7a026f7e378b9af8888a85ba2e4092",
+      "src/jxplanetx/_smalln_cpu_module.c": "8a44b9825ba8c469c424f144519c6b98980a706cfb61ec514ba6068f7d66cc91",
+      "src/jxplanetx/_wisdom_holman_cpu_module.c": "85c454431e3414aa0d44be3887e6d4e83a43a040dbe5a8b6eb692a9b53c98ea5",
+      "src/jxplanetx/_wisdom_holman_cpu_v2_module.c": "65e4ce5b9c40879e81eabc19641697085ab7f052953839bad9ae4f70eeed1a84",
+      "src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+      "src/jxplanetx/_wisdom_holman_cpu_v3_module.c": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+      "src/jxplanetx/_wisdom_holman_cpu_v4_module.c": "73feb1b1dbb4c24afacdd2bca1917471da7e6fa9e85965c72d988b8167b6e356",
+      "src/jxplanetx/_wisdom_holman_loop.c": "2d66d776bd493a5c3ef0bed2deb5d78bb27f397a9e302daa186290d52588315c",
+      "src/jxplanetx/_wisdom_holman_loop_v2.c": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+      "src/jxplanetx/_wisdom_holman_loop_v3.c": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+      "src/jxplanetx/_wisdom_holman_loop_v4.c": "10981b416e4bb90a89babfc05cdd9c97bf1e5b49a0956490300bc5cbc591a16c",
+      "src/jxplanetx/claims.py": "69c5e5c0e7e2ccfb3599c6d715fd4e7cac13e546e198b7cf19bec031f622a1f1",
+      "src/jxplanetx/cli.py": "185300b4ce30f35057dad4359b6405b7686f842eda0f9b237f0c9bd16cad7281",
+      "src/jxplanetx/cosmology_baryons.py": "0532acfb19791ed08f3f816782e6e351e0cd6c62e32fd51e731538b78ba31823",
+      "src/jxplanetx/cosmology_pm.py": "24da85a5cab69621a8ca313bd02606c17afb39e0b990aac155de14b28ba8d045",
+      "src/jxplanetx/cuda_massless_tracer.py": "565e272bac0f3b0d794cc481a6cb48b408e1fdcea08d4f6a93fb64a41ddf13da",
+      "src/jxplanetx/cuda_mechanism_schedules.py": "3465feef5b9e8fb7422a95fa4ad41acb4ae511be0289fdfb6d50ffa51edbfcaf",
+      "src/jxplanetx/cuda_restricted_wh.py": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927",
+      "src/jxplanetx/cuda_restricted_wh_episode.py": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae",
+      "src/jxplanetx/cuda_restricted_wh_episode_owner.py": "56c779eed37e531e42596242f165e86102fc0aad76481f473e3e49d6b92bac69",
+      "src/jxplanetx/cuda_restricted_wh_hybrid.py": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10",
+      "src/jxplanetx/cuda_restricted_wh_multirate.py": "1841deb6759f9fe1d67e73dbe46d3fcf6ef6acee33bed4f1d4cec7bd9d7a3309",
+      "src/jxplanetx/cuda_tracer_events.py": "35561d42b63f3f4dfb1a2368ca13c210ab99d0b5934e94c85ac48cc204b564b7",
+      "src/jxplanetx/data/long_horizon_known_system_v2/MANIFEST.json": "40d3e77c9ab5081f08354fe8e565e92008755059ef48ed9b7f43848c4f6f8231",
+      "src/jxplanetx/data/long_horizon_known_system_v2/README.md": "af0ae85eca293bc5d7f3b5d77cb913560adc363ce5c215dd29c300d67a1662e0",
+      "src/jxplanetx/data/long_horizon_known_system_v2/SHA256SUMS": "bf4eb9ec805f450e3928a841c377b9584404486556fe1bf041f36df5b88175dd",
+      "src/jxplanetx/data/long_horizon_known_system_v2/gm_de440_major_barycenters.csv": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217",
+      "src/jxplanetx/data/long_horizon_known_system_v2/horizons_de441_barycentric_icrf_jd2461200p5.csv": "97af9f841445a26d1c69dca46cfde73aa1a44c0651f19a1269a3facce6af8c9b",
+      "src/jxplanetx/data/long_horizon_known_system_v2/known_system_primary_relative_ecliptic_float_hex.csv": "6b3a2b1fbcee18821783c581a2e81ecdb9198a6da6550c81fbd03d579011bb8f",
+      "src/jxplanetx/de441_anchor.py": "516a7d7dc5807436df3e9bac8289b649fb8c835f600a67d1de9f92dea2d965d9",
+      "src/jxplanetx/de441_horizons.py": "f69a75a026b3377576300e8dd206a184958ff889fae5855bb79d8967f9067c78",
+      "src/jxplanetx/de441_population.py": "c13fade09d0d2096b7a4928b32c7a26f9656e37b5a98e76da3d230e86cedc3b8",
+      "src/jxplanetx/decimal_bs.py": "6c220edecf9f44cc8b8fb870595d2fe805045a441f5d1902415bbf736523b054",
+      "src/jxplanetx/decimal_math.py": "7dc49a49749a4eeea7300b88511d2964bacd81b9bf9cd7a14d5f75bae8c395a7",
+      "src/jxplanetx/dynamics.py": "c83073d78844f5875af3c48dd083be2f81d073441ec0277ab3bcb38d2a7dbf51",
+      "src/jxplanetx/eih_1pn_cuda.py": "a5bfacb6070546a3e1ee9835b6a2b8878a6cf9d8b105788f44ec8e0724473cf0",
+      "src/jxplanetx/encounter_tail.py": "5b21fb932eea643a98bd87af373c3b25a2fe213eb55d555963f83dc902c3e4d1",
+      "src/jxplanetx/engine/__init__.py": "0eb03741a4b37ef6cc8a4a8c982639d4fbbbe1b1caedb376b8c419be3e51c500",
+      "src/jxplanetx/engine/api.py": "1664c4c69e4b9fa30b983c8390f76aa7a05259e89dd009d57f7099f8ffe088f2",
+      "src/jxplanetx/engine/backends.py": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba",
+      "src/jxplanetx/engine/catalog.py": "91ef9d6a1691ecded6b98400701a7dd250fafa85d95db88afc1cdd4e1312a7a0",
+      "src/jxplanetx/engine/contracts.py": "11c834620deedacd219a35bda46772f9be9f0d6243c644dee4fb02eb6c0c144d",
+      "src/jxplanetx/engine/coupled_lunar.py": "f43cb7efd345b7b82bb72158f73b5b38cbbf9abcfdedce4a797e6be2056d7621",
+      "src/jxplanetx/engine/coupled_lunar_contracts.py": "56f3b6299dbb612c00afb694147b6137a03a887f676f7cc598d21afe0f16e820",
+      "src/jxplanetx/engine/encounter.py": "0bd95ff70f15574e8c58c2fcea4fce51e4964f75a2d7230719cc1f21a7cbdd22",
+      "src/jxplanetx/engine/encounter_contracts.py": "372ae800dd9404623ad1773c676700e1a42ec8e1b652c1e14b78288fb26ec1ac",
+      "src/jxplanetx/engine/evaluator.py": "26a4754c970225096bbe373fd083d3f7fdde626580599723906326991f33f888",
+      "src/jxplanetx/engine/force_abi.py": "b82847f38e56203ae6af3e04bd265c04790cd7f6d88d7158d3d18ac48e17024d",
+      "src/jxplanetx/engine/forces.py": "c21a2bdcfbad605d2aec2a8623629ad1a4c06f7ac6f38edac07b9261974e4605",
+      "src/jxplanetx/engine/hybrid.py": "3aba61e73a963270dbb3cd872280e3f2e857e7e2118b5c48d6cebab14f181b42",
+      "src/jxplanetx/engine/hybrid_contracts.py": "32b5e3b479d3b6060a7275e3658aebf6b375801ca7d8e74b6b45a14cf9356c14",
+      "src/jxplanetx/engine/lunar_ephemeris.py": "2234b8215fe848ebbacc07567eba29aa1f69eea5ff8c1218dae40c724280be49",
+      "src/jxplanetx/engine/lunar_ephemeris_contracts.py": "ab03eff40ca0a0ee89d5803d74282a30a0a05b706b16369ba4d1a3a7b0b840ed",
+      "src/jxplanetx/engine/physical_forces.py": "12cbad4cb5d4c83087fca8dfa835a7ec480c4d754088cdc110347ea178a6ba0c",
+      "src/jxplanetx/engine/rkf78.py": "01a802a85d0a2faad6bf49aaeba00c4fdf7ce10faa3eedfff6e9ed56e503ae4f",
+      "src/jxplanetx/engine/scenario.py": "a35d99ef78b8e80040198f26d257beb6074ae3f1251ae4082f482fdbc00dd79e",
+      "src/jxplanetx/engine/scenario_manifest.py": "0b72c1d65e51675cf3b8157576df6bb03c758228df6cd402eaed1f0546ca089d",
+      "src/jxplanetx/engine/simulation.py": "9d897efddc4f522cd67cd069500b488f4339265695d5a2e8a99b5d8d19f3ce62",
+      "src/jxplanetx/engine/simulation_archive.py": "b9d213bd0c653e7f9fc2905d2bbd1633356645bcd83f69bc8be5dcfc6c2aca91",
+      "src/jxplanetx/engine/symplectic.py": "220f55ad48b960f0d6802f33502bc17c224c22de0dbd1f5aae639033ec9c490f",
+      "src/jxplanetx/engine/symplectic_contracts.py": "305030363314bc4ea10e40c676f91b648c72398874d3d205b522105741ba3c9d",
+      "src/jxplanetx/engine/trajectory.py": "2a34e30bb248e0dfb60b7bd559bc1a540ebb5133419b49c80ac973480971a1e0",
+      "src/jxplanetx/engine/trajectory_contracts.py": "36d9fe8cdf81ce8d333b4afe18ed020550450a0655d7b95f35997892fb88e142",
+      "src/jxplanetx/engine/wisdom_holman.py": "2c3ed08e04d6a622af63f6be82afa1a222582e772a891179cdc01aa0f2a7383f",
+      "src/jxplanetx/engine/wisdom_holman_contracts.py": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7",
+      "src/jxplanetx/ensemble_validation.py": "2ca00d7d48997df109625d81d21ce0beee6276cf0a346c028e713d52914fdefd",
+      "src/jxplanetx/ephemeris.py": "9ad9dc3b79b8209795a6064bf1519bd548d0ed630da8eb08497e5a26eba85f69",
+      "src/jxplanetx/fast_wisdom_holman.py": "99da08305f5c0a191dd53e64d02a9a396b471aaf9f7b3a062545b1de220f7a72",
+      "src/jxplanetx/force_registry_v5.py": "1d5e7763ae3da8f23672aadf06ad26a9181e89c45477071c483c241a44aa8d05",
+      "src/jxplanetx/fused_cuda_adaptive_rkf78.py": "de92fb4f6e77727d2b49a121c2b4cccfc6432e6c124802012cee8dd7a948d025",
+      "src/jxplanetx/fused_cuda_rkf78.py": "f176d36dfb2acaeeaef7c4d0d7daf660a0651a5faecc2af018e46dc12e75e739",
+      "src/jxplanetx/fused_cuda_trajectory.py": "7e79c7f77ebab179e26d051c22b84d3800fa734677ff6a1f2e836327b4908322",
+      "src/jxplanetx/gates.py": "9ee4be7990301de6ffb70d00b3bf5f8fd0ab081eb66eb4fb296b25186de703ca",
+      "src/jxplanetx/general_dynamics.py": "f0c3a5d8b15c910556433e90cd8ed0040967d8f7a9afefc3175f0e3bb6acaa74",
+      "src/jxplanetx/gr15.py": "f9972994c42e1a0ba38e090355ddac650e25140620b94ae4834b262e742ac094",
+      "src/jxplanetx/gr15_eih_1pn.py": "aa694614e55feb827db5075c46d1489bcdca580dad7d0843957de948d2dddc85",
+      "src/jxplanetx/gr15_eih_1pn_batch.py": "687de69981fbe531563b3bb116170a861b744f46c56bdfe4dc420b92fbedc80a",
+      "src/jxplanetx/gr15_eih_1pn_cuda.py": "7765a3ed6e628b63031841feab91e05e21edb190f57290eb8089d1ff1b1d3f53",
+      "src/jxplanetx/gr15_eih_1pn_verified.py": "4884fee9a85c0513b44c3f038217562f9f85b48155e9ab77ae1096bb505b79a8",
+      "src/jxplanetx/ias15_gate.py": "d668c39c115cf9eec2307623f52624cb2d456259832b86fb44c1e91580528312",
+      "src/jxplanetx/independent_dop853.py": "5f7f82fb2dbe208352a40a29f3106790fcaa68db87809e95f7324f3eb4fd5062",
+      "src/jxplanetx/long_horizon/__init__.py": "c4211911e9e865b8d1bbed04565c4751f8fb60a35b95e3f21c04b4cbd80c53b0",
+      "src/jxplanetx/long_horizon/contracts.py": "5f26d70e8a2d3abc6a039429b79df85b9f65e024a0c89cd8f3bf8f096ad9ffa6",
+      "src/jxplanetx/long_horizon/initial_conditions.py": "e55099679a1264c91bedc6747aa03e9358a5a49ba3f394bfa2caecf1afbb6908",
+      "src/jxplanetx/long_horizon/physical_models.py": "0383d5a87e7580f0e0f08b16ad410a9cf4a930d73e099d0b8f771c86b35fdbac",
+      "src/jxplanetx/long_horizon/restricted_wh.py": "da4bba5f4901eb5b6767872a453f6c37d155f913c22e6a257e0cea1eb5a5d852",
+      "src/jxplanetx/long_horizon/runner.py": "ddae06015634e01743e4d05498a3f03b28607bec9b5fb752ce3246af7ea29c99",
+      "src/jxplanetx/long_horizon/science_inputs.py": "810853b60d203679a100c8eca203d62316e902f67ca4be6dbe7fd8042f18c1e2",
+      "src/jxplanetx/population_scale.py": "8c2448badf1b753644c367fbbf98faca6d10b609691c84c0efceb1d1f4e6a5bb",
+      "src/jxplanetx/production_benchmark.py": "a396ce42ceb953620b41713c9eb976c3f9753d1efb6f8a38f72a6136c3f1fecd",
+      "src/jxplanetx/provenance.py": "d77064f614557511b62b108f9b038bf0c5990abc3f404f2ebec6d2327062ce34",
+      "src/jxplanetx/restricted_wh_checkpoint.py": "83016a8c6ae4e6869494046f9c4ba5af63672792fa493406c35fe860056865d7",
+      "src/jxplanetx/restricted_wh_episode_checkpoint.py": "5149d2254d76816cbfbcc1f553f74fc195fe3cc7855eece785bd3cc86ddc7fd2",
+      "src/jxplanetx/restricted_wh_lifecycle.py": "b0211778fcf51dbfef78049e74bafd05d5daee4db7dd18f743f4a5b5a14af346",
+      "src/jxplanetx/restricted_wh_route.py": "7eae131cda32ee3feed525b13226b1b271b0fc54c1dd5d6a82927b4dc4b94075",
+      "src/jxplanetx/restricted_wh_source.py": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+      "src/jxplanetx/smalln.py": "ae50a68af87d0bdd1fb85bcd22213cc6eb05b0bb8ad01b2965dc6c95a31e767a",
+      "src/jxplanetx/solar_1pn.py": "f74d5c00cf65cf88fda4e1774af548b90094ad702332bab8fd77602b9283d095",
+      "src/jxplanetx/solar_system/__init__.py": "bb26c8df24d1558bc55a329bc82b24e20bb38353746ed1ce8d0c0d6a47a4c0a8",
+      "src/jxplanetx/solar_system/_cspice_worker.py": "09824658b6acb407ea683ff6d9c24df07bff3684549f5b478844f24c7d6e0951",
+      "src/jxplanetx/solar_system/artifacts.py": "a9e4d553d034eb6b49e90507b3f3e8d97f1851151214866784cb69344f1bf025",
+      "src/jxplanetx/solar_system/contracts.py": "8c3c940ad6d08cddac75e78a0837de7b3f310d5d66dae036e844a3939e477dbb",
+      "src/jxplanetx/solar_system/cspice_execution.py": "bee84c9e5cb29dcca9e2eb5d4a30eb13d2ebe10ffe02b2cec2b5483b62f673d8",
+      "src/jxplanetx/solar_system/cspice_execution_contracts.py": "b1f7b22094ca152ba5ec7b720db4127b2b3526d69955b830d5625fd8f4f43de8",
+      "src/jxplanetx/solar_system/cspice_time.py": "60aaecc001af508c632603ae86712c155bfa54ba8ac9ed350dc0c341e72bea00",
+      "src/jxplanetx/solar_system/earth_j2.py": "f281145cfd4eef17f5fa4b6730350841966e6b59404aacb02b0d161762e54f79",
+      "src/jxplanetx/solar_system/earth_j2_trajectory.py": "5c9899682ec8367b2414bd06197a3d5352392d106df053661d8f184caf3c1224",
+      "src/jxplanetx/solar_system/earth_pole.py": "ee875cd742bf5dddd71651126d17edf6fb71e765c9d151d7d5f302e5f1b25e0f",
+      "src/jxplanetx/solar_system/earth_zonal.py": "24b9a7ea1c819fc67aeb3ecbb53722792c48d8ad03415b99008d08a1eb49673a",
+      "src/jxplanetx/solar_system/eih_1pn.py": "e57a22e48ae9ea3127a14630809f31a07d723901bedf75fa582c9319f43a6de9",
+      "src/jxplanetx/solar_system/engine_preparation.py": "f16c7e4d67c6b147f8a441e46947d0718c5c5125f8755cdc26704e604afd7030",
+      "src/jxplanetx/solar_system/engine_preparation_contracts.py": "db4437f49b9bbe72bd6ebdc33d05623471eca3b172efa4c4057a516d9b26f369",
+      "src/jxplanetx/solar_system/frames.py": "f762bc6584248591a42863dbf9cee1def3b16fcf5d35e52bf25a8b39f48f6df2",
+      "src/jxplanetx/solar_system/llr_geodetic_transport.py": "1391d7f699bc65d6a58382a5ff5959a735bfa9b42387161eaad6b67d5358f357",
+      "src/jxplanetx/solar_system/llr_observation.py": "0c994322670c69bb0f80211957c844a988194809fe723a67b6608420851cd65a",
+      "src/jxplanetx/solar_system/lunar_coupled.py": "90eb3f9e34bd9cdf71f535b4d76bcbe050618525c8d63fe734711160b6c5023b",
+      "src/jxplanetx/solar_system/lunar_coupled_deformable.py": "f52bfd2d2e41ff1d2bf496c3d6e9c3e2264c1a50e2876847476ad506d71288bb",
+      "src/jxplanetx/solar_system/lunar_coupled_solar.py": "525edb0049a17a27d4dc9920939e1cacf89ab8dc51f47ac79211260ac73bfe8c",
+      "src/jxplanetx/solar_system/lunar_figure.py": "2ebcbb7408a32cd49289587e6b6def661ead2aec103bac35deab0d168b1bccfd",
+      "src/jxplanetx/solar_system/lunar_figure_degree3.py": "abc37ba2838441e9d642561d9328410aadf5532e018ca6776db3c5c149518a87",
+      "src/jxplanetx/solar_system/lunar_fluid_core.py": "a80a8b6c733a26f9c41c30b480bce7bd4cad9c7af728bc45cfba053f792ba72a",
+      "src/jxplanetx/solar_system/lunar_geodetic_precession.py": "eeae642fc7d6fda0897e4c30b01bffb98b254c043ebfc64182cff7cac417da65",
+      "src/jxplanetx/solar_system/lunar_mantle_deformation.py": "2f0516739cc42ae4631fb41ee9035927ee44eabff6f5983cfdd02cef1f6998b9",
+      "src/jxplanetx/solar_system/lunar_spin_distortion.py": "dee3c33fcc2d760786859f7c291035d8954101d253d67aa8eb9c6b88364a0db2",
+      "src/jxplanetx/solar_system/lunar_tide.py": "f60d19df5117db79ecac87d1934934af679ae03b8403505ff2ef6590f40f1f6f",
+      "src/jxplanetx/solar_system/lunar_tide_delay.py": "efdbec75868daa4b45891c5454ec4a9f833bfb6da70324789677eedd28873ade",
+      "src/jxplanetx/solar_system/lunar_translational_physics.py": "6d7c85882561c28c741b1235fe61f136cb6d949006a5c9481f9e033d0511adbb",
+      "src/jxplanetx/solar_system/ocean_loading.py": "cf4367d7484685101ecc051a0bfb16de34f7b8eb988b6befdf088b1b7b422966",
+      "src/jxplanetx/solar_system/serialization.py": "f4fbd0f9cfb25171e3fd32e329b6f223512d6054ee76ad30c23c2e08c383de4a",
+      "src/jxplanetx/solar_system/solid_earth_tide.py": "2a4b8dd37a4a53bccbfed897811e663624c9f42c230625d44fa3e2d57c5b4559",
+      "src/jxplanetx/solar_system/solid_pole_tide.py": "c14470c7e81a92037523d5069b9fc34b9b0c28b87e95448562bd5c4130fba22e",
+      "src/jxplanetx/solar_system/states.py": "67c8726569f7e39a9c21d49b64b4337d8b1bfaa9d8787b2760282b93ba0e4869",
+      "src/jxplanetx/solar_system/time.py": "7f89479f566f5db59da61114ff877dcb992e1dcfa714a33208a84dba98d47f9f",
+      "src/jxplanetx/solar_system/units.py": "348a6a996a1c39571772499100896a466caa1178956ad8acd97bb1db34ae829b",
+      "src/jxplanetx/survey_selection.py": "35bc0d41a4113abd3c3ce9843a86d8c0622a19973796ff3c717e9b212478f3c2",
+      "src/jxplanetx/survey_selection_v2.py": "d07c579efd5ab338398e712fda0666bc884b71ede9eabfd577abf8adbeab4aed",
+      "src/jxplanetx/survey_selection_v3.py": "d6f3c26176b384cebcc0b062adedfca04e3091c3f221b7e9d270a49a42ca2d61",
+      "src/jxplanetx/survey_selection_v4.py": "a54d19c9b3ae460c0a71822604c7d8a3d33bde41e4da5da4c1677735d7a7d318",
+      "src/jxplanetx/v5_implicit_midpoint.py": "58f504c5f9bd31f7a1ccc2cbb13e3d8acbb9f3bdf49863c4f332c8ad46ea2996",
+      "src/jxplanetx/v5_reference_dynamics.py": "e42eeefc91560edba768b1d9a0fc2818b364dd3b356a9cd2efc11ce522404591",
+      "src/jxplanetx/v5_solar_1pn_qualification.py": "51b8d971894a8b34cf9384fdb31340d8323e959b113f97cc87bdaa6202d0282b",
+      "src/jxplanetx/yoshida6.py": "562c2fff76a8a5e7838029ac94728147d84fb055bac84eadfed18d8a36e840f3"
+    },
+    "files_content_sha256": "70f46838934f2c51750a5f412c2d9629b878e862f2d80159bd2d439409c9c0f2",
+    "git_head": "4768ac01b33665fec4f6067d5209a92e6e27812a",
+    "import_time_local_files": {
+      "benchmarks/jx_long_horizon_m2_source_preflight.py": {
+        "module": "__benchmark__",
+        "sha256": "6b9a0861155407b8dbf74f04315f17516ff0707ecb74e35fb11f61545cca6740"
+      },
+      "src/jxplanetx/__init__.py": {
+        "module": "jxplanetx",
+        "sha256": "86bd065b9c16a448b217d960c6dd8d79a7d7ccc79209e7708ff79bc07ce681e0"
+      },
+      "src/jxplanetx/_all_conic_kepler.py": {
+        "module": "jxplanetx._all_conic_kepler",
+        "sha256": "3d38c569764957bc0c781a4c2a7c767ccf2b630a38b0c88688e9716ac2b79691"
+      },
+      "src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so": {
+        "module": "jxplanetx._wisdom_holman_cpu_v3",
+        "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3"
+      },
+      "src/jxplanetx/cuda_restricted_wh.py": {
+        "module": "jxplanetx.cuda_restricted_wh",
+        "sha256": "3c22c3d717fe5b07eb4ed929e5d32be591838fca8c1adbf02dec1263d3150927"
+      },
+      "src/jxplanetx/cuda_restricted_wh_episode.py": {
+        "module": "jxplanetx.cuda_restricted_wh_episode",
+        "sha256": "d2dd6aae41bcf41fdfca30a0e39ff5b22d3a05bedf5280a36ae9cd7b261b80ae"
+      },
+      "src/jxplanetx/cuda_restricted_wh_episode_owner.py": {
+        "module": "jxplanetx.cuda_restricted_wh_episode_owner",
+        "sha256": "56c779eed37e531e42596242f165e86102fc0aad76481f473e3e49d6b92bac69"
+      },
+      "src/jxplanetx/cuda_restricted_wh_hybrid.py": {
+        "module": "jxplanetx.cuda_restricted_wh_hybrid",
+        "sha256": "6b3ea46436dbdb7dc2c434cff005a88395fea6e00cd97c7be104650c75769b10"
+      },
+      "src/jxplanetx/cuda_tracer_events.py": {
+        "module": "jxplanetx.cuda_tracer_events",
+        "sha256": "35561d42b63f3f4dfb1a2368ca13c210ab99d0b5934e94c85ac48cc204b564b7"
+      },
+      "src/jxplanetx/engine/__init__.py": {
+        "module": "jxplanetx.engine",
+        "sha256": "0eb03741a4b37ef6cc8a4a8c982639d4fbbbe1b1caedb376b8c419be3e51c500"
+      },
+      "src/jxplanetx/engine/api.py": {
+        "module": "jxplanetx.engine.api",
+        "sha256": "1664c4c69e4b9fa30b983c8390f76aa7a05259e89dd009d57f7099f8ffe088f2"
+      },
+      "src/jxplanetx/engine/backends.py": {
+        "module": "jxplanetx.engine.backends",
+        "sha256": "c039ae04aab43c0809b200304a47e9d6e63bb7cbea76e0665724c75ab513deba"
+      },
+      "src/jxplanetx/engine/catalog.py": {
+        "module": "jxplanetx.engine.catalog",
+        "sha256": "91ef9d6a1691ecded6b98400701a7dd250fafa85d95db88afc1cdd4e1312a7a0"
+      },
+      "src/jxplanetx/engine/contracts.py": {
+        "module": "jxplanetx.engine.contracts",
+        "sha256": "11c834620deedacd219a35bda46772f9be9f0d6243c644dee4fb02eb6c0c144d"
+      },
+      "src/jxplanetx/engine/coupled_lunar.py": {
+        "module": "jxplanetx.engine.coupled_lunar",
+        "sha256": "f43cb7efd345b7b82bb72158f73b5b38cbbf9abcfdedce4a797e6be2056d7621"
+      },
+      "src/jxplanetx/engine/coupled_lunar_contracts.py": {
+        "module": "jxplanetx.engine.coupled_lunar_contracts",
+        "sha256": "56f3b6299dbb612c00afb694147b6137a03a887f676f7cc598d21afe0f16e820"
+      },
+      "src/jxplanetx/engine/encounter.py": {
+        "module": "jxplanetx.engine.encounter",
+        "sha256": "0bd95ff70f15574e8c58c2fcea4fce51e4964f75a2d7230719cc1f21a7cbdd22"
+      },
+      "src/jxplanetx/engine/encounter_contracts.py": {
+        "module": "jxplanetx.engine.encounter_contracts",
+        "sha256": "372ae800dd9404623ad1773c676700e1a42ec8e1b652c1e14b78288fb26ec1ac"
+      },
+      "src/jxplanetx/engine/evaluator.py": {
+        "module": "jxplanetx.engine.evaluator",
+        "sha256": "26a4754c970225096bbe373fd083d3f7fdde626580599723906326991f33f888"
+      },
+      "src/jxplanetx/engine/force_abi.py": {
+        "module": "jxplanetx.engine.force_abi",
+        "sha256": "b82847f38e56203ae6af3e04bd265c04790cd7f6d88d7158d3d18ac48e17024d"
+      },
+      "src/jxplanetx/engine/forces.py": {
+        "module": "jxplanetx.engine.forces",
+        "sha256": "c21a2bdcfbad605d2aec2a8623629ad1a4c06f7ac6f38edac07b9261974e4605"
+      },
+      "src/jxplanetx/engine/hybrid.py": {
+        "module": "jxplanetx.engine.hybrid",
+        "sha256": "3aba61e73a963270dbb3cd872280e3f2e857e7e2118b5c48d6cebab14f181b42"
+      },
+      "src/jxplanetx/engine/hybrid_contracts.py": {
+        "module": "jxplanetx.engine.hybrid_contracts",
+        "sha256": "32b5e3b479d3b6060a7275e3658aebf6b375801ca7d8e74b6b45a14cf9356c14"
+      },
+      "src/jxplanetx/engine/lunar_ephemeris.py": {
+        "module": "jxplanetx.engine.lunar_ephemeris",
+        "sha256": "2234b8215fe848ebbacc07567eba29aa1f69eea5ff8c1218dae40c724280be49"
+      },
+      "src/jxplanetx/engine/lunar_ephemeris_contracts.py": {
+        "module": "jxplanetx.engine.lunar_ephemeris_contracts",
+        "sha256": "ab03eff40ca0a0ee89d5803d74282a30a0a05b706b16369ba4d1a3a7b0b840ed"
+      },
+      "src/jxplanetx/engine/physical_forces.py": {
+        "module": "jxplanetx.engine.physical_forces",
+        "sha256": "12cbad4cb5d4c83087fca8dfa835a7ec480c4d754088cdc110347ea178a6ba0c"
+      },
+      "src/jxplanetx/engine/rkf78.py": {
+        "module": "jxplanetx.engine.rkf78",
+        "sha256": "01a802a85d0a2faad6bf49aaeba00c4fdf7ce10faa3eedfff6e9ed56e503ae4f"
+      },
+      "src/jxplanetx/engine/scenario.py": {
+        "module": "jxplanetx.engine.scenario",
+        "sha256": "a35d99ef78b8e80040198f26d257beb6074ae3f1251ae4082f482fdbc00dd79e"
+      },
+      "src/jxplanetx/engine/scenario_manifest.py": {
+        "module": "jxplanetx.engine.scenario_manifest",
+        "sha256": "0b72c1d65e51675cf3b8157576df6bb03c758228df6cd402eaed1f0546ca089d"
+      },
+      "src/jxplanetx/engine/simulation.py": {
+        "module": "jxplanetx.engine.simulation",
+        "sha256": "9d897efddc4f522cd67cd069500b488f4339265695d5a2e8a99b5d8d19f3ce62"
+      },
+      "src/jxplanetx/engine/simulation_archive.py": {
+        "module": "jxplanetx.engine.simulation_archive",
+        "sha256": "b9d213bd0c653e7f9fc2905d2bbd1633356645bcd83f69bc8be5dcfc6c2aca91"
+      },
+      "src/jxplanetx/engine/symplectic.py": {
+        "module": "jxplanetx.engine.symplectic",
+        "sha256": "220f55ad48b960f0d6802f33502bc17c224c22de0dbd1f5aae639033ec9c490f"
+      },
+      "src/jxplanetx/engine/symplectic_contracts.py": {
+        "module": "jxplanetx.engine.symplectic_contracts",
+        "sha256": "305030363314bc4ea10e40c676f91b648c72398874d3d205b522105741ba3c9d"
+      },
+      "src/jxplanetx/engine/trajectory.py": {
+        "module": "jxplanetx.engine.trajectory",
+        "sha256": "2a34e30bb248e0dfb60b7bd559bc1a540ebb5133419b49c80ac973480971a1e0"
+      },
+      "src/jxplanetx/engine/trajectory_contracts.py": {
+        "module": "jxplanetx.engine.trajectory_contracts",
+        "sha256": "36d9fe8cdf81ce8d333b4afe18ed020550450a0655d7b95f35997892fb88e142"
+      },
+      "src/jxplanetx/engine/wisdom_holman.py": {
+        "module": "jxplanetx.engine.wisdom_holman",
+        "sha256": "2c3ed08e04d6a622af63f6be82afa1a222582e772a891179cdc01aa0f2a7383f"
+      },
+      "src/jxplanetx/engine/wisdom_holman_contracts.py": {
+        "module": "jxplanetx.engine.wisdom_holman_contracts",
+        "sha256": "cc9d08abcaf166804d1876d9a8c1c0d55b1b5a7df161f245f1842f3b1b7beef7"
+      },
+      "src/jxplanetx/fast_wisdom_holman.py": {
+        "module": "jxplanetx.fast_wisdom_holman",
+        "sha256": "99da08305f5c0a191dd53e64d02a9a396b471aaf9f7b3a062545b1de220f7a72"
+      },
+      "src/jxplanetx/long_horizon/__init__.py": {
+        "module": "jxplanetx.long_horizon",
+        "sha256": "c4211911e9e865b8d1bbed04565c4751f8fb60a35b95e3f21c04b4cbd80c53b0"
+      },
+      "src/jxplanetx/long_horizon/contracts.py": {
+        "module": "jxplanetx.long_horizon.contracts",
+        "sha256": "5f26d70e8a2d3abc6a039429b79df85b9f65e024a0c89cd8f3bf8f096ad9ffa6"
+      },
+      "src/jxplanetx/long_horizon/initial_conditions.py": {
+        "module": "jxplanetx.long_horizon.initial_conditions",
+        "sha256": "e55099679a1264c91bedc6747aa03e9358a5a49ba3f394bfa2caecf1afbb6908"
+      },
+      "src/jxplanetx/long_horizon/physical_models.py": {
+        "module": "jxplanetx.long_horizon.physical_models",
+        "sha256": "0383d5a87e7580f0e0f08b16ad410a9cf4a930d73e099d0b8f771c86b35fdbac"
+      },
+      "src/jxplanetx/long_horizon/restricted_wh.py": {
+        "module": "jxplanetx.long_horizon.restricted_wh",
+        "sha256": "da4bba5f4901eb5b6767872a453f6c37d155f913c22e6a257e0cea1eb5a5d852"
+      },
+      "src/jxplanetx/long_horizon/runner.py": {
+        "module": "jxplanetx.long_horizon.runner",
+        "sha256": "ddae06015634e01743e4d05498a3f03b28607bec9b5fb752ce3246af7ea29c99"
+      },
+      "src/jxplanetx/long_horizon/science_inputs.py": {
+        "module": "jxplanetx.long_horizon.science_inputs",
+        "sha256": "810853b60d203679a100c8eca203d62316e902f67ca4be6dbe7fd8042f18c1e2"
+      },
+      "src/jxplanetx/restricted_wh_checkpoint.py": {
+        "module": "jxplanetx.restricted_wh_checkpoint",
+        "sha256": "83016a8c6ae4e6869494046f9c4ba5af63672792fa493406c35fe860056865d7"
+      },
+      "src/jxplanetx/restricted_wh_episode_checkpoint.py": {
+        "module": "jxplanetx.restricted_wh_episode_checkpoint",
+        "sha256": "5149d2254d76816cbfbcc1f553f74fc195fe3cc7855eece785bd3cc86ddc7fd2"
+      },
+      "src/jxplanetx/restricted_wh_lifecycle.py": {
+        "module": "jxplanetx.restricted_wh_lifecycle",
+        "sha256": "b0211778fcf51dbfef78049e74bafd05d5daee4db7dd18f743f4a5b5a14af346"
+      },
+      "src/jxplanetx/restricted_wh_route.py": {
+        "module": "jxplanetx.restricted_wh_route",
+        "sha256": "7eae131cda32ee3feed525b13226b1b271b0fc54c1dd5d6a82927b4dc4b94075"
+      },
+      "src/jxplanetx/restricted_wh_source.py": {
+        "module": "jxplanetx.restricted_wh_source",
+        "sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52"
+      },
+      "src/jxplanetx/solar_system/__init__.py": {
+        "module": "jxplanetx.solar_system",
+        "sha256": "bb26c8df24d1558bc55a329bc82b24e20bb38353746ed1ce8d0c0d6a47a4c0a8"
+      },
+      "src/jxplanetx/solar_system/earth_pole.py": {
+        "module": "jxplanetx.solar_system.earth_pole",
+        "sha256": "ee875cd742bf5dddd71651126d17edf6fb71e765c9d151d7d5f302e5f1b25e0f"
+      },
+      "src/jxplanetx/solar_system/earth_zonal.py": {
+        "module": "jxplanetx.solar_system.earth_zonal",
+        "sha256": "24b9a7ea1c819fc67aeb3ecbb53722792c48d8ad03415b99008d08a1eb49673a"
+      },
+      "src/jxplanetx/solar_system/eih_1pn.py": {
+        "module": "jxplanetx.solar_system.eih_1pn",
+        "sha256": "e57a22e48ae9ea3127a14630809f31a07d723901bedf75fa582c9319f43a6de9"
+      },
+      "src/jxplanetx/solar_system/lunar_coupled.py": {
+        "module": "jxplanetx.solar_system.lunar_coupled",
+        "sha256": "90eb3f9e34bd9cdf71f535b4d76bcbe050618525c8d63fe734711160b6c5023b"
+      },
+      "src/jxplanetx/solar_system/lunar_coupled_deformable.py": {
+        "module": "jxplanetx.solar_system.lunar_coupled_deformable",
+        "sha256": "f52bfd2d2e41ff1d2bf496c3d6e9c3e2264c1a50e2876847476ad506d71288bb"
+      },
+      "src/jxplanetx/solar_system/lunar_coupled_solar.py": {
+        "module": "jxplanetx.solar_system.lunar_coupled_solar",
+        "sha256": "525edb0049a17a27d4dc9920939e1cacf89ab8dc51f47ac79211260ac73bfe8c"
+      },
+      "src/jxplanetx/solar_system/lunar_figure.py": {
+        "module": "jxplanetx.solar_system.lunar_figure",
+        "sha256": "2ebcbb7408a32cd49289587e6b6def661ead2aec103bac35deab0d168b1bccfd"
+      },
+      "src/jxplanetx/solar_system/lunar_figure_degree3.py": {
+        "module": "jxplanetx.solar_system.lunar_figure_degree3",
+        "sha256": "abc37ba2838441e9d642561d9328410aadf5532e018ca6776db3c5c149518a87"
+      },
+      "src/jxplanetx/solar_system/lunar_fluid_core.py": {
+        "module": "jxplanetx.solar_system.lunar_fluid_core",
+        "sha256": "a80a8b6c733a26f9c41c30b480bce7bd4cad9c7af728bc45cfba053f792ba72a"
+      },
+      "src/jxplanetx/solar_system/lunar_mantle_deformation.py": {
+        "module": "jxplanetx.solar_system.lunar_mantle_deformation",
+        "sha256": "2f0516739cc42ae4631fb41ee9035927ee44eabff6f5983cfdd02cef1f6998b9"
+      },
+      "src/jxplanetx/solar_system/lunar_spin_distortion.py": {
+        "module": "jxplanetx.solar_system.lunar_spin_distortion",
+        "sha256": "dee3c33fcc2d760786859f7c291035d8954101d253d67aa8eb9c6b88364a0db2"
+      },
+      "src/jxplanetx/solar_system/lunar_tide.py": {
+        "module": "jxplanetx.solar_system.lunar_tide",
+        "sha256": "f60d19df5117db79ecac87d1934934af679ae03b8403505ff2ef6590f40f1f6f"
+      },
+      "src/jxplanetx/solar_system/lunar_tide_delay.py": {
+        "module": "jxplanetx.solar_system.lunar_tide_delay",
+        "sha256": "efdbec75868daa4b45891c5454ec4a9f833bfb6da70324789677eedd28873ade"
+      }
+    }
+  },
+  "completed_utc": "2026-10-06T04:08:21.236140+00:00",
+  "content_sha256": "81674069f9f538007b9db07eded745886c6963f6671b7919fe273069edcfff31",
+  "executed_source_archive": {
+    "file_count": 163,
+    "files_content_sha256": "70f46838934f2c51750a5f412c2d9629b878e862f2d80159bd2d439409c9c0f2",
+    "path": "EXECUTED_SOURCES.zip",
+    "sha256": "9e1d49c641170a935b641d4606aa8381b2085b2d013685f232065411e126e413",
+    "size_bytes": 5387779
+  },
+  "gates": {
+    "all_claims_false": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "coarse_all_body_position": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 8e-08,
+      "value": 8.902509491579963e-10
+    },
+    "coarse_all_body_velocity": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 8e-07,
+      "value": 2.2696207138257674e-08
+    },
+    "coarse_angular": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 5e-12,
+      "value": 3.051855082550466e-14
+    },
+    "coarse_energy": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-08,
+      "value": 4.2588650826467353e-13
+    },
+    "coarse_independent_pair_path": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.01,
+      "value": 0.23768128252810147
+    },
+    "coarse_independent_primary_periapse": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.05,
+      "value": 0.3074878839213353
+    },
+    "coarse_independent_primary_periapse_phase": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.015625,
+      "value": 0.008996420417726338
+    },
+    "coarse_independent_primary_phase": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.015625,
+      "value": 0.008996407602380237
+    },
+    "coarse_native_jacobi_periapse": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.05,
+      "value": 0.30748788392058857
+    },
+    "coarse_native_orbit_step_fraction": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.05,
+      "value": 0.0010136836052134473
+    },
+    "coarse_native_pair_path": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.0001,
+      "value": 0.25662006996168835
+    },
+    "coarse_native_periapse_step_fraction": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.0625,
+      "value": 0.0015721778587154621
+    },
+    "code_identity_stable": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "dop853_angular": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-10,
+      "value": 6.3317548156811535e-16
+    },
+    "dop853_energy": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-10,
+      "value": 3.01372203241296e-15
+    },
+    "dop853_ias15_position": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 5e-11,
+      "value": 1.8592335635492312e-11
+    },
+    "dop853_ias15_velocity": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 5e-10,
+      "value": 2.7251722698501597e-10
+    },
+    "executed_source_archive_retained": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "fine_all_body_position": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 2e-08,
+      "value": 2.2100213813712713e-10
+    },
+    "fine_all_body_velocity": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 2e-07,
+      "value": 5.600792289434211e-09
+    },
+    "fine_angular": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 5e-12,
+      "value": 6.318782397958333e-14
+    },
+    "fine_energy": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 3e-09,
+      "value": 2.2587053548189762e-13
+    },
+    "fine_independent_pair_path": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.01,
+      "value": 0.2554666978324373
+    },
+    "fine_independent_primary_periapse": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.05,
+      "value": 0.30748788391741805
+    },
+    "fine_independent_primary_periapse_phase": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.015625,
+      "value": 0.004498210208949127
+    },
+    "fine_independent_primary_phase": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.015625,
+      "value": 0.00449820380118215
+    },
+    "fine_native_jacobi_periapse": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.05,
+      "value": 0.3074878839170447
+    },
+    "fine_native_orbit_step_fraction": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.05,
+      "value": 0.0005068418026127514
+    },
+    "fine_native_pair_path": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 0.0001,
+      "value": 0.25904522334939034
+    },
+    "fine_native_periapse_step_fraction": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.0625,
+      "value": 0.000786088929366475
+    },
+    "fine_outer_position": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 3e-09,
+      "value": 4.29401918502496e-12
+    },
+    "fine_outer_velocity": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 3e-09,
+      "value": 2.239576858959263e-12
+    },
+    "ias15_angular": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-10,
+      "value": 3.798080527248426e-16
+    },
+    "ias15_energy": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-10,
+      "value": 1.5861694907436631e-15
+    },
+    "initial_reference_bitwise_exact": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "initial_reference_position": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.0,
+      "value": 0.0
+    },
+    "initial_reference_velocity": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 0.0,
+      "value": 0.0
+    },
+    "input_identity_stable": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "jx_coarse_exact_replay": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "jx_fine_exact_replay": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "jx_partitions_exact_replay": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "outer_de441_position": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-05,
+      "value": 2.2461527007506075e-07
+    },
+    "outer_de441_velocity": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 4e-06,
+      "value": 1.0759596772367049e-07
+    },
+    "partition_position": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-09,
+      "value": 5.2877809138950555e-12
+    },
+    "partition_velocity": {
+      "operator": "<=",
+      "passed": true,
+      "threshold": 1e-08,
+      "value": 1.3456659674260057e-10
+    },
+    "position_refinement_ratio": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 2.0,
+      "value": 4.028245865230564
+    },
+    "runtime_identity_stable": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "tracer_acceleration_bootstrap_exact": {
+      "operator": "==",
+      "passed": true,
+      "threshold": true,
+      "value": true
+    },
+    "velocity_refinement_ratio": {
+      "operator": ">=",
+      "passed": true,
+      "threshold": 2.0,
+      "value": 4.052320808445912
+    }
+  },
+  "independent_reference_receipts": {
+    "dop853": {
+      "function_evaluations": 33119,
+      "jacobian_evaluations": 0,
+      "lu_decompositions": 0,
+      "status": 0,
+      "success": true
+    },
+    "ias15": {
+      "final_time_hex": "0x1.4000000000000p+3",
+      "ias15_epsilon_hex": "0x1.203af9ee75616p-50",
+      "steps_done": 11450
+    }
+  },
+  "interpretation": "A pass qualifies only this ten-year Newtonian known-source numerical preflight. It does not qualify tracers, long duration, Planet Nine, observational inference, detection, or exclusion.",
+  "jx_receipts": {
+    "coarse": {
+      "claims": {
+        "cross_runtime_bitwise_reproducible": false,
+        "disk_checkpoint_restart_qualified": false,
+        "long_horizon_accuracy_qualified": false,
+        "production_qualified": false,
+        "science_result": false,
+        "source_close_encounter_qualified": false
+      },
+      "exact_replay_required": true,
+      "input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+      "map_input_sha256": "ec8cb2476cb5989236dd97aa70d9731ac5a7cdf72d12c744017750791b45c9fd",
+      "map_result_sha256": "8be587f33206d83002827b6a1ade73cc4f1cc4ce6e7d879181b84ad6dfe27cba",
+      "map_verification_sha256": "3d13cf7544a7c23106e5dd856fb2bdea2124898b4d57fb1ddc5961fca7c08cd5",
+      "native_source_map_metrics": {
+        "maximum_barycenter_position_norm": 6.209501591626279e-18,
+        "maximum_barycenter_velocity_norm": 6.16132270286042e-19,
+        "maximum_interaction_force_ratio": 0.0006137464920908866,
+        "maximum_jacobi_eccentricity": 0.24903203300181234,
+        "maximum_kepler_angular_momentum_error": 2.1317727626684867e-14,
+        "maximum_kepler_energy_error": 8.526512829121202e-14,
+        "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+        "maximum_kepler_residual_tolerance": 3.471923730109738e-18,
+        "maximum_kepler_time_residual": 1.0842021724855044e-19,
+        "maximum_orbit_step_fraction": 0.0010136836052134473,
+        "maximum_periapse_step_fraction": 0.0015721778587154621,
+        "maximum_translation_force_residual": 4.8226155511036407e-17,
+        "minimum_jacobi_periapse": 0.30748788392058857,
+        "minimum_pair_clearance_after_margin": 0.23048256918258117,
+        "minimum_pair_endpoint": 0.261471802255648,
+        "minimum_pair_path_lower_bound": 0.25662006996168835,
+        "minimum_secondary_hill_floor_ratio": 4.859674271030837
+      },
+      "primary_seconds": 0.2914318770635873,
+      "replay_seconds": 0.28911209595389664,
+      "runtime_identity": {
+        "coordinate_canonicalization": {
+          "canonical_barycentric_input_sha256": "fa41a2c3fe3096fc8afdf77626fa4ae954a74f77930cbb80c68653bd57dc59e6",
+          "canonical_relative_input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+          "canonicalization_idempotent": true,
+          "content_sha256": "6beaf2dae0e4a2ed696cd1e77839cfb6487ab7016a50818798d8f0c95311a07f",
+          "fixed_point_iteration_count": 1,
+          "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+          "forward_error_ulp_factor": 1.0,
+          "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+          "maximum_allowed_input_relative_error_in_eps": 512.0,
+          "maximum_fixed_point_iteration_count": 4,
+          "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+          "position_changed_component_count": 0,
+          "position_maximum_absolute_delta_AU": 0.0,
+          "position_maximum_component_ulps": 0.0,
+          "position_maximum_forward_error_bound_fraction": 0.0,
+          "position_maximum_input_relative_error": 0.0,
+          "raw_relative_input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+          "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+          "source_tile_sha256": "d22ff7e09cbe5eab52c018c177ee69e6feaa4aa337117bb842b83ecabd28b5b5",
+          "tile_node_zero_exact": true,
+          "velocity_changed_component_count": 0,
+          "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+          "velocity_maximum_component_ulps": 0.0,
+          "velocity_maximum_forward_error_bound_fraction": 0.0,
+          "velocity_maximum_input_relative_error": 0.0
+        },
+        "coordinate_canonicalization_receipt_sha256": "6beaf2dae0e4a2ed696cd1e77839cfb6487ab7016a50818798d8f0c95311a07f",
+        "exact_replay_required": true,
+        "numpy_version": "2.5.3",
+        "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+        "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+        "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+        "python_version": "3.14.4",
+        "source_map_runtime_identity": {
+          "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+          "compiler_version": "15.2.0",
+          "counter_count": 12,
+          "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+          "extension_binary": {
+            "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+            "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+            "size_bytes": 42520
+          },
+          "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+          "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+          "maximum_bodies": 32,
+          "metric_count": 17,
+          "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+          "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+          "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+          "scientific_claim_state": "SCREENING_ONLY"
+        },
+        "source_tile_sha256": "d22ff7e09cbe5eab52c018c177ee69e6feaa4aa337117bb842b83ecabd28b5b5"
+      },
+      "tile_sha256": "d22ff7e09cbe5eab52c018c177ee69e6feaa4aa337117bb842b83ecabd28b5b5",
+      "tracer_acceleration_bootstrap": {
+        "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+        "minimum_source_encounter_radius_AU": 1e-06,
+        "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+        "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+        "sum_source_gm_AU3_per_year2": 39.52989807155155,
+        "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+      }
+    },
+    "fine": {
+      "claims": {
+        "cross_runtime_bitwise_reproducible": false,
+        "disk_checkpoint_restart_qualified": false,
+        "long_horizon_accuracy_qualified": false,
+        "production_qualified": false,
+        "science_result": false,
+        "source_close_encounter_qualified": false
+      },
+      "exact_replay_required": true,
+      "input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+      "map_input_sha256": "bc975907083be3ccd8448f66b1433bc568ab5c27e2ce5ba475106b9c9ba68f21",
+      "map_result_sha256": "9ca06484438be7791c12e3f22ec509a14f1c77f94bf6ead0478aa2ecb8f87dc8",
+      "map_verification_sha256": "5ddc596b0b8e73ec86c4a45e75fd3554d219b7a0de04a2276b795e0d67110c8f",
+      "native_source_map_metrics": {
+        "maximum_barycenter_position_norm": 6.209501591635751e-18,
+        "maximum_barycenter_velocity_norm": 6.16132270286042e-19,
+        "maximum_interaction_force_ratio": 0.0006137464920902977,
+        "maximum_jacobi_eccentricity": 0.24903203300180393,
+        "maximum_kepler_angular_momentum_error": 2.1318883999217677e-14,
+        "maximum_kepler_energy_error": 9.947598300641403e-14,
+        "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+        "maximum_kepler_residual_tolerance": 1.7353422310466315e-18,
+        "maximum_kepler_time_residual": 5.421010862427522e-20,
+        "maximum_orbit_step_fraction": 0.0005068418026127514,
+        "maximum_periapse_step_fraction": 0.000786088929366475,
+        "maximum_translation_force_residual": 4.71950715562795e-17,
+        "minimum_jacobi_periapse": 0.3074878839170447,
+        "minimum_pair_clearance_after_margin": 0.23216966602375233,
+        "minimum_pair_endpoint": 0.26147170894519844,
+        "minimum_pair_path_lower_bound": 0.25904522334939034,
+        "minimum_secondary_hill_floor_ratio": 4.859674284138836
+      },
+      "primary_seconds": 0.5649235779419541,
+      "replay_seconds": 0.5588236961048096,
+      "runtime_identity": {
+        "coordinate_canonicalization": {
+          "canonical_barycentric_input_sha256": "fa41a2c3fe3096fc8afdf77626fa4ae954a74f77930cbb80c68653bd57dc59e6",
+          "canonical_relative_input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+          "canonicalization_idempotent": true,
+          "content_sha256": "1eaaf9216c699649638878f22a3016c2cd1cfe29acbed7c10cdf74359a4108a1",
+          "fixed_point_iteration_count": 1,
+          "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+          "forward_error_ulp_factor": 1.0,
+          "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+          "maximum_allowed_input_relative_error_in_eps": 512.0,
+          "maximum_fixed_point_iteration_count": 4,
+          "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+          "position_changed_component_count": 0,
+          "position_maximum_absolute_delta_AU": 0.0,
+          "position_maximum_component_ulps": 0.0,
+          "position_maximum_forward_error_bound_fraction": 0.0,
+          "position_maximum_input_relative_error": 0.0,
+          "raw_relative_input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+          "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+          "source_tile_sha256": "b56bdfaf95b13a0185c4b358229d70a1cdbd6ea14e12ed71a87c23e3f23a77f9",
+          "tile_node_zero_exact": true,
+          "velocity_changed_component_count": 0,
+          "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+          "velocity_maximum_component_ulps": 0.0,
+          "velocity_maximum_forward_error_bound_fraction": 0.0,
+          "velocity_maximum_input_relative_error": 0.0
+        },
+        "coordinate_canonicalization_receipt_sha256": "1eaaf9216c699649638878f22a3016c2cd1cfe29acbed7c10cdf74359a4108a1",
+        "exact_replay_required": true,
+        "numpy_version": "2.5.3",
+        "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+        "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+        "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+        "python_version": "3.14.4",
+        "source_map_runtime_identity": {
+          "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+          "compiler_version": "15.2.0",
+          "counter_count": 12,
+          "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+          "extension_binary": {
+            "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+            "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+            "size_bytes": 42520
+          },
+          "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+          "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+          "maximum_bodies": 32,
+          "metric_count": 17,
+          "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+          "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+          "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+          "scientific_claim_state": "SCREENING_ONLY"
+        },
+        "source_tile_sha256": "b56bdfaf95b13a0185c4b358229d70a1cdbd6ea14e12ed71a87c23e3f23a77f9"
+      },
+      "tile_sha256": "b56bdfaf95b13a0185c4b358229d70a1cdbd6ea14e12ed71a87c23e3f23a77f9",
+      "tracer_acceleration_bootstrap": {
+        "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+        "minimum_source_encounter_radius_AU": 1e-06,
+        "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+        "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+        "sum_source_gm_AU3_per_year2": 39.52989807155155,
+        "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+      }
+    },
+    "partitions": [
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+        "map_input_sha256": "de012ce59c8b19482aeb56a70f2e6db76bd0846d352e8a05909d804b8e4b0112",
+        "map_result_sha256": "53f3ce019a13c241258de07f6c313026d7faf4fd2ffcfce2cf0582edc59b54d3",
+        "map_verification_sha256": "7733013c3bab29755860df8bdd308e4492065625cd7a3054b3a9ad479cdd985a",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 7.90782216878622e-19,
+          "maximum_barycenter_velocity_norm": 6.16132270286042e-19,
+          "maximum_interaction_force_ratio": 0.00033670121713194823,
+          "maximum_jacobi_eccentricity": 0.24902297728179376,
+          "maximum_kepler_angular_momentum_error": 2.131686030611898e-14,
+          "maximum_kepler_energy_error": 7.105427357601002e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.4719234578730674e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136821279451346,
+          "maximum_periapse_step_fraction": 0.0015721126567576434,
+          "maximum_translation_force_residual": 3.713727243311998e-17,
+          "minimum_jacobi_periapse": 0.30749490396285495,
+          "minimum_pair_clearance_after_margin": 0.23783802524005937,
+          "minimum_pair_endpoint": 0.2728282729877083,
+          "minimum_pair_path_lower_bound": 0.2694531448900225,
+          "minimum_secondary_hill_floor_ratio": 5.347889053175143
+        },
+        "primary_seconds": 0.028164749965071678,
+        "replay_seconds": 0.028119123890064657,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "fa41a2c3fe3096fc8afdf77626fa4ae954a74f77930cbb80c68653bd57dc59e6",
+            "canonical_relative_input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+            "canonicalization_idempotent": true,
+            "content_sha256": "3959de7c332b2d15c31b1d3a9cf8896d4dc6b1ab35113d9a59b551accdb8bb4d",
+            "fixed_point_iteration_count": 1,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 0,
+            "position_maximum_absolute_delta_AU": 0.0,
+            "position_maximum_component_ulps": 0.0,
+            "position_maximum_forward_error_bound_fraction": 0.0,
+            "position_maximum_input_relative_error": 0.0,
+            "raw_relative_input_sha256": "4128e737dbf8102a99eb254c4fe09f07f39f4a6676c3da7e5119f83595fde0d7",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "a872312ef364d973b55a8d014d2bced369d58e2f963d7bc8ecee133b558b5456",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 0,
+            "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+            "velocity_maximum_component_ulps": 0.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.0,
+            "velocity_maximum_input_relative_error": 0.0
+          },
+          "coordinate_canonicalization_receipt_sha256": "3959de7c332b2d15c31b1d3a9cf8896d4dc6b1ab35113d9a59b551accdb8bb4d",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "a872312ef364d973b55a8d014d2bced369d58e2f963d7bc8ecee133b558b5456"
+        },
+        "tile_sha256": "a872312ef364d973b55a8d014d2bced369d58e2f963d7bc8ecee133b558b5456",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "5098ea5612af75b5b61f83bb3b17613c6f5d0e384c403e51546366eb5dbecb59",
+        "map_input_sha256": "3ac2dc34c9a89cfa8fb31381def9ea47ffa128167a8556bdfe3429d845aa38c8",
+        "map_result_sha256": "b97b66a36e12e337a635001f422ee13eb90eda2d6513277e1e16c9257a22acf5",
+        "map_verification_sha256": "307668d054d79189152be4f587ae87c1c58c1f438e096c2853b895a75b90b195",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 7.878220314363495e-19,
+          "maximum_barycenter_velocity_norm": 1.9998595645719682e-19,
+          "maximum_interaction_force_ratio": 0.00043363648053389365,
+          "maximum_jacobi_eccentricity": 0.24902503548344684,
+          "maximum_kepler_angular_momentum_error": 1.443119118362539e-14,
+          "maximum_kepler_energy_error": 7.105427357601002e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923309373315e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136808000719409,
+          "maximum_periapse_step_fraction": 0.0015720768705161342,
+          "maximum_translation_force_residual": 3.8684742293082614e-17,
+          "minimum_jacobi_periapse": 0.30749877841782336,
+          "minimum_pair_clearance_after_margin": 0.24071119665698162,
+          "minimum_pair_endpoint": 0.2614718022556514,
+          "minimum_pair_path_lower_bound": 0.25662006996169195,
+          "minimum_secondary_hill_floor_ratio": 6.416831848380958
+        },
+        "primary_seconds": 0.028163386043161154,
+        "replay_seconds": 0.028233707998879254,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "9a1a315d5bfc30a7bd091afc0018a8cc8e7d1066d0969e4b7bad81300bdfc5a5",
+            "canonical_relative_input_sha256": "908a4d2162936e76589a9c2ffe2b882db557c3a8d8183cae201ee808b3bc7f73",
+            "canonicalization_idempotent": true,
+            "content_sha256": "bb2571a108c2027ce830ec851f7c5f0e4cd45a9b7df4ea9f11231cdcab145b8c",
+            "fixed_point_iteration_count": 2,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 1,
+            "position_maximum_absolute_delta_AU": 1.3552527156068805e-20,
+            "position_maximum_component_ulps": 1.0,
+            "position_maximum_forward_error_bound_fraction": 0.125,
+            "position_maximum_input_relative_error": 2.1178701077250356e-16,
+            "raw_relative_input_sha256": "5098ea5612af75b5b61f83bb3b17613c6f5d0e384c403e51546366eb5dbecb59",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "5138b7a83fbf8b05edb6ae2bc39bb08c9429c64b314df07eb4175ecfc03bf2a3",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 0,
+            "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+            "velocity_maximum_component_ulps": 0.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.0,
+            "velocity_maximum_input_relative_error": 0.0
+          },
+          "coordinate_canonicalization_receipt_sha256": "bb2571a108c2027ce830ec851f7c5f0e4cd45a9b7df4ea9f11231cdcab145b8c",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "5138b7a83fbf8b05edb6ae2bc39bb08c9429c64b314df07eb4175ecfc03bf2a3"
+        },
+        "tile_sha256": "5138b7a83fbf8b05edb6ae2bc39bb08c9429c64b314df07eb4175ecfc03bf2a3",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "767d7e8089aa1ba56ca6a0f0baec4769236193c1b838929bd54d90ef6b99a49e",
+        "map_input_sha256": "252042f67158cf2329b118ca4780988a684d2b4a81ac0e2444b41fdecbcf6939",
+        "map_result_sha256": "099b10f5ad810f1e03a4e925941de21fed55e40618246c96ac371368c91fcaec",
+        "map_verification_sha256": "94799777768e8885ad57be29dca77b8ddb05a5d0b9a1a8109191b26f0c77e457",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 5.561766229567808e-19,
+          "maximum_barycenter_velocity_norm": 3.2010451084372746e-19,
+          "maximum_interaction_force_ratio": 0.0005074876818083452,
+          "maximum_jacobi_eccentricity": 0.24902771334863136,
+          "maximum_kepler_angular_momentum_error": 2.1317727626684867e-14,
+          "maximum_kepler_energy_error": 7.105427357601002e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.4719233870494605e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.001013680016014605,
+          "maximum_periapse_step_fraction": 0.0015720922612761125,
+          "maximum_translation_force_residual": 4.254420111824754e-17,
+          "minimum_jacobi_periapse": 0.3074971614441551,
+          "minimum_pair_clearance_after_margin": 0.2549361433756226,
+          "minimum_pair_endpoint": 0.275285365034268,
+          "minimum_pair_path_lower_bound": 0.27084499850587546,
+          "minimum_secondary_hill_floor_ratio": 5.565566170882911
+        },
+        "primary_seconds": 0.028149090008810163,
+        "replay_seconds": 0.028188692987896502,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "feb7d262a13447ad1edb711d0697289d826100481ac2516a10cea296d35901de",
+            "canonical_relative_input_sha256": "24d47349138f4fd4f395760c5c493c8deba18f04f5ebe0367a99c4d205366de1",
+            "canonicalization_idempotent": true,
+            "content_sha256": "375afac5d4cecef279fcc2ae738d0f494b9895270ce983ffe2d24942bcbc7088",
+            "fixed_point_iteration_count": 2,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 1,
+            "position_maximum_absolute_delta_AU": 1.3552527156068805e-20,
+            "position_maximum_component_ulps": 1.0,
+            "position_maximum_forward_error_bound_fraction": 0.2,
+            "position_maximum_input_relative_error": 2.0482356273536434e-16,
+            "raw_relative_input_sha256": "767d7e8089aa1ba56ca6a0f0baec4769236193c1b838929bd54d90ef6b99a49e",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "197e36ffcde6f31ddec90c8b9552ccded6e21ae7d74e716b85bc4d67c48b86fa",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 0,
+            "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+            "velocity_maximum_component_ulps": 0.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.0,
+            "velocity_maximum_input_relative_error": 0.0
+          },
+          "coordinate_canonicalization_receipt_sha256": "375afac5d4cecef279fcc2ae738d0f494b9895270ce983ffe2d24942bcbc7088",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "197e36ffcde6f31ddec90c8b9552ccded6e21ae7d74e716b85bc4d67c48b86fa"
+        },
+        "tile_sha256": "197e36ffcde6f31ddec90c8b9552ccded6e21ae7d74e716b85bc4d67c48b86fa",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "d270fef420b930db5c0c36922a6524404ba68c9fa22e847c2e7a3bfc4aa886b4",
+        "map_input_sha256": "ba89f80948b67168f28d73ad24708aa54f3c875c3d715816927de6797ed1ff00",
+        "map_result_sha256": "160a877f9c3736488be174af5891b0179a167a43344c56129756a5aba07c160c",
+        "map_verification_sha256": "e85d4244d91eb7b59173e6e746a07f57df724df507d721844250e376e81836f9",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 1.0068697501980368e-18,
+          "maximum_barycenter_velocity_norm": 4.672283374673232e-19,
+          "maximum_interaction_force_ratio": 0.0005353614986194827,
+          "maximum_jacobi_eccentricity": 0.24903033526051824,
+          "maximum_kepler_angular_momentum_error": 2.1317727626684867e-14,
+          "maximum_kepler_energy_error": 7.105427357601002e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923604226132e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136825739129106,
+          "maximum_periapse_step_fraction": 0.0015721460495731405,
+          "maximum_translation_force_residual": 3.9008625278234735e-17,
+          "minimum_jacobi_periapse": 0.3074913319845989,
+          "minimum_pair_clearance_after_margin": 0.23048256918256524,
+          "minimum_pair_endpoint": 0.2654725540546858,
+          "minimum_pair_path_lower_bound": 0.26209776670836976,
+          "minimum_secondary_hill_floor_ratio": 5.357087767483561
+        },
+        "primary_seconds": 0.028027223073877394,
+        "replay_seconds": 0.02798913198057562,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "8ff207a1533ad644b49515053de912a84def126fef21474226de37e5b2e47c04",
+            "canonical_relative_input_sha256": "d270fef420b930db5c0c36922a6524404ba68c9fa22e847c2e7a3bfc4aa886b4",
+            "canonicalization_idempotent": true,
+            "content_sha256": "054bbac4a3d4707160a71f89fe8d9b7170675d1855166aaa4a3cbc11ffeb749f",
+            "fixed_point_iteration_count": 1,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 0,
+            "position_maximum_absolute_delta_AU": 0.0,
+            "position_maximum_component_ulps": 0.0,
+            "position_maximum_forward_error_bound_fraction": 0.0,
+            "position_maximum_input_relative_error": 0.0,
+            "raw_relative_input_sha256": "d270fef420b930db5c0c36922a6524404ba68c9fa22e847c2e7a3bfc4aa886b4",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "941bb34c8f2db0e675c16358b4b7cf70e2dbd54280a72cb76cee8f23790e58d3",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 0,
+            "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+            "velocity_maximum_component_ulps": 0.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.0,
+            "velocity_maximum_input_relative_error": 0.0
+          },
+          "coordinate_canonicalization_receipt_sha256": "054bbac4a3d4707160a71f89fe8d9b7170675d1855166aaa4a3cbc11ffeb749f",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "941bb34c8f2db0e675c16358b4b7cf70e2dbd54280a72cb76cee8f23790e58d3"
+        },
+        "tile_sha256": "941bb34c8f2db0e675c16358b4b7cf70e2dbd54280a72cb76cee8f23790e58d3",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "ed88f711a073cf28da13741eb3a09506a2d396b149267f40be538a054981ad97",
+        "map_input_sha256": "d5a1514666a3e1bc1b63150d1b9e0e45e20255836b9b2ca65622f0632e767763",
+        "map_result_sha256": "fb1c60fff455f3863238972b2e00d4dce56d693fb1b068c8ec3320c8c83fa20a",
+        "map_verification_sha256": "c21b2f98fdec05de09b15b88b72581ba2036c31b39e70cd5e367956402da2e8f",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 9.431383787307932e-19,
+          "maximum_barycenter_velocity_norm": 3.0346676972712605e-19,
+          "maximum_interaction_force_ratio": 0.0005961191976895099,
+          "maximum_jacobi_eccentricity": 0.24903188518185584,
+          "maximum_kepler_angular_momentum_error": 2.1317727626684867e-14,
+          "maximum_kepler_energy_error": 7.105427357601002e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923730109737e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136836052134885,
+          "maximum_periapse_step_fraction": 0.0015721778587153563,
+          "maximum_translation_force_residual": 3.7897864955164184e-17,
+          "minimum_jacobi_periapse": 0.3074878839205981,
+          "minimum_pair_clearance_after_margin": 0.28866079784926174,
+          "minimum_pair_endpoint": 0.3074881759314353,
+          "minimum_pair_path_lower_bound": 0.30445197080824304,
+          "minimum_secondary_hill_floor_ratio": 5.019935163308033
+        },
+        "primary_seconds": 0.028044375008903444,
+        "replay_seconds": 0.02801155298948288,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "b827bbd1bd7d890fa3bf0e548dd63c99dfc2ba4c910f93c59245964dc132be0e",
+            "canonical_relative_input_sha256": "654c1814a6f144a8e9ca4adba1616b1ac233bc817eb503fc43463f2873fed571",
+            "canonicalization_idempotent": true,
+            "content_sha256": "edb423fc47a3815f5ee56f4eacaa6709dfe722f695c5469d914ec82abef64878",
+            "fixed_point_iteration_count": 2,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 0,
+            "position_maximum_absolute_delta_AU": 0.0,
+            "position_maximum_component_ulps": 0.0,
+            "position_maximum_forward_error_bound_fraction": 0.0,
+            "position_maximum_input_relative_error": 0.0,
+            "raw_relative_input_sha256": "ed88f711a073cf28da13741eb3a09506a2d396b149267f40be538a054981ad97",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "2794ae18af107fb3111dd7bd98482774bcbf46c3b5b4e42b84a45a9894c8dd0f",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 1,
+            "velocity_maximum_absolute_delta_AU_per_year": 6.776263578034403e-21,
+            "velocity_maximum_component_ulps": 1.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.14285714285714285,
+            "velocity_maximum_input_relative_error": 1.177719148147798e-16
+          },
+          "coordinate_canonicalization_receipt_sha256": "edb423fc47a3815f5ee56f4eacaa6709dfe722f695c5469d914ec82abef64878",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "2794ae18af107fb3111dd7bd98482774bcbf46c3b5b4e42b84a45a9894c8dd0f"
+        },
+        "tile_sha256": "2794ae18af107fb3111dd7bd98482774bcbf46c3b5b4e42b84a45a9894c8dd0f",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "6e9faf79021e801ac8382b18ca62645c5c2f20fd8e107c78619ebf52bc669f2a",
+        "map_input_sha256": "4524c52819ec563fa51be953bbc415a440e97be6fc278a520ba14f1be842df77",
+        "map_result_sha256": "b81789cdea2e9a3da8f4f7a35bee7a164cb42f121d0a7366f5ed0d3ebbb46738",
+        "map_verification_sha256": "9b4bbe647658513a02d5b500418bf7450aeebfcbf35bd2472b8e7f10cfb384bb",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 7.550921739893763e-19,
+          "maximum_barycenter_velocity_norm": 5.67873786294774e-20,
+          "maximum_interaction_force_ratio": 0.0006137464920908866,
+          "maximum_jacobi_eccentricity": 0.24903203300181234,
+          "maximum_kepler_angular_momentum_error": 2.1317438523750435e-14,
+          "maximum_kepler_energy_error": 5.684341886080802e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923629759694e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136834699165501,
+          "maximum_periapse_step_fraction": 0.0015721744257609323,
+          "maximum_translation_force_residual": 4.6107366009963165e-17,
+          "minimum_jacobi_periapse": 0.3074882618346999,
+          "minimum_pair_clearance_after_margin": 0.2539360396398521,
+          "minimum_pair_endpoint": 0.28892639757809013,
+          "minimum_pair_path_lower_bound": 0.2855512748716811,
+          "minimum_secondary_hill_floor_ratio": 4.866414739949352
+        },
+        "primary_seconds": 0.028093377011828125,
+        "replay_seconds": 0.02804779098369181,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "da466e0312c2d623e6e6225d016bac64d41cc1504c1a1d955ce05f37cd072cd5",
+            "canonical_relative_input_sha256": "6e9faf79021e801ac8382b18ca62645c5c2f20fd8e107c78619ebf52bc669f2a",
+            "canonicalization_idempotent": true,
+            "content_sha256": "d9cd9b14eaaa16746e86d79dc002308a17f16bb09b913a6f405c41d5cc6bd0dd",
+            "fixed_point_iteration_count": 1,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 0,
+            "position_maximum_absolute_delta_AU": 0.0,
+            "position_maximum_component_ulps": 0.0,
+            "position_maximum_forward_error_bound_fraction": 0.0,
+            "position_maximum_input_relative_error": 0.0,
+            "raw_relative_input_sha256": "6e9faf79021e801ac8382b18ca62645c5c2f20fd8e107c78619ebf52bc669f2a",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "92dd9d0aff60a0c389bd892b0860a4e7f510d5d155a19ba1aed33ed938878260",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 0,
+            "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+            "velocity_maximum_component_ulps": 0.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.0,
+            "velocity_maximum_input_relative_error": 0.0
+          },
+          "coordinate_canonicalization_receipt_sha256": "d9cd9b14eaaa16746e86d79dc002308a17f16bb09b913a6f405c41d5cc6bd0dd",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "92dd9d0aff60a0c389bd892b0860a4e7f510d5d155a19ba1aed33ed938878260"
+        },
+        "tile_sha256": "92dd9d0aff60a0c389bd892b0860a4e7f510d5d155a19ba1aed33ed938878260",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "7529aba8ce7b5a776af5a9a4bad2bdbdbc3de1747731aa1e134b2a27cbc7556f",
+        "map_input_sha256": "6e13a499229a3430aa66168f4434671acd7e7527ff19d5ecea65da7a47db64ce",
+        "map_result_sha256": "5b995f4795aa0f5ea5b52dec528a97b86e241e12ea925993a39be6912c4ff410",
+        "map_verification_sha256": "29e5483cd3651b86f3e10dede56d63608822fa2a7acde7162f3025fd5b0161b7",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 9.110552615970205e-19,
+          "maximum_barycenter_velocity_norm": 5.199892034699387e-19,
+          "maximum_interaction_force_ratio": 0.0006042375757660564,
+          "maximum_jacobi_eccentricity": 0.24903176438723648,
+          "maximum_kepler_angular_momentum_error": 1.475552811121985e-14,
+          "maximum_kepler_energy_error": 5.684341886080802e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923510792985e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136830483262861,
+          "maximum_periapse_step_fraction": 0.0015721513059279003,
+          "maximum_translation_force_residual": 4.0017396939543535e-17,
+          "minimum_jacobi_periapse": 0.3074907442054442,
+          "minimum_pair_clearance_after_margin": 0.24514575586123835,
+          "minimum_pair_endpoint": 0.2775019964316529,
+          "minimum_pair_path_lower_bound": 0.2726501667195576,
+          "minimum_secondary_hill_floor_ratio": 4.859674271030837
+        },
+        "primary_seconds": 0.028035869006998837,
+        "replay_seconds": 0.02802362700458616,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "8a32477a36d849df0b3bfd0b03ce9f4380ac85d4e598422eaf903cbfc44e4541",
+            "canonical_relative_input_sha256": "6de93644179780251e5ff78f660cd3ac9521b818189e48250b60c4c8474ff3f9",
+            "canonicalization_idempotent": true,
+            "content_sha256": "aa715b5938d5a0f5544960a61e30fcad2e28cf9dab2fc6ac00e7f48d7a491a0b",
+            "fixed_point_iteration_count": 2,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 0,
+            "position_maximum_absolute_delta_AU": 0.0,
+            "position_maximum_component_ulps": 0.0,
+            "position_maximum_forward_error_bound_fraction": 0.0,
+            "position_maximum_input_relative_error": 0.0,
+            "raw_relative_input_sha256": "7529aba8ce7b5a776af5a9a4bad2bdbdbc3de1747731aa1e134b2a27cbc7556f",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "4b05e9eb6bcbbc1c7cde5f4c13bbfdcae9e21e61b5436a499780a6e9f77bb962",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 1,
+            "velocity_maximum_absolute_delta_AU_per_year": 6.776263578034403e-21,
+            "velocity_maximum_component_ulps": 1.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.125,
+            "velocity_maximum_input_relative_error": 1.1568730916622397e-16
+          },
+          "coordinate_canonicalization_receipt_sha256": "aa715b5938d5a0f5544960a61e30fcad2e28cf9dab2fc6ac00e7f48d7a491a0b",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "4b05e9eb6bcbbc1c7cde5f4c13bbfdcae9e21e61b5436a499780a6e9f77bb962"
+        },
+        "tile_sha256": "4b05e9eb6bcbbc1c7cde5f4c13bbfdcae9e21e61b5436a499780a6e9f77bb962",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "d6c14e731e46b634803824aca1e93d9010abb2956d9cdd5c28658ef2e1b97a4d",
+        "map_input_sha256": "10a91f9b031097d29a77dd678fd2ef1ff7ea1dbffc978ee9bc37c0bef647b193",
+        "map_result_sha256": "ae2d7c88304950f1186232befa116b6e1efb1bef26990c0b003388de92974e7c",
+        "map_verification_sha256": "647047e3d0566d1d2144566b0d2a0963d6b2a3eaa8ba7a12d5168327cdf9e97b",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 2.537240669053296e-18,
+          "maximum_barycenter_velocity_norm": 6.528882960355018e-19,
+          "maximum_interaction_force_ratio": 0.00050936792597417,
+          "maximum_jacobi_eccentricity": 0.24903064642901307,
+          "maximum_kepler_angular_momentum_error": 1.4567209187227738e-14,
+          "maximum_kepler_energy_error": 7.105427357601002e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923345011781e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136803390578086,
+          "maximum_periapse_step_fraction": 0.0015720939596295033,
+          "maximum_translation_force_residual": 4.2671125289521695e-17,
+          "minimum_jacobi_periapse": 0.3074969688495067,
+          "minimum_pair_clearance_after_margin": 0.2408262492289332,
+          "minimum_pair_endpoint": 0.2615877557470852,
+          "minimum_pair_path_lower_bound": 0.2567349604982854,
+          "minimum_secondary_hill_floor_ratio": 4.916032353350079
+        },
+        "primary_seconds": 0.028143458999693394,
+        "replay_seconds": 0.028120186063461006,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "57da168ec8b3f2c404e463b2727a655d12ae39e94d8111381db3d6f8b6afb216",
+            "canonical_relative_input_sha256": "d6c14e731e46b634803824aca1e93d9010abb2956d9cdd5c28658ef2e1b97a4d",
+            "canonicalization_idempotent": true,
+            "content_sha256": "ec97f4f943b2d453659c3650bcffdbbf37c0eb1966f648ec84ad8635345bb9bb",
+            "fixed_point_iteration_count": 1,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 0,
+            "position_maximum_absolute_delta_AU": 0.0,
+            "position_maximum_component_ulps": 0.0,
+            "position_maximum_forward_error_bound_fraction": 0.0,
+            "position_maximum_input_relative_error": 0.0,
+            "raw_relative_input_sha256": "d6c14e731e46b634803824aca1e93d9010abb2956d9cdd5c28658ef2e1b97a4d",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "0e42868ed2b47bf893c4cd72523d0cb50c567888b563ac21a042c5ee0924705d",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 0,
+            "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+            "velocity_maximum_component_ulps": 0.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.0,
+            "velocity_maximum_input_relative_error": 0.0
+          },
+          "coordinate_canonicalization_receipt_sha256": "ec97f4f943b2d453659c3650bcffdbbf37c0eb1966f648ec84ad8635345bb9bb",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "0e42868ed2b47bf893c4cd72523d0cb50c567888b563ac21a042c5ee0924705d"
+        },
+        "tile_sha256": "0e42868ed2b47bf893c4cd72523d0cb50c567888b563ac21a042c5ee0924705d",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "9a48c22fbefcde9d38aed7e531e0f14e53d7d3a7b7230cc74e7b2f32ae02aa7e",
+        "map_input_sha256": "43ad20041ef3fdcbc3aa2e715bc7383f2d852a249b61e66047d7677a8f8d517a",
+        "map_result_sha256": "7fbf8e6d5364c0a8022e359ca8fa1fca81d197896dd5e269c9b6bc6b2c7220e5",
+        "map_verification_sha256": "a2137961109107f870e9c15d349a105512c8e95cd0044c318923fbff51c2fd09",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 1.1917609076676581e-18,
+          "maximum_barycenter_velocity_norm": 1.5550302614207e-19,
+          "maximum_interaction_force_ratio": 0.00035365270158579085,
+          "maximum_jacobi_eccentricity": 0.24903035147939456,
+          "maximum_kepler_angular_momentum_error": 1.475552811121985e-14,
+          "maximum_kepler_energy_error": 5.684341886080802e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923445136076e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.0010136806929468547,
+          "maximum_periapse_step_fraction": 0.0015721223031055884,
+          "maximum_translation_force_residual": 4.7803296714749464e-17,
+          "minimum_jacobi_periapse": 0.3074939265914848,
+          "minimum_pair_clearance_after_margin": 0.2385230233939204,
+          "minimum_pair_endpoint": 0.27351096994747826,
+          "minimum_pair_path_lower_bound": 0.2686599561720524,
+          "minimum_secondary_hill_floor_ratio": 5.1572169927644875
+        },
+        "primary_seconds": 0.028085371013730764,
+        "replay_seconds": 0.029142239945940673,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "34daee6baab575e8a71c3365e80ecd6ab8a76cf44cba741da743baaea513dac7",
+            "canonical_relative_input_sha256": "19f6d97d3bf77d263380bc6cad390dd1deaea08988410388cd9acaa35818f902",
+            "canonicalization_idempotent": true,
+            "content_sha256": "07d2e89865bfd3380664ec7074cab501dd106dec39b75a93c78152f7e9af014b",
+            "fixed_point_iteration_count": 2,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 0,
+            "position_maximum_absolute_delta_AU": 0.0,
+            "position_maximum_component_ulps": 0.0,
+            "position_maximum_forward_error_bound_fraction": 0.0,
+            "position_maximum_input_relative_error": 0.0,
+            "raw_relative_input_sha256": "9a48c22fbefcde9d38aed7e531e0f14e53d7d3a7b7230cc74e7b2f32ae02aa7e",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "94347b558a7598a6194d9a0eadd2082d92e37c98b80d37402662420d26029202",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 1,
+            "velocity_maximum_absolute_delta_AU_per_year": 6.776263578034403e-21,
+            "velocity_maximum_component_ulps": 1.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.2222222222222222,
+            "velocity_maximum_input_relative_error": 1.213594148410796e-16
+          },
+          "coordinate_canonicalization_receipt_sha256": "07d2e89865bfd3380664ec7074cab501dd106dec39b75a93c78152f7e9af014b",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "94347b558a7598a6194d9a0eadd2082d92e37c98b80d37402662420d26029202"
+        },
+        "tile_sha256": "94347b558a7598a6194d9a0eadd2082d92e37c98b80d37402662420d26029202",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      },
+      {
+        "claims": {
+          "cross_runtime_bitwise_reproducible": false,
+          "disk_checkpoint_restart_qualified": false,
+          "long_horizon_accuracy_qualified": false,
+          "production_qualified": false,
+          "science_result": false,
+          "source_close_encounter_qualified": false
+        },
+        "exact_replay_required": true,
+        "input_sha256": "efcca7aa4c39ef1f49e637560732fc2203d7ee49758e53a5faffd5739713b5eb",
+        "map_input_sha256": "6042c5e652ba4cc8ed6f6d048d4f5fdbaf2c2deb0ec0904668e26b316b5b9f7d",
+        "map_result_sha256": "d484d14d9b0e263b0c88e441db8ae0d332e7cc3e164e645386cf31d0f84bd8fb",
+        "map_verification_sha256": "6469dbb957c2b4269987140eea318d06d5b9fcd14fa345b829d499d2e8b8988d",
+        "native_source_map_metrics": {
+          "maximum_barycenter_position_norm": 7.107984954143985e-19,
+          "maximum_barycenter_velocity_norm": 3.7149097664639625e-19,
+          "maximum_interaction_force_ratio": 0.00042688873255910083,
+          "maximum_jacobi_eccentricity": 0.24903096372525094,
+          "maximum_kepler_angular_momentum_error": 1.464821375527116e-14,
+          "maximum_kepler_energy_error": 7.105427357601002e-14,
+          "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+          "maximum_kepler_residual_tolerance": 3.471923548480918e-18,
+          "maximum_kepler_time_residual": 8.131516293641283e-20,
+          "maximum_orbit_step_fraction": 0.001013683442054732,
+          "maximum_periapse_step_fraction": 0.001572158656415578,
+          "maximum_translation_force_residual": 4.4427696764991803e-17,
+          "minimum_jacobi_periapse": 0.3074899381233089,
+          "minimum_pair_clearance_after_margin": 0.25325603889660003,
+          "minimum_pair_endpoint": 0.28824656912604923,
+          "minimum_pair_path_lower_bound": 0.2848715787589531,
+          "minimum_secondary_hill_floor_ratio": 5.109492335774404
+        },
+        "primary_seconds": 0.028594239032827318,
+        "replay_seconds": 0.02829509205184877,
+        "runtime_identity": {
+          "coordinate_canonicalization": {
+            "canonical_barycentric_input_sha256": "c55cec02d10ed3bced8aa96fa6d859b01dcf122bfb819ce50257f0a5ae952922",
+            "canonical_relative_input_sha256": "a8a6ed39fa8639bda22795f7a72de386622095ef68473c5bd3b8ece6a5cd0e43",
+            "canonicalization_idempotent": true,
+            "content_sha256": "caf93270081cc643a8ea617902f547fd941f11ae5e668539bb8d205bb09de22e",
+            "fixed_point_iteration_count": 2,
+            "forward_error_bound": "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT",
+            "forward_error_ulp_factor": 1.0,
+            "maximum_allowed_input_relative_error": 1.1368683772161603e-13,
+            "maximum_allowed_input_relative_error_in_eps": 512.0,
+            "maximum_fixed_point_iteration_count": 4,
+            "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+            "position_changed_component_count": 1,
+            "position_maximum_absolute_delta_AU": 1.3552527156068805e-20,
+            "position_maximum_component_ulps": 1.0,
+            "position_maximum_forward_error_bound_fraction": 0.125,
+            "position_maximum_input_relative_error": 1.6258996567226588e-16,
+            "raw_relative_input_sha256": "efcca7aa4c39ef1f49e637560732fc2203d7ee49758e53a5faffd5739713b5eb",
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "source_tile_sha256": "92461b40c34df5caecde869216086d581aa1e088ac6d9f305e6b8cc90a4fbb0f",
+            "tile_node_zero_exact": true,
+            "velocity_changed_component_count": 0,
+            "velocity_maximum_absolute_delta_AU_per_year": 0.0,
+            "velocity_maximum_component_ulps": 0.0,
+            "velocity_maximum_forward_error_bound_fraction": 0.0,
+            "velocity_maximum_input_relative_error": 0.0
+          },
+          "coordinate_canonicalization_receipt_sha256": "caf93270081cc643a8ea617902f547fd941f11ae5e668539bb8d205bb09de22e",
+          "exact_replay_required": true,
+          "numpy_version": "2.5.3",
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+          "provider_id": "jx.restricted-wh.source-provider.ordered-jacobi.v1",
+          "provider_implementation_source_sha256": "69d30e621dfb28c60c5a07d63752d4b92d993ba5d74524d7c3b404cd19fe7b52",
+          "python_version": "3.14.4",
+          "source_map_runtime_identity": {
+            "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+            "compiler_version": "15.2.0",
+            "counter_count": 12,
+            "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+            "extension_binary": {
+              "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+              "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+              "size_bytes": 42520
+            },
+            "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+            "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+            "maximum_bodies": 32,
+            "metric_count": 17,
+            "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+            "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+            "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+            "scientific_claim_state": "SCREENING_ONLY"
+          },
+          "source_tile_sha256": "92461b40c34df5caecde869216086d581aa1e088ac6d9f305e6b8cc90a4fbb0f"
+        },
+        "tile_sha256": "92461b40c34df5caecde869216086d581aa1e088ac6d9f305e6b8cc90a4fbb0f",
+        "tracer_acceleration_bootstrap": {
+          "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+          "minimum_source_encounter_radius_AU": 1e-06,
+          "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+          "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+          "sum_source_gm_AU3_per_year2": 39.52989807155155,
+          "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+        }
+      }
+    ]
+  },
+  "metrics": {
+    "code_identity_stable": true,
+    "dop853_vs_ias15_all": {
+      "body_ids": [
+        10,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "1": {
+          "body_name": "Mercury Barycenter",
+          "final_position_AU": 1.1505444803016986e-11,
+          "final_velocity_AU_per_year": 2.7251722698501597e-10,
+          "maximum_position_AU": 1.8592335635492312e-11,
+          "maximum_velocity_AU_per_year": 2.7251722698501597e-10,
+          "rms_position_AU": 1.018918582936522e-11,
+          "rms_velocity_AU_per_year": 1.5684665728428345e-10
+        },
+        "10": {
+          "body_name": "Sun",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "2": {
+          "body_name": "Venus Barycenter",
+          "final_position_AU": 4.0342725398692973e-13,
+          "final_velocity_AU_per_year": 4.093764102133057e-12,
+          "maximum_position_AU": 4.0342725398692973e-13,
+          "maximum_velocity_AU_per_year": 4.093764102133057e-12,
+          "rms_position_AU": 1.721575948785695e-13,
+          "rms_velocity_AU_per_year": 1.7554388150241662e-12
+        },
+        "3": {
+          "body_name": "Earth-Moon Barycenter",
+          "final_position_AU": 2.3790732562728923e-13,
+          "final_velocity_AU_per_year": 1.4948438804561218e-12,
+          "maximum_position_AU": 2.3790732562728923e-13,
+          "maximum_velocity_AU_per_year": 1.4948438804561218e-12,
+          "rms_position_AU": 9.650625507220129e-14,
+          "rms_velocity_AU_per_year": 6.121359634398874e-13
+        },
+        "4": {
+          "body_name": "Mars Barycenter",
+          "final_position_AU": 5.282027194851725e-14,
+          "final_velocity_AU_per_year": 1.5007742470759126e-13,
+          "maximum_position_AU": 6.000211256234906e-14,
+          "maximum_velocity_AU_per_year": 1.9846207986545754e-13,
+          "rms_position_AU": 3.6887061931898856e-14,
+          "rms_velocity_AU_per_year": 1.1818981958967286e-13
+        },
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 2.583959122370317e-14,
+          "final_velocity_AU_per_year": 3.198185505371297e-14,
+          "maximum_position_AU": 3.928888739344545e-14,
+          "maximum_velocity_AU_per_year": 3.198185505371297e-14,
+          "rms_position_AU": 2.2169437708895144e-14,
+          "rms_velocity_AU_per_year": 1.1968587733775283e-14
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 6.6053791602874e-14,
+          "final_velocity_AU_per_year": 7.951524340041816e-15,
+          "maximum_position_AU": 6.6053791602874e-14,
+          "maximum_velocity_AU_per_year": 9.169259302923991e-15,
+          "rms_position_AU": 3.320849344460118e-14,
+          "rms_velocity_AU_per_year": 5.6515431660966284e-15
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 1.3399828792943372e-13,
+          "final_velocity_AU_per_year": 3.63577514631266e-15,
+          "maximum_position_AU": 1.3399828792943372e-13,
+          "maximum_velocity_AU_per_year": 3.63577514631266e-15,
+          "rms_position_AU": 7.12506760030942e-14,
+          "rms_velocity_AU_per_year": 2.2097614648250417e-15
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 3.50352332448907e-14,
+          "final_velocity_AU_per_year": 8.339835337443321e-16,
+          "maximum_position_AU": 3.9080481270251204e-14,
+          "maximum_velocity_AU_per_year": 1.5554927920745364e-15,
+          "rms_position_AU": 2.0740407589238635e-14,
+          "rms_velocity_AU_per_year": 9.231111902497973e-16
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 8.803277533334513e-14,
+          "final_velocity_AU_per_year": 1.6126920961239077e-15,
+          "maximum_position_AU": 8.803277533334513e-14,
+          "maximum_velocity_AU_per_year": 1.7271017045521525e-15,
+          "rms_position_AU": 4.666722420963102e-14,
+          "rms_velocity_AU_per_year": 9.961119953842058e-16
+        }
+      },
+      "maximum_position_AU": 1.8592335635492312e-11,
+      "maximum_velocity_AU_per_year": 2.7251722698501597e-10,
+      "rms_position_AU": 3.2228729288722486e-12,
+      "rms_velocity_AU_per_year": 4.960276638240291e-11
+    },
+    "executed_source_archive_retained": true,
+    "independent_source_guards": {
+      "coarse": {
+        "interval_count": 40960,
+        "maximum_primary_periapse_phase_radians": 0.008996420417726338,
+        "maximum_primary_phase_radians": 0.008996407602380237,
+        "method": "INDEPENDENT_NUMPY_FIRST_CROSSING_AND_TWO_BODY_GEOMETRY_V1",
+        "minimum_pair_endpoint_AU": 0.261471802255648,
+        "minimum_pair_path_lower_bound_AU": 0.23768128252810147,
+        "minimum_primary_two_body_periapse_AU": 0.3074878839213353,
+        "node_count": 40961,
+        "pair_acceleration_reach_per_interval_AU": 0.023561655325622294,
+        "pair_count": 45,
+        "pair_floor_AU": 0.01,
+        "pair_relative_acceleration_bound_AU_per_year2": 790597.9614310311
+      },
+      "fine": {
+        "interval_count": 81920,
+        "maximum_primary_periapse_phase_radians": 0.004498210208949127,
+        "maximum_primary_phase_radians": 0.00449820380118215,
+        "method": "INDEPENDENT_NUMPY_FIRST_CROSSING_AND_TWO_BODY_GEOMETRY_V1",
+        "minimum_pair_endpoint_AU": 0.26147170894519844,
+        "minimum_pair_path_lower_bound_AU": 0.2554666978324373,
+        "minimum_primary_two_body_periapse_AU": 0.30748788391741805,
+        "node_count": 81921,
+        "pair_acceleration_reach_per_interval_AU": 0.0058904138314055735,
+        "pair_count": 45,
+        "pair_floor_AU": 0.01,
+        "pair_relative_acceleration_bound_AU_per_year2": 790597.9614310311
+      }
+    },
+    "initial_reference": {
+      "body_ids": [
+        10,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "1": {
+          "body_name": "Mercury Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "10": {
+          "body_name": "Sun",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "2": {
+          "body_name": "Venus Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "3": {
+          "body_name": "Earth-Moon Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "4": {
+          "body_name": "Mars Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        }
+      },
+      "maximum_position_AU": 0.0,
+      "maximum_velocity_AU_per_year": 0.0,
+      "rms_position_AU": 0.0,
+      "rms_velocity_AU_per_year": 0.0
+    },
+    "initial_reference_bitwise_exact": true,
+    "input_identity_stable": true,
+    "invariants": {
+      "dop853": {
+        "initial_angular_momentum_hex": [
+          "0x1.795c4e3077649p-6",
+          "0x1.de528e0aea246p-8",
+          "0x1.c0d8985725cebp-1"
+        ],
+        "initial_energy_hex": "-0x1.665e7fa43d4f3p-3",
+        "maximum_relative_angular_momentum_drift": 6.3317548156811535e-16,
+        "maximum_relative_energy_drift": 3.01372203241296e-15,
+        "sample_count": 11,
+        "sample_scope": "RETAINED_REFERENCE_EPOCHS"
+      },
+      "ias15": {
+        "initial_angular_momentum_hex": [
+          "0x1.795c4e3077649p-6",
+          "0x1.de528e0aea246p-8",
+          "0x1.c0d8985725cebp-1"
+        ],
+        "initial_energy_hex": "-0x1.665e7fa43d4f3p-3",
+        "maximum_relative_angular_momentum_drift": 3.798080527248426e-16,
+        "maximum_relative_energy_drift": 1.5861694907436631e-15,
+        "sample_count": 11,
+        "sample_scope": "RETAINED_REFERENCE_EPOCHS"
+      },
+      "jx_coarse": {
+        "initial_angular_momentum_hex": [
+          "0x1.795c4e3077649p-6",
+          "0x1.de528e0aea246p-8",
+          "0x1.c0d8985725cebp-1"
+        ],
+        "initial_energy_hex": "-0x1.665e7fa43d4f3p-3",
+        "maximum_relative_angular_momentum_drift": 3.051855082550466e-14,
+        "maximum_relative_energy_drift": 4.2588650826467353e-13,
+        "sample_count": 40961,
+        "sample_scope": "ALL_SOURCE_MAP_NODES"
+      },
+      "jx_fine": {
+        "initial_angular_momentum_hex": [
+          "0x1.795c4e3077649p-6",
+          "0x1.de528e0aea246p-8",
+          "0x1.c0d8985725cebp-1"
+        ],
+        "initial_energy_hex": "-0x1.665e7fa43d4f3p-3",
+        "maximum_relative_angular_momentum_drift": 6.318782397958333e-14,
+        "maximum_relative_energy_drift": 2.2587053548189762e-13,
+        "sample_count": 81921,
+        "sample_scope": "ALL_SOURCE_MAP_NODES"
+      }
+    },
+    "jx_coarse_vs_dop853_all": {
+      "body_ids": [
+        10,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "1": {
+          "body_name": "Mercury Barycenter",
+          "final_position_AU": 8.902509491579963e-10,
+          "final_velocity_AU_per_year": 2.2696207138257674e-08,
+          "maximum_position_AU": 8.902509491579963e-10,
+          "maximum_velocity_AU_per_year": 2.2696207138257674e-08,
+          "rms_position_AU": 5.12222460430061e-10,
+          "rms_velocity_AU_per_year": 1.324638074284257e-08
+        },
+        "10": {
+          "body_name": "Sun",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "2": {
+          "body_name": "Venus Barycenter",
+          "final_position_AU": 4.6167463130691835e-10,
+          "final_velocity_AU_per_year": 4.745947489516181e-09,
+          "maximum_position_AU": 4.6167463130691835e-10,
+          "maximum_velocity_AU_per_year": 4.745947489516181e-09,
+          "rms_position_AU": 2.7516109375456107e-10,
+          "rms_velocity_AU_per_year": 2.814162438567662e-09
+        },
+        "3": {
+          "body_name": "Earth-Moon Barycenter",
+          "final_position_AU": 1.3824431244914787e-10,
+          "final_velocity_AU_per_year": 8.91287120078278e-10,
+          "maximum_position_AU": 1.3824431244914787e-10,
+          "maximum_velocity_AU_per_year": 8.91287120078278e-10,
+          "rms_position_AU": 8.101383337600011e-11,
+          "rms_velocity_AU_per_year": 5.105603390733668e-10
+        },
+        "4": {
+          "body_name": "Mars Barycenter",
+          "final_position_AU": 2.812169069442662e-10,
+          "final_velocity_AU_per_year": 8.805106733475738e-10,
+          "maximum_position_AU": 3.1526966560283744e-10,
+          "maximum_velocity_AU_per_year": 1.1175175052424485e-09,
+          "rms_position_AU": 1.8270988651124066e-10,
+          "rms_velocity_AU_per_year": 6.125749825030536e-10
+        },
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 9.402975692925854e-13,
+          "final_velocity_AU_per_year": 4.027322229636125e-13,
+          "maximum_position_AU": 9.402975692925854e-13,
+          "maximum_velocity_AU_per_year": 4.027322229636125e-13,
+          "rms_position_AU": 4.036622390329631e-13,
+          "rms_velocity_AU_per_year": 2.2503817736523782e-13
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 6.366434500986478e-12,
+          "final_velocity_AU_per_year": 1.770481379427369e-12,
+          "maximum_position_AU": 6.366434500986478e-12,
+          "maximum_velocity_AU_per_year": 1.770481379427369e-12,
+          "rms_position_AU": 3.966611583160215e-12,
+          "rms_velocity_AU_per_year": 1.1038679218337746e-12
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 4.688826150121431e-13,
+          "final_velocity_AU_per_year": 5.3201473029297767e-14,
+          "maximum_position_AU": 7.190177495041875e-13,
+          "maximum_velocity_AU_per_year": 1.4729936164650925e-13,
+          "rms_position_AU": 4.707092806807861e-13,
+          "rms_velocity_AU_per_year": 1.0016082280666001e-13
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 2.6991894149506825e-14,
+          "final_velocity_AU_per_year": 2.8426694682057186e-14,
+          "maximum_position_AU": 1.6011925753921415e-13,
+          "maximum_velocity_AU_per_year": 3.252454339327329e-14,
+          "rms_position_AU": 7.565850197674349e-14,
+          "rms_velocity_AU_per_year": 2.254645153500729e-14
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 2.6705089641414864e-13,
+          "final_velocity_AU_per_year": 2.4135607640725598e-14,
+          "maximum_position_AU": 3.776628219822277e-13,
+          "maximum_velocity_AU_per_year": 2.4135607640725598e-14,
+          "rms_position_AU": 1.8101534975528024e-13,
+          "rms_velocity_AU_per_year": 1.2727712280221182e-14
+        }
+      },
+      "maximum_position_AU": 8.902509491579963e-10,
+      "maximum_velocity_AU_per_year": 2.2696207138257674e-08,
+      "rms_position_AU": 1.9443450756517065e-10,
+      "rms_velocity_AU_per_year": 4.289778948429488e-09
+    },
+    "jx_exact_replay": {
+      "coarse": true,
+      "fine": true,
+      "partitions": true
+    },
+    "jx_fine_vs_de441_all_descriptive": {
+      "body_ids": [
+        10,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "1": {
+          "body_name": "Mercury Barycenter",
+          "final_position_AU": 1.29721673821536e-05,
+          "final_velocity_AU_per_year": 0.0003357556249583696,
+          "maximum_position_AU": 1.29721673821536e-05,
+          "maximum_velocity_AU_per_year": 0.0003357556249583696,
+          "rms_position_AU": 7.1975092337411556e-06,
+          "rms_velocity_AU_per_year": 0.00019796174457332072
+        },
+        "10": {
+          "body_name": "Sun",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "2": {
+          "body_name": "Venus Barycenter",
+          "final_position_AU": 6.047051694516229e-06,
+          "final_velocity_AU_per_year": 6.192305165431126e-05,
+          "maximum_position_AU": 6.047051694516229e-06,
+          "maximum_velocity_AU_per_year": 6.192305165431126e-05,
+          "rms_position_AU": 3.6347493901426636e-06,
+          "rms_velocity_AU_per_year": 3.713110241722759e-05
+        },
+        "3": {
+          "body_name": "Earth-Moon Barycenter",
+          "final_position_AU": 4.3791675098660845e-06,
+          "final_velocity_AU_per_year": 2.6596525564837717e-05,
+          "maximum_position_AU": 4.3791675098660845e-06,
+          "maximum_velocity_AU_per_year": 2.6596525564837717e-05,
+          "rms_position_AU": 2.5913163206582373e-06,
+          "rms_velocity_AU_per_year": 1.574416157881126e-05
+        },
+        "4": {
+          "body_name": "Mars Barycenter",
+          "final_position_AU": 2.078494168946136e-06,
+          "final_velocity_AU_per_year": 6.813901526700291e-06,
+          "maximum_position_AU": 2.6219753316969896e-06,
+          "maximum_velocity_AU_per_year": 9.122446677297455e-06,
+          "rms_position_AU": 1.4535342552805464e-06,
+          "rms_velocity_AU_per_year": 4.900136301189292e-06
+        },
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 2.2461527007506075e-07,
+          "final_velocity_AU_per_year": 1.0759596772367049e-07,
+          "maximum_position_AU": 2.2461527007506075e-07,
+          "maximum_velocity_AU_per_year": 1.0759596772367049e-07,
+          "rms_position_AU": 1.2792541133534208e-07,
+          "rms_velocity_AU_per_year": 6.532787774794108e-08
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 4.933636999559226e-08,
+          "final_velocity_AU_per_year": 1.0829847481451114e-08,
+          "maximum_position_AU": 4.933636999559226e-08,
+          "maximum_velocity_AU_per_year": 1.1817338470691568e-08,
+          "rms_position_AU": 2.6689909486616766e-08,
+          "rms_velocity_AU_per_year": 7.703748151213688e-09
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 2.293794585955646e-08,
+          "final_velocity_AU_per_year": 1.9814136101750875e-09,
+          "maximum_position_AU": 2.293794585955646e-08,
+          "maximum_velocity_AU_per_year": 5.144182663355727e-09,
+          "rms_position_AU": 1.3287210252366736e-08,
+          "rms_velocity_AU_per_year": 3.5943693662428255e-09
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 6.444672565093046e-08,
+          "final_velocity_AU_per_year": 1.0110432922067708e-08,
+          "maximum_position_AU": 6.444672565093046e-08,
+          "maximum_velocity_AU_per_year": 1.1027534881762802e-08,
+          "rms_position_AU": 3.298388501988238e-08,
+          "rms_velocity_AU_per_year": 7.564168860084636e-09
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 1.057409063303919e-07,
+          "final_velocity_AU_per_year": 1.9959576206208926e-08,
+          "maximum_position_AU": 1.057409063303919e-07,
+          "maximum_velocity_AU_per_year": 1.9959576206208926e-08,
+          "rms_position_AU": 5.288972517116005e-08,
+          "rms_velocity_AU_per_year": 1.225954883864695e-08
+        }
+      },
+      "maximum_position_AU": 1.29721673821536e-05,
+      "maximum_velocity_AU_per_year": 0.0003357556249583696,
+      "rms_position_AU": 2.7177999094065975e-06,
+      "rms_velocity_AU_per_year": 6.390576311126666e-05
+    },
+    "jx_fine_vs_de441_outer": {
+      "body_ids": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 2.2461527007506075e-07,
+          "final_velocity_AU_per_year": 1.0759596772367049e-07,
+          "maximum_position_AU": 2.2461527007506075e-07,
+          "maximum_velocity_AU_per_year": 1.0759596772367049e-07,
+          "rms_position_AU": 1.2792541133534208e-07,
+          "rms_velocity_AU_per_year": 6.532787774794108e-08
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 4.933636999559226e-08,
+          "final_velocity_AU_per_year": 1.0829847481451114e-08,
+          "maximum_position_AU": 4.933636999559226e-08,
+          "maximum_velocity_AU_per_year": 1.1817338470691568e-08,
+          "rms_position_AU": 2.6689909486616766e-08,
+          "rms_velocity_AU_per_year": 7.703748151213688e-09
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 2.293794585955646e-08,
+          "final_velocity_AU_per_year": 1.9814136101750875e-09,
+          "maximum_position_AU": 2.293794585955646e-08,
+          "maximum_velocity_AU_per_year": 5.144182663355727e-09,
+          "rms_position_AU": 1.3287210252366736e-08,
+          "rms_velocity_AU_per_year": 3.5943693662428255e-09
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 6.444672565093046e-08,
+          "final_velocity_AU_per_year": 1.0110432922067708e-08,
+          "maximum_position_AU": 6.444672565093046e-08,
+          "maximum_velocity_AU_per_year": 1.1027534881762802e-08,
+          "rms_position_AU": 3.298388501988238e-08,
+          "rms_velocity_AU_per_year": 7.564168860084636e-09
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 1.057409063303919e-07,
+          "final_velocity_AU_per_year": 1.9959576206208926e-08,
+          "maximum_position_AU": 1.057409063303919e-07,
+          "maximum_velocity_AU_per_year": 1.9959576206208926e-08,
+          "rms_position_AU": 5.288972517116005e-08,
+          "rms_velocity_AU_per_year": 1.225954883864695e-08
+        }
+      },
+      "maximum_position_AU": 2.2461527007506075e-07,
+      "maximum_velocity_AU_per_year": 1.0759596772367049e-07,
+      "rms_position_AU": 6.502164530323195e-08,
+      "rms_velocity_AU_per_year": 3.015795757686283e-08
+    },
+    "jx_fine_vs_dop853_all": {
+      "body_ids": [
+        10,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "1": {
+          "body_name": "Mercury Barycenter",
+          "final_position_AU": 2.2100213813712713e-10,
+          "final_velocity_AU_per_year": 5.600792289434211e-09,
+          "maximum_position_AU": 2.2100213813712713e-10,
+          "maximum_velocity_AU_per_year": 5.600792289434211e-09,
+          "rms_position_AU": 1.3037480911858571e-10,
+          "rms_velocity_AU_per_year": 3.307470436454972e-09
+        },
+        "10": {
+          "body_name": "Sun",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "2": {
+          "body_name": "Venus Barycenter",
+          "final_position_AU": 1.2094784673146373e-10,
+          "final_velocity_AU_per_year": 1.2430445422355942e-09,
+          "maximum_position_AU": 1.2094784673146373e-10,
+          "maximum_velocity_AU_per_year": 1.2430445422355942e-09,
+          "rms_position_AU": 7.121054330928489e-11,
+          "rms_velocity_AU_per_year": 7.282904294758272e-10
+        },
+        "3": {
+          "body_name": "Earth-Moon Barycenter",
+          "final_position_AU": 3.219519259865554e-11,
+          "final_velocity_AU_per_year": 2.0806180796052832e-10,
+          "maximum_position_AU": 3.219519259865554e-11,
+          "maximum_velocity_AU_per_year": 2.0806180796052832e-10,
+          "rms_position_AU": 1.910301234270796e-11,
+          "rms_velocity_AU_per_year": 1.2039103032174841e-10
+        },
+        "4": {
+          "body_name": "Mars Barycenter",
+          "final_position_AU": 7.268431228092099e-11,
+          "final_velocity_AU_per_year": 2.277252671754427e-10,
+          "maximum_position_AU": 8.137023094920117e-11,
+          "maximum_velocity_AU_per_year": 2.8836728556969067e-10,
+          "rms_position_AU": 4.684300539419699e-11,
+          "rms_velocity_AU_per_year": 1.5707715035822474e-10
+        },
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 4.29401918502496e-12,
+          "final_velocity_AU_per_year": 2.239576858959263e-12,
+          "maximum_position_AU": 4.29401918502496e-12,
+          "maximum_velocity_AU_per_year": 2.239576858959263e-12,
+          "rms_position_AU": 2.0238912915532283e-12,
+          "rms_velocity_AU_per_year": 1.0744689637033668e-12
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 1.217323014401369e-12,
+          "final_velocity_AU_per_year": 1.6738526856744547e-13,
+          "maximum_position_AU": 1.217323014401369e-12,
+          "maximum_velocity_AU_per_year": 2.4859992920723066e-13,
+          "rms_position_AU": 9.06567224098745e-13,
+          "rms_velocity_AU_per_year": 1.7537130981943753e-13
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 1.7816473486564336e-13,
+          "final_velocity_AU_per_year": 4.589840052291563e-14,
+          "maximum_position_AU": 4.877201514342757e-13,
+          "maximum_velocity_AU_per_year": 4.589840052291563e-14,
+          "rms_position_AU": 3.0527979510336257e-13,
+          "rms_velocity_AU_per_year": 2.6758947551684025e-14
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 5.708274058611732e-14,
+          "final_velocity_AU_per_year": 1.5565747504028623e-14,
+          "maximum_position_AU": 2.809130166652544e-13,
+          "maximum_velocity_AU_per_year": 2.93655375493391e-14,
+          "rms_position_AU": 1.717679845085861e-13,
+          "rms_velocity_AU_per_year": 1.6889903328951065e-14
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 1.8703485461813198e-13,
+          "final_velocity_AU_per_year": 3.5849417786198144e-14,
+          "maximum_position_AU": 2.983278138931415e-13,
+          "maximum_velocity_AU_per_year": 3.5849417786198144e-14,
+          "rms_position_AU": 2.1566352240954788e-13,
+          "rms_velocity_AU_per_year": 2.056930757477418e-14
+        }
+      },
+      "maximum_position_AU": 2.2100213813712713e-10,
+      "maximum_velocity_AU_per_year": 5.600792289434211e-09,
+      "rms_position_AU": 4.963145351173805e-11,
+      "rms_velocity_AU_per_year": 1.0727970943146414e-09
+    },
+    "jx_fine_vs_dop853_outer": {
+      "body_ids": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 4.29401918502496e-12,
+          "final_velocity_AU_per_year": 2.239576858959263e-12,
+          "maximum_position_AU": 4.29401918502496e-12,
+          "maximum_velocity_AU_per_year": 2.239576858959263e-12,
+          "rms_position_AU": 2.0238912915532283e-12,
+          "rms_velocity_AU_per_year": 1.0744689637033668e-12
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 1.217323014401369e-12,
+          "final_velocity_AU_per_year": 1.6738526856744547e-13,
+          "maximum_position_AU": 1.217323014401369e-12,
+          "maximum_velocity_AU_per_year": 2.4859992920723066e-13,
+          "rms_position_AU": 9.06567224098745e-13,
+          "rms_velocity_AU_per_year": 1.7537130981943753e-13
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 1.7816473486564336e-13,
+          "final_velocity_AU_per_year": 4.589840052291563e-14,
+          "maximum_position_AU": 4.877201514342757e-13,
+          "maximum_velocity_AU_per_year": 4.589840052291563e-14,
+          "rms_position_AU": 3.0527979510336257e-13,
+          "rms_velocity_AU_per_year": 2.6758947551684025e-14
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 5.708274058611732e-14,
+          "final_velocity_AU_per_year": 1.5565747504028623e-14,
+          "maximum_position_AU": 2.809130166652544e-13,
+          "maximum_velocity_AU_per_year": 2.93655375493391e-14,
+          "rms_position_AU": 1.717679845085861e-13,
+          "rms_velocity_AU_per_year": 1.6889903328951065e-14
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 1.8703485461813198e-13,
+          "final_velocity_AU_per_year": 3.5849417786198144e-14,
+          "maximum_position_AU": 2.983278138931415e-13,
+          "maximum_velocity_AU_per_year": 3.5849417786198144e-14,
+          "rms_position_AU": 2.1566352240954788e-13,
+          "rms_velocity_AU_per_year": 2.056930757477418e-14
+        }
+      },
+      "maximum_position_AU": 4.29401918502496e-12,
+      "maximum_velocity_AU_per_year": 2.239576858959263e-12,
+      "rms_position_AU": 1.0086833834790464e-12,
+      "rms_velocity_AU_per_year": 4.871679498473217e-13
+    },
+    "jx_full_vs_partition": {
+      "body_ids": [
+        10,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "by_body": {
+        "1": {
+          "body_name": "Mercury Barycenter",
+          "final_position_AU": 5.2877809138950555e-12,
+          "final_velocity_AU_per_year": 1.3456659674260057e-10,
+          "maximum_position_AU": 5.2877809138950555e-12,
+          "maximum_velocity_AU_per_year": 1.3456659674260057e-10,
+          "rms_position_AU": 2.3062286000973088e-12,
+          "rms_velocity_AU_per_year": 5.700315379522503e-11
+        },
+        "10": {
+          "body_name": "Sun",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 0.0,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 0.0
+        },
+        "2": {
+          "body_name": "Venus Barycenter",
+          "final_position_AU": 1.4081192562071728e-12,
+          "final_velocity_AU_per_year": 1.447270831791074e-11,
+          "maximum_position_AU": 1.4081192562071728e-12,
+          "maximum_velocity_AU_per_year": 1.447270831791074e-11,
+          "rms_position_AU": 4.990143097259427e-13,
+          "rms_velocity_AU_per_year": 5.10937354641329e-12
+        },
+        "3": {
+          "body_name": "Earth-Moon Barycenter",
+          "final_position_AU": 3.033314054221112e-12,
+          "final_velocity_AU_per_year": 1.8859563569979577e-11,
+          "maximum_position_AU": 3.033314054221112e-12,
+          "maximum_velocity_AU_per_year": 1.8859563569979577e-11,
+          "rms_position_AU": 1.3342707947361697e-12,
+          "rms_velocity_AU_per_year": 8.305947457828012e-12
+        },
+        "4": {
+          "body_name": "Mars Barycenter",
+          "final_position_AU": 1.2478731447267341e-12,
+          "final_velocity_AU_per_year": 3.70501279262406e-12,
+          "maximum_position_AU": 1.2478731447267341e-12,
+          "maximum_velocity_AU_per_year": 3.746481619770752e-12,
+          "rms_position_AU": 5.820148145883504e-13,
+          "rms_velocity_AU_per_year": 1.8915395378277315e-12
+        },
+        "5": {
+          "body_name": "Jupiter Barycenter",
+          "final_position_AU": 1.3877787807814457e-17,
+          "final_velocity_AU_per_year": 6.938893903907228e-18,
+          "maximum_position_AU": 1.3877787807814457e-17,
+          "maximum_velocity_AU_per_year": 6.938893903907228e-18,
+          "rms_position_AU": 4.1843104616990316e-18,
+          "rms_velocity_AU_per_year": 3.181520861444714e-18
+        },
+        "6": {
+          "body_name": "Saturn Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 0.0,
+          "maximum_position_AU": 1.1102230246251565e-16,
+          "maximum_velocity_AU_per_year": 1.1102230246251565e-16,
+          "rms_position_AU": 3.347473908266085e-17,
+          "rms_velocity_AU_per_year": 3.834983884386286e-17
+        },
+        "7": {
+          "body_name": "Uranus Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 3.469446951953614e-18,
+          "maximum_position_AU": 2.710505431213761e-20,
+          "maximum_velocity_AU_per_year": 5.561946577567963e-17,
+          "rms_position_AU": 8.172481370505921e-21,
+          "rms_velocity_AU_per_year": 2.0816681711721688e-17
+        },
+        "8": {
+          "body_name": "Neptune Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 1.734723475976807e-18,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 5.551115123125783e-17,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 1.678620511623704e-17
+        },
+        "9": {
+          "body_name": "Pluto Barycenter",
+          "final_position_AU": 0.0,
+          "final_velocity_AU_per_year": 1.1102230246251565e-16,
+          "maximum_position_AU": 0.0,
+          "maximum_velocity_AU_per_year": 1.1102230246251565e-16,
+          "rms_position_AU": 0.0,
+          "rms_velocity_AU_per_year": 6.69489673871845e-17
+        }
+      },
+      "maximum_position_AU": 5.2877809138950555e-12,
+      "maximum_velocity_AU_per_year": 1.3456659674260057e-10,
+      "rms_position_AU": 8.767397240026437e-13,
+      "rms_velocity_AU_per_year": 1.8297628058414863e-11
+    },
+    "native_source_map_guards": {
+      "coarse": {
+        "maximum_barycenter_position_norm": 6.209501591626279e-18,
+        "maximum_barycenter_velocity_norm": 6.16132270286042e-19,
+        "maximum_interaction_force_ratio": 0.0006137464920908866,
+        "maximum_jacobi_eccentricity": 0.24903203300181234,
+        "maximum_kepler_angular_momentum_error": 2.1317727626684867e-14,
+        "maximum_kepler_energy_error": 8.526512829121202e-14,
+        "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+        "maximum_kepler_residual_tolerance": 3.471923730109738e-18,
+        "maximum_kepler_time_residual": 1.0842021724855044e-19,
+        "maximum_orbit_step_fraction": 0.0010136836052134473,
+        "maximum_periapse_step_fraction": 0.0015721778587154621,
+        "maximum_translation_force_residual": 4.8226155511036407e-17,
+        "minimum_jacobi_periapse": 0.30748788392058857,
+        "minimum_pair_clearance_after_margin": 0.23048256918258117,
+        "minimum_pair_endpoint": 0.261471802255648,
+        "minimum_pair_path_lower_bound": 0.25662006996168835,
+        "minimum_secondary_hill_floor_ratio": 4.859674271030837
+      },
+      "fine": {
+        "maximum_barycenter_position_norm": 6.209501591635751e-18,
+        "maximum_barycenter_velocity_norm": 6.16132270286042e-19,
+        "maximum_interaction_force_ratio": 0.0006137464920902977,
+        "maximum_jacobi_eccentricity": 0.24903203300180393,
+        "maximum_kepler_angular_momentum_error": 2.1318883999217677e-14,
+        "maximum_kepler_energy_error": 9.947598300641403e-14,
+        "maximum_kepler_lagrange_identity_error": 2.220446049250313e-16,
+        "maximum_kepler_residual_tolerance": 1.7353422310466315e-18,
+        "maximum_kepler_time_residual": 5.421010862427522e-20,
+        "maximum_orbit_step_fraction": 0.0005068418026127514,
+        "maximum_periapse_step_fraction": 0.000786088929366475,
+        "maximum_translation_force_residual": 4.71950715562795e-17,
+        "minimum_jacobi_periapse": 0.3074878839170447,
+        "minimum_pair_clearance_after_margin": 0.23216966602375233,
+        "minimum_pair_endpoint": 0.26147170894519844,
+        "minimum_pair_path_lower_bound": 0.25904522334939034,
+        "minimum_secondary_hill_floor_ratio": 4.859674284138836
+      }
+    },
+    "runtime_identity_stable": true,
+    "tracer_acceleration_bootstrap": {
+      "derivation": "2*sum(source_gm)/minimum_source_encounter_radius^2",
+      "minimum_source_encounter_radius_AU": 1e-06,
+      "qualification_effect": "FAIL_CLOSED_SWEPT_GUARD_ONLY; NOT_TRACER_DYNAMICS_QUALIFICATION",
+      "scope": "OUTSIDE_EVERY_DECLARED_SOURCE_ENCOUNTER_SPHERE",
+      "sum_source_gm_AU3_per_year2": 39.52989807155155,
+      "uniform_relative_acceleration_bound_AU_per_year2": 79059796143103.12
+    },
+    "tracer_acceleration_bootstrap_exact": true
+  },
+  "protocol_content_sha256": "ac499179478892a173e169d9dec818125c0f0e51f3e58c4b439f4e8a809930cc",
+  "protocol_file_sha256": "8b1b152181e177653b86ac50ca698c05671d47b1590f8fca3b8d0e1b78d54b76",
+  "run_id": "jx-long-horizon-m2-known-source-10y-v2",
+  "runtime_identity_end": {
+    "jx_wisdom_holman": {
+      "compiler_flags": "-O3 -g0 -std=c11 -fno-fast-math -ffp-contract=off -lm",
+      "compiler_version": "15.2.0",
+      "counter_count": 12,
+      "exact_fallback_kernel_id": "jx.wisdom-holman.native-g-bundle.prototype.v1",
+      "extension_binary": {
+        "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/src/jxplanetx/_wisdom_holman_cpu_v3.cpython-314-x86_64-linux-gnu.so",
+        "sha256": "cb81c2f5c43aae638654413e1112a5d5f2b51b40f43f30d0e9b56074eca10ab3",
+        "size_bytes": 42520
+      },
+      "g_kernel_id": "jx.wisdom-holman.native-g-bundle.early-stop.prototype.v2",
+      "kernel_id": "jx.wisdom-holman.native-complete-map.checkpoint-sync.prototype.v3",
+      "maximum_bodies": 32,
+      "metric_count": 17,
+      "release_base_loop_source_sha256": "38b8898bc6c1358522a0f653fc55849719e955889f556fd9f5850ad199346750",
+      "release_loop_source_sha256": "7143fe32304b04901d107b48bf8fe5ae9043118b81c25c635e5d4b412c93b629",
+      "release_wrapper_source_sha256": "ee0e40a075b481516d8d30f8824b1fe31c9051c8c0de1dc8b321155882c411b3",
+      "scientific_claim_state": "SCREENING_ONLY"
+    },
+    "numerical_thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "numpy_core": {
+      "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/.venv/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "6fa6c8396aa1569ca1dbcfa44463b57f90e2dff42043f3ff22aa9e0165b839a3",
+      "size_bytes": 10629105
+    },
+    "numpy_distribution": {
+      "content_sha256": "62a67d5fc414c100791ebf43776b470c8394779e9784ceff091c9a81fbc48de1",
+      "file_count": 929,
+      "name": "numpy",
+      "required_imported_members": {
+        "numpy": "numpy/__init__.py",
+        "numpy._core._multiarray_umath": "numpy/_core/_multiarray_umath.cpython-314-x86_64-linux-gnu.so"
+      },
+      "total_size_bytes": 56390181,
+      "version": "2.5.3"
+    },
+    "numpy_version": "2.5.3",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+    "python_executable": "/usr/bin/python3.14",
+    "python_executable_identity": {
+      "sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+      "size_bytes": 7477160
+    },
+    "python_version": "3.14.4",
+    "rebound_distribution": {
+      "content_sha256": "c01dcabcf0d9c6187d37e107f2f4cfe412bb686f89f1d989a4ff9258dfc8ada2",
+      "file_count": 109,
+      "name": "rebound",
+      "required_imported_members": {
+        "rebound": "rebound/__init__.py",
+        "rebound.simulation": "rebound/simulation.py"
+      },
+      "total_size_bytes": 3087160,
+      "version": "5.1.1"
+    },
+    "rebound_libraries": [
+      {
+        "path": "/tmp/jx-m2-rebound511/librebound.cpython-314-x86_64-linux-gnu.so",
+        "sha256": "52df4fe1050b98d6b0db11f31c18ec14ed00697a987e904bd7587cce4a0ccdef",
+        "size_bytes": 2104024
+      }
+    ],
+    "rebound_module": {
+      "path": "/tmp/jx-m2-rebound511/rebound/__init__.py",
+      "sha256": "924e19bfddb22bca9cbff0c641eaf3b2f791287f33df2d8d852f80aac78f8cdd",
+      "size_bytes": 3824
+    },
+    "rebound_version": "5.1.1",
+    "scipy_distribution": {
+      "content_sha256": "dc90bb23096816fee99cb748e740b78a17c130abca56825894344a225012ee2c",
+      "file_count": 1427,
+      "name": "scipy",
+      "required_imported_members": {
+        "scipy": "scipy/__init__.py",
+        "scipy.integrate._ivp.base": "scipy/integrate/_ivp/base.py",
+        "scipy.integrate._ivp.common": "scipy/integrate/_ivp/common.py",
+        "scipy.integrate._ivp.ivp": "scipy/integrate/_ivp/ivp.py",
+        "scipy.integrate._ivp.rk": "scipy/integrate/_ivp/rk.py"
+      },
+      "total_size_bytes": 113767310,
+      "version": "1.17.0"
+    },
+    "scipy_dop853_module": {
+      "path": "/home/linoavila/Documents/Codex/2026-10-02/referenced-chatgpt-conversation-this-is-an/work/jx-cuda-tracer/.venv/lib/python3.14/site-packages/scipy/integrate/_ivp/rk.py",
+      "sha256": "fa5d6300917f4f949e699b116f59ae147159d5c6147d55d940dc9d3303891056",
+      "size_bytes": 22800
+    },
+    "scipy_version": "1.17.0"
+  },
+  "schema": "jx.long-horizon.m2-known-source-result.v2",
+  "state_arrays": {
+    "array_content_sha256": {
+      "de441_primary_relative_position_AU": "e1242b24889a58159fd59b8a9dae1b79241970e23dd9cca28cfea2fee406ce0c",
+      "de441_primary_relative_velocity_AU_per_year": "5750f613777f08f3b7c2155ecaebe9a997c94dcf6733558e76252aee3aa3e59a",
+      "dop853_barycentric_position_AU": "e2564b33ac4f79c216a8ed3cb0542cc3ac540ec7714976d943f26333545b4edd",
+      "dop853_barycentric_velocity_AU_per_year": "b9f141dc83cad6e06ccd98d37e48574e12a56a68c4714a20f3d6db4d2cab1628",
+      "epochs_jd_tdb": "cd973e491de8e583fb5909003e36ddb454a1b0d3c17e7671de090f964b5c452b",
+      "gm_AU3_per_year2": "dadd81c51e3222feb272aa09a4368f79be97927189d93575ea23fcb07f320d95",
+      "ias15_barycentric_position_AU": "42a5494d3370007ad2c148449b0dd37e2b0219faf793a21df82eaa6be2a0894a",
+      "ias15_barycentric_velocity_AU_per_year": "82656ff380d998b5a83da6c34a9ef4b779f96a9786772ee988f7538098402194",
+      "jx_coarse_all_node_position_AU": "b7037ef708cbe2afa6c6a20327f9d0090a3dd1502db1413be195b6d9e3db5b30",
+      "jx_coarse_all_node_velocity_AU_per_year": "53771415b7ed84ab1bc325ea28710f7934844cc8b9004a0e24843ea6e6f9f096",
+      "jx_coarse_position_AU": "9cabd923bbe83ab556c4993820b273490e3699547d0b3b44f674cfac7bc11aad",
+      "jx_coarse_velocity_AU_per_year": "3c6e339ef8a70b9e59cd7d89d4b2dd8869e2fb1794d91fa59b246af44e1af757",
+      "jx_fine_all_node_position_AU": "77dfee267cf6d56c0f251d7b81440b80af5a8c040d2b348c80448739efca4d55",
+      "jx_fine_all_node_velocity_AU_per_year": "e223a95d5ffc8a5347054923fde2c510f569b0048c94714c25991c971d5fa2ae",
+      "jx_fine_position_AU": "65f6af8a2dafcef29dd5e2a714a67c60190cca4b3d6d902414fc1249d6eb6e6f",
+      "jx_fine_velocity_AU_per_year": "8bfe5133b4c520f2eb2a4bf0eabe41998e4f8f39d10e1e711808af0d6a61be2d",
+      "jx_partition_position_AU": "79545bb656abf4c851147a33e77dade4c5197a8049537bc159a6c527ab4b1504",
+      "jx_partition_velocity_AU_per_year": "d47befb5871fdeb7e9093bbb5f6c4963e1aa70c29a9fbdd1f57ea136d993dfb0",
+      "sample_years": "5b2e37749965d21cf875f5d94bee401165dd2ddc4fdc771db2784423943cc35c"
+    },
+    "path": "STATES.npz",
+    "sha256": "49382bb15d99add32e83b30554154c5fd1f1ac32e94479ffb9c2851845388717"
+  },
+  "status": "PASSED",
+  "timings": {
+    "dop853_seconds": 0.8772765410831198,
+    "ias15_seconds": 0.16574487404432148,
+    "jx_coarse_seconds": 0.7201925889821723,
+    "jx_fine_seconds": 1.4158439669990912,
+    "jx_partition_seconds": 0.6671241649892181
+  }
+}
