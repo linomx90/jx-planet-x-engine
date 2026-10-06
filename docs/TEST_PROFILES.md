@@ -13,15 +13,15 @@ Duplicate assignments, stale paths, and unassigned files are fatal before any
 test starts. Each executable file runs in a separate child process. Adding or
 renaming a test therefore requires updating the manifest in the same change.
 
-The current 100-file inventory is:
+The current 102-file inventory is:
 
 | Profile | Files | Disposition |
 | --- | ---: | --- |
-| `live-current` | 65 | Run against the current source tree |
+| `live-current` | 66 | Run against the current source tree |
 | `cuda-optional` | 18 | Run CPU-safe checks; hardware-only cases self-skip |
 | `cuda-hardware-only` | 0 | Reserved for cases without a no-device skip path |
 | `rebound-4.4.11` | 3 | Run only with exact REBOUND 4.4.11 |
-| `rebound-5.1.1` | 4 | Run only with exact REBOUND 5.1.1 |
+| `rebound-5.1.1` | 5 | Run only with exact REBOUND 5.1.1; includes the real 10-year M2 source preflight |
 | `gr15-eih-external` | 2 | Run against the exact external GR15/EIH comparison runtime |
 | `performance-local` | 0 | Reserved for source-bound local performance evidence |
 | `library-catalog-local` | 0 | Reserved for read-only catalog evidence |

@@ -20,6 +20,8 @@ from jxplanetx.restricted_wh_lifecycle import (
     initialize_restricted_wh_lifecycle,
 )
 from jxplanetx.restricted_wh_source import (
+    MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR,
+    MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR_IN_EPS,
     MAXIMUM_SOURCE_STEPS_PER_TILE,
     RestrictedWHSourceContractError,
     RestrictedWHSourceIntegrationError,
@@ -138,6 +140,109 @@ class RestrictedWHSourceTests(unittest.TestCase):
             )
         )
 
+    def test_realistic_barycentric_roundoff_is_explicit_and_exact(self):
+        positions = np.asarray(
+            (
+                (0.0, 0.0, 0.0),
+                (
+                    10.771871959743002,
+                    -19.893444413801102,
+                    0.4066052474663806,
+                ),
+            ),
+            dtype=np.float64,
+        )
+        gm = np.asarray((39.4769, 0.09270611361871046), dtype=np.float64)
+        radius = float(np.linalg.norm(positions[1]))
+        speed = math.sqrt(float(np.sum(gm, dtype=np.float64)) / radius)
+        velocities = np.asarray(
+            (
+                (0.0, 0.0, 0.0),
+                (
+                    -positions[1, 1] * speed / radius,
+                    positions[1, 0] * speed / radius,
+                    0.0,
+                ),
+            ),
+            dtype=np.float64,
+        )
+        raw_positions = positions.copy()
+        raw_velocities = velocities.copy()
+        result = _build(
+            initial_source_relative_positions_AU=positions,
+            initial_source_relative_velocities_AU_per_year=velocities,
+            source_gm_AU3_per_year2=gm,
+            source_encounter_radii_AU=np.asarray((0.01, 0.01), dtype=np.float64),
+            certified_relative_acceleration_bounds_AU_per_year2=np.asarray(
+                (100.0, 100.0), dtype=np.float64
+            ),
+        )
+
+        receipt = result.runtime_identity["coordinate_canonicalization"]
+        self.assertEqual(
+            receipt["maximum_allowed_input_relative_error_in_eps"], 512.0
+        )
+        self.assertEqual(
+            receipt["maximum_allowed_input_relative_error"],
+            MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR,
+        )
+        self.assertGreater(receipt["position_changed_component_count"], 0)
+        self.assertLessEqual(
+            receipt["position_maximum_forward_error_bound_fraction"], 1.0
+        )
+        self.assertLessEqual(
+            receipt["position_maximum_input_relative_error"],
+            MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR,
+        )
+        self.assertTrue(receipt["canonicalization_idempotent"])
+        self.assertTrue(receipt["tile_node_zero_exact"])
+        self.assertEqual(
+            receipt["raw_relative_input_sha256"], result.input_content_sha256
+        )
+        self.assertNotEqual(
+            receipt["raw_relative_input_sha256"],
+            receipt["canonical_relative_input_sha256"],
+        )
+        self.assertRegex(
+            receipt["canonical_barycentric_input_sha256"], r"^[0-9a-f]{64}$"
+        )
+        self.assertNotEqual(
+            receipt["canonical_barycentric_input_sha256"],
+            receipt["canonical_relative_input_sha256"],
+        )
+        self.assertFalse(
+            np.array_equal(
+                result.tile.source_relative_positions_AU[0], raw_positions
+            )
+        )
+        np.testing.assert_array_equal(positions, raw_positions)
+        np.testing.assert_array_equal(velocities, raw_velocities)
+
+    def test_unsafe_coordinate_cancellation_fails_closed(self):
+        positions = np.asarray(
+            ((0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (1.0e20, 0.0, 0.0)),
+            dtype=np.float64,
+        )
+        velocities = np.asarray(
+            ((0.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0)),
+            dtype=np.float64,
+        )
+        gm = np.ones(3, dtype=np.float64)
+        with self.assertRaisesRegex(
+            RestrictedWHSourceContractError,
+            "forward-error or conditioning bound",
+        ):
+            _build(
+                source_ids=("primary", "secondary", "tertiary"),
+                initial_source_relative_positions_AU=positions,
+                initial_source_relative_velocities_AU_per_year=velocities,
+                source_gm_AU3_per_year2=gm,
+                source_encounter_radii_AU=np.full(3, 0.01, dtype=np.float64),
+                certified_relative_acceleration_bounds_AU_per_year2=np.full(
+                    3, 100.0, dtype=np.float64
+                ),
+            )
+
     def test_contract_rejects_invalid_lattice_and_source_arrays(self):
         with self.assertRaises(RestrictedWHSourceContractError):
             WisdomHolmanSourceTileSpec(0.0, 1)
@@ -180,6 +285,17 @@ class RestrictedWHSourceTests(unittest.TestCase):
             result.runtime_identity["source_map_runtime_identity"][
                 "kernel_id"
             ] = "changed"
+        with self.assertRaises(RestrictedWHSourceContractError):
+            replace(result, runtime_identity={})
+        forged_runtime = dict(result.runtime_identity)
+        forged_runtime["coordinate_canonicalization"] = {
+            "policy": "FORGED",
+            "content_sha256": "0" * 64,
+        }
+        with self.assertRaises(RestrictedWHSourceContractError):
+            replace(result, runtime_identity=forged_runtime)
+        with self.assertRaises(TypeError):
+            replace(result.coordinate_canonicalization)
         with self.assertRaises(RestrictedWHSourceContractError):
             replace(result, claims={"production_qualified": True})
 

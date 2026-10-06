@@ -69,6 +69,9 @@ RESTRICTED_WH_ARCHITECTURE = LongHorizonArchitectureContract(
         "REPLAY_VERIFIED_CHECKPOINT_CHAIN",
     ),
     entry_points={
+        "known_source_model": (
+            "jxplanetx.long_horizon:load_known_solar_system_source_model"
+        ),
         "initial_conditions": (
             "jxplanetx.long_horizon:build_predeclared_initial_condition_inventory"
         ),

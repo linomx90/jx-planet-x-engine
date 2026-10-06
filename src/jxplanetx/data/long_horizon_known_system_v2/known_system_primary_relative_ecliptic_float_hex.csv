@@ -1,0 +1,11 @@
+slot,body_id,body_name,gm_au3_per_julian_year2_hex,x_au_hex,y_au_hex,z_au_hex,vx_au_per_julian_year_hex,vy_au_per_julian_year_hex,vz_au_per_julian_year_hex
+0,10,Sun,0x1.3bd0beccac6afp+5,0x0.0p+0,0x0.0p+0,0x0.0p+0,0x0.0p+0,0x0.0p+0,0x0.0p+0
+1,1,Mercury Barycenter,0x1.b7cecb4d5b351p-18,-0x1.9409a96153e70p-2,-0x1.03bc35899733cp-4,0x1.fc0279a54836cp-6,-0x1.02f8bd64f33d1p-1,-0x1.368c57c675177p+3,-0x1.7e5050571ae5ap-1
+2,2,Venus Barycenter,0x1.954f090f44727p-14,-0x1.6c13e0f95113cp-1,0x1.a086a4ea46b5dp-4,0x1.5b8e9f57c767ep-5,-0x1.15f16494cd8dbp+0,-0x1.d62745168e5b2p+2,-0x1.399d0380f706dp-5
+3,3,Earth-Moon Barycenter,0x1.f76df0efd3c95p-14,-0x1.b622c307bbf9ap-3,-0x1.fc04e0d76e3d4p-1,0x1.fd95ea4c615c0p-15,0x1.829cb559429f5p+2,-0x1.5913225210178p+0,0x1.842dcacea9fb8p-15
+4,4,Mars Barycenter,0x1.ab7a3929b393ap-17,0x1.4f313d023b8c5p+0,0x1.180bc83a5baaep-1,-0x1.523958b0a257dp-6,-0x1.c6354aa51ce76p+0,0x1.49cae5736e83cp+2,0x1.364358b08e082p-3
+5,5,Jupiter Barycenter,0x1.34c6609ebf23fp-5,-0x1.651216b0a70cdp+1,0x1.1e0834079cc84p+2,0x1.6734deb24ce45p-5,-0x1.2fa4a88feac34p+1,-0x1.54f7ff15d7e24p+0,0x1.e01e220a346cbp-5
+6,6,Saturn Barycenter,0x1.71d0e2fd3b84cp-7,0x1.2c8eaba3f9093p+3,0x1.23d6bc67bc276p+0,-0x1.932d50e67e2acp-2,-0x1.6f8cac076c7c6p-2,0x1.024a97aaf9b84p+1,-0x1.55c680b7f83bap-6
+7,7,Uranus Barycenter,0x1.c3d8f106aa649p-10,0x1.2a949e3159bd9p+3,0x1.114453419b901p+4,-0x1.d77b5d43ed91bp-5,-0x1.460ed62fb9dddp+0,0x1.3e0ed02b9d578p-1,0x1.34768d0132a46p-6
+8,8,Neptune Barycenter,0x1.0a8c8f8c38c6ap-9,0x1.ddade925845f2p+4,0x1.054ca186f62aep+0,-0x1.6b037f8a9c9b9p-1,-0x1.90c876e2b4023p-5,0x1.26ee6e2e734dep+0,-0x1.728d0fb09543cp-6
+9,9,Pluto Barycenter,0x1.379282522bdf1p-22,0x1.3a86b6c5b6588p+4,-0x1.d7d566a11eb7bp+4,-0x1.43caea22fa250p+1,0x1.f7dabd5f99a4bp-1,0x1.8470caa27e72ep-2,-0x1.4dc90f170e110p-2

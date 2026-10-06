@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from fractions import Fraction
 import hashlib
 import math
 from pathlib import Path
@@ -21,6 +22,7 @@ from jxplanetx.long_horizon.runner import (
     FixedLongHorizonRunConfig,
     FixedLongHorizonSourceSegment,
     LongHorizonRunnerContractError,
+    LongHorizonRunnerIntegrityError,
     advance_fixed_lifecycle_segment,
     resume_fixed_lifecycle_run,
     start_fixed_lifecycle_run,
@@ -68,7 +70,7 @@ def _source_arrays():
         dtype=np.float64,
     )
     gm = np.asarray((MU, 1.0e-3 * MU), dtype=np.float64)
-    radii = np.asarray((1.0e-4, 1.0e-4), dtype=np.float64)
+    radii = np.asarray((1.0, 1.0), dtype=np.float64)
     bounds = np.asarray((100.0, 100.0), dtype=np.float64)
     return positions, velocities, gm, radii, bounds
 
@@ -82,8 +84,17 @@ def _source(
     frame: str = "SYNTHETIC_INERTIAL",
     source_ids: tuple[str, ...] = ("primary", "secondary"),
     source_schedule_sha256: str = SCHEDULE_SHA256,
+    gm=None,
+    radii=None,
+    bounds=None,
 ):
-    base_positions, base_velocities, gm, radii, bounds = _source_arrays()
+    (
+        base_positions,
+        base_velocities,
+        base_gm,
+        base_radii,
+        base_bounds,
+    ) = _source_arrays()
     return FixedLongHorizonSourceSegment(
         tile_id=tile_id,
         epoch_origin_years=0.0,
@@ -105,17 +116,29 @@ def _source(
         initial_source_relative_velocities_AU_per_year=(
             base_velocities if velocities is None else velocities
         ),
-        source_gm_AU3_per_year2=gm,
-        source_encounter_radii_AU=radii,
-        certified_relative_acceleration_bounds_AU_per_year2=bounds,
+        source_gm_AU3_per_year2=base_gm if gm is None else gm,
+        source_encounter_radii_AU=base_radii if radii is None else radii,
+        certified_relative_acceleration_bounds_AU_per_year2=(
+            base_bounds if bounds is None else bounds
+        ),
         source_provenance=_provenance(),
     )
 
 
-def _config(run_id: str = "long-horizon-runner-test"):
+def _config(
+    run_id: str = "long-horizon-runner-test",
+    *,
+    minimum_encounter_pair_separation_AU: float = 1.0,
+):
     return FixedLongHorizonRunConfig(
         run_id=run_id,
-        source_spec=WisdomHolmanSourceTileSpec(0.01, 1),
+        source_spec=WisdomHolmanSourceTileSpec(
+            0.01,
+            1,
+            minimum_encounter_pair_separation_AU=(
+                minimum_encounter_pair_separation_AU
+            ),
+        ),
         tracer_spec=FixedStepCUDARestrictedWHSpec(
             1,
             1,
@@ -208,6 +231,41 @@ class LongHorizonRunnerContractTests(unittest.TestCase):
                 config,
                 source_spec=WisdomHolmanSourceTileSpec(0.01, 2),
             )
+
+    def test_source_rejects_any_bound_below_uniform_bootstrap_minimum(self):
+        baseline = _source("runner-source-bound-baseline")
+        required = (
+            baseline.required_uniform_relative_acceleration_bound_AU_per_year2
+        )
+        _, _, gm, radii, _ = _source_arrays()
+        exact_required = (
+            2
+            * sum(
+                (Fraction.from_float(float(value)) for value in gm),
+                Fraction(0, 1),
+            )
+            / Fraction.from_float(float(np.min(radii))) ** 2
+        )
+        self.assertGreaterEqual(Fraction.from_float(required), exact_required)
+        self.assertLess(
+            Fraction.from_float(math.nextafter(required, -math.inf)),
+            exact_required,
+        )
+        exact_bounds = np.full(2, required, dtype=np.float64)
+        exact = _source("runner-source-bound-exact", bounds=exact_bounds)
+        self.assertEqual(
+            exact.required_uniform_relative_acceleration_bound_AU_per_year2,
+            required,
+        )
+        self.assertNotEqual(exact.content_sha256, baseline.content_sha256)
+
+        under_bounds = exact_bounds.copy()
+        under_bounds[1] = math.nextafter(required, -math.inf)
+        with self.assertRaisesRegex(
+            LongHorizonRunnerContractError,
+            "derived uniform bootstrap minimum",
+        ):
+            _source("runner-source-bound-under", bounds=under_bounds)
 
 
 @unittest.skipIf(cp is None, "CUDA device is required")
@@ -358,6 +416,103 @@ class LongHorizonRunnerLiveGPUTests(unittest.TestCase):
                     config=config,
                     source=changed,
                 )
+
+    def test_source_pair_floor_rejects_acceleration_bound_counterexample(self):
+        source = _source(
+            "runner-acceleration-counterexample",
+            positions=np.asarray(
+                ((0.0, 0.0, 0.0), (0.02, 0.0, 0.0)),
+                dtype=np.float64,
+            ),
+            velocities=np.zeros((2, 3), dtype=np.float64),
+            gm=np.ones(2, dtype=np.float64),
+            radii=np.ones(2, dtype=np.float64),
+            bounds=np.full(2, 4.0, dtype=np.float64),
+        )
+        self.assertEqual(
+            source.required_uniform_relative_acceleration_bound_AU_per_year2,
+            4.0,
+        )
+        permissive = _config(
+            "long-horizon-runner-acceleration-counterexample",
+            minimum_encounter_pair_separation_AU=0.02,
+        )
+        with self.assertRaisesRegex(
+            LongHorizonRunnerContractError,
+            "minimum encounter pair separation must be at least",
+        ):
+            advance_fixed_lifecycle_segment(
+                self._state(),
+                config=permissive,
+                source=source,
+            )
+
+    def test_committed_segment_rejects_falsified_checkpoint_contract(self):
+        config = _config("long-horizon-runner-checkpoint-contract-test")
+        genesis = self._state()
+        with tempfile.TemporaryDirectory() as directory:
+            committed = start_fixed_lifecycle_run(
+                genesis,
+                config=config,
+                source=_source("runner-checkpoint-contract-source-0000"),
+                checkpoint_directory=directory,
+            )
+            contract = committed.checkpoint_contract
+            mutations = (
+                {"run_id": contract.run_id + "-falsified"},
+                {
+                    "protocol_sha256": hashlib.sha256(
+                        b"falsified-checkpoint-protocol"
+                    ).hexdigest()
+                },
+                {"checkpoint_index": contract.checkpoint_index + 1},
+                {"global_step": contract.global_step + 1},
+                {"epoch": math.nextafter(contract.epoch, math.inf)},
+                {"method_id": contract.method_id + ".falsified"},
+            )
+            for mutation in mutations:
+                with self.subTest(field=next(iter(mutation))):
+                    falsified = replace(
+                        contract,
+                        **mutation,
+                        content_sha256=None,
+                    )
+                    self.assertEqual(
+                        falsified.state_sha256,
+                        contract.state_sha256,
+                    )
+                    self.assertEqual(
+                        falsified.checkpoint_content_sha256,
+                        contract.checkpoint_content_sha256,
+                    )
+                    with self.assertRaisesRegex(
+                        LongHorizonRunnerIntegrityError,
+                        "normalized checkpoint contract",
+                    ):
+                        replace(committed, checkpoint_contract=falsified)
+
+            record_mutations = (
+                (
+                    "run_id",
+                    committed.checkpoint_record["run_id"] + "-falsified",
+                ),
+                # ``False == 0`` under ordinary Python equality.  Full record
+                # identity must retain the JSON scalar type as well as value.
+                ("checkpoint_index", False),
+            )
+            for field, value in record_mutations:
+                with self.subTest(record_field=field):
+                    falsified_record = dict(committed.checkpoint_record)
+                    falsified_record[field] = value
+                    self.assertEqual(
+                        falsified_record["checkpoint_content_sha256"],
+                        committed.loaded_checkpoint.checkpoint_content_sha256,
+                    )
+                    with self.assertRaisesRegex(
+                        LongHorizonRunnerIntegrityError,
+                        "full checkpoint record",
+                    ):
+                        replace(committed, checkpoint_record=falsified_record)
 
     def test_wrong_external_anchor_fails_before_appending(self):
         config = _config("long-horizon-runner-anchor-test")

@@ -42,6 +42,56 @@ adding production interfaces, a complete encounter lifecycle, or accepting
 performance optimizations as qualified behavior.  Disk restart now exists as
 an experimental replay-verified component, but it is not production-qualified.
 
+## Milestone M2: physical known-system source
+
+M2 replaces the collapsed engineering source input for new physical
+qualification work with a content-addressed ten-body initial-state model. Its
+ordered roster is the actual Sun followed by the Mercury, Venus, Earth-Moon,
+Mars, Jupiter, Saturn, Uranus, Neptune, and Pluto system barycenters. The epoch
+is JD TDB 2461200.5. Retained NASA/JPL Horizons DE441 barycentric ICRF rows are
+rotated to the frozen J2000 mean ecliptic and made Sun-relative; gravitational
+parameters are converted once from retained exact-decimal DE440 values. The
+raw rows, derived float-hex state, semantic manifest, checksum roster, and
+conversion policy ship with the package and are independently rebuilt by the
+loader.
+
+This is a **DE440/DE441-seeded reduced Newtonian outer-Solar-System model**,
+not DE441 propagation. It does not include general relativity, resolved
+planetary satellites, asteroid perturbations, solar oblateness, a Galactic
+tide, or stellar passages. Compact-planet members are separate
+provenance-bound hypothesis arms; the null known-system arm is the physical
+baseline. All detection, exclusion, inference, long-duration, and science
+claims remain false.
+
+The superseded bounded v1 M2 screen used source steps of 1/4096 Julian year and
+1/8192 Julian year for ten years. It compared annual states with an
+independently written Cartesian SciPy DOP853 integration, exact REBOUND 5.1.1
+IAS15, the retained DE441 annual grid, and a ten-part one-year JX execution.
+Its 30-gate evidence did not retain the complete all-node state or executed
+source archive and cannot authorize the hardened v2 protocol. The prepared v2
+protocol uses 50 predeclared gates. It evaluates conservation at
+all 40,961 coarse and 81,921 fine nodes, retains the native encounter/timestep
+guard metrics, and applies an independent all-node first-crossing separation
+proof plus primary-relative periapse and phase limits. The exact executed local
+source tree is archived, and the NumPy, SciPy, and REBOUND distribution bytes
+are bound before and after execution. Every JX source node is retained for
+artifact-only recomputation, and only a final create-only completion marker
+identifies a finished attempt. All gates must pass before v2 is described as a
+completed qualification. For context only, the superseded v1 fine JX lane
+differed from DOP853 by at
+most `2.2101e-10 AU` and `5.6008e-9 AU/year` across all bodies, and by
+`4.2941e-12 AU` and `2.2396e-12 AU/year` for the five outer barycenters. The
+coarse-to-fine error ratios were 4.028 in position and 4.052 in velocity. The
+fine outer-state discrepancy from the retained DE441 grid was at most
+`2.2462e-7 AU` and `1.0760e-7 AU/year`; these residuals measure the reduced
+force model as well as numerical error. Full-vs-partition maxima were
+`5.2878e-12 AU` and `1.3457e-10 AU/year`.
+
+These v1 measurements do not authorize v2. Even after a completed v2 pass, its
+claim ceiling will authorize only the ten-year massive-source numerical
+preflight. It will not authorize the 108 tracer inputs, encounter behavior,
+compact-planet arms, 1,000-year execution, or any longer scientific run.
+
 ## Canonical experimental façade and operational boundary
 
 `jxplanetx.long_horizon` is the one experimental package façade for this work.

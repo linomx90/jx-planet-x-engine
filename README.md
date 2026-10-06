@@ -55,17 +55,38 @@ restricted Wisdom--Holman long-horizon architecture. It now provides:
 
 - exact, content-addressed conversion of the 12 predeclared observed SBDB
   objects plus 96 sensitivity states into binary64 Cartesian genesis data;
+- a content-addressed physical source model containing the actual Sun followed
+  by Mercury through Pluto system barycenters, reconstructed from retained
+  DE441 epoch states and exact-decimal DE440 gravitational parameters;
 - one fixed-lane CUDA/DOP853 lifecycle runner using six CPU route workers and
   the GPU quiet path; and
 - replay-verified, externally anchored checkpoint start and resume calls.
 
-The package includes the small raw SBDB responses and exact six-source control
-CSV required to rebuild those inputs. The fixed runner rejects multirate and
-persistent-owner combinations until they share the same terminal-lifecycle and
-checkpoint authority. A
+The package includes the small raw SBDB responses, the historical six-source
+control CSV, and the complete retained inputs for the ten-body known-system
+model. The fixed runner rejects multirate and persistent-owner combinations
+until they share the same terminal-lifecycle and checkpoint authority. A
 [create-only, prepare-only 1,000-year protocol](runs/long_horizon_observed_qualification_v1/README.md)
 is retained, but no long-duration execution or scientific result is authorized
-yet. See the [long-horizon engine contract](docs/JX_LONG_HORIZON_ENGINE.md).
+yet.
+
+The bounded M2 source preflight advances only this ten-body Newtonian source
+model for ten years. Its hardened protocol has 50 predeclared gates against
+independent SciPy DOP853 and REBOUND 5.1.1 IAS15 integrations, a halved-step
+refinement, ten one-year partitions, all-node conservation, independent
+source-separation/timestep proofs, native map guards, and retained annual
+DE441 outer-planet states. The exact executed local source tree is archived
+with the run, every JX source node is retained for independent recomputation,
+external numerical distributions are byte-bound, and a final create-only
+completion marker distinguishes complete attempts from interrupted evidence.
+The v2 protocol is prepared and tested, but no retained completed v2 attempt
+exists yet; the older 30-gate v1 screen is superseded and cannot authorize v2.
+This is
+numerical engineering evidence only: the model still
+omits relativity, resolved moons, asteroids, and solar oblateness, and it does
+not qualify tracer dynamics, Planet Nine hypotheses, long duration, or
+scientific inference. See the
+[long-horizon engine contract](docs/JX_LONG_HORIZON_ENGINE.md).
 Registry v18
 states `SCREENING_ONLY` explicitly and does not promote any capability beyond
 its exact evidence and claim ceiling. The legacy propagation core, CLI, locked
@@ -600,7 +621,7 @@ before importing them. If absent, it reconstructs the frozen ephemeral
 packages or changes frozen run artifacts. Use `--library-root PATH` when the
 read-only library mirror is mounted elsewhere.
 
-The complete 100-file ownership and runtime policy is documented in
+The complete 102-file ownership and runtime policy is documented in
 [JX test profiles](docs/TEST_PROFILES.md). Validate it with
 `python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
 with `--list-files`, or run all current-source profiles with `--profile live`.

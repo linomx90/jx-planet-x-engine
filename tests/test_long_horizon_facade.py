@@ -6,6 +6,7 @@ import unittest
 
 import numpy as np
 import jxplanetx.long_horizon as long_horizon
+import jxplanetx.restricted_wh_source as restricted_wh_source
 
 from jxplanetx.cuda_restricted_wh import (
     COORDINATE_SYSTEM,
@@ -140,28 +141,77 @@ def _source_build() -> WisdomHolmanSourceTileBuild:
             sha256=SHA_B,
         ),
     )
+    positions = np.ascontiguousarray(tile.source_relative_positions_AU[0])
+    velocities = np.ascontiguousarray(
+        tile.source_relative_velocities_AU_per_year[0]
+    )
+    gm = np.ascontiguousarray(tile.source_gm_AU3_per_year2)
+    input_digest = restricted_wh_source._canonical_input_sha256(
+        tile.source_ids, positions, velocities, gm
+    )
+    barycentric_digest = restricted_wh_source._coordinate_state_sha256(
+        b"jx.restricted-wh.source-provider.canonical-barycentric-input.v1",
+        tile.source_ids,
+        positions,
+        velocities,
+        gm,
+    )
+    metrics = {
+        "maximum_component_input_ulps": 0.0,
+        "maximum_forward_error_bound_fraction": 0.0,
+        "maximum_input_relative_error": 0.0,
+    }
+    receipt = restricted_wh_source._make_coordinate_canonicalization_receipt(
+        tile=tile,
+        raw_relative_input_sha256=input_digest,
+        canonical_relative_input_sha256=input_digest,
+        canonical_barycentric_input_sha256=barycentric_digest,
+        positions=positions,
+        velocities=velocities,
+        canonical_positions=positions,
+        canonical_velocities=velocities,
+        position_metrics=metrics,
+        velocity_metrics=metrics,
+        fixed_point_iteration_count=1,
+    )
     return WisdomHolmanSourceTileBuild(
         tile=tile,
-        input_content_sha256=SHA_A,
+        input_content_sha256=input_digest,
         source_map_input_content_sha256=SHA_B,
         source_map_result_content_sha256=SHA_C,
         source_map_verification_content_sha256=SHA_D,
         source_map_metrics=(("fixture", 1.0),),
         source_map_primary_seconds=0.1,
         source_map_replay_seconds=0.1,
-        runtime_identity={"backend": "cpu-fixture"},
+        coordinate_canonicalization=receipt,
+        runtime_identity={
+            "backend": "cpu-fixture",
+            "provider_id": restricted_wh_source.PROVIDER_ID,
+            "provider_implementation_source_sha256": (
+                restricted_wh_source.IMPLEMENTATION_SOURCE_SHA256
+            ),
+            "exact_replay_required": True,
+            "source_tile_sha256": tile.content_sha256,
+            "coordinate_canonicalization": dict(receipt.as_record()),
+            "coordinate_canonicalization_receipt_sha256": (
+                receipt.content_sha256
+            ),
+        },
     )
 
 
 class LongHorizonFacadeTests(unittest.TestCase):
-    def test_experimental_facade_exposes_genesis_and_fixed_runner_only(self):
+    def test_experimental_facade_exposes_physics_genesis_and_fixed_runner(self):
         expected = {
             "DEFAULT_GENESIS_MODEL",
             "FixedLongHorizonRunConfig",
             "FixedLongHorizonSourceSegment",
+            "KNOWN_SOLAR_SYSTEM_V2",
+            "KnownSolarSystemSourceModel",
             "ObservedInitialConditionInventory",
             "advance_fixed_lifecycle_segment",
             "build_predeclared_initial_condition_inventory",
+            "load_known_solar_system_source_model",
             "resume_fixed_lifecycle_run",
             "start_fixed_lifecycle_run",
         }
@@ -185,6 +235,10 @@ class LongHorizonFacadeTests(unittest.TestCase):
         self.assertEqual(
             dict(declaration.entry_points),
             {
+                "known_source_model": (
+                    "jxplanetx.long_horizon:"
+                    "load_known_solar_system_source_model"
+                ),
                 "initial_conditions": (
                     "jxplanetx.long_horizon:"
                     "build_predeclared_initial_condition_inventory"

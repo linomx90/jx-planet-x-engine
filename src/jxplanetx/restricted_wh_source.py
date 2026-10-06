@@ -16,6 +16,7 @@ from __future__ import annotations
 from collections.abc import Mapping as MappingABC
 from dataclasses import dataclass
 import hashlib
+import json
 import math
 from pathlib import Path
 import platform
@@ -64,6 +65,15 @@ PROVIDER_ID = "jx.restricted-wh.source-provider.ordered-jacobi.v1"
 SCIENTIFIC_CLASSIFICATION = "MODEL_OUTPUT"
 PROJECT_SCOPE = "SCREENING_ONLY"
 MAXIMUM_SOURCE_STEPS_PER_TILE = 1_000_000
+COORDINATE_CANONICALIZATION_ROUNDING_ULP_FACTOR = 1.0
+MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR_IN_EPS = 512.0
+MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR = (
+    float(
+        MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR_IN_EPS
+        * np.finfo(np.float64).eps
+    )
+)
+MAXIMUM_COORDINATE_CANONICALIZATION_FIXED_POINT_ITERATIONS = 4
 IMPLEMENTATION_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 SOURCE_PROVIDER_CLAIMS = MappingProxyType(
@@ -152,8 +162,24 @@ def _canonical_input_sha256(
     velocities: np.ndarray,
     gm: np.ndarray,
 ) -> str:
+    return _coordinate_state_sha256(
+        b"jx.restricted-wh.source-provider.input.v1",
+        source_ids,
+        positions,
+        velocities,
+        gm,
+    )
+
+
+def _coordinate_state_sha256(
+    domain: bytes,
+    source_ids: tuple[str, ...],
+    positions: np.ndarray,
+    velocities: np.ndarray,
+    gm: np.ndarray,
+) -> str:
     digest = hashlib.sha256()
-    digest.update(b"jx.restricted-wh.source-provider.input.v1\0")
+    digest.update(domain + b"\0")
     for source_id in source_ids:
         encoded = source_id.encode("utf-8")
         digest.update(len(encoded).to_bytes(4, "little"))
@@ -163,6 +189,194 @@ def _canonical_input_sha256(
         digest.update(str(array.shape).encode("ascii"))
         digest.update(array.tobytes(order="C"))
     return digest.hexdigest()
+
+
+def _coordinate_canonicalization_metrics(
+    original: np.ndarray,
+    canonical: np.ndarray,
+    cumulative_forward_error_bounds: np.ndarray,
+    label: str,
+) -> Mapping[str, float]:
+    """Validate and disclose one binary64 coordinate round trip.
+
+    Primary-relative inputs must be converted to a barycentric massive-system
+    state before the ordered-Jacobi map can consume them.  Subtracting the
+    primary again is not an identity operation for every binary64 vector.  We
+    check each correction against both a conservative forward-error bound for
+    the three rounded subtractions and a strict input-relative conditioning
+    ceiling.  Input ULP counts remain diagnostics only: near zero, a valid
+    barycentre translation can span many ULPs while staying within binary64
+    forward error.
+    """
+
+    if not (
+        original.shape == canonical.shape == cumulative_forward_error_bounds.shape
+    ):
+        raise RestrictedWHSourceContractError(
+            f"{label} canonicalization changed array shape"
+        )
+    maximum_ulps = 0.0
+    maximum_forward_bound_fraction = 0.0
+    maximum_relative_error = 0.0
+    for original_value, canonical_value, bound_value in zip(
+        original.flat,
+        canonical.flat,
+        cumulative_forward_error_bounds.flat,
+        strict=True,
+    ):
+        before = float(original_value)
+        after = float(canonical_value)
+        if before == after:
+            continue
+        correction = abs(after - before)
+        forward_bound = float(bound_value)
+        if before == 0.0:
+            raise RestrictedWHSourceContractError(
+                f"{label} canonicalization changed an exact-zero component"
+            )
+        relative_error = correction / abs(before)
+        if not (
+            math.isfinite(correction)
+            and math.isfinite(forward_bound)
+            and correction <= forward_bound
+            and math.isfinite(relative_error)
+            and relative_error
+            <= MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR
+        ):
+            raise RestrictedWHSourceContractError(
+                f"{label} barycentric canonicalization exceeded its "
+                "binary64 forward-error or conditioning bound"
+            )
+        component_ulps = correction / math.ulp(before)
+        maximum_ulps = max(maximum_ulps, component_ulps)
+        maximum_forward_bound_fraction = max(
+            maximum_forward_bound_fraction, correction / forward_bound
+        )
+        maximum_relative_error = max(maximum_relative_error, relative_error)
+    return MappingProxyType(
+        {
+            "maximum_component_input_ulps": float(maximum_ulps),
+            "maximum_forward_error_bound_fraction": float(
+                maximum_forward_bound_fraction
+            ),
+            "maximum_input_relative_error": float(maximum_relative_error),
+        }
+    )
+
+
+def _binary64_array_bitwise_equal(left: np.ndarray, right: np.ndarray) -> bool:
+    return bool(
+        left.shape == right.shape
+        and left.dtype == np.dtype(np.float64)
+        and right.dtype == np.dtype(np.float64)
+        and np.array_equal(left.view(np.uint64), right.view(np.uint64))
+    )
+
+
+def _canonicalize_primary_relative_state(
+    positions: np.ndarray,
+    velocities: np.ndarray,
+    gm: np.ndarray,
+) -> tuple[
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    Mapping[str, float],
+    Mapping[str, float],
+    int,
+]:
+    """Create a bounded fixed-point barycentric/relative coordinate pair."""
+
+    total_gm = np.sum(gm, dtype=np.float64)
+    current_positions = np.ascontiguousarray(positions.copy())
+    current_velocities = np.ascontiguousarray(velocities.copy())
+    position_forward_bounds = np.zeros_like(positions)
+    velocity_forward_bounds = np.zeros_like(velocities)
+    seen: set[tuple[bytes, bytes]] = set()
+    for iteration_count in range(
+        1, MAXIMUM_COORDINATE_CANONICALIZATION_FIXED_POINT_ITERATIONS + 1
+    ):
+        state_key = (
+            current_positions.tobytes(order="C"),
+            current_velocities.tobytes(order="C"),
+        )
+        if state_key in seen:
+            raise RestrictedWHSourceContractError(
+                "barycentric source canonicalization entered a cycle"
+            )
+        seen.add(state_key)
+        barycenter_position = (
+            np.sum(current_positions * gm[:, None], axis=0, dtype=np.float64)
+            / total_gm
+        )
+        barycenter_velocity = (
+            np.sum(current_velocities * gm[:, None], axis=0, dtype=np.float64)
+            / total_gm
+        )
+        barycentric_positions = np.ascontiguousarray(
+            current_positions - barycenter_position
+        )
+        barycentric_velocities = np.ascontiguousarray(
+            current_velocities - barycenter_velocity
+        )
+        canonical_positions = np.ascontiguousarray(
+            barycentric_positions - barycentric_positions[0]
+        )
+        canonical_velocities = np.ascontiguousarray(
+            barycentric_velocities - barycentric_velocities[0]
+        )
+        for source_index in range(current_positions.shape[0]):
+            for component in range(3):
+                position_forward_bounds[source_index, component] += (
+                    COORDINATE_CANONICALIZATION_ROUNDING_ULP_FACTOR
+                    * (
+                        math.ulp(barycentric_positions[source_index, component])
+                        + math.ulp(barycentric_positions[0, component])
+                        + math.ulp(canonical_positions[source_index, component])
+                    )
+                )
+                velocity_forward_bounds[source_index, component] += (
+                    COORDINATE_CANONICALIZATION_ROUNDING_ULP_FACTOR
+                    * (
+                        math.ulp(barycentric_velocities[source_index, component])
+                        + math.ulp(barycentric_velocities[0, component])
+                        + math.ulp(canonical_velocities[source_index, component])
+                    )
+                )
+        if _binary64_array_bitwise_equal(
+            canonical_positions, current_positions
+        ) and _binary64_array_bitwise_equal(
+            canonical_velocities, current_velocities
+        ):
+            break
+        current_positions = canonical_positions
+        current_velocities = canonical_velocities
+    else:
+        raise RestrictedWHSourceContractError(
+            "barycentric source canonicalization did not reach a fixed point"
+        )
+    position_metrics = _coordinate_canonicalization_metrics(
+        positions,
+        canonical_positions,
+        position_forward_bounds,
+        "initial source positions",
+    )
+    velocity_metrics = _coordinate_canonicalization_metrics(
+        velocities,
+        canonical_velocities,
+        velocity_forward_bounds,
+        "initial source velocities",
+    )
+    return (
+        barycentric_positions,
+        barycentric_velocities,
+        canonical_positions,
+        canonical_velocities,
+        position_metrics,
+        velocity_metrics,
+        iteration_count,
+    )
 
 
 def _derived_epoch(origin: float, global_step: int, step: float) -> float:
@@ -187,6 +401,352 @@ def _freeze_tree(value: Any) -> Any:
     if isinstance(value, (list, tuple)):
         return tuple(_freeze_tree(item) for item in value)
     return value
+
+
+def _canonical_record_sha256(domain: bytes, record: Mapping[str, Any]) -> str:
+    try:
+        payload = json.dumps(
+            record,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        ).encode("ascii")
+    except (TypeError, ValueError) as exc:
+        raise RestrictedWHSourceContractError(
+            "coordinate-canonicalization receipt is not canonical JSON"
+        ) from exc
+    return hashlib.sha256(domain + b"\0" + payload).hexdigest()
+
+
+_COORDINATE_CANONICALIZATION_RECEIPT_SEAL = object()
+
+
+@dataclass(frozen=True, slots=True, init=False)
+class SourceCoordinateCanonicalizationReceipt:
+    """Sealed precision custody for the source coordinate conversion."""
+
+    policy: str
+    forward_error_bound: str
+    forward_error_ulp_factor: float
+    maximum_allowed_input_relative_error_in_eps: float
+    maximum_allowed_input_relative_error: float
+    position_maximum_component_ulps: float
+    velocity_maximum_component_ulps: float
+    position_maximum_forward_error_bound_fraction: float
+    velocity_maximum_forward_error_bound_fraction: float
+    position_maximum_input_relative_error: float
+    velocity_maximum_input_relative_error: float
+    position_changed_component_count: int
+    velocity_changed_component_count: int
+    fixed_point_iteration_count: int
+    position_maximum_absolute_delta_AU: float
+    velocity_maximum_absolute_delta_AU_per_year: float
+    raw_relative_input_sha256: str
+    canonical_relative_input_sha256: str
+    canonical_barycentric_input_sha256: str
+    source_tile_sha256: str
+    canonicalization_idempotent: bool
+    tile_node_zero_exact: bool
+    content_sha256: str
+    _verification_seal: object
+
+    def _canonical_record(self) -> dict[str, Any]:
+        return {
+            "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+            "policy": self.policy,
+            "forward_error_bound": self.forward_error_bound,
+            "forward_error_ulp_factor_hex": self.forward_error_ulp_factor.hex(),
+            "maximum_allowed_input_relative_error_in_eps_hex": (
+                self.maximum_allowed_input_relative_error_in_eps.hex()
+            ),
+            "maximum_allowed_input_relative_error_hex": (
+                self.maximum_allowed_input_relative_error.hex()
+            ),
+            "position_maximum_component_ulps_hex": (
+                self.position_maximum_component_ulps.hex()
+            ),
+            "velocity_maximum_component_ulps_hex": (
+                self.velocity_maximum_component_ulps.hex()
+            ),
+            "position_maximum_forward_error_bound_fraction_hex": (
+                self.position_maximum_forward_error_bound_fraction.hex()
+            ),
+            "velocity_maximum_forward_error_bound_fraction_hex": (
+                self.velocity_maximum_forward_error_bound_fraction.hex()
+            ),
+            "position_maximum_input_relative_error_hex": (
+                self.position_maximum_input_relative_error.hex()
+            ),
+            "velocity_maximum_input_relative_error_hex": (
+                self.velocity_maximum_input_relative_error.hex()
+            ),
+            "position_changed_component_count": self.position_changed_component_count,
+            "velocity_changed_component_count": self.velocity_changed_component_count,
+            "fixed_point_iteration_count": self.fixed_point_iteration_count,
+            "maximum_fixed_point_iteration_count": (
+                MAXIMUM_COORDINATE_CANONICALIZATION_FIXED_POINT_ITERATIONS
+            ),
+            "position_maximum_absolute_delta_AU_hex": (
+                self.position_maximum_absolute_delta_AU.hex()
+            ),
+            "velocity_maximum_absolute_delta_AU_per_year_hex": (
+                self.velocity_maximum_absolute_delta_AU_per_year.hex()
+            ),
+            "raw_relative_input_sha256": self.raw_relative_input_sha256,
+            "canonical_relative_input_sha256": (
+                self.canonical_relative_input_sha256
+            ),
+            "canonical_barycentric_input_sha256": (
+                self.canonical_barycentric_input_sha256
+            ),
+            "source_tile_sha256": self.source_tile_sha256,
+            "canonicalization_idempotent": self.canonicalization_idempotent,
+            "tile_node_zero_exact": self.tile_node_zero_exact,
+        }
+
+    def as_record(self) -> Mapping[str, Any]:
+        return MappingProxyType(
+            {
+                "schema": "jx.restricted-wh.source-coordinate-canonicalization.v2",
+                "policy": self.policy,
+                "forward_error_bound": self.forward_error_bound,
+                "forward_error_ulp_factor": self.forward_error_ulp_factor,
+                "maximum_allowed_input_relative_error_in_eps": (
+                    self.maximum_allowed_input_relative_error_in_eps
+                ),
+                "maximum_allowed_input_relative_error": (
+                    self.maximum_allowed_input_relative_error
+                ),
+                "position_maximum_component_ulps": (
+                    self.position_maximum_component_ulps
+                ),
+                "velocity_maximum_component_ulps": (
+                    self.velocity_maximum_component_ulps
+                ),
+                "position_maximum_forward_error_bound_fraction": (
+                    self.position_maximum_forward_error_bound_fraction
+                ),
+                "velocity_maximum_forward_error_bound_fraction": (
+                    self.velocity_maximum_forward_error_bound_fraction
+                ),
+                "position_maximum_input_relative_error": (
+                    self.position_maximum_input_relative_error
+                ),
+                "velocity_maximum_input_relative_error": (
+                    self.velocity_maximum_input_relative_error
+                ),
+                "position_changed_component_count": (
+                    self.position_changed_component_count
+                ),
+                "velocity_changed_component_count": (
+                    self.velocity_changed_component_count
+                ),
+                "fixed_point_iteration_count": self.fixed_point_iteration_count,
+                "maximum_fixed_point_iteration_count": (
+                    MAXIMUM_COORDINATE_CANONICALIZATION_FIXED_POINT_ITERATIONS
+                ),
+                "position_maximum_absolute_delta_AU": (
+                    self.position_maximum_absolute_delta_AU
+                ),
+                "velocity_maximum_absolute_delta_AU_per_year": (
+                    self.velocity_maximum_absolute_delta_AU_per_year
+                ),
+                "raw_relative_input_sha256": self.raw_relative_input_sha256,
+                "canonical_relative_input_sha256": (
+                    self.canonical_relative_input_sha256
+                ),
+                "canonical_barycentric_input_sha256": (
+                    self.canonical_barycentric_input_sha256
+                ),
+                "source_tile_sha256": self.source_tile_sha256,
+                "canonicalization_idempotent": self.canonicalization_idempotent,
+                "tile_node_zero_exact": self.tile_node_zero_exact,
+                "content_sha256": self.content_sha256,
+            }
+        )
+
+    def __post_init__(self) -> None:
+        if self._verification_seal is not _COORDINATE_CANONICALIZATION_RECEIPT_SEAL:
+            raise RestrictedWHSourceContractError(
+                "coordinate-canonicalization receipts are provider-created only"
+            )
+        if (
+            self.policy
+            != "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2"
+            or self.forward_error_bound
+            != "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT"
+            or self.forward_error_ulp_factor
+            != COORDINATE_CANONICALIZATION_ROUNDING_ULP_FACTOR
+            or self.maximum_allowed_input_relative_error_in_eps
+            != MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR_IN_EPS
+            or self.maximum_allowed_input_relative_error
+            != MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR
+        ):
+            raise RestrictedWHSourceContractError(
+                "coordinate-canonicalization policy changed"
+            )
+        for name in (
+            "position_maximum_component_ulps",
+            "velocity_maximum_component_ulps",
+            "position_maximum_forward_error_bound_fraction",
+            "velocity_maximum_forward_error_bound_fraction",
+            "position_maximum_input_relative_error",
+            "velocity_maximum_input_relative_error",
+            "position_maximum_absolute_delta_AU",
+            "velocity_maximum_absolute_delta_AU_per_year",
+        ):
+            value = getattr(self, name)
+            if type(value) is not float or not math.isfinite(value) or value < 0.0:
+                raise RestrictedWHSourceContractError(
+                    f"{name} must be a nonnegative finite float"
+                )
+        if (
+            self.position_maximum_forward_error_bound_fraction > 1.0
+            or self.velocity_maximum_forward_error_bound_fraction > 1.0
+            or self.position_maximum_input_relative_error
+            > MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR
+            or self.velocity_maximum_input_relative_error
+            > MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR
+        ):
+            raise RestrictedWHSourceContractError(
+                "coordinate-canonicalization numerical bound changed"
+            )
+        for name in (
+            "position_changed_component_count",
+            "velocity_changed_component_count",
+            "fixed_point_iteration_count",
+        ):
+            value = getattr(self, name)
+            if type(value) is not int or value < 0:
+                raise RestrictedWHSourceContractError(
+                    f"{name} must be a nonnegative exact integer"
+                )
+        if not (
+            1
+            <= self.fixed_point_iteration_count
+            <= MAXIMUM_COORDINATE_CANONICALIZATION_FIXED_POINT_ITERATIONS
+        ):
+            raise RestrictedWHSourceContractError(
+                "coordinate-canonicalization iteration count is outside policy"
+            )
+        for name in (
+            "raw_relative_input_sha256",
+            "canonical_relative_input_sha256",
+            "canonical_barycentric_input_sha256",
+            "source_tile_sha256",
+            "content_sha256",
+        ):
+            _sha256(getattr(self, name), name)
+        if (
+            type(self.canonicalization_idempotent) is not bool
+            or not self.canonicalization_idempotent
+            or type(self.tile_node_zero_exact) is not bool
+            or not self.tile_node_zero_exact
+        ):
+            raise RestrictedWHSourceContractError(
+                "coordinate canonicalization must be idempotent and tile-exact"
+            )
+        expected = _canonical_record_sha256(
+            b"jx.restricted-wh.source-coordinate-canonicalization.v2",
+            self._canonical_record(),
+        )
+        if self.content_sha256 != expected:
+            raise RestrictedWHSourceContractError(
+                "coordinate-canonicalization receipt digest changed"
+            )
+
+
+def _make_coordinate_canonicalization_receipt(
+    *,
+    tile: FrozenSourcePathTile,
+    raw_relative_input_sha256: str,
+    canonical_relative_input_sha256: str,
+    canonical_barycentric_input_sha256: str,
+    positions: np.ndarray,
+    velocities: np.ndarray,
+    canonical_positions: np.ndarray,
+    canonical_velocities: np.ndarray,
+    position_metrics: Mapping[str, float],
+    velocity_metrics: Mapping[str, float],
+    fixed_point_iteration_count: int,
+) -> SourceCoordinateCanonicalizationReceipt:
+    values: dict[str, Any] = {
+        "policy": "PRIMARY_RELATIVE_TO_GM_BARYCENTRIC_TO_PRIMARY_RELATIVE_V2",
+        "forward_error_bound": (
+            "SUM_OF_FULL_ULPS_OF_INTERMEDIATE_PRIMARY_AND_RESULT"
+        ),
+        "forward_error_ulp_factor": (
+            COORDINATE_CANONICALIZATION_ROUNDING_ULP_FACTOR
+        ),
+        "maximum_allowed_input_relative_error_in_eps": (
+            MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR_IN_EPS
+        ),
+        "maximum_allowed_input_relative_error": (
+            MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR
+        ),
+        "position_maximum_component_ulps": position_metrics[
+            "maximum_component_input_ulps"
+        ],
+        "velocity_maximum_component_ulps": velocity_metrics[
+            "maximum_component_input_ulps"
+        ],
+        "position_maximum_forward_error_bound_fraction": position_metrics[
+            "maximum_forward_error_bound_fraction"
+        ],
+        "velocity_maximum_forward_error_bound_fraction": velocity_metrics[
+            "maximum_forward_error_bound_fraction"
+        ],
+        "position_maximum_input_relative_error": position_metrics[
+            "maximum_input_relative_error"
+        ],
+        "velocity_maximum_input_relative_error": velocity_metrics[
+            "maximum_input_relative_error"
+        ],
+        "position_changed_component_count": int(
+            np.count_nonzero(
+                positions.view(np.uint64) != canonical_positions.view(np.uint64)
+            )
+        ),
+        "velocity_changed_component_count": int(
+            np.count_nonzero(
+                velocities.view(np.uint64) != canonical_velocities.view(np.uint64)
+            )
+        ),
+        "fixed_point_iteration_count": fixed_point_iteration_count,
+        "position_maximum_absolute_delta_AU": float(
+            np.max(np.abs(canonical_positions - positions))
+        ),
+        "velocity_maximum_absolute_delta_AU_per_year": float(
+            np.max(np.abs(canonical_velocities - velocities))
+        ),
+        "raw_relative_input_sha256": raw_relative_input_sha256,
+        "canonical_relative_input_sha256": canonical_relative_input_sha256,
+        "canonical_barycentric_input_sha256": (
+            canonical_barycentric_input_sha256
+        ),
+        "source_tile_sha256": tile.content_sha256,
+        "canonicalization_idempotent": True,
+        "tile_node_zero_exact": True,
+    }
+    receipt = object.__new__(SourceCoordinateCanonicalizationReceipt)
+    for name, value in values.items():
+        object.__setattr__(receipt, name, value)
+    object.__setattr__(
+        receipt,
+        "_verification_seal",
+        _COORDINATE_CANONICALIZATION_RECEIPT_SEAL,
+    )
+    object.__setattr__(
+        receipt,
+        "content_sha256",
+        _canonical_record_sha256(
+            b"jx.restricted-wh.source-coordinate-canonicalization.v2",
+            receipt._canonical_record(),
+        ),
+    )
+    receipt.__post_init__()
+    return receipt
 
 
 @dataclass(frozen=True)
@@ -230,6 +790,7 @@ class WisdomHolmanSourceTileBuild:
     source_map_metrics: tuple[tuple[str, float], ...]
     source_map_primary_seconds: float
     source_map_replay_seconds: float
+    coordinate_canonicalization: SourceCoordinateCanonicalizationReceipt
     runtime_identity: Mapping[str, Any]
     claims: Mapping[str, bool] = SOURCE_PROVIDER_CLAIMS
     provider_id: str = PROVIDER_ID
@@ -267,6 +828,29 @@ class WisdomHolmanSourceTileBuild:
             )
         _positive_float(self.source_map_primary_seconds, "source_map_primary_seconds")
         _positive_float(self.source_map_replay_seconds, "source_map_replay_seconds")
+        if type(self.coordinate_canonicalization) is not SourceCoordinateCanonicalizationReceipt:
+            raise RestrictedWHSourceContractError(
+                "coordinate_canonicalization must be a sealed provider receipt"
+            )
+        self.coordinate_canonicalization.__post_init__()
+        if (
+            self.coordinate_canonicalization.raw_relative_input_sha256
+            != self.input_content_sha256
+            or self.coordinate_canonicalization.source_tile_sha256
+            != self.tile.content_sha256
+            or self.coordinate_canonicalization.canonical_relative_input_sha256
+            != _canonical_input_sha256(
+                self.tile.source_ids,
+                np.ascontiguousarray(self.tile.source_relative_positions_AU[0]),
+                np.ascontiguousarray(
+                    self.tile.source_relative_velocities_AU_per_year[0]
+                ),
+                np.ascontiguousarray(self.tile.source_gm_AU3_per_year2),
+            )
+        ):
+            raise RestrictedWHSourceContractError(
+                "coordinate-canonicalization receipt is not linked to build bytes"
+            )
         if (
             self.provider_id != PROVIDER_ID
             or self.scientific_classification != SCIENTIFIC_CLASSIFICATION
@@ -277,9 +861,34 @@ class WisdomHolmanSourceTileBuild:
             raise RestrictedWHSourceContractError(
                 "source-provider identity or claim ceiling changed"
             )
-        object.__setattr__(
-            self, "runtime_identity", _freeze_tree(self.runtime_identity)
-        )
+        runtime_identity = _freeze_tree(self.runtime_identity)
+        runtime_coordinate_receipt = runtime_identity.get(
+            "coordinate_canonicalization"
+        ) if isinstance(runtime_identity, MappingABC) else None
+        if (
+            not isinstance(runtime_identity, MappingABC)
+            or runtime_identity.get("provider_id") != PROVIDER_ID
+            or runtime_identity.get("provider_implementation_source_sha256")
+            != IMPLEMENTATION_SOURCE_SHA256
+            or runtime_identity.get("exact_replay_required") is not True
+            or runtime_identity.get("source_tile_sha256")
+            != self.tile.content_sha256
+            or runtime_identity.get("coordinate_canonicalization_receipt_sha256")
+            != self.coordinate_canonicalization.content_sha256
+            or not isinstance(runtime_coordinate_receipt, MappingABC)
+            or _canonical_record_sha256(
+                b"jx.restricted-wh.source-coordinate-runtime-view.v2",
+                dict(runtime_coordinate_receipt),
+            )
+            != _canonical_record_sha256(
+                b"jx.restricted-wh.source-coordinate-runtime-view.v2",
+                dict(self.coordinate_canonicalization.as_record()),
+            )
+        ):
+            raise RestrictedWHSourceContractError(
+                "runtime identity is not linked to coordinate custody"
+            )
+        object.__setattr__(self, "runtime_identity", runtime_identity)
         object.__setattr__(
             self, "claims", MappingProxyType(dict(SOURCE_PROVIDER_CLAIMS))
         )
@@ -505,11 +1114,25 @@ def build_wisdom_holman_source_tile(
         )
 
     input_digest = _canonical_input_sha256(source_ids, positions, velocities, gm)
-    total_gm = np.sum(gm, dtype=np.float64)
-    barycenter_position = np.sum(positions * gm[:, None], axis=0) / total_gm
-    barycenter_velocity = np.sum(velocities * gm[:, None], axis=0) / total_gm
-    barycentric_positions = np.ascontiguousarray(positions - barycenter_position)
-    barycentric_velocities = np.ascontiguousarray(velocities - barycenter_velocity)
+    (
+        barycentric_positions,
+        barycentric_velocities,
+        canonical_positions,
+        canonical_velocities,
+        position_canonicalization_metrics,
+        velocity_canonicalization_metrics,
+        canonicalization_iteration_count,
+    ) = _canonicalize_primary_relative_state(positions, velocities, gm)
+    canonical_input_digest = _canonical_input_sha256(
+        source_ids, canonical_positions, canonical_velocities, gm
+    )
+    canonical_barycentric_input_digest = _coordinate_state_sha256(
+        b"jx.restricted-wh.source-provider.canonical-barycentric-input.v1",
+        source_ids,
+        barycentric_positions,
+        barycentric_velocities,
+        gm,
+    )
     epoch = _derived_epoch(
         epoch_origin_years, global_source_step, spec.source_step_years
     )
@@ -597,11 +1220,13 @@ def build_wisdom_holman_source_tile(
     relative_velocities = np.ascontiguousarray(
         source_result.velocities - source_result.velocities[:, 0:1, :]
     )
-    if not np.array_equal(relative_positions[0], positions) or not np.array_equal(
-        relative_velocities[0], velocities
+    if not _binary64_array_bitwise_equal(
+        relative_positions[0], canonical_positions
+    ) or not _binary64_array_bitwise_equal(
+        relative_velocities[0], canonical_velocities
     ):
         raise RestrictedWHSourceIntegrationError(
-            "source-map coordinate round trip changed the initial relative state"
+            "source-map coordinate round trip changed the canonical initial state"
         )
 
     tile = FrozenSourcePathTile(
@@ -628,6 +1253,21 @@ def build_wisdom_holman_source_tile(
         ),
         provenance=provenance,
     )
+    coordinate_canonicalization = _make_coordinate_canonicalization_receipt(
+        tile=tile,
+        raw_relative_input_sha256=input_digest,
+        canonical_relative_input_sha256=canonical_input_digest,
+        canonical_barycentric_input_sha256=(
+            canonical_barycentric_input_digest
+        ),
+        positions=positions,
+        velocities=velocities,
+        canonical_positions=canonical_positions,
+        canonical_velocities=canonical_velocities,
+        position_metrics=position_canonicalization_metrics,
+        velocity_metrics=velocity_canonicalization_metrics,
+        fixed_point_iteration_count=canonicalization_iteration_count,
+    )
     runtime_identity = {
         "provider_id": PROVIDER_ID,
         "provider_implementation_source_sha256": IMPLEMENTATION_SOURCE_SHA256,
@@ -636,6 +1276,12 @@ def build_wisdom_holman_source_tile(
         "numpy_version": np.__version__,
         "source_map_runtime_identity": fast_wisdom_holman_runtime_identity(),
         "exact_replay_required": True,
+        "coordinate_canonicalization": dict(
+            coordinate_canonicalization.as_record()
+        ),
+        "coordinate_canonicalization_receipt_sha256": (
+            coordinate_canonicalization.content_sha256
+        ),
         "source_tile_sha256": tile.content_sha256,
     }
     return WisdomHolmanSourceTileBuild(
@@ -649,6 +1295,7 @@ def build_wisdom_holman_source_tile(
         source_map_metrics=source_result.metrics,
         source_map_primary_seconds=float(source_result.primary_seconds),
         source_map_replay_seconds=float(source_result.replay_seconds),
+        coordinate_canonicalization=coordinate_canonicalization,
         runtime_identity=runtime_identity,
     )
 
@@ -905,6 +1552,10 @@ def advance_cuda_restricted_wh_lifecycle_with_wisdom_holman_source(
 
 __all__ = [
     "IMPLEMENTATION_SOURCE_SHA256",
+    "COORDINATE_CANONICALIZATION_ROUNDING_ULP_FACTOR",
+    "MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR",
+    "MAXIMUM_COORDINATE_CANONICALIZATION_RELATIVE_ERROR_IN_EPS",
+    "MAXIMUM_COORDINATE_CANONICALIZATION_FIXED_POINT_ITERATIONS",
     "MAXIMUM_SOURCE_STEPS_PER_TILE",
     "PROVIDER_ID",
     "PROJECT_SCOPE",
@@ -913,6 +1564,7 @@ __all__ = [
     "RestrictedWHSourceIntegrationError",
     "SCIENTIFIC_CLASSIFICATION",
     "SOURCE_PROVIDER_CLAIMS",
+    "SourceCoordinateCanonicalizationReceipt",
     "WisdomHolmanRestrictedWHSegmentResult",
     "WisdomHolmanRestrictedWHHybridSegmentResult",
     "WisdomHolmanRestrictedWHLifecycleSegmentResult",

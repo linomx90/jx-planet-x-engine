@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping as MappingABC
 from dataclasses import dataclass, field
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -82,6 +83,14 @@ OWNED_EPISODE_UNSUPPORTED_REASON = (
 MULTIRATE_UNSUPPORTED_REASON = (
     "multirate scheduling has no lifecycle checkpoint composition in the "
     "experimental long-horizon runner"
+)
+SOURCE_ACCELERATION_BOUND_POLICY = (
+    "UNIFORM_BOOTSTRAP_2_SUM_GM_OVER_MIN_ENCOUNTER_RADIUS_SQUARED_"
+    "EXACT_BINARY64_INPUT_RATIONAL_CEILING_V1"
+)
+SOURCE_ACCELERATION_BOUND_APPLICABILITY = (
+    "SOURCE_SPEC_MINIMUM_ENCOUNTER_PAIR_SEPARATION_GTE_"
+    "MINIMUM_SOURCE_ENCOUNTER_RADIUS"
 )
 
 
@@ -169,6 +178,42 @@ def _freeze_tree(value: Any, label: str = "metadata") -> Any:
     )
 
 
+def _type_sensitive_canonical_tree_equal(left: Any, right: Any) -> bool:
+    """Compare canonical evidence without bool/integer or signed-zero aliasing."""
+
+    if isinstance(left, MappingABC) or isinstance(right, MappingABC):
+        if not isinstance(left, MappingABC) or not isinstance(right, MappingABC):
+            return False
+        left_keys = tuple(left.keys())
+        right_keys = tuple(right.keys())
+        if (
+            any(type(key) is not str for key in left_keys)
+            or any(type(key) is not str for key in right_keys)
+            or set(left_keys) != set(right_keys)
+        ):
+            return False
+        return all(
+            _type_sensitive_canonical_tree_equal(left[key], right[key])
+            for key in left_keys
+        )
+    if type(left) is not type(right):
+        return False
+    if type(left) in (list, tuple):
+        return len(left) == len(right) and all(
+            _type_sensitive_canonical_tree_equal(left_item, right_item)
+            for left_item, right_item in zip(left, right, strict=True)
+        )
+    if type(left) is float:
+        return (
+            math.isfinite(left)
+            and math.isfinite(right)
+            and left.hex() == right.hex()
+        )
+    if left is None or type(left) in (str, bool, int):
+        return left == right
+    return False
+
+
 def _canonical_sha256(domain: bytes, value: Mapping[str, Any]) -> str:
     payload = json.dumps(
         _plain_tree(value),
@@ -247,6 +292,13 @@ def _source_material_sha256(source: "FixedLongHorizonSourceSegment") -> str:
             "citation": source.source_provenance.citation,
             "version": source.source_provenance.version,
             "sha256": source.source_provenance.sha256,
+        },
+        "acceleration_bound_receipt": {
+            "policy": SOURCE_ACCELERATION_BOUND_POLICY,
+            "applicability_condition": SOURCE_ACCELERATION_BOUND_APPLICABILITY,
+            "required_uniform_relative_acceleration_bound_AU_per_year2": (
+                source.required_uniform_relative_acceleration_bound_AU_per_year2
+            ),
         },
         "arrays": tuple(
             {
@@ -430,7 +482,13 @@ class FixedLongHorizonRunConfig:
 
 @dataclass(frozen=True, eq=False)
 class FixedLongHorizonSourceSegment:
-    """Owned, immutable massive-source boundary data for one segment."""
+    """Owned, immutable massive-source boundary data for one segment.
+
+    The derived uniform relative-acceleration bound is valid only when the
+    run configuration's certified source-pair separation floor is at least
+    the minimum source encounter radius.  The runner checks that condition
+    before hashing or numerical execution.
+    """
 
     tile_id: str
     epoch_origin_years: float
@@ -452,6 +510,9 @@ class FixedLongHorizonSourceSegment:
     source_encounter_radii_AU: np.ndarray
     certified_relative_acceleration_bounds_AU_per_year2: np.ndarray
     source_provenance: Provenance
+    required_uniform_relative_acceleration_bound_AU_per_year2: float = field(
+        init=False
+    )
     content_sha256: str = field(init=False)
 
     def __post_init__(self) -> None:
@@ -542,6 +603,38 @@ class FixedLongHorizonSourceSegment:
             raise LongHorizonRunnerContractError(
                 "source GM, encounter radii, and acceleration bounds must be positive"
             )
+        try:
+            total_gm = sum(
+                (Fraction.from_float(float(value)) for value in gm),
+                Fraction(0, 1),
+            )
+            minimum_encounter_radius = min(float(value) for value in radii)
+            exact_required_uniform_bound = (2 * total_gm) / (
+                Fraction.from_float(minimum_encounter_radius) ** 2
+            )
+            required_uniform_bound = float(exact_required_uniform_bound)
+        except (OverflowError, ZeroDivisionError) as error:
+            raise LongHorizonRunnerContractError(
+                "source GM and encounter radii do not admit a finite uniform "
+                "bootstrap acceleration bound"
+            ) from error
+        if not math.isfinite(required_uniform_bound) or required_uniform_bound <= 0.0:
+            raise LongHorizonRunnerContractError(
+                "source GM and encounter radii do not admit a finite uniform "
+                "bootstrap acceleration bound"
+            )
+        if (
+            Fraction.from_float(required_uniform_bound)
+            < exact_required_uniform_bound
+        ):
+            required_uniform_bound = math.nextafter(
+                required_uniform_bound, math.inf
+            )
+        if not bool(np.all(bounds >= required_uniform_bound)):
+            raise LongHorizonRunnerContractError(
+                "every certified relative acceleration bound must be at least "
+                "the derived uniform bootstrap minimum"
+            )
         for name, value in (
             ("initial_source_relative_positions_AU", positions),
             ("initial_source_relative_velocities_AU_per_year", velocities),
@@ -550,6 +643,11 @@ class FixedLongHorizonSourceSegment:
             ("certified_relative_acceleration_bounds_AU_per_year2", bounds),
         ):
             object.__setattr__(self, name, value)
+        object.__setattr__(
+            self,
+            "required_uniform_relative_acceleration_bound_AU_per_year2",
+            required_uniform_bound,
+        )
         object.__setattr__(self, "content_sha256", _source_material_sha256(self))
 
     def _arrays(self) -> tuple[tuple[str, np.ndarray], ...]:
@@ -653,17 +751,27 @@ class LongHorizonCommittedSegment:
             raise LongHorizonRunnerContractError(
                 "checkpoint_record must be a mapping"
             )
+        expected_checkpoint_contract = adapt_restricted_wh_checkpoint(
+            self.loaded_checkpoint
+        )
         if (
             self.loaded_checkpoint.state_sha256 != self.prepared.output_state_sha256
             or self.checkpoint_contract.state_sha256
             != self.prepared.output_state_sha256
             or self.checkpoint_contract.checkpoint_content_sha256
             != self.loaded_checkpoint.checkpoint_content_sha256
+            or self.checkpoint_contract.content_sha256
+            != expected_checkpoint_contract.content_sha256
+            or not _type_sensitive_canonical_tree_equal(
+                self.checkpoint_record,
+                self.loaded_checkpoint.record,
+            )
             or self.checkpoint_record.get("checkpoint_content_sha256")
             != self.loaded_checkpoint.checkpoint_content_sha256
         ):
             raise LongHorizonRunnerIntegrityError(
-                "checkpoint replay is not bound to the prepared segment"
+                "checkpoint replay, normalized checkpoint contract, or full "
+                "checkpoint record is not bound to the prepared segment"
             )
         object.__setattr__(
             self,
@@ -716,6 +824,16 @@ def _validate_source_against_state(
     if not expected:
         raise LongHorizonRunnerContractError(
             "source segment context differs from the exact dynamics state"
+        )
+    minimum_encounter_radius = float(np.min(source.source_encounter_radii_AU))
+    if (
+        config.source_spec.minimum_encounter_pair_separation_AU
+        < minimum_encounter_radius
+    ):
+        raise LongHorizonRunnerContractError(
+            "source_spec minimum encounter pair separation must be at least "
+            "the minimum source encounter radius for the uniform bootstrap "
+            "acceleration bound to apply"
         )
 
 

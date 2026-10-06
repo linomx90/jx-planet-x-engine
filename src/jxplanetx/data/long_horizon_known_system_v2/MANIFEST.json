@@ -1,0 +1,107 @@
+{
+  "artifact_id": "jx.long-horizon.full-known-solar-system-source.v2",
+  "body_ids_ordered": [
+    10,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "body_names_ordered": [
+    "Sun",
+    "Mercury Barycenter",
+    "Venus Barycenter",
+    "Earth-Moon Barycenter",
+    "Mars Barycenter",
+    "Jupiter Barycenter",
+    "Saturn Barycenter",
+    "Uranus Barycenter",
+    "Neptune Barycenter",
+    "Pluto Barycenter"
+  ],
+  "claim_flags": {
+    "complete_de441_force_model": false,
+    "detection_claim": false,
+    "exclusion_claim": false,
+    "inference_authorized": false,
+    "long_duration_accuracy_qualified": false,
+    "observationally_fitted": false,
+    "science_result": false,
+    "uncertainty_calibrated": false
+  },
+  "conversion": {
+    "astronomical_unit_km_exact": "149597870.7",
+    "gm_policy": "EXACT_DECIMAL_GM_KM3_S2_TIMES_EXACT_UNIT_RATIO_THEN_ONE_NEAREST_BINARY64_ROUNDING",
+    "iau_1976_j2000_mean_obliquity_arcsec_exact": "84381.448",
+    "j2000_obliquity_cos_binary64_hex": "0x1.d5c0357681ef3p-1",
+    "j2000_obliquity_rad_binary64_hex": "0x1.a2e9395ca7c3fp-2",
+    "j2000_obliquity_sin_binary64_hex": "0x1.9752e50f4b398p-2",
+    "julian_day_seconds_exact": "86400",
+    "julian_year_days_exact": "365.25",
+    "rotation": "x_ecl=x_icrf; y_ecl=cos(epsilon)*y_icrf+sin(epsilon)*z_icrf; z_ecl=-sin(epsilon)*y_icrf+cos(epsilon)*z_icrf",
+    "state_policy": "FIXED_J2000_ECLIPTIC_ROTATION_OF_EACH_BARYCENTRIC_STATE_THEN_SUBTRACT_ROTATED_SUN_WITH_SEPARATE_BINARY64_OPERATIONS",
+    "velocity_policy": "ROTATE_EACH_AU_PER_DAY_STATE_SUBTRACT_ROTATED_SUN_THEN_MULTIPLY_EACH_COMPONENT_BY_EXACT_BINARY64_365.25"
+  },
+  "coordinate_system": "PRIMARY_RELATIVE_CARTESIAN_RIGHT_HANDED",
+  "epoch_jd_tdb": 2461200.5,
+  "epoch_scale": "TDB",
+  "files": [
+    {
+      "bytes": 2007,
+      "path": "horizons_de441_barycentric_icrf_jd2461200p5.csv",
+      "role": "CURATED_SOURCE_ROWS",
+      "sha256": "97af9f841445a26d1c69dca46cfde73aa1a44c0651f19a1269a3facce6af8c9b"
+    },
+    {
+      "bytes": 448,
+      "path": "gm_de440_major_barycenters.csv",
+      "role": "CURATED_GM_SOURCE",
+      "sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217"
+    },
+    {
+      "bytes": 1800,
+      "path": "known_system_primary_relative_ecliptic_float_hex.csv",
+      "role": "DERIVED_BINARY64_KNOWN_SYSTEM_STATE",
+      "sha256": "6b3a2b1fbcee18821783c581a2e81ecdb9198a6da6550c81fbd03d579011bb8f"
+    }
+  ],
+  "frame": "PRIMARY_RELATIVE_IAU76_80_ECLIPTIC_J2000",
+  "nonclaims": [
+    "not a retained DE441 SPK kernel or direct ephemeris evaluator",
+    "not the complete DE441 force model",
+    "not a resolved Earth-Moon or planetary-satellite model",
+    "not long-duration accuracy or stability evidence",
+    "not an observational fit or uncertainty model",
+    "not evidence for detection, exclusion, orbit, mass, or sky position"
+  ],
+  "origin": "NAIF_BODY_10_SUN_AT_EPOCH",
+  "primary_body_id": 10,
+  "schema": "jx.long-horizon.known-system-source-manifest.v2",
+  "source_identity": {
+    "center": "Solar System Barycenter (0)",
+    "ephemeris": "DE441",
+    "provider": "NASA/JPL Horizons",
+    "reference_frame": "ICRF",
+    "state_type": "geometric Cartesian position and velocity"
+  },
+  "units": {
+    "gm": "AU3_PER_JULIAN_YEAR_365.25_D2",
+    "integration_gravitational_constant": 1,
+    "length": "AU",
+    "source_velocity": "AU_PER_DAY",
+    "time": "JULIAN_YEAR_365.25_D",
+    "velocity": "AU_PER_JULIAN_YEAR_365.25_D"
+  },
+  "upstream": {
+    "gm_de440_kernel_sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+    "gm_table_sha256": "11fe03048f125e5283c3ef0d8054bc366baaf74dd86093ac3e61798e93769217",
+    "horizons_10yr_contract_sha256": "5112c90e71317a5cae54d17ea82296296af68812f18c663429dc773ac161053f",
+    "horizons_full_vectors_sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e",
+    "horizons_reference_manifest_sha256": "87bf405df5d333dde237b8a6f63ba57a67baff60e74f752b5d1e77cc094d4565"
+  }
+}

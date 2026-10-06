@@ -223,6 +223,19 @@ class ReproducibleReleaseTests(unittest.TestCase):
                 "de441_control_state.csv",
                 staged_files,
             )
+            for relative in (
+                "MANIFEST.json",
+                "README.md",
+                "SHA256SUMS",
+                "gm_de440_major_barycenters.csv",
+                "horizons_de441_barycentric_icrf_jd2461200p5.csv",
+                "known_system_primary_relative_ecliptic_float_hex.csv",
+            ):
+                self.assertIn(
+                    "src/jxplanetx/data/long_horizon_known_system_v2/"
+                    + relative,
+                    staged_files,
+                )
             self.assertFalse(
                 any(name.startswith("runs/") for name in staged_files)
             )

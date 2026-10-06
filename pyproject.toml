@@ -155,4 +155,5 @@ jxplanetx = [
   "data/long_horizon_source_model_v1/*.json",
   "data/long_horizon_source_model_v1/*.md",
   "data/long_horizon_source_model_v1/SHA256SUMS",
+  "data/long_horizon_known_system_v2/*",
 ]
