@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jxplanetx"
-version = "0.6.0rc16"
+version = "0.6.0rc17.dev0"
 description = "Falsification-first general celestial-dynamics framework with explicit scientific claim controls"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -23,6 +23,16 @@ classifiers = [
 engine = ["numpy>=2,<3"]
 gpu-cuda12 = ["numpy>=2,<3", "cupy-cuda12x[ctk]>=14,<15"]
 gpu-cuda13 = ["numpy>=2,<3", "cupy-cuda13x[ctk]>=14,<15"]
+routed-tracer-cuda12 = [
+  "numpy==2.3.5",
+  "scipy==1.17.0",
+  "cupy-cuda12x[ctk]>=14,<15",
+]
+routed-tracer-cuda13 = [
+  "numpy==2.3.5",
+  "scipy==1.17.0",
+  "cupy-cuda13x[ctk]>=14,<15",
+]
 rebound = ["rebound==4.4.11"]
 ias15 = ["rebound==4.4.11"]
 rebound-competition = ["rebound==5.1.1"]
@@ -134,3 +144,15 @@ extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+jxplanetx = [
+  "data/long_horizon_science_inputs_v1/*.json",
+  "data/long_horizon_science_inputs_v1/*.md",
+  "data/long_horizon_science_inputs_v1/SHA256SUMS",
+  "data/long_horizon_science_inputs_v1/raw/*.json",
+  "data/long_horizon_source_model_v1/*.csv",
+  "data/long_horizon_source_model_v1/*.json",
+  "data/long_horizon_source_model_v1/*.md",
+  "data/long_horizon_source_model_v1/SHA256SUMS",
+]

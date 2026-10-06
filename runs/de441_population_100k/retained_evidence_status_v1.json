@@ -1,0 +1,54 @@
+{
+  "assessment_date": "2026-10-05",
+  "checkout_classification": "HISTORICAL_COMPACT_ATTESTATION_WITHOUT_RETAINED_EXECUTION_EVIDENCE",
+  "checkout_observation": {
+    "block_summaries": 0,
+    "checkpoint_archives": 0,
+    "execution_directories_present": false,
+    "population_csv": {
+      "bytes": 18579086,
+      "path": "population_elements_v1.csv",
+      "rows_excluding_header": 100000,
+      "sha256": "2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1"
+    },
+    "tracer_csvs": 0
+  },
+  "historical_attestation": {
+    "audit_record": {
+      "path": "final_result_v1_audit.json",
+      "sha256": "57922e53e0c9a0bb021c659c5abecff85212792dac88241d62b9c8c4423acf12"
+    },
+    "claimed_block_summaries_verified_at_audit_time": 240,
+    "claimed_checkpoint_archives_verified_at_audit_time": 1200,
+    "claimed_tracer_csvs_verified_at_audit_time": 240,
+    "claimed_tracer_rows_verified_at_audit_time": 240000,
+    "final_result": {
+      "path": "final_result_v1.json",
+      "sha256": "24b7572cf130c683acd66a4677dac62d0d30b15b24f9bf5997b612a8045d7efd"
+    },
+    "qualification_result": {
+      "path": "qualification_result_v1.json",
+      "sha256": "68598a3cc65c0667d2788c84ae687362cd72ce64528d41f3a39fc77d9198090c"
+    }
+  },
+  "candidate_9118_provenance": {
+    "declared_candidate_metadata_sha256": "509917e0093107464d9ee45ed2c8e9f403403b2bb0e94455fa3614825917f8b0",
+    "declared_metadata_artifact_retained": false,
+    "governing_later_record": {
+      "path": "../../audits/jx_o2_g0_candidate_9118_retirement_v1/candidate_9118_retirement_v1.json",
+      "resolution_id": "jx-o2-g0-candidate-9118-retirement-v1",
+      "sha256": "01a041382aa716293db9f61ae8917d44bd80c62347cc2aaa7c03d0442f6009cd"
+    },
+    "historical_role": "EXPLORATORY_SCREENING_ONLY",
+    "promotion_forbidden_for_jx_o2": true,
+    "reason": "The candidate-selection lineage is incomplete, and catalog elements declared at JD 2458270.0 were reassigned to JD 2461200.5 without physical propagation or refit."
+  },
+  "limitations": [
+    "The compact result and audit JSON files report what was checked on the original execution host; they are not substitutes for the absent block, tracer, and checkpoint files.",
+    "The numerical outcome cannot be independently re-audited from this checkout alone.",
+    "Absolute paths inside the historical compact JSON files identify the original host and are not expected to resolve in a relocated checkout.",
+    "Any separately authorized fresh run must use a newly preregistered contract for the hardened v2 job, block, checkpoint, and result schemas; historical locked files remain immutable records.",
+    "Candidate 9118 is a historical exploratory input only. Its missing metadata blob cannot repair its incomplete selection lineage or epoch provenance and must not be promoted into the JX-O2 scientific model family."
+  ],
+  "schema": "jx-de441-population-retained-evidence-status/v1"
+}

@@ -13,24 +13,24 @@ Duplicate assignments, stale paths, and unassigned files are fatal before any
 test starts. Each executable file runs in a separate child process. Adding or
 renaming a test therefore requires updating the manifest in the same change.
 
-The current 278-file inventory is:
+The current 100-file inventory is:
 
 | Profile | Files | Disposition |
 | --- | ---: | --- |
-| `live-current` | 199 | Run against the current source tree |
-| `cuda-optional` | 23 | Run CPU-safe checks; hardware-only cases self-skip |
-| `cuda-hardware-only` | 5 | Run only when a compatible CUDA device is available |
+| `live-current` | 65 | Run against the current source tree |
+| `cuda-optional` | 18 | Run CPU-safe checks; hardware-only cases self-skip |
+| `cuda-hardware-only` | 0 | Reserved for cases without a no-device skip path |
 | `rebound-4.4.11` | 3 | Run only with exact REBOUND 4.4.11 |
-| `rebound-5.1.1` | 5 | Run only with exact REBOUND 5.1.1 |
+| `rebound-5.1.1` | 4 | Run only with exact REBOUND 5.1.1 |
 | `gr15-eih-external` | 2 | Run against the exact external GR15/EIH comparison runtime |
-| `performance-local` | 3 | Run source-bound native/TRACE evidence with exact REBOUND 5.1.1 |
-| `library-catalog-local` | 1 | Verify the catalog against the read-only local library |
-| `source-closed-reph` | 1 | Run from a virtual environment with its source-closed package |
-| `retained-lunar-coupled` | 1 | Run with its lineage-specific retained mpmath wheel |
-| `retained-lunar-torque-spice` | 1 | Run with retained mpmath, spiceypy, and CSPICE binaries |
-| `exact-lunar-launcher` | 1 | Run with the exact reconstructed R2 launcher runtime |
-| `frozen-history` | 31 | Replay only from the matching frozen source/runtime custody |
-| `superseded-preregistration` | 2 | Accounted for, but not executed after later outputs exist |
+| `performance-local` | 0 | Reserved for source-bound local performance evidence |
+| `library-catalog-local` | 0 | Reserved for read-only catalog evidence |
+| `source-closed-reph` | 0 | Reserved for source-closed REPH evidence |
+| `retained-lunar-coupled` | 0 | Reserved for retained coupled-lunar evidence |
+| `retained-lunar-torque-spice` | 0 | Reserved for retained lunar torque/SPICE evidence |
+| `exact-lunar-launcher` | 0 | Reserved for exact-environment lunar launchers |
+| `frozen-history` | 8 | Replay only from the matching frozen source/runtime custody |
+| `superseded-preregistration` | 0 | Reserved for superseded preregistration states |
 
 ## Commands
 
@@ -70,24 +70,27 @@ Frozen-history probes deliberately reject the evolved live engine. A refusal
 such as “the frozen engine source roster changed” is a custody success, not a
 live-engine regression. Those files must be replayed only after reconstructing
 their matching historical source and dependency boundary. The runner refuses a
-direct live execution request for this profile. This profile also contains
-historical lunar diagnostics bound to pinned PyERFA and obsolete qualification
-harnesses that clone the full evidence tree for each mutation; running those
-against the live tree is neither a release gate nor a valid current-source test.
+direct live execution request for this profile. Its eight-file roster is the
+legacy challenger/post-V5, REBOUND comparison, and V5 solar-1PN qualification
+set recorded in the executable manifest; running those files against the live
+tree is neither a release gate nor a valid current-source test.
 
 The superseded preregistration tests assert that later execution artifacts are
 absent. Those artifacts now exist as preserved evidence, so deleting them to
 make an old state assertion pass would be destructive and scientifically
-incorrect. The manifest records these files without executing that obsolete
-state assertion.
+incorrect. The manifest currently keeps an empty reserved profile for that
+superseded state assertion; no live test file is assigned to it.
 
 ## CI policy
 
-CI validates exact manifest coverage first. It then runs current-source and
-CUDA-optional files with per-file process isolation, and runs REBOUND 4.4.11
-and 5.1.1 in separate exact-version jobs. The Ubuntu 26.04 post-V5 job verifies
-the frozen numerical runtime and confirms that the evolved live source is
-rejected by the historical custody boundary. Retained-library lunar lanes stay
-local because their immutable inputs are not part of the Git checkout. A
-separate packaging job requires byte-identical wheel and source artifacts from
-two independent clean builds and smoke-tests fresh installs of both formats.
+CI validates exact manifest coverage first. It runs the CPU-safe restricted-WH
+precision and checkpoint contracts with pinned NumPy/SciPy, the current engine
+modules in isolated lanes (including optimized-Python checks), the generic
+SPICE/lunar/science-input ephemeris contracts with pinned SpiceyPy, the frozen
+population profile under exact REBOUND 4.4.11, and the GR15 comparison gates in
+their declared dependency job. CUDA device cases remain self-skipping on
+generic runners and are exercised on the qualified local RTX. Retained or
+source-closed evidence lanes stay local because their immutable inputs are not
+part of the Git checkout. A separate packaging job requires byte-identical
+wheel and source artifacts from two independent clean builds and smoke-tests
+fresh installs of both formats.

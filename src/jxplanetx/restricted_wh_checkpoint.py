@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping as MappingABC
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import fcntl
 import hashlib
 import json
@@ -200,6 +200,9 @@ class RestrictedWHCheckpointIntegrityError(RestrictedWHCheckpointError):
     """Stored checkpoint evidence failed a hash, chain, or replay check."""
 
 
+_LOADER_VERIFICATION_SEAL = object()
+
+
 @dataclass(frozen=True, eq=False)
 class LoadedRestrictedWHCheckpoint:
     """Latest state released only after complete chain verification and replay."""
@@ -214,8 +217,16 @@ class LoadedRestrictedWHCheckpoint:
     record: Mapping[str, Any]
     claims: Mapping[str, bool] = CHECKPOINT_CLAIMS
     method_id: str = CHECKPOINT_METHOD_ID
+    _verification_seal: object = field(
+        default=None, init=False, repr=False, compare=False
+    )
 
     def __post_init__(self) -> None:
+        if self._verification_seal is not _LOADER_VERIFICATION_SEAL:
+            raise RestrictedWHCheckpointContractError(
+                "LoadedRestrictedWHCheckpoint is released only by the "
+                "replay-verifying loader"
+            )
         if type(self.state) is not RestrictedWHLifecycleState:
             raise RestrictedWHCheckpointContractError(
                 "state must be an exact RestrictedWHLifecycleState"
@@ -249,6 +260,38 @@ class LoadedRestrictedWHCheckpoint:
             )
         object.__setattr__(self, "claims", MappingProxyType(dict(CHECKPOINT_CLAIMS)))
         object.__setattr__(self, "record", _freeze_tree(self.record))
+
+
+def _release_verified_checkpoint(
+    *,
+    state: RestrictedWHLifecycleState,
+    checkpoint_index: int,
+    checkpoint_content_sha256: str,
+    input_state_sha256: str,
+    state_sha256: str,
+    run_id: str,
+    protocol_sha256: str,
+    record: Mapping[str, Any],
+) -> LoadedRestrictedWHCheckpoint:
+    """Create a loaded head only inside the replay-verifying loader."""
+
+    value = object.__new__(LoadedRestrictedWHCheckpoint)
+    for name, item in (
+        ("state", state),
+        ("checkpoint_index", checkpoint_index),
+        ("checkpoint_content_sha256", checkpoint_content_sha256),
+        ("input_state_sha256", input_state_sha256),
+        ("state_sha256", state_sha256),
+        ("run_id", run_id),
+        ("protocol_sha256", protocol_sha256),
+        ("record", record),
+        ("claims", CHECKPOINT_CLAIMS),
+        ("method_id", CHECKPOINT_METHOD_ID),
+        ("_verification_seal", _LOADER_VERIFICATION_SEAL),
+    ):
+        object.__setattr__(value, name, item)
+    value.__post_init__()
+    return value
 
 
 def _text(value: object, label: str) -> str:
@@ -2463,7 +2506,7 @@ def load_latest_restricted_wh_lifecycle_checkpoint(
     resolved = resolve_backend(backend)
     with resolved.activate():
         resolved.xp.cuda.get_current_stream().synchronize()
-    return LoadedRestrictedWHCheckpoint(
+    return _release_verified_checkpoint(
         state=state,
         checkpoint_index=index,
         checkpoint_content_sha256=record["checkpoint_content_sha256"],

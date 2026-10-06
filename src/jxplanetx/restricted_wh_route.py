@@ -73,6 +73,49 @@ class RestrictedWHRouteIntegrationError(RestrictedWHRouteError):
     """The route failed closed without releasing a state."""
 
 
+_VERIFIED_ROUTE_CONTEXT_TOKEN = object()
+
+
+@dataclass(frozen=True, slots=True)
+class _VerifiedRouteContext:
+    """Process-local proof that one immutable source tile was hash-verified.
+
+    This private context exists solely for persistent route workers. A public
+    route call still recomputes the complete tile digest. Worker processes
+    receive a bytes-backed ``FrozenSourcePathTile`` that cannot be mutated
+    through its arrays, verify it once during initialization, and reuse this
+    identity for the bounded lifetime of that worker.
+    """
+
+    source_tile: FrozenSourcePathTile
+    source_tile_sha256: str
+    token: object
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.source_tile) is not FrozenSourcePathTile
+            or type(self.source_tile_sha256) is not str
+            or self.source_tile_sha256 != self.source_tile.content_sha256
+            or self.token is not _VERIFIED_ROUTE_CONTEXT_TOKEN
+        ):
+            raise RestrictedWHRouteContractError(
+                "verified route context is invalid"
+            )
+
+
+def _prepare_verified_route_context(
+    source_tile: FrozenSourcePathTile,
+) -> _VerifiedRouteContext:
+    """Verify one tile completely before trusted process-local route reuse."""
+
+    digest = verify_source_path_tile(source_tile)
+    return _VerifiedRouteContext(
+        source_tile=source_tile,
+        source_tile_sha256=digest,
+        token=_VERIFIED_ROUTE_CONTEXT_TOKEN,
+    )
+
+
 def _finite_float(value: object, label: str) -> float:
     if type(value) is not float or not math.isfinite(value):
         raise RestrictedWHRouteContractError(
@@ -608,7 +651,7 @@ def _relative_event(
     )
 
 
-def route_restricted_wh_map_step(
+def _route_restricted_wh_map_step_core(
     tracer_relative_position_AU: np.ndarray,
     tracer_relative_velocity_AU_per_year: np.ndarray,
     *,
@@ -616,9 +659,10 @@ def route_restricted_wh_map_step(
     source_tile: FrozenSourcePathTile,
     source_node_index: int,
     source_steps_per_map_step: int,
-    spec: RestrictedWHRouteSpec = RestrictedWHRouteSpec(),
+    spec: RestrictedWHRouteSpec,
+    verified_context: _VerifiedRouteContext | None,
 ) -> RestrictedWHRouteResult:
-    """Redo one guarded map step over every retained fine source segment."""
+    """Core route implementation with an optional trusted worker context."""
 
     position = _vector(
         tracer_relative_position_AU, "tracer_relative_position_AU"
@@ -635,7 +679,19 @@ def route_restricted_wh_map_step(
         raise RestrictedWHRouteContractError(
             "source_tile must be an exact FrozenSourcePathTile"
         )
-    tile_digest = verify_source_path_tile(source_tile)
+    if verified_context is None:
+        tile_digest = verify_source_path_tile(source_tile)
+    elif (
+        type(verified_context) is not _VerifiedRouteContext
+        or verified_context.token is not _VERIFIED_ROUTE_CONTEXT_TOKEN
+        or verified_context.source_tile is not source_tile
+        or verified_context.source_tile_sha256 != source_tile.content_sha256
+    ):
+        raise RestrictedWHRouteContractError(
+            "verified route context does not identify the exact source tile"
+        )
+    else:
+        tile_digest = verified_context.source_tile_sha256
     if type(source_node_index) is not int or source_node_index < 0:
         raise RestrictedWHRouteContractError(
             "source_node_index must be nonnegative"
@@ -833,6 +889,58 @@ def route_restricted_wh_map_step(
         ),
         completed_map_fraction=1.0,
         runtime_identity=_runtime_identity(source_tile, spec),
+    )
+
+
+def route_restricted_wh_map_step(
+    tracer_relative_position_AU: np.ndarray,
+    tracer_relative_velocity_AU_per_year: np.ndarray,
+    *,
+    tracer_index: int,
+    source_tile: FrozenSourcePathTile,
+    source_node_index: int,
+    source_steps_per_map_step: int,
+    spec: RestrictedWHRouteSpec = RestrictedWHRouteSpec(),
+) -> RestrictedWHRouteResult:
+    """Redo one guarded map step after complete public tile verification."""
+
+    return _route_restricted_wh_map_step_core(
+        tracer_relative_position_AU,
+        tracer_relative_velocity_AU_per_year,
+        tracer_index=tracer_index,
+        source_tile=source_tile,
+        source_node_index=source_node_index,
+        source_steps_per_map_step=source_steps_per_map_step,
+        spec=spec,
+        verified_context=None,
+    )
+
+
+def _route_restricted_wh_map_step_verified(
+    verified_context: _VerifiedRouteContext,
+    tracer_relative_position_AU: np.ndarray,
+    tracer_relative_velocity_AU_per_year: np.ndarray,
+    *,
+    tracer_index: int,
+    source_node_index: int,
+    source_steps_per_map_step: int,
+    spec: RestrictedWHRouteSpec,
+) -> RestrictedWHRouteResult:
+    """Route inside a worker that already verified its immutable source tile."""
+
+    if type(verified_context) is not _VerifiedRouteContext:
+        raise RestrictedWHRouteContractError(
+            "verified_context must be an internal verified route context"
+        )
+    return _route_restricted_wh_map_step_core(
+        tracer_relative_position_AU,
+        tracer_relative_velocity_AU_per_year,
+        tracer_index=tracer_index,
+        source_tile=verified_context.source_tile,
+        source_node_index=source_node_index,
+        source_steps_per_map_step=source_steps_per_map_step,
+        spec=spec,
+        verified_context=verified_context,
     )
 
 

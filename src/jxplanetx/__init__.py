@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-__version__ = "0.6.0rc16"
+__version__ = "0.6.0rc17.dev0"
 
 _GR15_EXPORTS = (
     "GR15ContractError",
@@ -110,6 +110,8 @@ _UNIFIED_SIMULATION_EXPORTS = (
     "LUNAR_DEGREE2_PARAMETER_IDS",
     "LUNAR_DEGREE3_PARAMETER_IDS",
     "LUNAR_EPHEMERIS_V1_BODY_IDS",
+    "LUNAR_EPHEMERIS_V1_EPOCH_ORIGIN",
+    "LUNAR_EPHEMERIS_V1_EPOCH_UNIT",
     "LUNAR_EPHEMERIS_V1_FORCE_ROSTER",
     "LUNAR_EPHEMERIS_V1_METHOD_ID",
     "LUNAR_EPHEMERIS_V1_MODEL_ID",

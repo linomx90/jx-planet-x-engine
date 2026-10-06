@@ -42,6 +42,57 @@ adding production interfaces, a complete encounter lifecycle, or accepting
 performance optimizations as qualified behavior.  Disk restart now exists as
 an experimental replay-verified component, but it is not production-qualified.
 
+## Canonical experimental façade and operational boundary
+
+`jxplanetx.long_horizon` is the one experimental package façade for this work.
+It declares the restricted Wisdom--Holman family as the canonical JX
+long-horizon architecture without promoting it into the stable
+`jxplanetx.engine` API.  The façade exposes shared event, result, and
+checkpoint receipts; the predeclared observed populations; the content-bound
+Cartesian genesis builder; and the fixed-lane lifecycle runner.  It does not
+export the unqualified static-multirate function.
+
+The genesis builder converts exactly 12 nominal NASA/JPL SBDB element rows and
+their 96 predeclared sensitivity realizations into 108 primary-relative
+binary64 Cartesian states.  The installed package retains the two exact SBDB
+response files and the exact six-source control CSV.  Every output binds the
+raw-input hashes, population and ensemble identities, element bytes, converter
+source identity, epoch, frame, units, primary definition, and round-trip
+postconditions.  The default primary GM is the exact row-zero inner-system
+monopole used by the long-horizon source model—not the smaller standalone
+DE440 Sun GM.  This is an explicit force-model-aligned reinterpretation of the
+osculating elements and is not an ephemeris evaluation or orbit fit.
+
+The operational runner composes one replay-verified Wisdom--Holman source
+segment, the fixed-lane CUDA/DOP853 terminal lifecycle, and the existing
+create-only lifecycle checkpoint chain.  A call first produces an in-memory
+prepared segment.  It releases a committed segment only after checkpoint
+publication, full-chain reload/replay, external-head verification, and exact
+output-state identity.  Resume requires the caller to supply the genesis hash,
+latest checkpoint index, and latest checkpoint digest.  Six CPU route workers
+remain the declared target-host default while quiet tracer work remains on the
+GPU.
+
+This v1 runner intentionally rejects static multirate and persistent-owner
+episode modes.  Their current checkpoint objects do not carry the same
+fixed-lane terminal lifecycle authority; silently combining them would create
+an unverifiable history.  They remain optimization candidates behind separate
+direct-module experiments until one shared state and checkpoint contract is
+implemented and independently validated.
+
+`benchmarks/jx_long_horizon_observed_qualification.py` prepares, but cannot
+execute, the next 1,000-year qualification protocol.  It binds all 108 states,
+the exact six-source model, candidate 0.0625-year and refinement 0.03125-year
+JX lanes, an exact REBOUND IAS15 comparison lane, annual diagnostics,
+500-year split/restart checks, encounter accounting, resource ceilings, and
+all-false claims.  `--prepare-only` is mandatory and publication is
+create-only.  No 1,000-year execution is authorized until the protocol's
+source, runner, dependency, GPU, and independent-reference prerequisites all
+match.  The retained preparation receipt is
+[`runs/long_horizon_observed_qualification_v1/PROTOCOL.json`](../runs/long_horizon_observed_qualification_v1/PROTOCOL.json),
+with protocol content digest
+`3a566fb5a98a3d3709cd7dbda9983ab6a4670b15fbcb74300eb0a3f78377fc35`.
+
 ## Numerical map
 
 Tracers are exactly massless and are represented in nonrotating,
@@ -356,6 +407,53 @@ retaining the same conservative claim ceiling.
 
 Passing these focused gates establishes only the behavior they test.  It does
 not extrapolate accuracy or stability to astronomical durations.
+
+## Static dyadic multirate precision prototype
+
+`jxplanetx.cuda_restricted_wh_multirate` is an additive experimental
+foundation for individual tracer timesteps.  A content-addressed plan assigns
+each tracer an immutable power-of-two ratio on the authoritative fine source
+lattice.  The plan must name a content-addressed accuracy-validation artifact
+and its policy.  The plan is cryptographically bound to the exact input-state
+metadata and tracer array bytes, immutable source tile, and every numerical
+and backend field of the execution policy.  The named external artifact is
+still only a provenance pointer: this module does not interpret its scientific
+content and the pointer is not by itself an accuracy claim.
+One fused CUDA launch advances all assigned rungs to the same
+lattice endpoint, using the same binary64 differential kick and all-conic
+Kepler drift as the fixed restricted-WH map.  Uniform ratio one is required to
+be bitwise identical to the fixed fused engine, and mixed-rung lanes are
+checked against independent fixed-rung executions.
+
+The prototype adds stricter coarse-step admission checks rather than weakening
+the fixed-map guards.  Every tracer map step is bounded against every massive
+source for clearance, relative sweep, and local dynamical phase.  A separate
+cubic-Hermite path-length certificate bounds secondary-source motion relative
+to the primary so a coarse step cannot undersample the indirect acceleration.
+Equality, nonfinite values, missing margin, or any CUDA failure rejects the
+complete result and returns the unchanged input state.
+
+Rungs are static for the complete supplied segment.  State-dependent rung
+changes, automatic fine-step demotion, routed-encounter rejoin, checkpoint
+lineage, and symplectic transition correctors are not implemented by this
+module.  It therefore remains a direct experimental component with every
+scientific and production claim false.  A timestep ladder is compared against
+the independent DOP853 route over each fine source interval before any rung is
+considered for longer qualification.
+
+On the local RTX 5060 Ti, a bounded 16,800-lane, 8,000-fine-step fixture with
+equal contiguous populations at ratios 1, 2, 4, and 8 measured a median
+`1.548` seconds, versus `2.777` seconds for all lanes at ratio 1: a `1.79x`
+engineering throughput gain with the exact input-state and execution-policy
+binding enabled.  Three repetitions were deterministic, and the
+mixed endpoint was bitwise equal to four independent fixed-rung executions.
+The bounded procedure is retained in
+`benchmarks/jx_cuda_restricted_wh_multirate_benchmark.py`.
+The mixed endpoint is intentionally different from the all-fine endpoint;
+therefore this timing does **not** authorize those coarse rungs.  Only a
+predeclared independent accuracy envelope on the intended population can do
+that.  Until such evidence passes, the canonical precision path remains the
+fine fixed map plus DOP853 encounter routing.
 
 ## Fused CUDA execution and measured bounds
 
@@ -688,6 +786,25 @@ prototype does not establish or provide:
 
 The name “Long-Horizon Engine” describes the target subsystem, not the present
 qualification level.
+
+## Predeclared observed-object input rung
+
+`jxplanetx.long_horizon` now exposes two content-addressed observed-object
+benchmark blocks and their deterministic uncertainty-sensitivity ensembles.
+Their nominal osculating elements come from retained NASA/JPL SBDB responses
+at JD TDB 2461200.5, the exact frozen DE441 control epoch. Selection rules,
+raw response hashes, object identities, orbit-solution identifiers, data arcs,
+observation counts, and six reported one-sigma element errors are bound before
+dynamics are run. The raw source package is retained under
+`runs/long_horizon_science_inputs_v1`.
+
+This closes the earlier synthetic-fixture/epoch mismatch for the next
+validation rung, but it does not create an observationally complete or
+debiased population. The eight perturbations per object are independent
+bounded sensitivity draws scaled by the reported one-sigma element errors;
+they are not covariance or posterior samples. Every detection, exclusion,
+orbit-fit, and science-result claim remains false until separately qualified
+dynamics, selection effects, and inference are supplied.
 
 ## Next milestones
 

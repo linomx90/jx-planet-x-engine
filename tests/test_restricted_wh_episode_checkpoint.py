@@ -245,6 +245,11 @@ class OwnedEpisodeDeltaCheckpointTests(unittest.TestCase):
             )
             self.assertFalse(any(loaded.claims.values()))
             self.assertEqual(dict(loaded.claims), dict(CHECKPOINT_CLAIMS))
+            with self.assertRaisesRegex(
+                OwnedEpisodeCheckpointContractError,
+                "replay-verifying loader",
+            ):
+                replace(loaded, state_sha256=hashlib.sha256(b"forged").hexdigest())
 
     def test_quiet_segment_has_empty_delta_and_round_trips(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -404,6 +409,105 @@ class OwnedEpisodeDeltaCheckpointTests(unittest.TestCase):
             )
             loaded = _load(session_root, genesis, row1)
             self.assertStateEqual(loaded.state, result1.state)
+
+    def test_compute_once_append_matches_replayed_append_exactly(self):
+        initial = _dense_state()
+        genesis = owned_episode_state_sha256(initial, _backend())
+        tile, spec, expected = _segment(initial, worker_count=2)
+        with (
+            tempfile.TemporaryDirectory() as replayed_temporary,
+            tempfile.TemporaryDirectory() as compute_once_temporary,
+        ):
+            replayed_root = Path(replayed_temporary)
+            compute_once_root = Path(compute_once_temporary)
+            with open_owned_episode_delta_append_session(
+                replayed_root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            ) as replayed_session:
+                replayed_head = replayed_session.append(
+                    input_state=initial,
+                    result=expected,
+                    source_tile=tile,
+                    spec=spec,
+                    route_worker_count=2,
+                    route_lookahead_steps=4,
+                )
+            original_advance = (
+                checkpoint_module.advance_cuda_restricted_wh_owned_episodes
+            )
+            with (
+                open_owned_episode_delta_append_session(
+                    compute_once_root,
+                    run_id=RUN_ID,
+                    protocol_sha256=PROTOCOL_SHA256,
+                    genesis_state_sha256=genesis,
+                    backend=_backend(),
+                ) as compute_once_session,
+                mock.patch.object(
+                    checkpoint_module,
+                    "advance_cuda_restricted_wh_owned_episodes",
+                    wraps=original_advance,
+                ) as counted_advance,
+            ):
+                computed, compute_once_head = (
+                    compute_once_session.advance_and_append(
+                        input_state=initial,
+                        source_tile=tile,
+                        spec=spec,
+                        route_worker_count=2,
+                        route_lookahead_steps=4,
+                    )
+                )
+                self.assertEqual(counted_advance.call_count, 1)
+            self.assertEqual(
+                compute_once_head.checkpoint_content_sha256,
+                replayed_head.checkpoint_content_sha256,
+            )
+            self.assertEqual(
+                compute_once_head.route_chain_sha256,
+                replayed_head.route_chain_sha256,
+            )
+            self.assertStateEqual(computed.state, expected.state)
+            self.assertStateEqual(compute_once_head.state, expected.state)
+            loaded = _load(
+                compute_once_root, genesis, compute_once_head.record
+            )
+            self.assertStateEqual(loaded.state, expected.state)
+
+    def test_compute_once_failure_is_transactional_and_closes_session(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            initial = _dense_state()
+            genesis = owned_episode_state_sha256(initial, _backend())
+            tile = _tile(node_count=5)
+            spec = FixedStepCUDARestrictedWHSpec(4, 1, _backend())
+            session = open_owned_episode_delta_append_session(
+                root,
+                run_id=RUN_ID,
+                protocol_sha256=PROTOCOL_SHA256,
+                genesis_state_sha256=genesis,
+                backend=_backend(),
+            )
+            with mock.patch.object(
+                checkpoint_module,
+                "advance_cuda_restricted_wh_owned_episodes",
+                side_effect=RuntimeError("injected advance failure"),
+            ):
+                with self.assertRaisesRegex(
+                    RuntimeError, "injected advance failure"
+                ):
+                    session.advance_and_append(
+                        input_state=initial,
+                        source_tile=tile,
+                        spec=spec,
+                        route_worker_count=1,
+                        route_lookahead_steps=4,
+                    )
+            self.assertTrue(session._closed)
+            self.assertFalse(_record_path(root, 0).exists())
 
     def test_append_session_resumes_once_from_external_head(self):
         with tempfile.TemporaryDirectory() as temporary:

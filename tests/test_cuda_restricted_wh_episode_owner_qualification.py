@@ -12,12 +12,13 @@ class CUDARestrictedWHOwnedEpisodeQualificationContractTests(unittest.TestCase):
         self.assertEqual(q.QUIET_LANES, 6)
         self.assertEqual(q.STEP_COUNT, 196)
         self.assertEqual(q.ROUTE_WORKER_COUNT, 6)
-        self.assertEqual(q.ROUTE_LOOKAHEAD_STEPS, 64)
+        self.assertEqual(q.ROUTE_LOOKAHEAD_STEPS, 32)
         self.assertEqual(q.PHYSICAL_CPU_AFFINITY, (0, 1, 2, 3, 4, 5))
         self.assertEqual(q.EXPECTED_ROUTE_COUNT, 1176)
         self.assertEqual(q.EXPECTED_EPISODE_COUNT, 6)
-        self.assertEqual(q.EXPECTED_CHAIN_SUBMISSIONS, 30)
-        self.assertEqual(q.EXPECTED_CACHE_HITS, 1146)
+        self.assertEqual(q.EXPECTED_CHAIN_SUBMISSIONS_PER_LANE, 8)
+        self.assertEqual(q.EXPECTED_CHAIN_SUBMISSIONS, 48)
+        self.assertEqual(q.EXPECTED_CACHE_HITS, 1128)
 
     def test_claim_ceiling_is_all_false(self):
         self.assertTrue(q.CLAIMS)

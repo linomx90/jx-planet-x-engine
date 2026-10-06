@@ -1,8 +1,8 @@
 # Third-party notices
 
-Original JX source code and project material in version `0.6.0rc10` is governed
-by the proprietary all-rights-reserved notice in the repository root. Earlier
-public JX releases retain the licenses and notices that accompanied them.
+Original JX source code and project material is governed by the proprietary
+all-rights-reserved notice in the repository root. Earlier public JX releases
+retain the licenses and notices that accompanied them.
 
 The complete research archive also preserves REBOUND 4.4.11 source and a
 Python 3.12 Linux wheel solely to reproduce the optional IAS15 comparison

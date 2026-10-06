@@ -1,8 +1,8 @@
 # JX Celestial Dynamics Framework
 
-**Version:** 0.6.0rc16
+**Version:** 0.6.0rc17.dev0
 
-**Release date:** 2026-09-24
+**Release state:** Unreleased research successor to published `0.6.0rc16`
 
 **License:** Proprietary — all rights reserved
 **Scientific claim state:** `SCREENING_ONLY`
@@ -14,9 +14,10 @@ not assumptions built into the engine. Model output is not astronomical
 evidence.
 
 This repository contains the engine source, packaging metadata, unit tests,
-locked protocols, and compact result summaries. It intentionally excludes the
-project's large observational inputs, bulk execution archives, and
-candidate-search catalogs.
+locked protocols, compact result summaries, and the two small content-addressed
+NASA/JPL SBDB responses needed to reconstruct the predeclared long-horizon
+benchmark states. It intentionally excludes large observational inputs, bulk
+execution archives, and candidate-search catalogs.
 
 The [experiment data index](docs/JX_EXPERIMENT_DATA_INDEX.md) provides the
 non-destructive map of the local immutable library, active runs, benchmark
@@ -25,7 +26,7 @@ the library authority catalog as the source of truth and does not promote
 workspace results.
 
 The installable distribution and command remain `jxplanetx` for backward
-compatibility. Version 0.6.0rc16 carries the immutable General Dynamics
+compatibility. The published version 0.6.0rc16 carries the immutable General Dynamics
 registry v18 evidence historically bound to rc3, retains the supported
 measured small-N CPU/CUDA interfaces, and advances the supported fast
 Wisdom--Holman CPU screen to a checkpoint-synchronized native map. Its default
@@ -46,6 +47,25 @@ in threads because the compiled boundary releases the GIL, while an audited
 dispatcher uses the measured RTX 5060 Ti crossover only inside its exact
 registered workload and hardware scope. All other automatic cases remain on
 CPU; callers may still request either backend explicitly.
+
+## Experimental long-horizon path
+
+`jxplanetx.long_horizon` is the single experimental façade for JX's canonical
+restricted Wisdom--Holman long-horizon architecture. It now provides:
+
+- exact, content-addressed conversion of the 12 predeclared observed SBDB
+  objects plus 96 sensitivity states into binary64 Cartesian genesis data;
+- one fixed-lane CUDA/DOP853 lifecycle runner using six CPU route workers and
+  the GPU quiet path; and
+- replay-verified, externally anchored checkpoint start and resume calls.
+
+The package includes the small raw SBDB responses and exact six-source control
+CSV required to rebuild those inputs. The fixed runner rejects multirate and
+persistent-owner combinations until they share the same terminal-lifecycle and
+checkpoint authority. A
+[create-only, prepare-only 1,000-year protocol](runs/long_horizon_observed_qualification_v1/README.md)
+is retained, but no long-duration execution or scientific result is authorized
+yet. See the [long-horizon engine contract](docs/JX_LONG_HORIZON_ENGINE.md).
 Registry v18
 states `SCREENING_ONLY` explicitly and does not promote any capability beyond
 its exact evidence and claim ceiling. The legacy propagation core, CLI, locked
@@ -237,10 +257,11 @@ restart-archive, CUDA, geodetic-transport, event, or ephemeris qualified.
 Rc16 also exposes `integrate_lunar_ephemeris_v1`, a resolved-eleven fixed-step
 RKF78 component combining mutual Newtonian gravity and EIH 1PN with reacting
 static lunar quadrupoles, fixed-axis Earth J2, and mantle/core rotation. Its
-outcome-blind 90/365-day DE440 screen passed: the one-year Earth–Moon position
-error was 61.57 m versus 3.73 km for the matched no-EIH control, while the
-one-year Sun–Earth error was 29.26 m versus 56.09 km. This remains a fitted-
-reference, screening-only result; see
+historical 90/365-day DE440 screen reported 61.57 m one-year Earth–Moon error
+and 29.26 m one-year Sun–Earth error. The named execution package was retained
+only under temporary paths and is no longer available, so those numbers are
+historical and unreproducible from this checkout—not a current pass or release
+gate. The component remains fitted-reference, screening-only code; see
 [`docs/JX_PUBLIC_LUNAR_EPHEMERIS_90_365_HOLDOUT.md`](docs/JX_PUBLIC_LUNAR_EPHEMERIS_90_365_HOLDOUT.md).
 
 NumPy CPU and optional CuPy CUDA 12/13 code paths are available. The
@@ -467,6 +488,8 @@ other physical model.
 - Optional: `numpy==2.3.5` and `scipy==1.17.0` for the independent DOP853 runner
 - Optional: `numpy==2.3.5`, `pyerfa==2.0.1.5`, and `spiceypy==8.2.0` for the
   screening-only lunar laser-ranging transport runner
+- Optional: `spiceypy==8.2.0` for the Linux-only, caller-custodied JPL-kernel
+  state evaluator
 
 ## Install and test
 
@@ -489,6 +512,14 @@ Install the exact LLR screening stack with
 Earth-orientation, or observation data; the runner requires separately
 supplied, hash-bound read-only inputs.
 
+Install the external JPL-kernel state evaluator with
+`python -m pip install -e '.[ephemeris]'`. It performs no download or kernel
+discovery: callers must supply an explicit, hash-bound kernel bundle. The
+isolated CSPICE worker fails closed outside kernel coverage and identifies the
+Python, SpiceyPy, CSPICE, worker, and kernel bytes. Returned states are
+provider-derived interpolation results, not a native or independently
+generated JX ephemeris.
+
 Install the public CPU dynamics API with
 `python -m pip install -e '.[engine]'`. For an NVIDIA GPU, install exactly one
 matching wheel extra: `.[gpu-cuda12]` for CUDA 12.x or `.[gpu-cuda13]` for
@@ -497,6 +528,13 @@ driver is still required. Do not install both CuPy wheel families in one
 environment. An explicitly requested GPU backend will not silently fall back
 to CPU; conservative `auto` routing selects CPU when no matching calibration
 or usable CUDA profile is available.
+
+The restricted-WH long-horizon path also routes guarded tracer encounters
+through SciPy DOP853. Install its complete stack with exactly one matching
+extra: `.[routed-tracer-cuda12]` or `.[routed-tracer-cuda13]`. These extras
+pin the qualified NumPy and SciPy versions and include the corresponding CuPy
+toolkit bundle; the lighter `gpu-cuda*` extras alone do not provide the routed
+encounter solver.
 
 Without installing the package:
 
@@ -509,7 +547,7 @@ Build the release artifacts twice from the declared package-only input boundary
 and require byte identity with:
 
 ```bash
-python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc16
+python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc17-dev0
 ```
 
 The builder requires the exact backend pinned in `pyproject.toml`, normalizes
@@ -562,7 +600,7 @@ before importing them. If absent, it reconstructs the frozen ephemeral
 packages or changes frozen run artifacts. Use `--library-root PATH` when the
 read-only library mirror is mounted elsewhere.
 
-The complete 260-file ownership and runtime policy is documented in
+The complete 100-file ownership and runtime policy is documented in
 [JX test profiles](docs/TEST_PROFILES.md). Validate it with
 `python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
 with `--list-files`, or run all current-source profiles with `--profile live`.
@@ -636,7 +674,10 @@ observational Planet X result. See the
 
 The locked 10,000-year source/control screen completed 100,000 matched
 massless tracers per arm plus 40,000 audit trajectories. All numerical gates
-passed. The control arm produced 4,377 sampled low-perihelion injections and
+passed in the historical execution. The compact results remain retained, but
+the 240 block outputs and 1,200 checkpoint archives are absent from this
+checkout, so the original full evidence audit cannot be repeated here. The
+control arm produced 4,377 sampled low-perihelion injections and
 the candidate-9118 source arm produced 4,374. The source-minus-control fraction
 was −0.00003 with a paired-block 95% bootstrap interval of
 [−0.00009, +0.00003], entirely inside the predeclared ±0.001 equivalence

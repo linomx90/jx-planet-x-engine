@@ -3,9 +3,33 @@
 All notable package changes are recorded here. Scientific outcomes and their
 claim boundaries remain documented in the corresponding locked run reports.
 
-## Unreleased
+## Unreleased — 0.6.0rc17.dev0
 
 ### Added
+
+- Declared the CUDA restricted Wisdom--Holman family as the canonical
+  experimental long-horizon architecture behind `jxplanetx.long_horizon`,
+  while retaining an all-false scientific claim ceiling.
+- Packaged the exact content-addressed NASA/JPL SBDB response bytes used by
+  the predeclared observed-object benchmark populations so installed wheels
+  and source archives can reconstruct their provenance without the run tree.
+- Added complete routed-tracer CUDA extras that pin NumPy and SciPy alongside
+  the matching CuPy CUDA toolkit family.
+- Added one source-bound fixed-lane lifecycle runner with exact result, event,
+  route-ledger, and replay-verified checkpoint receipts. Routed receipts now
+  require the exact massive-source wrapper tile and fail closed without it.
+- Added a create-only `PREPARED_NOT_EXECUTED` 1,000-year validation protocol
+  over 108 predeclared observed and sensitivity states, two JX timesteps, and
+  an independent REBOUND 5.1.1 comparison lane. No long-duration execution is
+  enabled by this change.
+- Restored the exact 100,000-row DE441 population input and hardened generic
+  SPICE, lunar-ephemeris, and DE441 block/checkpoint provenance and validation.
+
+### Release identity
+
+- Advanced current development to `0.6.0rc17.dev0`. The already published and
+  tagged `0.6.0rc16` identity is immutable; the release builder now refuses to
+  rebuild any version explicitly listed as published.
 
 - Added the screening-only
   `orbit_determination.multi_arc_linearized_weighted_svd_step` component with

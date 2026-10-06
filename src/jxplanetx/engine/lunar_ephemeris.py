@@ -24,6 +24,7 @@ import hashlib
 import json
 import math
 import struct
+from typing import Any
 
 from jxplanetx.solar_system import eih_1pn
 from jxplanetx.solar_system import lunar_coupled as _lunar
@@ -44,8 +45,10 @@ from .rkf78 import RKF78_STAGE_COUNT, _rkf78_step
 
 LUNAR_EPHEMERIS_V1_STATE_ABI_VERSION = 1
 LUNAR_EPHEMERIS_V1_RESULT_DIGEST_DOMAIN = (
-    "jxplanetx.engine.lunar-ephemeris-v1-result.v1"
+    "jxplanetx.engine.lunar-ephemeris-v1-result.v2"
 )
+LUNAR_EPHEMERIS_V1_EPOCH_UNIT = "SI_SECOND"
+LUNAR_EPHEMERIS_V1_EPOCH_ORIGIN = "J2000_TDB_JD_2451545.0"
 LUNAR_EPHEMERIS_V1_FORCE_ROSTER = (
     "MUTUAL_NEWTONIAN_POINT_MASS",
     "MUTUAL_EIH_1PN_GR",
@@ -83,7 +86,7 @@ MOON_INDEX = 4
 BODY_COUNT = len(LUNAR_EPHEMERIS_V1_BODY_IDS)
 _POSITION_COMPONENTS = BODY_COUNT * 3 + 4
 _VELOCITY_COMPONENTS = BODY_COUNT * 3 + 6
-_LEDGER_DOMAIN = b"jxplanetx.engine.lunar-ephemeris-v1-ledger.v1\0"
+_LEDGER_DOMAIN = b"jxplanetx.engine.lunar-ephemeris-v1-ledger.v2\0"
 
 
 class LunarEphemerisV1Error(ValueError):
@@ -147,7 +150,13 @@ def _owned_array(value: object, shape: tuple[int, ...], label: str):
 
 @dataclass(frozen=True, slots=True, eq=False)
 class LunarEphemerisV1State:
-    """Owned resolved-eleven translation and lunar rotation state."""
+    """Owned resolved-eleven translation and lunar rotation state.
+
+    ``epoch`` is an elapsed count of SI seconds on the TDB coordinate-time
+    scale from J2000 TDB (JD 2451545.0).  The two explicit metadata fields are
+    appended defaults so callers using the original v1 constructor continue
+    to construct the same interpretation without a positional-argument shift.
+    """
 
     snapshot_id: str
     epoch: float
@@ -165,6 +174,8 @@ class LunarEphemerisV1State:
     state_abi_version: int = LUNAR_EPHEMERIS_V1_STATE_ABI_VERSION
     scientific_claim_state: str = SCIENTIFIC_CLAIM_STATE
     production_authorized: bool = False
+    epoch_unit: str = LUNAR_EPHEMERIS_V1_EPOCH_UNIT
+    epoch_origin: str = LUNAR_EPHEMERIS_V1_EPOCH_ORIGIN
 
     def __post_init__(self) -> None:
         _text(self.snapshot_id, "snapshot_id")
@@ -176,6 +187,12 @@ class LunarEphemerisV1State:
             (self.frame, "BARYCENTRIC_INERTIAL", "frame"),
             (self.origin, "SYSTEM_BARYCENTER", "origin"),
             (self.axes, "J2000", "axes"),
+            (self.epoch_unit, LUNAR_EPHEMERIS_V1_EPOCH_UNIT, "epoch_unit"),
+            (
+                self.epoch_origin,
+                LUNAR_EPHEMERIS_V1_EPOCH_ORIGIN,
+                "epoch_origin",
+            ),
         )
         for value, expected, label in expected_context:
             if value != expected:
@@ -284,7 +301,7 @@ class LunarEphemerisV1Parameters:
 
 @dataclass(frozen=True, slots=True)
 class LunarEphemerisV1IntegrationSpec:
-    """Exact checkpoint schedule and fixed maximum RKF78 step."""
+    """Exact TDB-second checkpoint schedule and fixed maximum RKF78 step."""
 
     checkpoint_epochs: tuple[float, ...]
     maximum_step: float
@@ -355,12 +372,95 @@ class LunarEphemerisV1Run:
             or any(type(item) is not LunarEphemerisV1State for item in self.checkpoints)
         ):
             raise LunarEphemerisV1Error("checkpoint roster changed")
+        if self.initial_state.epoch != self.integration_spec.checkpoint_epochs[0]:
+            raise LunarEphemerisV1Error(
+                "initial state epoch must equal the first checkpoint epoch"
+            )
+        initial_context = (
+            self.initial_state.time_scale,
+            self.initial_state.frame,
+            self.initial_state.origin,
+            self.initial_state.axes,
+            self.initial_state.epoch_unit,
+            self.initial_state.epoch_origin,
+            self.initial_state.body_ids,
+            self.initial_state.state_abi_version,
+            self.initial_state.scientific_claim_state,
+            self.initial_state.production_authorized,
+        )
+        for index, (checkpoint, scheduled_epoch) in enumerate(
+            zip(
+                self.checkpoints,
+                self.integration_spec.checkpoint_epochs,
+                strict=True,
+            )
+        ):
+            if checkpoint.epoch != scheduled_epoch:
+                raise LunarEphemerisV1Error(
+                    f"checkpoints[{index}].epoch does not match the schedule"
+                )
+            checkpoint_context = (
+                checkpoint.time_scale,
+                checkpoint.frame,
+                checkpoint.origin,
+                checkpoint.axes,
+                checkpoint.epoch_unit,
+                checkpoint.epoch_origin,
+                checkpoint.body_ids,
+                checkpoint.state_abi_version,
+                checkpoint.scientific_claim_state,
+                checkpoint.production_authorized,
+            )
+            if checkpoint_context != initial_context:
+                raise LunarEphemerisV1Error(
+                    f"checkpoints[{index}] coordinate or claim context changed"
+                )
+            if checkpoint.provenance != self.initial_state.provenance:
+                raise LunarEphemerisV1Error(
+                    f"checkpoints[{index}] provenance changed"
+                )
+            expected_snapshot_id = (
+                self.initial_state.snapshot_id
+                if index == 0
+                else f"{self.initial_state.snapshot_id}:checkpoint:{index}"
+            )
+            if checkpoint.snapshot_id != expected_snapshot_id:
+                raise LunarEphemerisV1Error(
+                    f"checkpoints[{index}] snapshot identity changed"
+                )
+        if _state_digest(self.checkpoints[0]) != _state_digest(self.initial_state):
+            raise LunarEphemerisV1Error(
+                "the first checkpoint must exactly reproduce the initial state"
+            )
+        if (
+            type(self.accepted_step_epochs) is not tuple
+            or type(self.accepted_step_magnitudes) is not tuple
+        ):
+            raise LunarEphemerisV1Error(
+                "accepted step epochs and magnitudes must be exact tuples"
+            )
         for value, label in (
             (self.accepted_steps, "accepted_steps"),
             (self.force_evaluations, "force_evaluations"),
         ):
             if type(value) is not int or value <= 0:
                 raise LunarEphemerisV1Error(f"{label} must be positive")
+        if (
+            len(self.accepted_step_epochs) != self.accepted_steps
+            or len(self.accepted_step_magnitudes) != self.accepted_steps
+        ):
+            raise LunarEphemerisV1Error(
+                "accepted step tuple lengths must equal accepted_steps"
+            )
+        if self.accepted_steps > self.integration_spec.maximum_steps:
+            raise LunarEphemerisV1Error(
+                "accepted_steps exceeds the declared maximum_steps"
+            )
+        _validate_step_roster(
+            self.integration_spec,
+            self.accepted_step_epochs,
+            self.accepted_step_magnitudes,
+        )
         if self.force_evaluations != self.accepted_steps * RKF78_STAGE_COUNT:
             raise LunarEphemerisV1Error("force-evaluation accounting changed")
         for value, label in (
@@ -376,6 +476,15 @@ class LunarEphemerisV1Run:
         ):
             if type(value) is not float or not math.isfinite(value) or value < 0.0:
                 raise LunarEphemerisV1Error(f"{label} must be finite and nonnegative")
+        if (
+            self.maximum_eih_compactness
+            > self.parameters.eih.maximum_compactness
+            or self.maximum_eih_speed_fraction_squared
+            > self.parameters.eih.maximum_speed_fraction_squared
+        ):
+            raise LunarEphemerisV1Error(
+                "EIH diagnostic exceeds the declared weak-field domain"
+            )
         for value, label in (
             (self.accepted_step_ledger_sha256, "accepted_step_ledger_sha256"),
             (self.result_content_sha256, "result_content_sha256"),
@@ -400,6 +509,32 @@ class LunarEphemerisV1Run:
             or self.general_superiority_claimed
         ):
             raise LunarEphemerisV1Error("run identity or claim controls changed")
+        expected_ledger = _accepted_step_ledger_digest(
+            self.accepted_step_epochs,
+            self.accepted_step_magnitudes,
+        )
+        if self.accepted_step_ledger_sha256 != expected_ledger:
+            raise LunarEphemerisV1Error(
+                "accepted_step_ledger_sha256 does not match the retained step roster"
+            )
+        expected_result = _result_digest(
+            self.initial_state,
+            self.parameters,
+            self.integration_spec,
+            self.checkpoints,
+            self.accepted_step_epochs,
+            self.accepted_step_magnitudes,
+            self.accepted_steps,
+            self.force_evaluations,
+            self.accepted_step_ledger_sha256,
+            self.maximum_eih_compactness,
+            self.maximum_eih_speed_fraction_squared,
+            self.maximum_quaternion_preprojection_norm_error,
+        )
+        if self.result_content_sha256 != expected_result:
+            raise LunarEphemerisV1Error(
+                "result_content_sha256 does not match the complete run content"
+            )
 
     @property
     def final_state(self) -> LunarEphemerisV1State:
@@ -460,52 +595,241 @@ def _state_from_packed(
             v[BODY_COUNT * 3 + 3 : BODY_COUNT * 3 + 6]
         ),
         provenance=template.provenance,
+        time_scale=template.time_scale,
+        frame=template.frame,
+        origin=template.origin,
+        axes=template.axes,
+        body_ids=template.body_ids,
+        state_abi_version=template.state_abi_version,
+        scientific_claim_state=template.scientific_claim_state,
+        production_authorized=template.production_authorized,
+        epoch_unit=template.epoch_unit,
+        epoch_origin=template.epoch_origin,
     )
 
 
-def _parameter_digest(parameters: LunarEphemerisV1Parameters) -> str:
-    base = parameters.coupled_lunar
-    lunar = base.lunar
-    core = lunar.core_coupling
-    payload = {
-        "earth_j2": base.earth_j2.hex(),
-        "earth_pole_inertial": [value.hex() for value in base.earth_pole_inertial],
-        "earth_reference_radius_km": base.earth_reference_radius_km.hex(),
-        "eih": {
-            "beta": parameters.eih.beta.hex(),
-            "gamma": parameters.eih.gamma.hex(),
-            "maximum_compactness": parameters.eih.maximum_compactness.hex(),
-            "maximum_speed_fraction_squared": (
-                parameters.eih.maximum_speed_fraction_squared.hex()
-            ),
-            "speed_of_light_km_s": parameters.eih.speed_of_light_km_s.hex(),
-        },
-        "figure_inertia_over_mr2": [
-            value.hex() for value in lunar.figure_inertia_over_mr2
-        ],
-        "mantle_inertia_over_mr2": [
-            value.hex() for value in lunar.mantle_inertia_over_mr2
-        ],
-        "core_inertia_over_mr2": [
-            value.hex() for value in core.core_inertia_over_mr2
-        ],
-        "core_parameter_source_id": core.parameter_source_id,
-        "core_viscous_coefficient": (
-            core.viscous_coefficient_over_mr2_per_second.hex()
-        ),
-        "lunar_reference_radius_km": lunar.lunar_reference_radius_km.hex(),
-        "model_id": parameters.model_id,
-    }
-    encoded = json.dumps(
-        payload,
+def _canonical_json_bytes(value: object) -> bytes:
+    return json.dumps(
+        value,
         allow_nan=False,
         ensure_ascii=True,
         separators=(",", ":"),
         sort_keys=True,
     ).encode("ascii")
-    digest = hashlib.sha256(encoded)
-    digest.update(parameters.gravitational_parameters_km3_s2.tobytes(order="C"))
+
+
+def _framed_update(digest: Any, label: str, value: bytes) -> None:
+    label_bytes = label.encode("ascii")
+    digest.update(struct.pack(">Q", len(label_bytes)))
+    digest.update(label_bytes)
+    digest.update(struct.pack(">Q", len(value)))
+    digest.update(value)
+
+
+def _state_metadata(state: LunarEphemerisV1State) -> dict[str, object]:
+    provenance = state.provenance
+    return {
+        "axes": state.axes,
+        "body_ids": list(state.body_ids),
+        "epoch": state.epoch.hex(),
+        "epoch_origin": state.epoch_origin,
+        "epoch_unit": state.epoch_unit,
+        "frame": state.frame,
+        "origin": state.origin,
+        "production_authorized": state.production_authorized,
+        "provenance": {
+            "citation": provenance.citation,
+            "sha256": provenance.sha256,
+            "source_id": provenance.source_id,
+            "version": provenance.version,
+        },
+        "scientific_claim_state": state.scientific_claim_state,
+        "snapshot_id": state.snapshot_id,
+        "state_abi_version": state.state_abi_version,
+        "time_scale": state.time_scale,
+    }
+
+
+def _update_state_digest(
+    digest: Any, label: str, state: LunarEphemerisV1State
+) -> None:
+    _framed_update(
+        digest,
+        f"{label}.metadata",
+        _canonical_json_bytes(_state_metadata(state)),
+    )
+    for array_label, value in (
+        ("positions_km", state.positions_km),
+        ("velocities_km_s", state.velocities_km_s),
+        (
+            "mantle_quaternion_body_to_inertial",
+            state.mantle_quaternion_body_to_inertial,
+        ),
+        (
+            "mantle_angular_velocity_body_s",
+            state.mantle_angular_velocity_body_s,
+        ),
+        ("core_angular_velocity_body_s", state.core_angular_velocity_body_s),
+    ):
+        _framed_update(
+            digest,
+            f"{label}.{array_label}.float64-c-bytes",
+            value.tobytes(order="C"),
+        )
+
+
+def _state_digest(state: LunarEphemerisV1State) -> str:
+    digest = hashlib.sha256(b"jxplanetx.engine.lunar-ephemeris-v1-state.v2\0")
+    _update_state_digest(digest, "state", state)
     return digest.hexdigest()
+
+
+def _parameter_digest(parameters: LunarEphemerisV1Parameters) -> str:
+    """Bind every public and nested physical/claim parameter field."""
+
+    base = parameters.coupled_lunar
+    lunar = base.lunar
+    core = lunar.core_coupling
+    eih = parameters.eih
+    payload = {
+        "coupled_lunar": {
+            "earth_j2": base.earth_j2.hex(),
+            "earth_pole_inertial": [
+                value.hex() for value in base.earth_pole_inertial
+            ],
+            "earth_reference_radius_km": base.earth_reference_radius_km.hex(),
+            "lunar": {
+                "core_coupling": {
+                    "core_inertia_over_mr2": [
+                        value.hex() for value in core.core_inertia_over_mr2
+                    ],
+                    "evidence_class": core.evidence_class,
+                    "mantle_frame": core.mantle_frame,
+                    "model_id": core.model_id,
+                    "parameter_source_id": core.parameter_source_id,
+                    "parameter_status": core.parameter_status,
+                    "physical_status": core.physical_status,
+                    "pressure_torque_formula": core.pressure_torque_formula,
+                    "qualification_authorized": core.qualification_authorized,
+                    "registry_authorized": core.registry_authorized,
+                    "viscous_coefficient_over_mr2_per_second": (
+                        core.viscous_coefficient_over_mr2_per_second.hex()
+                    ),
+                },
+                "earth_gm_km3_s2": lunar.earth_gm_km3_s2.hex(),
+                "figure_inertia_over_mr2": [
+                    value.hex() for value in lunar.figure_inertia_over_mr2
+                ],
+                "lunar_reference_radius_km": (
+                    lunar.lunar_reference_radius_km.hex()
+                ),
+                "mantle_inertia_over_mr2": [
+                    value.hex() for value in lunar.mantle_inertia_over_mr2
+                ],
+                "model_id": lunar.model_id,
+                "moon_gm_km3_s2": lunar.moon_gm_km3_s2.hex(),
+                "qualification_authorized": lunar.qualification_authorized,
+                "registry_authorized": lunar.registry_authorized,
+                "scientific_claim_state": lunar.scientific_claim_state,
+                "scope": lunar.scope,
+            },
+            "model_id": base.model_id,
+            "qualification_authorized": base.qualification_authorized,
+            "registry_authorized": base.registry_authorized,
+            "scientific_claim_state": base.scientific_claim_state,
+            "scope": base.scope,
+            "sun_gm_km3_s2": base.sun_gm_km3_s2.hex(),
+        },
+        "eih": {
+            "beta": eih.beta.hex(),
+            "coordinate_scope": eih.coordinate_scope,
+            "correction_only": eih.correction_only,
+            "gamma": eih.gamma.hex(),
+            "maximum_compactness": eih.maximum_compactness.hex(),
+            "maximum_speed_fraction_squared": (
+                eih.maximum_speed_fraction_squared.hex()
+            ),
+            "model_id": eih.model_id,
+            "production_ready": eih.production_ready,
+            "qualification_authorized": eih.qualification_authorized,
+            "registry_authorized": eih.registry_authorized,
+            "scientific_claim_state": eih.scientific_claim_state,
+            "speed_of_light_km_s": eih.speed_of_light_km_s.hex(),
+        },
+        "ephemeris_qualified": parameters.ephemeris_qualified,
+        "force_roster": list(parameters.force_roster),
+        "gravitational_parameters_km3_s2": [
+            float(value).hex()
+            for value in parameters.gravitational_parameters_km3_s2
+        ],
+        "model_id": parameters.model_id,
+        "omitted_physics": list(parameters.omitted_physics),
+        "production_authorized": parameters.production_authorized,
+        "scientific_claim_state": parameters.scientific_claim_state,
+    }
+    return hashlib.sha256(
+        b"jxplanetx.engine.lunar-ephemeris-v1-parameters.v2\0"
+        + _canonical_json_bytes(payload)
+    ).hexdigest()
+
+
+def _accepted_step_ledger_digest(
+    epochs: tuple[float, ...], magnitudes: tuple[float, ...]
+) -> str:
+    """Hash the retained step roster; checkpoint states use the result digest."""
+
+    digest = hashlib.sha256(_LEDGER_DOMAIN)
+    for epoch, magnitude in zip(epochs, magnitudes, strict=True):
+        digest.update(struct.pack(">dd", epoch, magnitude))
+    return digest.hexdigest()
+
+
+def _validate_step_roster(
+    spec: LunarEphemerisV1IntegrationSpec,
+    epochs: tuple[float, ...],
+    magnitudes: tuple[float, ...],
+) -> None:
+    if len(epochs) != len(magnitudes):
+        raise LunarEphemerisV1Error("accepted step tuple lengths differ")
+    direction = (
+        1.0 if spec.checkpoint_epochs[-1] > spec.checkpoint_epochs[0] else -1.0
+    )
+    current = spec.checkpoint_epochs[0]
+    checkpoint_index = 1
+    for index, (epoch, magnitude) in enumerate(
+        zip(epochs, magnitudes, strict=True)
+    ):
+        _finite_float(epoch, f"accepted_step_epochs[{index}]")
+        _positive_float(magnitude, f"accepted_step_magnitudes[{index}]")
+        if checkpoint_index >= len(spec.checkpoint_epochs):
+            raise LunarEphemerisV1Error(
+                "accepted step roster extends past the schedule"
+            )
+        target = spec.checkpoint_epochs[checkpoint_index]
+        remaining = target - current
+        if direction * remaining <= 0.0 or not math.isfinite(remaining):
+            raise LunarEphemerisV1Error("accepted step roster lost monotone progress")
+        expected_magnitude = min(spec.maximum_step, abs(remaining))
+        expected_epoch = (
+            target
+            if expected_magnitude >= abs(remaining)
+            else current + math.copysign(expected_magnitude, direction)
+        )
+        if magnitude != expected_magnitude or epoch != expected_epoch:
+            raise LunarEphemerisV1Error(
+                f"accepted step {index} does not match the fixed-step schedule"
+            )
+        if expected_epoch == current or not math.isfinite(expected_epoch):
+            raise LunarEphemerisV1Error(
+                "accepted step cannot advance the binary64 epoch"
+            )
+        current = expected_epoch
+        if current == target:
+            checkpoint_index += 1
+    if checkpoint_index != len(spec.checkpoint_epochs):
+        raise LunarEphemerisV1Error(
+            "accepted step roster does not reach every checkpoint"
+        )
 
 
 def _result_digest(
@@ -513,45 +837,54 @@ def _result_digest(
     parameters: LunarEphemerisV1Parameters,
     spec: LunarEphemerisV1IntegrationSpec,
     checkpoints: tuple[LunarEphemerisV1State, ...],
+    accepted_step_epochs: tuple[float, ...],
+    accepted_step_magnitudes: tuple[float, ...],
+    accepted_steps: int,
+    force_evaluations: int,
     ledger_sha256: str,
+    maximum_eih_compactness: float,
+    maximum_eih_speed_fraction_squared: float,
+    maximum_quaternion_preprojection_norm_error: float,
 ) -> str:
     payload = {
-        "axes": initial.axes,
-        "body_ids": list(initial.body_ids),
+        "accepted_step_epochs": [value.hex() for value in accepted_step_epochs],
+        "accepted_step_magnitudes": [
+            value.hex() for value in accepted_step_magnitudes
+        ],
+        "accepted_steps": accepted_steps,
         "checkpoint_epochs": [value.hex() for value in spec.checkpoint_epochs],
+        "ephemeris_qualified": False,
+        "force_evaluations": force_evaluations,
+        "force_roster": list(LUNAR_EPHEMERIS_V1_FORCE_ROSTER),
+        "general_superiority_claimed": False,
         "ledger_sha256": ledger_sha256,
+        "maximum_eih_compactness": maximum_eih_compactness.hex(),
+        "maximum_eih_speed_fraction_squared": (
+            maximum_eih_speed_fraction_squared.hex()
+        ),
+        "maximum_quaternion_preprojection_norm_error": (
+            maximum_quaternion_preprojection_norm_error.hex()
+        ),
         "maximum_step": spec.maximum_step.hex(),
+        "maximum_steps": spec.maximum_steps,
         "method_id": LUNAR_EPHEMERIS_V1_METHOD_ID,
         "model_id": LUNAR_EPHEMERIS_V1_MODEL_ID,
-        "origin": initial.origin,
+        "omitted_physics": list(LUNAR_EPHEMERIS_V1_OMITTED_PHYSICS),
         "parameter_sha256": _parameter_digest(parameters),
-        "provenance_sha256": initial.provenance.sha256,
+        "production_authorized": False,
         "schema": LUNAR_EPHEMERIS_V1_RESULT_DIGEST_DOMAIN,
-        "state_abi_version": LUNAR_EPHEMERIS_V1_STATE_ABI_VERSION,
-        "time_scale": initial.time_scale,
+        "scientific_claim_state": SCIENTIFIC_CLAIM_STATE,
     }
-    encoded = json.dumps(
-        payload,
-        allow_nan=False,
-        ensure_ascii=True,
-        separators=(",", ":"),
-        sort_keys=True,
-    ).encode("ascii")
     digest = hashlib.sha256(
-        LUNAR_EPHEMERIS_V1_RESULT_DIGEST_DOMAIN.encode("ascii")
-        + b"\0"
-        + encoded
+        LUNAR_EPHEMERIS_V1_RESULT_DIGEST_DOMAIN.encode("ascii") + b"\0"
     )
-    for checkpoint in checkpoints:
-        digest.update(float(checkpoint.epoch).hex().encode("ascii"))
-        for value in (
-            checkpoint.positions_km,
-            checkpoint.velocities_km_s,
-            checkpoint.mantle_quaternion_body_to_inertial,
-            checkpoint.mantle_angular_velocity_body_s,
-            checkpoint.core_angular_velocity_body_s,
-        ):
-            digest.update(value.tobytes(order="C"))
+    _framed_update(digest, "run", _canonical_json_bytes(payload))
+    # Bind the initial bytes explicitly even though the first checkpoint is
+    # required to reproduce them.  That duplication is intentional: initial
+    # conditions and checkpoint evidence are separate contract roles.
+    _update_state_digest(digest, "initial_state", initial)
+    for index, checkpoint in enumerate(checkpoints):
+        _update_state_digest(digest, f"checkpoints[{index}]", checkpoint)
     return digest.hexdigest()
 
 
@@ -594,7 +927,6 @@ def integrate_lunar_ephemeris_v1(
     accepted_epochs: list[float] = []
     accepted_magnitudes: list[float] = []
     checkpoints: list[LunarEphemerisV1State] = [initial_state]
-    ledger = hashlib.sha256(_LEDGER_DOMAIN)
     maximum_compactness = 0.0
     maximum_speed_fraction = 0.0
     maximum_quaternion_error = 0.0
@@ -774,9 +1106,6 @@ def integrate_lunar_ephemeris_v1(
             epoch = endpoint
             accepted_epochs.append(epoch)
             accepted_magnitudes.append(abs(step))
-            ledger.update(struct.pack(">dd", epoch, abs(step)))
-            ledger.update(position.tobytes(order="C"))
-            ledger.update(velocity.tobytes(order="C"))
 
         checkpoints.append(
             _state_from_packed(
@@ -789,23 +1118,35 @@ def integrate_lunar_ephemeris_v1(
         )
 
     checkpoint_tuple = tuple(checkpoints)
-    ledger_sha256 = ledger.hexdigest()
+    accepted_epoch_tuple = tuple(accepted_epochs)
+    accepted_magnitude_tuple = tuple(accepted_magnitudes)
+    ledger_sha256 = _accepted_step_ledger_digest(
+        accepted_epoch_tuple,
+        accepted_magnitude_tuple,
+    )
     content_sha256 = _result_digest(
         initial_state,
         parameters,
         integration_spec,
         checkpoint_tuple,
+        accepted_epoch_tuple,
+        accepted_magnitude_tuple,
+        len(accepted_epoch_tuple),
+        len(accepted_epoch_tuple) * RKF78_STAGE_COUNT,
         ledger_sha256,
+        float(maximum_compactness),
+        float(maximum_speed_fraction),
+        float(maximum_quaternion_error),
     )
     return LunarEphemerisV1Run(
         initial_state=initial_state,
         parameters=parameters,
         integration_spec=integration_spec,
         checkpoints=checkpoint_tuple,
-        accepted_step_epochs=tuple(accepted_epochs),
-        accepted_step_magnitudes=tuple(accepted_magnitudes),
-        accepted_steps=len(accepted_epochs),
-        force_evaluations=len(accepted_epochs) * RKF78_STAGE_COUNT,
+        accepted_step_epochs=accepted_epoch_tuple,
+        accepted_step_magnitudes=accepted_magnitude_tuple,
+        accepted_steps=len(accepted_epoch_tuple),
+        force_evaluations=len(accepted_epoch_tuple) * RKF78_STAGE_COUNT,
         accepted_step_ledger_sha256=ledger_sha256,
         result_content_sha256=content_sha256,
         maximum_eih_compactness=float(maximum_compactness),
@@ -820,6 +1161,8 @@ __all__ = [
     "BODY_COUNT",
     "EARTH_INDEX",
     "LUNAR_EPHEMERIS_V1_BODY_IDS",
+    "LUNAR_EPHEMERIS_V1_EPOCH_ORIGIN",
+    "LUNAR_EPHEMERIS_V1_EPOCH_UNIT",
     "LUNAR_EPHEMERIS_V1_FORCE_ROSTER",
     "LUNAR_EPHEMERIS_V1_METHOD_ID",
     "LUNAR_EPHEMERIS_V1_MODEL_ID",

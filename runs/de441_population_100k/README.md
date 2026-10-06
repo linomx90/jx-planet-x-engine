@@ -9,6 +9,35 @@ injection fraction **equivalent within the predeclared ±0.001 margin**.
 This is a numerical source/control result, not a detection or exclusion of
 Planet X. The result remains `SCREENING_ONLY`.
 
+## Checkout evidence status
+
+The result below is a **historical compact attestation**, not a presently
+re-auditable execution archive. This checkout retains the contracts, compact
+result JSON, compact audit JSON, state CSVs, and the byte-exact 100,000-row
+population. It does **not** retain the execution directories that the audit
+read on its original host: all 240 block summaries, all 240 tracer CSVs, and
+all 1,200 checkpoint archives are absent here.
+
+Therefore, statements below that those artifacts passed describe what
+`final_result_v1_audit.json` recorded at audit time. They do not claim those
+files were rechecked in this checkout. The exact current inventory and its
+limitations are recorded in `retained_evidence_status_v1.json`. The numerical
+outcome cannot be independently re-audited from this checkout alone; doing so
+requires a clean rerun under a newly preregistered contract and preservation
+of its complete execution evidence.
+
+The candidate source custody is also incomplete. `states/state_manifest.json`
+declares a candidate-metadata artifact with SHA-256
+`509917e0093107464d9ee45ed2c8e9f403403b2bb0e94455fa3614825917f8b0`,
+but that artifact is not retained in this checkout. Candidate 9118 is therefore
+a historical exploratory screening input only. The later JX-O2 retirement
+receipt, `audits/jx_o2_g0_candidate_9118_retirement_v1/`, is the governing
+policy for that experiment: it forbids promoting candidate 9118 because its
+selection lineage was incomplete and its catalog elements were reassigned
+from JD 2458270.0 to JD 2461200.5 without physical propagation or refit. The
+historical result is preserved; it is not reinterpreted as scientific source
+provenance.
+
 ## Question tested
 
 Does adding one declared distant source model—candidate 9118, 5.06 Earth
@@ -102,10 +131,10 @@ inside its locked 0.001 limit.
 
 The run used eight workers and completed in 4,921.89 seconds (82.03 minutes).
 
-## Independent artifact readback
+## Historical independent artifact readback
 
-`final_result_v1_audit.json` has verdict `AUDIT_PASSED`. The audit independently
-re-read and verified:
+`final_result_v1_audit.json` records verdict `AUDIT_PASSED`. On the original
+execution host, the audit reported that it independently re-read and verified:
 
 - 240 block summaries and their hashes;
 - 240 tracer CSVs containing 240,000 rows;
@@ -115,8 +144,11 @@ re-read and verified:
 - convergence metrics;
 - the deterministic paired bootstrap interval and effect classification.
 
-This protects against a damaged or internally inconsistent stored result. It
-does not provide independent dynamical-software replication.
+That historical readback protected against a damaged or internally
+inconsistent stored result at audit time. Because its input execution files
+are not retained here, the compact audit JSON alone does not provide that
+protection to this checkout. It also was not independent dynamical-software
+replication.
 
 ## Scientific interpretation
 
@@ -149,6 +181,7 @@ would then test whether the short-screen equivalence persists.
 | `final_contract_v1.json` | `1f3ccf6f29d4ec9890b9d66d19858c148760b00167281ce386afdfd0c8801725` |
 | `final_result_v1.json` | `24b7572cf130c683acd66a4677dac62d0d30b15b24f9bf5997b612a8045d7efd` |
 | `final_result_v1_audit.json` | `57922e53e0c9a0bb021c659c5abecff85212792dac88241d62b9c8c4423acf12` |
+| `retained_evidence_status_v1.json` | `6ad7f834a526ba4a94a2e7ffa7b5b0509dd2666c4500f56bb745e0b04c9a3565` |
 | `population_elements_v1.csv` | `2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1` |
 | `states/de441_control_state.csv` | `edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14` |
 | `states/de441_source_9118_state.csv` | `81a8cf50f2ce6d17e90369efcaa82cf82a0955665851fae0207e4c6cfae4b6cf` |
@@ -156,27 +189,24 @@ would then test whether the short-screen equivalence persists.
 
 ## Reproduce and audit
 
-With the pinned REBOUND wheel and locked inputs available:
+The commands below document the historical workflow. The original final and
+qualification contracts lock the historical v1 implementation hashes and are
+preserved unchanged. The hardened runner now emits v2 job/block/checkpoint and
+result custody records, so a fresh scientific execution requires a new contract
+registered before outcomes are inspected. Do not rewrite the historical
+contracts merely to make their hashes match new code.
+
+The retained inputs can be checked without implying that the absent execution
+evidence was re-audited:
 
 ```bash
-PYTHONPATH=../.vendor:src python3 -m unittest discover -s tests -v
-
-PYTHONPATH=../.vendor:src python3 \
-  runs/de441_population_100k/run_population.py \
-  --contract runs/de441_population_100k/final_contract_v1.json \
-  --run-dir runs/de441_population_100k/final_execution_v1 \
-  --output runs/de441_population_100k/final_result_v1.json \
-  --workers 8
-
-PYTHONPATH=../.vendor:src python3 \
-  runs/de441_population_100k/audit_final_result.py \
-  --contract runs/de441_population_100k/final_contract_v1.json \
-  --result runs/de441_population_100k/final_result_v1.json \
-  --execution runs/de441_population_100k/final_execution_v1 \
-  --population runs/de441_population_100k/population_elements_v1.csv \
-  --output runs/de441_population_100k/final_result_v1_audit.json
+sha256sum runs/de441_population_100k/population_elements_v1.csv
+python3 -m unittest -v tests.test_de441_population
 ```
 
-The runners refuse to overwrite existing locked result files. Move the
-existing execution/result artifacts to a separate archival location before an
-intentional clean replication; do not delete the original scientific record.
+No hardened final-run contract is present, and the candidate-retirement
+receipt does not authorize one for JX-O2. Any separately authorized forensic
+replication or future experiment would require a new preregistration and must
+give its execution directory, result, and v2 audit distinct names. The runner
+and auditor refuse to overwrite custody artifacts. Never move or rewrite the
+historical compact records to make a new run look like the old one.

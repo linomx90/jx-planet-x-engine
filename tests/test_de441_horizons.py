@@ -48,6 +48,26 @@ class De441HorizonsTests(unittest.TestCase):
         self.assertEqual(verdict_from_gates({"a": {"passed": False}}), "INVALID")
         self.assertEqual(verdict_from_gates({}), "INVALID")
 
+    def test_incomplete_historical_anchor_is_explicitly_non_authorizing(self) -> None:
+        anchor = PROJECT_ROOT / "runs" / "de441_anchor"
+        status = json.loads(
+            (anchor / "EVIDENCE_STATUS.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            status["classification"],
+            "HISTORICAL_SCREENING_ONLY_INCOMPLETE",
+        )
+        self.assertFalse(status["replayable_from_checkout"])
+        self.assertFalse(status["cross_method_claim_authorized"])
+        self.assertFalse(status["science_claim_authorized"])
+        for missing in (
+            "horizons_de441_vectors.csv",
+            "y6_160_trajectory.csv",
+            "y6_224_trajectory.csv",
+            "bs_trajectory.csv",
+        ):
+            self.assertFalse((anchor / missing).exists())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -412,6 +412,11 @@ class RestrictedWHCheckpointTests(unittest.TestCase):
             )
             self.assertEqual(dict(loaded.claims), dict(CHECKPOINT_CLAIMS))
             self.assertFalse(any(loaded.claims.values()))
+            with self.assertRaisesRegex(
+                RestrictedWHCheckpointContractError,
+                "replay-verifying loader",
+            ):
+                replace(loaded, state_sha256=hashlib.sha256(b"forged").hexdigest())
             implementation = record["implementation_identity"]
             self.assertEqual(
                 implementation["backend_implementation_source_sha256"],

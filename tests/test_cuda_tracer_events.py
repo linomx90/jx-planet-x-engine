@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import math
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 
+import jxplanetx.cuda_tracer_events as event_module
 from jxplanetx.cuda_tracer_events import (
     DOP853EventLocatorSpec,
     EVENT_PRIMARY_BOUNDARY_OUTWARD,
@@ -185,6 +187,27 @@ class DensePolynomialExhaustivenessTests(unittest.TestCase):
 
 
 class ContinuousEventLocationTests(unittest.TestCase):
+    def test_primary_dense_analysis_is_reused_within_each_accepted_interval(self):
+        with patch.object(
+            event_module,
+            "_dense_distance_critical_fractions",
+            wraps=event_module._dense_distance_critical_fractions,
+        ) as critical_fractions:
+            result = _route(
+                _vector(2.0, 3.0),
+                _vector(0.2, 0.0),
+                ((0.0, 0.0, 0.0),),
+                (0.1,),
+                boundary=100.0,
+                spec=DOP853EventLocatorSpec(maximum_substep_fraction=0.25),
+            )
+
+        self.assertFalse(result.terminated_at_event)
+        self.assertEqual(
+            critical_fractions.call_count,
+            result.accepted_step_count,
+        )
+
     def test_event_free_route_releases_only_full_step_endpoint_and_diagnostics(self):
         result = _route(
             _vector(2.0, 3.0),

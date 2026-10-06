@@ -110,7 +110,7 @@ class JXRC6ReleaseCandidateTests(unittest.TestCase):
             )
         )
 
-        self.assertEqual(__version__, "0.6.0rc10")
+        self.assertEqual(__version__, "0.6.0rc17.dev0")
         self.assertEqual(manifest["version"], "0.6.0rc8")
         self.assertEqual(manifest["scientific_claim_state"], "SCREENING_ONLY")
         self.assertFalse(manifest["release_scope"]["general_rebound_superiority_claimed"])
@@ -155,7 +155,7 @@ class JXRC6ReleaseCandidateTests(unittest.TestCase):
                 encoding="utf-8"
             )
         )
-        self.assertEqual(__version__, "0.6.0rc10")
+        self.assertEqual(__version__, "0.6.0rc17.dev0")
         self.assertEqual(manifest["version"], "0.6.0rc9")
         self.assertEqual(manifest["scientific_claim_state"], "SCREENING_ONLY")
         self.assertFalse(
@@ -197,8 +197,8 @@ class JXRC6ReleaseCandidateTests(unittest.TestCase):
                 encoding="utf-8"
             )
         )
-        self.assertEqual(__version__, "0.6.0rc10")
-        self.assertEqual(manifest["version"], __version__)
+        self.assertEqual(__version__, "0.6.0rc17.dev0")
+        self.assertEqual(manifest["version"], "0.6.0rc10")
         self.assertEqual(manifest["scientific_claim_state"], "SCREENING_ONLY")
         packaging = manifest["reproducible_packaging"]
         self.assertTrue(packaging["stage_modes_canonicalized"])

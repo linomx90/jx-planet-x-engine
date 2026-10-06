@@ -1,0 +1,54 @@
+{
+  "active_outer_body_ids": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "artifact": {
+    "bytes": 973,
+    "path": "de441_control_state.csv",
+    "sha256": "edfbfd50ca29b28b46fe43cae8cb99bd73a9303a5f2e5babf7bf9ad2a820ff14"
+  },
+  "artifact_id": "jx.de441-population.outer-control-state.v1",
+  "classification": "RECONSTRUCTED_DE441_BACKBONE_PLUS_ASSUMED_INNER_SYSTEM_MONOPOLE",
+  "epoch_jd_tdb": 2461200.5,
+  "frame": "J2000 ecliptic, rotated from Horizons ICRF",
+  "inner_system_monopole_body_ids": [
+    10,
+    1,
+    2,
+    3,
+    4
+  ],
+  "nonclaims": [
+    "not a retained DE441 SPK kernel or direct ephemeris evaluator",
+    "not an exact Sun-centered state because row 0 is an inner-system monopole",
+    "not long-duration accuracy or scientific-inference evidence"
+  ],
+  "origin": "inner-system monopole center at t0",
+  "primary_physical_model": "COLLAPSED_INNER_SYSTEM_MONOPOLE",
+  "primary_source_id": "Sun",
+  "schema": "jx.long-horizon.source-model-manifest.v1",
+  "source_ids_ordered": [
+    "Sun",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto"
+  ],
+  "units": {
+    "gm": "AU^3/JULIAN_YEAR^2",
+    "integration_gravitational_constant": 1,
+    "length": "AU",
+    "time": "JULIAN_YEAR_365.25_D",
+    "velocity": "AU/JULIAN_YEAR"
+  },
+  "upstream": {
+    "de440_gm_sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+    "horizons_de441_vectors_sha256": "18308086c9191333448e07a6ab6942a6b0fc7f0100ad2b3abaffbb1a0fd3993e",
+    "historical_state_manifest_sha256": "ec6e2ba8877d206838172dbb573318a2122977e263c054994d4c82a409a43d36"
+  }
+}

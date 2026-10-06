@@ -1,0 +1,42 @@
+{
+  "schema": "jx.long-horizon.science-input-manifest.v1",
+  "acquisition_date": "2026-10-05",
+  "authority": "NASA/JPL SBDB (Small-Body DataBase) Query API",
+  "api_version": "1.0",
+  "epoch_jd_tdb": 2461200.5,
+  "frame": "HELIOCENTRIC_IAU76_80_ECLIPTIC_J2000_OSCULATING",
+  "sources": {
+    "detached": {
+      "path": "raw/jpl_sbdb_detached_query_20261005.json",
+      "sha256": "91647cabbce60eb362b54ddf5be525188e5c58c8db1ade66c0bc6398be78df32",
+      "rows": 26,
+      "selection": "source=ORB; all six element sigmas defined; sort data_arc_days descending, observations_used descending, spk_id ascending; take 6"
+    },
+    "scattering_control": {
+      "path": "raw/jpl_sbdb_scattering_control_query_20261005.json",
+      "sha256": "3d82cc80b73f9fcb5e7969375129524ba0356926c7a14ac82955d0083176a224",
+      "rows": 329,
+      "selection": "name=null; source=ORB; all six element sigmas defined; sort data_arc_days descending, observations_used descending, spk_id ascending; take 6"
+    }
+  },
+  "selected_spk_ids": {
+    "detached": [20090377, 20474640, 54526835, 20541132, 50666516, 20148209],
+    "scattering_control": [20574372, 20303775, 20026181, 20042301, 20026375, 20015874]
+  },
+  "perturbation_policy": {
+    "realizations_per_object": 8,
+    "distribution": "CENTERED_OPEN_UNIFORM",
+    "half_width": "3 times the source-reported one-sigma value for each element",
+    "covariance_used": false,
+    "classification": "INDEPENDENT_SOURCE_SIGMA_SENSITIVITY_ENVELOPE"
+  },
+  "claim_ceiling": "OBSERVED_OBJECT_BENCHMARK_AND_NUMERICAL_SENSITIVITY_ONLY",
+  "claims": {
+    "observationally_complete": false,
+    "observationally_fitted": false,
+    "uncertainty_calibrated": false,
+    "detection_claim": false,
+    "exclusion_claim": false,
+    "science_result": false
+  }
+}

@@ -35,7 +35,7 @@ ejection, completion, or science claim is made.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import json
 import math
@@ -208,6 +208,9 @@ class OwnedEpisodeCheckpointIntegrityError(OwnedEpisodeCheckpointError):
     """Stored checkpoint evidence failed a hash, chain, or replay check."""
 
 
+_LOADER_VERIFICATION_SEAL = object()
+
+
 @dataclass(frozen=True, eq=False)
 class LoadedOwnedEpisodeCheckpoint:
     """Latest state released after exact full-chain replay."""
@@ -225,8 +228,16 @@ class LoadedOwnedEpisodeCheckpoint:
     record: Mapping[str, Any]
     claims: Mapping[str, bool] = CHECKPOINT_CLAIMS
     method_id: str = CHECKPOINT_METHOD_ID
+    _verification_seal: object = field(
+        default=None, init=False, repr=False, compare=False
+    )
 
     def __post_init__(self) -> None:
+        if self._verification_seal is not _LOADER_VERIFICATION_SEAL:
+            raise OwnedEpisodeCheckpointContractError(
+                "LoadedOwnedEpisodeCheckpoint is released only by the "
+                "replay-verifying loader"
+            )
         if type(self.state) is not CUDARestrictedWHState:
             raise OwnedEpisodeCheckpointContractError(
                 "state must be an exact CUDARestrictedWHState"
@@ -270,6 +281,44 @@ class LoadedOwnedEpisodeCheckpoint:
             )
         object.__setattr__(self, "claims", MappingProxyType(dict(CHECKPOINT_CLAIMS)))
         object.__setattr__(self, "record", _checkpoint_codec._freeze_tree(self.record))
+
+
+def _release_verified_owned_episode_checkpoint(
+    *,
+    state: CUDARestrictedWHState,
+    checkpoint_index: int,
+    checkpoint_content_sha256: str,
+    input_state_sha256: str,
+    state_sha256: str,
+    route_chain_sha256: str,
+    route_record_count_cumulative: int,
+    segment_episode_count_cumulative: int,
+    run_id: str,
+    protocol_sha256: str,
+    record: Mapping[str, Any],
+) -> LoadedOwnedEpisodeCheckpoint:
+    """Create a loaded head only inside an exact replay-verifying path."""
+
+    value = object.__new__(LoadedOwnedEpisodeCheckpoint)
+    for name, item in (
+        ("state", state),
+        ("checkpoint_index", checkpoint_index),
+        ("checkpoint_content_sha256", checkpoint_content_sha256),
+        ("input_state_sha256", input_state_sha256),
+        ("state_sha256", state_sha256),
+        ("route_chain_sha256", route_chain_sha256),
+        ("route_record_count_cumulative", route_record_count_cumulative),
+        ("segment_episode_count_cumulative", segment_episode_count_cumulative),
+        ("run_id", run_id),
+        ("protocol_sha256", protocol_sha256),
+        ("record", record),
+        ("claims", CHECKPOINT_CLAIMS),
+        ("method_id", CHECKPOINT_METHOD_ID),
+        ("_verification_seal", _LOADER_VERIFICATION_SEAL),
+    ):
+        object.__setattr__(value, name, item)
+    value.__post_init__()
+    return value
 
 
 _APPEND_SESSION_SEAL = object()
@@ -481,7 +530,7 @@ def _read_published_append_head(
     state = _state_from_storage(
         output_metadata, arrays, prefix="output", backend=backend
     )
-    loaded = LoadedOwnedEpisodeCheckpoint(
+    loaded = _release_verified_owned_episode_checkpoint(
         state=state,
         checkpoint_index=index,
         checkpoint_content_sha256=record["checkpoint_content_sha256"],
@@ -1332,7 +1381,7 @@ def dump_owned_episode_delta_checkpoint(
         namespace = _checkpoint_namespace(root, run_id, protocol_sha256)
         _checkpoint_codec._ensure_namespace(root, namespace)
         with _checkpoint_codec._checkpoint_append_lock(namespace):
-            return _dump_locked(
+            record, _verified_result = _dump_locked(
                 root,
                 run_id=run_id,
                 protocol_sha256=protocol_sha256,
@@ -1349,6 +1398,7 @@ def dump_owned_episode_delta_checkpoint(
                     previous_checkpoint_content_sha256
                 ),
             )
+            return record
     except OwnedEpisodeCheckpointError:
         raise
     except _checkpoint_codec.RestrictedWHCheckpointIntegrityError as exc:
@@ -1365,7 +1415,7 @@ def _dump_locked(
     genesis_state_sha256: str,
     checkpoint_index: int,
     input_state: CUDARestrictedWHState,
-    result: CUDARestrictedWHOwnedEpisodeResult,
+    result: CUDARestrictedWHOwnedEpisodeResult | None,
     source_tile: FrozenSourcePathTile,
     spec: FixedStepCUDARestrictedWHSpec,
     route_spec: RestrictedWHRouteSpec,
@@ -1375,7 +1425,21 @@ def _dump_locked(
     verified_head: _VerifiedAppendHead | None = None,
     bound_implementation_identity: Mapping[str, Any] | None = None,
     bound_runtime_identity: Mapping[str, Any] | None = None,
-) -> Mapping[str, Any]:
+    generate_result_inside_lock: bool = False,
+) -> tuple[Mapping[str, Any], CUDARestrictedWHOwnedEpisodeResult]:
+    if type(generate_result_inside_lock) is not bool:
+        raise OwnedEpisodeCheckpointContractError(
+            "generate_result_inside_lock must be an exact bool"
+        )
+    if generate_result_inside_lock:
+        if result is not None:
+            raise OwnedEpisodeCheckpointContractError(
+                "an internally generated append cannot accept a result"
+            )
+    elif type(result) is not CUDARestrictedWHOwnedEpisodeResult:
+        raise OwnedEpisodeCheckpointContractError(
+            "an externally generated append requires an exact result"
+        )
     if (bound_implementation_identity is None) != (
         bound_runtime_identity is None
     ):
@@ -1460,15 +1524,35 @@ def _dump_locked(
         prefix="input",
         backend=spec.backend,
     )
-    verified_result = _verify_result_against_replay(
-        verified_input_state,
-        result,
-        source_tile,
-        spec,
-        route_spec,
-        route_worker_count,
-        route_lookahead_steps,
-    )
+    if generate_result_inside_lock:
+        verified_result = advance_cuda_restricted_wh_owned_episodes(
+            verified_input_state,
+            source_tile,
+            spec,
+            route_spec=route_spec,
+            route_worker_count=route_worker_count,
+            route_lookahead_steps=route_lookahead_steps,
+        )
+        _validate_segment_shape(
+            verified_input_state,
+            verified_result,
+            source_tile,
+            spec,
+            route_spec,
+            route_worker_count,
+            route_lookahead_steps,
+        )
+    else:
+        assert result is not None
+        verified_result = _verify_result_against_replay(
+            verified_input_state,
+            result,
+            source_tile,
+            spec,
+            route_spec,
+            route_worker_count,
+            route_lookahead_steps,
+        )
     with resolved.activate():
         output_arrays = _state_arrays(
             verified_result.state, cp, prefix="output"
@@ -1503,7 +1587,10 @@ def _dump_locked(
                 "first checkpoint input differs from protocol genesis"
             )
     else:
-        assert verified_head is not None
+        if verified_head is None:
+            raise OwnedEpisodeCheckpointIntegrityError(
+                "successor append lacks its verified predecessor capability"
+            )
         if latest.get("genesis_state_sha256") != genesis_state_sha256:
             raise OwnedEpisodeCheckpointContractError(
                 "successor changed the protocol genesis commitment"
@@ -1672,7 +1759,7 @@ def _dump_locked(
             "append host/CUDA runtime identity changed before publication"
         )
     _checkpoint_codec._atomic_json_create(record_path, record)
-    return _checkpoint_codec._freeze_tree(record)
+    return _checkpoint_codec._freeze_tree(record), verified_result
 
 
 def _verify_record_static(
@@ -2057,7 +2144,7 @@ def load_latest_owned_episode_delta_checkpoint(
         resolved = resolve_backend(backend)
         with resolved.activate():
             resolved.xp.cuda.get_current_stream().synchronize()
-        return LoadedOwnedEpisodeCheckpoint(
+        return _release_verified_owned_episode_checkpoint(
             state=state,
             checkpoint_index=index,
             checkpoint_content_sha256=record["checkpoint_content_sha256"],
@@ -2221,7 +2308,7 @@ class OwnedEpisodeDeltaAppendSession:
                 if self._verified_head is None
                 else self._verified_head.checkpoint_content_sha256
             )
-            record = _dump_locked(
+            record, _verified_result = _dump_locked(
                 self._root,
                 run_id=self._run_id,
                 protocol_sha256=self._protocol_sha256,
@@ -2257,6 +2344,125 @@ class OwnedEpisodeDeltaAppendSession:
         self._loaded_head = loaded
         self._verified_head = verified_head
         return loaded
+
+    def advance_and_append(
+        self,
+        *,
+        input_state: CUDARestrictedWHState,
+        source_tile: FrozenSourcePathTile,
+        spec: FixedStepCUDARestrictedWHSpec,
+        route_spec: RestrictedWHRouteSpec | None = None,
+        route_worker_count: int = 6,
+        route_lookahead_steps: int = 32,
+    ) -> tuple[
+        CUDARestrictedWHOwnedEpisodeResult,
+        LoadedOwnedEpisodeCheckpoint,
+    ]:
+        """Advance once inside the locked session and publish that result.
+
+        Unlike :meth:`append`, this method does not accept an externally
+        computed result and therefore does not repeat the same deterministic
+        segment before publication.  It first authenticates the locked chain
+        frontier and canonicalizes the exact input bytes, then owns the sole
+        numerical advance, hashes and publishes its output, and reads the new
+        bytes back before advancing the private authorization capability.
+
+        Every public checkpoint load still replays the complete chain.  The
+        existing :meth:`append` method remains available when an independent
+        pre-publication replay of a caller-supplied result is required.
+        """
+
+        self._require_owner()
+        try:
+            if type(input_state) is not CUDARestrictedWHState:
+                raise OwnedEpisodeCheckpointContractError(
+                    "input_state must be an exact CUDARestrictedWHState"
+                )
+            if type(source_tile) is not FrozenSourcePathTile:
+                raise OwnedEpisodeCheckpointContractError(
+                    "source_tile must be an exact FrozenSourcePathTile"
+                )
+            if type(spec) is not FixedStepCUDARestrictedWHSpec:
+                raise OwnedEpisodeCheckpointContractError(
+                    "spec must be an exact FixedStepCUDARestrictedWHSpec"
+                )
+            if spec.backend != self._backend:
+                raise OwnedEpisodeCheckpointContractError(
+                    "append session backend cannot change"
+                )
+            if route_spec is None:
+                route_spec = RestrictedWHRouteSpec(
+                    maximum_primary_dynamical_phase=(
+                        spec.maximum_primary_dynamical_phase
+                    ),
+                    primary_outer_boundary_AU=spec.primary_outer_boundary_AU,
+                )
+            if type(route_spec) is not RestrictedWHRouteSpec:
+                raise OwnedEpisodeCheckpointContractError(
+                    "route_spec must be an exact RestrictedWHRouteSpec"
+                )
+            current_implementation, current_runtime = (
+                _current_checkpoint_identities(self._backend)
+            )
+            if not _checkpoint_codec._canonical_tree_equal(
+                current_implementation, self._implementation_identity
+            ):
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "append session implementation identity changed"
+                )
+            if not _checkpoint_codec._canonical_tree_equal(
+                current_runtime, self._runtime_identity
+            ):
+                raise OwnedEpisodeCheckpointIntegrityError(
+                    "append session host/CUDA runtime identity changed"
+                )
+            checkpoint_index = (
+                0
+                if self._verified_head is None
+                else self._verified_head.checkpoint_index + 1
+            )
+            predecessor = (
+                None
+                if self._verified_head is None
+                else self._verified_head.checkpoint_content_sha256
+            )
+            record, result = _dump_locked(
+                self._root,
+                run_id=self._run_id,
+                protocol_sha256=self._protocol_sha256,
+                genesis_state_sha256=self._genesis_state_sha256,
+                checkpoint_index=checkpoint_index,
+                input_state=input_state,
+                result=None,
+                source_tile=source_tile,
+                spec=spec,
+                route_spec=route_spec,
+                route_worker_count=route_worker_count,
+                route_lookahead_steps=route_lookahead_steps,
+                previous_checkpoint_content_sha256=predecessor,
+                verified_head=self._verified_head,
+                bound_implementation_identity=(
+                    self._implementation_identity
+                ),
+                bound_runtime_identity=self._runtime_identity,
+                generate_result_inside_lock=True,
+            )
+            loaded, verified_head = _read_published_append_head(
+                self._root,
+                run_id=self._run_id,
+                protocol_sha256=self._protocol_sha256,
+                genesis_state_sha256=self._genesis_state_sha256,
+                backend=self._backend,
+                expected_record=record,
+                implementation_identity=self._implementation_identity,
+                runtime_identity=self._runtime_identity,
+            )
+        except BaseException:
+            self.close()
+            raise
+        self._loaded_head = loaded
+        self._verified_head = verified_head
+        return result, loaded
 
 
 def open_owned_episode_delta_append_session(

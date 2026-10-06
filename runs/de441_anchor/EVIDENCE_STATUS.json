@@ -1,0 +1,22 @@
+{
+  "assessment_date": "2026-10-05",
+  "classification": "HISTORICAL_SCREENING_ONLY_INCOMPLETE",
+  "cross_method_claim_authorized": false,
+  "missing_required_evidence": [
+    "raw DE441 source archive or kernel",
+    "normalized epoch-state table",
+    "Y6-160 trajectory, summary, and binary state",
+    "Y6-224 trajectory and summary",
+    "independent Bulirsch-Stoer trajectory"
+  ],
+  "retained_records": [
+    "bs_reference_224_blocked_corrected_summary.json",
+    "gate.json",
+    "independent_reference_gate.json",
+    "metadata.json"
+  ],
+  "replayable_from_checkout": false,
+  "schema": "jx-de441-anchor-evidence-status/v1",
+  "science_claim_authorized": false,
+  "superseding_replayable_package": "../de441_horizons_10yr"
+}

@@ -68,8 +68,10 @@ from .engine.backends import resolve_backend
 from .restricted_wh_route import (
     RestrictedWHRouteResult,
     RestrictedWHRouteSpec,
+    _VerifiedRouteContext,
+    _prepare_verified_route_context,
+    _route_restricted_wh_map_step_verified,
     restricted_wh_route_policy_identity,
-    route_restricted_wh_map_step,
 )
 
 
@@ -122,6 +124,7 @@ class _CachedRouteOutcome:
 
 
 _OWNED_SOURCE_TILE: FrozenSourcePathTile | None = None
+_OWNED_ROUTE_CONTEXT: _VerifiedRouteContext | None = None
 _OWNED_ROUTE_SPEC: RestrictedWHRouteSpec | None = None
 _OWNED_SOURCE_STEPS_PER_MAP_STEP: int | None = None
 
@@ -132,9 +135,11 @@ def _initialize_owned_worker(
     source_steps_per_map_step: int,
 ) -> None:
     global _OWNED_SOURCE_TILE
+    global _OWNED_ROUTE_CONTEXT
     global _OWNED_ROUTE_SPEC
     global _OWNED_SOURCE_STEPS_PER_MAP_STEP
     _OWNED_SOURCE_TILE = source_tile
+    _OWNED_ROUTE_CONTEXT = _prepare_verified_route_context(source_tile)
     _OWNED_ROUTE_SPEC = route_spec
     _OWNED_SOURCE_STEPS_PER_MAP_STEP = source_steps_per_map_step
 
@@ -142,13 +147,14 @@ def _initialize_owned_worker(
 def _execute_owned_chain(request: _OwnedChainRequest) -> _OwnedChainResponse:
     if (
         _OWNED_SOURCE_TILE is None
+        or _OWNED_ROUTE_CONTEXT is None
         or _OWNED_ROUTE_SPEC is None
         or _OWNED_SOURCE_STEPS_PER_MAP_STEP is None
     ):
         raise RuntimeError("owned route worker was not initialized")
     return _execute_owned_chain_core(
         request,
-        _OWNED_SOURCE_TILE,
+        _OWNED_ROUTE_CONTEXT,
         _OWNED_ROUTE_SPEC,
         _OWNED_SOURCE_STEPS_PER_MAP_STEP,
     )
@@ -156,7 +162,7 @@ def _execute_owned_chain(request: _OwnedChainRequest) -> _OwnedChainResponse:
 
 def _execute_owned_chain_core(
     request: _OwnedChainRequest,
-    source_tile: FrozenSourcePathTile,
+    route_context: _VerifiedRouteContext,
     route_spec: RestrictedWHRouteSpec,
     source_steps_per_map_step: int,
 ) -> _OwnedChainResponse:
@@ -166,11 +172,11 @@ def _execute_owned_chain_core(
     payloads: list[Any] = []
     for offset in range(request.maximum_steps):
         try:
-            result = route_restricted_wh_map_step(
+            result = _route_restricted_wh_map_step_verified(
+                route_context,
                 position,
                 velocity,
                 tracer_index=job.tracer_index,
-                source_tile=source_tile,
                 source_node_index=(
                     job.source_node_index
                     + offset * source_steps_per_map_step
@@ -239,6 +245,11 @@ class _PersistentOwnedRouteDispatcher:
         self.owners: dict[tuple[int, int], int] = {}
         self.cache: dict[tuple[int, int], deque[_CachedRouteOutcome]] = {}
         self.last_assignments: tuple[int, ...] = ()
+        self.local_route_context = (
+            _prepare_verified_route_context(source_tile)
+            if worker_count == 1
+            else None
+        )
         self.chain_submission_count = 0
         self.speculative_step_count = 0
         self.committed_cached_step_count = 0
@@ -285,8 +296,9 @@ class _PersistentOwnedRouteDispatcher:
         self.new_episode_assignment_count += 1
         return worker_index
 
+    @staticmethod
     def _validate_cached_start(
-        self, job: _RouteJob, outcome: _CachedRouteOutcome
+        job: _RouteJob, outcome: _CachedRouteOutcome
     ) -> None:
         if outcome.source_node_index != job.source_node_index:
             raise _OwnedRouteContinuityError(
@@ -300,7 +312,10 @@ class _PersistentOwnedRouteDispatcher:
             if (
                 actual_array.dtype != np.dtype(np.float64)
                 or actual_array.shape != (3,)
-                or not np.array_equal(actual_array, expected)
+                or not actual_array.flags.c_contiguous
+                or not np.array_equal(
+                    actual_array.view(np.uint64), expected.view(np.uint64)
+                )
             ):
                 raise _OwnedRouteContinuityError(
                     f"owned route {label} continuity changed"
@@ -407,9 +422,13 @@ class _PersistentOwnedRouteDispatcher:
             self.chain_submission_count += 1
             if self.worker_count == 1:
                 try:
+                    if self.local_route_context is None:
+                        raise RuntimeError(
+                            "serial owned route context was not initialized"
+                        )
                     response = _execute_owned_chain_local(
                         request,
-                        self.source_tile,
+                        self.local_route_context,
                         self.route_spec,
                         self.source_steps_per_map_step,
                     )
@@ -475,12 +494,12 @@ class _PersistentOwnedRouteDispatcher:
 
 def _execute_owned_chain_local(
     request: _OwnedChainRequest,
-    source_tile: FrozenSourcePathTile,
+    route_context: _VerifiedRouteContext,
     route_spec: RestrictedWHRouteSpec,
     source_steps_per_map_step: int,
 ) -> _OwnedChainResponse:
     return _execute_owned_chain_core(
-        request, source_tile, route_spec, source_steps_per_map_step
+        request, route_context, route_spec, source_steps_per_map_step
     )
 
 

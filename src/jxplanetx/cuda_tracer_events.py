@@ -719,6 +719,8 @@ def _locate_surface_roots(
     spec: DOP853EventLocatorSpec,
     brentq: Callable[..., float],
     minimize_scalar: Callable[..., object],
+    critical: tuple[float, ...] | None = None,
+    minima: tuple[tuple[float, float], ...] | None = None,
 ) -> tuple[_SurfaceRoot, ...]:
     if not 0.0 <= fraction_0 < fraction_1 <= 1.0 + 16.0 * np.finfo(float).eps:
         raise TracerEventIntegrationError("accepted dense interval is invalid")
@@ -757,30 +759,39 @@ def _locate_surface_roots(
     def residual_squared(fraction: float) -> float:
         return squared(fraction) - threshold_squared
 
-    critical = _dense_distance_critical_fractions(
-        dense_output,
-        source_position_0,
-        source_velocity_0,
-        source_position_1,
-        source_velocity_1,
-        step=step,
-        fraction_0=fraction_0,
-        fraction_1=fraction_1,
-        spec=spec,
-    )
-    minima = _refined_distance_minima(
-        dense_output,
-        source_position_0,
-        source_velocity_0,
-        source_position_1,
-        source_velocity_1,
-        step=step,
-        fraction_0=fraction_0,
-        fraction_1=fraction_1,
-        critical=critical,
-        spec=spec,
-        minimize_scalar=minimize_scalar,
-    )
+    if (critical is None) != (minima is None):
+        raise TracerEventIntegrationError(
+            "dense-distance analysis must provide both critical roots and minima"
+        )
+    if critical is None:
+        critical = _dense_distance_critical_fractions(
+            dense_output,
+            source_position_0,
+            source_velocity_0,
+            source_position_1,
+            source_velocity_1,
+            step=step,
+            fraction_0=fraction_0,
+            fraction_1=fraction_1,
+            spec=spec,
+        )
+        minima = _refined_distance_minima(
+            dense_output,
+            source_position_0,
+            source_velocity_0,
+            source_position_1,
+            source_velocity_1,
+            step=step,
+            fraction_0=fraction_0,
+            fraction_1=fraction_1,
+            critical=critical,
+            spec=spec,
+            minimize_scalar=minimize_scalar,
+        )
+    if critical is None or minima is None:  # pragma: no cover - defensive
+        raise TracerEventIntegrationError(
+            "dense-distance analysis was not constructed"
+        )
 
     # Critical roots make the polynomial monotonic between landmarks.  Refined
     # minima are added as actual-function landmarks so a sub-threshold valley
@@ -890,6 +901,8 @@ def _minimum_distance_on_interval(
     fraction_1: float,
     spec: DOP853EventLocatorSpec,
     minimize_scalar: Callable[..., object],
+    critical: tuple[float, ...] | None = None,
+    minima: tuple[tuple[float, float], ...] | None = None,
 ) -> float:
     def squared(fraction: float) -> float:
         return _distance_squared(
@@ -902,30 +915,39 @@ def _minimum_distance_on_interval(
             float(fraction),
         )
 
-    critical = _dense_distance_critical_fractions(
-        dense_output,
-        source_position_0,
-        source_velocity_0,
-        source_position_1,
-        source_velocity_1,
-        step=step,
-        fraction_0=fraction_0,
-        fraction_1=fraction_1,
-        spec=spec,
-    )
-    minima = _refined_distance_minima(
-        dense_output,
-        source_position_0,
-        source_velocity_0,
-        source_position_1,
-        source_velocity_1,
-        step=step,
-        fraction_0=fraction_0,
-        fraction_1=fraction_1,
-        critical=critical,
-        spec=spec,
-        minimize_scalar=minimize_scalar,
-    )
+    if (critical is None) != (minima is None):
+        raise TracerEventIntegrationError(
+            "dense-distance analysis must provide both critical roots and minima"
+        )
+    if critical is None:
+        critical = _dense_distance_critical_fractions(
+            dense_output,
+            source_position_0,
+            source_velocity_0,
+            source_position_1,
+            source_velocity_1,
+            step=step,
+            fraction_0=fraction_0,
+            fraction_1=fraction_1,
+            spec=spec,
+        )
+        minima = _refined_distance_minima(
+            dense_output,
+            source_position_0,
+            source_velocity_0,
+            source_position_1,
+            source_velocity_1,
+            step=step,
+            fraction_0=fraction_0,
+            fraction_1=fraction_1,
+            critical=critical,
+            spec=spec,
+            minimize_scalar=minimize_scalar,
+        )
+    if critical is None or minima is None:  # pragma: no cover - defensive
+        raise TracerEventIntegrationError(
+            "dense-distance analysis was not constructed"
+        )
     minimum_squared = min(squared(fraction_0), squared(fraction_1))
     if minima:
         minimum_squared = min(
@@ -1337,6 +1359,54 @@ def locate_tracer_step_events(
                 "DOP853 accepted interval escaped the one-step domain"
             )
 
+        # Critical roots and refined minima depend only on this accepted dense
+        # interval and one source segment.  The primary analysis is needed for
+        # the phase bound and then again for its collision/outer surfaces; do
+        # the expensive certified degree-seven reconstruction exactly once per
+        # source.  This changes no polynomial, root, tolerance, or ordering.
+        distance_analysis: dict[
+            int,
+            tuple[tuple[float, ...], tuple[tuple[float, float], ...]],
+        ] = {}
+
+        def analyze_source_distance(
+            source_index: int,
+        ) -> tuple[tuple[float, ...], tuple[tuple[float, float], ...]]:
+            cached = distance_analysis.get(source_index)
+            if cached is not None:
+                return cached
+            critical = _dense_distance_critical_fractions(
+                dense_output,
+                position_0[source_index],
+                velocity_0[source_index],
+                position_1[source_index],
+                velocity_1[source_index],
+                step=step,
+                fraction_0=fraction_0,
+                fraction_1=fraction_1,
+                spec=spec,
+            )
+            minima = _refined_distance_minima(
+                dense_output,
+                position_0[source_index],
+                velocity_0[source_index],
+                position_1[source_index],
+                velocity_1[source_index],
+                step=step,
+                fraction_0=fraction_0,
+                fraction_1=fraction_1,
+                critical=critical,
+                spec=spec,
+                minimize_scalar=minimize_scalar,
+            )
+            result = (critical, minima)
+            distance_analysis[source_index] = result
+            return result
+
+        primary_critical, primary_minima = analyze_source_distance(
+            primary_source_index
+        )
+
         primary_minimum_distance = _minimum_distance_on_interval(
             dense_output,
             position_0[primary_source_index],
@@ -1348,6 +1418,8 @@ def locate_tracer_step_events(
             fraction_1=fraction_1,
             spec=spec,
             minimize_scalar=minimize_scalar,
+            critical=primary_critical,
+            minima=primary_minima,
         )
         try:
             phase = abs(current_time - previous_time) * math.sqrt(
@@ -1369,6 +1441,9 @@ def locate_tracer_step_events(
         for source_index, radius in enumerate(source_radii):
             if radius <= 0.0:
                 continue
+            source_critical, source_minima = analyze_source_distance(
+                source_index
+            )
             roots = _locate_surface_roots(
                 dense_output,
                 position_0[source_index],
@@ -1382,6 +1457,8 @@ def locate_tracer_step_events(
                 spec=spec,
                 brentq=brentq,
                 minimize_scalar=minimize_scalar,
+                critical=source_critical,
+                minima=source_minima,
             )
             for root in roots:
                 candidates.append(
@@ -1414,6 +1491,8 @@ def locate_tracer_step_events(
                 spec=spec,
                 brentq=brentq,
                 minimize_scalar=minimize_scalar,
+                critical=primary_critical,
+                minima=primary_minima,
             )
             for root in roots:
                 record = _event_record(

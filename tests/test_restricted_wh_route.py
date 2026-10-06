@@ -20,9 +20,17 @@ from jxplanetx.restricted_wh_route import (
     RestrictedWHRouteContractError,
     RestrictedWHRouteIntegrationError,
     RestrictedWHRouteSpec,
+    _prepare_verified_route_context,
+    _route_restricted_wh_map_step_verified,
     restricted_wh_route_policy_identity,
     route_restricted_wh_map_step,
 )
+from jxplanetx.cuda_restricted_wh_episode_owner import (
+    _CachedRouteOutcome,
+    _OwnedRouteContinuityError,
+    _PersistentOwnedRouteDispatcher,
+)
+from jxplanetx.cuda_restricted_wh_hybrid import _RouteJob
 
 
 SOLAR_GM = 4.0 * math.pi * math.pi
@@ -89,6 +97,71 @@ def _tile(
 
 
 class RestrictedWHRouteTests(unittest.TestCase):
+    def test_verified_worker_context_matches_public_route_exactly(self):
+        tile = _tile(nodes=3)
+        position = np.asarray([10.0, 0.0, 0.0], dtype=np.float64)
+        velocity = np.asarray(
+            [0.0, math.sqrt(SOLAR_GM / 10.0), 0.0], dtype=np.float64
+        )
+        public = route_restricted_wh_map_step(
+            position,
+            velocity,
+            tracer_index=6,
+            source_tile=tile,
+            source_node_index=0,
+            source_steps_per_map_step=2,
+        )
+        context = _prepare_verified_route_context(tile)
+        worker = _route_restricted_wh_map_step_verified(
+            context,
+            position,
+            velocity,
+            tracer_index=6,
+            source_node_index=0,
+            source_steps_per_map_step=2,
+            spec=RestrictedWHRouteSpec(),
+        )
+        self.assertEqual(public.source_tile_sha256, worker.source_tile_sha256)
+        self.assertEqual(public.source_segment_sha256, worker.source_segment_sha256)
+        self.assertEqual(public.events, worker.events)
+        self.assertEqual(public.accepted_step_count, worker.accepted_step_count)
+        self.assertEqual(
+            public.derivative_evaluation_count, worker.derivative_evaluation_count
+        )
+        self.assertTrue(
+            np.array_equal(
+                public.endpoint_relative_position_AU.view(np.uint64),
+                worker.endpoint_relative_position_AU.view(np.uint64),
+            )
+        )
+        self.assertTrue(
+            np.array_equal(
+                public.endpoint_relative_velocity_AU_per_year.view(np.uint64),
+                worker.endpoint_relative_velocity_AU_per_year.view(np.uint64),
+            )
+        )
+
+    def test_owned_route_continuity_distinguishes_signed_zero(self):
+        job = _RouteJob(
+            original_lane=0,
+            tracer_index=1,
+            guard_phase="PRE_KICK_GUARD",
+            guard_reason="SWEPT_SOURCE_RADIUS",
+            guard_source_index=0,
+            source_node_index=0,
+            position=np.asarray([-0.0, 1.0, 2.0], dtype=np.float64),
+            velocity=np.asarray([3.0, 4.0, 5.0], dtype=np.float64),
+        )
+        outcome = _CachedRouteOutcome(
+            source_node_index=0,
+            position=np.asarray([0.0, 1.0, 2.0], dtype=np.float64),
+            velocity=np.asarray([3.0, 4.0, 5.0], dtype=np.float64),
+            payload=None,
+            failure=None,
+        )
+        with self.assertRaises(_OwnedRouteContinuityError):
+            _PersistentOwnedRouteDispatcher._validate_cached_start(job, outcome)
+
     def test_primary_only_route_matches_exact_all_conic_drift(self):
         tile = _tile()
         position = np.asarray([10.0, 0.0, 0.0], dtype=np.float64)

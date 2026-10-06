@@ -9,16 +9,20 @@ import tarfile
 import tempfile
 import tomllib
 import unittest
+from unittest import mock
 
 from tools.build_release import (
+    PUBLISHED_PACKAGE_VERSIONS,
+    ReleaseBuildError,
     STAGE_DIRECTORIES,
     STAGE_FILES,
     canonicalize_sdist,
     project_metadata,
     sha256,
     stage_source,
+    verify_backend,
 )
-from tools.run_local_test_matrix import require_python
+from tools.run_local_test_matrix import load_manifest, require_python
 from tools.run_cuda_release_gate import CUDA_TEST_TARGETS, EXPECTED_TEST_COUNT
 
 
@@ -59,7 +63,7 @@ class ReproducibleReleaseTests(unittest.TestCase):
 
     def test_release_identity_and_exact_backend_pin(self) -> None:
         version, backend = project_metadata(ROOT)
-        self.assertEqual(version, "0.6.0rc16")
+        self.assertEqual(version, "0.6.0rc17.dev0")
         self.assertEqual(backend, "78.1.1")
         metadata = tomllib.loads((ROOT / "pyproject.toml").read_text())
         self.assertEqual(
@@ -69,10 +73,69 @@ class ReproducibleReleaseTests(unittest.TestCase):
             metadata["project"]["license-files"],
             ["LICENSE", "AUTHORS.md", "THIRD_PARTY_NOTICES.md"],
         )
+        extras = metadata["project"]["optional-dependencies"]
+        self.assertEqual(
+            extras["routed-tracer-cuda12"],
+            [
+                "numpy==2.3.5",
+                "scipy==1.17.0",
+                "cupy-cuda12x[ctk]>=14,<15",
+            ],
+        )
+        self.assertEqual(
+            extras["routed-tracer-cuda13"],
+            [
+                "numpy==2.3.5",
+                "scipy==1.17.0",
+                "cupy-cuda13x[ctk]>=14,<15",
+            ],
+        )
         license_text = (ROOT / "LICENSE").read_text(encoding="utf-8")
         self.assertIn("Copyright (c) 2026 Lino Avila", license_text)
         self.assertIn("All rights reserved", license_text)
         self.assertNotIn("Permission is hereby granted", license_text)
+
+    def test_release_builder_refuses_published_version_reuse(self) -> None:
+        self.assertEqual(
+            PUBLISHED_PACKAGE_VERSIONS,
+            frozenset({"0.6.0rc8", "0.6.0rc10", "0.6.0rc16"}),
+        )
+        self.assertNotIn("0.6.0rc17.dev0", PUBLISHED_PACKAGE_VERSIONS)
+        for published_alias in ("0.6.0rc16", "0.6.0-rc16"):
+            with self.subTest(version=published_alias), mock.patch(
+                "tools.build_release.project_metadata",
+                return_value=(published_alias, "78.1.1"),
+            ):
+                with self.assertRaisesRegex(
+                    ReleaseBuildError, "already published JX package version"
+                ):
+                    verify_backend(ROOT)
+
+    def test_ci_executes_every_profile_marked_for_ci(self) -> None:
+        profiles = load_manifest()
+        self.assertEqual(
+            {name for name, profile in profiles.items() if profile.ci},
+            {
+                "cuda-optional",
+                "gr15-eih-external",
+                "live-current",
+                "rebound-4.4.11",
+                "rebound-5.1.1",
+            },
+        )
+        workflow = (ROOT / ".github/workflows/test.yml").read_text(
+            encoding="utf-8"
+        )
+        for command in (
+            "--profile ci-generic",
+            "--profile rebound-4.4.11",
+            "--profile rebound-5.1.1",
+            "--profile gr15-eih-external",
+        ):
+            self.assertIn(command, workflow)
+        self.assertIn("'.[independent,ephemeris]'", workflow)
+        self.assertIn("'.[independent,rebound]'", workflow)
+        self.assertIn("'.[relativity-validation]'", workflow)
 
     def test_distribution_stage_excludes_research_evidence(self) -> None:
         self.assertEqual(
@@ -143,6 +206,26 @@ class ReproducibleReleaseTests(unittest.TestCase):
             self.assertIn("src/jxplanetx/gr15_eih_1pn_batch.py", staged_files)
             self.assertIn("src/jxplanetx/eih_1pn_cuda.py", staged_files)
             self.assertIn("src/jxplanetx/solar_system/eih_1pn.py", staged_files)
+            for relative in (
+                "MANIFEST.json",
+                "README.md",
+                "SHA256SUMS",
+                "raw/jpl_sbdb_detached_query_20261005.json",
+                "raw/jpl_sbdb_scattering_control_query_20261005.json",
+            ):
+                self.assertIn(
+                    "src/jxplanetx/data/long_horizon_science_inputs_v1/"
+                    + relative,
+                    staged_files,
+                )
+            self.assertIn(
+                "src/jxplanetx/data/long_horizon_source_model_v1/"
+                "de441_control_state.csv",
+                staged_files,
+            )
+            self.assertFalse(
+                any(name.startswith("runs/") for name in staged_files)
+            )
             for path in stage.rglob("*"):
                 expected_mode = 0o755 if path.is_dir() or path.stat().st_mode & 0o111 else 0o644
                 self.assertEqual(path.stat().st_mode & 0o777, expected_mode)

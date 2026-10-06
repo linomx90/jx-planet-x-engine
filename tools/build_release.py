@@ -18,6 +18,8 @@ import tarfile
 import tempfile
 import tomllib
 
+from packaging.version import InvalidVersion, Version
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE_DATE_EPOCH = 1_700_000_000
@@ -25,6 +27,9 @@ RELEASE_TOOL_VERSIONS = {
     "packaging": "26.3",
     "wheel": "0.48.0",
 }
+PUBLISHED_PACKAGE_VERSIONS = frozenset(
+    {"0.6.0rc8", "0.6.0rc10", "0.6.0rc16"}
+)
 STAGE_FILES = (
     "pyproject.toml",
     "README.md",
@@ -69,6 +74,20 @@ def project_metadata(source_root: Path) -> tuple[str, str]:
 
 def verify_backend(source_root: Path) -> tuple[str, str]:
     version, required_backend = project_metadata(source_root)
+    try:
+        normalized_version = Version(version)
+        published_versions = {
+            Version(item) for item in PUBLISHED_PACKAGE_VERSIONS
+        }
+    except InvalidVersion as exc:
+        raise ReleaseBuildError(
+            f"project version is not valid PEP 440: {version}"
+        ) from exc
+    if normalized_version in published_versions:
+        raise ReleaseBuildError(
+            "refusing to reuse an already published JX package version: "
+            f"{version}"
+        )
     actual_backend = importlib.metadata.version("setuptools")
     if actual_backend != required_backend:
         raise ReleaseBuildError(

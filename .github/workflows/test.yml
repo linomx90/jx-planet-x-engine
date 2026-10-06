@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   cpu-core:
-    name: CPU core and optimized contracts
+    name: Optimized CPU contracts
     runs-on: ubuntu-latest
     env:
       PYTHONDONTWRITEBYTECODE: "1"
@@ -23,16 +23,59 @@ jobs:
           python-version: "3.12.13"
       - name: Install core dependencies
         run: python -m pip install -e '.[independent]'
-      - name: Run isolated engine modules
-        run: |
-          for test_path in tests/test_engine*.py; do
-            python -m unittest discover -s tests -p "$(basename "$test_path")" -v
-          done
       - name: Run isolated engine modules under optimized Python
         run: |
           for test_path in tests/test_engine*.py; do
             python -OO -m unittest discover -s tests -p "$(basename "$test_path")" -v
           done
+          python -OO -m unittest -v tests.test_long_horizon_science_inputs
+
+  long-horizon-contracts:
+    name: Exact current-source test matrix
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONNOUSERSITE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.13"
+      - name: Install current CPU and ephemeris dependencies
+        run: python -m pip install -e '.[independent,ephemeris]'
+      - name: Require exact non-overlapping test-profile coverage
+        run: python tools/run_local_test_matrix.py --validate-only
+      - name: Run every generic-CI manifest lane in isolated processes
+        run: python tools/run_local_test_matrix.py --profile ci-generic
+      - name: Run numerical long-horizon contracts under optimized Python
+        run: |
+          python -OO -m unittest -v \
+            tests.test_all_conic_kepler \
+            tests.test_cuda_tracer_events \
+            tests.test_cuda_restricted_wh_multirate \
+            tests.test_long_horizon_initial_conditions \
+            tests.test_long_horizon_observed_qualification \
+            tests.test_long_horizon_runner \
+            tests.test_restricted_wh_route
+
+  rebound-4-population:
+    name: Frozen DE441 population and legacy encounter contracts
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONNOUSERSITE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.13"
+      - name: Install the exact legacy REBOUND runtime
+        run: python -m pip install -e '.[independent,rebound]'
+      - name: Run the exact REBOUND 4.4.11 profile
+        run: |
+          python tools/run_local_test_matrix.py \
+            --profile rebound-4.4.11 \
+            --runtime-python "$(command -v python)"
 
   reproducible-packaging:
     name: Reproducible wheel and source archive
@@ -81,10 +124,14 @@ jobs:
               integrate_lunar_ephemeris_v1,
           )
           from jxplanetx.general_dynamics import registry_summary
+          from importlib import resources
+          from jxplanetx.long_horizon import (
+              CANONICAL_ARCHITECTURE_ID,
+              SCIENCE_INPUTS_CONTENT_SHA256,
+          )
           summary = registry_summary()
           from jxplanetx.gr15 import gr15_runtime_identity
           assert jxplanetx.__version__ == os.environ["JX_PACKAGE_VERSION"]
-          assert jxplanetx.__version__ == "0.6.0rc16"
           assert _gr15_cpu.METHOD_ID == "JX_GAUSS_RADAU15_V2"
           assert _gr15_v3_cpu.METHOD_ID == "JX_GAUSS_RADAU15_V3"
           assert _eih_1pn_cpu.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
@@ -101,12 +148,28 @@ jobs:
           assert summary["version"] == "0.6.0rc3"
           assert summary["scientific_claim_state"] == "SCREENING_ONLY"
           assert summary["production_ready"] is False
+          assert CANONICAL_ARCHITECTURE_ID == "jxplanetx.long-horizon.restricted-wh.v1"
+          assert len(SCIENCE_INPUTS_CONTENT_SHA256) == 64
+          packaged_inputs = resources.files("jxplanetx").joinpath(
+              "data", "long_horizon_science_inputs_v1"
+          )
+          assert packaged_inputs.joinpath("MANIFEST.json").is_file()
+          assert packaged_inputs.joinpath(
+              "raw", "jpl_sbdb_detached_query_20261005.json"
+          ).is_file()
+          packaged_source = resources.files("jxplanetx").joinpath(
+              "data", "long_horizon_source_model_v1"
+          )
+          assert packaged_source.joinpath("de441_control_state.csv").is_file()
+          assert packaged_source.joinpath("MANIFEST.json").is_file()
+          assert packaged_source.joinpath("README.md").is_file()
+          assert packaged_source.joinpath("SHA256SUMS").is_file()
           PY
             "$runtime" -m jxplanetx.cli --version
           done
 
   gr15:
-    name: GR15 supported API and REBOUND screens
+    name: Exact REBOUND 5 and external GR15-EIH profiles
     runs-on: ubuntu-latest
     env:
       PYTHONDONTWRITEBYTECODE: "1"
@@ -116,17 +179,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12.13"
-      - name: Install GR15 comparison dependencies
-        run: python -m pip install -e '.[independent,rebound-competition]'
-      - name: Run supported GR15 gates
+      - name: Install the complete external-validation runtime
+        run: python -m pip install -e '.[relativity-validation]'
+      - name: Run every exact-runtime GR15/REBOUND manifest lane
         run: |
-          python -m unittest -v \
-            tests.test_gr15 \
-            tests.test_gr15_eih_1pn \
-            tests.test_gr15_eih_1pn_batch \
-            tests.test_gr15_eih_1pn_verified \
-            tests.test_jx_gr15_ias15 \
-            tests.test_jx_gr15_v3_candidate \
-            tests.test_jx_gr15_v3_adversarial \
-            tests.test_jx_gr15_rc10_acceptance \
-            tests.test_jx_gr15_rc9_acceptance
+          python tools/run_local_test_matrix.py \
+            --profile rebound-5.1.1 \
+            --runtime-python "$(command -v python)"
+          python tools/run_local_test_matrix.py \
+            --profile gr15-eih-external \
+            --runtime-python "$(command -v python)"

@@ -4,6 +4,26 @@ This is a non-destructive navigation layer. It does not move, merge,
 rewrite, promote, or supersede any experiment. The immutable library
 authority catalog remains authoritative for its 99 packages.
 
+The workspace rows below are the catalog snapshot bound to the historical
+release record; they are not a live filesystem inventory. The 2026-10-05
+ephemeris custody audit made the following additive corrections without
+rewriting that frozen catalog:
+
+- `de441_anchor` is explicitly classified as incomplete historical screening;
+  its raw ephemeris and trajectory evidence is absent.
+- `de441_population_100k/population_elements_v1.csv` was restored byte-exact
+  (100,000 rows, SHA-256 `2e4def4aa9fbbfaf451dc563480d7010c3afd8e39b7ffeceb91a4f6a055442d1`),
+  while the absent historical block/checkpoint outputs remain disclosed.
+- `long_horizon_science_inputs_v1` now retains the exact JPL SBDB responses
+  underlying the observed-object benchmark populations at the DE441 control
+  epoch. It is an input/provenance package, not a dynamical result.
+- `long_horizon_observed_qualification_v1` retains a create-only preparation
+  receipt for the bounded 1,000-year validation rung. Its status is
+  `PREPARED_NOT_EXECUTED`; it is not a numerical or scientific result.
+
+Current status is authoritative in each package README/status record; the
+catalog counts below remain a reproducible historical snapshot.
+
 ## Inventory
 
 - Consolidated records: **207**
