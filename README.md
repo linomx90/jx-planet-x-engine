@@ -629,7 +629,7 @@ before importing them. If absent, it reconstructs the frozen ephemeral
 packages or changes frozen run artifacts. Use `--library-root PATH` when the
 read-only library mirror is mounted elsewhere.
 
-The complete 102-file ownership and runtime policy is documented in
+The complete 106-file ownership and runtime policy is documented in
 [JX test profiles](docs/TEST_PROFILES.md). Validate it with
 `python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
 with `--list-files`, or run all current-source profiles with `--profile live`.

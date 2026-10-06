@@ -53,6 +53,8 @@
         "tests/test_jx_rc6_release_candidate.py",
         "tests/test_long_horizon_facade.py",
         "tests/test_long_horizon_initial_conditions.py",
+        "tests/test_long_horizon_m2_source_path.py",
+        "tests/test_long_horizon_m3_tracer_preflight.py",
         "tests/test_long_horizon_observed_qualification.py",
         "tests/test_long_horizon_physical_models.py",
         "tests/test_long_horizon_science_inputs.py",
@@ -109,6 +111,7 @@
         "tests/test_cuda_restricted_wh_multirate.py",
         "tests/test_gr15_eih_1pn_batch_cuda.py",
         "tests/test_gr15_eih_1pn_cuda.py",
+        "tests/test_long_horizon_known_system_inputs.py",
         "tests/test_long_horizon_runner.py",
         "tests/test_restricted_wh_checkpoint.py",
         "tests/test_restricted_wh_checkpoint_qualification.py",
@@ -154,7 +157,8 @@
         "tests/test_jx_gr15_rc10_acceptance.py",
         "tests/test_jx_gr15_rc9_acceptance.py",
         "tests/test_jx_gr15_v3_adversarial.py",
-        "tests/test_long_horizon_m2_source_preflight.py"
+        "tests/test_long_horizon_m2_source_preflight.py",
+        "tests/test_long_horizon_m3_rebound511.py"
       ]
     },
     {
