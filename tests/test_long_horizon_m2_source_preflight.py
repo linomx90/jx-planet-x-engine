@@ -79,6 +79,83 @@ def _passing_metrics() -> dict[str, object]:
 
 
 class M2ProtocolTests(unittest.TestCase):
+    def test_v2_wire_identity_is_literal_and_v1_is_not_alias_compatible(self) -> None:
+        self.assertEqual(
+            qualification.PROTOCOL_SCHEMA,
+            "jx.long-horizon.m2-known-source-protocol.v2",
+        )
+        self.assertEqual(
+            qualification.RESULT_SCHEMA,
+            "jx.long-horizon.m2-known-source-result.v2",
+        )
+        self.assertEqual(
+            qualification.ARTIFACT_SCHEMA,
+            "jx.long-horizon.m2-known-source-artifacts.v2",
+        )
+        self.assertEqual(
+            qualification.COMPLETION_SCHEMA,
+            "jx.long-horizon.m2-known-source-completion.v2",
+        )
+        self.assertEqual(
+            qualification.RUN_ID,
+            "jx-long-horizon-m2-known-source-10y-v2",
+        )
+        self.assertEqual(
+            qualification.PROTOCOL_DOMAIN,
+            b"jx.long-horizon.m2-known-source.protocol.v2\0",
+        )
+        self.assertEqual(
+            qualification.RESULT_DOMAIN,
+            b"jx.long-horizon.m2-known-source.result.v2\0",
+        )
+        self.assertEqual(
+            qualification.ARTIFACT_DOMAIN,
+            b"jx.long-horizon.m2-known-source.artifacts.v2\0",
+        )
+        self.assertEqual(
+            qualification.COMPLETION_DOMAIN,
+            b"jx.long-horizon.m2-known-source.completion.v2\0",
+        )
+        self.assertEqual(
+            qualification.STATE_DOMAIN,
+            b"jx.long-horizon.m2-known-source.state.v2\0",
+        )
+        self.assertEqual(qualification.CODE_FILES_DOMAIN, b"jx.m2.code-files.v2\0")
+        self.assertEqual(
+            qualification.RUNTIME_DISTRIBUTION_DOMAIN,
+            b"jx.m2.runtime-distribution.v2\0",
+        )
+        self.assertEqual(
+            qualification.SOURCE_SCHEDULE_DOMAIN,
+            b"jx.long-horizon.m2-source-schedule.v2\0",
+        )
+        self.assertEqual(
+            qualification.SOURCE_ARCHIVE_SCHEMA,
+            "jx.long-horizon.m2-executed-sources.v2",
+        )
+        self.assertEqual(qualification.PROVENANCE_VERSION, "v2")
+        self.assertEqual(
+            qualification.DEFAULT_OUTPUT_ROOT,
+            Path("runs/long_horizon_m2_source_preflight_v2"),
+        )
+        record = {"schema": qualification.PROTOCOL_SCHEMA, "value": 1}
+        v2 = qualification._content_record(
+            record, qualification.PROTOCOL_DOMAIN
+        )["content_sha256"]
+        v1 = qualification._content_record(
+            record, b"jx.long-horizon.m2-known-source.protocol.v1\0"
+        )["content_sha256"]
+        self.assertNotEqual(v2, v1)
+        self.assertEqual(qualification._provenance().version, "v2")
+
+    def test_cli_default_uses_the_v2_output_root(self) -> None:
+        fake_result = {"all_gates_passed": True, "status": "PASSED"}
+        with mock.patch.object(
+            qualification, "run", return_value=fake_result
+        ) as run, mock.patch("builtins.print"):
+            self.assertEqual(qualification.main(["--execute"]), 0)
+        run.assert_called_once_with(qualification.DEFAULT_OUTPUT_ROOT, PROJECT_ROOT)
+
     def test_exact_lattices_roster_and_claim_ceiling_are_predeclared(self) -> None:
         self.assertEqual(qualification.COARSE_STEP_YEARS.hex(), "0x1.0000000000000p-12")
         self.assertEqual(qualification.FINE_STEP_YEARS.hex(), "0x1.0000000000000p-13")
@@ -464,6 +541,10 @@ class M2ExactRuntimeExecutionTests(unittest.TestCase):
                     names,
                 )
                 archived_manifest = json.loads(source.read("MANIFEST.json"))
+            self.assertEqual(
+                archived_manifest["schema"],
+                "jx.long-horizon.m2-executed-sources.v2",
+            )
             self.assertEqual(
                 archived_manifest["files_content_sha256"],
                 result["executed_source_archive"]["files_content_sha256"],

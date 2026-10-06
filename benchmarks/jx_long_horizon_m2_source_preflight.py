@@ -114,6 +114,12 @@ RESULT_DOMAIN = b"jx.long-horizon.m2-known-source.result.v2\0"
 ARTIFACT_DOMAIN = b"jx.long-horizon.m2-known-source.artifacts.v2\0"
 COMPLETION_DOMAIN = b"jx.long-horizon.m2-known-source.completion.v2\0"
 STATE_DOMAIN = b"jx.long-horizon.m2-known-source.state.v2\0"
+CODE_FILES_DOMAIN = b"jx.m2.code-files.v2\0"
+RUNTIME_DISTRIBUTION_DOMAIN = b"jx.m2.runtime-distribution.v2\0"
+SOURCE_SCHEDULE_DOMAIN = b"jx.long-horizon.m2-source-schedule.v2\0"
+SOURCE_ARCHIVE_SCHEMA = "jx.long-horizon.m2-executed-sources.v2"
+PROVENANCE_VERSION = "v2"
+DEFAULT_OUTPUT_ROOT = Path("runs/long_horizon_m2_source_preflight_v2")
 
 HORIZON_YEARS = 10
 ANNUAL_SAMPLE_YEARS = tuple(float(index) for index in range(HORIZON_YEARS + 1))
@@ -482,7 +488,7 @@ def _code_identity(root: Path) -> dict[str, Any]:
         "file_count": len(files),
         "import_time_local_files": _IMPORT_TIME_LOCAL_FILES,
         "files_content_sha256": hashlib.sha256(
-            b"jx.m2.code-files.v2\0" + _canonical_json(files)
+            CODE_FILES_DOMAIN + _canonical_json(files)
         ).hexdigest(),
     }
 
@@ -498,7 +504,7 @@ def _write_source_archive_create_only(
         with os.fdopen(descriptor, "w+b") as stream:
             with zipfile.ZipFile(stream, mode="w", compression=zipfile.ZIP_STORED) as archive:
                 manifest = {
-                    "schema": "jx.long-horizon.m2-executed-sources.v2",
+                    "schema": SOURCE_ARCHIVE_SCHEMA,
                     "git_head": identity["git_head"],
                     "files": dict(files),
                     "import_time_local_files": identity[
@@ -611,7 +617,7 @@ def _distribution_identity(
         "file_count": len(rows),
         "total_size_bytes": sum(int(row["size_bytes"]) for row in rows),
         "content_sha256": hashlib.sha256(
-            b"jx.m2.runtime-distribution.v2\0" + _canonical_json(rows)
+            RUNTIME_DISTRIBUTION_DOMAIN + _canonical_json(rows)
         ).hexdigest(),
         "required_imported_members": required_members,
     }
@@ -684,7 +690,7 @@ def _runtime_identity() -> dict[str, Any]:
 
 def _schedule_sha256(step: float) -> str:
     return hashlib.sha256(
-        b"jx.long-horizon.m2-source-schedule.v2\0"
+        SOURCE_SCHEDULE_DOMAIN
         + KNOWN_SOLAR_SYSTEM_V2.content_sha256.encode("ascii")
         + b"\0"
         + step.hex().encode("ascii")
@@ -988,7 +994,7 @@ def _provenance() -> Provenance:
     return Provenance(
         "jx.long-horizon.m2-known-source-preflight",
         "Retained NASA/JPL Horizons DE441 state and NAIF DE440 GM known-system model",
-        "v1",
+        PROVENANCE_VERSION,
         KNOWN_SOLAR_SYSTEM_V2.content_sha256,
     )
 
@@ -2018,7 +2024,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--output-root",
         type=Path,
-        default=Path("runs/long_horizon_m2_source_preflight_v2"),
+        default=DEFAULT_OUTPUT_ROOT,
     )
     parser.add_argument(
         "--project-root",
