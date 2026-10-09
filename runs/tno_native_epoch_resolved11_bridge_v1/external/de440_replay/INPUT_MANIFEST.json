@@ -1,0 +1,61 @@
+{
+  "input_count": 9,
+  "inputs": [
+    {
+      "logical_locator": "artifact-root/kernels/de440s.bsp",
+      "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+      "size_bytes": 32726016
+    },
+    {
+      "logical_locator": "artifact-root/licenses/naif-spice-rules.html",
+      "sha256": "ae85f851646e7c4f0a762db852907bc090a2ab50c815eb2a6cd8639e96b7e047",
+      "size_bytes": 23487
+    },
+    {
+      "logical_locator": "artifact-root/licenses/numpy-2.3.5-LICENSE.txt",
+      "sha256": "2046a3130e50b11c01659b3a0d963e6ae0b7436ff8e89cbcfd9e87bc6112d595",
+      "size_bytes": 47768
+    },
+    {
+      "logical_locator": "artifact-root/licenses/spiceypy-cspice-composite-license-provenance.v1.json",
+      "sha256": "285cdb7a837de375dbaecf7578949449262bc5ecb1625e8f4972e5dd82233a9b",
+      "size_bytes": 42166
+    },
+    {
+      "logical_locator": "artifact-root/native/libcspice.so",
+      "sha256": "1d9273fc9afce5201e904569a9439a0b010d2461dfc88c0de549d2a1b5ecdf84",
+      "size_bytes": 3561056
+    },
+    {
+      "logical_locator": "artifact-root/wheels/numpy-2.3.5-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "fffe29a1ef00883599d1dc2c51aa2e5d80afe49523c261a74933df395c15c520",
+      "size_bytes": 16597350
+    },
+    {
+      "logical_locator": "artifact-root/wheels/spiceypy-8.2.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "00c2714d3dd67180794ad0b66735d6cac470e19627d6e99f9628a50b52133d90",
+      "size_bytes": 2442346
+    },
+    {
+      "logical_locator": "parameter-root/constants/gm_de440.tpc",
+      "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "size_bytes": 12406
+    },
+    {
+      "logical_locator": "parameter-root/licenses/naif-spice-rules.html",
+      "sha256": "ae85f851646e7c4f0a762db852907bc090a2ab50c815eb2a6cd8639e96b7e047",
+      "size_bytes": 23487
+    }
+  ],
+  "numerical_kat_sha256": "2f9a5e3674c4d9516334e9bc8b165b9c95c7f3d39d3dae530a7ecac430af6841",
+  "reference_raw_report_sha256": "3bd3dc46eaa85875b610ec68e357f0398421c4936a2f4bc6ad111681ce834334",
+  "runtime_requirement": {
+    "implementation": "CPython",
+    "numpy_version": "2.3.5",
+    "platform_scope": "LINUX_X86_64_FOR_INCLUDED_NATIVE_ARTIFACTS",
+    "pyerfa_version": "2.0.1.5",
+    "python_version_tested": "3.14.4"
+  },
+  "schema": "jx.eleven-body-replay-input-manifest.v1",
+  "scientific_reference_sha256": "d09b710310c91c50a8acf764c8be5280bbbae81ea5942051668c98e2f1a13502"
+}

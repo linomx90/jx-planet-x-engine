@@ -1,0 +1,176 @@
+{
+  "claim_ceiling": "NUMERICAL_ENGINEERING_CROSSCHECK_ONLY",
+  "claims": {
+    "long_duration_accuracy_qualified": false,
+    "new_dynamics_executed": false,
+    "observational_likelihood_evaluated": false,
+    "planet_nine_evidence": false,
+    "production_qualified": false,
+    "science_result": false,
+    "survey_selection_evaluated": false,
+    "tno_dynamical_classification_established": false,
+    "uncertainty_distribution_calibrated": false
+  },
+  "classification": "VERIFIED_RETAINED_NUMERICAL_ENGINEERING_EXPERIMENT_ONLY",
+  "content_sha256": "32932ac5f424e15d1694ffbd1145ef84f96676931e7f74d4bea03818d7c28e09",
+  "implementation": {
+    "path": "tools/jx_tno_observed_crosscheck_v1.py",
+    "sha256": "088c22e4bd81ff4779e0cbd5a8245547dd555ce2668c0f43ed2a70d98e4f0a6f"
+  },
+  "interpretation": "The retained JX candidate, JX refinement, and IAS15 trajectories agree closely over ten years for this exact 108-state benchmark. Because the acceptance thresholds came from the retained calibration run and the calibration and official state archives are byte-identical, this is deterministic numerical/replay evidence, not a blinded independent accuracy qualification or an astronomical TNO result.",
+  "recomputed_cartesian_metrics": {
+    "candidate_vs_refinement": {
+      "maximum_position_vector_l2": {
+        "approx_meters": 1218.0533235449625,
+        "float64_hex": "0x1.17c3676cdaabap-27",
+        "unit": "AU"
+      },
+      "maximum_velocity_vector_l2": {
+        "approx_meters_per_second": 1.055516591953749e-05,
+        "float64_hex": "0x1.3205c731f51a1p-29",
+        "unit": "AU_PER_JULIAN_YEAR"
+      }
+    },
+    "refinement_vs_rebound_ias15": {
+      "maximum_position_vector_l2": {
+        "approx_meters": 406.03666813102035,
+        "float64_hex": "0x1.7508fb7945cc1p-29",
+        "unit": "AU"
+      },
+      "maximum_velocity_vector_l2": {
+        "approx_meters_per_second": 3.5182040511066156e-06,
+        "float64_hex": "0x1.980239569523dp-31",
+        "unit": "AU_PER_JULIAN_YEAR"
+      }
+    }
+  },
+  "retained_artifacts": [
+    {
+      "bytes": 2793,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/ARTIFACTS.json",
+      "sha256": "2c7de59e243eab795c2782b946ba1b57be0d9632632a7627754817ebb7782304"
+    },
+    {
+      "bytes": 1688,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/CALIBRATION_COMPLETED.json",
+      "sha256": "9fefc3009b69b9f31a6712ccdad5a265382d55a998d72b832c7c3c933ddc7111"
+    },
+    {
+      "bytes": 753,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/CALIBRATION_EVENTS.json",
+      "sha256": "c9a5b77f2e3b731f7851679758825c89b282e0895ee02e31bc814d505035f78d"
+    },
+    {
+      "bytes": 66369546,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/CALIBRATION_EXECUTED_SOURCES.zip",
+      "sha256": "6bd8eed752cabdd5b1c5dddbcd01e37a50e49a94fbe073cdbf1b97cb47267da8"
+    },
+    {
+      "bytes": 365227,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/CALIBRATION_PROTOCOL.json",
+      "sha256": "6db90266432ae857c67c0e6a970431fd498976534b03c9971a2cc2755b60186a"
+    },
+    {
+      "bytes": 4919522,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/CALIBRATION_RECEIPT.json",
+      "sha256": "067c1917d36d670e93ba9573bb7a8aad5cc29a1a90c490292a832237ce405028"
+    },
+    {
+      "bytes": 141830358,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/CALIBRATION_STATES.npz",
+      "sha256": "5a39cb6ee274445b03ae90ee70250bb24990099a99aa2b848b781b7f2ba6278a"
+    },
+    {
+      "bytes": 1461,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/COMPLETED.json",
+      "sha256": "b9607ea20d44f6a0468494db16cc54775c68b68ef6ebdb16e8886b36b562fc85"
+    },
+    {
+      "bytes": 753,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/EVENTS.json",
+      "sha256": "c9a5b77f2e3b731f7851679758825c89b282e0895ee02e31bc814d505035f78d"
+    },
+    {
+      "bytes": 66369545,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/EXECUTED_SOURCES.zip",
+      "sha256": "d27f33e4c81b4442237656e866103b5bc1d21859c5c67073a87919be0adb561b"
+    },
+    {
+      "bytes": 365227,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/PROTOCOL.json",
+      "sha256": "6db90266432ae857c67c0e6a970431fd498976534b03c9971a2cc2755b60186a"
+    },
+    {
+      "bytes": 4975995,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/RESULT.json",
+      "sha256": "8728398c2f523b4257b0a4dc6092d53ef2c83f800f1ab9fbb8101a174c83f4fb"
+    },
+    {
+      "bytes": 141830358,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/STATES.npz",
+      "sha256": "5a39cb6ee274445b03ae90ee70250bb24990099a99aa2b848b781b7f2ba6278a"
+    },
+    {
+      "bytes": 2211,
+      "path": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d/THRESHOLDS.json",
+      "sha256": "bf0b479c60be1cab47a735495d6945b7dce79c08943c9a085ea974f9527516ac"
+    }
+  ],
+  "schema": "jx.tno.observed-numerical-crosscheck.summary.v1",
+  "source_experiment": {
+    "bounded_sensitivity_state_count": 96,
+    "candidate_step_years_hex": "0x1.0000000000000p-9",
+    "duration_years": 10,
+    "independent_comparator": "REBOUND_5.1.1_IAS15",
+    "massive_source_count": 10,
+    "nominal_observed_tno_count": 12,
+    "nominal_state_ids": [
+      "jpl-20090377",
+      "jpl-20474640",
+      "jpl-54526835",
+      "jpl-20541132",
+      "jpl-50666516",
+      "jpl-20148209",
+      "jpl-20574372",
+      "jpl-20303775",
+      "jpl-20026181",
+      "jpl-20042301",
+      "jpl-20026375",
+      "jpl-20015874"
+    ],
+    "protocol_content_sha256": "9e13a6e6dd610889c0e1984c2d53c96df5ddfd419ee9fe82539b5c405bb45367",
+    "refinement_step_years_hex": "0x1.0000000000000p-10",
+    "relative_root": "runs/long_horizon_m3_tracer_preflight_v1/attempt-20261006d",
+    "result_content_sha256": "8a01dbcfc0fa56df47980794ae14362243fbb720c6cdd5747b13905147c78f2a",
+    "run_id": "jx-long-horizon-m3-tracer-preflight-10y-v1",
+    "source_ids": [
+      "Sun",
+      "Mercury Barycenter",
+      "Venus Barycenter",
+      "Earth-Moon Barycenter",
+      "Mars Barycenter",
+      "Jupiter Barycenter",
+      "Saturn Barycenter",
+      "Uranus Barycenter",
+      "Neptune Barycenter",
+      "Pluto Barycenter"
+    ],
+    "total_state_count": 108
+  },
+  "status": "VERIFIED_EXISTING_TEN_YEAR_CROSSCHECK_NOT_SCIENCE",
+  "verification": {
+    "all_arrays_finite_with_exact_shapes_and_dtypes": true,
+    "all_retained_artifact_hashes_match": true,
+    "calibration_and_official_state_archives_bitwise_identical": true,
+    "candidate_event_count": 0,
+    "candidate_refinement_source_path_bitwise_identical_at_common_nodes": true,
+    "independent_blinded_acceptance_test": false,
+    "lane_initial_states_bitwise_identical": true,
+    "lifecycle_nonzero_count": 0,
+    "minimum_candidate_source_distance_AU_hex": "0x1.a2600fb9f6336p+4",
+    "minimum_refinement_source_distance_AU_hex": "0x1.a2600fba6cdb0p+4",
+    "new_dynamics_executed": false,
+    "refinement_event_count": 0,
+    "threshold_origin": "CALIBRATED_FROM_RETAINED_CALIBRATION_RUN"
+  }
+}
