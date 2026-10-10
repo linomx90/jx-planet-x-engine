@@ -122,6 +122,48 @@ def _state(
 
 
 class CUDAMasslessTracerContractTests(unittest.TestCase):
+    def test_active_endpoint_minimum_canonicalizes_one_ulp_without_tolerance(self):
+        source_positions = np.ascontiguousarray(
+            [[0.0, 0.0, 0.0]], dtype=np.float64
+        )
+        tracer_positions = np.ascontiguousarray(
+            [[3.0, 4.0, 0.0], [3.0, 4.0, 0.0], [0.001, 0.0, 0.0]],
+            dtype=np.float64,
+        )
+        lifecycle = np.ascontiguousarray(
+            [
+                cuda_module.LIFECYCLE_ACTIVE,
+                cuda_module.LIFECYCLE_ACTIVE,
+                cuda_module.LIFECYCLE_REMOVED_SOURCE_RADIUS,
+            ],
+            dtype=np.int32,
+        )
+        endpoint = cuda_module._host_binary64_active_endpoint_minimum(
+            source_positions, tracer_positions, lifecycle,
+        )
+        self.assertEqual(endpoint[0], 5.0)
+        self.assertEqual(endpoint[1], 5.0)
+        self.assertTrue(math.isinf(endpoint[2]))
+        gpu_like_one_ulp_high = np.nextafter(5.0, math.inf)
+        self.assertGreater(gpu_like_one_ulp_high, endpoint[0])
+        cumulative = np.ascontiguousarray(
+            [gpu_like_one_ulp_high, 4.0, 0.5], dtype=np.float64
+        )
+        canonical = cuda_module._canonicalize_active_endpoint_minimum_host(
+            cumulative, source_positions, tracer_positions, lifecycle,
+        )
+        self.assertEqual(canonical.tolist(), [5.0, 4.0, 0.5])
+        self.assertEqual(
+            cuda_module.ACTIVE_ENDPOINT_MINIMUM_POLICY,
+            (
+                "ACTIVE_RETURNED_ENDPOINT_HOST_BINARY64_V1:FOR_EACH_SOURCE_IN_SOURCE_ORDER;"
+                "DX_DY_DZ_ARE_PYTHON_BINARY64_SUBTRACTIONS;"
+                "SQUARED_NORM_IS_LEFT_ASSOCIATED_(DX*DX+DY*DY)+DZ*DZ;"
+                "DISTANCE_IS_MATH_SQRT;CUMULATIVE_VALUE_IS_EXACT_OPERAND_MINIMUM;"
+                "REMOVED_TRACERS_REMAIN_BOUND_TO_THEIR_FROZEN_EVENT_MINIMUM"
+            ),
+        )
+
     def test_guard_reason_candidate_policy_mapping_is_explicit(self):
         expected = {
             "ACCELERATION_BOUND": (None, True),
@@ -254,6 +296,44 @@ class CUDAMasslessTracerContractTests(unittest.TestCase):
 
 @GPU_REQUIRED
 class CUDAMasslessTracerGPUTests(unittest.TestCase):
+    def test_two_successive_public_annual_segments_revalidate_endpoint_minimum(self):
+        spec = FixedStepCUDAMasslessTracerSpec(
+            1.0 / 64.0,
+            64,
+            _backend(),
+            source_path_steps_per_chunk=64,
+        )
+        first = advance_cuda_massless_tracers(_state(9), spec)
+        first_endpoint = cuda_module._host_binary64_active_endpoint_minimum(
+            np.ascontiguousarray(
+                CP.asnumpy(first.state.source_positions), dtype=np.float64
+            ),
+            np.ascontiguousarray(
+                CP.asnumpy(first.state.tracer_positions), dtype=np.float64
+            ),
+            np.ascontiguousarray(
+                CP.asnumpy(first.state.tracer_lifecycle), dtype=np.int32
+            ),
+        )
+        first_minimum = CP.asnumpy(first.minimum_source_distance_AU)
+        self.assertTrue(np.all(first_minimum <= first_endpoint))
+        second = advance_cuda_massless_tracers(first.state, spec)
+        self.assertEqual(second.state.global_step, 128)
+        second_endpoint = cuda_module._host_binary64_active_endpoint_minimum(
+            np.ascontiguousarray(
+                CP.asnumpy(second.state.source_positions), dtype=np.float64
+            ),
+            np.ascontiguousarray(
+                CP.asnumpy(second.state.tracer_positions), dtype=np.float64
+            ),
+            np.ascontiguousarray(
+                CP.asnumpy(second.state.tracer_lifecycle), dtype=np.int32
+            ),
+        )
+        self.assertTrue(
+            np.all(CP.asnumpy(second.minimum_source_distance_AU) <= second_endpoint)
+        )
+
     def test_quiet_cuda_segment_is_finite_and_has_no_routes(self):
         result = advance_cuda_massless_tracers(
             _state(16),

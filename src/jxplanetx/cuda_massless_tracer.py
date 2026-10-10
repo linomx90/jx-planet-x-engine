@@ -61,6 +61,13 @@ KERNEL_ID = "jx.cuda.massless-tracer.restricted-kdk.v2"
 SCIENTIFIC_CLASSIFICATION = "MODEL_OUTPUT"
 PROJECT_SCOPE = "SCREENING_ONLY"
 DETERMINISM_SCOPE = "SAME_PYTHON_NUMPY_SCIPY_CPU_AND_CUDA_RUNTIME_DEVICE"
+ACTIVE_ENDPOINT_MINIMUM_POLICY = (
+    "ACTIVE_RETURNED_ENDPOINT_HOST_BINARY64_V1:FOR_EACH_SOURCE_IN_SOURCE_ORDER;"
+    "DX_DY_DZ_ARE_PYTHON_BINARY64_SUBTRACTIONS;"
+    "SQUARED_NORM_IS_LEFT_ASSOCIATED_(DX*DX+DY*DY)+DZ*DZ;"
+    "DISTANCE_IS_MATH_SQRT;CUMULATIVE_VALUE_IS_EXACT_OPERAND_MINIMUM;"
+    "REMOVED_TRACERS_REMAIN_BOUND_TO_THEIR_FROZEN_EVENT_MINIMUM"
+)
 IMPLEMENTATION_SOURCE_SHA256 = _import_time_file_sha256(Path(__file__))
 EVENT_LOCATOR_SOURCE_SHA256 = _import_time_file_sha256(
     Path(_cuda_tracer_events.__file__)
@@ -2537,12 +2544,12 @@ def _validate_continuation(
     active_slots = lifecycle_host == LIFECYCLE_ACTIVE
     if np.any(active_slots):
         active_positions = tracer_positions_host[active_slots]
-        endpoint_distances = np.linalg.norm(
-            active_positions[:, None, :] - source_positions_host[None, :, :],
-            axis=2,
+        endpoint_minimum = _host_binary64_active_endpoint_minimum(
+            source_positions_host,
+            tracer_positions_host,
+            lifecycle_host,
         )
-        endpoint_minimum = np.min(endpoint_distances, axis=1)
-        if np.any(minimum_host[active_slots] > endpoint_minimum):
+        if np.any(minimum_host[active_slots] > endpoint_minimum[active_slots]):
             raise CUDAMasslessTracerContractError(
                 "cumulative minimum excludes an active tracer endpoint"
             )
@@ -2951,6 +2958,102 @@ def _kernel(backend: ArrayBackend) -> Any:
     )
 
 
+def _host_binary64_active_endpoint_minimum(
+    source_positions: np.ndarray,
+    tracer_positions: np.ndarray,
+    tracer_lifecycle: np.ndarray,
+) -> np.ndarray:
+    """Return active endpoint minima under one frozen host binary64 rule.
+
+    Each subtraction, multiplication, and addition is a separate Python
+    binary64 operation.  The squared norm is evaluated in the written
+    left-associated order before ``math.sqrt``.  Removed tracers retain
+    infinity here because their terminal event has its own frozen witness.
+    """
+
+    if (
+        type(source_positions) is not np.ndarray
+        or source_positions.dtype != np.dtype(np.float64)
+        or source_positions.ndim != 2
+        or source_positions.shape[0] < 1
+        or source_positions.shape[1] != 3
+        or not source_positions.flags.c_contiguous
+        or type(tracer_positions) is not np.ndarray
+        or tracer_positions.dtype != np.dtype(np.float64)
+        or tracer_positions.ndim != 2
+        or tracer_positions.shape[1] != 3
+        or not tracer_positions.flags.c_contiguous
+        or type(tracer_lifecycle) is not np.ndarray
+        or tracer_lifecycle.dtype != np.dtype(np.int32)
+        or tracer_lifecycle.shape != (tracer_positions.shape[0],)
+        or not tracer_lifecycle.flags.c_contiguous
+        or not np.isfinite(source_positions).all()
+        or not np.isfinite(tracer_positions).all()
+    ):
+        raise CUDAMasslessTracerContractError(
+            "active endpoint minimum inputs differ from the frozen host contract"
+        )
+    output = np.full(tracer_positions.shape[0], np.inf, dtype=np.float64)
+    for tracer_slot in range(tracer_positions.shape[0]):
+        lifecycle = int(tracer_lifecycle[tracer_slot])
+        if lifecycle != LIFECYCLE_ACTIVE:
+            if lifecycle not in (
+                LIFECYCLE_REMOVED_SOURCE_RADIUS,
+                LIFECYCLE_REMOVED_OUTER_BOUNDARY,
+            ):
+                raise CUDAMasslessTracerContractError(
+                    "active endpoint minimum received an unknown lifecycle"
+                )
+            continue
+        minimum = math.inf
+        tracer = tracer_positions[tracer_slot]
+        for source_slot in range(source_positions.shape[0]):
+            source = source_positions[source_slot]
+            dx = float(tracer[0]) - float(source[0])
+            dy = float(tracer[1]) - float(source[1])
+            dz = float(tracer[2]) - float(source[2])
+            squared = (dx * dx + dy * dy) + dz * dz
+            distance = math.sqrt(squared)
+            if not math.isfinite(distance) or not distance > 0.0:
+                raise CUDAMasslessTracerContractError(
+                    "an active endpoint reaches a nonfinite or zero source distance"
+                )
+            if distance < minimum:
+                minimum = distance
+        output[tracer_slot] = minimum
+    return output
+
+
+def _canonicalize_active_endpoint_minimum_host(
+    cumulative_minimum: np.ndarray,
+    source_positions: np.ndarray,
+    tracer_positions: np.ndarray,
+    tracer_lifecycle: np.ndarray,
+) -> np.ndarray:
+    """Include every active returned endpoint without a comparison tolerance."""
+
+    if (
+        type(cumulative_minimum) is not np.ndarray
+        or cumulative_minimum.dtype != np.dtype(np.float64)
+        or cumulative_minimum.shape != (tracer_positions.shape[0],)
+        or not cumulative_minimum.flags.c_contiguous
+        or np.any(np.isnan(cumulative_minimum))
+        or np.any(cumulative_minimum <= 0.0)
+    ):
+        raise CUDAMasslessTracerContractError(
+            "cumulative endpoint minimum differs from the frozen host contract"
+        )
+    endpoint_minimum = _host_binary64_active_endpoint_minimum(
+        source_positions, tracer_positions, tracer_lifecycle
+    )
+    result = cumulative_minimum.copy()
+    for tracer_slot in range(result.shape[0]):
+        endpoint = float(endpoint_minimum[tracer_slot])
+        if endpoint < float(result[tracer_slot]):
+            result[tracer_slot] = endpoint
+    return result
+
+
 def _path_kernels(backend: ArrayBackend) -> tuple[Any, Any]:
     key = ("shared-source-path", int(backend.device_index or 0), KERNEL_SOURCE_SHA256)
     cached = _KERNEL_CACHE.get(key)
@@ -3249,6 +3352,7 @@ def cuda_massless_tracer_runtime_identity(backend: BackendSpec) -> Mapping[str, 
             "encounter_route_method": (
                 "SCIPY_DOP853_CONTINUOUS_EVENT_FULL_STEP_REDO_V2"
             ),
+            "active_endpoint_minimum_policy": ACTIVE_ENDPOINT_MINIMUM_POLICY,
             "determinism_scope": DETERMINISM_SCOPE,
         }
     return MappingProxyType(value)
@@ -4345,6 +4449,24 @@ def advance_cuda_massless_tracers(
         # transaction.  Surface asynchronous errors and complete the committed
         # endpoint before returning buffers to a caller or another stream.
         cp.cuda.runtime.deviceSynchronize()
+        cumulative_minimum = cp.asarray(
+            _canonicalize_active_endpoint_minimum_host(
+                np.ascontiguousarray(
+                    cp.asnumpy(cumulative_minimum), dtype=np.float64
+                ),
+                np.ascontiguousarray(
+                    cp.asnumpy(current_source_position), dtype=np.float64
+                ),
+                np.ascontiguousarray(
+                    cp.asnumpy(current_tracer_position), dtype=np.float64
+                ),
+                np.ascontiguousarray(
+                    cp.asnumpy(cumulative_lifecycle), dtype=np.int32
+                ),
+            ),
+            dtype=cp.float64,
+            order="C",
+        )
         routes = tuple(
             sorted(records, key=lambda row: (row.global_step, row.tracer_index))
         )
@@ -5443,6 +5565,7 @@ def load_latest_cuda_massless_tracer_checkpoint(
 
 
 __all__ = [
+    "ACTIVE_ENDPOINT_MINIMUM_POLICY",
     "CHECKPOINT_SCHEMA",
     "CUDA_OPTIONS",
     "CUDAMasslessTracerContractError",
