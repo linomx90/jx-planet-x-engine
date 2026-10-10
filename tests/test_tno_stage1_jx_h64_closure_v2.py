@@ -15,12 +15,12 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "benchmarks" / "jx_tno_stage1_jx_h64_closure_v1.py"
+SOURCE = ROOT / "benchmarks" / "jx_tno_stage1_jx_h64_closure_v2.py"
 
 
 def load_module() -> types.ModuleType:
     payload = SOURCE.read_bytes()
-    name = "_test_jx_tno_stage1_jx_h64_closure_v1"
+    name = "_test_jx_tno_stage1_jx_h64_closure_v2"
     module = types.ModuleType(name)
     module.__file__ = str(SOURCE)
     module.__package__ = ""
@@ -73,6 +73,8 @@ class H64ClosureTests(unittest.TestCase):
         )
         self.assertEqual(protocol["preregistration"]["tag"], m.PREREGISTRATION_TAG)
         self.assertTrue(protocol["claims"]["retrospective_outcome_seen"])
+        self.assertFalse(protocol["claims"]["failed_v1_result_published"])
+        self.assertTrue(protocol["claims"]["v2_implementation_repair_only"])
         self.assertTrue(protocol["claims"]["threshold_application_roster_changed_after_outcome"])
         for key in (
             "h64_refinement_closure_established", "dynamical_classification_generated",
@@ -80,6 +82,149 @@ class H64ClosureTests(unittest.TestCase):
             "planet_nine_evidence", "science_result",
         ):
             self.assertIs(protocol["claims"][key], False)
+
+    def test_failed_v1_custody_and_exact_repair_are_disclosed(self) -> None:
+        m = self.module
+        protocol = m.build_protocol()
+        failed = protocol["failed_attempt_v1"]
+        repair = protocol["implementation_repair"]
+        self.assertEqual(failed["git_commit"], m.FAILED_V1_GIT_COMMIT)
+        self.assertEqual(failed["source_sha256"], m.FAILED_V1_SOURCE_SHA256)
+        self.assertEqual(failed["test_sha256"], m.FAILED_V1_TEST_SHA256)
+        self.assertEqual(failed["retained_root_roster"], ["PROTOCOL.json"])
+        self.assertFalse(failed["result_published"])
+        self.assertEqual(failed["exception_type"], "NameError")
+        self.assertFalse(repair["scientific_contract_changed"])
+        self.assertFalse(repair["numerical_contract_changed"])
+        self.assertFalse(repair["gate_formulas_changed"])
+        self.assertFalse(repair["thresholds_changed"])
+        self.assertEqual(
+            m._validate_failed_v1_custody()["content_sha256"],
+            m.FAILED_V1_PROTOCOL_CONTENT_SHA256,
+        )
+
+    def test_restart_receipts_are_explicitly_returned_and_destructured(self) -> None:
+        tree = ast.parse(SOURCE.read_text(encoding="utf-8"))
+        functions = {
+            node.name: node
+            for node in tree.body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        }
+        runtime = functions["_runtime_and_lanes"]
+        returns = [node for node in ast.walk(runtime) if isinstance(node, ast.Return)]
+        returned_names = [
+            item.id
+            for node in returns
+            if isinstance(node.value, ast.Tuple)
+            for item in node.value.elts
+            if isinstance(item, ast.Name)
+        ]
+        self.assertEqual(returned_names.count("restart_receipts"), 1)
+        self.assertLess(
+            returned_names.index("restart_records"),
+            returned_names.index("restart_receipts"),
+        )
+        self.assertLess(
+            returned_names.index("restart_receipts"),
+            returned_names.index("source_payload"),
+        )
+
+        worker = functions["_execute_worker"]
+        destructured = []
+        for node in ast.walk(worker):
+            if (
+                isinstance(node, ast.Assign)
+                and isinstance(node.value, ast.Call)
+                and isinstance(node.value.func, ast.Name)
+                and node.value.func.id == "_runtime_and_lanes"
+                and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Tuple)
+            ):
+                destructured = [
+                    item.id for item in node.targets[0].elts
+                    if isinstance(item, ast.Name)
+                ]
+        self.assertEqual(destructured.count("restart_receipts"), 1)
+        self.assertLess(
+            destructured.index("restart_records"),
+            destructured.index("restart_receipts"),
+        )
+        self.assertLess(
+            destructured.index("restart_receipts"),
+            destructured.index("source_payload"),
+        )
+
+    def test_execution_worker_carries_restart_receipts_into_metadata(self) -> None:
+        m = self.module
+        receipts = [{"case_order": 0}, {"case_order": 1}]
+        captured = {}
+
+        class FakeDelegate:
+            @staticmethod
+            def _fresh_child_interpreter_receipt():
+                return {"fresh": True}
+
+            @staticmethod
+            def _reject_preloaded_runtime_modules():
+                return {"registry": True}
+
+            @staticmethod
+            def _load_json(_path, _label):
+                return b"{}", {"probe": True}
+
+            @staticmethod
+            def _validate_import_probe_receipt(_receipt, *, expected_path):
+                self.assertEqual(expected_path, Path("probe.json"))
+
+            @staticmethod
+            def validate_execution_prerequisites(_root):
+                return {"custody": True}
+
+            @staticmethod
+            def materialize_cartesian_payload(_lanes):
+                return b"\0" * m.EXPECTED_ARRAY_BYTES, [{"lane": "compact"}], [{"lane": "gate"}]
+
+        originals = {
+            "_delegate": m._delegate,
+            "validate_prepared": m.validate_prepared,
+            "_validate_v4_artifacts": m._validate_v4_artifacts,
+            "_runtime_and_lanes": m._runtime_and_lanes,
+            "_combined_gate_result": m._combined_gate_result,
+            "_publish_result_artifacts": m._publish_result_artifacts,
+        }
+        try:
+            m._delegate = lambda: FakeDelegate()
+            m.validate_prepared = lambda _root: m.build_protocol()
+            m._validate_v4_artifacts = lambda **_kwargs: ({}, {})
+            m._runtime_and_lanes = lambda *_args: (
+                [{"lane": "raw"}], b"midpoint", [{"midpoint_order": 0}],
+                b"restart", [{"stream_order": 0}], receipts,
+                b"source", [{"source_order": 0}], {"runtime": True},
+            )
+            m._combined_gate_result = lambda _lanes: {
+                "all_predeclared_gates_passed": False,
+            }
+            m._publish_result_artifacts = lambda _root, artifacts: captured.update(
+                artifacts=dict(artifacts)
+            )
+            result = m._execute_worker(
+                Path("unused-root"), Path("unused-de441"),
+                Path("unused-rebound"), Path("probe.json"),
+            )
+        finally:
+            for name, value in originals.items():
+                setattr(m, name, value)
+
+        self.assertEqual(
+            result["jx_midpoint_checkpoints"]["fresh_process_restart_cases"],
+            receipts,
+        )
+        self.assertEqual(
+            json.loads(captured["artifacts"]["RESULT.json"])[
+                "jx_midpoint_checkpoints"
+            ]["fresh_process_restart_cases"],
+            receipts,
+        )
 
     def test_protocol_binds_current_source_test_and_exact_v4_artifacts(self) -> None:
         m = self.module

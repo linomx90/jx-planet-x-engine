@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded post-v4 JX h=1/64 numerical-closure experiment.
+"""Bounded post-v4 JX h=1/64 numerical-closure experiment, revision 2.
 
 This successor was designed after the retained Stage-1 v4 outcome was known.
 It does not alter any numerical threshold and it does not repeat REBOUND or
@@ -13,6 +13,12 @@ The retained h=1/32 lane remains outcome-bearing through the unchanged
 contraction and Richardson rules.  This is an explicitly retrospective
 successor policy, not a claim that v4 passed.  No dynamical classification,
 population inference, or Planet Nine result can be emitted by this module.
+
+Revision 2 changes no scientific or numerical contract.  It corrects the
+failed revision-1 result-assembly path by explicitly returning the already
+authenticated fresh-process restart receipts alongside the restart streams.
+Revision 1 published no result and remains frozen in Git and its protocol-only
+run root.
 """
 
 from __future__ import annotations
@@ -34,16 +40,24 @@ from typing import Any, Iterable, Mapping, Sequence
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SCRIPT_PATH = PROJECT_ROOT / "benchmarks" / "jx_tno_stage1_jx_h64_closure_v1.py"
-TEST_PATH = PROJECT_ROOT / "tests" / "test_tno_stage1_jx_h64_closure_v1.py"
+SCRIPT_PATH = PROJECT_ROOT / "benchmarks" / "jx_tno_stage1_jx_h64_closure_v2.py"
+TEST_PATH = PROJECT_ROOT / "tests" / "test_tno_stage1_jx_h64_closure_v2.py"
 V4_SOURCE_PATH = PROJECT_ROOT / "benchmarks" / "jx_tno_stage1_dynamics_qualification_v4.py"
 V4_TEST_PATH = PROJECT_ROOT / "tests" / "test_tno_stage1_dynamics_qualification_v4.py"
 V4_ROOT = PROJECT_ROOT / "runs" / "tno_stage1_dynamics_qualification_v4"
-DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "runs" / "tno_stage1_jx_h64_closure_v1"
+FAILED_V1_ROOT = PROJECT_ROOT / "runs" / "tno_stage1_jx_h64_closure_v1"
+DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "runs" / "tno_stage1_jx_h64_closure_v2"
 DE441_ROOT = PROJECT_ROOT / "runs" / "tno_de441_resolved11_native_epochs_v1"
 DEFAULT_REBOUND_TARGET = Path("/tmp/jx-m4-rebound511")
-PREREGISTRATION_BRANCH = "research/tno-stage1-h64-closure-v1-preregistered-20261010"
-PREREGISTRATION_TAG = "tno-stage1-h64-closure-v1-preregistered-20261010"
+PREREGISTRATION_BRANCH = "research/tno-stage1-h64-closure-v2-preregistered-20261010"
+PREREGISTRATION_TAG = "tno-stage1-h64-closure-v2-preregistered-20261010"
+
+FAILED_V1_GIT_COMMIT = "511f227e9a71081ce8fe62b8bdf153a198b3d2dd"
+FAILED_V1_GIT_TAG = "tno-stage1-h64-closure-v1-preregistered-20261010"
+FAILED_V1_SOURCE_SHA256 = "de93d61b6b16db35fd4573c9d2f69d6fbe1120ea1a53f196e64f0c902590b944"
+FAILED_V1_TEST_SHA256 = "6f017abdf027192ca72a2a994f2f2a9129e421bc46f9803d35dba057b331d8da"
+FAILED_V1_PROTOCOL_FILE_SHA256 = "8e53f1349a0aadbc11c5ae7c3cf865dd11b08ff268354d50fbab9def72797fe8"
+FAILED_V1_PROTOCOL_CONTENT_SHA256 = "197670124674644259924fbcd4e4b0973c3cfebae738e85d7dc4990609593d88"
 
 V4_SOURCE_SHA256 = "6ffbd4f6f6025cb413790a8d0addf7a620ce4d3a993e99b01426a4c2749ec7f2"
 V4_TEST_SHA256 = "dc71007054e9afd1cb4d4182de253ac17f495ff835cc6b8677cdf2f36b5c2f8d"
@@ -64,26 +78,27 @@ V4_FILES = {
     "RESULT.json": (10_602_296, "bebd9186da0ef8943e05a8c4afc057073d48a8a47e9a4d006dae6e59921d5c42"),
 }
 
-PROTOCOL_SCHEMA = "jx.tno.stage1-jx-h64-closure.protocol.v1"
-RESULT_SCHEMA = "jx.tno.stage1-jx-h64-closure.result.v1"
-ARRAY_SCHEMA = "jx.tno.stage1-jx-h64-closure.cartesian-arrays.v1"
-MIDPOINT_SCHEMA = "jx.tno.stage1-jx-h64-closure.midpoints.v1"
-RESTART_STREAM_SCHEMA = "jx.tno.stage1-jx-h64-closure.restart-streams.v1"
-JX_SOURCE_SCHEMA = "jx.tno.stage1-jx-h64-closure.source-nodes.v1"
-IMPORT_PROBE_SCHEMA = "jx.tno.stage1-jx-h64-closure.import-probe.v1"
-RESTART_RECEIPT_SCHEMA = "jx.tno.stage1-jx-h64-closure.restart-receipt.v1"
-SOURCE_PREFLIGHT_SCHEMA = "jx.tno.stage1-jx-h64-closure.source-preflight.v1"
+PROTOCOL_SCHEMA = "jx.tno.stage1-jx-h64-closure.protocol.v2"
+RESULT_SCHEMA = "jx.tno.stage1-jx-h64-closure.result.v2"
+ARRAY_SCHEMA = "jx.tno.stage1-jx-h64-closure.cartesian-arrays.v2"
+MIDPOINT_SCHEMA = "jx.tno.stage1-jx-h64-closure.midpoints.v2"
+RESTART_STREAM_SCHEMA = "jx.tno.stage1-jx-h64-closure.restart-streams.v2"
+JX_SOURCE_SCHEMA = "jx.tno.stage1-jx-h64-closure.source-nodes.v2"
+IMPORT_PROBE_SCHEMA = "jx.tno.stage1-jx-h64-closure.import-probe.v2"
+RESTART_RECEIPT_SCHEMA = "jx.tno.stage1-jx-h64-closure.restart-receipt.v2"
+SOURCE_PREFLIGHT_SCHEMA = "jx.tno.stage1-jx-h64-closure.source-preflight.v2"
 
-PROTOCOL_DOMAIN = b"jx.tno.stage1-jx-h64-closure.protocol.v1\0"
-RESULT_DOMAIN = b"jx.tno.stage1-jx-h64-closure.result.v1\0"
-ARRAY_DOMAIN = b"jx.tno.stage1-jx-h64-closure.cartesian-arrays.v1\0"
-MIDPOINT_DOMAIN = b"jx.tno.stage1-jx-h64-closure.midpoints.v1\0"
-RESTART_STREAM_DOMAIN = b"jx.tno.stage1-jx-h64-closure.restart-streams.v1\0"
-JX_SOURCE_DOMAIN = b"jx.tno.stage1-jx-h64-closure.source-nodes.v1\0"
-IMPORT_PROBE_DOMAIN = b"jx.tno.stage1-jx-h64-closure.import-probe.v1\0"
-RESTART_DOMAIN = b"jx.tno.stage1-jx-h64-closure.restart-receipt.v1\0"
-SCHEDULE_DOMAIN = b"jx.tno.stage1-jx-h64-closure.schedule.v1\0"
-SOURCE_PREFLIGHT_DOMAIN = b"jx.tno.stage1-jx-h64-closure.source-preflight.v1\0"
+PROTOCOL_DOMAIN = b"jx.tno.stage1-jx-h64-closure.protocol.v2\0"
+RESULT_DOMAIN = b"jx.tno.stage1-jx-h64-closure.result.v2\0"
+ARRAY_DOMAIN = b"jx.tno.stage1-jx-h64-closure.cartesian-arrays.v2\0"
+MIDPOINT_DOMAIN = b"jx.tno.stage1-jx-h64-closure.midpoints.v2\0"
+RESTART_STREAM_DOMAIN = b"jx.tno.stage1-jx-h64-closure.restart-streams.v2\0"
+JX_SOURCE_DOMAIN = b"jx.tno.stage1-jx-h64-closure.source-nodes.v2\0"
+IMPORT_PROBE_DOMAIN = b"jx.tno.stage1-jx-h64-closure.import-probe.v2\0"
+RESTART_DOMAIN = b"jx.tno.stage1-jx-h64-closure.restart-receipt.v2\0"
+SCHEDULE_DOMAIN = b"jx.tno.stage1-jx-h64-closure.schedule.v2\0"
+SOURCE_PREFLIGHT_DOMAIN = b"jx.tno.stage1-jx-h64-closure.source-preflight.v2\0"
+CLASSIFICATION = "POST_OUTCOME_BOUNDED_JX_H64_REFINEMENT_CLOSURE_IMPLEMENTATION_REVISION_2"
 
 HORIZON_YEARS = 1_000
 OBJECT_COUNT = 12
@@ -115,6 +130,8 @@ EXPECTED_RESTART_STREAM_BYTES = len(RESTART_CASES) * 2 * RESTART_SUFFIX_BYTES
 
 CLAIMS = {
     "retrospective_outcome_seen": True,
+    "failed_v1_result_published": False,
+    "v2_implementation_repair_only": True,
     "v4_reclassified_as_pass": False,
     "thresholds_changed_after_outcome": False,
     "threshold_application_roster_changed_after_outcome": True,
@@ -312,9 +329,9 @@ def _delegate() -> types.ModuleType:
         "SOURCE_BUILDER_PREFLIGHT_DOMAIN": SOURCE_PREFLIGHT_DOMAIN,
         "CLASSIFICATION": "TNO_STAGE1_POST_V4_JX_H64_CLOSURE_ONLY",
         "CLAIM_CEILING": "RETROSPECTIVE_NUMERICAL_REFINEMENT_CLOSURE_NOT_CLASSIFICATION",
-        "JX_PROVENANCE_VERSION": "v5-h64-closure-v1",
-        "JX_TILE_ID_PREFIX": "stage1-v5-h64",
-        "JX_PROVENANCE_ID_PREFIX": "jx-tno-stage1-v5-h64",
+        "JX_PROVENANCE_VERSION": "v5-h64-closure-v2",
+        "JX_TILE_ID_PREFIX": "stage1-v5-h64-v2",
+        "JX_PROVENANCE_ID_PREFIX": "jx-tno-stage1-v5-h64-v2",
         "JX_STEP_YEARS": (1.0 / STEPS_PER_YEAR,),
         "JX_STEPS_PER_YEAR": (STEPS_PER_YEAR,),
         "JX_FRESH_PROCESS_RESTART_CASES": RESTART_CASES,
@@ -356,15 +373,39 @@ def _v4_bindings() -> list[dict[str, object]]:
     ]
 
 
+def _validate_failed_v1_custody() -> dict[str, Any]:
+    if (
+        not FAILED_V1_ROOT.is_dir()
+        or FAILED_V1_ROOT.is_symlink()
+        or {item.name for item in FAILED_V1_ROOT.iterdir()} != {"PROTOCOL.json"}
+    ):
+        raise ClosureError("failed v1 root must remain protocol-only")
+    payload = _read_small(
+        FAILED_V1_ROOT / "PROTOCOL.json", "failed v1 protocol", 5_760
+    )
+    protocol = _strict_json(payload, "failed v1 protocol")
+    if (
+        _sha256(payload) != FAILED_V1_PROTOCOL_FILE_SHA256
+        or protocol.get("content_sha256") != FAILED_V1_PROTOCOL_CONTENT_SHA256
+        or protocol.get("outcomes_generated") is not False
+        or protocol.get("implementation", {}).get("sha256")
+        != FAILED_V1_SOURCE_SHA256
+        or protocol.get("test", {}).get("sha256") != FAILED_V1_TEST_SHA256
+    ):
+        raise ClosureError("failed v1 custody changed")
+    return protocol
+
+
 def build_protocol() -> dict[str, object]:
     if _selected_restart_cases() != RESTART_CASES:
         raise ClosureError("deterministic h64 restart selection changed")
+    _validate_failed_v1_custody()
     source = _implementation_record(SCRIPT_PATH, "h64_closure_implementation")
     test = _implementation_record(TEST_PATH, "h64_closure_test")
     protocol: dict[str, object] = {
         "schema": PROTOCOL_SCHEMA,
-        "classification": "POST_OUTCOME_BOUNDED_JX_H64_REFINEMENT_CLOSURE",
-        "design_status": "RETROSPECTIVE_SUCCESSOR_DESIGNED_AFTER_V4_FAILURE",
+        "classification": CLASSIFICATION,
+        "design_status": "RETROSPECTIVE_SUCCESSOR_DESIGNED_AFTER_V4_FAILURE;_V2_REPAIRS_FAILED_V1_RESULT_ASSEMBLY_ONLY",
         "objective": "RUN_ONLY_24_JX_H64_LANES_AND_REEVALUATE_UNCHANGED_STAGE1_THRESHOLDS",
         "preregistration": {
             "branch": PREREGISTRATION_BRANCH,
@@ -374,6 +415,29 @@ def build_protocol() -> dict[str, object]:
         },
         "implementation": source,
         "test": test,
+        "failed_attempt_v1": {
+            "git_commit": FAILED_V1_GIT_COMMIT,
+            "git_tag": FAILED_V1_GIT_TAG,
+            "source_sha256": FAILED_V1_SOURCE_SHA256,
+            "test_sha256": FAILED_V1_TEST_SHA256,
+            "protocol_file_sha256": FAILED_V1_PROTOCOL_FILE_SHA256,
+            "protocol_content_sha256": FAILED_V1_PROTOCOL_CONTENT_SHA256,
+            "run_root": "runs/tno_stage1_jx_h64_closure_v1",
+            "retained_root_roster": ["PROTOCOL.json"],
+            "result_published": False,
+            "failure_stage": "POST_DYNAMICS_RESULT_METADATA_ASSEMBLY",
+            "exception_type": "NameError",
+            "exception_message": "name 'restart_receipts' is not defined",
+        },
+        "implementation_repair": {
+            "scientific_contract_changed": False,
+            "numerical_contract_changed": False,
+            "input_roster_changed": False,
+            "lane_roster_changed": False,
+            "gate_formulas_changed": False,
+            "thresholds_changed": False,
+            "repair": "RETURN_AUTHENTICATED_RESTART_RECEIPTS_FROM_RUNTIME_HELPER_AND_DESTRUCTURE_THEM_IN_RESULT_WORKER",
+        },
         "predecessor_v4": {
             "git_commit": V4_GIT_COMMIT,
             "git_tag": V4_GIT_TAG,
@@ -789,7 +853,17 @@ def _runtime_and_lanes(
     fresh_registry: Mapping[str, Any],
     fresh_child: Mapping[str, Any],
     rebound_target: Path,
-) -> tuple[list[dict[str, object]], bytes, list[dict[str, object]], bytes, list[dict[str, object]], bytes, list[dict[str, object]], dict[str, object]]:
+) -> tuple[
+    list[dict[str, object]],
+    bytes,
+    list[dict[str, object]],
+    bytes,
+    list[dict[str, object]],
+    list[dict[str, object]],
+    bytes,
+    list[dict[str, object]],
+    dict[str, object],
+]:
     bridge = d._load_json(d.BRIDGE_STATES_PATH, "bridge states")[1]
     lanes: list[dict[str, object]] = []
     midpoint_builder = bytearray()
@@ -838,7 +912,8 @@ def _runtime_and_lanes(
         raise ClosureError("new h64 evidence geometry changed")
     return (
         lanes, midpoint_payload, midpoint_records, restart_payload,
-        restart_records, source_payload, source_records, runtime,
+        restart_records, restart_receipts, source_payload, source_records,
+        runtime,
     )
 
 
@@ -859,7 +934,8 @@ def _execute_worker(
     custody = d.validate_execution_prerequisites(de441_root)
     (
         lanes, midpoint_payload, midpoint_records, restart_payload,
-        restart_records, source_payload, source_records, runtime,
+        restart_records, restart_receipts, source_payload, source_records,
+        runtime,
     ) = _runtime_and_lanes(
         d, root, custody, import_probe, fresh_registry, fresh_child,
         rebound_target,
@@ -914,7 +990,7 @@ def _execute_worker(
     passed = gates["all_predeclared_gates_passed"] is True
     result: dict[str, object] = {
         "schema": RESULT_SCHEMA,
-        "classification": "POST_OUTCOME_BOUNDED_JX_H64_REFINEMENT_CLOSURE",
+        "classification": CLASSIFICATION,
         "status": "H64_REFINEMENT_CLOSURE_PASS" if passed else "H64_REFINEMENT_CLOSURE_GATES_NOT_ALL_PASS",
         "protocol_content_sha256": protocol["content_sha256"],
         "protocol_file_sha256": _sha256(_canonical_json(protocol)),
@@ -1252,7 +1328,7 @@ def validate_output(output_root: Path = DEFAULT_OUTPUT_ROOT) -> dict[str, Any]:
         or len(arrays) != EXPECTED_ARRAY_BYTES
         or result.get("schema") != RESULT_SCHEMA
         or result.get("classification")
-        != "POST_OUTCOME_BOUNDED_JX_H64_REFINEMENT_CLOSURE"
+        != CLASSIFICATION
         or result.get("protocol_content_sha256")
         != build_protocol()["content_sha256"]
         or result.get("protocol_file_sha256") != _sha256(expected_protocol)
