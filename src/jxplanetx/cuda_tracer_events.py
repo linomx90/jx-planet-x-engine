@@ -160,6 +160,44 @@ class DOP853EventLocatorSpec:
             )
 
 
+@dataclass(frozen=True)
+class TracerEventCandidatePolicy:
+    """Terminal surfaces to inspect after an accepted DOP853 interval.
+
+    ``None`` means every positive-radius source surface.  A tuple selects an
+    explicit, canonical subset.  The policy never narrows the exhaustive
+    initial singularity, inside-surface, or exact-``t=0`` checks; it is only a
+    caller-supplied proof about which surfaces can first be reached later in
+    the guarded outer step.  The default is therefore fully exhaustive.
+    """
+
+    source_radius_indices: tuple[int, ...] | None = None
+    include_primary_boundary: bool = True
+
+    def __post_init__(self) -> None:
+        indices = self.source_radius_indices
+        if indices is not None:
+            if type(indices) is not tuple:
+                raise TracerEventContractError(
+                    "source_radius_indices must be None or an exact tuple"
+                )
+            previous = -1
+            for index in indices:
+                if type(index) is not int or index < 0:
+                    raise TracerEventContractError(
+                        "source_radius_indices entries must be nonnegative integers"
+                    )
+                if index <= previous:
+                    raise TracerEventContractError(
+                        "source_radius_indices must be strictly increasing"
+                    )
+                previous = index
+        if type(self.include_primary_boundary) is not bool:
+            raise TracerEventContractError(
+                "include_primary_boundary must be an exact bool"
+            )
+
+
 @dataclass(frozen=True, eq=False)
 class TracerEventRecord:
     """One continuously located event on the accepted dense solution."""
@@ -1048,6 +1086,7 @@ def locate_tracer_step_events(
     step_years: float,
     primary_source_index: int = 0,
     primary_boundary_radius_AU: float | None = None,
+    candidate_policy: TracerEventCandidatePolicy | None = None,
     spec: DOP853EventLocatorSpec | None = None,
 ) -> TracerStepEventResult:
     """Route and continuously inspect exactly one signed tracer step.
@@ -1057,12 +1096,21 @@ def locate_tracer_step_events(
     An optional primary boundary terminates only where the physical (not
     integration-direction) primary-relative radial velocity is outward.  This
     definition therefore remains valid for a negative ``step_years``.
+    ``candidate_policy`` may narrow only the continuous accepted-interval
+    surface search.  Initial singularity, interior, and surface checks remain
+    exhaustive regardless of that policy.
     """
 
     if spec is None:
         spec = DOP853EventLocatorSpec()
     if type(spec) is not DOP853EventLocatorSpec:
         raise TracerEventContractError("spec must be DOP853EventLocatorSpec")
+    if candidate_policy is None:
+        candidate_policy = TracerEventCandidatePolicy()
+    if type(candidate_policy) is not TracerEventCandidatePolicy:
+        raise TracerEventContractError(
+            "candidate_policy must be TracerEventCandidatePolicy"
+        )
     step = _finite_number(step_years, "step_years")
     if step == 0.0:
         raise TracerEventContractError("step_years cannot be zero")
@@ -1111,6 +1159,14 @@ def locate_tracer_step_events(
         or not 0 <= primary_source_index < source_count
     ):
         raise TracerEventContractError("primary_source_index is outside the source table")
+    if candidate_policy.source_radius_indices is None:
+        continuous_source_indices: tuple[int, ...] = tuple(range(source_count))
+    else:
+        continuous_source_indices = candidate_policy.source_radius_indices
+        if any(index >= source_count for index in continuous_source_indices):
+            raise TracerEventContractError(
+                "candidate source-radius index is outside the source table"
+            )
     boundary: float | None = None
     if primary_boundary_radius_AU is not None:
         boundary = _finite_number(
@@ -1438,7 +1494,12 @@ def locate_tracer_step_events(
         maximum_primary_phase = max(maximum_primary_phase, phase)
 
         candidates: list[TracerEventRecord] = []
-        for source_index, radius in enumerate(source_radii):
+        # The candidate policy is an external guard proof.  Do not add an
+        # endpoint-sign prefilter here: it would miss tangent/grazing contacts,
+        # whose exhaustive stationary-point treatment is retained unchanged
+        # for every selected surface.
+        for source_index in continuous_source_indices:
+            radius = source_radii[source_index]
             if radius <= 0.0:
                 continue
             source_critical, source_minima = analyze_source_distance(
@@ -1477,7 +1538,7 @@ def locate_tracer_step_events(
                         step=step,
                     )
                 )
-        if boundary is not None:
+        if boundary is not None and candidate_policy.include_primary_boundary:
             roots = _locate_surface_roots(
                 dense_output,
                 position_0[primary_source_index],
@@ -1648,6 +1709,7 @@ __all__ = [
     "TracerEventContractError",
     "TracerEventError",
     "TracerEventIntegrationError",
+    "TracerEventCandidatePolicy",
     "TracerEventRecord",
     "TracerStepEventResult",
     "cubic_hermite_source_state",

@@ -122,6 +122,26 @@ def _state(
 
 
 class CUDAMasslessTracerContractTests(unittest.TestCase):
+    def test_guard_reason_candidate_policy_mapping_is_explicit(self):
+        expected = {
+            "ACCELERATION_BOUND": (None, True),
+            "COLLISION_SURFACE_POSSIBLE": (None, True),
+            "OUTER_BOUNDARY_POSSIBLE": ((), True),
+            "PRIMARY_PERIAPSE_RESOLUTION": ((), False),
+            "SWEPT_FLOOR": ((), False),
+        }
+        for reason, signature in expected.items():
+            with self.subTest(reason=reason):
+                policy = cuda_module._event_candidate_policy_for_guard_reason(
+                    reason
+                )
+                self.assertEqual(
+                    (policy.source_radius_indices, policy.include_primary_boundary),
+                    signature,
+                )
+        with self.assertRaises(CUDAMasslessTracerContractError):
+            cuda_module._event_candidate_policy_for_guard_reason("NONE")
+
     def test_spec_is_cuda_only_and_fixed_binary64_policy(self):
         with self.assertRaises(CUDAMasslessTracerContractError):
             FixedStepCUDAMasslessTracerSpec(
@@ -346,6 +366,48 @@ class CUDAMasslessTracerGPUTests(unittest.TestCase):
         )
         observed = CP.asnumpy(result.state.tracer_positions[0])
         self.assertLess(float(np.max(np.abs(observed - expected))), 2.0e-12)
+
+    def test_live_and_deterministic_replay_use_identical_candidate_policy(self):
+        locator = cuda_module.locate_tracer_step_events
+        live_policies = []
+
+        def record_live(*args, **kwargs):
+            live_policies.append(kwargs.get("candidate_policy"))
+            return locator(*args, **kwargs)
+
+        with mock.patch.object(
+            cuda_module,
+            "locate_tracer_step_events",
+            side_effect=record_live,
+        ):
+            routed = advance_cuda_massless_tracers(
+                _state(1, encounter_radius=1.1),
+                FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+            )
+        self.assertEqual(routed.encounter_routes[0].reason, "SWEPT_FLOOR")
+        self.assertEqual(len(live_policies), 1)
+
+        replay_and_live_policies = []
+
+        def record_replay_and_live(*args, **kwargs):
+            replay_and_live_policies.append(kwargs.get("candidate_policy"))
+            return locator(*args, **kwargs)
+
+        with mock.patch.object(
+            cuda_module,
+            "locate_tracer_step_events",
+            side_effect=record_replay_and_live,
+        ):
+            advance_cuda_massless_tracers(
+                routed.state,
+                FixedStepCUDAMasslessTracerSpec(0.001, 1, _backend()),
+            )
+
+        self.assertGreaterEqual(len(replay_and_live_policies), 2)
+        self.assertEqual(replay_and_live_policies[0], live_policies[0])
+        self.assertTrue(
+            all(policy == live_policies[0] for policy in replay_and_live_policies)
+        )
 
     def test_total_route_budget_fails_before_first_ledger_append(self):
         with self.assertRaisesRegex(

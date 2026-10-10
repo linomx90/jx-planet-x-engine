@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import fields, is_dataclass
 import math
 import unittest
 from unittest.mock import patch
@@ -12,6 +13,7 @@ from jxplanetx.cuda_tracer_events import (
     EVENT_PRIMARY_BOUNDARY_OUTWARD,
     EVENT_SOURCE_RADIUS_CONTACT,
     LOCATION_DENSE_MINIMUM,
+    TracerEventCandidatePolicy,
     TracerEventContractError,
     TracerEventIntegrationError,
     cubic_hermite_source_state,
@@ -40,6 +42,33 @@ def _stationary_sources(*positions: tuple[float, float, float]):
     )
 
 
+def _assert_bitwise_equal(
+    test: unittest.TestCase,
+    left: object,
+    right: object,
+) -> None:
+    test.assertIs(type(left), type(right))
+    if isinstance(left, np.ndarray):
+        test.assertEqual(left.dtype, right.dtype)
+        test.assertEqual(left.shape, right.shape)
+        test.assertEqual(left.tobytes(order="C"), right.tobytes(order="C"))
+    elif isinstance(left, float):
+        test.assertEqual(np.float64(left).tobytes(), np.float64(right).tobytes())
+    elif is_dataclass(left):
+        for field in fields(left):
+            _assert_bitwise_equal(
+                test,
+                getattr(left, field.name),
+                getattr(right, field.name),
+            )
+    elif isinstance(left, tuple):
+        test.assertEqual(len(left), len(right))
+        for left_item, right_item in zip(left, right):
+            _assert_bitwise_equal(test, left_item, right_item)
+    else:
+        test.assertEqual(left, right)
+
+
 def _route(
     tracer_position: np.ndarray,
     tracer_velocity: np.ndarray,
@@ -49,6 +78,7 @@ def _route(
     step: float = 1.0,
     boundary: float | None = None,
     primary: int = 0,
+    candidate_policy: TracerEventCandidatePolicy | None = None,
     spec: DOP853EventLocatorSpec | None = None,
 ):
     p0, v0, p1, v1, gm = _stationary_sources(*positions)
@@ -64,6 +94,7 @@ def _route(
         step_years=step,
         primary_source_index=primary,
         primary_boundary_radius_AU=boundary,
+        candidate_policy=candidate_policy,
         spec=spec,
     )
 
@@ -187,6 +218,104 @@ class DensePolynomialExhaustivenessTests(unittest.TestCase):
 
 
 class ContinuousEventLocationTests(unittest.TestCase):
+    def test_filtered_event_free_result_is_bitwise_identical_to_default(self):
+        positions = tuple(
+            (float(index * 10), float((index % 3) * 7), 0.0)
+            for index in range(11)
+        )
+        radii = tuple(0.01 for _ in positions)
+        exhaustive = _route(
+            _vector(3.0, 4.0),
+            _vector(0.1, -0.05),
+            positions,
+            radii,
+            boundary=100_000.0,
+            spec=DOP853EventLocatorSpec(maximum_substep_fraction=0.25),
+        )
+        filtered = _route(
+            _vector(3.0, 4.0),
+            _vector(0.1, -0.05),
+            positions,
+            radii,
+            boundary=100_000.0,
+            candidate_policy=TracerEventCandidatePolicy(
+                source_radius_indices=(),
+                include_primary_boundary=False,
+            ),
+            spec=DOP853EventLocatorSpec(maximum_substep_fraction=0.25),
+        )
+
+        _assert_bitwise_equal(self, exhaustive, filtered)
+
+    def test_outer_only_event_is_bitwise_identical_to_exhaustive(self):
+        arguments = (
+            _vector(0.5),
+            _vector(1.0),
+            ((0.0, 0.0, 0.0), (100.0, 0.0, 0.0)),
+            (0.01, 1.0),
+        )
+        exhaustive = _route(*arguments, boundary=1.0)
+        outer_only = _route(
+            *arguments,
+            boundary=1.0,
+            candidate_policy=TracerEventCandidatePolicy(
+                source_radius_indices=(),
+                include_primary_boundary=True,
+            ),
+        )
+
+        self.assertEqual(
+            outer_only.earliest_event.event_type,
+            EVENT_PRIMARY_BOUNDARY_OUTWARD,
+        )
+        _assert_bitwise_equal(self, exhaustive, outer_only)
+
+    def test_policy_does_not_narrow_initial_surface_or_inside_checks(self):
+        no_continuous_surfaces = TracerEventCandidatePolicy(
+            source_radius_indices=(),
+            include_primary_boundary=False,
+        )
+        contact = _route(
+            _vector(1.0),
+            _vector(0.0, 1.0),
+            ((0.0, 0.0, 0.0),),
+            (1.0,),
+            candidate_policy=no_continuous_surfaces,
+        )
+        self.assertEqual(contact.completed_fraction, 0.0)
+        self.assertEqual(
+            contact.earliest_event.event_type,
+            EVENT_SOURCE_RADIUS_CONTACT,
+        )
+        with self.assertRaisesRegex(TracerEventIntegrationError, "already inside"):
+            _route(
+                _vector(0.5),
+                _vector(0.0, 1.0),
+                ((0.0, 0.0, 0.0),),
+                (1.0,),
+                candidate_policy=no_continuous_surfaces,
+            )
+
+    def test_selected_surface_retains_grazing_stationary_point_search(self):
+        result = _route(
+            _vector(-2.0, 1.0),
+            _vector(4.0, 0.0),
+            ((-100.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
+            (0.0, 1.0),
+            candidate_policy=TracerEventCandidatePolicy(
+                source_radius_indices=(1,),
+                include_primary_boundary=False,
+            ),
+            spec=DOP853EventLocatorSpec(maximum_substep_fraction=1.0),
+        )
+
+        self.assertEqual(result.earliest_event.source_index, 1)
+        self.assertEqual(
+            result.earliest_event.location_method,
+            LOCATION_DENSE_MINIMUM,
+        )
+        self.assertAlmostEqual(result.earliest_event.step_fraction, 0.5, places=10)
+
     def test_primary_dense_analysis_is_reused_within_each_accepted_interval(self):
         with patch.object(
             event_module,
@@ -464,7 +593,45 @@ class EventContractAndFailureTests(unittest.TestCase):
     def test_contract_rejects_ambiguous_types_and_invalid_policy(self):
         with self.assertRaises(TracerEventContractError):
             DOP853EventLocatorSpec(dense_polynomial_validation_points=4)
+        with self.assertRaises(TracerEventContractError):
+            TracerEventCandidatePolicy(
+                source_radius_indices=[0]  # type: ignore[arg-type]
+            )
+        with self.assertRaises(TracerEventContractError):
+            TracerEventCandidatePolicy(source_radius_indices=(1, 1))
         p0, v0, p1, v1, gm = _stationary_sources((0.0, 0.0, 0.0))
+        with self.assertRaisesRegex(
+            TracerEventContractError, "outside the source table"
+        ):
+            locate_tracer_step_events(
+                _vector(1.0),
+                _vector(0.0, 1.0),
+                p0,
+                v0,
+                p1,
+                v1,
+                gm,
+                np.array([0.0], dtype=np.float64),
+                step_years=1.0,
+                candidate_policy=TracerEventCandidatePolicy(
+                    source_radius_indices=(1,)
+                ),
+            )
+        with self.assertRaisesRegex(
+            TracerEventContractError, "candidate_policy"
+        ):
+            locate_tracer_step_events(
+                _vector(1.0),
+                _vector(0.0, 1.0),
+                p0,
+                v0,
+                p1,
+                v1,
+                gm,
+                np.array([0.0], dtype=np.float64),
+                step_years=1.0,
+                candidate_policy=object(),  # type: ignore[arg-type]
+            )
         with self.assertRaises(TracerEventContractError):
             locate_tracer_step_events(
                 [1.0, 0.0, 0.0],  # type: ignore[arg-type]

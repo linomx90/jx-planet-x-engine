@@ -41,6 +41,7 @@ from .cuda_tracer_events import (
     DOP853EventLocatorSpec,
     EVENT_PRIMARY_BOUNDARY_OUTWARD,
     EVENT_SOURCE_RADIUS_CONTACT,
+    TracerEventCandidatePolicy,
     TracerEventError,
     cubic_hermite_source_state,
     locate_tracer_step_events,
@@ -98,6 +99,16 @@ REASON_NAMES = {
     REASON_OUTER_BOUNDARY_POSSIBLE: "OUTER_BOUNDARY_POSSIBLE",
     REASON_PRIMARY_PERIAPSE_RESOLUTION: "PRIMARY_PERIAPSE_RESOLUTION",
 }
+
+_EXHAUSTIVE_EVENT_CANDIDATES = TracerEventCandidatePolicy()
+_PRIMARY_BOUNDARY_ONLY_EVENT_CANDIDATES = TracerEventCandidatePolicy(
+    source_radius_indices=(),
+    include_primary_boundary=True,
+)
+_NO_CONTINUOUS_EVENT_CANDIDATES = TracerEventCandidatePolicy(
+    source_radius_indices=(),
+    include_primary_boundary=False,
+)
 
 LIFECYCLE_ACTIVE = 0
 LIFECYCLE_REMOVED_SOURCE_RADIUS = 1
@@ -157,6 +168,26 @@ class CUDAMasslessTracerIntegrationError(CUDAMasslessTracerError):
 
 class EncounterRouteError(CUDAMasslessTracerIntegrationError):
     """A guarded outer step could not be transactionally re-integrated."""
+
+
+def _event_candidate_policy_for_guard_reason(
+    reason: str,
+) -> TracerEventCandidatePolicy:
+    """Map one recomputable CUDA guard reason to its safe terminal surfaces."""
+
+    if reason in {"ACCELERATION_BOUND", "COLLISION_SURFACE_POSSIBLE"}:
+        # A higher-priority guard can mask every later surface classification.
+        return _EXHAUSTIVE_EVENT_CANDIDATES
+    if reason == "OUTER_BOUNDARY_POSSIBLE":
+        # Reaching this priority proves every source collision surface clear.
+        return _PRIMARY_BOUNDARY_ONLY_EVENT_CANDIDATES
+    if reason in {"PRIMARY_PERIAPSE_RESOLUTION", "SWEPT_FLOOR"}:
+        # Reaching either priority proves all terminal surfaces clear.  The
+        # route still resolves the dynamics and primary phase continuously.
+        return _NO_CONTINUOUS_EVENT_CANDIDATES
+    raise CUDAMasslessTracerContractError(
+        "guard reason has no continuous-event candidate policy"
+    )
 
 
 def _text(value: object, label: str) -> str:
@@ -2276,6 +2307,7 @@ def _validate_route_witness(
         ),
         maximum_accepted_steps=MAXIMUM_EVENT_LOCATOR_ACCEPTED_STEPS,
     )
+    candidate_policy = _event_candidate_policy_for_guard_reason(record.reason)
     try:
         replay = locate_tracer_step_events(
             np.ascontiguousarray(record.tracer_position_0_AU, dtype=np.float64),
@@ -2291,6 +2323,7 @@ def _validate_route_witness(
             step_years=record.source_segment_step_years,
             primary_source_index=0,
             primary_boundary_radius_AU=state.primary_outer_boundary_AU,
+            candidate_policy=candidate_policy,
             spec=locator_spec,
         )
     except TracerEventError as exc:
@@ -3967,6 +4000,10 @@ def advance_cuda_massless_tracers(
                         raise EncounterRouteError(
                             "CUDA returned an invalid trigger reason"
                         )
+                    reason_name = REASON_NAMES[reason_code]
+                    candidate_policy = _event_candidate_policy_for_guard_reason(
+                        reason_name
+                    )
                     p0 = cp.asnumpy(path.positions[completed])
                     v0 = cp.asnumpy(path.velocities[completed])
                     p1 = cp.asnumpy(path.positions[completed + 1])
@@ -4011,6 +4048,7 @@ def advance_cuda_massless_tracers(
                             primary_boundary_radius_AU=(
                                 state.primary_outer_boundary_AU
                             ),
+                            candidate_policy=candidate_policy,
                             spec=event_spec,
                         )
                     except TracerEventError as exc:
@@ -4151,7 +4189,7 @@ def advance_cuda_massless_tracers(
                             source_index=source_index,
                             source_id=state.source_ids[source_index],
                             global_step=absolute_start_step + completed,
-                            reason=REASON_NAMES[reason_code],
+                            reason=reason_name,
                             source_segment_sha256=segment_sha,
                             source_segment_epoch_0=(
                                 state.epoch
