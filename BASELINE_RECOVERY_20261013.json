@@ -1,0 +1,128 @@
+{
+  "schema": "jxplanetx.engine-baseline-recovery.v1",
+  "record_date": "2026-10-13",
+  "package_version": "0.6.0rc16",
+  "scientific_claim_state": "SCREENING_ONLY",
+  "scope": {
+    "test_custody_and_release_integrity_only": true,
+    "physics_or_numerical_model_changed": false,
+    "scientific_claim_promoted": false
+  },
+  "base_source": {
+    "git_commit": "aa36f8f1cb5852b8b5bb34c7ac476a8e35025e84",
+    "git_tree": "35af12ed2593979d45dd6148cdc20171063979dc",
+    "branch_created_for_recovery": "codex/engine-baseline-recovery-20261013"
+  },
+  "recovered_test_custody": {
+    "committed_manifest_sha256_before_recovery": "899e7ffd483a286708827fe4157ba8b7b37a1e7d9a4ed2c41ec1642ff0ff245d",
+    "committed_manifest_paths_before_recovery": 284,
+    "git_bound_test_files": 73,
+    "stale_manifest_paths": 211,
+    "stale_files_available_in_two_preserved_workspaces": true,
+    "stale_files_byte_identical_between_preserved_workspaces": true,
+    "preserved_workspace_source": {
+      "git_commit": "31890c335ec85cc7ed4b2858e169f98ea829fb64",
+      "snapshots": [
+        "Codex/2026-08-22/github-plugin-github-openai-curated-remote-3/work/jx-planet-x-engine",
+        "Codex/2026-09-29/c/work/jx-rc17-equations-candidate-20260929"
+      ]
+    },
+    "stale_files_total_bytes": 1825141,
+    "stale_files_aggregate_sha256": "6a3ffb6eb30227473c540d599e9d998fb19718e5b8af0058af1ebe1e4e2259ee",
+    "stale_files_aggregate_encoding": "sorted UTF-8 path, NUL, decimal size, NUL, lowercase content SHA-256, newline",
+    "stale_file_git_custody": {
+      "clean_files_from_a_different_source_lineage": 99,
+      "modified_worktree_only_files": 5,
+      "untracked_only_files": 107,
+      "files_bound_to_rc16_by_individual_receipt_hash": 2,
+      "complete_rc16_dependency_closures_bound": 0
+    },
+    "activation_decision": "RETIRED_FROM_ACTIVE_BASELINE",
+    "activation_reason": "The omitted files came from a larger uncommitted development tree and require source or data absent from the rc16 Git tree. Adding only the tests mixes incompatible source lineages.",
+    "historical_rc16_release_receipt_modified": false
+  },
+  "active_inventory": {
+    "test_files": 73,
+    "test_file_bytes": 1979921,
+    "test_files_aggregate_sha256": "4f3494054434c67a6da9fc05543d6e39f48a50a47397ea5ac7c09533cc2867ce",
+    "test_files_aggregate_encoding": "sorted UTF-8 path, NUL, decimal size, NUL, lowercase content SHA-256, newline",
+    "profiles": {
+      "live-current": 52,
+      "cuda-hardware-only": 2,
+      "rebound-4.4.11": 3,
+      "rebound-5.1.1": 4,
+      "gr15-eih-external": 2,
+      "frozen-history": 10
+    },
+    "manifest_sha256": "34f57c8d324e3f24771b36db46c540aa47b07f6cb6d6a3696d6ac25de8f133c4"
+  },
+  "changed_control_files": {
+    ".github/workflows/test.yml": "cae6e87a2da35a688921c470992aebd8a0604731ab898e7e5d5bf5350dc1366c",
+    "README.md": "81d2c6145a368d4a21298940618978f1326edf9fd55256fca2ee494c0982f057",
+    "docs/TEST_PROFILES.md": "83da04a10116dfa7cbb9891df264413209fa9edbdeabd656e2e014b1b69b854b",
+    "tools/run_local_test_matrix.py": "c5150d25721c15788e7b0abd36255719745eea66ac3f4cc221eaee01f4655d04",
+    "tools/test_matrix_manifest.json": "34f57c8d324e3f24771b36db46c540aa47b07f6cb6d6a3696d6ac25de8f133c4"
+  },
+  "validation": {
+    "manifest_exact_coverage": {
+      "status": "PASS",
+      "files": 73,
+      "profiles": 6
+    },
+    "engine_normal": {
+      "status": "PASS",
+      "isolated_file_lanes": 13
+    },
+    "engine_optimized": {
+      "status": "PASS",
+      "python_mode": "-OO",
+      "isolated_file_lanes": 13
+    },
+    "live_current_compiled_source": {
+      "status": "PASS",
+      "isolated_file_lanes": 52,
+      "native_extensions_built_from_current_source": true
+    },
+    "reproducible_packaging": {
+      "status": "PASS",
+      "python": "3.14.4",
+      "setuptools": "78.1.1",
+      "packaging": "26.3",
+      "wheel": "0.48.0",
+      "independent_clean_builds": 2,
+      "wheel_byte_identical": true,
+      "sdist_byte_identical": true,
+      "wheel_artifact": {
+        "filename": "jxplanetx-0.6.0rc16-cp314-cp314-linux_x86_64.whl",
+        "size_bytes": 1017554,
+        "sha256": "c2406a0a82f54338137ce2d866547a6e70f923ccdb2da04a8f1f52dda01f090e"
+      },
+      "sdist_artifact": {
+        "filename": "jxplanetx-0.6.0rc16.tar.gz",
+        "size_bytes": 810837,
+        "sha256": "ad66bb46cd19d145df83473db3edb83117a46c236a17fdc72477be3bd652a8a6"
+      },
+      "fresh_wheel_smoke": "PASS",
+      "fresh_sdist_smoke": "PASS"
+    },
+    "not_executed": [
+      "cuda-hardware-only",
+      "rebound-4.4.11",
+      "rebound-5.1.1",
+      "gr15-eih-external",
+      "frozen-history"
+    ]
+  },
+  "ci_enforcement": {
+    "dedicated_inventory_prerequisite": true,
+    "missing_duplicate_stale_or_unassigned_tests_block_downstream_jobs": true,
+    "engine_selection_comes_from_manifest": true,
+    "optimized_engine_mode_supported_by_runner": true
+  },
+  "release_actions_at_record_creation": {
+    "commit_performed": false,
+    "tag_performed": false,
+    "push_performed": false,
+    "publication_performed": false
+  }
+}

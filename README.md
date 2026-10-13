@@ -545,24 +545,21 @@ all measured body counts through CUDA from 16 systems. These are finite-host,
 finite-workload engineering observations, not a portable speed ranking or a
 general superiority claim.
 
-The source-closed evidence tests intentionally span mutually incompatible
-runtime contracts, so do not use one monolithic Python process to judge the
-expanded local evidence tree. The local matrix runner isolates the current
-engine tests, REBOUND 5.1.1 bridge, retained-wheel lunar checks, and exact R2
-launcher runtime:
+The repository contains tests with mutually incompatible runtime contracts, so
+do not use one monolithic Python process to judge them. The local matrix runner
+isolates the current engine tests and the repository-bound external-comparison
+profiles:
 
 ```bash
 python3 tools/run_local_test_matrix.py --profile engine
 python3 tools/run_local_test_matrix.py --profile evidence
 ```
 
-The evidence profile verifies the retained wheel and shared-library hashes
-before importing them. If absent, it reconstructs the frozen ephemeral
-`/tmp/jx-reference-core-runtime` with the system Python; it never installs
-packages or changes frozen run artifacts. Use `--library-root PATH` when the
-read-only library mirror is mounted elsewhere.
+The active evidence aggregate contains only tests whose source is bound to this
+Git tree. It currently requires the exact external REBOUND/GR15 comparison
+runtime and never installs packages or changes frozen run artifacts.
 
-The complete 260-file ownership and runtime policy is documented in
+The exact repository-bound test ownership and runtime policy is documented in
 [JX test profiles](docs/TEST_PROFILES.md). Validate it with
 `python3 tools/run_local_test_matrix.py --validate-only`, list every assignment
 with `--list-files`, or run all current-source profiles with `--profile live`.

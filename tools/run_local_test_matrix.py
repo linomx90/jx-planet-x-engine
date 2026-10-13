@@ -396,6 +396,12 @@ def build_lanes(
     source_path = ROOT / "src"
     current_python = require_python(Path(sys.executable), "current Python")
     selected: list[str]
+
+    def present(profile_ids: tuple[str, ...]) -> list[str]:
+        """Return only profiles that have baseline-bound test files."""
+
+        return [profile_id for profile_id in profile_ids if profile_id in profiles]
+
     if requested == "engine":
         files = tuple(
             relative
@@ -412,34 +418,40 @@ def build_lanes(
             for relative in files
         ]
     if requested == "live":
-        selected = ["live-current", "cuda-optional", "cuda-hardware-only"]
+        selected = present(
+            ("live-current", "cuda-optional", "cuda-hardware-only")
+        )
     elif requested == "ci-generic":
-        selected = ["live-current", "cuda-optional"]
+        selected = present(("live-current", "cuda-optional"))
     elif requested in {"all", "all-compatible"}:
-        selected = [
-            "live-current",
-            "cuda-optional",
-            "cuda-hardware-only",
-            "rebound-5.1.1",
-            "gr15-eih-external",
-            "performance-local",
-            "library-catalog-local",
-            "source-closed-reph",
-            "retained-lunar-coupled",
-            "retained-lunar-torque-spice",
-            "exact-lunar-launcher",
-        ]
+        selected = present(
+            (
+                "live-current",
+                "cuda-optional",
+                "cuda-hardware-only",
+                "rebound-5.1.1",
+                "gr15-eih-external",
+                "performance-local",
+                "library-catalog-local",
+                "source-closed-reph",
+                "retained-lunar-coupled",
+                "retained-lunar-torque-spice",
+                "exact-lunar-launcher",
+            )
+        )
     elif requested == "evidence":
-        selected = [
-            "rebound-5.1.1",
-            "gr15-eih-external",
-            "performance-local",
-            "library-catalog-local",
-            "source-closed-reph",
-            "retained-lunar-coupled",
-            "retained-lunar-torque-spice",
-            "exact-lunar-launcher",
-        ]
+        selected = present(
+            (
+                "rebound-5.1.1",
+                "gr15-eih-external",
+                "performance-local",
+                "library-catalog-local",
+                "source-closed-reph",
+                "retained-lunar-coupled",
+                "retained-lunar-torque-spice",
+                "exact-lunar-launcher",
+            )
+        )
     elif requested in profiles:
         selected = [requested]
     else:
@@ -633,12 +645,15 @@ def build_lanes(
     return lanes
 
 
-def run_lane(lane: TestLane, *, quiet: bool) -> int:
+def run_lane(lane: TestLane, *, quiet: bool, optimized: bool) -> int:
     environment = base_environment()
     environment["PYTHONPATH"] = os.pathsep.join(str(path) for path in lane.pythonpath)
     environment.update(dict(lane.environment))
     verbosity = "-q" if quiet else "-v"
-    command = [str(lane.python), "-m", "unittest", *lane.targets, verbosity]
+    command = [str(lane.python)]
+    if optimized:
+        command.append("-OO")
+    command.extend(("-m", "unittest", *lane.targets, verbosity))
     print(f"\n[{lane.name}] {shlex.join(command)}", flush=True)
     result = subprocess.run(command, cwd=ROOT, env=environment, check=False)
     return result.returncode
@@ -687,6 +702,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="include every assigned test file in --list output",
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="quiet unittest output")
+    parser.add_argument(
+        "--optimized",
+        action="store_true",
+        help="run every selected lane under Python -OO",
+    )
     return parser.parse_args(argv)
 
 
@@ -720,7 +740,7 @@ def main(argv: list[str] | None = None) -> int:
 
     failed: list[str] = []
     for lane in lanes:
-        if run_lane(lane, quiet=args.quiet) != 0:
+        if run_lane(lane, quiet=args.quiet, optimized=args.optimized) != 0:
             failed.append(lane.name)
 
     print(f"\nCompleted {len(lanes)} isolated test lane(s).", flush=True)
