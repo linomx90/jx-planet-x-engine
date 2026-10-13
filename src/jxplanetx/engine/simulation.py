@@ -17,7 +17,12 @@ import math
 from threading import RLock
 from typing import Any
 
-from .backends import BackendUnavailableError, resolve_backend
+from .backends import (
+    BackendArrayError,
+    BackendError,
+    BackendUnavailableError,
+    resolve_backend,
+)
 from .contracts import (
     ForcePlan,
     MutualEIH1PN,
@@ -25,20 +30,36 @@ from .contracts import (
     Provenance,
     StateSnapshot,
 )
-from .evaluator import _validate_state
+from .evaluator import (
+    EvaluationError,
+    _validate_force_plan_structure,
+    _validate_relativistic_scalar_contract,
+    _validate_state,
+)
+from .forces import ForceError
+from .force_abi import get_force_abi
+from .integrator_registry import (
+    EXACT_ORDERED_FORCE_MODEL_IDS_SCOPE,
+    FORCE_ABI_V1_GENERAL_FIRST_ORDER_SCOPE,
+    GR15_EIH1PN_CUDA_METHOD_ID,
+    GR15_EIH1PN_METHOD_ID,
+    GR15_NEWTONIAN_METHOD_ID,
+    INTEGRATOR_ROUTE_SCIENTIFIC_CLAIM_STATE,
+    IntegratorRouteSpec,
+    get_integrator_route,
+)
 from .trajectory import (
     TrajectoryResult,
     _copy_force_plan,
     _copy_initial_snapshot,
+    _validate_restricted_central_velocity,
     integrate_trajectory,
+    TrajectoryContractError,
 )
 from .trajectory_contracts import ADAPTIVE_RKF78_METHOD_ID, AdaptiveRKF78Spec
 
 
-GR15_NEWTONIAN_METHOD_ID = "JX_GAUSS_RADAU15_V3"
-GR15_EIH1PN_METHOD_ID = "JX_GR15_EIH1PN_V1"
-GR15_EIH1PN_CUDA_METHOD_ID = "JX_GR15_EIH1PN_CUDA_V1"
-SCIENTIFIC_CLAIM_STATE = "SCREENING_ONLY"
+SCIENTIFIC_CLAIM_STATE = INTEGRATOR_ROUTE_SCIENTIFIC_CLAIM_STATE
 CONTINUATION_DIGEST_ALGORITHM = "SHA256_CANONICAL_JSON_AND_ARRAY_BYTES_V1"
 CONTINUATION_DIGEST_DOMAIN = "jxplanetx.simulation.continuation-state.v1"
 
@@ -53,6 +74,164 @@ class JXSimulationContractError(JXSimulationError, ValueError):
 
 class JXSimulationCompatibilityError(JXSimulationError):
     """An integrator cannot preserve the requested force-plan semantics."""
+
+
+def _validate_route_force_plan(
+    route: IntegratorRouteSpec,
+    force_plan: ForcePlan,
+) -> None:
+    """Enforce one route's backend and force-plan execution boundary."""
+
+    backend = force_plan.backend
+    if not route.supports_backend(backend.backend_id, backend.device):
+        if route.integrator_id in {
+            GR15_NEWTONIAN_METHOD_ID,
+            GR15_EIH1PN_METHOD_ID,
+        }:
+            message = "native GR15 currently requires the explicit NumPy CPU backend"
+        elif route.integrator_id == GR15_EIH1PN_CUDA_METHOD_ID:
+            message = (
+                "native CUDA GR15-EIH1PN requires an explicit CuPy CUDA backend"
+            )
+        else:
+            message = (
+                "adaptive RKF78 requires an explicit NumPy CPU or CuPy CUDA backend"
+            )
+        raise JXSimulationCompatibilityError(message)
+
+    force_model_ids = tuple(model.model_id for model in force_plan.models)
+    for model in force_plan.models:
+        try:
+            force_abi = get_force_abi(model)
+        except KeyError as exc:
+            raise JXSimulationCompatibilityError(
+                f"force model {model.model_id!r} is not registered in force ABI v1"
+            ) from exc
+        if backend.backend_id not in force_abi.supported_backend_ids:
+            raise JXSimulationCompatibilityError(
+                f"force model {model.model_id!r} does not support backend "
+                f"{backend.backend_id!r}"
+            )
+
+    if route.force_plan_scope == FORCE_ABI_V1_GENERAL_FIRST_ORDER_SCOPE:
+        incompatible = tuple(
+            model.model_id
+            for model in force_plan.models
+            if route.required_force_abi_integrator_class
+            not in get_force_abi(model).compatible_integrator_classes
+        )
+        if incompatible:
+            raise JXSimulationCompatibilityError(
+                "adaptive RKF78 requires every force model to declare "
+                f"GENERAL_FIRST_ORDER compatibility; incompatible={incompatible!r}"
+            )
+    if (
+        route.force_plan_scope == EXACT_ORDERED_FORCE_MODEL_IDS_SCOPE
+        and force_model_ids != route.required_force_model_ids
+    ):
+        if route.integrator_id == GR15_NEWTONIAN_METHOD_ID:
+            message = (
+                "native GR15 accepts exactly one NewtonianPointMass force term"
+            )
+        else:
+            message = (
+                "native GR15-EIH1PN requires exactly NewtonianPointMass followed "
+                "by MutualEIH1PN"
+            )
+        raise JXSimulationCompatibilityError(message)
+
+
+def _validate_route_state_force_plan(
+    route: IntegratorRouteSpec,
+    snapshot: StateSnapshot,
+    force_plan: ForcePlan,
+) -> None:
+    """Enforce route semantics that can be reconstructed without a run spec."""
+
+    _validate_route_force_plan(route, force_plan)
+    if route.force_plan_scope == FORCE_ABI_V1_GENERAL_FIRST_ORDER_SCOPE:
+        try:
+            backend, validated_state = _validate_force_plan_structure(
+                snapshot,
+                force_plan,
+            )
+            with backend.activate():
+                _validate_restricted_central_velocity(
+                    backend,
+                    snapshot,
+                    validated_state[1],
+                    force_plan.models,
+                )
+        except (
+            BackendArrayError,
+            BackendError,
+            BackendUnavailableError,
+            EvaluationError,
+            ForceError,
+            TrajectoryContractError,
+        ) as exc:
+            raise JXSimulationCompatibilityError(
+                "adaptive RKF78 route state and force plan are incompatible"
+            ) from exc
+    elif route.integrator_id == GR15_NEWTONIAN_METHOD_ID:
+        _validate_gr15_newtonian_configuration(snapshot, force_plan)
+    elif route.integrator_id in {
+        GR15_EIH1PN_METHOD_ID,
+        GR15_EIH1PN_CUDA_METHOD_ID,
+    }:
+        gravity, _relativity = _validate_gr15_eih_configuration(
+            snapshot,
+            force_plan,
+        )
+        if route.integrator_id == GR15_EIH1PN_METHOD_ID:
+            _validate_gr15_newtonian_configuration(
+                snapshot,
+                ForcePlan(
+                    plan_id=force_plan.plan_id,
+                    backend=force_plan.backend,
+                    models=(gravity,),
+                ),
+            )
+
+
+def _preflight_integrator_route(
+    integrator_id: str,
+    spec: object,
+    snapshot: StateSnapshot,
+    force_plan: ForcePlan,
+    continuation: JXSimulationContinuation | None,
+) -> IntegratorRouteSpec:
+    """Resolve and enforce the registry-level route compatibility boundary."""
+
+    try:
+        route = get_integrator_route(integrator_id)
+    except KeyError:
+        raise JXSimulationCompatibilityError(
+            f"unsupported unified integrator route {integrator_id!r}"
+        ) from None
+
+    if type(spec) is not route.spec_type:
+        if route.integrator_id == ADAPTIVE_RKF78_METHOD_ID:
+            message = "the adaptive RKF78 route requires an exact AdaptiveRKF78Spec"
+        elif route.integrator_id == GR15_NEWTONIAN_METHOD_ID:
+            message = "the GR15 route requires an exact jxplanetx.GR15Spec"
+        else:
+            message = (
+                "a native GR15-EIH1PN route requires an exact jxplanetx.GR15Spec"
+            )
+        raise JXSimulationContractError(message)
+
+    _validate_route_state_force_plan(route, snapshot, force_plan)
+
+    backend = force_plan.backend
+    if continuation is not None and (
+        not route.supports_continuation(backend.backend_id, backend.device)
+    ):
+        raise JXSimulationCompatibilityError(
+            f"integrator route {route.integrator_id!r} does not support continuation "
+            f"on backend {backend.backend_id!r}"
+        )
+    return route
 
 
 @dataclass(frozen=True, slots=True, eq=False)
@@ -343,23 +522,12 @@ def _continuation_state_identity_sha256(
     ).hexdigest()
 
 
-def _gr15_newtonian_inputs(
+def _validate_gr15_newtonian_configuration(
     snapshot: StateSnapshot,
     plan: ForcePlan,
-    spec: object,
-) -> tuple[Any, Any, Any]:
-    """Return exact native inputs only for a semantics-preserving GR15 route."""
+) -> NewtonianPointMass:
+    """Validate GR15 Newtonian state/plan semantics independent of run timing."""
 
-    from jxplanetx.gr15 import GR15Spec
-
-    if type(spec) is not GR15Spec:
-        raise JXSimulationContractError(
-            "the GR15 route requires an exact jxplanetx.GR15Spec"
-        )
-    if spec.checkpoint_epochs[0] != snapshot.epoch:
-        raise JXSimulationContractError(
-            "GR15 initial_epoch must exactly equal StateSnapshot.epoch"
-        )
     if plan.backend.backend_id != "numpy" or plan.backend.device != "cpu":
         raise JXSimulationCompatibilityError(
             "native GR15 currently requires the explicit NumPy CPU backend"
@@ -387,11 +555,9 @@ def _gr15_newtonian_inputs(
         raise JXSimulationCompatibilityError(
             "Newtonian GM metadata units do not match the state units"
         )
-    lower = min(spec.initial_epoch, spec.final_epoch)
-    upper = max(spec.initial_epoch, spec.final_epoch)
-    if metadata.validity_start > lower or metadata.validity_end < upper:
+    if not metadata.validity_start <= snapshot.epoch <= metadata.validity_end:
         raise JXSimulationCompatibilityError(
-            "Newtonian GM metadata validity does not cover the GR15 trajectory"
+            "Newtonian GM metadata validity does not include the state epoch"
         )
 
     try:
@@ -402,6 +568,10 @@ def _gr15_newtonian_inputs(
         ) from exc
 
     body_count = len(snapshot.body_ids)
+    if not 2 <= body_count <= 32:
+        raise JXSimulationCompatibilityError(
+            "native GR15 supports exactly 2--32 bodies"
+        )
     for label, value in (
         ("positions", snapshot.positions),
         ("velocities", snapshot.velocities),
@@ -464,26 +634,44 @@ def _gr15_newtonian_inputs(
             "native GR15 requires zero radii because it has no finite-radius "
             "collision detector equivalent to the generic force runtime"
         )
-    return snapshot.positions, snapshot.velocities, gm
+    return gravity
 
 
-def _gr15_eih_plan_parameters(
+def _gr15_newtonian_inputs(
     snapshot: StateSnapshot,
     plan: ForcePlan,
     spec: object,
-) -> tuple[NewtonianPointMass, object]:
-    """Validate the common CPU/CUDA EIH plan and construct native parameters."""
+) -> tuple[Any, Any, Any]:
+    """Return exact native inputs only for a semantics-preserving GR15 route."""
 
     from jxplanetx.gr15 import GR15Spec
 
     if type(spec) is not GR15Spec:
         raise JXSimulationContractError(
-            "a native GR15-EIH1PN route requires an exact jxplanetx.GR15Spec"
+            "the GR15 route requires an exact jxplanetx.GR15Spec"
         )
     if spec.checkpoint_epochs[0] != snapshot.epoch:
         raise JXSimulationContractError(
-            "GR15-EIH1PN initial_epoch must exactly equal StateSnapshot.epoch"
+            "GR15 initial_epoch must exactly equal StateSnapshot.epoch"
         )
+    gravity = _validate_gr15_newtonian_configuration(snapshot, plan)
+    metadata = gravity.parameter_metadata[0]
+    lower = min(spec.initial_epoch, spec.final_epoch)
+    upper = max(spec.initial_epoch, spec.final_epoch)
+    if metadata.validity_start > lower or metadata.validity_end < upper:
+        raise JXSimulationCompatibilityError(
+            "Newtonian GM metadata validity does not cover the GR15 trajectory"
+        )
+
+    gm = snapshot.gravitational_parameters
+    return snapshot.positions, snapshot.velocities, gm
+
+
+def _validate_gr15_eih_configuration(
+    snapshot: StateSnapshot,
+    plan: ForcePlan,
+) -> tuple[NewtonianPointMass, MutualEIH1PN]:
+    """Validate native EIH state/plan semantics independent of run timing."""
 
     if (
         len(plan.models) != 2
@@ -529,25 +717,30 @@ def _gr15_eih_plan_parameters(
         raise JXSimulationCompatibilityError(
             "native GR15-EIH1PN requires length_unit='KM' and time_unit='S'"
         )
-    expected = (
-        ("speed_of_light", "KM/S"),
-        ("maximum_compactness", "1"),
-        ("maximum_speed_fraction_squared", "1"),
-    )
-    lower = min(spec.initial_epoch, spec.final_epoch)  # type: ignore[attr-defined]
-    upper = max(spec.initial_epoch, spec.final_epoch)  # type: ignore[attr-defined]
     gravity_metadata = gravity.parameter_metadata[0]
     if gravity_metadata.units != "KM^3/S^2":
         raise JXSimulationCompatibilityError(
             "Newtonian GM metadata does not match the native KM/S unit contract"
         )
-    if (
-        gravity_metadata.validity_start > lower
-        or gravity_metadata.validity_end < upper
+    if not (
+        gravity_metadata.validity_start
+        <= snapshot.epoch
+        <= gravity_metadata.validity_end
     ):
         raise JXSimulationCompatibilityError(
-            "Newtonian GM metadata validity does not cover the GR15 trajectory"
+            "Newtonian GM metadata validity does not include the state epoch"
         )
+    try:
+        _validate_relativistic_scalar_contract(relativity)
+    except EvaluationError as exc:
+        raise JXSimulationCompatibilityError(
+            "EIH scalar bounds are incompatible with the native runtime"
+        ) from exc
+    expected = (
+        ("speed_of_light", "KM/S"),
+        ("maximum_compactness", "1"),
+        ("maximum_speed_fraction_squared", "1"),
+    )
     if len(relativity.parameter_metadata) != len(expected):
         raise JXSimulationCompatibilityError("EIH parameter metadata is incomplete")
     for metadata, (parameter_id, units) in zip(
@@ -558,9 +751,46 @@ def _gr15_eih_plan_parameters(
             raise JXSimulationCompatibilityError(
                 f"EIH {parameter_id} metadata does not match the native unit contract"
             )
+        if not metadata.validity_start <= snapshot.epoch <= metadata.validity_end:
+            raise JXSimulationCompatibilityError(
+                f"EIH {parameter_id} validity does not include the state epoch"
+            )
+    return gravity, relativity
+
+
+def _gr15_eih_plan_parameters(
+    snapshot: StateSnapshot,
+    plan: ForcePlan,
+    spec: object,
+) -> tuple[NewtonianPointMass, object]:
+    """Validate the common CPU/CUDA EIH plan and construct native parameters."""
+
+    from jxplanetx.gr15 import GR15Spec
+
+    if type(spec) is not GR15Spec:
+        raise JXSimulationContractError(
+            "a native GR15-EIH1PN route requires an exact jxplanetx.GR15Spec"
+        )
+    if spec.checkpoint_epochs[0] != snapshot.epoch:
+        raise JXSimulationContractError(
+            "GR15-EIH1PN initial_epoch must exactly equal StateSnapshot.epoch"
+        )
+
+    gravity, relativity = _validate_gr15_eih_configuration(snapshot, plan)
+    lower = min(spec.initial_epoch, spec.final_epoch)  # type: ignore[attr-defined]
+    upper = max(spec.initial_epoch, spec.final_epoch)  # type: ignore[attr-defined]
+    gravity_metadata = gravity.parameter_metadata[0]
+    if (
+        gravity_metadata.validity_start > lower
+        or gravity_metadata.validity_end < upper
+    ):
+        raise JXSimulationCompatibilityError(
+            "Newtonian GM metadata validity does not cover the GR15 trajectory"
+        )
+    for metadata in relativity.parameter_metadata:
         if metadata.validity_start > lower or metadata.validity_end < upper:
             raise JXSimulationCompatibilityError(
-                f"EIH {parameter_id} validity does not cover the GR15 trajectory"
+                f"EIH {metadata.parameter_id} validity does not cover the GR15 trajectory"
             )
 
     from jxplanetx.solar_system.eih_1pn import EIH1PNParameters
@@ -874,14 +1104,17 @@ class JXSimulation:
         continuation: JXSimulationContinuation | None,
     ) -> JXSimulationRun:
         run_index = len(self._runs)
-        if integrator_id == ADAPTIVE_RKF78_METHOD_ID:
-            if type(spec) is not AdaptiveRKF78Spec:
-                raise JXSimulationContractError(
-                    "the adaptive RKF78 route requires an exact AdaptiveRKF78Spec"
-                )
+        route = _preflight_integrator_route(
+            integrator_id,
+            spec,
+            snapshot,
+            self._force_plan,
+            continuation,
+        )
+        if route.integrator_id == ADAPTIVE_RKF78_METHOD_ID:
             native = integrate_trajectory(snapshot, self._force_plan, spec)
             return self._wrap_rkf78(run_index, native, continuation)
-        if integrator_id == GR15_NEWTONIAN_METHOD_ID:
+        if route.integrator_id == GR15_NEWTONIAN_METHOD_ID:
             positions, velocities, gm = _gr15_newtonian_inputs(
                 snapshot, self._force_plan, spec
             )
@@ -889,7 +1122,7 @@ class JXSimulation:
 
             native = integrate_gr15(positions, velocities, gm, spec)
             return self._wrap_gr15(run_index, native, continuation)
-        if integrator_id == GR15_EIH1PN_METHOD_ID:
+        if route.integrator_id == GR15_EIH1PN_METHOD_ID:
             positions, velocities, gm, parameters = _gr15_eih_inputs(
                 snapshot, self._force_plan, spec
             )
@@ -899,20 +1132,28 @@ class JXSimulation:
                 positions, velocities, gm, spec, parameters
             )
             return self._wrap_gr15(run_index, native, continuation)
-        if integrator_id == GR15_EIH1PN_CUDA_METHOD_ID:
-            positions, velocities, gm, parameters = _gr15_eih_cuda_inputs(
-                snapshot, self._force_plan, spec
-            )
-            from jxplanetx.gr15_eih_1pn_cuda import (
-                integrate_gr15_eih_1pn_cuda_batch,
-            )
+        if route.integrator_id == GR15_EIH1PN_CUDA_METHOD_ID:
+            try:
+                cuda_backend = resolve_backend(self._force_plan.backend)
+            except BackendUnavailableError as exc:
+                raise JXSimulationCompatibilityError(
+                    "the explicitly requested CUDA backend is unavailable"
+                ) from exc
+            with cuda_backend.activate():
+                positions, velocities, gm, parameters = _gr15_eih_cuda_inputs(
+                    snapshot, self._force_plan, spec
+                )
+                from jxplanetx.gr15_eih_1pn_cuda import (
+                    integrate_gr15_eih_1pn_cuda_batch,
+                )
 
-            native = integrate_gr15_eih_1pn_cuda_batch(
-                positions, velocities, gm, spec, parameters
-            )
+                native = integrate_gr15_eih_1pn_cuda_batch(
+                    positions, velocities, gm, spec, parameters
+                )
             return self._wrap_gr15_cuda(run_index, native, continuation)
         raise JXSimulationCompatibilityError(
-            f"unsupported unified integrator route {integrator_id!r}"
+            f"registered unified integrator route {route.integrator_id!r} "
+            "has no numerical adapter"
         )
 
     def _wrap_rkf78(

@@ -14,7 +14,7 @@ import math
 from dataclasses import dataclass, fields, is_dataclass, replace
 from typing import Any
 
-from .backends import ArrayBackend, resolve_backend
+from .backends import ArrayBackend
 from .catalog import CodeStatus, get_capability
 from .contracts import (
     BackendSpec,
@@ -28,13 +28,7 @@ from .contracts import (
 from .evaluator import (
     EvaluationError,
     ForceLedgerEntry,
-    _validate_dependencies,
-    _validate_model_sequence,
-    _validate_mutual_eih_frame,
-    _validate_parameter_contracts,
-    _validate_restricted_central_position,
-    _validate_restricted_frame,
-    _validate_state,
+    _validate_force_plan_structure,
     evaluate_force_plan,
 )
 from .physical_forces import (
@@ -694,11 +688,10 @@ def _validate_result_bindings(result: TrajectoryResult) -> None:
     if result.direction != result.integration_spec.direction:
         raise TrajectoryContractError("direction does not match the checkpoint schedule")
 
-    _validate_model_sequence(result.force_plan.models)
-    _validate_dependencies(result.force_plan.models)
-    _validate_parameter_contracts(result.initial_snapshot, result.force_plan)
-    _validate_restricted_frame(result.initial_snapshot, result.force_plan.models)
-    _validate_mutual_eih_frame(result.initial_snapshot, result.force_plan.models)
+    backend, initial_state = _validate_force_plan_structure(
+        result.initial_snapshot,
+        result.force_plan,
+    )
     _validate_force_compatibility(result.force_plan)
     _validate_metadata_range(
         result.force_plan,
@@ -706,17 +699,9 @@ def _validate_result_bindings(result: TrajectoryResult) -> None:
         max(result.checkpoint_epochs[0], result.checkpoint_epochs[-1]),
     )
 
-    backend = resolve_backend(result.backend_spec)
     if result.backend_id != backend.name or result.device != backend.device:
         raise TrajectoryContractError("result backend identity does not match backend_spec")
     with backend.activate():
-        initial_state = _validate_state(backend, result.initial_snapshot)
-        _validate_restricted_central_position(
-            backend,
-            result.initial_snapshot,
-            initial_state[0],
-            result.force_plan.models,
-        )
         _validate_restricted_central_velocity(
             backend,
             result.initial_snapshot,
@@ -1361,26 +1346,14 @@ def integrate_trajectory(
             "checkpoint_epochs[0] must exactly equal StateSnapshot.epoch"
         )
 
-    _validate_model_sequence(plan.models)
-    _validate_dependencies(plan.models)
-    _validate_parameter_contracts(snapshot, plan)
-    _validate_restricted_frame(snapshot, plan.models)
-    _validate_mutual_eih_frame(snapshot, plan.models)
+    backend, validated_state = _validate_force_plan_structure(snapshot, plan)
     _validate_force_compatibility(plan)
     lower_epoch = min(spec.checkpoint_epochs[0], spec.checkpoint_epochs[-1])
     upper_epoch = max(spec.checkpoint_epochs[0], spec.checkpoint_epochs[-1])
     _validate_metadata_range(plan, lower_epoch, upper_epoch)
 
-    backend = resolve_backend(plan.backend)
     direction = 1.0 if spec.direction == "FORWARD" else -1.0
     with backend.activate():
-        validated_state = _validate_state(backend, snapshot)
-        _validate_restricted_central_position(
-            backend,
-            snapshot,
-            validated_state[0],
-            plan.models,
-        )
         _validate_restricted_central_velocity(
             backend,
             snapshot,

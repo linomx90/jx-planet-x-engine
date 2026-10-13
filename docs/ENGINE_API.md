@@ -171,6 +171,15 @@ rank, supported backend IDs, compatible integrator classes, and acceleration
 semantics. This is the evaluator's real dispatch roster, but it is not yet a
 compiled callback ABI shared by specialized GR15 and CUDA kernels.
 
+`INTEGRATOR_ROUTE_REGISTRY` and `list_integrator_routes()` expose the exact
+four-route `JXSimulation` execution roster. Each immutable route record binds
+an exact request type, strict backend/device syntax, force dispatch scope,
+continuation and archive support, the portable-manifest force intersection,
+and the fixed `SCREENING_ONLY` claim boundary. The generic RKF78 route consumes
+the force ABI's `GENERAL_FIRST_ORDER` compatibility class. Native GR15 routes
+remain explicitly specialized exact-plan adapters and do not claim shared
+force-ABI dispatch.
+
 `NewtonianPointMass` requires:
 
 - nonempty, unique `source_ids` and `target_ids`;
@@ -217,11 +226,9 @@ term for that target; negative or nonfinite values are rejected. Acceleration
 is radial and away from the radiation source, with inverse-square distance
 scaling.
 
-`SolarJ2Force`, `EarthZonalJ2J5Force`, `LunarStaticDegree2Force`, and
-`LunarStaticDegree3Force` bind retained Solar-System kernels to a `ForcePlan`.
-The solar component accepts a resolved target roster and applies the
-GM-weighted reaction to the Sun; the Earth and lunar components are pair
-forces. Construct the retained physical force first, then call the
+`EarthZonalJ2J5Force`, `LunarStaticDegree2Force`, and
+`LunarStaticDegree3Force` bind retained Solar-System pair kernels to a
+`ForcePlan`. Construct the retained physical force first, then call the
 corresponding `bind_*` function with the exact `unit_system_id`, ordered
 metadata, and an explicit pole/orientation provider ID. Reference-radius
 metadata uses the snapshot length unit; coefficient and provider metadata use
@@ -350,12 +357,22 @@ restart = load_simulation_archive(
 run = restart.simulation.integrate(integrator_id, next_spec)
 ```
 
+The live plan is an in-process authority and must have been created and
+retained through JX's public immutable contract constructors. Archive v1 is a
+hostile-byte boundary, not a sandbox against arbitrary Python memory mutation
+such as bypassing a frozen dataclass with `object.__setattr__`.
+
 The loader verifies the archive/member/state/force-plan/provenance identities
+and the reconstructible, non-evaluating structural route/state/plan boundary
 before constructing a simulation rooted at the archived endpoint. It never
-unpickles code or reconstructs executable providers. CUDA archive creation is
-refused because current device results have no host-verifiable content digest.
-The archive is a numerical restart mechanism, not ephemeris qualification or
-long-term physical validation.
+unpickles code, runs force kernels, or reconstructs executable providers.
+Force-domain and provider viability are checked when execution starts; loading
+does not promise that a future integration will succeed. Archive v1 does not
+retain or independently attest the original parent integration request spec;
+callers must preserve that execution receipt separately. CUDA archive creation
+is refused because current device results have no host-verifiable content
+digest. The archive is a numerical restart mechanism, not proof of historical
+execution, ephemeris qualification, or long-term physical validation.
 
 ## Public trajectory API
 

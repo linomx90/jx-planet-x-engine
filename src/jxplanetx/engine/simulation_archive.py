@@ -19,14 +19,17 @@ import zipfile
 
 from .backends import resolve_backend
 from .contracts import ForcePlan, Provenance, StateSnapshot
+from .integrator_registry import get_integrator_route
 from .simulation import (
     CONTINUATION_DIGEST_ALGORITHM,
     CONTINUATION_DIGEST_DOMAIN,
     SCIENTIFIC_CLAIM_STATE,
     JXSimulation,
+    JXSimulationCompatibilityError,
     JXSimulationContinuation,
     JXSimulationContractError,
     _continuation_state_identity_sha256,
+    _validate_route_state_force_plan,
 )
 from .trajectory import _canonical_result_content
 
@@ -56,7 +59,7 @@ class SimulationArchiveError(JXSimulationContractError):
 
 @dataclass(frozen=True, slots=True, eq=False)
 class JXSimulationArchiveLoad:
-    """Verified archive lineage plus a simulation rooted at its endpoint."""
+    """Content-checked archive bytes and declared lineage rooted at one endpoint."""
 
     simulation: JXSimulation
     continuation: JXSimulationContinuation
@@ -258,6 +261,28 @@ def dump_simulation_archive(
     if type(simulation) is not JXSimulation:
         raise SimulationArchiveError("simulation must be an exact JXSimulation")
     continuation = simulation.prepare_continuation(parent_run_index)
+    try:
+        route = get_integrator_route(continuation.parent_integrator_id)
+    except KeyError as exc:
+        raise SimulationArchiveError(
+            "the parent integrator is not a registered archive route"
+        ) from exc
+    backend = simulation.force_plan.backend
+    if not route.supports_archive(backend.backend_id, backend.device):
+        raise SimulationArchiveError(
+            "the parent integrator route does not support restart archives "
+            f"on backend {backend.backend_id!r}"
+        )
+    try:
+        _validate_route_state_force_plan(
+            route,
+            continuation.snapshot,
+            simulation.force_plan,
+        )
+    except JXSimulationCompatibilityError as exc:
+        raise SimulationArchiveError(
+            "the parent integrator route is incompatible with the force plan"
+        ) from exc
     snapshot = continuation.snapshot
     plan_sha256 = simulation_force_plan_sha256(simulation.force_plan)
     arrays = {
@@ -381,7 +406,7 @@ def load_simulation_archive(
     expected_sha256: str,
     force_plan: ForcePlan,
 ) -> JXSimulationArchiveLoad:
-    """Verify and load one restart archive against an exact live force plan."""
+    """Load restart bytes against a structurally compatible exact live force plan."""
 
     if type(archive_bytes) is not bytes or not archive_bytes:
         raise SimulationArchiveError("archive_bytes must be nonempty exact bytes")
@@ -558,6 +583,24 @@ def load_simulation_archive(
         continuation_record["parent_integrator_id"],
         "continuation.parent_integrator_id",
     )
+    try:
+        parent_route = get_integrator_route(parent_integrator_id)
+    except KeyError as exc:
+        raise SimulationArchiveError(
+            "the archived parent integrator is not a registered route"
+        ) from exc
+    backend = force_plan.backend
+    if not parent_route.supports_archive(backend.backend_id, backend.device):
+        raise SimulationArchiveError(
+            "the archived parent integrator route does not support restart archives "
+            f"on backend {backend.backend_id!r}"
+        )
+    try:
+        _validate_route_state_force_plan(parent_route, snapshot, force_plan)
+    except JXSimulationCompatibilityError as exc:
+        raise SimulationArchiveError(
+            "the archived parent integrator route is incompatible with the force plan"
+        ) from exc
     parent_native_result_digest = _digest(
         continuation_record["parent_native_result_digest"],
         "continuation.parent_native_result_digest",

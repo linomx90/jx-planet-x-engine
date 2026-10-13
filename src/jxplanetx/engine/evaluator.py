@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from typing import Any
 
 from .backends import ArrayBackend, resolve_backend
@@ -520,7 +521,11 @@ def _validate_restricted_central_position(
 
     for model in models:
         if type(model) is RestrictedStaticCentral1PN:
-            central_index = snapshot.index_of(model.central_source_id)
+            central_index = _indices_for_ids(
+                snapshot,
+                (model.central_source_id,),
+                "1PN central_source_id",
+            )[0]
             if _has_any(
                 backend,
                 positions[central_index] != backend.xp.float64(0.0),
@@ -543,6 +548,16 @@ def _validate_force_abi_context(
         LunarStaticDegree2Force,
         LunarStaticDegree3Force,
     )
+    if any(type(model) in physical_types for model in models):
+        for index, body_id in enumerate(snapshot.body_ids):
+            if len(body_id) > 128 or any(
+                ord(character) < 0x21 or ord(character) > 0x7E
+                for character in body_id
+            ):
+                raise EvaluationError(
+                    f"physical-force body_ids[{index}] must contain at most 128 "
+                    "printable ASCII characters without spaces"
+                )
     for model in models:
         abi = get_force_abi(model)
         if backend.name not in abi.supported_backend_ids:
@@ -610,6 +625,211 @@ def _ensure_finite_acceleration(
         raise ForceDomainError(f"{label} produced nonfinite acceleration")
 
 
+def _validate_relativistic_scalar_contract(
+    model: RestrictedStaticCentral1PN | MutualEIH1PN,
+) -> tuple[float, float, float]:
+    """Apply one shared 1PN scalar contract at every execution boundary."""
+
+    checked: list[float] = []
+    for value, label in (
+        (model.speed_of_light, "speed_of_light"),
+        (model.maximum_compactness, "maximum_compactness"),
+        (
+            model.maximum_speed_fraction_squared,
+            "maximum_speed_fraction_squared",
+        ),
+    ):
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise EvaluationError(f"{label} must be a finite real number")
+        scalar = float(value)
+        if not math.isfinite(scalar) or scalar <= 0.0:
+            raise EvaluationError(f"{label} must be positive and finite")
+        checked.append(scalar)
+    speed_of_light, compactness, speed_fraction_squared = checked
+    if not math.isfinite(speed_of_light * speed_of_light):
+        raise EvaluationError("speed_of_light squared must be finite")
+    if compactness >= 1.0 or speed_fraction_squared >= 1.0:
+        raise EvaluationError(
+            "1PN weak-field and speed bounds must be strictly below one"
+        )
+    return speed_of_light, compactness, speed_fraction_squared
+
+
+def _validate_force_plan_structure(
+    snapshot: StateSnapshot,
+    plan: ForcePlan,
+) -> tuple[ArrayBackend, tuple[Any, Any, Any, Any, Any, Any]]:
+    """Validate reconstructible state/plan semantics without evaluating forces."""
+
+    if type(snapshot) is not StateSnapshot:
+        raise EvaluationError("snapshot must be an exact StateSnapshot")
+    if type(plan) is not ForcePlan:
+        raise EvaluationError("plan must be an exact ForcePlan")
+    if (
+        plan.evidence_class != MODEL_OUTPUT
+        or plan.registry_authorized
+        or plan.qualification_authorized
+    ):
+        raise EvaluationError(
+            "the force evaluator accepts only nonauthorizing MODEL_OUTPUT plans"
+        )
+    _validate_model_sequence(plan.models)
+    _validate_dependencies(plan.models)
+    _validate_parameter_contracts(snapshot, plan)
+    for model in plan.models:
+        if type(model) in (RestrictedStaticCentral1PN, MutualEIH1PN):
+            _validate_relativistic_scalar_contract(model)
+    _validate_restricted_frame(snapshot, plan.models)
+    _validate_mutual_eih_frame(snapshot, plan.models)
+    backend = resolve_backend(plan.backend)
+    _validate_force_abi_context(backend, snapshot, plan.models)
+
+    with backend.activate():
+        validated_state = _validate_state(backend, snapshot)
+        positions, _velocities, gm, _masses, _radii, massive = validated_state
+        _validate_restricted_central_position(
+            backend,
+            snapshot,
+            positions,
+            plan.models,
+        )
+        if any(
+            type(model) in (LunarStaticDegree2Force, LunarStaticDegree3Force)
+            for model in plan.models
+        ) and _has_any(
+            backend,
+            gm <= backend.xp.float64(0.0),
+            "lunar-figure all-body GM check",
+        ):
+            raise ForceDomainError(
+                "lunar degree-two and degree-three kernels require every "
+                "gravitational parameter to be positive"
+            )
+        body_count = len(snapshot.body_ids)
+        for model in plan.models:
+            if type(model) is NewtonianPointMass:
+                source_indices = _indices_for_ids(
+                    snapshot,
+                    model.source_ids,
+                    "Newtonian source_ids",
+                )
+                _indices_for_ids(
+                    snapshot,
+                    model.target_ids,
+                    "Newtonian target_ids",
+                )
+                _require_massive_sources(
+                    backend,
+                    massive,
+                    source_indices,
+                    "Newtonian source_ids",
+                )
+            elif type(model) is RestrictedStaticCentral1PN:
+                central_index = _indices_for_ids(
+                    snapshot,
+                    (model.central_source_id,),
+                    "1PN central_source_id",
+                )[0]
+                target_indices = _indices_for_ids(
+                    snapshot,
+                    model.target_ids,
+                    "1PN target_ids",
+                )
+                _require_massive_sources(
+                    backend,
+                    massive,
+                    (central_index,),
+                    "1PN central_source_id",
+                )
+                _require_massless_targets(
+                    backend,
+                    massive,
+                    target_indices,
+                    "1PN target_ids",
+                )
+            elif type(model) is MutualEIH1PN:
+                body_indices = _indices_for_ids(
+                    snapshot,
+                    model.body_ids,
+                    "mutual EIH body_ids",
+                )
+                _require_massive_sources(
+                    backend,
+                    massive,
+                    body_indices,
+                    "mutual EIH body_ids",
+                )
+            elif type(model) is CannonballSRP:
+                source_index = _indices_for_ids(
+                    snapshot,
+                    (model.radiation_source_id,),
+                    "SRP radiation_source_id",
+                )[0]
+                target_indices = _indices_for_ids(
+                    snapshot,
+                    model.target_ids,
+                    "SRP target_ids",
+                )
+                _require_massive_sources(
+                    backend,
+                    massive,
+                    (source_index,),
+                    "SRP radiation_source_id",
+                )
+                _require_massless_targets(
+                    backend,
+                    massive,
+                    target_indices,
+                    "SRP target_ids",
+                )
+                _validate_target_parameter(
+                    backend,
+                    model.area_to_mass,
+                    "area_to_mass",
+                    len(target_indices),
+                )
+                _validate_target_parameter(
+                    backend,
+                    model.radiation_pressure_coefficient,
+                    "radiation_pressure_coefficient",
+                    len(target_indices),
+                )
+            elif type(model) in (
+                EarthZonalJ2J5Force,
+                LunarStaticDegree2Force,
+                LunarStaticDegree3Force,
+            ):
+                source_indices = _indices_for_ids(
+                    snapshot,
+                    model.source_ids,
+                    f"{model.model_id} source_ids",
+                )
+                target_indices = _indices_for_ids(
+                    snapshot,
+                    model.target_ids,
+                    f"{model.model_id} target_ids",
+                )
+                if (
+                    model.force.source_index != source_indices[0]
+                    or model.force.target_index != target_indices[0]
+                ):
+                    raise EvaluationError(
+                        f"{model.model_id} embedded indices do not match "
+                        "StateSnapshot.body_ids"
+                    )
+                _require_massive_sources(
+                    backend,
+                    massive,
+                    source_indices,
+                    f"{model.model_id} source_ids",
+                )
+            else:  # Exact model-sequence validation makes this unreachable.
+                raise UnsupportedForceError(
+                    "force model has no structural runtime contract"
+                )
+        return backend, validated_state
+
+
 def evaluate_force_plan(
     snapshot: StateSnapshot,
     plan: ForcePlan,
@@ -621,23 +841,7 @@ def evaluate_force_plan(
     copied to another device, or mutated.
     """
 
-    if type(snapshot) is not StateSnapshot:
-        raise EvaluationError("snapshot must be an exact StateSnapshot")
-    if type(plan) is not ForcePlan:
-        raise EvaluationError("plan must be an exact ForcePlan")
-    if (
-        plan.evidence_class != MODEL_OUTPUT
-        or plan.registry_authorized
-        or plan.qualification_authorized
-    ):
-        raise EvaluationError("the force evaluator accepts only nonauthorizing MODEL_OUTPUT plans")
-    _validate_model_sequence(plan.models)
-    _validate_dependencies(plan.models)
-    _validate_parameter_contracts(snapshot, plan)
-    _validate_restricted_frame(snapshot, plan.models)
-    _validate_mutual_eih_frame(snapshot, plan.models)
-    backend = resolve_backend(plan.backend)
-    _validate_force_abi_context(backend, snapshot, plan.models)
+    backend, validated_state = _validate_force_plan_structure(snapshot, plan)
     tile_size = plan.backend.tile_size
     state_metadata = StateMetadataBinding(
         snapshot_id=snapshot.snapshot_id,
@@ -665,11 +869,8 @@ def evaluate_force_plan(
             _masses,
             radii,
             massive,
-        ) = _validate_state(backend, snapshot)
+        ) = validated_state
         body_count = len(snapshot.body_ids)
-        _validate_restricted_central_position(
-            backend, snapshot, positions, plan.models
-        )
         total = backend.xp.zeros((body_count, 3), dtype=backend.xp.float64)
         ledger: list[ForceLedgerEntry] = []
         contributions: list[ForceContribution] = []

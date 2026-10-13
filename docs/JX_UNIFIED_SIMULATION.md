@@ -66,6 +66,18 @@ dispatch contract, not yet a general C callback ABI: native GR15 and CUDA
 kernels still accept only their explicitly specialized force combinations and
 reject these three additions without recording a run.
 
+`INTEGRATOR_ROUTE_REGISTRY` is the matching execution roster for
+`JXSimulation`. It contains exactly the four routes listed above and binds each
+route to its exact request type, backend/device syntax, force-dispatch scope,
+continuation/archive boundary, portable-manifest intersection, and fixed
+`SCREENING_ONLY` claim ceiling. Generic RKF78 consumes the force-ABI
+`GENERAL_FIRST_ORDER` compatibility declaration. The three native GR15 routes
+are explicitly marked as specialized exact-plan adapters rather than shared
+force-ABI dispatch. Portable-manifest support is plan-aware: NumPy RKF78 is
+portable only when every force belongs to the existing Newtonian, restricted
+1PN, or cannonball-SRP manifest codec. Restart archive dump and load both check
+the registered route/backend boundary.
+
 State ABI v1 now adds a separate typed coupled-lunar route. The five-block
 `CoupledLunarStateSnapshot` owns Sun/Earth/Moon translation, lunar mantle
 attitude, mantle angular velocity, and fluid-core angular velocity with exact
@@ -130,11 +142,20 @@ until device results have a retained content digest.
 ZIP byte stream containing canonical ASCII JSON and six non-pickle NPY arrays.
 `load_simulation_archive()` requires the expected archive SHA-256 plus a live
 caller-supplied `ForcePlan` whose canonical digest exactly matches the archive.
+That live plan is an in-process authority created and retained through the JX
+immutable contract constructors; the hostile-byte archive boundary is not a
+sandbox against arbitrary Python memory mutation of a frozen dataclass.
 It validates member roster/order/type/size, CRC, every member digest, array
 dtype/shape/order, the continuation state digest, provenance, force roster, and
-claim ceiling before returning a new `JXSimulation` rooted at the endpoint.
+claim ceiling, plus the reconstructible non-evaluating structural
+route/state/plan boundary, before returning a new `JXSimulation` rooted at the
+endpoint. Force-domain and provider checks remain execution-time checks, so a
+successful load does not promise that a future integration will succeed.
 Executable orientation providers are deliberately not deserialized; their
 public IDs, parameters, and provenance are bound through the supplied plan.
+Archive v1 does not retain or independently attest the original parent
+integration request spec, so it is restart custody rather than proof of the
+historical parent execution.
 
 ## Remaining unification sequence
 

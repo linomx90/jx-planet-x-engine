@@ -27,6 +27,7 @@ from .contracts import (
     StateSnapshot,
 )
 from .scenario import DynamicsScenario, ScenarioContractError
+from .integrator_registry import get_integrator_route
 from .trajectory_contracts import AdaptiveRKF78Spec
 
 
@@ -1033,6 +1034,23 @@ def _scenario_from_document(value: object) -> DynamicsScenario:
 def dump_dynamics_scenario_manifest(scenario: DynamicsScenario) -> bytes:
     """Return canonical, newline-terminated ASCII JSON for one scenario."""
 
+    if type(scenario) is not DynamicsScenario:
+        raise ScenarioManifestError("scenario must be an exact DynamicsScenario")
+    route = get_integrator_route(scenario.integration_spec.method_id)
+    backend = scenario.force_plan.backend
+    if (
+        not route.supports_backend(backend.backend_id, backend.device)
+        or backend.backend_id not in route.portable_manifest_backend_ids
+    ):
+        raise ScenarioManifestError(
+            "portable scenario manifest V1 supports only NumPy/CPU"
+        )
+    if not route.supports_portable_manifest(
+        backend.backend_id, backend.device, scenario.force_model_ids
+    ):
+        raise ScenarioManifestError(
+            "portable scenario manifest V1 supports only implemented force types"
+        )
     document = {
         "array_order": PORTABLE_SCENARIO_ARRAY_ORDER,
         "float_encoding": PORTABLE_SCENARIO_FLOAT_ENCODING,

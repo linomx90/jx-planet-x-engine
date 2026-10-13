@@ -270,7 +270,13 @@ class RestrictedStaticCentral1PN:
         _text(self.unit_system_id, "unit_system_id")
         if source in targets:
             raise ContractError("the central source cannot be a 1PN target")
-        _number(self.speed_of_light, "speed_of_light", positive=True)
+        speed_of_light = _number(
+            self.speed_of_light,
+            "speed_of_light",
+            positive=True,
+        )
+        if not math.isfinite(speed_of_light * speed_of_light):
+            raise ContractError("speed_of_light squared must be finite")
         compactness = _number(self.maximum_compactness, "maximum_compactness", positive=True)
         speed_fraction = _number(
             self.maximum_speed_fraction_squared,
@@ -310,7 +316,13 @@ class MutualEIH1PN:
         if len(bodies) < 2:
             raise ContractError("mutual EIH 1PN requires at least two bodies")
         _text(self.unit_system_id, "unit_system_id")
-        _number(self.speed_of_light, "speed_of_light", positive=True)
+        speed_of_light = _number(
+            self.speed_of_light,
+            "speed_of_light",
+            positive=True,
+        )
+        if not math.isfinite(speed_of_light * speed_of_light):
+            raise ContractError("speed_of_light squared must be finite")
         compactness = _number(
             self.maximum_compactness,
             "maximum_compactness",

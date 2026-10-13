@@ -31,6 +31,7 @@
         "tests/test_engine_scenario_manifest.py",
         "tests/test_engine_symplectic.py",
         "tests/test_engine_trajectory.py",
+        "tests/test_engine_unified_runtime.py",
         "tests/test_engine_wisdom_holman.py",
         "tests/test_ensemble_validation.py",
         "tests/test_fast_wisdom_holman.py",
