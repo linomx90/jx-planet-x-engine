@@ -1,6 +1,7 @@
 # Authorship and ownership
 
-The JX Celestial Dynamics Framework was created and is directed by:
+JX Scientific Engine, formerly described as the JX Celestial Dynamics
+Framework, was created and is directed by:
 
 - Lino Avila (`@linomx90`)
 

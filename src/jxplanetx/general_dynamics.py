@@ -1,4 +1,4 @@
-"""Evidence-aware registry for the JX General Dynamics research platform.
+"""General Dynamics evidence registry within JX Scientific Engine.
 
 Registry membership means that a capability belongs to the same project.  It
 does not mean that the capability is implemented in the Python engine, that it

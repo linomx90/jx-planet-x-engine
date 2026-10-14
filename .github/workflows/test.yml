@@ -1,4 +1,4 @@
-name: JX General Dynamics release candidate
+name: JX Scientific Engine release candidate
 
 on:
   push:

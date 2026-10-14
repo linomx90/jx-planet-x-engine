@@ -1,4 +1,4 @@
-# JX Celestial Dynamics Framework
+# JX Scientific Engine
 
 **Version:** 0.6.0rc16
 
@@ -7,11 +7,12 @@
 **License:** Proprietary — all rights reserved
 **Scientific claim state:** `SCREENING_ONLY`
 
-JX is a falsification-first, general celestial-dynamics framework for explicit
-physical models, reproducible numerical experiments, and scientific claim
-control. Outer-Solar-System and Planet X studies are important applications,
-not assumptions built into the engine. Model output is not astronomical
-evidence.
+JX Scientific Engine is a falsification-first scientific-computing platform
+for explicit physical models, reproducible numerical experiments, and
+scientific claim control. Celestial dynamics is its current native numerical
+core. Outer-Solar-System and Planet X studies are important applications, not
+the identity of the engine or assumptions built into it. Model output is not
+scientific evidence by itself.
 
 This repository contains the engine source, packaging metadata, unit tests,
 locked protocols, and compact result summaries. It intentionally excludes the
@@ -30,8 +31,10 @@ one authority order. It is the entry point for understanding what is unified
 now, what remains separate, and why bulk historical data is referenced rather
 than copied into the source tree.
 
-The installable distribution and command remain `jxplanetx` for backward
-compatibility. Version 0.6.0rc16 carries the immutable General Dynamics
+The installable distribution, Python package, and command remain `jxplanetx`
+for backward compatibility. Historical release titles, artifact schemas,
+identifiers, URLs, and evidence records retain their original names. Version
+0.6.0rc16 carries the immutable General Dynamics
 registry v18 evidence historically bound to rc3, retains the supported
 measured small-N CPU/CUDA interfaces, and advances the supported fast
 Wisdom--Holman CPU screen to a checkpoint-synchronized native map. Its default

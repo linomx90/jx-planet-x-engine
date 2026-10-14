@@ -34,6 +34,11 @@ def invoke_cli(arguments: list[str]) -> tuple[int, str, str]:
 
 
 class EngineJobCLITests(unittest.TestCase):
+    def test_official_display_name_preserves_command_identifier(self):
+        cli_parser = parser()
+        self.assertEqual(cli_parser.prog, "jxplanetx")
+        self.assertIn("JX Scientific Engine", cli_parser.format_help())
+
     def test_base_cli_import_and_help_do_not_require_engine_extra(self):
         source_root = Path(__file__).resolve().parents[1] / "src"
         environment = dict(os.environ)

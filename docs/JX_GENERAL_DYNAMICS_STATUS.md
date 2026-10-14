@@ -1,9 +1,9 @@
-# JX General Dynamics
+# General Dynamics registry and evidence layer
 
-JX General Dynamics is one research platform with several evidence tracks.  A
-track can belong to the platform without sharing a numerical solver or being
-scientifically qualified.  This distinction prevents a successful benchmark in
-one domain from silently certifying another.
+Within JX Scientific Engine, General Dynamics is a registry and evidence layer
+with several research tracks. A track can belong to the platform without
+sharing a numerical solver or being scientifically qualified. This distinction
+prevents a successful benchmark in one domain from silently certifying another.
 
 The machine-readable registry lives in
 `src/jxplanetx/general_dynamics.py`.  It binds each active track to an exact
@@ -134,7 +134,7 @@ backends until JX owns an independently validated implementation.  Evidence
 packages provide the bridge:
 
 ```text
-JX General Dynamics
+JX Scientific Engine — General Dynamics evidence layer
   orbital dynamics                 native JX CPU/GPU kernels
   rotational/interior dynamics     native research probes, unresolved physics
   compressible hydrodynamics       pinned Castro/AMReX CPU/GPU backend

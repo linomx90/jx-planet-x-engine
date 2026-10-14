@@ -1,4 +1,4 @@
-"""JX falsification-first celestial-dynamics and evidence framework."""
+"""JX Scientific Engine: falsification-first dynamics and evidence framework."""
 
 from __future__ import annotations
 

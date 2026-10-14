@@ -5,6 +5,12 @@ It joins the executable components into one system without copying bulk
 research data, rewriting historical evidence, or treating every experiment as
 qualified science.
 
+**Official project name:** JX Scientific Engine. The distribution, Python
+package, and command retain the identifier `jxplanetx` for compatibility.
+Historical names, release records, schemas, digest domains, URLs, and evidence
+identities remain unchanged. Planet X is one research application within the
+engine; it does not define the engine's scope or name.
+
 This map is authoritative only for this scientific-engine branch; it does not
 supersede other JX layers. The 2026-10-12 master registry's JX-3 row selects the
 older engine commit `985249492cbbbfc0d2f4f0953b2b52150f6e25b5` and is
@@ -134,9 +140,9 @@ shared restart or portable job contract.
 
 The broader General Dynamics tracks include separately bounded cosmology,
 fluid, reaction, and research-backend evidence. They belong to the research
-platform but do not inherit the celestial engine's claim state or validation
-scope, and they do not become engine routes merely by appearing in the same
-index.
+platform but do not inherit the JX Scientific Engine runtime's claim state or
+validation scope, and they do not become engine routes merely by appearing in
+the same index.
 
 ## Evidence and storage boundary
 

@@ -7,6 +7,9 @@ claim boundaries remain documented in the corresponding locked run reports.
 
 ### Added
 
+- Adopted **JX Scientific Engine** as the official project name. The
+  `jxplanetx` distribution, import package, and command remain unchanged for
+  backward compatibility; historical records and identifiers are not renamed.
 - Added an immutable unified-integrator route registry for the four routes
   currently executable through `JXSimulation`, with exact spec, backend,
   force-plan, continuation, archive, and claim boundaries.

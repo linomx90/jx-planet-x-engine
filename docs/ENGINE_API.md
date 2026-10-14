@@ -1,4 +1,4 @@
-# JX experimental engine API
+# JX Scientific Engine API
 
 ## Status and claim boundary
 

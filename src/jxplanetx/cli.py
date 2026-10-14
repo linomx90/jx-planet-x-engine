@@ -340,7 +340,10 @@ def _dispatch_engine_job_cli_lazy(args: argparse.Namespace) -> int:
 
 
 def parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="jxplanetx", description="JX Planet X scientific engine")
+    p = argparse.ArgumentParser(
+        prog="jxplanetx",
+        description="JX Scientific Engine (jxplanetx command)",
+    )
     p.add_argument("--version", action="version", version=__version__)
     sub = p.add_subparsers(required=True)
     engine = sub.add_parser(

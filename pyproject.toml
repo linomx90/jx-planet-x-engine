@@ -5,13 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jxplanetx"
 version = "0.6.0rc16"
-description = "Falsification-first general celestial-dynamics framework with explicit scientific claim controls"
+description = "JX Scientific Engine: falsification-first physical modeling with explicit scientific claim controls"
 readme = "README.md"
 requires-python = ">=3.12"
 license = "LicenseRef-JX-Proprietary"
 license-files = ["LICENSE", "AUTHORS.md", "THIRD_PARTY_NOTICES.md"]
 authors = [{name = "Lino Avila"}]
-keywords = ["celestial-mechanics", "n-body", "gpu", "force-models", "planet-x", "reproducibility"]
+keywords = ["scientific-computing", "celestial-mechanics", "n-body", "gpu", "force-models", "planet-x", "reproducibility"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Science/Research",

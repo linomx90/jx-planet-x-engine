@@ -69,6 +69,12 @@ class ReproducibleReleaseTests(unittest.TestCase):
             metadata["project"]["license-files"],
             ["LICENSE", "AUTHORS.md", "THIRD_PARTY_NOTICES.md"],
         )
+        self.assertEqual(metadata["project"]["name"], "jxplanetx")
+        self.assertEqual(
+            metadata["project"]["scripts"]["jxplanetx"],
+            "jxplanetx.cli:main",
+        )
+        self.assertIn("JX Scientific Engine", metadata["project"]["description"])
         license_text = (ROOT / "LICENSE").read_text(encoding="utf-8")
         self.assertIn("Copyright (c) 2026 Lino Avila", license_text)
         self.assertIn("All rights reserved", license_text)
