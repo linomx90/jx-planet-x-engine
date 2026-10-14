@@ -191,9 +191,19 @@
       "interpreter": "local .venv",
       "isolation": "per_file",
       "ci": false,
-      "description": "Reserved for local performance evidence.",
+      "description": "Local TNO research, preregistration, and performance evidence.",
       "requirements": [],
-      "files": []
+      "files": [
+        "tests/test_tno_10my_full128_production_preflight_v1.py",
+        "tests/test_tno_10my_full128_trajectory_grid_v1.py",
+        "tests/test_tno_10my_full128_writer_qualification_v1.py",
+        "tests/test_tno_10my_full128_writer_qualification_v2.py",
+        "tests/test_tno_10my_full128_writer_qualification_v3.py",
+        "tests/test_tno_10my_full129_trajectory_acquisition_v1.py",
+        "tests/test_tno_1kyr_full129_h64_h128_qualification_v1.py",
+        "tests/test_tno_1kyr_reduced5_h128_source_preflight_v1.py",
+        "tests/test_tno_full128_reduced5_bridge_v1.py"
+      ]
     },
     {
       "id": "library-catalog-local",
@@ -263,9 +273,16 @@
         "tests/test_rebound_ias15_comparison.py",
         "tests/test_rebound_leapfrog_comparison.py",
         "tests/test_rebound_whfast_comparison.py",
+        "tests/test_tno_10my_full128_gpu_smoke_v1.py",
+        "tests/test_tno_10my_full128_gpu_smoke_v2.py",
+        "tests/test_tno_10my_full128_gpu_smoke_v3.py",
         "tests/test_tno_10my_reduced5_classification_pilot_v1.py",
         "tests/test_tno_10my_reduced5_classification_pilot_v2.py",
         "tests/test_tno_10my_reduced5_grid_adapter_v1.py",
+        "tests/test_tno_1kyr_full129_restart_qualification_v1.py",
+        "tests/test_tno_1kyr_reduced5_lifecycle_gate_v1.py",
+        "tests/test_tno_1kyr_reduced5_lifecycle_gate_v2.py",
+        "tests/test_tno_1kyr_reduced5_lifecycle_gate_v3.py",
         "tests/test_tno_de441_resolved11_acquisition_v1.py",
         "tests/test_tno_stage15_resolved11_encounter_qualification_v1.py",
         "tests/test_tno_stage15_resolved11_encounter_qualification_v2.py",
@@ -292,9 +309,11 @@
       "interpreter": "none",
       "isolation": "none",
       "ci": false,
-      "description": "Reserved for superseded preregistration-state tests.",
+      "description": "Superseded preregistration-state tests retained for custody.",
       "requirements": [],
-      "files": []
+      "files": [
+        "tests/test_tno_3gyr_full129_robustness_v1.py"
+      ]
     }
   ]
 }
