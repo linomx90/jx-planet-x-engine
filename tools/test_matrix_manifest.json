@@ -200,7 +200,7 @@
         "tests/test_tno_10my_full128_writer_qualification_v2.py",
         "tests/test_tno_10my_full128_writer_qualification_v3.py",
         "tests/test_tno_10my_full129_trajectory_acquisition_v1.py",
-        "tests/test_tno_1kyr_full129_h64_h128_qualification_v1.py",
+        "tests/test_tno_1kyr_reduced5_h128_source_preflight_executor_v1.py",
         "tests/test_tno_1kyr_reduced5_h128_source_preflight_v1.py",
         "tests/test_tno_full128_reduced5_bridge_v1.py"
       ]
@@ -279,6 +279,7 @@
         "tests/test_tno_10my_reduced5_classification_pilot_v1.py",
         "tests/test_tno_10my_reduced5_classification_pilot_v2.py",
         "tests/test_tno_10my_reduced5_grid_adapter_v1.py",
+        "tests/test_tno_1kyr_full129_h64_h128_qualification_v1.py",
         "tests/test_tno_1kyr_full129_restart_qualification_v1.py",
         "tests/test_tno_1kyr_reduced5_lifecycle_gate_v1.py",
         "tests/test_tno_1kyr_reduced5_lifecycle_gate_v2.py",
