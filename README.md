@@ -24,6 +24,12 @@ definitions, result bundles, sibling archives, and metadata gaps. It preserves
 the library authority catalog as the source of truth and does not promote
 workspace results.
 
+The [JX Scientific Engine union map](docs/JX_SCIENTIFIC_ENGINE_UNION.md)
+connects the runtime, portable job, verification, and evidence boundaries in
+one authority order. It is the entry point for understanding what is unified
+now, what remains separate, and why bulk historical data is referenced rather
+than copied into the source tree.
+
 The installable distribution and command remain `jxplanetx` for backward
 compatibility. Version 0.6.0rc16 carries the immutable General Dynamics
 registry v18 evidence historically bound to rc3, retains the supported
@@ -140,6 +146,19 @@ unqualified `MODEL_OUTPUT`. A canonical portable manifest records NumPy/CPU
 binary64 scenarios with hexadecimal floats and an external SHA-256 identity;
 loading reconstructs read-only arrays and does not authenticate or qualify the
 scenario.
+
+Engine Job V1 connects one externally hash-bound portable manifest to an
+actual NumPy/CPU adaptive-RKF78 execution and one deterministic `.jxjob`
+bundle. The bundle contains a trajectory artifact, restart archive, and
+canonical receipt. Verification checks exact bytes, hashes, structure, and
+manifest/artifact/restart cross-bindings without rerunning the numerical
+execution or recomputing the declared native-result digest. It remains
+`SCREENING_ONLY` `MODEL_OUTPUT`, not authenticated execution, source/runtime
+reproduction, or scientific qualification. See
+[Dynamics scenarios V1](docs/DYNAMICS_SCENARIOS.md#engine-job-v1-manifest-to-one-bundle)
+for the CLI, filesystem-custody, and recovery boundaries. Install the
+`jxplanetx[engine]` extra before using these numerical commands; the base CLI
+and its help remain importable without NumPy.
 
 `integrate_encounter_segment` adds a standalone full-Cartesian adaptive
 RKF78 segment for exact NumPy/CPU binary64, barycentric-inertial, fully mutual,
@@ -585,10 +604,18 @@ normalization, exact finite-pool statistics, and fail-closed verdicts.
 
 ```bash
 jxplanetx --help
+jxplanetx engine list
+jxplanetx engine run --manifest scenario.json --manifest-sha256 MANIFEST_SHA256 --output result.jxjob
+jxplanetx engine verify --manifest scenario.json --manifest-sha256 MANIFEST_SHA256 --job result.jxjob --job-sha256 JOB_SHA256
 jxplanetx validate --output validation.json
 jxplanetx write-ensemble-contract --output ensemble-contract.json
 jxplanetx prepare-ensemble --contract ensemble-contract.json --output plan.lock.json
 ```
+
+The manifest hash, and the job hash supplied for later verification, are
+caller-supplied, out-of-band exact-byte identities; they provide content
+integrity, not signatures or origin authentication. The `run` command never
+replaces an existing output path.
 
 The general ensemble workflow validates externally computed trajectories. The
 project-specific DOP853 module now supplies an independent 10,000-year

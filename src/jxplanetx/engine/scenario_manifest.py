@@ -123,7 +123,7 @@ def _canonical(document: object) -> bytes:
             separators=(",", ":"),
             sort_keys=True,
         )
-    except (TypeError, ValueError) as exc:
+    except (RecursionError, TypeError, ValueError) as exc:
         raise ScenarioManifestError("manifest cannot be serialized canonically") from exc
     return (text + "\n").encode("ascii")
 
@@ -155,7 +155,9 @@ def _strict_json(raw: bytes) -> object:
             parse_float=reject_float,
             parse_constant=reject_constant,
         )
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+    except ScenarioManifestError:
+        raise
+    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError, ValueError) as exc:
         raise ScenarioManifestError("manifest must be canonical ASCII JSON") from exc
     if duplicate is not None:
         raise ScenarioManifestError(f"manifest repeats object key {duplicate!r}")

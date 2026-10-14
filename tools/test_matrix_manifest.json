@@ -17,6 +17,7 @@
       "description": "Live CPU-safe and optional-dependency tests for the current source tree.",
       "files": [
         "tests/test_claim_capabilities.py",
+        "tests/test_cli_engine_job.py",
         "tests/test_cli_survey_selection.py",
         "tests/test_de441_horizons.py",
         "tests/test_engine.py",
@@ -27,6 +28,8 @@
         "tests/test_engine_encounter.py",
         "tests/test_engine_forces.py",
         "tests/test_engine_hybrid.py",
+        "tests/test_engine_run_artifact.py",
+        "tests/test_engine_runner.py",
         "tests/test_engine_scenario.py",
         "tests/test_engine_scenario_manifest.py",
         "tests/test_engine_symplectic.py",

@@ -591,6 +591,81 @@ format does not expose J2, full EIH, eleven-body, or coupled lunar state paths.
 The complete contract, example, arithmetic policy, and next qualification
 steps are in [Dynamics scenarios V1](DYNAMICS_SCENARIOS.md).
 
+## Public Engine Job V1 API
+
+Engine Job V1 turns one externally hash-bound portable scenario manifest into
+one deterministic outer bundle:
+
+Install the `jxplanetx[engine]` extra for this numerical API. Importing the
+base CLI or displaying its help does not require NumPy; invoking an `engine`
+subcommand without the extra returns a controlled dependency error.
+
+```python
+from jxplanetx.engine import (
+    engine_job_sha256,
+    run_scenario_manifest,
+    verify_engine_job_bytes,
+)
+
+bundle = run_scenario_manifest(manifest_bytes, expected_manifest_sha256)
+assert engine_job_sha256(bundle.job_bytes) == bundle.job_sha256
+
+verification = verify_engine_job_bytes(
+    manifest_bytes,
+    expected_manifest_sha256=expected_manifest_sha256,
+    job_bytes=bundle.job_bytes,
+    expected_job_sha256=bundle.job_sha256,
+)
+```
+
+`run_engine_job_bytes()` is the byte-only convenience form. The path-free API
+supports exactly the portable NumPy/CPU adaptive-RKF78 route. Its one
+`.jxjob` ZIP contains `trajectory.zip`, `restart.zip`, and `receipt.json`; the
+manifest is supplied separately. `EngineRunBundle` retains the exact manifest,
+artifact, restart, receipt, and outer-bundle bytes and hashes.
+
+`verify_engine_job_bytes()` first checks the caller-supplied exact-byte hashes
+for both the separate manifest and outer job. It then enforces the canonical
+ZIP and JSON encodings, member rosters and limits, rebuilds the receipt, and
+cross-binds manifest state and force data to the trajectory artifact and
+restart endpoint. `EngineRunVerification` retains the exact verified manifest
+and job bytes so its exported envelope can revalidate itself.
+
+This verifier does not rerun numerical execution. It does not recompute the
+declared native-result digest; it only cross-binds that declared value. It also
+does not authenticate the executor, reproduce the source/runtime, guarantee
+cross-platform replay, or authorize accuracy, physics, improvement, registry,
+qualification, or production claims. It establishes content integrity for the
+supplied bytes; external SHA-256 values are required but are not signatures.
+Every result is `SCREENING_ONLY` `MODEL_OUTPUT`.
+
+Engine Job V1 applies hard schema and execution-policy ceilings, including a
+stage/body-pair/model work proxy. Those deterministic bounds are not elapsed-
+time, resident-memory, allocator, concurrency, or denial-of-service
+guarantees. External services must add their own isolation and resource
+controls.
+
+The CLI surface is:
+
+```bash
+jxplanetx engine list
+jxplanetx engine run --manifest scenario.json --manifest-sha256 MANIFEST_SHA256 --output result.jxjob
+jxplanetx engine verify --manifest scenario.json --manifest-sha256 MANIFEST_SHA256 --job result.jxjob --job-sha256 JOB_SHA256
+```
+
+The path-based commands require Linux `O_PATH` plus `/proc/self/fd` custody for
+regular inputs. The output parent must be owned by the effective user and not
+group- or world-writable. Publication writes and synchronizes a private
+staging inode, creates the final path with a create-only hard link, removes
+the staging name as a required pre-commit step, then synchronizes the
+directory; it never replaces a destination. If the process
+fails after linking but before its report is observed, a complete final file
+may remain, and a crash before staging-link cleanup may also leave the hidden
+staging name. Resolve that outcome by inspecting the final file against the
+expected job SHA-256, not by assuming the exit status means that no output was
+published. Without a trusted expected hash, the final file's presence alone is
+not verification.
+
 ## Public standalone adaptive encounter-segment API
 
 ```python

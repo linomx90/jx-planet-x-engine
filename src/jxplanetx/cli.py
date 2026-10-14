@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from dataclasses import asdict
 from pathlib import Path
 
@@ -311,10 +312,70 @@ def run_survey_pilot_cli(args: argparse.Namespace) -> int:
     return 3
 
 
+def _dispatch_engine_job_cli_lazy(args: argparse.Namespace) -> int:
+    """Load the optional numerical engine only for an ``engine`` command."""
+
+    try:
+        from .engine_job_cli import (
+            dispatch_engine_job_cli,
+            list_engine_routes_cli,
+            run_engine_job_cli,
+            verify_engine_job_cli,
+        )
+    except ModuleNotFoundError as exc:
+        if exc.name == "numpy":
+            print(
+                "jxplanetx engine: NumPy is required; install jxplanetx[engine]",
+                file=sys.stderr,
+            )
+            return 2
+        raise
+    handlers = {
+        "list": list_engine_routes_cli,
+        "run": run_engine_job_cli,
+        "verify": verify_engine_job_cli,
+    }
+    args.engine_job_func = handlers[args.engine_command]
+    return dispatch_engine_job_cli(args)
+
+
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="jxplanetx", description="JX Planet X scientific engine")
     p.add_argument("--version", action="version", version=__version__)
     sub = p.add_subparsers(required=True)
+    engine = sub.add_parser(
+        "engine",
+        help="run or verify one portable, screening-only Engine Job V1 bundle",
+    )
+    engine_sub = engine.add_subparsers(dest="engine_command", required=True)
+    engine_list = engine_sub.add_parser(
+        "list",
+        help="list unified routes and the narrow Engine Job V1 support boundary",
+    )
+    engine_list.set_defaults(
+        func=_dispatch_engine_job_cli_lazy,
+    )
+    engine_run = engine_sub.add_parser(
+        "run",
+        help="execute a verified portable manifest and create one .jxjob file",
+    )
+    engine_run.add_argument("--manifest", required=True)
+    engine_run.add_argument("--manifest-sha256", required=True)
+    engine_run.add_argument("--output", required=True)
+    engine_run.set_defaults(
+        func=_dispatch_engine_job_cli_lazy,
+    )
+    engine_verify = engine_sub.add_parser(
+        "verify",
+        help="verify one externally hash-bound .jxjob without rerunning dynamics",
+    )
+    engine_verify.add_argument("--manifest", required=True)
+    engine_verify.add_argument("--manifest-sha256", required=True)
+    engine_verify.add_argument("--job", required=True)
+    engine_verify.add_argument("--job-sha256", required=True)
+    engine_verify.set_defaults(
+        func=_dispatch_engine_job_cli_lazy,
+    )
     v = sub.add_parser("validate", help="run core numerical validity gates")
     v.add_argument("--decimal-digits", type=int, default=80)
     v.add_argument("--output", default="runs/validation.json")

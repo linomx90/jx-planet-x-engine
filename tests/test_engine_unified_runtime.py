@@ -945,6 +945,44 @@ class UnifiedRuntimeTests(unittest.TestCase):
                 force_plan=force_plan(tile_size=3),
             )
 
+        with zipfile.ZipFile(io.BytesIO(archive), "r") as source_archive:
+            infos = source_archive.infolist()
+            members = {
+                info.filename: source_archive.read(info.filename)
+                for info in infos
+            }
+        type_confused_manifest = json.loads(
+            members["manifest.json"].decode("ascii")
+        )
+        type_confused_manifest["claim"]["production_authorized"] = 0
+        members["manifest.json"] = (
+            json.dumps(
+                type_confused_manifest,
+                allow_nan=False,
+                ensure_ascii=True,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
+            + "\n"
+        ).encode("ascii")
+        stream = io.BytesIO()
+        with zipfile.ZipFile(
+            stream,
+            "w",
+            compression=zipfile.ZIP_STORED,
+        ) as output_archive:
+            for info in infos:
+                output_archive.writestr(info, members[info.filename])
+        type_confused_archive = stream.getvalue()
+        with self.assertRaisesRegex(SimulationArchiveError, "claim ceiling"):
+            load_simulation_archive(
+                type_confused_archive,
+                expected_sha256=simulation_archive_sha256(
+                    type_confused_archive
+                ),
+                force_plan=plan,
+            )
+
         absent_source_plan = force_plan(source_ids=("ABSENT",))
         forged_plan_binding = rebind_archive_force_plan(
             archive,

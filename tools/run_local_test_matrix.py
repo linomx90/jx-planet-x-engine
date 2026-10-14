@@ -406,7 +406,10 @@ def build_lanes(
         files = tuple(
             relative
             for relative in profiles["live-current"].files
-            if Path(relative).name.startswith("test_engine")
+            if (
+                Path(relative).name.startswith("test_engine")
+                or Path(relative).name == "test_cli_engine_job.py"
+            )
         )
         return [
             lane_for_file(

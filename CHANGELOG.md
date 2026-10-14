@@ -7,6 +7,17 @@ claim boundaries remain documented in the corresponding locked run reports.
 
 ### Added
 
+- Added an immutable unified-integrator route registry for the four routes
+  currently executable through `JXSimulation`, with exact spec, backend,
+  force-plan, continuation, archive, and claim boundaries.
+- Added Engine Job V1: an externally hash-bound portable NumPy/CPU RKF78
+  manifest now produces one deterministic `.jxjob` containing a trajectory
+  artifact, restart archive, and canonical receipt. The API and Linux CLI
+  verify exact bytes and structural cross-bindings without replaying dynamics
+  or promoting any result beyond `SCREENING_ONLY` `MODEL_OUTPUT`.
+- Added a scientific-engine union map that places the runtime, portable-job,
+  evidence, and reasoning-assistant boundaries in one authority order without
+  copying bulk historical payloads into Git.
 - Added the screening-only
   `orbit_determination.multi_arc_linearized_weighted_svd_step` component with
   shared global parameters, disjoint arc-local parameters, multiple full-

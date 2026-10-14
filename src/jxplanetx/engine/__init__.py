@@ -549,3 +549,55 @@ for _public_name in _HYBRID_PUBLIC_ROSTER:
     globals()[_public_name] = getattr(_api, _public_name)
 __all__.extend(_HYBRID_PUBLIC_ROSTER)
 del _public_name
+
+
+_ENGINE_JOB_PUBLIC_ROSTER = (
+    "ENGINE_JOB_BUNDLE_HASH_ALGORITHM",
+    "ENGINE_JOB_BUNDLE_MAX_BYTES",
+    "ENGINE_JOB_BUNDLE_SCHEMA",
+    "ENGINE_JOB_EXPECTED_SHA256_SOURCE",
+    "ENGINE_JOB_V1_EXECUTION_POLICY",
+    "ENGINE_JOB_V1_MAX_ARTIFACT_BYTES",
+    "ENGINE_JOB_V1_MAX_BODIES",
+    "ENGINE_JOB_V1_MAX_CHECKPOINTS",
+    "ENGINE_JOB_V1_MAX_FORCE_MODELS",
+    "ENGINE_JOB_V1_MAX_MANIFEST_BYTES",
+    "ENGINE_JOB_V1_MAX_RESTART_BYTES",
+    "ENGINE_JOB_V1_MAX_STAGE_BODY_PAIR_MODEL_EVALUATIONS",
+    "ENGINE_JOB_V1_MAX_TEXT_ENCODING_BYTES",
+    "ENGINE_JOB_V1_MAX_IDENTITY_ENCODING_BYTES",
+    "ENGINE_JOB_V1_MAXIMUM_REJECTIONS",
+    "ENGINE_JOB_V1_MAXIMUM_STEPS",
+    "ENGINE_RUN_ARTIFACT_ARRAY_DTYPE",
+    "ENGINE_RUN_ARTIFACT_HASH_ALGORITHM",
+    "ENGINE_RUN_ARTIFACT_MAX_BYTES",
+    "ENGINE_RUN_ARTIFACT_MAX_MANIFEST_BYTES",
+    "ENGINE_RUN_ARTIFACT_MEMBER_HASH_ALGORITHM",
+    "ENGINE_RUN_ARTIFACT_SCHEMA",
+    "ENGINE_RUN_ARTIFACT_SCOPE",
+    "ENGINE_RUN_ID_DOMAIN",
+    "ENGINE_RUN_ID_HASH_ALGORITHM",
+    "ENGINE_RUN_RECEIPT_HASH_ALGORITHM",
+    "ENGINE_RUN_RECEIPT_MAX_BYTES",
+    "ENGINE_RUN_RECEIPT_SCHEMA",
+    "ENGINE_RUN_RECEIPT_SCOPE",
+    "EngineRunArtifactError",
+    "EngineRunBundle",
+    "EngineRunVerification",
+    "EngineRunnerError",
+    "JXEngineRunArtifact",
+    "SIMULATION_ARCHIVE_MAX_MANIFEST_BYTES",
+    "dump_engine_run_artifact",
+    "engine_job_sha256",
+    "engine_job_claim_ceiling",
+    "engine_run_artifact_sha256",
+    "engine_run_receipt_sha256",
+    "load_engine_run_artifact",
+    "run_engine_job_bytes",
+    "run_scenario_manifest",
+    "verify_engine_job_bytes",
+)
+for _public_name in _ENGINE_JOB_PUBLIC_ROSTER:
+    globals()[_public_name] = getattr(_api, _public_name)
+__all__.extend(_ENGINE_JOB_PUBLIC_ROSTER)
+del _public_name

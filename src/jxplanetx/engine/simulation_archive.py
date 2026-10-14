@@ -9,14 +9,16 @@ still binding their public identities, parameters, and provenance.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import InitVar, dataclass
 import hashlib
 import io
 import json
 import math
+import tokenize
 from typing import Any
 import zipfile
 
+from ._zip_preflight import preflight_exact_zip_roster
 from .backends import resolve_backend
 from .contracts import ForcePlan, Provenance, StateSnapshot
 from .integrator_registry import get_integrator_route
@@ -40,6 +42,7 @@ SIMULATION_ARCHIVE_HASH_ALGORITHM = "SHA256_ARCHIVE_BYTES"
 FORCE_PLAN_DIGEST_ALGORITHM = "SHA256_CANONICAL_FORCE_PLAN_JSON_V1"
 FORCE_PLAN_DIGEST_DOMAIN = "jxplanetx.simulation.force-plan.v1"
 SIMULATION_ARCHIVE_MAX_BYTES = 256 * 1024 * 1024
+SIMULATION_ARCHIVE_MAX_MANIFEST_BYTES = 1024 * 1024
 _ARRAY_NAMES = (
     "gravitational_parameters",
     "masses",
@@ -51,6 +54,7 @@ _ARRAY_NAMES = (
 _MEMBER_NAMES = tuple(f"arrays/{name}.npy" for name in _ARRAY_NAMES) + (
     "manifest.json",
 )
+_ARCHIVE_LOAD_TOKEN = object()
 
 
 class SimulationArchiveError(JXSimulationContractError):
@@ -69,8 +73,14 @@ class JXSimulationArchiveLoad:
     scope: str = SIMULATION_ARCHIVE_SCOPE
     scientific_claim_state: str = SCIENTIFIC_CLAIM_STATE
     production_authorized: bool = False
+    _load_token: InitVar[object] = None
 
-    def __post_init__(self) -> None:
+    def __post_init__(self, _load_token: object) -> None:
+        if _load_token is not _ARCHIVE_LOAD_TOKEN:
+            raise SimulationArchiveError(
+                "JXSimulationArchiveLoad must be constructed by "
+                "load_simulation_archive"
+            )
         if type(self.simulation) is not JXSimulation:
             raise SimulationArchiveError("simulation must be an exact JXSimulation")
         if type(self.continuation) is not JXSimulationContinuation:
@@ -112,7 +122,7 @@ def _canonical(document: object) -> bytes:
             separators=(",", ":"),
             sort_keys=True,
         )
-    except (TypeError, ValueError) as exc:
+    except (RecursionError, TypeError, ValueError) as exc:
         raise SimulationArchiveError("archive manifest is not canonical JSON") from exc
     return (rendered + "\n").encode("ascii")
 
@@ -144,7 +154,9 @@ def _strict_json(raw: bytes) -> dict[str, Any]:
             parse_float=reject_float,
             parse_constant=reject_constant,
         )
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+    except SimulationArchiveError:
+        raise
+    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError, ValueError) as exc:
         raise SimulationArchiveError("archive manifest must be ASCII JSON") from exc
     if duplicate is not None:
         raise SimulationArchiveError(f"archive manifest repeats key {duplicate!r}")
@@ -339,6 +351,8 @@ def dump_simulation_archive(
         **{f"arrays/{name}.npy": raw for name, raw in arrays.items()},
         "manifest.json": _canonical(manifest),
     }
+    if len(members["manifest.json"]) > SIMULATION_ARCHIVE_MAX_MANIFEST_BYTES:
+        raise SimulationArchiveError("archive manifest exceeds the v1 size ceiling")
     stream = io.BytesIO()
     with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_STORED) as archive:
         for name in _MEMBER_NAMES:
@@ -376,28 +390,68 @@ def _read_array(
         raise SimulationArchiveError(f"arrays.{name} exceeds the size ceiling")
     try:
         raw = archive.read(expected_member)
-    except (KeyError, OSError, zipfile.BadZipFile) as exc:
+    except (KeyError, OSError, RuntimeError, zipfile.BadZipFile) as exc:
         raise SimulationArchiveError(f"arrays.{name} could not be read safely") from exc
     if len(raw) != size or _sha256(raw) != _digest(
         document["sha256"], f"arrays.{name}.sha256"
     ):
         raise SimulationArchiveError(f"arrays.{name} byte identity mismatch")
-    try:
-        loaded = np.load(io.BytesIO(raw), allow_pickle=False)
-    except (OSError, ValueError) as exc:
-        raise SimulationArchiveError(f"arrays.{name} is not a safe NPY array") from exc
     expected_shape = (body_count, 3) if name in {"positions", "velocities"} else (body_count,)
     expected_dtype = np.dtype(np.bool_) if name == "massive" else np.dtype(np.float64)
+    stream = io.BytesIO(raw)
+    try:
+        version = np.lib.format.read_magic(stream)
+        if version != (1, 0):
+            raise SimulationArchiveError(
+                f"arrays.{name} must use canonical NPY 1.0"
+            )
+        shape, fortran_order, dtype = np.lib.format.read_array_header_1_0(
+            stream,
+            max_header_size=4096,
+        )
+    except SimulationArchiveError:
+        raise
+    except (
+        EOFError,
+        MemoryError,
+        OSError,
+        OverflowError,
+        RecursionError,
+        SyntaxError,
+        TypeError,
+        ValueError,
+        tokenize.TokenError,
+    ) as exc:
+        raise SimulationArchiveError(
+            f"arrays.{name} has an invalid NPY header"
+        ) from exc
+    payload_offset = stream.tell()
+    expected_payload_bytes = math.prod(expected_shape) * expected_dtype.itemsize
     if (
-        type(loaded) is not np.ndarray
-        or loaded.dtype != expected_dtype
-        or loaded.shape != expected_shape
-        or not loaded.flags.c_contiguous
+        dtype != expected_dtype
+        or shape != expected_shape
+        or fortran_order is not False
+        or len(raw) - payload_offset != expected_payload_bytes
     ):
         raise SimulationArchiveError(
             f"arrays.{name} has the wrong dtype, shape, or memory order"
         )
-    return np.ascontiguousarray(loaded.copy())
+    try:
+        loaded = np.frombuffer(
+            raw,
+            dtype=expected_dtype,
+            count=math.prod(expected_shape),
+            offset=payload_offset,
+        ).reshape(expected_shape)
+        owned = np.ascontiguousarray(loaded.copy())
+    except (TypeError, ValueError, MemoryError) as exc:
+        raise SimulationArchiveError(
+            f"arrays.{name} payload could not be loaded safely"
+        ) from exc
+    if _array_bytes(owned, name) != raw:
+        raise SimulationArchiveError(f"arrays.{name} NPY encoding is not canonical")
+    owned.setflags(write=False)
+    return owned
 
 
 def load_simulation_archive(
@@ -416,8 +470,13 @@ def load_simulation_archive(
     if archive_sha256 != _digest(expected_sha256, "expected_sha256"):
         raise SimulationArchiveError("archive SHA-256 does not match expected_sha256")
     try:
+        preflight_exact_zip_roster(archive_bytes, _MEMBER_NAMES)
         archive_context = zipfile.ZipFile(io.BytesIO(archive_bytes), "r")
-    except zipfile.BadZipFile as exc:
+    except ValueError as exc:
+        raise SimulationArchiveError(
+            "archive member roster or central directory is not canonical"
+        ) from exc
+    except (RuntimeError, zipfile.BadZipFile) as exc:
         raise SimulationArchiveError("archive bytes are not a valid ZIP container") from exc
     with archive_context as archive:
         infos = archive.infolist()
@@ -431,14 +490,39 @@ def load_simulation_archive(
                 or info.compress_type != zipfile.ZIP_STORED
             ):
                 raise SimulationArchiveError("archive contains an invalid member")
+            if (
+                info.filename == "manifest.json"
+                and info.file_size > SIMULATION_ARCHIVE_MAX_MANIFEST_BYTES
+            ):
+                raise SimulationArchiveError(
+                    "archive manifest exceeds the v1 size ceiling"
+                )
             mode = (info.external_attr >> 16) & 0o170000
             if mode not in (0, 0o100000):
                 raise SimulationArchiveError("archive members must be regular files")
         if sum(info.file_size for info in infos) > SIMULATION_ARCHIVE_MAX_BYTES:
             raise SimulationArchiveError("archive members exceed the total size ceiling")
+        canonical_stream = io.BytesIO()
+        try:
+            with zipfile.ZipFile(
+                canonical_stream,
+                "w",
+                compression=zipfile.ZIP_STORED,
+            ) as canonical_archive:
+                for name in _MEMBER_NAMES:
+                    raw_member = archive.read(name)
+                    canonical_archive.writestr(_zip_info(name), raw_member)
+                    del raw_member
+        except (KeyError, OSError, RuntimeError, zipfile.BadZipFile) as exc:
+            raise SimulationArchiveError(
+                "archive members could not be read safely"
+            ) from exc
+        if canonical_stream.getvalue() != archive_bytes:
+            raise SimulationArchiveError("archive ZIP encoding is not canonical")
+        canonical_stream.close()
         try:
             manifest_raw = archive.read("manifest.json")
-        except (KeyError, OSError, zipfile.BadZipFile) as exc:
+        except (KeyError, OSError, RuntimeError, zipfile.BadZipFile) as exc:
             raise SimulationArchiveError("archive manifest could not be read safely") from exc
         manifest = _strict_json(manifest_raw)
         top = _expect_keys(
@@ -467,10 +551,11 @@ def load_simulation_archive(
             ("production_authorized", "scientific_claim_state"),
             "claim",
         )
-        if claim != {
+        expected_claim = {
             "production_authorized": False,
             "scientific_claim_state": SCIENTIFIC_CLAIM_STATE,
-        }:
+        }
+        if _canonical(claim) != _canonical(expected_claim):
             raise SimulationArchiveError("archive claim ceiling changed")
         force_record = _expect_keys(
             top["force_plan"],
@@ -633,6 +718,7 @@ def load_simulation_archive(
         continuation=continuation,
         archive_sha256=archive_sha256,
         force_plan_sha256=archived_plan_sha256,
+        _load_token=_ARCHIVE_LOAD_TOKEN,
     )
 
 
@@ -642,6 +728,7 @@ __all__ = [
     "JXSimulationArchiveLoad",
     "SIMULATION_ARCHIVE_HASH_ALGORITHM",
     "SIMULATION_ARCHIVE_MAX_BYTES",
+    "SIMULATION_ARCHIVE_MAX_MANIFEST_BYTES",
     "SIMULATION_ARCHIVE_SCHEMA",
     "SIMULATION_ARCHIVE_SCOPE",
     "SimulationArchiveError",
