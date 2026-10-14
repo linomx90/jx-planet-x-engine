@@ -70,8 +70,11 @@ immutable-library authority.
 - Unified runtime-route baseline: commit
   `b77aad089c39a7331ea5f9f85fabe2e1e7ac6b79`, tree
   `ee744d975800c799827b5d461912a2c300d0bc3b`.
-- Engine Job V1 and this union map are identified by the Git commit that
-  contains them. They have no stable source identity until that commit exists.
+- Engine Job V1 implementation baseline: commit
+  `7f04b0d7632ca143abea16486c10b763430327fd`, tree
+  `9815e23145d589fce345f53f800e5836addf7df5`.
+- This union-map seal is identified externally by the Git commit that contains
+  it; a file cannot embed its own containing commit without a successor seal.
 - Repository experiment navigation catalog:
   `catalog/JX_EXPERIMENT_CATALOG.json`, SHA-256
   `923a06bcf06b472813df32f709b49ae12495561292b5848c1b71c47314feaba4`.
