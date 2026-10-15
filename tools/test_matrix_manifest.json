@@ -205,6 +205,7 @@
         "tests/test_tno_common_epoch_full129_bridge_v1.py",
         "tests/test_tno_common_epoch_horizons_oracle_acquisition_v1.py",
         "tests/test_tno_common_epoch_horizons_oracle_v1.py",
+        "tests/test_tno_common_epoch_horizons_response_diagnostic_acquisition_v1.py",
         "tests/test_tno_common_epoch_horizons_response_diagnostic_v1.py",
         "tests/test_tno_full128_reduced5_bridge_v1.py"
       ]
