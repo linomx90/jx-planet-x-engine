@@ -47,6 +47,7 @@
         "tests/test_jx_o2_candidate_9118_retirement.py",
         "tests/test_jx_o2_g0_audit.py",
         "tests/test_jx_o2_public_reconstruction_design.py",
+        "tests/test_jx_rebound_portfolio_v1.py",
         "tests/test_planet_x_survey_model_design.py",
         "tests/test_reproducible_release.py",
         "tests/test_solar_1pn.py",
