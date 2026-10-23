@@ -36,6 +36,15 @@ records the superseded commit and both superseded protocol hashes, and changes
 no scientific case, gate, candidate, oracle, or randomness choice. No holdout
 candidate or oracle execution occurred before this correction.
 
+Protocol revision 3 records a second input-only feasibility correction made
+before the pulse was available or accessed. Exact binary64 reconstruction after
+the frozen Hill bisection placed the nominal `0.800` target at
+`0.8000000000000002`, just outside the inclusive `[0.798, 0.800]` band.
+Revision 3 moves only the confirmatory Hill-stress and HILL-IN calibration
+target to `0.799`, safely inside that unchanged band. It records the superseded
+revision-2 commit and hashes; it changes no roster, gate, candidate, oracle, or
+randomness choice, and no candidate or oracle execution preceded the fix.
+
 The confirmatory interaction stress targets a reconstructed force ratio in
 `[0.0145, 0.0155]` with a frozen unequal-mass construction, at least 3.5
 mutual-Hill radii of initial adjacent separation, and all other guards inside.

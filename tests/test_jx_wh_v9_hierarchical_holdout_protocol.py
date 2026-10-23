@@ -70,7 +70,7 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
 
     def test_protocol_is_design_only_and_cannot_self_approve(self) -> None:
         protocol = self.protocol
-        self.assertEqual(protocol["protocol_revision"], 2)
+        self.assertEqual(protocol["protocol_revision"], 3)
         correction = protocol["pre_seed_correction"]
         self.assertEqual(
             correction["prior_registration_commit"],
@@ -91,6 +91,28 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
         self.assertEqual(correction["oracle_executions_before_correction"], 0)
         self.assertFalse(correction["beacon_pulse_available_before_correction"])
         self.assertFalse(correction["beacon_pulse_accessed_before_correction"])
+        correction3 = protocol["pre_seed_correction_revision_3"]
+        self.assertEqual(
+            correction3["prior_registration_commit"],
+            "cbc9ab4eaf99d874cf53cc6fd310931008a80036",
+        )
+        self.assertEqual(
+            correction3["prior_protocol_sha256"],
+            "a11639304c0257dc7339a04b56a249d5faf4fbe52a19ec7a8e87101866298654",
+        )
+        self.assertEqual(
+            correction3["prior_protocol_content_sha256"],
+            "fcb18dd723c01c6744e32b7b8aa99efed91ee9384721bae869f897b5e1e69616",
+        )
+        self.assertTrue(correction3["input_only_guard_evaluation"])
+        self.assertFalse(correction3["changed_scientific_case_roster"])
+        self.assertTrue(correction3["changed_scientific_case_construction"])
+        self.assertFalse(correction3["changed_scientific_gates"])
+        self.assertFalse(correction3["changed_randomness_source_or_pulse"])
+        self.assertEqual(correction3["candidate_executions_before_correction"], 0)
+        self.assertEqual(correction3["oracle_executions_before_correction"], 0)
+        self.assertFalse(correction3["beacon_pulse_available_before_correction"])
+        self.assertFalse(correction3["beacon_pulse_accessed_before_correction"])
         self.assertEqual(
             protocol["status"],
             "REGISTERED_DESIGN_ONLY_AWAITING_SOURCE_BOUND_RUNNER_AND_INDEPENDENT_EXECUTION",
@@ -250,7 +272,7 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
             stresses["PERIAPSE_STEP_DYNAMIC_SAFE"]["target_periapse_step_fraction"],
             0.03125,
         )
-        self.assertEqual(stresses["HILL_SWEPT_CLEARANCE_JUST_INSIDE"]["initial_node_utilization_target"], 0.8)
+        self.assertEqual(stresses["HILL_SWEPT_CLEARANCE_JUST_INSIDE"]["initial_node_utilization_target"], 0.799)
         self.assertFalse(stresses["HILL_SWEPT_CLEARANCE_JUST_INSIDE"]["swept_path_endpoint_may_be_pre_tuned"])
         interaction = stresses["INTERACTION_FORCE_DYNAMIC_STRESS_0_15_UTILIZATION"]
         self.assertEqual(interaction["interaction_ratio_target"], 0.015)
@@ -294,6 +316,8 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
         self.assertEqual(by_id["JXHHO-C-MASS-OUT"]["target_float_hex"], "0x1.47ae147ae147cp-7")
         self.assertEqual(by_id["JXHHO-C-HILL-OUT"]["reconstructed_initial_node_utilization_band_min"], 1.0001)
         self.assertEqual(by_id["JXHHO-C-HILL-OUT"]["reconstructed_initial_node_utilization_band_max"], 1.0002)
+        self.assertEqual(by_id["JXHHO-C-HILL-IN"]["target_initial_node_utilization"], 0.799)
+        self.assertEqual(by_id["JXHHO-C-HILL-IN"]["reconstructed_acceptance_band"], [0.798, 0.8])
         self.assertEqual(by_id["JXHHO-C-N33-OUT"]["body_count"], 33)
         self.assertEqual(
             by_id["JXHHO-C-MASS-OUT"]["expected_top_level_exception_message"],
