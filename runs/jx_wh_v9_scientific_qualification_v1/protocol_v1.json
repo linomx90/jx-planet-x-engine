@@ -1,0 +1,155 @@
+{
+  "schema": "jxplanetx.wisdom-holman-v9-scientific-qualification-protocol.v1",
+  "qualification_id": "JX_WH_V9_SCIENTIFIC_QUALIFICATION_V1",
+  "status": "REGISTERED_AWAITING_EXECUTION_EXTERNAL_REVIEW_REQUIRED",
+  "registration_kind": "RETROSPECTIVE_CANDIDATE_PROSPECTIVE_ORACLE_EXECUTION",
+  "base_repository_commit": "c935be6fd16e9ff078e80a0ed2c7d8939efaa2ba",
+  "candidate": {
+    "package_version": "0.6.0rc17",
+    "api_id": "jx.fast-wisdom-holman-v9.opt-in-screening-api.v1",
+    "wrapper_sha256": "089a8d738aed908a4b1c1af74e74ac214062e692d74bb7940e35a16686d47a3d",
+    "native_wrapper_sha256": "90468c9f527eefb6347b31e8e371310d1e054e2703bb6043baaae71d4078d654",
+    "native_loop_sha256": "680b4f887fa82561bb503a7982367f68c9c6648cd67ed8b926f1ae87e0d41bd2",
+    "supported_platform": "LINUX_X86_64_GCC_IEEE_BINARY64_FE_TONEAREST_MXCSR_MASKED_FTZ_DAZ_OFF"
+  },
+  "prior_evidence_disclosure": {
+    "candidate_previously_tested": true,
+    "workload_previously_inspected": true,
+    "outcome_blind_preregistration": false,
+    "formal_result_generated_before_registration": false,
+    "disclosed_development_observation": {
+      "weak_three_body_position_error_p64": 0.00034886,
+      "weak_three_body_position_error_p128": 0.000087206,
+      "weak_three_body_position_error_p256": 0.000021801,
+      "classification": "NONFORMAL_PROTOCOL_DESIGN_PILOT_NOT_QUALIFICATION_EVIDENCE"
+    },
+    "interpretation": "Thresholds are prospective for the retained formal execution but the candidate and workload are not blind holdouts. This limitation blocks final scientific approval without independent reproduction."
+  },
+  "independent_oracles": {
+    "analytic_two_body": {
+      "implementation": "STANDALONE_DECIMAL_100_DIGIT_ELLIPTIC_KEPLER_SOLUTION",
+      "shares_jx_integrator_code": false,
+      "precision_decimal_digits": 100
+    },
+    "dop853": {
+      "implementation": "SCIPY_SOLVE_IVP_DOP853_STANDALONE_PAIRWISE_NEWTONIAN_RHS",
+      "required_scipy_version": "1.17.0",
+      "shares_jx_force_or_integrator_code": false,
+      "relative_tolerance": 1e-13,
+      "absolute_tolerance": 1e-15
+    },
+    "ias15": {
+      "implementation": "REBOUND_IAS15_ALL_ACTIVE_NEWTONIAN_POINT_MASSES",
+      "required_rebound_version": "5.1.1",
+      "epsilon": 1e-13,
+      "adaptive_mode": "PRS23",
+      "shares_jx_force_or_integrator_code": false
+    }
+  },
+  "workloads": {
+    "analytic_two_body_portfolio": {
+      "case_count": 240,
+      "semimajor_axis_au_like": [1e-06, 1.0, 1000000.0],
+      "eccentricity": [0.0, 0.3, 0.6, 0.85, 0.9],
+      "true_anomaly_radians": [0.0, 1.0471975511965976, 3.141592653589793, 5.235987755982989],
+      "secondary_to_primary_gm_ratio": [1e-06, 0.009],
+      "direction": [-1, 1],
+      "checkpoint_periods": [0, 1, 10, 100],
+      "step_divisor_rule": "NEXT_POWER_OF_TWO_AT_LEAST_MAX_128_AND_64_OVER_ONE_MINUS_E_TO_THREE_HALVES",
+      "coordinate_system": "BARYCENTRIC_ICRS_ALIGNED_PLANAR",
+      "units": "G_EQUALS_ONE_LENGTH_AND_TIME_CONSISTENT"
+    },
+    "weak_three_body": {
+      "fixture_id": "jx.rebound_whfast.ordered_jacobi_weak_three_body.v1",
+      "initial_state_sha256": "9ae0797e88e65d6f49c48e6ca24e13d0845e44bbfa5ee19e73d97dfc1f8ecc08",
+      "body_count": 3,
+      "short_horizon_periods": 10,
+      "long_horizon_periods": 100,
+      "invariant_horizon_periods": 10000,
+      "step_divisors": [64, 128, 256],
+      "samples_per_period": 4,
+      "all_bodies_active": true,
+      "gravity": "UNSOFTENED_MUTUAL_NEWTONIAN_POINT_MASS"
+    }
+  },
+  "gates": {
+    "analytic_two_body": {
+      "all_cases_required": true,
+      "normalized_position_error_max": 5e-10,
+      "normalized_velocity_error_max": 5e-10,
+      "relative_energy_error_max": 2e-11,
+      "relative_angular_momentum_error_max": 2e-11,
+      "normalized_forward_backward_state_error_max": 1e-09,
+      "fallback_count_required": 0
+    },
+    "weak_three_body_oracle_floor": {
+      "position_and_velocity_oracle_difference_max": 1e-08,
+      "oracle_difference_fraction_of_v9_p256_error_max": 0.05
+    },
+    "weak_three_body_convergence": {
+      "adjacent_position_error_ratio_min": 3.7,
+      "adjacent_position_error_ratio_max": 4.3,
+      "adjacent_velocity_error_ratio_min": 3.7,
+      "adjacent_velocity_error_ratio_max": 4.3,
+      "adjacent_phase_error_ratio_min": 3.7,
+      "adjacent_phase_error_ratio_max": 4.3
+    },
+    "weak_three_body_absolute": {
+      "p64_position_error_max": 0.001,
+      "p64_velocity_error_max": 0.001,
+      "p64_phase_error_radians_max": 0.002,
+      "p64_relative_energy_error_max": 5e-06,
+      "p128_scale_from_p64": 0.25,
+      "p256_scale_from_p64": 0.0625,
+      "relative_angular_momentum_error_max": 1e-12,
+      "center_of_mass_position_max": 1e-12,
+      "total_momentum_max": 1e-12,
+      "p128_normalized_forward_backward_state_error_max": 1e-09,
+      "fallback_count_required": 0
+    },
+    "long_sampled_invariants": {
+      "p64_relative_energy_envelope_max": 5e-06,
+      "p128_relative_energy_envelope_max": 1.25e-06,
+      "relative_angular_momentum_error_max": 2e-12,
+      "center_of_mass_position_max": 2e-12,
+      "total_momentum_max": 2e-12,
+      "p64_over_p128_energy_envelope_ratio_min": 3.5,
+      "p64_over_p128_energy_envelope_ratio_max": 4.5,
+      "finite_horizon_observation_only": true
+    },
+    "engineering_prerequisites": {
+      "exact_replay_required": true,
+      "hostile_fp_controls_fail_closed": true,
+      "thread_local_diagnostics_isolated": true,
+      "clean_wheel_and_sdist_reproduction_required": true,
+      "normal_and_optimized_python_required": true
+    }
+  },
+  "decision_rule": {
+    "internal_pass_status": "ELIGIBLE_FOR_INDEPENDENT_REVIEW",
+    "failure_status": "INVALID_FOR_DECLARED_QUALIFICATION",
+    "all_numeric_and_custody_gates_conjunctive": true,
+    "external_approval_required": true,
+    "second_independently_administered_host_required_for_final_approval": true,
+    "named_external_reviewer_signature_required_for_final_approval": true,
+    "post_outcome_threshold_or_case_changes_forbidden": true
+  },
+  "claim_ceiling": "FROZEN_RC17_V9_NONENCOUNTERING_NEWTONIAN_TWO_BODY_PORTFOLIO_AND_WEAK_THREE_BODY_BENCHMARK_ON_DECLARED_LINUX_X86_64_GCC_RUNTIME_ONLY",
+  "claim_controls": {
+    "benchmark_qualification_claimed_at_registration": false,
+    "broad_n_body_qualification_authorized": false,
+    "close_encounter_claim_authorized": false,
+    "cross_platform_claim_authorized": false,
+    "detection_claim_authorized": false,
+    "ephemeris_use_authorized": false,
+    "external_review_completed": false,
+    "observational_claim_authorized": false,
+    "physical_truth_claimed": false,
+    "production_authorized": false,
+    "scientific_approval_granted": false,
+    "stability_claim_authorized": false,
+    "superiority_claimed": false,
+    "v9_default_route_authorized": false
+  },
+  "next_gate": "OUTCOME_BLIND_HIERARCHICAL_HOLDOUT_AND_INDEPENDENT_HOST_REPRODUCTION_WITH_NAMED_EXTERNAL_REVIEWER"
+}
