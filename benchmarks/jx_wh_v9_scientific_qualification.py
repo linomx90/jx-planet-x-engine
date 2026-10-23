@@ -2110,7 +2110,13 @@ def _validate_sdist_bytes(
                     count > MAX_ARCHIVE_MEMBERS
                     or member.name in seen
                     or not _safe_archive_name(member.name.rstrip("/"))
-                    or not member.name.startswith(root)
+                    or not (
+                        member.name.startswith(root)
+                        or (
+                            member.name == root.rstrip("/")
+                            and member.isdir()
+                        )
+                    )
                     or not (member.isfile() or member.isdir())
                 ):
                     raise QualificationError("sdist tar structure changed")

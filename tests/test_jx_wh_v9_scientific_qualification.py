@@ -219,6 +219,11 @@ def _sdist_bytes(sources: dict[str, object]) -> bytes:
         payloads[root + relative] = raw
     stream = io.BytesIO()
     with tarfile.open(fileobj=stream, mode="w:gz") as archive:
+        directory = tarfile.TarInfo(root.rstrip("/"))
+        directory.type = tarfile.DIRTYPE
+        directory.mode = 0o755
+        directory.mtime = 0
+        archive.addfile(directory)
         for name, raw in sorted(payloads.items()):
             info = tarfile.TarInfo(name)
             info.size = len(raw)
@@ -893,6 +898,13 @@ class EngineeringEvidenceTests(unittest.TestCase):
                 "jxplanetx-0.6.0rc17.tar.gz",
                 self.sources,
             )
+
+    def test_sdist_accepts_canonical_root_directory_member(self) -> None:
+        qualification._validate_sdist_bytes(
+            _sdist_bytes(self.sources),
+            "jxplanetx-0.6.0rc17.tar.gz",
+            self.sources,
+        )
 
     def test_zip_member_cap_does_not_trust_forged_eocd_count(self) -> None:
         payload = io.BytesIO()
