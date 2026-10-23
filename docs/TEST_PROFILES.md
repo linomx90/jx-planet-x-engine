@@ -13,12 +13,13 @@ Duplicate assignments, stale paths, and unassigned files are fatal before any
 test starts. Each executable file runs in a separate child process. Adding or
 renaming a test therefore requires updating the manifest in the same change.
 
-The recovered baseline plus the unified-runtime, Engine Job V1, and explicit
-V9 route coverage contains 79 repository-bound test files:
+The recovered baseline plus the unified-runtime, Engine Job V1, explicit V9
+route coverage, and the reduced V9 qualification contract contains 80
+repository-bound test files:
 
 | Profile | Files | Disposition |
 | --- | ---: | --- |
-| `live-current` | 58 | Run against the current source tree |
+| `live-current` | 59 | Run current-source unit, API, route, and reduced qualification-contract tests |
 | `cuda-hardware-only` | 2 | Run only when a compatible CUDA device is available |
 | `rebound-4.4.11` | 3 | Run only with exact REBOUND 4.4.11 |
 | `rebound-5.1.1` | 4 | Run only with exact REBOUND 5.1.1 |
@@ -89,10 +90,13 @@ current-source test.
 ## CI policy
 
 CI validates exact manifest coverage in a dedicated prerequisite job. The
-current workflow then runs 20 engine lanes under normal and optimized Python:
+current workflow then runs 21 engine lanes under normal and optimized Python:
 the 16 `test_engine*.py` files, Engine Job CLI custody, the V3 fast route, the
-V9 native gates, and the separate public V9 route. It also runs the supported
-GR15 subset and verifies reproducible wheel/source packaging with
-fresh-install smoke tests. Other manifest profiles remain explicit local
-lanes; they are not described as CI-covered until a corresponding workflow
-job exists.
+V9 native gates, the separate public V9 route, and the reduced V9 scientific-
+qualification contract. That qualification lane exercises report closure,
+oracle, replay, custody, and forgery checks with its `smoke` profile; smoke is
+structurally unable to claim qualification or scientific approval. CI also
+runs the supported GR15 subset and verifies reproducible wheel/source
+packaging with fresh-install smoke tests. Other manifest profiles remain
+explicit local lanes; they are not described as CI-covered until a
+corresponding workflow job exists.

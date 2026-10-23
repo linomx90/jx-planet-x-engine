@@ -14,7 +14,7 @@
       "interpreter": "current",
       "isolation": "per_file",
       "ci": false,
-      "description": "Live CPU-safe and optional-dependency tests for the current source tree.",
+      "description": "Live CPU-safe, optional-dependency, and reduced qualification-contract tests for the current source tree.",
       "files": [
         "tests/test_claim_capabilities.py",
         "tests/test_cli_engine_job.py",
@@ -48,6 +48,7 @@
         "tests/test_jx_o2_candidate_9118_retirement.py",
         "tests/test_jx_o2_g0_audit.py",
         "tests/test_jx_o2_public_reconstruction_design.py",
+        "tests/test_jx_wh_v9_scientific_qualification.py",
         "tests/test_planet_x_survey_model_design.py",
         "tests/test_reproducible_release.py",
         "tests/test_solar_1pn.py",

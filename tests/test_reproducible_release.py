@@ -89,30 +89,61 @@ class ReproducibleReleaseTests(unittest.TestCase):
             runtime_python=None,
         )
         selected = {lane.name for lane in lanes}
+        self.assertEqual(len(lanes), 21)
         self.assertIn("engine:test_fast_wisdom_holman.py", selected)
         self.assertIn("engine:test_fast_wisdom_holman_v9.py", selected)
+        self.assertIn(
+            "engine:test_jx_wh_v9_scientific_qualification.py",
+            selected,
+        )
         self.assertIn("engine:test_wisdom_holman_v9.py", selected)
         self.assertEqual(
             sha256(ROOT / "tests/test_fast_wisdom_holman_v9.py"),
             "1688babd7f62c638821013f027f9a4118518ef1568d99ec5f57877b648140ba8",
         )
 
-    def test_distribution_stage_excludes_research_evidence(self) -> None:
+    def test_distribution_stage_scopes_research_evidence(self) -> None:
         self.assertEqual(
             STAGE_FILES,
             (
                 "pyproject.toml",
+                "MANIFEST.in",
                 "README.md",
                 "LICENSE",
                 "AUTHORS.md",
                 "THIRD_PARTY_NOTICES.md",
                 "benchmarks/jx_smalln_cpu_rkf78.c",
+                "benchmarks/rebound_leapfrog_comparison.py",
+                "benchmarks/rebound_whfast_comparison.py",
+                "benchmarks/jx_wh_v9_scientific_qualification.py",
+                "tools/build_release.py",
+                "tests/test_wisdom_holman_v9.py",
+                "tests/test_fast_wisdom_holman_v9.py",
+                "tests/test_jx_wh_v9_scientific_qualification.py",
+                "runs/jx_wh_v9_scientific_qualification_v1/README.md",
+                "runs/jx_wh_v9_scientific_qualification_v1/protocol_v1.json",
             ),
         )
         self.assertEqual(STAGE_DIRECTORIES, ("src/jxplanetx",))
-        declared = set(STAGE_FILES + STAGE_DIRECTORIES)
-        self.assertFalse(
-            declared & {"library", "runs", "evidence", "archives", "benchmarks"}
+        staged_research_files = {
+            relative
+            for relative in STAGE_FILES
+            if relative.startswith(("benchmarks/", "tools/", "tests/", "runs/"))
+        }
+        self.assertEqual(
+            staged_research_files,
+            {
+                "benchmarks/jx_smalln_cpu_rkf78.c",
+                "benchmarks/rebound_leapfrog_comparison.py",
+                "benchmarks/rebound_whfast_comparison.py",
+                "benchmarks/jx_wh_v9_scientific_qualification.py",
+                "tools/build_release.py",
+                "tests/test_wisdom_holman_v9.py",
+                "tests/test_fast_wisdom_holman_v9.py",
+                "tests/test_jx_wh_v9_scientific_qualification.py",
+                "runs/jx_wh_v9_scientific_qualification_v1/README.md",
+                "runs/jx_wh_v9_scientific_qualification_v1/protocol_v1.json",
+            },
         )
         with tempfile.TemporaryDirectory() as directory:
             stage = Path(directory) / "stage"
@@ -161,6 +192,36 @@ class ReproducibleReleaseTests(unittest.TestCase):
             self.assertIn(
                 "src/jxplanetx/fast_wisdom_holman_v9.py",
                 staged_files,
+            )
+            qualification_source_files = {
+                "benchmarks/rebound_leapfrog_comparison.py",
+                "benchmarks/rebound_whfast_comparison.py",
+                "benchmarks/jx_wh_v9_scientific_qualification.py",
+                "tools/build_release.py",
+                "tests/test_wisdom_holman_v9.py",
+                "tests/test_fast_wisdom_holman_v9.py",
+                "tests/test_jx_wh_v9_scientific_qualification.py",
+                "runs/jx_wh_v9_scientific_qualification_v1/README.md",
+                "runs/jx_wh_v9_scientific_qualification_v1/protocol_v1.json",
+            }
+            self.assertTrue(qualification_source_files.issubset(staged_files))
+            self.assertNotIn(
+                "runs/jx_wh_v9_scientific_qualification_v1/result_v1.json",
+                staged_files,
+            )
+            self.assertEqual(
+                (stage / "MANIFEST.in").read_text(encoding="utf-8").splitlines(),
+                [
+                    "include benchmarks/jx_wh_v9_scientific_qualification.py",
+                    "include benchmarks/rebound_leapfrog_comparison.py",
+                    "include benchmarks/rebound_whfast_comparison.py",
+                    "include tools/build_release.py",
+                    "include tests/test_wisdom_holman_v9.py",
+                    "include tests/test_fast_wisdom_holman_v9.py",
+                    "include tests/test_jx_wh_v9_scientific_qualification.py",
+                    "include runs/jx_wh_v9_scientific_qualification_v1/README.md",
+                    "include runs/jx_wh_v9_scientific_qualification_v1/protocol_v1.json",
+                ],
             )
             staged_v9_wrapper = (
                 stage / "src/jxplanetx/fast_wisdom_holman_v9.py"

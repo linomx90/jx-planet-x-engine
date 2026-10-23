@@ -1,0 +1,9 @@
+include benchmarks/jx_wh_v9_scientific_qualification.py
+include benchmarks/rebound_leapfrog_comparison.py
+include benchmarks/rebound_whfast_comparison.py
+include tools/build_release.py
+include tests/test_wisdom_holman_v9.py
+include tests/test_fast_wisdom_holman_v9.py
+include tests/test_jx_wh_v9_scientific_qualification.py
+include runs/jx_wh_v9_scientific_qualification_v1/README.md
+include runs/jx_wh_v9_scientific_qualification_v1/protocol_v1.json

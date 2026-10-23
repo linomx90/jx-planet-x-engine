@@ -42,3 +42,42 @@ x86-64 GCC runtime.  It does not authorize production ephemerides,
 observational inference, close encounters, general N-body dynamics,
 cross-platform equivalence, long-term stability, superiority, or a Planet-X
 claim.  V9 remains explicit opt-in and the project remains `SCREENING_ONLY`.
+
+## Smoke contract versus formal execution
+
+The repository test matrix runs the qualification harness only in its reduced
+`smoke` profile, without IAS15.  That profile checks the analytic oracle,
+candidate replay, report serialization, custody rules, and anti-forgery
+validation, but it deliberately fails the formal-profile gate.  A smoke report
+is diagnostic output, is not a qualification result, and must not be promoted
+or retained as formal evidence.
+
+The `formal` profile is a separate, explicitly acknowledged execution.  It
+requires the exact registered dependency versions and a bound engineering
+receipt before it can evaluate the full locked workload.  Even a conjunctive
+formal pass can emit only `ELIGIBLE_FOR_INDEPENDENT_REVIEW`; it cannot grant
+scientific approval.  The source archive carries this runner, its smoke test,
+the complete declared non-package source closure, the locked protocol, and
+this README for reconstruction, but no generated formal result.
+
+Formal execution starts from the committed, clean source checkout with
+`PYTHONPATH=src:.`.  The runner then loads the candidate science route from
+the separately validated build-A wheel and verifies that its native extension
+matches the registered runtime identity.  A wheel-only launch environment is
+not the registered execution boundary.  Generate the initial result outside
+the checkout so that the worktree remains clean through the mandatory live
+verification; retain the verified result afterward.
+
+`--verify` is an intrinsic schema, digest, and gate-consistency check.  Because
+its SHA-256 digests are unkeyed, it is not evidence of authorship or an
+independent reproduction.  Every formal result must also pass
+`--verify-live`, with all six registered engineering paths supplied, so the
+runner repeats the complete profile and compares the canonical report.
+
+The registered `next_gate` also requires a separately preregistered,
+outcome-blind hierarchical holdout.  A second independently administered host
+and a named, cryptographically signing external reviewer are necessary but
+not sufficient for final approval until that holdout is completed.  Any later
+review or approval must be an additive signed artifact; the local formal
+report's `external_review_completed` and `scientific_approval_granted` fields
+remain false permanently.

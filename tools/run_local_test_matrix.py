@@ -407,6 +407,7 @@ def build_lanes(
             "test_cli_engine_job.py",
             "test_fast_wisdom_holman.py",
             "test_fast_wisdom_holman_v9.py",
+            "test_jx_wh_v9_scientific_qualification.py",
             "test_wisdom_holman_v9.py",
         }
         files = tuple(

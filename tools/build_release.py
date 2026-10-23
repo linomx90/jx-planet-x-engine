@@ -27,11 +27,21 @@ RELEASE_TOOL_VERSIONS = {
 }
 STAGE_FILES = (
     "pyproject.toml",
+    "MANIFEST.in",
     "README.md",
     "LICENSE",
     "AUTHORS.md",
     "THIRD_PARTY_NOTICES.md",
     "benchmarks/jx_smalln_cpu_rkf78.c",
+    "benchmarks/rebound_leapfrog_comparison.py",
+    "benchmarks/rebound_whfast_comparison.py",
+    "benchmarks/jx_wh_v9_scientific_qualification.py",
+    "tools/build_release.py",
+    "tests/test_wisdom_holman_v9.py",
+    "tests/test_fast_wisdom_holman_v9.py",
+    "tests/test_jx_wh_v9_scientific_qualification.py",
+    "runs/jx_wh_v9_scientific_qualification_v1/README.md",
+    "runs/jx_wh_v9_scientific_qualification_v1/protocol_v1.json",
 )
 STAGE_DIRECTORIES = ("src/jxplanetx",)
 IGNORED_STAGE_NAMES = {"__pycache__", ".pytest_cache"}
