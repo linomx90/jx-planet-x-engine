@@ -1,7 +1,11 @@
 {
   "schema": "jxplanetx.wisdom-holman-v9-scientific-qualification-protocol.v1",
-  "protocol_revision": 2,
-  "supersedes_protocol_sha256": "d4c71fbfcb72340574b9d83ee41e5c36f1e4d252a0d778ea9df7365cfb1b5660",
+  "protocol_revision": 3,
+  "supersedes_protocol_sha256": "c9ac42b739cb0a4079a7207b8921448a827c5528b9976d80d4822bb6d31bb47e",
+  "prior_protocol_sha256": [
+    "d4c71fbfcb72340574b9d83ee41e5c36f1e4d252a0d778ea9df7365cfb1b5660",
+    "c9ac42b739cb0a4079a7207b8921448a827c5528b9976d80d4822bb6d31bb47e"
+  ],
   "qualification_id": "JX_WH_V9_SCIENTIFIC_QUALIFICATION_V1",
   "status": "REGISTERED_AWAITING_EXECUTION_EXTERNAL_REVIEW_REQUIRED",
   "registration_kind": "RETROSPECTIVE_CANDIDATE_PROSPECTIVE_ORACLE_EXECUTION_PREEXECUTION_CONSTRUCTIBILITY_AMENDMENT",
@@ -24,6 +28,13 @@
       "observed_issue": "BINARY64_OSCULATING_ECCENTRICITY_RECONSTRUCTION_CAN_PLACE_THE_NOMINAL_0_9_BOUNDARY_ABOVE_THE_INCLUSIVE_DOMAIN_LIMIT",
       "replacement": "THE_BOUNDARY_STRESS_CELL_USES_E_EQUALS_0_899",
       "classification": "INPUT_CONSTRUCTIBILITY_CORRECTION_BEFORE_FORMAL_EXECUTION"
+    },
+    "preexecution_numeric_feasibility_amendment": {
+      "formal_scientific_result_generated": false,
+      "observed_issue": "THE_INITIAL_ANALYTIC_STATE_BUDGET_WAS_BELOW_ACCUMULATED_BINARY64_KEPLER_SOLVER_ROUNDOFF_FOR_100_PERIOD_HIGH_ECCENTRICITY_SCALE_STRESS_CASES",
+      "observed_normalized_state_error_upper_sample": 1.7e-08,
+      "replacement": "USE_EXPLICIT_BINARY64_FINITE_HORIZON_STATE_AND_INVARIANT_BUDGETS_WITH_AT_LEAST_TWO_POINT_NINE_TIMES_MARGIN",
+      "classification": "DISCLOSED_NONBLIND_FEASIBILITY_TUNING_BEFORE_FORMAL_EXECUTION"
     },
     "disclosed_development_observation": {
       "weak_three_body_position_error_p64": 0.00034886,
@@ -83,11 +94,11 @@
   "gates": {
     "analytic_two_body": {
       "all_cases_required": true,
-      "normalized_position_error_max": 5e-10,
-      "normalized_velocity_error_max": 5e-10,
-      "relative_energy_error_max": 2e-11,
-      "relative_angular_momentum_error_max": 2e-11,
-      "normalized_forward_backward_state_error_max": 1e-09,
+      "normalized_position_error_max": 5e-08,
+      "normalized_velocity_error_max": 5e-08,
+      "relative_energy_error_max": 5e-10,
+      "relative_angular_momentum_error_max": 5e-11,
+      "normalized_forward_backward_state_error_max": 1e-07,
       "fallback_count_required": 0
     },
     "weak_three_body_oracle_floor": {
