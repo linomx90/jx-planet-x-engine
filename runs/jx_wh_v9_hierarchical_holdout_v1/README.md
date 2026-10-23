@@ -55,6 +55,17 @@ must equal the target bit-for-bit. The same exact closure applies to science
 cases, the unequal interaction stress, and guard controls. No tolerance was
 widened, and no roster, gate, candidate, oracle, or randomness choice changed.
 
+Protocol revision 5 records a fourth input-only feasibility correction before
+the pulse was available or accessed. The earlier, underspecified ascending
+ordered-Jacobi inverse produced precision-dependent tiny residues where outer
+Hill-calibration components are algebraically zero. Revision 5 freezes the
+equivalent backward inverse from an exact zero total barycenter, with the exact
+descending recurrence and subsequent ascending body reconstruction written in
+the protocol. A complete synthetic-seed feasibility sweep then produced
+identical 160/220-digit records and branch traces for all 32 cases and all 10
+controls. No threshold or quantization was added, and no scientific outcome
+was generated.
+
 The confirmatory interaction stress targets a reconstructed force ratio in
 `[0.0145, 0.0155]` with a frozen unequal-mass construction, at least 3.5
 mutual-Hill radii of initial adjacent separation, and all other guards inside.

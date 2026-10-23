@@ -70,7 +70,7 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
 
     def test_protocol_is_design_only_and_cannot_self_approve(self) -> None:
         protocol = self.protocol
-        self.assertEqual(protocol["protocol_revision"], 4)
+        self.assertEqual(protocol["protocol_revision"], 5)
         correction = protocol["pre_seed_correction"]
         self.assertEqual(
             correction["prior_registration_commit"],
@@ -136,6 +136,29 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
         self.assertEqual(correction4["oracle_executions_before_correction"], 0)
         self.assertFalse(correction4["beacon_pulse_available_before_correction"])
         self.assertFalse(correction4["beacon_pulse_accessed_before_correction"])
+        correction5 = protocol["pre_seed_correction_revision_5"]
+        self.assertEqual(
+            correction5["prior_registration_commit"],
+            "5ba9e4eb58d647090696538a8d3f434fc6fa2274",
+        )
+        self.assertEqual(
+            correction5["prior_protocol_sha256"],
+            "f020ab31c4f3d594265f1c029149273716a56fb40ce705ff150d38329cdbe226",
+        )
+        self.assertEqual(
+            correction5["prior_protocol_content_sha256"],
+            "7b1f023d247ac0fe8b0bbb43d214830d1d03ada81dff0beb67a8c297775b1354",
+        )
+        self.assertTrue(correction5["input_only_constructor_evaluation"])
+        self.assertFalse(correction5["changed_scientific_case_roster"])
+        self.assertTrue(correction5["changed_scientific_case_construction"])
+        self.assertTrue(correction5["changed_guard_control_construction"])
+        self.assertFalse(correction5["changed_scientific_gates"])
+        self.assertFalse(correction5["changed_randomness_source_or_pulse"])
+        self.assertEqual(correction5["candidate_executions_before_correction"], 0)
+        self.assertEqual(correction5["oracle_executions_before_correction"], 0)
+        self.assertFalse(correction5["beacon_pulse_available_before_correction"])
+        self.assertFalse(correction5["beacon_pulse_accessed_before_correction"])
         self.assertEqual(
             protocol["status"],
             "REGISTERED_DESIGN_ONLY_AWAITING_SOURCE_BOUND_RUNNER_AND_INDEPENDENT_EXECUTION",
@@ -294,6 +317,10 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
             "S_final==target_binary64",
             self.protocol["case_input_constructor"]["binary64_secondary_total_closure_rule"],
         )
+        inverse = self.protocol["case_input_constructor"]["ordered_jacobi_inverse_rule"]
+        self.assertIn("R_(N-1)=0", inverse)
+        self.assertIn("i=N-1..1 in strictly descending integer order", inverse)
+        self.assertIn("only allowed inverse", inverse)
         stresses = self.protocol["boundary_stress_construction"]
         self.assertEqual(stresses["MASS_RATIO_0_99"]["total_secondary_to_primary_gm_ratio"], 0.0099)
         self.assertEqual(stresses["ECCENTRICITY_DYNAMIC_SAFE_0_80"]["eccentricity"], 0.8)

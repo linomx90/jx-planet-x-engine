@@ -1,6 +1,6 @@
 {
   "schema": "jxplanetx.wisdom-holman-v9-hierarchical-holdout-protocol.v1",
-  "protocol_revision": 4,
+  "protocol_revision": 5,
   "holdout_id": "JX_WH_V9_HIERARCHICAL_HOLDOUT_V1",
   "status": "REGISTERED_DESIGN_ONLY_AWAITING_SOURCE_BOUND_RUNNER_AND_INDEPENDENT_EXECUTION",
   "registration_kind": "PROSPECTIVE_OUTCOME_BLIND_DETERMINISTIC_HIERARCHICAL_HOLDOUT",
@@ -47,6 +47,25 @@
     "defect": "For mandatory N=32 inputs, independently converting a high-precision final equal-share remainder left the required public sequential binary64 secondary-GM sum three ulps below its registered target.",
     "correction": "Set the last secondary GM to the positive binary64 recurrence-closing remainder float(target_binary64-S_previous), then require the final immutable-order sequential sum to equal target_binary64 bit-for-bit. Apply the same closure to confirmatory, interaction-stress, and guard-control mass construction.",
     "input_only_mass_evaluation": true,
+    "changed_scientific_case_roster": false,
+    "changed_scientific_case_construction": true,
+    "changed_guard_control_construction": true,
+    "changed_scientific_gates": false,
+    "changed_randomness_source_or_pulse": false,
+    "candidate_executions_before_correction": 0,
+    "oracle_executions_before_correction": 0,
+    "beacon_pulse_available_before_correction": false,
+    "beacon_pulse_accessed_before_correction": false,
+    "correction_committed_before_registered_pulse_required": true
+  },
+  "pre_seed_correction_revision_5": {
+    "correction_timestamp_utc": "2026-10-23T03:01:18Z",
+    "prior_registration_commit": "5ba9e4eb58d647090696538a8d3f434fc6fa2274",
+    "prior_protocol_sha256": "f020ab31c4f3d594265f1c029149273716a56fb40ce705ff150d38329cdbe226",
+    "prior_protocol_content_sha256": "7b1f023d247ac0fe8b0bbb43d214830d1d03ada81dff0beb67a8c297775b1354",
+    "defect": "The underspecified ascending ordered-Jacobi inverse introduced precision-dependent residuals for algebraically zero outer-body Cartesian components, so mandatory Hill records differed between the 160- and 220-digit construction runs.",
+    "correction": "Freeze the algebraically equivalent backward inverse from exact zero total barycenter: initialize R_(N-1)=0 and V_(N-1)=0; for i=N-1..1 compute R_(i-1)=R_i-(gm_i/K_i)q_i and V_(i-1)=V_i-(gm_i/K_i)u_i; then set r_0=R_0, v_0=V_0 and r_i=R_(i-1)+q_i, v_i=V_(i-1)+u_i in ascending body order before the already registered binary64 conversion and correction.",
+    "input_only_constructor_evaluation": true,
     "changed_scientific_case_roster": false,
     "changed_scientific_case_construction": true,
     "changed_guard_control_construction": true,
@@ -236,7 +255,7 @@
     "period_rule": "P_i=2*pi*sqrt(a_i^3/K_i) in the registered high-precision context before the one final binary64 conversion; P_inner=P_1.",
     "planar_jacobi_state": "For each secondary, solve E-e*sin(E)=M, then q=(a*(cos(E)-e),a*sqrt(1-e^2)*sin(E),0) and u=(-a*n*sin(E)/(1-e*cos(E)),a*n*sqrt(1-e^2)*cos(E)/(1-e*cos(E)),0), where n=sqrt(K_i/a^3).",
     "orientation_rule": "Apply R3(longitude_of_ascending_node)*R1(inclination)*R3(argument_of_periapsis) to q and u in that written left-to-right matrix product with high-precision multiply/add and no fused-operation assumption.",
-    "ordered_jacobi_inverse_rule": "For i=1..N-1, q_i=r_i-barycenter(r_0..r_{i-1}) and u_i=v_i-barycenter_velocity(v_0..v_{i-1}) with GM weights. Solve this triangular system in ascending i at high precision, set the total GM-weighted barycenter position and velocity to exact zero, then perform the registered single binary64 conversion and one binary64 math.fsum barycenter correction.",
+    "ordered_jacobi_inverse_rule": "For i=1..N-1, q_i=r_i-R_(i-1) and u_i=v_i-V_(i-1), where R_i and V_i are the GM-weighted barycenter position and velocity of bodies 0..i and K_i is their registered cumulative GM. Solve with exact zero total barycenter by initializing high-precision vectors R_(N-1)=0 and V_(N-1)=0; for i=N-1..1 in strictly descending integer order compute R_(i-1)=R_i-(gm_i/K_i)*q_i and V_(i-1)=V_i-(gm_i/K_i)*u_i with the written multiply then subtract; then set r_0=R_0 and v_0=V_0, and for i=1..N-1 in ascending integer order set r_i=R_(i-1)+q_i and v_i=V_(i-1)+u_i with one written add. This backward exact-total-barycenter recurrence is the only allowed inverse. Then perform the registered single binary64 conversion and one binary64 math.fsum barycenter correction.",
     "final_reconstruction_rule": "Derive all retained orbital elements, periods, guard metrics, D0, steps, and checkpoint epochs only from the final corrected binary64 Cartesian state using a standalone exact-operation-order implementation; never retain nominal pre-rounding values in place of reconstructed ones.",
     "step_and_epoch_rounding": "For each divisor, fixed_step=float(P_inner/divisor) using binary64 division; checkpoint epoch for integer index k is float(initial_epoch+k*fixed_step) using one binary64 multiplication followed by one binary64 addition, with no cumulative addition.",
     "constructor_source_change_after_pulse_allowed": false,
@@ -862,6 +881,6 @@
     "algorithm": "SHA-256",
     "canonicalization": "SORTED_KEYS_COMPACT_ASCII_EXCLUDING_CONTENT_INTEGRITY",
     "domain": "jxplanetx.wisdom-holman-v9-hierarchical-holdout-protocol.v1",
-    "content_sha256": "7b1f023d247ac0fe8b0bbb43d214830d1d03ada81dff0beb67a8c297775b1354"
+    "content_sha256": "c37e1b8360e4b98601049df5abaaa8ec52c9ac4ae3de63272bf39bfe26da4540"
   }
 }
