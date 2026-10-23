@@ -1,0 +1,114 @@
+{
+  "claim_ceiling": "FROZEN_RC17_V9_NONENCOUNTERING_NEWTONIAN_TWO_BODY_PORTFOLIO_AND_WEAK_THREE_BODY_BENCHMARK_ON_DECLARED_LINUX_X86_64_GCC_RUNTIME_ONLY",
+  "claim_controls": {
+    "external_review_completed": false,
+    "independent_host_reproduction_completed": false,
+    "local_formal_execution_completed": true,
+    "local_live_reproduction_completed": true,
+    "outcome_blind_holdout_completed": false,
+    "scientific_approval_granted": false
+  },
+  "content_integrity": {
+    "algorithm": "SHA-256",
+    "canonicalization": "SORTED_KEYS_COMPACT_ASCII_EXCLUDING_CONTENT_INTEGRITY",
+    "content_sha256": "21ffa83ba3ca7e37cf2e477703fc6d804155e3659dfc1b1662d2b13e71362527",
+    "domain": "jxplanetx.wisdom-holman-v9-independent-review-handoff.v1"
+  },
+  "engineering_evidence": {
+    "build_a_artifacts_manifest": {
+      "path": "runs/jx_wh_v9_scientific_qualification_v1/engineering/build_a_ARTIFACTS_v1.json",
+      "sha256": "38f2458f2fd215f775fbc0e93e2dfe226e88d05858d2278f503970eb9b6cb607",
+      "size_bytes": 713
+    },
+    "build_b_artifacts_manifest": {
+      "path": "runs/jx_wh_v9_scientific_qualification_v1/engineering/build_b_ARTIFACTS_v1.json",
+      "sha256": "38f2458f2fd215f775fbc0e93e2dfe226e88d05858d2278f503970eb9b6cb607",
+      "size_bytes": 713
+    },
+    "engineering_receipt": {
+      "content_sha256": "0538d5a1dcf988386b6d322fbfa434f4f11d7f3b598fe5655619d75745e4261b",
+      "path": "runs/jx_wh_v9_scientific_qualification_v1/engineering/engineering_receipt_v1.json",
+      "sha256": "8cf3f4b8b038095a817617bfd8938b0e7f4992d16807236ab4e9f3b7815efb44",
+      "size_bytes": 4310
+    },
+    "normal_log": {
+      "content_sha256": "f4c459f23051734215e6673ce67ced0e25ebdc0b848b80b58727f47f826a3ecf",
+      "path": "runs/jx_wh_v9_scientific_qualification_v1/engineering/normal_log_v1.json",
+      "sha256": "d9a0057d7112c57d8d87ae48a6fdb7b5636c12d44eed4a48ea570154ba858624",
+      "size_bytes": 1574,
+      "tests_run": 52
+    },
+    "optimized_log": {
+      "content_sha256": "1ee5a377a3ad042ac995df037f66ce6bcf44ee05072c93311628266d4344eebb",
+      "path": "runs/jx_wh_v9_scientific_qualification_v1/engineering/optimized_log_v1.json",
+      "sha256": "c913de1eea3bf8a5f178ad6188a2458594530fd58fbf08f0b9542df751f57e3b",
+      "size_bytes": 1580,
+      "tests_run": 52
+    },
+    "sdist": {
+      "build_a_and_b_byte_identical": true,
+      "filename": "jxplanetx-0.6.0rc17.tar.gz",
+      "sha256": "a68e968f748f0fc840fd155fc7157795d7c0b39dd455b9982e8169de4fe940f7",
+      "size_bytes": 964324
+    },
+    "wheel": {
+      "build_a_and_b_byte_identical": true,
+      "filename": "jxplanetx-0.6.0rc17-cp314-cp314-linux_x86_64.whl",
+      "sha256": "f906c8c31a51590c3aba97f5eb6417b8d023b167829403723fe093939581ce4d",
+      "size_bytes": 1179068,
+      "v9_extension_sha256": "f11d0f2c0a447e12d44566c7a325a19d664aaa937fb46e34fcf165983e2eba83"
+    }
+  },
+  "external_completion_required": {
+    "additive_signed_approval_artifact_only": true,
+    "independently_administered_supported_host": true,
+    "named_external_reviewer": true,
+    "outcome_blind_hierarchical_holdout": true,
+    "reviewer_identity_independently_anchored": true,
+    "reviewer_signature_namespace": "jxplanetx-wisdom-holman-v9-scientific-review-v1",
+    "same_owner_or_author_administered_host_disallowed": true
+  },
+  "live_reproduction": {
+    "canonical_report_byte_equal": true,
+    "completed": true,
+    "engineering_paths_revalidated": true,
+    "execution_head": "d1248279a9054d428d4ce9e59dc12937a35009e5",
+    "external_authority": false,
+    "formal_profile_reexecuted": true,
+    "local_self_attested_command_receipt": true,
+    "runner_sha256": "1dc5b36c1318081f2a4a1a5dacd721e10b1b584d3c132d514b417e74108c6eee",
+    "same_host": true,
+    "test_sha256": "028dc698424f8581b4112e1076478c984bcb8159f982e01c7bc7df371dcda779"
+  },
+  "local_result": {
+    "all_gates_passed": true,
+    "analytic_case_count": 240,
+    "content_sha256": "68e8301760f5cb74b32427097e84be1a31ce110a0ee36fa86bb520e84c130e86",
+    "decision_status": "ELIGIBLE_FOR_INDEPENDENT_REVIEW",
+    "external_review_completed": false,
+    "gate_count": 93,
+    "gates_passed": 93,
+    "path": "runs/jx_wh_v9_scientific_qualification_v1/result_v1.json",
+    "profile": "formal",
+    "scientific_approval_granted": false,
+    "sha256": "807a8d40dff32e229876f47818578fd0e6a0aa305f1780e8a8f40aebad55b5d9",
+    "size_bytes": 20988601
+  },
+  "qualification_id": "JX_WH_V9_SCIENTIFIC_QUALIFICATION_V1",
+  "registration": {
+    "content_sha256": "3487d544848381c75ae51360ae7cd99e9db4cac9e2332115ee767ebe7636b7e3",
+    "containing_commit": "d1248279a9054d428d4ce9e59dc12937a35009e5",
+    "containing_commit_parent": "7b3c2b75e1731b70745d19c77f8fce96d3066a2d",
+    "parent_diff_only_registration": true,
+    "path": "runs/jx_wh_v9_scientific_qualification_v1/execution_registration_v1.json",
+    "sha256": "7e4e9ffa1ed7718977a5532cb51c74187730d9885ce3b23117c55585aa2aa533",
+    "size_bytes": 5869
+  },
+  "schema": "jxplanetx.wisdom-holman-v9-independent-review-handoff.v1",
+  "source_access": {
+    "immutable_git_commit": "d1248279a9054d428d4ce9e59dc12937a35009e5",
+    "source_freeze_commit": "7b3c2b75e1731b70745d19c77f8fce96d3066a2d",
+    "source_freeze_tree": "dc90d41a1da682a2714732e424f4eb2536622d48"
+  },
+  "status": "AWAITING_OUTCOME_BLIND_HOLDOUT_INDEPENDENT_HOST_AND_NAMED_REVIEWER"
+}

@@ -1,6 +1,6 @@
 # Wisdom–Holman V9 scientific qualification v1
 
-Status: `REGISTERED_AWAITING_EXECUTION_EXTERNAL_REVIEW_REQUIRED`
+Status: `LOCAL_FORMAL_PASS_ELIGIBLE_FOR_INDEPENDENT_REVIEW_EXTERNAL_APPROVAL_WITHHELD`
 
 This directory registers a prospective independent-oracle execution for the
 exact rc17 V9 implementation.  It does not rename existing screening results
@@ -81,3 +81,24 @@ not sufficient for final approval until that holdout is completed.  Any later
 review or approval must be an additive signed artifact; the local formal
 report's `external_review_completed` and `scientific_approval_granted` fields
 remain false permanently.
+
+## Retained local result
+
+The registered formal execution at Git commit
+`d1248279a9054d428d4ce9e59dc12937a35009e5` completed with all 93 conjunctive
+gates passing and status `ELIGIBLE_FOR_INDEPENDENT_REVIEW`.  The retained
+`result_v1.json` is 20,988,601 bytes, has raw SHA-256
+`807a8d40dff32e229876f47818578fd0e6a0aa305f1780e8a8f40aebad55b5d9`,
+and has domain-separated content SHA-256
+`68e8301760f5cb74b32427097e84be1a31ce110a0ee36fa86bb520e84c130e86`.
+It covers all 240 registered analytic cases and the complete registered weak
+three-body workload.  Intrinsic verification and a full same-host
+`--verify-live` reproduction both passed before the result was retained.
+
+The engineering logs and manifests used by that execution are retained below
+`engineering/`; `independent_review_handoff_v1.json` binds those files, the
+registration, and the result.  To repeat live verification, check out the
+recorded execution commit above and use the separately registered build-A and
+build-B artifacts.  The later evidence-retention commit is not the execution
+checkout.  This local result is not an external reproduction, an outcome-blind
+holdout, or scientific approval.
