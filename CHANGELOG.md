@@ -7,6 +7,17 @@ claim boundaries remain documented in the corresponding locked run reports.
 
 ### Added
 
+- Added `jxplanetx.fast_wisdom_holman_v9` as a separate supported explicit
+  opt-in route on its fail-closed Linux x86_64 GCC binary64 platform boundary,
+  requiring round-to-nearest, masked MXCSR exceptions, and FTZ/DAZ disabled,
+  with complete recursive C-source custody, installed wheel/source-archive
+  execution smoke coverage, and normal/`-OO` gates. V3 remains the unchanged
+  default because V9 differs from it bitwise on some irregular, backward, and
+  two-body schedules. V9 keeps distinct API/result/certificate identities and
+  remains `SCREENING_ONLY`, unqualified, non-production, and unauthorized for
+  registry use. The evidence establishes neither process `fenv`
+  exception-flag/`errno` equivalence nor a general portability or
+  performance-superiority claim.
 - Adopted **JX Scientific Engine** as the official project name. The
   `jxplanetx` distribution, import package, and command remain unchanged for
   backward compatibility; historical records and identifiers are not renamed.

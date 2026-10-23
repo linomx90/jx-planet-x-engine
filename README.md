@@ -1,8 +1,8 @@
 # JX Scientific Engine
 
-**Version:** 0.6.0rc16
+**Version:** 0.6.0rc17
 
-**Release date:** 2026-09-24
+**Release date:** 2026-10-22
 
 **License:** Proprietary — all rights reserved
 **Scientific claim state:** `SCREENING_ONLY`
@@ -34,7 +34,7 @@ than copied into the source tree.
 The installable distribution, Python package, and command remain `jxplanetx`
 for backward compatibility. Historical release titles, artifact schemas,
 identifiers, URLs, and evidence records retain their original names. Version
-0.6.0rc16 carries the immutable General Dynamics
+0.6.0rc17 carries the immutable General Dynamics
 registry v18 evidence historically bound to rc3, retains the supported
 measured small-N CPU/CUDA interfaces, and advances the supported fast
 Wisdom--Holman CPU screen to a checkpoint-synchronized native map. Its default
@@ -202,6 +202,21 @@ as its exact fallback. This API remains
 `SCREENING_ONLY`, supports at most 32 bodies inside the existing narrow
 hierarchical elliptic domain, and adds no close-encounter switching,
 qualification, production authorization, or general speed claim.
+
+The additive `jxplanetx.fast_wisdom_holman_v9` interface exposes V9 as a
+supported explicit opt-in only when its fail-closed runtime gate confirms the
+frozen Linux x86_64, GCC, little-endian IEEE-binary64 environment with
+round-to-nearest, every MXCSR exception masked, and MXCSR FTZ/DAZ disabled.
+The V3
+`jxplanetx.fast_wisdom_holman` interface remains the default and is unchanged.
+V9 has its own API, result, certificate, runtime, and recursive-source
+identities because promotion testing found small bitwise differences from V3
+on irregular, backward, and two-body schedules. V9 remains `SCREENING_ONLY`,
+unqualified, non-production, and unauthorized for registry use. Its V8
+equivalence evidence covers returned values, status, buffers, metrics,
+counters, cache, and fallback state; it does not claim process `fenv`
+exception-flag or `errno` equivalence. This narrow support statement is not a
+general portability claim or a performance-superiority claim.
 
 `integrate_hybrid_wisdom_holman_rkf78_trajectory` implements the narrowly
 defined
@@ -531,7 +546,7 @@ Build the release artifacts twice from the declared package-only input boundary
 and require byte identity with:
 
 ```bash
-python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc16
+python3 tools/build_release.py --output-dir /tmp/jxplanetx-0.6.0rc17
 ```
 
 The builder requires the exact backend pinned in `pyproject.toml`, normalizes
@@ -751,7 +766,7 @@ and validation command.
 ## Citation and license
 
 Citation metadata and human authorship are recorded in `CITATION.cff` and
-`AUTHORS.md`. Original JX material in version `0.6.0rc16` is proprietary and
+`AUTHORS.md`. Original JX material in version `0.6.0rc17` is proprietary and
 all rights are reserved by Lino Avila; copying, modification, distribution,
 commercial use, and derivative works require prior written authorization.
 Optional third-party packages retain their own licenses. Earlier public JX

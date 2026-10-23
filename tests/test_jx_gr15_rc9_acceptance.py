@@ -21,7 +21,7 @@ class GR15RC9ArtifactAcceptanceTests(unittest.TestCase):
         self.assertEqual(
             hashlib.sha256(PROTOCOL.read_bytes()).hexdigest(), PROTOCOL_SHA256
         )
-        self.assertEqual(jxplanetx.__version__, "0.6.0rc16")
+        self.assertEqual(jxplanetx.__version__, "0.6.0rc17")
         with self.assertRaisesRegex(
             acceptance.RC9AcceptanceError, "source binding changed"
         ):

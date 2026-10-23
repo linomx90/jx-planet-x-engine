@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "JX Celestial Dynamics Framework"
 type: software
-version: "0.6.0rc16"
-date-released: 2026-09-24
+version: "0.6.0rc17"
+date-released: 2026-10-22
 authors:
   - family-names: Avila
     given-names: Lino

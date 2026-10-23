@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-__version__ = "0.6.0rc16"
+__version__ = "0.6.0rc17"
 
 _GR15_EXPORTS = (
     "GR15ContractError",

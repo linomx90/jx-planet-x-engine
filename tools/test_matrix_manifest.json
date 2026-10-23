@@ -38,6 +38,7 @@
         "tests/test_engine_wisdom_holman.py",
         "tests/test_ensemble_validation.py",
         "tests/test_fast_wisdom_holman.py",
+        "tests/test_fast_wisdom_holman_v9.py",
         "tests/test_force_registry_v5.py",
         "tests/test_gr15.py",
         "tests/test_gr15_eih_1pn.py",
@@ -71,7 +72,8 @@
         "tests/test_v5_reference_integrator.py",
         "tests/test_v5_solar_1pn_execution_prerequisites.py",
         "tests/test_v5_solar_1pn_preexecution_handoff_v1.py",
-        "tests/test_v5_solar_1pn_q8q9_prerequisites.py"
+        "tests/test_v5_solar_1pn_q8q9_prerequisites.py",
+        "tests/test_wisdom_holman_v9.py"
       ]
     },
     {

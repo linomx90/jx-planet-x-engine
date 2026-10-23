@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jxplanetx"
-version = "0.6.0rc16"
+version = "0.6.0rc17"
 description = "JX Scientific Engine: falsification-first physical modeling with explicit scientific claim controls"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -42,6 +42,9 @@ jxplanetx = "jxplanetx.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+jxplanetx = ["*.c", "*.h"]
 
 [[tool.setuptools.ext-modules]]
 name = "jxplanetx._smalln_cpu"
@@ -84,6 +87,55 @@ name = "jxplanetx._wisdom_holman_cpu_v4"
 sources = [
   "src/jxplanetx/_wisdom_holman_cpu_v4_module.c",
   "src/jxplanetx/_wisdom_holman_loop_v4.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._wisdom_holman_cpu_v7"
+sources = [
+  "src/jxplanetx/_wisdom_holman_cpu_v7_module.c",
+  "src/jxplanetx/_wisdom_holman_loop_v7.c",
+]
+depends = [
+  "src/jxplanetx/_wisdom_holman_loop_v6.c",
+  "src/jxplanetx/_wisdom_holman_loop_v4.c",
+  "src/jxplanetx/_wisdom_holman_loop_v3.c",
+  "src/jxplanetx/_wisdom_holman_loop_v2.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._wisdom_holman_cpu_v8"
+sources = [
+  "src/jxplanetx/_wisdom_holman_cpu_v8_module.c",
+  "src/jxplanetx/_wisdom_holman_loop_v8.c",
+]
+depends = [
+  "src/jxplanetx/_wisdom_holman_loop_v7.c",
+  "src/jxplanetx/_wisdom_holman_loop_v6.c",
+  "src/jxplanetx/_wisdom_holman_loop_v4.c",
+  "src/jxplanetx/_wisdom_holman_loop_v3.c",
+  "src/jxplanetx/_wisdom_holman_loop_v2.c",
+]
+libraries = ["m"]
+extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]
+
+[[tool.setuptools.ext-modules]]
+name = "jxplanetx._wisdom_holman_cpu_v9"
+sources = [
+  "src/jxplanetx/_wisdom_holman_cpu_v9_module.c",
+  "src/jxplanetx/_wisdom_holman_loop_v9.c",
+]
+depends = [
+  "src/jxplanetx/_wisdom_holman_cpu_v8_module.c",
+  "src/jxplanetx/_wisdom_holman_loop_v8.c",
+  "src/jxplanetx/_wisdom_holman_loop_v7.c",
+  "src/jxplanetx/_wisdom_holman_loop_v6.c",
+  "src/jxplanetx/_wisdom_holman_loop_v4.c",
+  "src/jxplanetx/_wisdom_holman_loop_v3.c",
+  "src/jxplanetx/_wisdom_holman_loop_v2.c",
 ]
 libraries = ["m"]
 extra-compile-args = ["-O3", "-g0", "-std=c11", "-fno-fast-math", "-ffp-contract=off"]

@@ -18,7 +18,7 @@ from tools.build_release import (
     sha256,
     stage_source,
 )
-from tools.run_local_test_matrix import require_python
+from tools.run_local_test_matrix import build_lanes, load_manifest, require_python
 from tools.run_cuda_release_gate import CUDA_TEST_TARGETS, EXPECTED_TEST_COUNT
 
 
@@ -59,7 +59,7 @@ class ReproducibleReleaseTests(unittest.TestCase):
 
     def test_release_identity_and_exact_backend_pin(self) -> None:
         version, backend = project_metadata(ROOT)
-        self.assertEqual(version, "0.6.0rc16")
+        self.assertEqual(version, "0.6.0rc17")
         self.assertEqual(backend, "78.1.1")
         metadata = tomllib.loads((ROOT / "pyproject.toml").read_text())
         self.assertEqual(
@@ -79,6 +79,23 @@ class ReproducibleReleaseTests(unittest.TestCase):
         self.assertIn("Copyright (c) 2026 Lino Avila", license_text)
         self.assertIn("All rights reserved", license_text)
         self.assertNotIn("Permission is hereby granted", license_text)
+
+    def test_engine_ci_aggregate_runs_supported_and_v9_wh_gates(self) -> None:
+        profiles = load_manifest(ROOT / "tools/test_matrix_manifest.json")
+        lanes = build_lanes(
+            "engine",
+            ROOT / "library",
+            profiles,
+            runtime_python=None,
+        )
+        selected = {lane.name for lane in lanes}
+        self.assertIn("engine:test_fast_wisdom_holman.py", selected)
+        self.assertIn("engine:test_fast_wisdom_holman_v9.py", selected)
+        self.assertIn("engine:test_wisdom_holman_v9.py", selected)
+        self.assertEqual(
+            sha256(ROOT / "tests/test_fast_wisdom_holman_v9.py"),
+            "1688babd7f62c638821013f027f9a4118518ef1568d99ec5f57877b648140ba8",
+        )
 
     def test_distribution_stage_excludes_research_evidence(self) -> None:
         self.assertEqual(
@@ -127,9 +144,39 @@ class ReproducibleReleaseTests(unittest.TestCase):
                 "src/jxplanetx/_wisdom_holman_loop_v2.c",
                 staged_files,
             )
+            for version in ("v6", "v7", "v8", "v9"):
+                self.assertIn(
+                    f"src/jxplanetx/_wisdom_holman_loop_{version}.c",
+                    staged_files,
+                )
+            for version in ("v7", "v8", "v9"):
+                self.assertIn(
+                    f"src/jxplanetx/_wisdom_holman_cpu_{version}_module.c",
+                    staged_files,
+                )
             self.assertIn(
                 "src/jxplanetx/fast_wisdom_holman.py",
                 staged_files,
+            )
+            self.assertIn(
+                "src/jxplanetx/fast_wisdom_holman_v9.py",
+                staged_files,
+            )
+            staged_v9_wrapper = (
+                stage / "src/jxplanetx/fast_wisdom_holman_v9.py"
+            ).read_text(encoding="utf-8")
+            self.assertIn(
+                'SUPPORT_STATUS = "SUPPORTED_OPT_IN_LINUX_X86_64_GCC"',
+                staged_v9_wrapper,
+            )
+            self.assertIn(
+                'SCIENTIFIC_CLAIM_STATE = "SCREENING_ONLY"',
+                staged_v9_wrapper,
+            )
+            self.assertIn("PUBLIC_DEFAULT = False", staged_v9_wrapper)
+            self.assertEqual(
+                sha256(stage / "src/jxplanetx/fast_wisdom_holman_v9.py"),
+                "089a8d738aed908a4b1c1af74e74ac214062e692d74bb7940e35a16686d47a3d",
             )
             self.assertIn("src/jxplanetx/_gr15_core.c", staged_files)
             self.assertIn("src/jxplanetx/_gr15_core.h", staged_files)
@@ -156,7 +203,11 @@ class ReproducibleReleaseTests(unittest.TestCase):
     def test_native_extensions_are_exactly_scoped_and_screening_only(self) -> None:
         metadata = tomllib.loads((ROOT / "pyproject.toml").read_text())
         extensions = metadata["tool"]["setuptools"]["ext-modules"]
-        self.assertEqual(len(extensions), 9)
+        self.assertEqual(
+            metadata["tool"]["setuptools"]["package-data"],
+            {"jxplanetx": ["*.c", "*.h"]},
+        )
+        self.assertEqual(len(extensions), 12)
         self.assertEqual(extensions[0]["name"], "jxplanetx._smalln_cpu")
         self.assertEqual(
             extensions[0]["sources"],
@@ -289,7 +340,113 @@ class ReproducibleReleaseTests(unittest.TestCase):
             (ROOT / "src/jxplanetx/_wisdom_holman_cpu_v4_module.c").read_text(),
         )
         self.assertEqual(
-            extensions[5],
+            tuple(extension["name"] for extension in extensions[5:8]),
+            (
+                "jxplanetx._wisdom_holman_cpu_v7",
+                "jxplanetx._wisdom_holman_cpu_v8",
+                "jxplanetx._wisdom_holman_cpu_v9",
+            ),
+        )
+        promoted_sources = (
+            (
+                "v7",
+                "dba08b8c899f4039e5e24fbb897f23c57c99da00deb9e084960fb910cd96b94c",
+                "337c92c1ea4aba54f64e8e336889a02dccb23d2bd6c275dedfac39e73fd9c0bb",
+                [
+                    "src/jxplanetx/_wisdom_holman_loop_v6.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v4.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v3.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v2.c",
+                ],
+            ),
+            (
+                "v8",
+                "fcf77481d241902f2c05eabaaac9bfa89f208e645d9ae760baf67dcd03e9d288",
+                "6fe8b4fcda8947bc21aacce56d9e3383a1d5d579176c742a994628967927b004",
+                [
+                    "src/jxplanetx/_wisdom_holman_loop_v7.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v6.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v4.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v3.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v2.c",
+                ],
+            ),
+            (
+                "v9",
+                "90468c9f527eefb6347b31e8e371310d1e054e2703bb6043baaae71d4078d654",
+                "680b4f887fa82561bb503a7982367f68c9c6648cd67ed8b926f1ae87e0d41bd2",
+                [
+                    "src/jxplanetx/_wisdom_holman_cpu_v8_module.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v8.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v7.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v6.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v4.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v3.c",
+                    "src/jxplanetx/_wisdom_holman_loop_v2.c",
+                ],
+            ),
+        )
+        for offset, (version, wrapper_sha, loop_sha, dependencies) in enumerate(
+            promoted_sources,
+            start=5,
+        ):
+            with self.subTest(promoted_version=version):
+                self.assertEqual(
+                    extensions[offset]["sources"],
+                    [
+                        (
+                            "src/jxplanetx/"
+                            f"_wisdom_holman_cpu_{version}_module.c"
+                        ),
+                        f"src/jxplanetx/_wisdom_holman_loop_{version}.c",
+                    ],
+                )
+                self.assertEqual(extensions[offset]["depends"], dependencies)
+                self.assertEqual(extensions[offset]["libraries"], ["m"])
+                self.assertEqual(
+                    extensions[offset]["extra-compile-args"],
+                    [
+                        "-O3",
+                        "-g0",
+                        "-std=c11",
+                        "-fno-fast-math",
+                        "-ffp-contract=off",
+                    ],
+                )
+                self.assertEqual(
+                    sha256(
+                        ROOT
+                        / (
+                            "src/jxplanetx/"
+                            f"_wisdom_holman_cpu_{version}_module.c"
+                        )
+                    ),
+                    wrapper_sha,
+                )
+                self.assertEqual(
+                    sha256(
+                        ROOT
+                        / f"src/jxplanetx/_wisdom_holman_loop_{version}.c"
+                    ),
+                    loop_sha,
+                )
+                wrapper_text = (
+                    ROOT
+                    / (
+                        "src/jxplanetx/"
+                        f"_wisdom_holman_cpu_{version}_module.c"
+                    )
+                ).read_text()
+                if version == "v9":
+                    self.assertIn("screening only.", wrapper_text)
+                    self.assertIn(
+                        '#include "_wisdom_holman_cpu_v8_module.c"',
+                        wrapper_text,
+                    )
+                else:
+                    self.assertIn('"SCREENING_ONLY"', wrapper_text)
+        self.assertEqual(
+            extensions[8],
             {
                 "name": "jxplanetx._gr15_cpu",
                 "sources": [
@@ -315,7 +472,7 @@ class ReproducibleReleaseTests(unittest.TestCase):
             "9a6cb532e88c732f6653c2763d9510036432d9930d930c19a5d259a03b3b514c",
         )
         self.assertEqual(
-            extensions[6],
+            extensions[9],
             {
                 "name": "jxplanetx._gr15_v3_cpu",
                 "sources": [
@@ -343,7 +500,7 @@ class ReproducibleReleaseTests(unittest.TestCase):
             "036d1dc7e4e2e26c908c6dde9ff27bdf6a5804b88aa3f3e374f1f512642c1e41",
         )
         self.assertEqual(
-            extensions[7],
+            extensions[10],
             {
                 "name": "jxplanetx._eih_1pn_cpu",
                 "sources": [
@@ -366,7 +523,7 @@ class ReproducibleReleaseTests(unittest.TestCase):
             "de4b173ff26aab1a5d012aca79b2687c81ce8ef97db290e48b00ca3d21f40746",
         )
         self.assertEqual(
-            extensions[8],
+            extensions[11],
             {
                 "name": "jxplanetx._gr15_eih_1pn_cpu",
                 "sources": [
@@ -416,6 +573,13 @@ class ReproducibleReleaseTests(unittest.TestCase):
         )
         self.assertIn("_wisdom_holman_cpu_v3", workflow)
         self.assertIn("_wisdom_holman_cpu_v4", workflow)
+        self.assertIn("_wisdom_holman_cpu_v7", workflow)
+        self.assertIn("_wisdom_holman_cpu_v8", workflow)
+        self.assertIn("_wisdom_holman_cpu_v9", workflow)
+        self.assertIn("fast_wisdom_holman_v9_runtime_identity", workflow)
+        self.assertIn("integrate_fast_wisdom_holman_v9_trajectory", workflow)
+        self.assertIn("SUPPORTED_OPT_IN_LINUX_X86_64_GCC", workflow)
+        self.assertIn('assert jxplanetx.__version__ == "0.6.0rc17"', workflow)
         self.assertIn("_gr15_cpu", workflow)
         self.assertIn("_gr15_v3_cpu", workflow)
         self.assertIn("_eih_1pn_cpu", workflow)

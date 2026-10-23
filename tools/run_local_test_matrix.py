@@ -403,12 +403,18 @@ def build_lanes(
         return [profile_id for profile_id in profile_ids if profile_id in profiles]
 
     if requested == "engine":
+        explicitly_routed_engine_tests = {
+            "test_cli_engine_job.py",
+            "test_fast_wisdom_holman.py",
+            "test_fast_wisdom_holman_v9.py",
+            "test_wisdom_holman_v9.py",
+        }
         files = tuple(
             relative
             for relative in profiles["live-current"].files
             if (
                 Path(relative).name.startswith("test_engine")
-                or Path(relative).name == "test_cli_engine_job.py"
+                or Path(relative).name in explicitly_routed_engine_tests
             )
         )
         return [

@@ -74,6 +74,8 @@ jobs:
           for runtime in "$RUNNER_TEMP/wheel-smoke/bin/python" "$RUNNER_TEMP/sdist-smoke/bin/python"; do
             "$runtime" - <<'PY'
           import jxplanetx
+          import math
+          import numpy as np
           import os
           from jxplanetx import (
               _eih_1pn_cpu,
@@ -83,18 +85,35 @@ jobs:
               _wisdom_holman_cpu_v2,
               _wisdom_holman_cpu_v3,
               _wisdom_holman_cpu_v4,
+              _wisdom_holman_cpu_v7,
+              _wisdom_holman_cpu_v8,
+              _wisdom_holman_cpu_v9,
           )
           from jxplanetx.engine import (
+              BackendSpec,
               CodeStatus,
+              FixedStepWisdomHolmanSpec,
+              ForcePlan,
               LUNAR_EPHEMERIS_V1_METHOD_ID,
+              NewtonianPointMass,
+              ParameterMetadata,
+              Provenance,
+              StateSnapshot,
               get_capability,
               integrate_lunar_ephemeris_v1,
+          )
+          from jxplanetx.fast_wisdom_holman_v9 import (
+              PUBLIC_DEFAULT as V9_PUBLIC_DEFAULT,
+              SCIENTIFIC_CLAIM_STATE as V9_SCIENTIFIC_CLAIM_STATE,
+              SUPPORT_STATUS as V9_SUPPORT_STATUS,
+              fast_wisdom_holman_v9_runtime_identity,
+              integrate_fast_wisdom_holman_v9_trajectory,
           )
           from jxplanetx.general_dynamics import registry_summary
           summary = registry_summary()
           from jxplanetx.gr15 import gr15_runtime_identity
           assert jxplanetx.__version__ == os.environ["JX_PACKAGE_VERSION"]
-          assert jxplanetx.__version__ == "0.6.0rc16"
+          assert jxplanetx.__version__ == "0.6.0rc17"
           assert _gr15_cpu.METHOD_ID == "JX_GAUSS_RADAU15_V2"
           assert _gr15_v3_cpu.METHOD_ID == "JX_GAUSS_RADAU15_V3"
           assert _eih_1pn_cpu.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
@@ -102,6 +121,124 @@ jobs:
           assert _wisdom_holman_cpu_v2.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
           assert _wisdom_holman_cpu_v3.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
           assert _wisdom_holman_cpu_v4.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert _wisdom_holman_cpu_v7.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert _wisdom_holman_cpu_v8.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert _wisdom_holman_cpu_v9.SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert (
+              _wisdom_holman_cpu_v9._nextafter_bits(0.0, 1.0)
+              == math.nextafter(0.0, 1.0)
+          )
+          assert (
+              _wisdom_holman_cpu_v9.adaptive_g_bundle(1.0, 0.5)
+              == _wisdom_holman_cpu_v8.adaptive_g_bundle(1.0, 0.5)
+          )
+          v9_identity = fast_wisdom_holman_v9_runtime_identity()
+          assert V9_SUPPORT_STATUS == "SUPPORTED_OPT_IN_LINUX_X86_64_GCC"
+          assert V9_SCIENTIFIC_CLAIM_STATE == "SCREENING_ONLY"
+          assert V9_PUBLIC_DEFAULT is False
+          assert v9_identity["support_status"] == V9_SUPPORT_STATUS
+          assert v9_identity["scientific_claim_state"] == "SCREENING_ONLY"
+          assert v9_identity["public_default"] is False
+          assert v9_identity["registry_authorized"] is False
+          assert v9_identity["qualification_authorized"] is False
+          assert v9_identity["production_authorized"] is False
+          assert v9_identity["superiority_claimed"] is False
+          assert (
+              dict(v9_identity["runtime_fp_environment"])[
+                  "mxcsr_all_exceptions_masked"
+              ]
+              is True
+          )
+          assert (
+              v9_identity["platform_policy"]["mxcsr_all_exceptions_masked"]
+              is True
+          )
+          provenance = Provenance(
+              "jx.release-smoke.v9",
+              "installed package smoke",
+              "1",
+              "1" * 64,
+          )
+          gm = np.asarray((1.0, 0.001), dtype=np.float64)
+          total_gm = float(np.sum(gm))
+          orbital_speed = math.sqrt(total_gm)
+          snapshot = StateSnapshot(
+              snapshot_id="jx.release-smoke.v9.snapshot",
+              epoch=0.0,
+              time_scale="TDB",
+              frame="BARYCENTRIC_INERTIAL",
+              origin="BARYCENTER",
+              axes="ICRS_ALIGNED",
+              length_unit="L",
+              time_unit="T",
+              mass_unit="M",
+              unit_system_id="jx.release-smoke.synthetic",
+              body_ids=("primary", "secondary"),
+              positions=np.asarray(
+                  (
+                      (-gm[1] / total_gm, 0.0, 0.0),
+                      (gm[0] / total_gm, 0.0, 0.0),
+                  ),
+                  dtype=np.float64,
+              ),
+              velocities=np.asarray(
+                  (
+                      (0.0, -(gm[1] / total_gm) * orbital_speed, 0.0),
+                      (0.0, (gm[0] / total_gm) * orbital_speed, 0.0),
+                  ),
+                  dtype=np.float64,
+              ),
+              gravitational_parameters=gm,
+              masses=gm.copy(),
+              radii=np.zeros(2, dtype=np.float64),
+              massive=np.ones(2, dtype=np.bool_),
+              provenance=provenance,
+          )
+          metadata = ParameterMetadata(
+              "state.gravitational_parameters",
+              "L^3/T^2",
+              provenance,
+              None,
+              None,
+              -1.0,
+              10.0,
+          )
+          plan = ForcePlan(
+              "jx.release-smoke.v9.plan",
+              BackendSpec("numpy", "cpu", 2),
+              (
+                  NewtonianPointMass(
+                      snapshot.body_ids,
+                      snapshot.body_ids,
+                      snapshot.unit_system_id,
+                      (metadata,),
+                  ),
+              ),
+          )
+          period = 2.0 * math.pi / math.sqrt(total_gm)
+          spec = FixedStepWisdomHolmanSpec(
+              checkpoint_step_indices=(0, 1),
+              fixed_step=period / 64.0,
+              maximum_steps=1,
+              jacobi_body_order=snapshot.body_ids,
+              minimum_encounter_pair_separation=0.01,
+              minimum_jacobi_periapse=0.05,
+              maximum_initial_barycenter_position_norm=1.0e-12,
+              maximum_initial_barycenter_velocity_norm=1.0e-12,
+          )
+          v9_result = integrate_fast_wisdom_holman_v9_trajectory(
+              snapshot,
+              plan,
+              spec,
+          )
+          assert v9_result.positions.shape == (2, 2, 3)
+          assert v9_result.support_status == V9_SUPPORT_STATUS
+          assert v9_result.scientific_claim_state == "SCREENING_ONLY"
+          assert v9_result.public_default is False
+          assert v9_result.registry_authorized is False
+          assert v9_result.qualification_authorized is False
+          assert v9_result.production_authorized is False
+          assert v9_result.superiority_claimed is False
           assert gr15_runtime_identity()["method_id"] == "JX_GAUSS_RADAU15_V3"
           assert gr15_runtime_identity()["scientific_claim_state"] == "SCREENING_ONLY"
           lunar = get_capability(LUNAR_EPHEMERIS_V1_METHOD_ID)
