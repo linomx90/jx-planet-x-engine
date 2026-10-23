@@ -19,6 +19,13 @@ second independently administered supported host and a named external
 reviewer/signature.  Those requirements cannot be satisfied by the engine or
 by its authors grading their own output.
 
+Protocol revision 2 preserves the registered revision-1 SHA-256 and records
+one pre-execution constructibility amendment.  A dry-run showed that
+reconstructing the nominal binary64 `e = 0.9` boundary can round just above the
+engine's inclusive eccentricity guard.  Before any formal scientific result
+was generated, that boundary cell was moved to `e = 0.899`.  No metric,
+threshold, oracle, horizon, or decision rule changed.
+
 The claim ceiling covers only the frozen non-encountering Newtonian two-body
 portfolio and weak hierarchical three-body benchmark on the declared Linux
 x86-64 GCC runtime.  It does not authorize production ephemerides,

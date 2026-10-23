@@ -1,8 +1,10 @@
 {
   "schema": "jxplanetx.wisdom-holman-v9-scientific-qualification-protocol.v1",
+  "protocol_revision": 2,
+  "supersedes_protocol_sha256": "d4c71fbfcb72340574b9d83ee41e5c36f1e4d252a0d778ea9df7365cfb1b5660",
   "qualification_id": "JX_WH_V9_SCIENTIFIC_QUALIFICATION_V1",
   "status": "REGISTERED_AWAITING_EXECUTION_EXTERNAL_REVIEW_REQUIRED",
-  "registration_kind": "RETROSPECTIVE_CANDIDATE_PROSPECTIVE_ORACLE_EXECUTION",
+  "registration_kind": "RETROSPECTIVE_CANDIDATE_PROSPECTIVE_ORACLE_EXECUTION_PREEXECUTION_CONSTRUCTIBILITY_AMENDMENT",
   "base_repository_commit": "c935be6fd16e9ff078e80a0ed2c7d8939efaa2ba",
   "candidate": {
     "package_version": "0.6.0rc17",
@@ -17,6 +19,12 @@
     "workload_previously_inspected": true,
     "outcome_blind_preregistration": false,
     "formal_result_generated_before_registration": false,
+    "preexecution_constructibility_amendment": {
+      "formal_scientific_metrics_inspected": false,
+      "observed_issue": "BINARY64_OSCULATING_ECCENTRICITY_RECONSTRUCTION_CAN_PLACE_THE_NOMINAL_0_9_BOUNDARY_ABOVE_THE_INCLUSIVE_DOMAIN_LIMIT",
+      "replacement": "THE_BOUNDARY_STRESS_CELL_USES_E_EQUALS_0_899",
+      "classification": "INPUT_CONSTRUCTIBILITY_CORRECTION_BEFORE_FORMAL_EXECUTION"
+    },
     "disclosed_development_observation": {
       "weak_three_body_position_error_p64": 0.00034886,
       "weak_three_body_position_error_p128": 0.000087206,
@@ -50,7 +58,7 @@
     "analytic_two_body_portfolio": {
       "case_count": 240,
       "semimajor_axis_au_like": [1e-06, 1.0, 1000000.0],
-      "eccentricity": [0.0, 0.3, 0.6, 0.85, 0.9],
+      "eccentricity": [0.0, 0.3, 0.6, 0.85, 0.899],
       "true_anomaly_radians": [0.0, 1.0471975511965976, 3.141592653589793, 5.235987755982989],
       "secondary_to_primary_gm_ratio": [1e-06, 0.009],
       "direction": [-1, 1],
