@@ -27,6 +27,15 @@ is run for a control. These mandatory contract checks are never counted in the
 draw has a domain-separated SHA-256 definition. There is no rejection sampling,
 replacement case, discretionary seed, or outcome-dependent subset.
 
+Protocol revision 2 transparently corrects one constructibility defect found
+after the first preregistration commit but before the registered pulse was
+available or accessed: the maximum-body-count rejection control has 33 bodies
+and therefore needs the deterministic ID `secondary_32`, while revision 1 had
+described IDs only through `secondary_31`. Revision 2 extends only that ID rule,
+records the superseded commit and both superseded protocol hashes, and changes
+no scientific case, gate, candidate, oracle, or randomness choice. No holdout
+candidate or oracle execution occurred before this correction.
+
 The confirmatory interaction stress targets a reconstructed force ratio in
 `[0.0145, 0.0155]` with a frozen unequal-mass construction, at least 3.5
 mutual-Hill radii of initial adjacent separation, and all other guards inside.

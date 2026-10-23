@@ -1,10 +1,26 @@
 {
   "schema": "jxplanetx.wisdom-holman-v9-hierarchical-holdout-protocol.v1",
-  "protocol_revision": 1,
+  "protocol_revision": 2,
   "holdout_id": "JX_WH_V9_HIERARCHICAL_HOLDOUT_V1",
   "status": "REGISTERED_DESIGN_ONLY_AWAITING_SOURCE_BOUND_RUNNER_AND_INDEPENDENT_EXECUTION",
   "registration_kind": "PROSPECTIVE_OUTCOME_BLIND_DETERMINISTIC_HIERARCHICAL_HOLDOUT",
   "registration_date_utc": "2026-10-22",
+  "pre_seed_correction": {
+    "correction_timestamp_utc": "2026-10-23T02:44:40Z",
+    "prior_registration_commit": "da14f6b1d03e5157b0ee3cd13e0996247202a04e",
+    "prior_protocol_sha256": "0d04af1e053dc4a4ab317b28ad996f30833f172df98dba559ded48b76d6a3864",
+    "prior_protocol_content_sha256": "c384e2156f3ed65ec18a0cb798ea67e89434316faa24e5443ad88bf985ebfaf9",
+    "defect": "The revision-1 body-ID rule stopped at secondary_31 although the mandatory N=33 rejection control requires secondary_32.",
+    "correction": "Extend the deterministic two-digit secondary body-ID rule through secondary_32 and freeze its confirmatory/control bounds and examples.",
+    "changed_scientific_cases": false,
+    "changed_scientific_gates": false,
+    "changed_randomness_source_or_pulse": false,
+    "candidate_executions_before_correction": 0,
+    "oracle_executions_before_correction": 0,
+    "beacon_pulse_available_before_correction": false,
+    "beacon_pulse_accessed_before_correction": false,
+    "correction_committed_before_registered_pulse_required": true
+  },
   "outcome_blindness": {
     "holdout_candidate_executions_before_registration": 0,
     "holdout_oracle_executions_before_registration": 0,
@@ -169,7 +185,12 @@
   "case_input_constructor": {
     "initial_epoch": 0.0,
     "initial_epoch_float_hex": "0x0.0p+0",
-    "body_id_rule": "body_ids=(ASCII 'primary', then ASCII 'secondary_01', 'secondary_02', ... with zero-padded two-digit indices through 'secondary_31') truncated to N; this exact tuple is also jacobi_body_order",
+    "body_id_rule": "body_ids=(ASCII 'primary', then ASCII 'secondary_01', 'secondary_02', ... with zero-padded two-digit indices through 'secondary_32') truncated to N; this exact tuple is also jacobi_body_order",
+    "body_id_format": "secondary_%02d",
+    "body_id_minimum_secondary_index": 1,
+    "body_id_maximum_confirmatory_secondary_index": 31,
+    "body_id_maximum_guard_control_secondary_index": 32,
+    "body_id_examples": {"1": "secondary_01", "31": "secondary_31", "32": "secondary_32"},
     "primary_gm": 1.0,
     "primary_gm_float_hex": "0x1.0000000000000p+0",
     "radii_rule": "Every radius is positive-zero binary64 0x0.0p+0 in immutable body order.",
@@ -803,6 +824,6 @@
     "algorithm": "SHA-256",
     "canonicalization": "SORTED_KEYS_COMPACT_ASCII_EXCLUDING_CONTENT_INTEGRITY",
     "domain": "jxplanetx.wisdom-holman-v9-hierarchical-holdout-protocol.v1",
-    "content_sha256": "c384e2156f3ed65ec18a0cb798ea67e89434316faa24e5443ad88bf985ebfaf9"
+    "content_sha256": "fcb18dd723c01c6744e32b7b8aa99efed91ee9384721bae869f897b5e1e69616"
   }
 }

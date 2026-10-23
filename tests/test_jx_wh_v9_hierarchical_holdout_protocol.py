@@ -70,6 +70,27 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
 
     def test_protocol_is_design_only_and_cannot_self_approve(self) -> None:
         protocol = self.protocol
+        self.assertEqual(protocol["protocol_revision"], 2)
+        correction = protocol["pre_seed_correction"]
+        self.assertEqual(
+            correction["prior_registration_commit"],
+            "da14f6b1d03e5157b0ee3cd13e0996247202a04e",
+        )
+        self.assertEqual(
+            correction["prior_protocol_sha256"],
+            "0d04af1e053dc4a4ab317b28ad996f30833f172df98dba559ded48b76d6a3864",
+        )
+        self.assertEqual(
+            correction["prior_protocol_content_sha256"],
+            "c384e2156f3ed65ec18a0cb798ea67e89434316faa24e5443ad88bf985ebfaf9",
+        )
+        self.assertFalse(correction["changed_scientific_cases"])
+        self.assertFalse(correction["changed_scientific_gates"])
+        self.assertFalse(correction["changed_randomness_source_or_pulse"])
+        self.assertEqual(correction["candidate_executions_before_correction"], 0)
+        self.assertEqual(correction["oracle_executions_before_correction"], 0)
+        self.assertFalse(correction["beacon_pulse_available_before_correction"])
+        self.assertFalse(correction["beacon_pulse_accessed_before_correction"])
         self.assertEqual(
             protocol["status"],
             "REGISTERED_DESIGN_ONLY_AWAITING_SOURCE_BOUND_RUNNER_AND_INDEPENDENT_EXECUTION",
@@ -168,6 +189,15 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
             self.assertEqual(case["horizon_inner_periods"], 10)
 
     def test_interior_and_boundary_constants_are_frozen(self) -> None:
+        constructor = self.protocol["case_input_constructor"]
+        self.assertEqual(constructor["body_id_format"], "secondary_%02d")
+        self.assertEqual(constructor["body_id_minimum_secondary_index"], 1)
+        self.assertEqual(constructor["body_id_maximum_confirmatory_secondary_index"], 31)
+        self.assertEqual(constructor["body_id_maximum_guard_control_secondary_index"], 32)
+        self.assertEqual(
+            constructor["body_id_examples"],
+            {"1": "secondary_01", "31": "secondary_31", "32": "secondary_32"},
+        )
         materialization = self.protocol["public_case_derivation"][
             "input_numeric_materialization"
         ]
