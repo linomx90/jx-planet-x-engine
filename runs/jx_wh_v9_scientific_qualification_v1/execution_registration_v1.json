@@ -1,0 +1,140 @@
+{
+  "claim_ceiling": "FROZEN_RC17_V9_NONENCOUNTERING_NEWTONIAN_TWO_BODY_PORTFOLIO_AND_WEAK_THREE_BODY_BENCHMARK_ON_DECLARED_LINUX_X86_64_GCC_RUNTIME_ONLY",
+  "claim_controls": {
+    "broad_n_body_qualified": false,
+    "close_encounters_qualified": false,
+    "cross_platform_equivalence_claimed": false,
+    "default_route_authorized": false,
+    "external_review_completed": false,
+    "independent_host_reproduction_completed": false,
+    "long_term_stability_claimed": false,
+    "observational_inference_authorized": false,
+    "outcome_blind_holdout_completed": false,
+    "planet_x_claim_authorized": false,
+    "production_ephemeris_authorized": false,
+    "protocol_registered": true,
+    "release_builds_reproducible": true,
+    "scientific_approval_granted": false,
+    "source_frozen": true,
+    "superiority_claimed": false
+  },
+  "content_integrity": {
+    "algorithm": "SHA-256",
+    "canonicalization": "SORTED_KEYS_COMPACT_ASCII_EXCLUDING_CONTENT_INTEGRITY",
+    "content_sha256": "3487d544848381c75ae51360ae7cd99e9db4cac9e2332115ee767ebe7636b7e3",
+    "domain": "jxplanetx.wisdom-holman-v9-execution-registration.v1"
+  },
+  "execution_contract": {
+    "formal_result_generated_at_registration": false,
+    "initial_output_location": "OUTSIDE_SOURCE_CHECKOUT_UNTIL_LIVE_VERIFICATION_COMPLETES",
+    "launch_boundary": "COMMITTED_CLEAN_SOURCE_CHECKOUT_WITH_PYTHONPATH_SRC_AND_ROOT",
+    "local_status_ceiling": "ELIGIBLE_FOR_INDEPENDENT_REVIEW",
+    "profile": "formal",
+    "result_logical_path": "runs/jx_wh_v9_scientific_qualification_v1/result_v1.json",
+    "science_candidate_loading": "VALIDATED_BUILD_A_WHEEL_WRAPPER_AND_NATIVE_EXTENSION",
+    "verify_live_mandatory": true
+  },
+  "external_completion_contract": {
+    "approval_artifact_additive_only": true,
+    "cross_host_full_report_byte_identity_required": false,
+    "cross_host_immutable_identity_and_all_numeric_gate_agreement_required": true,
+    "independent_host_administrator_attestation_required": true,
+    "independent_host_must_not_share_project_author_ownership_or_administration": true,
+    "local_report_fields_must_remain_false": [
+      "external_review_completed",
+      "scientific_approval_granted"
+    ],
+    "named_external_reviewer_required": true,
+    "outcome_blind_hierarchical_holdout_required": true,
+    "reviewer_detached_cryptographic_signature_required": true,
+    "same_owner_victus_is_not_independent": true,
+    "status_after_local_pass": "AWAITING_OUTCOME_BLIND_HOLDOUT_INDEPENDENT_HOST_AND_NAMED_REVIEWER"
+  },
+  "protocol": {
+    "path": "runs/jx_wh_v9_scientific_qualification_v1/protocol_v1.json",
+    "protocol_revision": 3,
+    "registration_commit": "65986fabbce5c9528fe7193cd01ed530afbcfcfa",
+    "sha256": "d9c94b04266519a40e102f7feb443439612ce1bfd89871fe09be652d51187512",
+    "size_bytes": 8257
+  },
+  "qualification_id": "JX_WH_V9_SCIENTIFIC_QUALIFICATION_V1",
+  "release_builds": {
+    "build_a": {
+      "artifacts_manifest": {
+        "filename": "ARTIFACTS.json",
+        "sha256": "38f2458f2fd215f775fbc0e93e2dfe226e88d05858d2278f503970eb9b6cb607",
+        "size_bytes": 713
+      },
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc17.tar.gz",
+        "sha256": "a68e968f748f0fc840fd155fc7157795d7c0b39dd455b9982e8169de4fe940f7",
+        "size_bytes": 964324
+      },
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc17-cp314-cp314-linux_x86_64.whl",
+        "sha256": "f906c8c31a51590c3aba97f5eb6417b8d023b167829403723fe093939581ce4d",
+        "size_bytes": 1179068
+      }
+    },
+    "build_b": {
+      "artifacts_manifest": {
+        "filename": "ARTIFACTS.json",
+        "sha256": "38f2458f2fd215f775fbc0e93e2dfe226e88d05858d2278f503970eb9b6cb607",
+        "size_bytes": 713
+      },
+      "sdist": {
+        "filename": "jxplanetx-0.6.0rc17.tar.gz",
+        "sha256": "a68e968f748f0fc840fd155fc7157795d7c0b39dd455b9982e8169de4fe940f7",
+        "size_bytes": 964324
+      },
+      "wheel": {
+        "filename": "jxplanetx-0.6.0rc17-cp314-cp314-linux_x86_64.whl",
+        "sha256": "f906c8c31a51590c3aba97f5eb6417b8d023b167829403723fe093939581ce4d",
+        "size_bytes": 1179068
+      }
+    },
+    "byte_identical": {
+      "artifacts_manifest": true,
+      "sdist": true,
+      "wheel": true
+    },
+    "candidate_native_extension": {
+      "member": "jxplanetx/_wisdom_holman_cpu_v9.cpython-314-x86_64-linux-gnu.so",
+      "sha256": "f11d0f2c0a447e12d44566c7a325a19d664aaa937fb46e34fcf165983e2eba83",
+      "size_bytes": 82424
+    },
+    "scientific_claim_state": "SCREENING_ONLY",
+    "source_date_epoch": 1700000000,
+    "tool_versions": {
+      "packaging": "26.3",
+      "python": "3.14.4",
+      "setuptools": "78.1.1",
+      "wheel": "0.48.0"
+    },
+    "version": "0.6.0rc17"
+  },
+  "schema": "jxplanetx.wisdom-holman-v9-execution-registration.v1",
+  "source_freeze": {
+    "build_tool": {
+      "path": "tools/build_release.py",
+      "sha256": "d7130a4d23922e0200780f941cd0527bdbf9bd115f36394885072728571c8d67",
+      "size_bytes": 13295
+    },
+    "candidate_base_commit": "c935be6fd16e9ff078e80a0ed2c7d8939efaa2ba",
+    "qualification_test": {
+      "path": "tests/test_jx_wh_v9_scientific_qualification.py",
+      "sha256": "028dc698424f8581b4112e1076478c984bcb8159f982e01c7bc7df371dcda779",
+      "size_bytes": 44574
+    },
+    "runner": {
+      "path": "benchmarks/jx_wh_v9_scientific_qualification.py",
+      "sha256": "1dc5b36c1318081f2a4a1a5dacd721e10b1b584d3c132d514b417e74108c6eee",
+      "size_bytes": 190802
+    },
+    "source_closure_sha256": "509693ea57e93a13b3d5d443eb111e1d199480733e699b6e8228a91a71d4e2ed",
+    "source_commit": "7b3c2b75e1731b70745d19c77f8fce96d3066a2d",
+    "source_commit_parent": "cb5dd8b6ae6793c47be1f2a3ba2095a0c2bf98cc",
+    "source_tree": "dc90d41a1da682a2714732e424f4eb2536622d48"
+  },
+  "status": "REGISTERED_FOR_LOCAL_FORMAL_EXECUTION_EXTERNAL_APPROVAL_WITHHELD"
+}
