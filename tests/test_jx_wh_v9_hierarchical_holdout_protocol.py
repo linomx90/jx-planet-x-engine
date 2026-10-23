@@ -70,7 +70,7 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
 
     def test_protocol_is_design_only_and_cannot_self_approve(self) -> None:
         protocol = self.protocol
-        self.assertEqual(protocol["protocol_revision"], 3)
+        self.assertEqual(protocol["protocol_revision"], 4)
         correction = protocol["pre_seed_correction"]
         self.assertEqual(
             correction["prior_registration_commit"],
@@ -113,6 +113,29 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
         self.assertEqual(correction3["oracle_executions_before_correction"], 0)
         self.assertFalse(correction3["beacon_pulse_available_before_correction"])
         self.assertFalse(correction3["beacon_pulse_accessed_before_correction"])
+        correction4 = protocol["pre_seed_correction_revision_4"]
+        self.assertEqual(
+            correction4["prior_registration_commit"],
+            "1f36d96e643a9cc35906f9c0f2c652280179816a",
+        )
+        self.assertEqual(
+            correction4["prior_protocol_sha256"],
+            "2e808cf2bab980b9ae5d2287dc142c95ff712db88c6fa8aca5956249f8bb6bc7",
+        )
+        self.assertEqual(
+            correction4["prior_protocol_content_sha256"],
+            "1426e25fc9fd979f370be36211434301b297a745d70bd9e8fae3ea43e3bed8d3",
+        )
+        self.assertTrue(correction4["input_only_mass_evaluation"])
+        self.assertFalse(correction4["changed_scientific_case_roster"])
+        self.assertTrue(correction4["changed_scientific_case_construction"])
+        self.assertTrue(correction4["changed_guard_control_construction"])
+        self.assertFalse(correction4["changed_scientific_gates"])
+        self.assertFalse(correction4["changed_randomness_source_or_pulse"])
+        self.assertEqual(correction4["candidate_executions_before_correction"], 0)
+        self.assertEqual(correction4["oracle_executions_before_correction"], 0)
+        self.assertFalse(correction4["beacon_pulse_available_before_correction"])
+        self.assertFalse(correction4["beacon_pulse_accessed_before_correction"])
         self.assertEqual(
             protocol["status"],
             "REGISTERED_DESIGN_ONLY_AWAITING_SOURCE_BOUND_RUNNER_AND_INDEPENDENT_EXECUTION",
@@ -264,7 +287,13 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
             interior["eccentricity_max_by_body_count_and_cell"]["32"],
             [0.01, 0.01, 0.01, 0.01],
         )
-        self.assertIn("equal GM", interior["mass_weight_rule"])
+        self.assertIn("same exact high-precision share", interior["mass_weight_rule"])
+        self.assertIn("recurrence-closing binary64 remainder", interior["mass_weight_rule"])
+        self.assertIn("bit-for-bit", interior["mass_weight_rule"])
+        self.assertIn(
+            "S_final==target_binary64",
+            self.protocol["case_input_constructor"]["binary64_secondary_total_closure_rule"],
+        )
         stresses = self.protocol["boundary_stress_construction"]
         self.assertEqual(stresses["MASS_RATIO_0_99"]["total_secondary_to_primary_gm_ratio"], 0.0099)
         self.assertEqual(stresses["ECCENTRICITY_DYNAMIC_SAFE_0_80"]["eccentricity"], 0.8)
@@ -279,6 +308,8 @@ class WisdomHolmanV9HierarchicalHoldoutProtocolTests(unittest.TestCase):
         self.assertEqual(interaction["target_tolerance_absolute"], 0.0005)
         self.assertEqual(interaction["reconstructed_target_band"], [0.0145, 0.0155])
         self.assertEqual(interaction["minimum_initial_adjacent_mutual_hill_separation"], 3.5)
+        self.assertIn("recurrence-closing binary64 remainder", interaction["mass_rule_after_override"])
+        self.assertIn("bit-for-bit", interaction["mass_rule_after_override"])
         self.assertEqual(
             interaction["closed_interval_float_hex"],
             ["0x1.00068db8bac71p+0", "0x1.0000000000000p+1"],

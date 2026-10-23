@@ -45,6 +45,16 @@ target to `0.799`, safely inside that unchanged band. It records the superseded
 revision-2 commit and hashes; it changes no roster, gate, candidate, oracle, or
 randomness choice, and no candidate or oracle execution preceded the fix.
 
+Protocol revision 4 records a third input-only feasibility correction made
+before the pulse was available or accessed. With 32 bodies, converting a
+high-precision equal-share remainder left the public sequential binary64 mass
+sum three ulps below its target. Revision 4 instead makes the highest-index
+secondary the deterministic recurrence-closing body: its GM is the positive
+binary64 result of `target - S_previous`, after which the final sequential sum
+must equal the target bit-for-bit. The same exact closure applies to science
+cases, the unequal interaction stress, and guard controls. No tolerance was
+widened, and no roster, gate, candidate, oracle, or randomness choice changed.
+
 The confirmatory interaction stress targets a reconstructed force ratio in
 `[0.0145, 0.0155]` with a frozen unequal-mass construction, at least 3.5
 mutual-Hill radii of initial adjacent separation, and all other guards inside.

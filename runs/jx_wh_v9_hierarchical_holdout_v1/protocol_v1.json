@@ -1,6 +1,6 @@
 {
   "schema": "jxplanetx.wisdom-holman-v9-hierarchical-holdout-protocol.v1",
-  "protocol_revision": 3,
+  "protocol_revision": 4,
   "holdout_id": "JX_WH_V9_HIERARCHICAL_HOLDOUT_V1",
   "status": "REGISTERED_DESIGN_ONLY_AWAITING_SOURCE_BOUND_RUNNER_AND_INDEPENDENT_EXECUTION",
   "registration_kind": "PROSPECTIVE_OUTCOME_BLIND_DETERMINISTIC_HIERARCHICAL_HOLDOUT",
@@ -31,6 +31,25 @@
     "input_only_guard_evaluation": true,
     "changed_scientific_case_roster": false,
     "changed_scientific_case_construction": true,
+    "changed_scientific_gates": false,
+    "changed_randomness_source_or_pulse": false,
+    "candidate_executions_before_correction": 0,
+    "oracle_executions_before_correction": 0,
+    "beacon_pulse_available_before_correction": false,
+    "beacon_pulse_accessed_before_correction": false,
+    "correction_committed_before_registered_pulse_required": true
+  },
+  "pre_seed_correction_revision_4": {
+    "correction_timestamp_utc": "2026-10-23T02:51:53Z",
+    "prior_registration_commit": "1f36d96e643a9cc35906f9c0f2c652280179816a",
+    "prior_protocol_sha256": "2e808cf2bab980b9ae5d2287dc142c95ff712db88c6fa8aca5956249f8bb6bc7",
+    "prior_protocol_content_sha256": "1426e25fc9fd979f370be36211434301b297a745d70bd9e8fae3ea43e3bed8d3",
+    "defect": "For mandatory N=32 inputs, independently converting a high-precision final equal-share remainder left the required public sequential binary64 secondary-GM sum three ulps below its registered target.",
+    "correction": "Set the last secondary GM to the positive binary64 recurrence-closing remainder float(target_binary64-S_previous), then require the final immutable-order sequential sum to equal target_binary64 bit-for-bit. Apply the same closure to confirmatory, interaction-stress, and guard-control mass construction.",
+    "input_only_mass_evaluation": true,
+    "changed_scientific_case_roster": false,
+    "changed_scientific_case_construction": true,
+    "changed_guard_control_construction": true,
     "changed_scientific_gates": false,
     "changed_randomness_source_or_pulse": false,
     "candidate_executions_before_correction": 0,
@@ -211,6 +230,7 @@
     "body_id_examples": {"1": "secondary_01", "31": "secondary_31", "32": "secondary_32"},
     "primary_gm": 1.0,
     "primary_gm_float_hex": "0x1.0000000000000p+0",
+    "binary64_secondary_total_closure_rule": "For every confirmatory case and guard control, freeze target_binary64 first; assign every non-final secondary by its registered rule; accumulate them in immutable body order from positive zero using exactly S=float(S+gm_i); assign the highest-index final secondary exactly float(target_binary64-S_previous) using one binary64 subtraction; require it positive; perform the final sequential addition; and require exact float.hex equality S_final==target_binary64. No fsum, high-precision final remainder, tolerance, or alternate closing body is permitted.",
     "radii_rule": "Every radius is positive-zero binary64 0x0.0p+0 in immutable body order.",
     "cumulative_gm_rule": "Use the exact candidate recurrence in immutable body order: K_0=gm_0 and K_i=float(K_(i-1)+gm_i) for i=1..N-1, with one binary64 addition per body and no math.fsum. Retain every K_i as float.hex, require finite strict increase, and require manifest K hex readback equality to the candidate workspace binding. This same K_i is mandatory for inertias, periods, elements, interaction ratios, guards, and normalization.",
     "period_rule": "P_i=2*pi*sqrt(a_i^3/K_i) in the registered high-precision context before the one final binary64 conversion; P_inner=P_1.",
@@ -249,7 +269,7 @@
     "eccentricity_rule": "e_i=e_max(N,cell)*(0.25+0.75*u), where u is the uniform53 draw with body index ASCII str(i) and exact field literal eccentricity_u; evaluate at 160 decimal digits; boundary overrides replace only their named target eccentricity",
     "inclination_radians_rule": "i_i=0.05*u, where u is the uniform53 draw with body index ASCII str(i) and exact field literal inclination_u; evaluate at 160 decimal digits, so 0<=i_i<0.05",
     "angular_turn_rule": "longitude_of_ascending_node, argument_of_periapsis, and mean_anomaly each equal 2*pi*u from separate uniform53 draws with body index ASCII str(i) and the respective exact field literals longitude_of_ascending_node_u, argument_of_periapsis_u, and mean_anomaly_u",
-    "mass_weight_rule": "All N-1 secondaries receive equal GM at 160 decimal digits. Convert bodies 1..N-2 to binary64 round-to-nearest ties-to-even in order and set body N-1 to the binary64 conversion of the positive high-precision remainder. Sum secondaries by the public-boundary recurrence S=0; S=float(S+gm_i) in ascending immutable order and require S/primary to equal the selected binary64 total within one ulp. Require the complete 220-digit constructor repeat to produce identical GM and cumulative-K float.hex values, every binary64 secondary GM to be positive, and every immutable-order cumulative GM to be strictly greater than its predecessor.",
+    "mass_weight_rule": "Let target_binary64 be the binary64 round-to-nearest-ties-to-even conversion of the selected exact high-precision total secondary GM. All N-1 secondaries have the same exact high-precision share. Convert bodies 1..N-2 to binary64 in order, accumulate S_previous from positive zero with the public one-addition-per-body recurrence S=float(S+gm_i), and set body N-1 to the positive recurrence-closing binary64 remainder float(target_binary64-S_previous) using one binary64 subtraction. Continue the same recurrence for body N-1 and require the final S to equal target_binary64 bit-for-bit. Require the complete 220-digit constructor repeat to produce identical GM, target, branch, and cumulative-K float.hex values, every binary64 secondary GM to be positive, and every immutable-order cumulative GM to be strictly greater than its predecessor.",
     "all_bodies_active": true,
     "gravity": "UNSOFTENED_MUTUAL_NEWTONIAN_POINT_MASS",
     "radii": 0.0,
@@ -335,7 +355,7 @@
       "secondary_02_gm_float_hex": "0x1.26e978d4fdf3bp-7",
       "other_secondaries_total_gm_high_precision_rational": "9/10000",
       "other_secondaries_total_gm_binary64_reference_hex": "0x1.d7dbf487fcb92p-11",
-      "mass_rule_after_override": "Assign secondary_02 exact high-precision rational GM=9/1000, whose registered binary64 value is 0x1.26e978d4fdf3bp-7. Share exact high-precision rational total GM=9/10000 equally among the other N-2 secondaries, converting in ascending body order and assigning the final non-secondary_02 body the positive binary64 remainder. Sum secondaries by the exact public-boundary binary64 recurrence S=0; S=float(S+gm_i) and require S/primary to equal binary64(0.0099) within one ulp. Require every GM positive, every candidate-order cumulative K strictly increasing, and identical 160/220-digit GM and K float.hex values.",
+      "mass_rule_after_override": "Set target_binary64 to binary64(0.0099). Assign secondary_02 exact high-precision rational GM=9/1000, whose registered binary64 value is 0x1.26e978d4fdf3bp-7. Share exact high-precision rational total GM=9/10000 equally among every other secondary except the highest-index final secondary. Convert those fixed bodies to binary64 in ascending immutable order. Accumulate all bodies before the final secondary, including secondary_02, from positive zero with S=float(S+gm_i), then assign the highest-index final secondary the positive recurrence-closing binary64 remainder float(target_binary64-S_previous) using one binary64 subtraction. Require the final sequential S to equal target_binary64 bit-for-bit. Require every GM positive, every candidate-order cumulative K strictly increasing, and identical 160/220-digit GM, target, branch, and K float.hex values.",
       "calibration_family_override": "Set the two innermost secondaries to e=0 and inclination=longitude_of_ascending_node=argument_of_periapsis=mean_anomaly=0, retain a_1=1, replace a_2 by the calibration ratio, and leave all later semimajor axes and their SHA-derived elements unchanged.",
       "calibration_parameter": "SECONDARY_2_ADJACENT_SEMIMAJOR_AXIS_RATIO_ONLY",
       "closed_interval": [1.0001, 2.0],
@@ -842,6 +862,6 @@
     "algorithm": "SHA-256",
     "canonicalization": "SORTED_KEYS_COMPACT_ASCII_EXCLUDING_CONTENT_INTEGRITY",
     "domain": "jxplanetx.wisdom-holman-v9-hierarchical-holdout-protocol.v1",
-    "content_sha256": "1426e25fc9fd979f370be36211434301b297a745d70bd9e8fae3ea43e3bed8d3"
+    "content_sha256": "7b1f023d247ac0fe8b0bbb43d214830d1d03ada81dff0beb67a8c297775b1354"
   }
 }
